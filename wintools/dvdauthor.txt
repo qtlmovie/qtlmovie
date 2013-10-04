@@ -1,0 +1,8 @@
+Download DvdAuthor Mingw version for Windows:
+  http://www.paehl.com/open_source/?DVDAuthor
+
+Latest tested version:
+  http://www.paehl.com/open_source/downloads/dvdauthor_0.7.1.7z
+
+Extract the following files here:
+  dvdauthor.exe

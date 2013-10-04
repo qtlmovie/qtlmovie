@@ -1,0 +1,27 @@
+http://qt-project.org/forums/viewthread/33284/
+Starting a QFileDialog on "Computer" virtual folder on Windows 7
+
+--------------------------------------------------------------------
+
+Hello,
+
+Using Qt 5.1.0 (MinGW) on Windows 7 (64-bit).
+
+In a Windows-specific branch of code, I would like to select a directory using getExistingDirectory() and initially open the dialog box on the "Computer" virtual folder. The idea is that the user has to select a drive letter.
+
+Browsing the net, I found the following method:
+
+@QFileDialog::getExistingDirectory(this, title, "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}")@
+
+In the various posts, some people report this to work and others not to work. Indeed, the CLSID seems correct since copy/pasting this in the address bar of my Windows Explorer sends me to "Computer".
+
+But the QFileDialog does not start on "Computer", it starts on the current directory and the following error message appears on the console:
+
+@shellItem: SHCreateItemFromParsingName(:)) failed ()@
+
+Is there a reliable way to start a QFileDialog on the "Computer" virtual folder on Windows 7?
+
+Since some people reported the above CLSID to work, is this a matter of Qt version or Windows version? These posts seemed a bit old.
+
+Thanks,
+-Thierry

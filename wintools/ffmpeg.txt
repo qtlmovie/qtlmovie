@@ -1,0 +1,6 @@
+Download FFmpeg binaries for Windows:
+  http://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-latest-win32-static.7z
+
+Extract the following files here:
+  ffmpeg.exe
+  ffprobe.exe

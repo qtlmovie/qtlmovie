@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtlMovieMainWindow</class>
+ <widget class="QMainWindow" name="QtlMovieMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>679</width>
+    <height>607</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QtlMovie</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="QtlMovie.qrc">
+    <normaloff>:/images/qtlmovie-logo.png</normaloff>:/images/qtlmovie-logo.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="layoutCentral">
+    <item row="8" column="1">
+     <widget class="QLabel" name="labelRemainingTime">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QProgressBar" name="progressBarEncode">
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="textVisible">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0" colspan="2">
+     <widget class="QtlPlainTextLogger" name="log">
+      <property name="textInteractionFlags">
+       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="buttonStart">
+      <property name="text">
+       <string>Start ...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupOutputFile">
+      <property name="title">
+       <string>Output file</string>
+      </property>
+      <layout class="QGridLayout" name="layoutOutput">
+       <item row="0" column="1">
+        <widget class="QtlLineEdit" name="editOutputFile"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="buttonOutputFile">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelOutputFile">
+         <property name="text">
+          <string>File :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QtlButtonGrid" name="boxOutputTypes" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupInputFile">
+      <property name="title">
+       <string>Input file</string>
+      </property>
+      <layout class="QGridLayout" name="layoutInput">
+       <item row="0" column="2">
+        <widget class="QPushButton" name="buttonInputFile">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QtlLineEdit" name="editInputFile"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelInputFile">
+         <property name="text">
+          <string>File :</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupVideo">
+      <property name="title">
+       <string>Video</string>
+      </property>
+      <layout class="QVBoxLayout" name="layoutVideo">
+       <item>
+        <widget class="QtlButtonGrid" name="boxVideoStreams" native="true"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupAudio">
+      <property name="title">
+       <string>Audio</string>
+      </property>
+      <layout class="QVBoxLayout" name="layoutAudio">
+       <item>
+        <widget class="QtlButtonGrid" name="boxAudioStreams" native="true"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupSubtitles">
+      <property name="title">
+       <string>Subtitles</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0" colspan="3">
+          <widget class="QtlButtonGrid" name="boxSubtitleStreams" native="true">
+            <widget class="QRadioButton" name="radioButtonNoSubtitle">
+              <property name="text">
+                <string>None</string>
+              </property>
+            </widget>
+          </widget>
+        </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="radioButtonSubtitleFile">
+         <property name="text">
+          <string>File :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QtlLineEdit" name="editSubtitleFile"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="buttonSubtitleFile">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>679</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionTranscode"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAboutMediaTools"/>
+    <addaction name="actionAboutQt"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionInputFileProperties"/>
+    <addaction name="actionTestAudio"/>
+    <addaction name="actionDvdDecrypter"/>
+    <addaction name="separator"/>
+    <addaction name="actionClearLog"/>
+    <addaction name="actionLogDebug"/>
+    <addaction name="actionSaveLog"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About QtlMovie</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionTranscode">
+   <property name="text">
+    <string>Transcode ...</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings ...</string>
+   </property>
+  </action>
+  <action name="actionInputFileProperties">
+   <property name="text">
+    <string>Input File Properties ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionClearLog">
+   <property name="text">
+    <string>Clear Log</string>
+   </property>
+  </action>
+  <action name="actionSaveLog">
+   <property name="text">
+    <string>Save Log ...</string>
+   </property>
+  </action>
+  <action name="actionTestAudio">
+   <property name="text">
+    <string>Test Audio ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionAboutMediaTools">
+   <property name="text">
+    <string>About Media Tools</string>
+   </property>
+  </action>
+  <action name="actionDvdDecrypter">
+   <property name="text">
+    <string>DVD Decrypter ...</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help ...</string>
+   </property>
+  </action>
+  <action name="actionLogDebug">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Log Debug</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QtlLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>QtlLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QtlPlainTextLogger</class>
+   <extends>QPlainTextEdit</extends>
+   <header>QtlPlainTextLogger.h</header>
+   <slots>
+    <slot>saveToFile()</slot>
+    <slot>setDebugMode(bool)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>QtlButtonGrid</class>
+   <extends>QWidget</extends>
+   <header>QtlButtonGrid.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="QtlMovie.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>openFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonInputFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>openFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editInputFile</sender>
+   <signal>editingFinished()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>inputFileNameEdited()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>284</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editOutputFile</sender>
+   <signal>editingFinished()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>outputFileNameEdited()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>332</x>
+     <y>291</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonOutputFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>selectOutputFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSettings</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>editSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInputFileProperties</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>showInputFileProperties()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClearLog</sender>
+   <signal>triggered()</signal>
+   <receiver>log</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>478</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSaveLog</sender>
+   <signal>triggered()</signal>
+   <receiver>log</receiver>
+   <slot>saveToFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>466</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTestAudio</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>showAudioTest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSubtitleFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>selectSubtitleFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAboutMediaTools</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>aboutMediaTools()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDvdDecrypter</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>startDvdDecrypter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHelp</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>showHelp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogDebug</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>log</receiver>
+   <slot>setDebugMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>466</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonNoSubtitle</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonSubtitleFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editSubtitleFile</sender>
+   <signal>editingFinished()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>324</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>openFile()</slot>
+  <slot>selectOutputFile()</slot>
+  <slot>selectSubtitleFile()</slot>
+  <slot>startTranscoding()</slot>
+  <slot>cancelTranscoding()</slot>
+  <slot>showInputFileProperties()</slot>
+  <slot>showAudioTest()</slot>
+  <slot>startDvdDecrypter()</slot>
+  <slot>editSettings()</slot>
+  <slot>aboutMediaTools()</slot>
+  <slot>about()</slot>
+  <slot>showHelp()</slot>
+  <slot>inputFileNameEdited()</slot>
+  <slot>inputFileNameChanged(QString)</slot>
+  <slot>inputFileFormatChanged()</slot>
+  <slot>clearInputStreamInfo()</slot>
+  <slot>inputStreamSelectionUpdated()</slot>
+  <slot>enableOutputTypes()</slot>
+  <slot>outputFileNameEdited()</slot>
+  <slot>outputFileNameChanged(QString)</slot>
+  <slot>transcodingStarted()</slot>
+  <slot>transcodingStopped(bool)</slot>
+  <slot>transcodingProgress(QString,int,int,int,int)</slot>
+  <slot>setOutputFileType()</slot>
+ </slots>
+</ui>

@@ -1,0 +1,85 @@
+DVDAuthor::dvdauthor, version 0.7.1.
+Build options: gnugetopt iconv freetype fribidi fontconfig
+Send bug reports to <dvdauthor-users@lists.sourceforge.net>
+
+INFO: no default video format, must explicitly specify NTSC or PAL
+syntax: dvdauthor [-o VTSBASE | -n] [options] VOBFILE(s)
+
+	-x XMLFILE where XMLFILE is a configuration file describing the
+	    structure of the DVD to create.  If you use a config file, then you
+	    do not need to specify any other options, except -o and -n.
+
+	-n skips writing any files, for testing purposes.  MUST occur before any
+	    other options.
+
+	--video=VOPTS or -v VOPTS where VOPTS is a plus (+) separated list of
+	    video options.  dvdauthor will try to infer any unspecified options.
+		pal, ntsc, 4:3, 16:9, 720xfull, 720x576, 720x480, 704xfull,
+		704x576, 704x480, 352xfull, 352x576, 352x480, 352xhalf,
+		352x288, 352x240, nopanscan, noletterbox, crop.
+	    Default is ntsc, 4:3, 720xfull
+
+	--audio=AOPTS or -a AOPTS where AOPTS is a plus (+) separated list of
+	    options for an audio track, with each track separated by a
+	    comma (,).  For example -a ac3+en,mp2+de specifies two audio
+	    tracks: the first is an English track encoded in AC3, the second is
+	    a German track encoded using MPEG-1 layer 2 compression.
+		ac3, mp2, pcm, dts, 16bps, 20bps, 24bps, drc, surround, nolang,
+		1ch, 2ch, 3ch, 4ch, 5ch, 6ch, 7ch, 8ch, and any two letter
+		ISO 639 language abbreviation.
+	    Default is 1 track, mp2, 20bps, nolang, 2ch.
+	    'ac3' implies drc, 6ch.
+
+	--subpictures=SOPTS or -s SOPTS where SOPTS is a plus (+) separated list
+	    of options for a subpicture track, with each track separated by a
+	    comma (,).
+		nolang and any two letter language abbreviation (see -a)
+	    Default is no subpicture tracks.
+
+	--palette[=FILE] or -p FILE or -P where FILE specifies where to get the
+	    subpicture palette.  Settable per title and per menu.  If the
+	    filename ends in .rgb (case insensitive) then it is assumed to be
+	    RGB, otherwise it is YUV.  Entries should be 6 hexadecimal digits.
+	    FILE defaults to xste-palette.dat
+
+	--file=FILE or -f FILE or FILE where FILE is either a file, a pipe, or a
+	    shell command ending in | which supplies an MPEG-2 system stream
+	    with VOB sectors inserted in the appropriate places
+	    (using mplex -f 8 to generate)
+
+	--chapter[s][=COPTS] or -c COPTS or -C where COPTS is a comma (,)
+	    separated list of chapter markers.  Each marker is of the form
+	    [[h:]mm:]ss[.frac] and is relative to the SCR of the next file
+	    listed (independent of any timestamp transposing that occurs within
+	    dvdauthor).  The chapter markers ONLY apply to the next file listed.
+	    COPTS defaults to 0
+
+	--menu or -m creates a menu.
+
+	--title or -t creates a title.
+
+	--toc or -T creates the table of contents file instead of a titleset.
+	    If this option is used, it should be listed first, and you may not
+	    specify any titles.
+
+	--entry=EOPTS or -e EOPTS makes the current menu the default for
+	    certain circumstances.  EOPTS is a comma separated list of any of:
+		for TOC menus: title
+		for VTS menus: root, ptt, audio, subtitle, angle
+
+	--button or -b DEST specifies what command to issue for each button.
+	    See --instructions or -i for a description of
+	    DEST.
+
+	--instructions or -i post=DEST executes the DEST instructions at the
+	    end of the title.
+
+	--fpc or -F CMD sets the commands to be executed when the disc is first
+	    inserted.
+
+	--jumppad or -j enables the creation of jumppads, which allow greater
+	    flexibility in choosing jump/call desinations.
+
+	--allgprm or -g enables the use of all 16 general purpose registers.
+
+	--help or -h displays this screen.

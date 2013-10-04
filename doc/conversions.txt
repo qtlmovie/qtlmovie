@@ -1,0 +1,140 @@
+====================================
+A list of recommended FFmpeg options
+====================================
+
+Source: http://develop.participatoryculture.org/index.php/ConversionMatrix
+
+
+Apple Format Conversions
+------------------------
+
+iPod (Classic / Nano) 320x480
+ffmpeg -i INPUT -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.ipod.mp4
+
+iPod Touch 640x480
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.ipod.mp4
+
+iPod Touch 4+ 960x640
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.ipod.mp4
+
+iPhone 640x480
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.iphone.mp4
+
+iPhone 4+ 960x640
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.iphone.mp4
+
+iPhone 5 1920x1080
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.iphone.mp4
+
+iPad 1024x768
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.ipad.mp4
+
+iPad 3 1920x1080
+ffmpeg -i {filename} -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.ipad.mp4
+
+Apple Universal 1280x720 ffmpeg -i INPUT -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.appleuniversal.mp4
+
+Apple TV 1280x720
+ffmpeg -i INPUT -acodec aac -ac 2 -strict experimental -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -b 1200k -f mp4 -threads 0 {filename}.appletv.mp4
+
+
+Android Conversions
+-------------------
+
+base ffmpeg command:
+-i {input} -y -acodec aac -ab 160k -s {ssize} -vcodec libx264 -preset slow -profile:v baseline -level 30 -maxrate 10000000 -bufsize 10000000 -f mp4 -threads 0 {output}
+
+Manufacturer  Device            Screen Resolution
+Samsung       Galaxy Y          240x320
+Samsung       Galaxy Mini       240x320
+Samsung       Galaxy Ace        320x480
+Samsung       Admire            320x480
+Samsung       Droid Charge      480x800
+Samsung       Galaxy S/S2/S+    480x800
+Samsung       Galaxy S3         720x1280
+Samsung       Galaxy Nexus      720x1280
+Samsung       Galaxy Tab        600x1024
+Samsung       Galaxy Tab 10.1   800x1280
+Samsung       Galaxy Note       800x1280
+Samsung       Galaxy Note II    1080x1920
+Samsung       Infuse 4G         800x1280
+Samsung       Epic Touch 4G     480x800
+HTC           Wildfire          240x320
+HTC           Desire            480x800
+HTC           Droid Incredible  480x800
+HTC           Thunderbolt       480x800
+HTC           Evo 4G            480x800
+HTC           Sensation         540x960
+HTC           Rezound           720x1280
+HTC           One X             720x1280
+Motorola      Droid X           854x480
+Motorola      Droid X2          1280x720
+Motorola      RAZR              960x540
+Motorola      XOOM              1280x800
+Sanyo         Zio               480x800
+Other         720p              1280x720
+Other         1080p             1920x1080
+
+
+Output Formats
+--------------
+
+MP4 mp4
+ffmpeg -i {input} -acodec aac -ab 96k -vcodec libx264 -preset slow -f mp4 -crf 22 {output}
+
+MP3 (audio only) mp3
+ffmpeg -i INPUT -f mp3 -y OUTPUT
+
+Ogg Theora (video) ogv
+ffmpeg -i {input}-f ogg -vn -acodec libvorbis -aq 60
+
+Ogg Vorbis (audio) ogg
+ffmpeg -i {input} -f ogg -vn -acodec libvorbis -aq 60 {output}
+
+H.264 Web HD 720p
+-i {input} -s hd720 -vcodec libx264 -preset slow -crf 24 -acodec aac -ab 96k -ar 44100 {output1} ; qt-faststart {output1} {$output2}
+
+H.264 Web SD 480p
+-i {input} -s hd480 -vcodec libx264 -preset slow -crf 24 -acodec aac -ab 96k -ar 44100 {output1} ; qt-faststart {output1} {$output2}
+
+WebM HD 720p
+-i {input} -s hd720 -vcodec libvpx -g 120 -lag-in-frames 16 -deadline good -cpu-used 0 -vprofile 0 -qmax 51 -qmin 11 -slices 4 -b:v 2M -acodec libvorbis -ab 112k -ar 44100 -f webm {output1}
+
+WebM SD 480p
+-i {input} -s hd480 -vcodec libvpx -g 120 -lag-in-frames 16 -deadline good -cpu-used 0 -vprofile 0 -qmax 63 -qmin 0 -b:v 768k -acodec libvorbis -ab 112k -ar 44100 -f webm {output1}
+
+DNxHD 1080p Ingest 1080p
+-i {input} -r 23.976 -s hd1080 -vcodec dnxhd -b:v 175M -acodec pcm_s16be -ar 48000 {output1}
+
+DNxHD 720p Ingest 780p
+-i {input} -r 23.976 -s hd720 -vcodec dnxhd -b:v 90M -acodec pcm_s16be -ar 48000 {output1}
+
+ProRes 1080p Ingest 1080p
+-i {input} -s hd1080 -vcodec prores -profile 2 -acodec pcm_s16be -ar 48000 {output1}
+
+ProRes 720p Ingest 780p
+-i {input} -s hd720 -vcodec prores -profile 2 -acodec pcm_s16be -ar 48000 {output1}
+
+AVC Intra 1080p Ingest 1080p
+-i {input} -s hd1080 -vcodec libx264 -pix_fmt yuv422p -crf 0 -intra -b:v 100M -acodec pcm_s16be -ar 48000 {output1}
+
+AVC Intra 720p Ingest 780p
+-i {input} -s hd1080 -vcodec libx264 -pix_fmt yuv422p -crf 0 -intra -b:v 100M -acodec pcm_s16be -ar 48000 {output1}
+
+
+Kindle Fire
+-----------
+Kindle Fire 1224x600 
+
+Input Video Size > 1024x600
+ffmpeg -i INPUT -acodec aac -ab 96k -vcodec libx264 -vpre slow -f mp4 -crf 22 -s 1024x600 -strict experimental OUTPUT
+
+Input Video Size <= 1024x600
+ffmpeg -i INPUT -acodec aac -ab 96k -vcodec libx264 -vpre slow -f mp4 -crf 22 -strict experimental OUTPUT
+
+
+PSP
+---
+
+PSP 320x480
+ffmpeg -i INPUT -s 320x240 -b 512000 -ar 24000 -ab 64000 -f psp -r 29.97 OUTPUT

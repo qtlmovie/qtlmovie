@@ -1,0 +1,159 @@
+Subject: QAudioOutput playing a QProcess standard output: end of data undetected
+Reference: http://qt-project.org/forums/viewthread/31347/
+
+--------------------------------------------------------------------------------
+
+Hello,
+
+I have an issue regarding the detection of the end of data while reading the standard output of a QProcess, especially when using it as audio source for a QAudioOutput instance.
+
+I use Qt 5.1.0 on Windows 7.
+
+I have isolated the issue in the sample source code below. I create a QProcess instance which runs the ffmpeg executable as a simple example. The ffmpeg command extracts the first audio stream of a video file and converts it into simple 16-bit PCM samples. The output file is the process standard output.
+
+I close the standard input and standard error channels of the QProcess. I explicitly sets standard output of the QProcess as its "read channel". Then, I start a QAudioOutput on the QProcess (which is a subclass of QIODevice). The audio is played correctly until the end of the process output.
+
+But the QAudioOutput never enters the IdleState after the end of data. The problem is: How can I be notified that the QAudioOutput has completed the audio stream?
+
+There are several tracks that I explored without luck.
+
+I am notified of the process completion. But most of the time there are still many audio samples in the output pipe. If I stop the QAudioOutput when I am notified of the process completion, the last part of the audio is not played. For small files, the process completion is notified even before we can hear any sample.
+
+For testing, I manually ran the same ffmpeg command and saved the output in a file. In a modified version of the test, I use a QFile on this file as QAudioOutput source. The end of the file is detected by QAudioOutput which enters IdleState. Program output:
+
+@
+Audio state changed to  ActiveState
+Audio state changed to  IdleState
+@
+
+On the other hand, when QAudioOutput uses the process output as source, IdleState is never entered. Program output:
+
+@
+Audio state changed to  ActiveState
+Process finished, exit code  0 exit status 0 
+@
+
+As another test, I removed the QAudioOutput and tried to read myself the ffmpeg process output, just like QAudioOutput does. I connect to the signal QIODevice::readyRead() and get notified of all process output data. There is something weird here. In the corresponding slot, I read data and check QIODevice::atEnd(). In all invocations of the slot, atEnd() returns true, even the first one. At the end of the process output, I simply no longer get invoked. How can I detect that I reached the end of data?
+
+Note that the atEnd() documentation is pretty vague on the reliability of the information it returns: "_For some devices, atEnd() can return true even though there is more data to read. This special case only applies to devices that generate data in direct response to you calling read() (e.g., /dev or /proc files on Unix and Mac OS X, or console input / stdin on all platforms)_".
+
+So, it seems that there are two distinct issues here:
+
+A QProcess issue: How can we be reliably notified of the end of data while reading the process output?
+
+A QAudioOutput issue: When the QAudioOuput source runs out of samples, it should notify somehow. When the audio source is a QFile, the IdleState is entered. Why not with a QProcess source? Probably because, unlike QFile, the end of the file is not reliably detected. After end of data, the QAudioOutput should report a QAudio::UnderrunError. But there seems to be no signal to notify an error, QAudioOutput::error() must be call synchronously.
+
+Any idea on how to reliably stop a QAudioOutput when its source is a QProcess?
+Thanks.
+
+PS: I will post the sample code in a reply. Attempting to include it here resulted in "_Your post is too large. The maximum number of allowed characters is 6000_".
+
+--------------------------------------------------------------------------------
+
+Sample code to reproduce the problem.
+
+Project file:
+@
+TEMPLATE = app
+CONFIG += qt thread
+QT += core multimedia
+TARGET = testaudio
+SOURCES += testaudio.cpp main.cpp
+HEADERS += testaudio.h
+@
+
+Main program main.cpp:
+@
+#include "testaudio.h"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+    // Customize with your path to ffmep executable and test file
+    TestAudio test("C:\\Program Files\\FFmpeg\\bin\\ffmpeg.exe", "test.mpg");
+    return a.exec();
+}
+@
+
+TestAudio header file testaudio.h:
+@
+#include <QtCore>
+#include <QtDebug>
+#include <QtMultimedia>
+
+class TestAudio: public QObject
+{
+    Q_OBJECT
+public:
+    TestAudio(const QString& ffmpeg, const QString& fileName, QObject* parent = 0);
+private slots:
+    void audioStateChanged(QAudio::State audioState);
+    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void processError(QProcess::ProcessError error);
+private:
+    QProcess* process;
+    QAudioOutput* audio;
+};
+@
+
+TestAudio implementation file testaudio.cpp:
+@
+#include "testaudio.h"
+
+TestAudio::TestAudio(const QString& ffmpeg, const QString& fileName, QObject* parent) :
+    QObject(parent),
+    process(0),
+    audio(0)
+{
+    // FFmpeg argument list.
+    QStringList args;
+    args << "-i" << fileName
+         << "-vn"                       // Suppress video streams.
+         << "-map" << "0:a:0"           // Select first audio stream.
+         << "-codec:a" << "pcm_s16le"   // Audio format: PCM 16 bits little endian.
+         << "-ar" << "44100"            // Resample to 44.1 kHz.
+         << "-ac" << "1"                // Remix to one channel (mono).
+         << "-f" << "s16le"             // Output file format is raw PCM.
+         << "-";                        // Output file is standard output.
+
+    // Start FFmpeg process. Keep only standard output channel.
+    process = new QProcess(this);
+    connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
+    connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(processError(QProcess::ProcessError)));
+    process->setProcessChannelMode(QProcess::SeparateChannels);
+    process->setReadChannel(QProcess::StandardOutput);
+    process->start(ffmpeg, args);
+    process->closeWriteChannel();
+    process->closeReadChannel(QProcess::StandardError);
+
+    // Same audio format for QAudioOutput.
+    QAudioFormat audioFormat;
+    audioFormat.setCodec("audio/pcm");
+    audioFormat.setSampleRate(44100);
+    audioFormat.setChannelCount(1);
+    audioFormat.setSampleSize(16);
+    audioFormat.setByteOrder(QAudioFormat::LittleEndian);
+    audioFormat.setSampleType(QAudioFormat::SignedInt);
+
+    // Start audio output.
+    audio = new QAudioOutput(audioFormat, this);
+    audio->setVolume(1.0);
+    connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(audioStateChanged(QAudio::State)));
+    audio->start(process);
+}
+
+void TestAudio::audioStateChanged(QAudio::State audioState)
+{
+    qDebug() << "Audio state changed to " << audioState;
+}
+
+void TestAudio::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    qDebug() << "Process finished, exit code " << exitCode << "exit status" << exitStatus;
+}
+
+void TestAudio::processError(QProcess::ProcessError error)
+{
+    qDebug() << "Process error " << error;
+}
+@

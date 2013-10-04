@@ -1,0 +1,3 @@
+MinGW (Minimalist GNU on Windows) is installed with Qt pre-built installers.
+To install MinGW separately, see http://www.mingw.org/wiki/Getting_Started
+Installer: https://sourceforge.net/projects/mingw/files/latest/download

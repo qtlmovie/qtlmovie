@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtlMovieEditSettings</class>
+ <widget class="QDialog" name="QtlMovieEditSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>567</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QtlMovie Settings</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="QtlMovie.qrc">
+    <normaloff>:/images/qtlmovie-logo.png</normaloff>:/images/qtlmovie-logo.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tab">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabDirectories">
+      <attribute name="title">
+       <string>Directories</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutDirectories">
+       <item>
+        <widget class="QGroupBox" name="groupBoxInputDir">
+         <property name="title">
+          <string>Default input directory</string>
+         </property>
+         <layout class="QGridLayout" name="layoutInputDir">
+          <item row="0" column="1">
+           <widget class="QtlLineEdit" name="editInputDir"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelInputDir">
+            <property name="text">
+             <string>Initial :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="buttonBrowseInputDir">
+            <property name="text">
+             <string>Browse ...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxOutputDir">
+         <property name="title">
+          <string>Default output directory</string>
+         </property>
+         <layout class="QGridLayout" name="layoutDefaultOutputDir">
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkBoxSameAsInput">
+            <property name="text">
+             <string>Same as input file directory</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxDvdBurning">
+         <property name="title">
+          <string>DVD burning</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelDvdDevice">
+            <property name="text">
+             <string>Device :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QtlLineEdit" name="editDvdBurner"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="buttonBrowseDvdBurner">
+            <property name="text">
+             <string>Browse ...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacerDirectories">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabTools">
+      <attribute name="title">
+       <string>Media Tools</string>
+      </attribute>
+      <layout class="QGridLayout" name="layoutTools">
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelFFprobe">
+         <property name="text">
+          <string>FFprobe :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QtlLineEdit" name="editGrowisofs"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="defaultFFmpeg">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelFFmpeg">
+         <property name="text">
+          <string>FFmpeg :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QtlLineEdit" name="editTelxcc"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QtlLineEdit" name="editFFprobe"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLabel" name="defaultDvdAuthor">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLabel" name="defaultMkisofs">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QtlLineEdit" name="editDvdAuthor"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QtlLineEdit" name="editFFmpeg"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="buttonBrowseFFmpeg">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="labelDvdDecrypter">
+         <property name="text">
+          <string>DVD Decrypter :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QtlLineEdit" name="editMkisofs"/>
+       </item>
+       <item row="6" column="2">
+        <widget class="QPushButton" name="buttonBrowseMkisofs">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="labelGrowisofs">
+         <property name="text">
+          <string>growisofs :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="buttonBrowseDvdAuthor">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelMkisofs">
+         <property name="text">
+          <string>mkisofs :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="labelTelxcc">
+         <property name="text">
+          <string>telxcc :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelDvdAuthor">
+         <property name="text">
+          <string>DVD Author :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="buttonBrowseFFprobe">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="defaultFFprobe">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLabel" name="defaultGrowisofs">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QPushButton" name="buttonBrowseGrowisofs">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QPushButton" name="buttonBrowseTelxcc">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QLabel" name="defaultTelxcc">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="1">
+        <widget class="QLabel" name="defaultDvdDecrypter">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QtlLineEdit" name="editDvdDecrypter"/>
+       </item>
+       <item row="12" column="2">
+        <widget class="QPushButton" name="buttonBrowseDvdDecrypter">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1">
+        <spacer name="spacerMediaTools">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabTranscoding">
+      <attribute name="title">
+       <string>Transcoding</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutTranscoding_2">
+       <item>
+        <widget class="QGroupBox" name="groupBoxTranscodingDuration">
+         <property name="title">
+          <string>Transcoding duration</string>
+         </property>
+         <layout class="QGridLayout" name="layoutTranscoding">
+          <item row="0" column="0" colspan="2">
+           <widget class="QRadioButton" name="radioButtonComplete">
+            <property name="text">
+             <string>Transcode complete video</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinMaxTranscode">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="prefix">
+             <string/>
+            </property>
+            <property name="maximum">
+             <number>100000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioButtonPartial">
+            <property name="text">
+             <string>Stop transcoding after :</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxDvdOutput">
+         <property name="title">
+          <string>DVD output</string>
+         </property>
+         <layout class="QGridLayout" name="layoutDvdOutput">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelDvdBitrate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Video bitrate :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinDvdBitrate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> kb/s</string>
+            </property>
+            <property name="minimum">
+             <number>500</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>4000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkCreateChapters">
+            <property name="text">
+             <string>Create chapters :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinChapterMinutes">
+            <property name="suffix">
+             <string> minutes</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkDvdRemuxAfterTranscode">
+            <property name="text">
+             <string>Remux audio/video after transcode (remove potential synchronization errors with DVD Author)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxSubtitles">
+         <property name="title">
+          <string>Subtitles insertion</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutSubtitles">
+          <item>
+           <widget class="QCheckBox" name="checkBoxSrtUseVideoSize">
+            <property name="text">
+             <string>Use original video size as a hint for SRT/SSA/ASS character shape</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxFFmpegOptions">
+         <property name="title">
+          <string>FFmpeg options</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelFFmpegProbeSeconds">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Probe size :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinFFmpegProbeSeconds">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100000</number>
+            </property>
+            <property name="value">
+             <number>200</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>112</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabMisc">
+      <attribute name="title">
+       <string>Miscellaneous</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutMisc">
+       <item>
+        <widget class="QGroupBox" name="groupBoxLanguages">
+         <property name="title">
+          <string>Target audience language codes</string>
+         </property>
+         <layout class="QGridLayout" name="layoutLanguages">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="buttonNewLanguage">
+            <property name="text">
+             <string>Add ...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="buttonDeleteLanguage">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2">
+           <widget class="QListWidget" name="listLanguages">
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="sortingEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxIntermediateFiles">
+         <property name="title">
+          <string>Intermediate files</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutIntermediateFiles">
+          <item>
+           <widget class="QCheckBox" name="checkBoxKeepIntermediateFiles">
+            <property name="text">
+             <string>Keep intermediate files</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxLog">
+         <property name="title">
+          <string>Log panel</string>
+         </property>
+         <layout class="QGridLayout" name="layoutLog">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelMaxLogLines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Max log :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinMaxLogLines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> lines</string>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>100000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+            <property name="value">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacerMisc">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtlLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>QtlLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="QtlMovie.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseFFmpeg</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseFFmpeg()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseFFprobe</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseFFprobe()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>resetValues(QAbstractButton*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseInputDir</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseInputDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>520</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxSameAsInput</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>setDefaultOutputDirSelectable(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>283</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonDeleteLanguage</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>deleteAudienceLanguage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonNewLanguage</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>newAudienceLanguage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listLanguages</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>enableDeleteAudienceLanguage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseDvdAuthor</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseDvdAuthor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseMkisofs</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseMkisofs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseGrowisofs</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseGrowisofs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseTelxcc</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseTelxcc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseDvdDecrypter</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseDvdDecrypter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseDvdBurner</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseDvdBurner()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>resetValues(QAbstractButton*)</slot>
+  <slot>browseFFmpeg()</slot>
+  <slot>browseFFprobe()</slot>
+  <slot>browseDvdAuthor()</slot>
+  <slot>browseMkisofs()</slot>
+  <slot>browseGrowisofs()</slot>
+  <slot>browseTelxcc()</slot>
+  <slot>browseDvdDecrypter()</slot>
+  <slot>browseInputDir()</slot>
+  <slot>setDefaultOutputDirSelectable(bool)</slot>
+  <slot>newAudienceLanguage()</slot>
+  <slot>deleteAudienceLanguage()</slot>
+  <slot>enableDeleteAudienceLanguage()</slot>
+  <slot>createChapterToggled(bool)</slot>
+  <slot>browseDvdBurner()</slot>
+ </slots>
+</ui>

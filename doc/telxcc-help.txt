@@ -1,0 +1,41 @@
+Command line parameters:
+
+$ telxcc -h
+telxcc - TELeteXt Closed Captions decoder
+(c) Forers, s. r. o., <info@forers.com>, 2011-2013; Licensed under the GPL.
+Please consider making a donation to support our free GNU/GPL software: http://fore.rs/donate/telxcc
+Version 2.4.2 (Built on Mar 31 2013)
+
+Usage: ./telxcc [-i INPUT] [-o OUTPUT] [-h] [-v] [-p PAGE] [-t TID] [-f OFFSET] [-n] [-1] [-c] [-s [REF]]
+  -i INPUT    transport stream (- = STDIN, default STDIN)
+  -o OUTPUT   subtitles in SubRip SRT file format (UTF-8 encoded) (- = STDOUT, default STDOUT)
+  -h          this help text
+  -v          be verbose
+  -p PAGE     teletext page number carrying closed captions
+  -t TID      transport stream PID of teletext data sub-stream
+              if the value of 8192 is specified, the first suitable stream will be used
+  -f OFFSET   subtitles offset in seconds
+  -n          do not print UTF-8 BOM characters to the file
+  -1          produce at least one (dummy) frame
+  -c          output colour information in font HTML tags
+  -s [REF]    search engine mode; produce absolute timestamps in UTC and output data in one line
+              if REF (unix timestamp) is omitted, use current system time,
+              telxcc will automatically switch to transport stream UTC timestamps when available    
+
+Usage example:
+
+$ telxcc -i TVP.ts -o TVP.srt
+telxcc - TELeteXt Closed Captions decoder
+(c) Forers, s. r. o., <info@forers.com>, 2011-2013; Licensed under the GPL.
+Please consider making a donation to support our free GNU/GPL software: http://fore.rs/donate/telxcc
+Version 2.4.2 (Built on Mar 31 2013)
+
+- Found VBI/teletext stream ID 205 (0xcd) for SID 45 (0x2d)
+- PID 0xbd PTS available
+- Programme Identification Data = OGLOSZENIA -> 640
+- Programme Timestamp (UTC) = Thu Mar 28 14:40:00 2013
+- Transmission mode = serial
+- Using G0 Latin National Subset ID 0x1.0 (Polish)
+! Unrecoverable data error; UNHAM8/4(70)
+- There were some CC data carried via pages = 777 778 484 488 
+- Done (181250 teletext packets processed, 321 frames produced)

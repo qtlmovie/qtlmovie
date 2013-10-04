@@ -1,0 +1,19 @@
+=====================
+QtlMovie "to do" list
+=====================
+
+- Complete help files: Overview / Why QtlMovie, settings description.
+
+- Test on Ubuntu, integrate with avconv intead of ffmpeg.
+
+- Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
+  as initial directory.
+
+- Fix "Audio Test" features. Does not always work.
+
+- Integrate DVD Decrypter: Directly rip DVD. Try to read VOB. In case of error,
+  load stream desc from IFO only. Then add an initial DVD Decrypter pass in the
+  transcoding job.
+
+- Add a "batch" mechanism. Several jobs are edited separately. The main window
+  contains a list of jobs. "Start" means starting the queue.

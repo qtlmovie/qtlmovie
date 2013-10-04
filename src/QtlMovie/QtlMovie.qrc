@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/qtlmovie-logo.png</file>
+        <file>images/ffmpeg-logo.png</file>
+        <file>images/gnu-logo.png</file>
+        <file>images/dvd-logo.png</file>
+        <file>images/dvddecrypter-logo.png</file>
+        <file>help/qtlmovie-user.html</file>
+        <file>help/default.css</file>
+        <file>help/qtlmovie.html</file>
+        <file>help/qtlmovie-build.html</file>
+    </qresource>
+</RCC>

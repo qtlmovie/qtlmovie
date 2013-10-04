@@ -1,0 +1,8 @@
+Download telxcc version for Windows:
+  https://github.com/forers/telxcc
+
+Latest tested version:
+  https://forers.com/download/telxcc/telxcc-windows-x86-v2.4.3.zip
+
+Extract the following files here:
+  telxcc.exe

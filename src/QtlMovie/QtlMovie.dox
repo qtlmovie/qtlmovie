@@ -1,0 +1,16 @@
+/**
+
+@mainpage QtlMovie Source Code Reference
+
+<p> This set of documentation describes the C++ classes in the QtlMovie application
+source code.
+
+<p> The source code is logically split in three parts:
+
+- Qtl - Qt utility library (class names starting in Qtl, except QtlMovie classes).
+- Qts - Qt MPEG Transport Stream library (class names starting in Qts).
+- QtlMovie - Application GUI, based on Qtl and Qts (class names starting in QtlMovie).
+
+<p> The QtlMovie version for this documentation is given by the symbol @link QTLMOVIE_VERSION @endlink.
+
+*/

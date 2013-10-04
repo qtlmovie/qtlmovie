@@ -1,0 +1,2 @@
+Download mkisofs mingw version for Windows and drop it here:
+  http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/mkisofs.exe

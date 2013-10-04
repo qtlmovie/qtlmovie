@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <title>QtlMovie User Guide</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" href="default.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <h1><a id="top">QtlMovie User Guide</a></h1>
+    <div class="toc">
+      <h2>Content</h2>
+      <ul>
+        <li>Back to <a href="qtlmovie.html">QtlMovie Documentation</a></li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#infiles">Input files</a>
+          <ul>
+            <li><a href="#avin">Audio/video input</a></li>
+            <li><a href="#subin">Subtitle input</a></li>
+          </ul>
+        </li>
+        <li><a href="#outfiles">Output files</a>
+          <ul>
+            <li><a href="#dvdout">DVD output</a></li>
+            <li><a href="#ipadout">iPad output</a></li>
+            <li><a href="#subout">Subtitle extraction</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <hr/>
+      <h2><a id="overview">Overview</a></h2>
+      <p>QtlMovie is a simple Qt front-end to ffmpeg and other media tools.</p>
+      <p>QtlMovie does not pretend to be the next most wanted GUI for ffmpeg.
+        Instead, it is designed to automate a reduced number of tasks in a
+        "one-click" way without setting many parameters.</p>
+      <p>These tasks are:</p>
+      <ul>
+        <li>Create a simple video DVD with one movie, no menu, no alternate language.</li>
+        <li>Create video files for the iPad.</li>
+      </ul>
+      <p>QtlMovie main features are:</p>
+      <ul>
+        <li>Take any type of common audio/video file as input.</li>
+        <li>Produce ISO images for DVD burning (external tool required to burn the ISO image).</li>
+        <li>Produce video files for iPad viewing.</li>
+        <li>Keep only one audio track.</li>
+        <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
+          but does not keep subtitles as a separate stream.</li>
+      </ul>
+      <p>QtlMovie is based on the Qt framework. It works on Windows, Linux and should
+        work on any platform which is supported by Qt version 5. QtlMovie uses external free software
+        such as ffmpeg, DVD Author or mkisofs which are available on Windows and Linux.</p>
+      <p>QtlMovie is available either as source code or binary installer for Windows.
+        The binary installer for Windows comes prepackaged with Qt5 libraries, ffmpeg (64-bit), DVD Author and mkisofs.
+        It is self-sufficient and does not depend on any prior installation.</p>
+      <hr/>
+      <h2><a id="infiles">Input files</a></h2>
+      <h3><a id="avin">Audio/video input</a></h3>
+      <p>Input files can be any type of multimedia file which is accepted as input by ffmpeg.
+        This include the container file format (MPG, AVI, MKV, etc.), the video format
+        (MPEG-2, AVC / H.264, WMV, etc.) and the audio format (MP2, MP3, AAC, etc.)</p>
+      <p>Multiple video, audio and subtitle streams can be present. The QtlMovie graphical interface
+        requests the user to select exactly one video and one audio stream.</p>
+      <h3><a id="subin">Subtitle input</a></h3>
+      <p>At most one subtitle source can be specified. This can be a stream of the input file or an external subtitle file.</p>
+      <p>The following subtitles formats are supported:</p>
+      <ul>
+        <li>SubRip (SRT).</li>
+        <li>SubStation Alpha (SSA, ASS).</li>
+        <li>DVD subtitles (input file stream only, not external subtitle file).</li>
+        <li>DVB subtitles (transport stream input file stream only, not external subtitle file).</li>
+      </ul>
+      <p>Teletext subtitles are not yet supported but will be in a future release.</p>
+      <p>Important: The subtitles are always hardcoded ("<i>burnt</i>") into the video by QtlMovie.
+        The output file never contains independent subtitle streams.</p>
+      <hr/>
+      <h2><a id="outfiles">Output files</a></h2>
+      <h3><a id="dvdout">DVD output</a></h3>
+      <p>QtlMovie always produces DVD with the following characteristics:</p>
+      <ul>
+        <li>PAL format.</li>
+        <li>MPEG-2 video, 16:9, 720 x 576, 25 frames/second. The average bitrate is 4 Mb/s
+          (adjustable in the settings) but is automatically reduced when necessary so
+          that the output fits in a 4.7 GB DVD media.</li>
+        <li>MPEG-1 layer 2 audio, stereo, sampled at 48 kHz. The audio bitrate is 192 kb/s.</li>
+      </ul>
+      <p>The output video has a 16:9 aspect ratio. Black borders are added when necessary so
+        that the meaningful image part has the same aspect ratio as the input file.</p>
+      <p>QtlMovie can produce two types of DVD output: An MPEG file (.mpg) with a DVD-compliant
+        content or an ISO image of the DVD media. The first option can be used to check the
+        audio/video using standard media players. If the result is satisfactory, the resulting MPEG
+        file can be used as input to produce a DVD ISO image. Alternatively, if you are confident
+        with the processing, a DVD ISO image can be directly requested (the transcoding and
+        ISO image generation are automatically processed).</p>
+      <p>When producing a DVD ISO image, QtlMovie tries to guess if the input file is already
+        a DVD-compliant MPEG file or not. In the first case, QtlMovie does not re-encode the
+        input file and directly creates the DVD structure from the input MPEG file.</p>
+      <h3><a id="ipadout">iPad output</a></h3>
+      <p>QtlMovie always produces iPad files with the following characteristics:</p>
+      <ul>
+        <li>MP4 file format.</li>
+        <li>AVC / H.264 video, baseline profile, level 3.0. The average bitrate is 2.5 Mb/s.
+          The display aspect ratio is unchanged (no black border is added).
+          The frame size is unchanged, unless the input size exceeds 1024 x 768 in which case the
+          size is reduced to fit within a 1024 x 768 bounding box, preserving the input aspect ratio.</li>
+        <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
+      </ul>
+      <h3><a id="subout">Subtitle extraction</a></h3>
+      <p>QtlMovie can also be used to extract subtitle streams from the input files.
+        The input and output formats must text subtitles: SRT, SSA, ASS.
+        Conversions are possible between these formats (SRT subtitles can be extracted as ASS for instance).</p>
+      <hr/>
+      <p>[<i><a href="#top">Back to top</a></i>]</p>
+    </div>
+  </body>
+</html>

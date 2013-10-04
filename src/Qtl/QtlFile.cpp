@@ -1,0 +1,400 @@
+//----------------------------------------------------------------------------
+//
+// Copyright (c) 2013, Thierry Lelegard
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice,
+//    this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+// THE POSSIBILITY OF SUCH DAMAGE.
+//
+//----------------------------------------------------------------------------
+//
+// Qtl, Qt utility library.
+// Define the class QtlFile.
+//
+//----------------------------------------------------------------------------
+
+#include "QtlFile.h"
+#include <QProcessEnvironment>
+#include <QFileInfo>
+#include <QDir>
+
+
+//----------------------------------------------------------------------------
+// Constructor.
+//----------------------------------------------------------------------------
+
+QtlFile::QtlFile(const QString& fileName, QObject *parent) :
+    QObject(parent),
+    _fileName(fileName == "" ? "" : absoluteNativeFilePath(fileName))
+{
+}
+
+QtlFile::QtlFile(const QtlFile& other, QObject* parent) :
+    QObject(parent),
+    _fileName(other._fileName)
+{
+}
+
+
+//----------------------------------------------------------------------------
+// Get the directory name of the file.
+//----------------------------------------------------------------------------
+
+QString QtlFile::directoryName() const
+{
+    if (_fileName.isEmpty()) {
+        return "";
+    }
+    else {
+        const QFileInfo info(_fileName);
+        return absoluteNativeFilePath(info.path());
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Set the file name.
+//----------------------------------------------------------------------------
+
+bool QtlFile::setFileName(const QString& fileName)
+{
+    const QString path(fileName.isEmpty() ? "" : absoluteNativeFilePath(fileName));
+    if (path != _fileName) {
+        // Set a new file name.
+        _fileName = path;
+        emit fileNameChanged(_fileName);
+        return true;
+    }
+    else {
+        // The absolute path remains unchanged.
+        return false;
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Build an absolute file path with native directory separators.
+//----------------------------------------------------------------------------
+
+QString QtlFile::absoluteNativeFilePath(const QString& path)
+{
+    // Qt conversion and clean path operates on '/' only.
+    // Make sure that the Windows separators are converted into slashes.
+    QString path1(path);
+    path1.replace('\\', '/');
+
+    // Build an absolute file path, remove redundant "." and "..", convert directory separators to "/".
+    QString clean(QDir::cleanPath(QFileInfo(path1).absoluteFilePath()));
+
+    // Collapse multiple slashes. Note that "//" shall remain at the beginning of the string (Windows share).
+#if defined(Q_OS_WIN)
+    const bool winShare = clean.startsWith("//");
+#endif
+    clean.replace(QRegExp("/+"), "/");
+#if defined(Q_OS_WIN)
+    if (winShare) {
+        clean.insert(0, '/');
+    }
+#endif
+
+    // Remove trailing slashes (unless on "/").
+    if (clean.length() > 1) {
+        clean.replace(QRegExp("/*$"), "");
+    }
+
+    // Convert directory separators to native.
+    return QDir::toNativeSeparators(clean);
+}
+
+
+//----------------------------------------------------------------------------
+// Return the list of directories in the system search path.
+//----------------------------------------------------------------------------
+
+QStringList QtlFile::commandSearchPath()
+{
+    // Environment variable names.
+#if defined(Q_OS_WIN)
+    const QString varName("Path");
+    const QString pathSeparator(";");
+#else
+    const QString varName("PATH");
+    const QString pathSeparator(":");
+#endif
+
+    // Get the process environment.
+    const QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+
+    // Get and split the search path.
+    return env.value(varName).split(pathSeparator, QString::SkipEmptyParts);
+}
+
+
+//----------------------------------------------------------------------------
+// Search a file in a list of directories.
+//----------------------------------------------------------------------------
+
+QString QtlFile::search(const QString& baseName,
+                        const QStringList& searchPath,
+                        const QString& extension,
+                        QFile::Permissions permissions)
+{
+    // Filter out empty name.
+    if (baseName.isEmpty()) {
+        return "";
+    }
+
+    // Check if the file ends with the specified extension.
+    // On Windows, use non-case-sensitive search.
+    QString fileName(baseName);
+    const Qt::CaseSensitivity caseSensitivity =
+#if defined(Q_OS_WIN)
+        Qt::CaseInsensitive;
+#else
+        Qt::CaseSensitive;
+#endif
+    if (!baseName.endsWith(extension, caseSensitivity)) {
+        // Specified extension not present, add it.
+        fileName.append(extension);
+    }
+
+    // If fileName contains a directory separator, do not seach in other directories.
+    if (fileName.contains(QChar('/')) || fileName.contains(QChar('\\'))) {
+        return absoluteNativeFilePath(fileName);
+    }
+
+    // Search file in all directories.
+    foreach (const QString& dir, searchPath) {
+        const QString path(dir + QDir::separator() + fileName);
+        const QFileInfo info(path);
+        if (info.exists() && info.permission(permissions) && !info.isDir()) {
+            // Found.
+            return path;
+        }
+    }
+
+    // File not found.
+    return "";
+}
+
+
+//----------------------------------------------------------------------------
+// Expand a file path containing wildcards to all existing files matching
+// the specification.
+//----------------------------------------------------------------------------
+
+namespace {
+    //!
+    //! Recursive helper function for qtlExpandFilePath.
+    //! @param [in,out] result The list of full file paths to return.
+    //! @param [in] baseDir Current directory to explore.
+    //! @param [in] currentPart Iterator to current component in the original wildcard specification.
+    //! @param [in] endPart Iterator to the end of this list of components.
+    //! @param [in] filter User-specified filter.
+    //!
+    void subExpandFilePath(QStringList& result,
+                           const QString& baseDir,
+                           const QStringList::const_iterator& currentPart,
+                           const QStringList::const_iterator& endPart,
+                           QtlFilePathFilterInterface* filter)
+    {
+        // If there is nothing to search in the base directory, there is nothing to find...
+        if (currentPart == endPart) {
+            return;
+        }
+
+        // Get the current component in the base directory (can be a wildcard).
+        QString localPart(*currentPart);
+        QStringList::const_iterator nextPart(currentPart + 1);
+        bool isLastPart = nextPart == endPart;
+
+        // Base options for filtering files in the directory.
+        QDir::Filters filterOptions (
+        #if defined (Q_OS_UNIX)
+            // Case sensitivity depends on the operating system.
+            QDir::CaseSensitive |
+        #endif
+            // Always filter directories.
+            QDir::Dirs |
+            // We always skip "." and "..".
+            QDir::NoDotAndDotDot);
+
+        // Special case: the local part is **, meaning all subdirectories.
+        if (localPart == "**") {
+
+            // Skip contiguous **.
+            while (nextPart != endPart && *nextPart == "**") {
+                ++nextPart;
+            }
+
+            // First, apply _next_ part (without **) to the local subdirectory.
+            subExpandFilePath(result, baseDir, nextPart, endPart, filter);
+
+            // Then apply the local scheme (**) on all subdirectories.
+            localPart = "*";    // search all local subdirectories.
+            --nextPart;         // back on **, applied on all local subdirectories.
+            isLastPart = false; // since we stepped back.
+        }
+        else if (nextPart == endPart) {
+            // Last component and not **. We also filter files.
+            filterOptions |= QDir::Files;
+        }
+
+        // Load files and directories in the base directories using localPart as name filter.
+        QDir dir(baseDir, localPart, QDir::Name | QDir::IgnoreCase | QDir::DirsLast, filterOptions);
+        QFileInfoList files(dir.entryInfoList());
+
+        // Loop on all entries in the directory.
+        foreach (QFileInfo info, files) {
+
+            // Build full path.
+            const QString fileName(info.fileName());
+            const QString filePath(baseDir + QDir::separator() + fileName);
+
+            // Check if this file path must be kept using the optional filter.
+            // We only add paths when we reached the last componement in the path.
+            if (isLastPart && (filter == 0 || filter->filePathFilter(info))) {
+                result.append(filePath);
+            }
+
+            // Check if we need to recurse in a subdirectory.
+            if (info.isDir() && !isLastPart && (filter == 0 || filter->recursionFilter(info))) {
+                subExpandFilePath(result, filePath, nextPart, endPart, filter);
+            }
+        }
+    }
+}
+
+QStringList QtlFile::expandFilePath(const QString& path, QtlFilePathFilterInterface* filter)
+{
+    // Resolve absolute path.
+    QString absPath(absoluteNativeFilePath(path));
+    const QChar sep(QDir::separator());
+
+    // The object to return.
+    QStringList result;
+
+    // Locate first wildcard character in string.
+    int start = absPath.indexOf(QRegExp("[?\\*]"));
+    if (start < 0) {
+        // No wildcard, point after end of string.
+        start = absPath.length();
+    }
+
+    // Filter pathological case: a wildcard cannot be at beginning of absolute file path.
+    if (start <= 0) {
+        return result;
+    }
+
+    // Locate last directory separator before first wildcard (or end of string).
+    start = absPath.lastIndexOf(sep, start - 1);
+
+    // Longest directory path without wildcard.
+    // Use at least "/" when root is the first directory without wildcard.
+    QString baseDirectory(absPath.left(qMax(start, 1)));
+
+    // Split all remaining components.
+    QStringList parts(absPath.mid(start).split(sep, QString::SkipEmptyParts));
+
+    // Run the exploration
+    subExpandFilePath(result, baseDirectory, parts.begin(), parts.end(), filter);
+
+    // Cleanup the list.
+    result.sort(Qt::CaseInsensitive);
+    result.removeDuplicates();
+    return result;
+}
+
+
+//-----------------------------------------------------------------------------
+// Get the absolute file path of the parent directory of a file.
+//-----------------------------------------------------------------------------
+
+QString QtlFile::parentPath(const QString& path, int upLevels)
+{
+    QFileInfo info(path);
+    while (upLevels-- > 0) {
+        info = QFileInfo(info.absolutePath());
+    }
+    return absoluteNativeFilePath(info.absoluteFilePath());
+}
+
+
+//-----------------------------------------------------------------------------
+// Read the content of a binary file.
+//-----------------------------------------------------------------------------
+
+QtlByteBlock QtlFile::readBinaryFile(const QString& fileName, int maxSize)
+{
+    // Open the file. Note: the ~QFile() destructor will close it.
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) {
+        return QtlByteBlock();
+    }
+
+    // Read the file.
+    QtlByteBlock data;
+    readBinary(file, data, maxSize);
+    return data;
+}
+
+
+//-----------------------------------------------------------------------------
+// Read a portion of a binary file at a given position.
+//-----------------------------------------------------------------------------
+
+bool QtlFile::readBinary(QIODevice& device, QtlByteBlock& data, int maxSize)
+{
+    // Clear returned content.
+    data.clear();
+
+    // Chunk size for each read operation.
+    const int maxChunkSize = 2048;
+    const int chunkSize = maxSize < 0 ? maxChunkSize : qMin(maxSize, maxChunkSize);
+
+    // Actual read size.
+    int size = 0;
+    bool success = true;
+
+    // Read until maxSize or end of file.
+    while (maxSize < 0 || size < maxSize) {
+        // Resize buffer.
+        data.resize(data.size() + chunkSize);
+
+        // Read a chunk.
+        const qint64 thisMax = maxSize < 0 || size + chunkSize < maxSize ? chunkSize : maxSize - size;
+        const qint64 thisRead = device.read(reinterpret_cast<char*>(data.data() + size), thisMax);
+        success = thisRead >= 0;
+        if (!success) {
+            break;
+        }
+        size += thisRead;
+        if (thisRead < thisMax) {
+            break;
+        }
+    }
+
+    // Resize to actually read size.
+    data.resize(size);
+
+    // Do not report error now if some bytes were read.
+    return success || size > 0;
+}

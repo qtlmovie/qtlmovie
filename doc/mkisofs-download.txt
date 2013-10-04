@@ -1,0 +1,11 @@
+Windows binary:
+  http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/mkisofs.exe
+
+The above links to a version 2 of mkisofs. Do not use version 3 as
+found in http://osspack32.googlecode.com/files/mkisofs.exe
+
+Useful information:
+  http://askubuntu.com/questions/28052/how-do-i-create-a-video-dvd-from-vob-files
+  http://www.crazysquirrel.com/computing/debian/dvd-creation.jspx
+  http://linuxgazette.net/issue83/stoddard.html
+  http://idefix.net/~koos/irregular.php/irregular-20071126/from-video-ts-to-working-video-dvd-in-linux

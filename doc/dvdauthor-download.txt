@@ -1,0 +1,12 @@
+DvdAuthor source:
+http://dvdauthor.sourceforge.net/
+http://sourceforge.net/projects/dvdauthor/
+http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/
+http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/dvdauthor-0.7.1.tar.gz/download
+
+DvdAuthor Mingw version version for Windows:
+http://www.paehl.com/open_source/?DVDAuthor
+http://www.paehl.com/open_source/downloads/dvdauthor_0.7.1.7z
+
+DvdAuthor documentation:
+http://dvdauthor.sourceforge.net/doc/index.html

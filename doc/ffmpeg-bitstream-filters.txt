@@ -1,0 +1,15 @@
+Bitstream filters:
+text2movsub
+remove_extra
+noise
+mov2textsub
+mp3decomp
+mp3comp
+mjpegadump
+mjpeg2jpeg
+imxdump
+h264_mp4toannexb
+dump_extra
+chomp
+aac_adtstoasc
+

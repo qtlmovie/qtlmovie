@@ -1,0 +1,15 @@
+On Windows, download the latest official FFmpeg static binary (see below).
+This is a compressed file such as ffmpeg-1.2-win64-static.7z.
+Versions exist for 32-bit and 64-bit Windows. Be sure to download
+the adequate version in order to get the maximum performance.
+
+FFmpeg home page: http://ffmpeg.org/
+Windows builds: http://ffmpeg.zeranoe.com/builds/
+Win64 static builds: http://ffmpeg.zeranoe.com/builds/win64/static/
+
+http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.7z
+
+QtlMovie has not yet be tested with libav, the new FFmpeg fork.
+
+Libav home page: http://libav.org/
+Windows builds: http://win32.libav.org/releases/

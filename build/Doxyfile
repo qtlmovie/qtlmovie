@@ -1,0 +1,156 @@
+#-----------------------------------------------------------------------------
+# 
+#  Copyright (c) 2013, Thierry Lelegard
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer. 
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution. 
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+#  THE POSSIBILITY OF SUCH DAMAGE.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Doxygen configuration file for QtlMovie.
+# 
+#-----------------------------------------------------------------------------
+
+# Include all default values from Doxygen 1.8.2
+@INCLUDE = Doxyfile.defaults
+
+PROJECT_NAME = "QtlMovie"
+
+# All directories containing generated files start with build-
+OUTPUT_DIRECTORY = ../build-doxygen
+
+# Source files are in src
+FULL_PATH_NAMES = NO
+INPUT = ../src
+EXCLUDE = ../src/UnitTest
+
+# Extract all definitions. Also recognizes Qt slots and signals.
+EXTRACT_ALL = YES
+EXTRACT_PRIVATE = YES
+EXTRACT_STATIC = YES
+
+# Macro names that are defined before the preprocessor is started.
+PREDEFINED += DOXYGEN
+
+# Do not generate LaTex output.
+GENERATE_LATEX = NO
+
+# If the JAVADOC_AUTOBRIEF tag is set to YES then Doxygen
+# will interpret the first line (until the first dot) of a JavaDoc-style
+# comment as the brief description. If set to NO, the JavaDoc
+# comments will behave just like regular Qt-style comments
+# (thus requiring an explicit @brief command for a brief description.)
+
+JAVADOC_AUTOBRIEF = YES
+
+# When TYPEDEF_HIDES_STRUCT is enabled, a typedef of a struct, union, or enum
+# is documented as struct, union, or enum with the name of the typedef. So
+# typedef struct TypeS {} TypeT, will appear in the documentation as a struct
+# with name TypeT. When disabled the typedef will appear as a member of a file,
+# namespace, or class. And the struct will be named TypeS. This can typically
+# be useful for C code in case the coding convention dictates that all compound
+# types are typedef'ed and only the typedef is referenced, never the tag name.
+
+TYPEDEF_HIDES_STRUCT = YES
+
+# If the SHOW_INCLUDE_FILES tag is set to YES (the default) then Doxygen
+# will put a list of the files that are included by a file in the documentation
+# of that file.
+
+SHOW_INCLUDE_FILES = NO
+
+# If the SORT_MEMBER_DOCS tag is set to YES (the default) then doxygen
+# will sort the (detailed) documentation of file and class members
+# alphabetically by member name. If set to NO the members will appear in
+# declaration order.
+
+SORT_MEMBER_DOCS = NO
+
+# If the SORT_BRIEF_DOCS tag is set to YES then doxygen will sort the
+# brief documentation of file, namespace and class members alphabetically
+# by member name. If set to NO (the default) the members will appear in
+# declaration order.
+
+SORT_BRIEF_DOCS = YES
+
+# If the SORT_MEMBERS_CTORS_1ST tag is set to YES then doxygen
+# will sort the (brief and detailed) documentation of class members so that
+# constructors and destructors are listed first. If set to NO (the default)
+# the constructors will appear in the respective orders defined by
+# SORT_MEMBER_DOCS and SORT_BRIEF_DOCS.
+# This tag will be ignored for brief docs if SORT_BRIEF_DOCS is set to NO
+# and ignored for detailed docs if SORT_MEMBER_DOCS is set to NO.
+
+SORT_MEMBERS_CTORS_1ST = YES
+
+# The QUIET tag can be used to turn on/off the messages that are generated
+# by doxygen. Possible values are YES and NO. If left blank NO is used.
+
+QUIET = YES
+
+# The WARN_NO_PARAMDOC option can be enabled to get warnings for
+# functions that are documented, but have no documentation for their parameters
+# or return value. If set to NO (the default) doxygen will only warn about
+# wrong or incomplete parameter documentation, but not about the absence of
+# documentation.
+
+WARN_NO_PARAMDOC = YES
+
+# The RECURSIVE tag can be used to turn specify whether or not subdirectories
+# should be searched for input files as well. Possible values are YES and NO.
+# If left blank NO is used.
+
+RECURSIVE = YES
+
+# If the VERBATIM_HEADERS tag is set to YES (the default) then Doxygen
+# will generate a verbatim copy of the header file for each class for
+# which an include is specified. Set to NO to disable this.
+
+VERBATIM_HEADERS = NO
+
+# The HTML_STYLESHEET tag can be used to specify a user-defined cascading
+# style sheet that is used by each HTML page. It can be used to
+# fine-tune the look of the HTML output. If the tag is left blank doxygen
+# will generate a default style sheet. Note that doxygen will try to copy
+# the style sheet file to the HTML output directory, so don't put your own
+# style sheet in the HTML output directory as well, or it will be erased!
+
+HTML_STYLESHEET = Doxygen.css
+
+# The GENERATE_TREEVIEW tag is used to specify whether a tree-like index
+# structure should be generated to display hierarchical information.
+# If the tag value is set to YES, a side panel will be generated
+# containing a tree-like index structure (just like the one that
+# is generated for HTML Help). For this to work a browser that supports
+# JavaScript, DHTML, CSS and frames is required (i.e. any modern browser).
+# Windows users are probably better off using the HTML help feature.
+# Since the tree basically has the same information as the tab index you
+# could consider to set DISABLE_INDEX to NO when enabling this option.
+
+GENERATE_TREEVIEW = YES
+
+# The ENUM_VALUES_PER_LINE tag can be used to set the number of enum values
+# (range [0,1..20]) that doxygen will group on one line in the generated HTML
+# documentation. Note that a value of 0 will completely suppress the enum
+# values from appearing in the overview section.
+
+ENUM_VALUES_PER_LINE = 1
