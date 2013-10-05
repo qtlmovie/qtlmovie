@@ -104,6 +104,12 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     _streams.clear();
     _ffInfo.clear();
 
+    // If the file is an ISO image, there is nothing to analyze.
+    if (isIsoImage()) {
+        emit mediaInfoChanged();
+        return;
+    }
+
     // If there was some info, they changed (we just cleared them).
     if (!wasNone) {
         emit mediaInfoChanged();
@@ -378,6 +384,17 @@ bool QtlMovieInputFile::isDvdCompliant() const
         _ffInfo.value("format.format_name") == "mpeg" &&
         _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video" &&
         _ffInfo.valueOfStream(audioStream->ffIndex(), "codec_name") == "mp2";
+}
+
+
+//----------------------------------------------------------------------------
+// Check if the file seems to be a DVD ISO image.
+//----------------------------------------------------------------------------
+
+bool QtlMovieInputFile::isIsoImage() const
+{
+    QFileInfo info(fileName());
+    return info.suffix().toLower() == "iso";
 }
 
 

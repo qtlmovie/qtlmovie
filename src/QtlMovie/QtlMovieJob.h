@@ -228,13 +228,12 @@ private:
     bool addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, const QString& outputFileName);
 
     //!
-    //! Add the processes for transcoding to a DVD ISO image and burn it.
-    //! @param [in] inputFile The input file.
-    //! @param [in] outputFileName The output file name of the ISO image.
+    //! Add the process for burning a DVD ISO image.
+    //! @param [in] isoFile The input ISO image.
     //! @param [in] dvdBurner The DVD burner device.
     //! @return True on success, false on error.
     //!
-    bool addTranscodeAndBurnDvd(const QtlMovieInputFile* inputFile, const QString& outputFileName, const QString& dvdBurner);
+    bool addBurnDvd(const QString& isoFile, const QString& dvdBurner);
 
     //!
     //! Add a process for transcoding to iPad.

@@ -133,6 +133,13 @@ public:
     bool isDvdCompliant() const;
 
     //!
+    //! Check if the file seems to be a DVD ISO image.
+    //! In fact, check that the file name ends in ".iso".
+    //! @return True if the file seems to be a DVD ISO image.
+    //!
+    bool isIsoImage() const;
+
+    //!
     //! Get the DVD palette in RGB format.
     //! @return The DVD palette in RGB format or an empty array if the file is not a DVD.
     //!

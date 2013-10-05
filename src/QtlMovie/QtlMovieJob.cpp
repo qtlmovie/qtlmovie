@@ -252,6 +252,11 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
         return false;
     }
 
+    // ISO image can only be burnt.
+    if (inputFile->isIsoImage()) {
+        return outputType == QtlMovieOutputFile::DvdBurn;
+    }
+
     // Subtitle type.
     const QtlMovieStreamInfoPtr subtitleInfo(inputFile->selectedSubtitleStreamInfo());
     const QtlMovieStreamInfo::SubtitleType subtitleType(subtitleInfo.isNull() ? QtlMovieStreamInfo::SubNone : subtitleInfo->subtitleType());
@@ -319,6 +324,11 @@ bool QtlMovieJob::buildScenario()
     // Main output file type.
     const QtlMovieOutputFile::OutputType outputType = _outputFile->outputType();
 
+    // If the operation is simply a DVD burning, there is nothing to transcode.
+    if (_inputFile->isIsoImage() && outputType == QtlMovieOutputFile::DvdBurn) {
+        return addBurnDvd(_inputFile->fileName(), settings()->dvdBurner());
+    }
+
     // The input file which will be used for media transcoding.
     // Initially, this is the input file but we may insert intermediate steps later.
     const QtlMovieInputFile* inputForTranscoding = _inputFile;
@@ -378,7 +388,8 @@ bool QtlMovieJob::buildScenario()
         break;
     }
     case QtlMovieOutputFile::DvdBurn: {
-        success = addTranscodeAndBurnDvd(inputForTranscoding, _outputFile->fileName(), settings()->dvdBurner());
+        success = addTranscodeToDvdIsoImage(inputForTranscoding, _outputFile->fileName()) &&
+                addBurnDvd(_outputFile->fileName(), settings()->dvdBurner());
         break;
     }
     case QtlMovieOutputFile::Ipad: {
@@ -852,23 +863,18 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
 
 
 //----------------------------------------------------------------------------
-// Add the processes for transcoding to a DVD ISO image and burn it.
+// Add the process for burning a DVD ISO image.
 //----------------------------------------------------------------------------
 
-bool QtlMovieJob::addTranscodeAndBurnDvd(const QtlMovieInputFile* inputFile, const QString& outputFileName, const QString& dvdBurner)
+bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
 {
-    // First, generate the DVD ISO image.
-    if (!addTranscodeToDvdIsoImage(inputFile, outputFileName)) {
-        return false;
-    }
-
     // Build a growisofs command to burn the DVD.
     // Important: In the last argument, use "device=isofile" in one single argument.
     // If the burning device and the ISO file are specified in two separate arguments,
     // growisofs creates a new file system with the ISO file inside. The "=" in the
     // same argument means that the file is an ISO image to burn.
     QStringList args;
-    args << "-dvd-compat" << "-Z" << (dvdBurner + "=" + outputFileName);
+    args << "-dvd-compat" << "-Z" << (dvdBurner + "=" + isoFile);
 
     // Add the growisofs process to the job.
     QtlMovieProcess* process = new QtlMovieGrowisofsProcess(args, settings(), log(), this);
