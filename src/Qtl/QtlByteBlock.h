@@ -302,7 +302,7 @@ public:
     template<typename INT>
     INT fromBigEndian(int index)
     {
-        return index < 0 || index + sizeof(INT) > size() ? 0 : qFromBigEndian<INT>(data() + index);
+        return index < 0 || index + int(sizeof(INT)) > size() ? 0 : qFromBigEndian<INT>(data() + index);
     }
 };
 
