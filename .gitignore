@@ -1,5 +1,12 @@
+build-[Dd]oxygen
+build-*-[Rr]elease
+build-*-[Dd]ebug
 *~
 *.bak
 *.exe
-build-*
+*.dll
+*.lib
+*.obj
+*.a
+*.o
 *.pro.user
