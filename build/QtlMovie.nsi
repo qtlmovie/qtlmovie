@@ -32,7 +32,7 @@
 ;  If Win64 is defined, generate a 64-bit installer (default: 32-bit installer).
 ;
 ;  This script uses the following required symbols:
-;  ProductVersion, BuildDir, RootDir, QtDllDir, OutDir.
+;  ProductVersion, BuildDir, RootDir, QtDllDir, QtPluginDir, OutDir.
 ;
 ;-----------------------------------------------------------------------------
 
@@ -137,7 +137,11 @@ Section "Install"
     File "${QtDllDir}\icuin51.dll"
     File "${QtDllDir}\icuuc51.dll"
     File "${QtDllDir}\icudt51.dll"
+    File "${RootDir}\build\qt.conf"
     File "${RootDir}\LICENSE.txt"
+
+    SetOutPath "$INSTDIR\plugins\platforms"
+    File "${QtPluginDir}\platforms\qwindows.dll"
 
     SetOutPath "$INSTDIR\fonts"
     File "${RootDir}\fonts\fonts.conf.template"
@@ -210,6 +214,10 @@ Section "Uninstall"
     Delete "$INSTDIR\wintools\dvddecrypter.txt"
     RMDir  "$INSTDIR\wintools"
 
+    Delete "$INSTDIR\plugins\platforms\qwindows.dll"
+    RMDir  "$INSTDIR\plugins\platforms"
+    RMDir  "$INSTDIR\plugins"
+
     Delete "$INSTDIR\QtlMovie.exe"
     Delete "$INSTDIR\Qt5Core.dll"
     Delete "$INSTDIR\Qt5Network.dll"
@@ -222,6 +230,7 @@ Section "Uninstall"
     Delete "$INSTDIR\icuin51.dll"
     Delete "$INSTDIR\icuuc51.dll"
     Delete "$INSTDIR\icudt51.dll"
+    Delete "$INSTDIR\qt.conf"
     Delete "$INSTDIR\LICENSE.txt"
     Delete "$INSTDIR\QtlMovieUninstall.exe"
     RMDir  "$INSTDIR"

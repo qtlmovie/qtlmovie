@@ -1,0 +1,8 @@
+===================
+QtlMovie Change Log
+===================
+
+* 2013-10-08 - Fixed deployment problem on Windows.
+  The Qt DLL's which were copied still referenced the hardcoded
+  path the Qt build environment. Now the installer includes the
+  required Qt plugins.

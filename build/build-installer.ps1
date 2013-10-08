@@ -150,13 +150,18 @@ else {
     & (Join-Path $PSScriptRoot build.ps1) -Release -NoPause
 }
 
-# Search the various files to pack.
-$ProductExe = Get-FileInPath "${ProductName}.exe" ($BuildDir, (Join-Path $BuildDir "release"), (Join-Path $BuildDir $ProductName), (Join-Path (Join-Path $BuildDir $ProductName) "release"))
-$ProductBuildDir = Split-Path -Parent $ProductExe
-$QtDllDir = Split-Path -Parent (Get-FileInPath Qt5Core.dll $env:Path)
-
 # Build the installer.
 if (-not $NoInstaller) {
+
+    # Search the various files to pack.
+    $ProductExe = Get-FileInPath "${ProductName}.exe" ($BuildDir, (Join-Path $BuildDir "release"), (Join-Path $BuildDir $ProductName), (Join-Path (Join-Path $BuildDir $ProductName) "release"))
+    $ProductBuildDir = Split-Path -Parent $ProductExe
+    $QtDllDir = Split-Path -Parent (Get-FileInPath Qt5Core.dll $env:Path)
+    $QtPluginDir = (Join-Path (Split-Path -Parent $QtDllDir) "plugins")
+    if (-not (Test-Path -PathType Container $QtPluginDir)) {
+        Exit-Script "Qt plugins directory not found: $QtPluginDir"
+    }
+
     # Locate NSIS, the Nullsoft Scriptable Installation System.
     $NsisExe = Get-FileInPath makensis.exe "$env:Path;C:\Program Files\NSIS;C:\Program Files (x86)\NSIS"
     $NsisScript = Get-FileInPath "${ProductName}.nsi" $PSScriptRoot
@@ -167,6 +172,7 @@ if (-not $NoInstaller) {
         "/DBuildDir=$ProductBuildDir" `
         "/DRootDir=$RootDir" `
         "/DQtDllDir=$QtDllDir" `
+        "/DQtPluginDir=$QtPluginDir" `
         "/DOutDir=$BuildDir" `
         "$NsisScript"
 
@@ -177,6 +183,7 @@ if (-not $NoInstaller) {
         "/DBuildDir=$ProductBuildDir" `
         "/DRootDir=$RootDir" `
         "/DQtDllDir=$QtDllDir" `
+        "/DQtPluginDir=$QtPluginDir" `
         "/DOutDir=$BuildDir" `
         "$NsisScript"
 }
