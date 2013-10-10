@@ -44,6 +44,7 @@ QtlMovieTsDemux::QtlMovieTsDemux(const QString& fileName,
                                  QObject* parent) :
     QtlMovieAction(settings, log, parent),
     _file(fileName),
+    _isM2ts(false),
     _timerId(-1)
 {
 }
@@ -123,6 +124,7 @@ void QtlMovieTsDemux::timerEvent(QTimerEvent* event)
     // Read TS packets.
     QtsTsPacket buffer[QTL_TS_PACKETS_CHUNK];
     const int count = _file.read(buffer, QTL_TS_PACKETS_CHUNK);
+    _isM2ts = _file.tsFileType() == QtsTsFile::M2tsFile;
 
     if (count < 0) {
         // File error.

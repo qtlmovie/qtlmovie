@@ -33,6 +33,17 @@
 
 #include "QtsTsFile.h"
 
+namespace {
+    //!
+    //! Number of TS packet to read to determine the file format.
+    //!
+    const int QTS_AUTODETECT_PACKETS = 16;
+    //!
+    //! Required number of matching TS packet to determine the file format.
+    //!
+    const int QTS_AUTODETECT_MIN_PACKETS = 12;
+}
+
 
 //----------------------------------------------------------------------------
 // Constructors.
@@ -40,14 +51,28 @@
 
 QtsTsFile::QtsTsFile(QObject* parent) :
     QFile(parent),
+    _tsFileType(AutoDetect),
     _inBuffer()
 {
 }
 
-QtsTsFile::QtsTsFile(const QString& name, QObject* parent) :
+QtsTsFile::QtsTsFile(const QString& name, TsFileType type, QObject* parent) :
     QFile(name, parent),
+    _tsFileType(type),
     _inBuffer()
 {
+}
+
+
+//----------------------------------------------------------------------------
+// Set the TS packet format. Must be called before open().
+//----------------------------------------------------------------------------
+
+void QtsTsFile::setTsFileType(const TsFileType& tsFileType)
+{
+    if (!isOpen()) {
+        _tsFileType = tsFileType;
+    }
 }
 
 
@@ -73,6 +98,76 @@ bool QtsTsFile::open(QIODevice::OpenMode mode)
 
 
 //----------------------------------------------------------------------------
+// Make sure that the internal input buffer contains at least a given number
+// of bytes.
+//----------------------------------------------------------------------------
+
+bool QtsTsFile::fillBuffer(int size)
+{
+    // If the buffer needs more data from the file.
+    if (_inBuffer.size() < size) {
+
+        // Resize the buffer to accept all requested bytes.
+        const int initialSize = _inBuffer.size();
+        _inBuffer.resize(size);
+
+        // Read data from the file.
+        const qint64 received = QIODevice::read(reinterpret_cast<char*>(_inBuffer.data()) + initialSize, qint64(size - initialSize));
+        if (received < 0) {
+            // Read error, restore buffer size.
+            _inBuffer.resize(initialSize);
+            return false;
+        }
+
+        // New buffer size.
+        _inBuffer.resize(initialSize + int(received));
+    }
+    return true;
+}
+
+
+//----------------------------------------------------------------------------
+// Read enough packets in _inBuffer to determine the packet size.
+//----------------------------------------------------------------------------
+
+bool QtsTsFile::autoDetectFileFormat()
+{
+    // Fill the buffer for auto-detection.
+    // Make sure we can read the requested number of largest packets (M2TS).
+    fillBuffer(QTS_AUTODETECT_PACKETS * QTS_PKT_M2TS_SIZE);
+
+    // Count matching synchronization bytes for TS and M2TS formats.
+    int tsMatch = 0;
+    int m2tsMatch = 0;
+    for (int i = 0; i < _inBuffer.size(); i += QTS_PKT_SIZE) {
+        if (_inBuffer[i] == QTS_SYNC_BYTE) {
+            tsMatch++;
+        }
+    }
+    for (int i = QTS_M2TS_HEADER_SIZE; i < _inBuffer.size(); i += QTS_PKT_M2TS_SIZE) {
+        if (_inBuffer[i] == QTS_SYNC_BYTE) {
+            m2tsMatch++;
+        }
+    }
+
+    // Guess the format from accumulated values.
+    // Get the format with the highest matches and at least the required number of packets.
+    if (tsMatch > m2tsMatch && tsMatch >= QTS_AUTODETECT_MIN_PACKETS) {
+        _tsFileType = TsFile;
+        return true;
+    }
+    else if (m2tsMatch > tsMatch && m2tsMatch >= QTS_AUTODETECT_MIN_PACKETS) {
+        _tsFileType = M2tsFile;
+        return true;
+    }
+    else {
+        // Cannot guess, not enough bytes or not a valid TS file.
+        return false;
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Read as many TS packets as possible from the file.
 //----------------------------------------------------------------------------
 
@@ -83,26 +178,36 @@ int QtsTsFile::read(QtsTsPacket* buffer, int maxPacketCount)
         return 0;
     }
 
-    // Copy buffered partial packet.
-    const int initialSize = _inBuffer.size();
-    Q_ASSERT(initialSize >= 0);
-    Q_ASSERT(initialSize < QTS_PKT_SIZE);
-    ::memcpy(buffer, _inBuffer.data(), initialSize);
-
-    // Maximum size to read.
-    const qint64 maxRead = qint64(maxPacketCount) * QTS_PKT_SIZE - initialSize;
-    const qint64 received = QIODevice::read(reinterpret_cast<char*>(buffer) + initialSize, maxRead);
-    if (received <= 0) {
-        // Read error.
-        return received;
+    // Perform initial autodetection of packet format.
+    if (_tsFileType == AutoDetect && !autoDetectFileFormat()) {
+        // Read error or not a valid TS file.
+        return -1;
     }
 
-    // Copy back the partial buffer (if any partial TS packet is present).
-    const int packetCount = int((initialSize + received) / QTS_PKT_SIZE);
-    const int residue = int((initialSize + received) % QTS_PKT_SIZE);
-    _inBuffer.resize(residue);
-    if (residue > 0) {
-        ::memcpy(_inBuffer.data(), buffer + packetCount, residue);
+    // Format of packets to read.
+    int headerSize = _tsFileType == M2tsFile ? QTS_M2TS_HEADER_SIZE : 0;
+    int packetSize = headerSize + QTS_PKT_SIZE;
+    int packetCount = 0;
+
+    // Read packets one by one, using the internal buffer as intermediate.
+    // Not optimal, especially in the case of plain TS files, but the code is simpler.
+    while (packetCount < maxPacketCount) {
+
+        // Make sure at least one packet is in the buffer.
+        const bool readOk = fillBuffer(packetSize);
+
+        // If not enough data in the buffer, stop there. Report an error only
+        // if an I/O error was detected and no previous packet could be read.
+        if (_inBuffer.size() < packetSize) {
+            return readOk || packetCount > 0 ? packetCount : -1;
+        }
+
+        // Read the TS packet into the user buffer. Skip the optional header.
+        ::memcpy(buffer++, _inBuffer.data() + headerSize, QTS_PKT_SIZE);
+        packetCount++;
+
+        // Remove the packet from the internal buffer.
+        _inBuffer.remove(0, packetSize);
     }
     return packetCount;
 }
@@ -114,8 +219,50 @@ int QtsTsFile::read(QtsTsPacket* buffer, int maxPacketCount)
 
 bool QtsTsFile::write(const QtsTsPacket* buffer, int packetCount)
 {
-    const char* current = reinterpret_cast<const char*>(buffer);
-    qint64 remain = qint64(packetCount) * QTS_PKT_SIZE;
+    while (packetCount-- > 0) {
+        if (!writeWithTimeStamp(0, buffer++)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+//----------------------------------------------------------------------------
+// Write one TS packet with timestamp to the file.
+//----------------------------------------------------------------------------
+
+bool QtsTsFile::writeWithTimeStamp(quint32 timeStamp, const QtsTsPacket* packet)
+{
+    switch (_tsFileType) {
+    case AutoDetect:
+    case TsFile: {
+        // Directly write the packet, ignore the time stamp.
+        return writeRawData(packet, QTS_PKT_SIZE);
+    }
+    case M2tsFile: {
+        // Convert the time stamp to big endian.
+        quint8 timeStampBuffer[4];
+        qToBigEndian<quint32>(timeStamp, timeStampBuffer);
+        // Write the time stamp, then the packet.
+        return writeRawData(timeStampBuffer, 4) && writeRawData(packet, QTS_PKT_SIZE);
+    }
+    default:
+        // Invalid file format, error.
+        return false;
+    }
+
+}
+
+
+//----------------------------------------------------------------------------
+// Write raw data to the file.
+//----------------------------------------------------------------------------
+
+bool QtsTsFile::writeRawData(const void* data, int size)
+{
+    const char* current = reinterpret_cast<const char*>(data);
+    qint64 remain = qint64(size);
     while (remain > 0) {
         const qint64 written = QIODevice::write(current, remain);
         if (written <= 0) {

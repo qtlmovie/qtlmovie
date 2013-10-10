@@ -2,7 +2,10 @@
 QtlMovie Change Log
 ===================
 
+* 2013-10-11 - Improved help files.
+
+* 2013-10-08 - Support M2TS input files.
+
 * 2013-10-08 - Fixed deployment problem on Windows.
-  The Qt DLL's which were copied still referenced the hardcoded
-  path the Qt build environment. Now the installer includes the
-  required Qt plugins.
+  The Qt DLL's which were copied still referenced the hardcoded path the Qt
+  build environment. Now the installer includes the required Qt plugins.

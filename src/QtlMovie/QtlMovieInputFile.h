@@ -140,6 +140,25 @@ public:
     bool isIsoImage() const;
 
     //!
+    //! Check if the input file is an MPEG transport stream.
+    //! This include TS and M2TS files.
+    //! @return True if the input file is an MPEG transport stream.
+    //!
+    bool isTsFile() const
+    {
+        return _isTs;
+    }
+
+    //!
+    //! Check if the input file has M2TS format.
+    //! @return True if the input file has M2TS format.
+    //!
+    bool isM2tsFile() const
+    {
+        return _isM2ts;
+    }
+
+    //!
     //! Get the DVD palette in RGB format.
     //! @return The DVD palette in RGB format or an empty array if the file is not a DVD.
     //!
@@ -305,6 +324,8 @@ private:
     int     _selectedAudioStreamIndex;           //!< Index of audio stream to transcode.
     int     _selectedSubtitleStreamIndex;        //!< Index of subtitle stream to transcode.
     QString _externalSubtitleFileName;           //!< Subtitle file name, can be empty.
+    bool    _isTs;                               //!< File is a transport stream (TS or M2TS format).
+    bool    _isM2ts;                             //!< File has M2TS format.
 
     // Unaccessible operations.
     QtlMovieInputFile() Q_DECL_EQ_DELETE;

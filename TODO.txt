@@ -2,10 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Complete help files: Overview / Why QtlMovie, settings description.
-  Add a warning on Ubuntu: too old version of ffmpeg, avconv insufficiently
-  compatible with ffmpeg.
-
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory.
 

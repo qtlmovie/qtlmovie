@@ -15,6 +15,7 @@
           <ul>
             <li><a href="#avin">Audio/video input</a></li>
             <li><a href="#subin">Subtitle input</a></li>
+            <li><a href="#dvdin">DVD input</a></li>
           </ul>
         </li>
         <li><a href="#outfiles">Output files</a>
@@ -22,6 +23,21 @@
             <li><a href="#dvdout">DVD output</a></li>
             <li><a href="#ipadout">iPad output</a></li>
             <li><a href="#subout">Subtitle extraction</a></li>
+          </ul>
+        </li>
+        <li><a href="#settings">Settings and options</a>
+          <ul>
+            <li><a href="#dirsettings">"Directories" tab</a></li>
+            <li><a href="#toolssettings">"Media Tools" tab</a></li>
+            <li><a href="#transcsettings">"Transcoding" tab</a></li>
+            <li><a href="#liscsettings">"Miscellaneous" tab</a></li>
+          </ul>
+        </li>
+        <li><a href="#platforms">Platforms notes</a>
+          <ul>
+            <li><a href="#windows">Windows</a></li>
+            <li><a href="#linux">Linux</a></li>
+            <li><a href="#otherpf">Other platforms</a></li>
           </ul>
         </li>
       </ul>
@@ -41,7 +57,7 @@
       <p>QtlMovie main features are:</p>
       <ul>
         <li>Take any type of common audio/video file as input.</li>
-        <li>Produce ISO images for DVD burning (external tool required to burn the ISO image).</li>
+        <li>Produce DVD ISO images and optionally burn them.</li>
         <li>Produce video files for iPad viewing.</li>
         <li>Keep only one audio track.</li>
         <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
@@ -49,15 +65,15 @@
       </ul>
       <p>QtlMovie is based on the Qt framework. It works on Windows, Linux and should
         work on any platform which is supported by Qt version 5. QtlMovie uses external free software
-        such as ffmpeg, DVD Author or mkisofs which are available on Windows and Linux.</p>
+        such as ffmpeg, DVD Author, telxcc or mkisofs which are available on Windows and Linux.</p>
       <p>QtlMovie is available either as source code or binary installer for Windows.
-        The binary installer for Windows comes prepackaged with Qt5 libraries, ffmpeg (64-bit), DVD Author and mkisofs.
+        The binary installer for Windows comes prepackaged with Qt5 libraries and all required media tools.
         It is self-sufficient and does not depend on any prior installation.</p>
       <hr/>
       <h2><a id="infiles">Input files</a></h2>
       <h3><a id="avin">Audio/video input</a></h3>
       <p>Input files can be any type of multimedia file which is accepted as input by ffmpeg.
-        This include the container file format (MPG, AVI, MKV, etc.), the video format
+        This include the container file format (MPG, AVI, MKV, TS, M2TS, etc.), the video format
         (MPEG-2, AVC / H.264, WMV, etc.) and the audio format (MP2, MP3, AAC, etc.)</p>
       <p>Multiple video, audio and subtitle streams can be present. The QtlMovie graphical interface
         requests the user to select exactly one video and one audio stream.</p>
@@ -69,10 +85,42 @@
         <li>SubStation Alpha (SSA, ASS).</li>
         <li>DVD subtitles (input file stream only, not external subtitle file).</li>
         <li>DVB subtitles (transport stream input file stream only, not external subtitle file).</li>
+        <li>Teletext subtitles (transport stream input file stream only, not external subtitle file)..</p>
       </ul>
-      <p>Teletext subtitles are not yet supported but will be in a future release.</p>
       <p>Important: The subtitles are always hardcoded ("<i>burnt</i>") into the video by QtlMovie.
         The output file never contains independent subtitle streams.</p>
+      <h3><a id="dvdin">DVD input</a></h3>
+      <p>QtlMovie is typically ideal to rip DVD and create iPad movies, a typical task when you own
+        an iPad and many DVD's.</p>
+      <p>A DVD is a standard file system. All video contents are in a top-level directory named VIDEO_TS.
+        Inside VIDEO_TS, there are several <i>title sets</i>.
+        A title set is typically a film, a documentary, a bonus, etc.
+        Title sets are numbered from "00" to "99" (potentially).
+        The title set "nn" is composed of several files named
+        VTS_nn_0.IFO, VTS_nn_0.VOB (optional), VTS_nn_1.VOB, etc.
+        The video content starts in VTS_nn_1.VOB and extends to other VOB's.
+        Each VOB has a maximum size of 1 GB.
+        Finding the main film of the DVD is usually easy, this is the largest video content (sum of all 
+        the VTS_nn_*.VOB).</p>
+      <p>QtlMovie recognizes this structure. To transcode a film, simply select as input file the
+        information file VTS_nn_0.IFO or any VTS_nn_*.VOB. QtlMovie will automatically find all VOB's for 
+        the film. QtlMovie also automatically finds the associated information file VTS_nn_0.IFO.
+        This is an important file since it contains the language names of the audio and subtitle tracks
+        and the color palette of the subtitles. When ripping a DVD, do not forget to include the .IFO
+        file for the film. Otherwise, the audio and subtitle tracks will appear without language and
+        you will be unable to decide which one to select. Also, without the .IFO file, the subtitles
+        appear in dirty colors and are barely watchable.</p>
+      <p>If your DVD is not copy-protected, QtlMovie can work directly on the DVD medium since this
+        is a regular file system.
+        For a copy-protected DVD that you legitimately own, you need a tool like <i>DVD Decrypter</i>
+        to rip it and copy the movie files to your hard drive. Do not forget to rip the VTS_nn_0.IFO
+        with the corresponding VOB files.</p>
+      <p>It is unclear if DVD Decrypter is available on platforms other than Windows but similar
+        tools exist on Linux. On Windows platforms, DVD Decrypter comes pre-pakaged with the
+        binary installer of QtlMovie. You can launch it from QtlMovie from the Tools menu.
+        Then, you can rip the film out of the DVD media. In a future version, QtlMovie
+        may automatically invoke DVD Decrypter as part of the transcoding process when the DVD
+        is copy-protected. This is possible since DVD Decrypter has a command line mode.</p>
       <hr/>
       <h2><a id="outfiles">Output files</a></h2>
       <h3><a id="dvdout">DVD output</a></h3>
@@ -86,15 +134,26 @@
       </ul>
       <p>The output video has a 16:9 aspect ratio. Black borders are added when necessary so
         that the meaningful image part has the same aspect ratio as the input file.</p>
-      <p>QtlMovie can produce two types of DVD output: An MPEG file (.mpg) with a DVD-compliant
-        content or an ISO image of the DVD media. The first option can be used to check the
-        audio/video using standard media players. If the result is satisfactory, the resulting MPEG
-        file can be used as input to produce a DVD ISO image. Alternatively, if you are confident
-        with the processing, a DVD ISO image can be directly requested (the transcoding and
-        ISO image generation are automatically processed).</p>
+      <p>QtlMovie can produce several types of DVD output:</p>
+      <ul>
+        <li>An MPEG file (.mpg) with a DVD-compliant content.</li>
+        <li>An ISO image of the DVD media.</li>
+        <li>Burn the DVD media.</li>
+      </ul>
+      <p>The first option can be used to check the resulting audio/video using standard media players.
+        If the result is satisfactory, the resulting MPEG file can be used as input to produce a DVD ISO image.</p>
       <p>When producing a DVD ISO image, QtlMovie tries to guess if the input file is already
         a DVD-compliant MPEG file or not. In the first case, QtlMovie does not re-encode the
         input file and directly creates the DVD structure from the input MPEG file.</p>
+      <p>A DVD ISO image can also be used as input file. In this case, the only possible
+        output type is burning the image to a physical media.</p>
+      <p>A consequence of these features is that a DVD can be created either at once, from the orginal
+        video file to the DVD physical media, or in several phases. In the later case, the output
+        of a phase (MPEG file, ISO image) can be used as input for the next phase without the pain
+        of audio/video re-encoding.</p>
+      <p>When the output type type is burning to a physical media, the so-called <i>output file name</i>
+        designates the ISO image in fact. The default DVD burning device shall be selected in the settings menu.
+        The ISO image is never deleted and can be reused to burn additional media.</p>
       <h3><a id="ipadout">iPad output</a></h3>
       <p>QtlMovie always produces iPad files with the following characteristics:</p>
       <ul>
@@ -107,8 +166,158 @@
       </ul>
       <h3><a id="subout">Subtitle extraction</a></h3>
       <p>QtlMovie can also be used to extract subtitle streams from the input files.
-        The input and output formats must text subtitles: SRT, SSA, ASS.
-        Conversions are possible between these formats (SRT subtitles can be extracted as ASS for instance).</p>
+        The subtitle format must be text (SRT, SSA, ASS or Teletext).
+        Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
+        The output subtitle file format is SRT.</p>
+      <hr/>
+      <h2><a id="settings">Settings and options</a></h2>
+      <p>The QtlMovie settings are accessible using the "Tools" menu.</p>
+      <h3><a id="dirsettings">"Directories" tab</a></h3>
+      <p>The "Default input directory" is where the "Browse" button is initially set when no input
+        file is currently selected. By default, this is the user's home directory.</p>
+      <p>The "Default output directory" area defines where the output file shall be
+        created by default. The default output file name inside the output directory is
+        the same as the input file with the extension corresponding to the output file type.</p>
+      <p>If the option "Same as input directory" is checked, the default location for the output
+        file is the same as the input file. Otherwise, a specific directory can be selected for
+        each output type.</p>
+      <p>The "DVD burning device" designates the device name for the DVD burner.
+        On Windows, it shall be a device letter like "D:" or "E:".
+        On Unix systems, it shall be a device path such as "/dev/dvd".
+        Unlike input and output directories, this is not a default value which can be changed in the GUI,
+        this is the actual device name which is unconditionally used when "Burn DVD" is selected as output type.
+        This makes sense since most computers have only one DVD drive.
+        Note that the default output directory for type "Burn DVD" is not the burning device, this is the
+        directory where the ISO image files are stored before burning. There are two different default
+        output directories for output types "DVD ISO Image" and "Burn DVD" since images of the later type
+        are typically created in a temporary directory that the user wants to clean up on a regular basis.</p>
+      <h3><a id="toolssettings">"Media Tools" tab</a></h3>
+      <p>This tab specifies the location of the executable files for the external media tools which are used by QtlMovie:</p>
+      <ul>
+        <li>FFmpeg</li>
+        <li>FFprobe</li>
+        <li>DVD Author</li>
+        <li>mkisofs</li>
+        <li>growisofs</li>
+        <li>telxcc</li>
+        <li>DVD Decrypter</li>
+      </ul>
+      <p>For each tool, the "Default" value is the location where QtlMovie has found the corresponding executable.
+        The way QtlMovie locates the media tools depends on the operating system.
+        On Windows, they are searched first in the <code>wintools</code> subdirectory inside the QtlMovie
+        installation area, then in various predefined locations for each tool (typically within
+        <code>C:\Program File</code> and finally in the <code>Path</code> environment variable.
+        On Unix systems, the media tools are searched in the <code>PATH</code> environment variable.</p>
+      <p>For each tool, a specific alternate executable can be selected in the corresponding edit box
+        or using the corresponding "Browse" button.</p>
+      <h3><a id="transcsettings">"Transcoding" tab</a></h3>
+      <p>This tab groups all the settings which affect the audio and video transcoding.</p>
+      <p>The "Transcoding duration" indicates whether the entire input file shall be transcoded
+        or if the output file shall be truncated after a given number of seconds.
+        Note that this indicates the playout duration of the output file,
+        not the duration of the transcoding operation.
+        Trancoding a movie can take a long time and limiting the transcoded duration can be helpful
+        in a test phase, to verify the video quality or the audio or subtitle language for instance.</p>
+      <p>The "DVD output" area is used only when transcoding to a DVD.
+        The specified video bitrate is used by default as "average bitrate".
+        However, QtlMovie ensures that the output can fit into a standard 4.7 GB DVD medium
+        and reduces the bitrate accordingly when necessary.</p>
+      <p>When checked, the "Create chapters" option creates chapters on the DVD.
+        All chapters have the same specified number of minutes.</p>
+      <p>When checked, the option "Remux audio/video after transcode" forces an additional remuxing of
+        the audio and video after transcoding. This takes some additional time but this removes potential
+        synchronization errors with DVD Author when the DVD file structure is created.
+        This also enforces a DVD-compliant multiplexing when the input file already has DVD-compliant
+        audio and video and is not re-encoded.
+        It is recommended to let this option checked.</p>
+      <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
+        Currently, the only option is the "Probe size".
+        This is the amount of seconds which are analyzed at the beginning of the input file to determine
+        the number and type of audio, video and subtitle streams.
+        The FFmpeg default value is 5 seconds.
+        This is usually enough for most files.
+        However, some MPEG files do not list all their streams at the beginning of the file and
+        some streams which appear late in the file (subtitles for instance) may not be detected.
+        As a consequence, the default probe size for QtlMovie is 200 seconds.
+        It is recommended to not reduce this size.
+        It can be increased if you suspect that some streams are not detected.</p>
+      <h3><a id="liscsettings">"Miscellaneous" tab</a></h3>
+      <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
+      <p>The "Target audience language codes" lists the codes which are used to identify the
+        language of the "target audience".
+        This needs some explanation.
+        When an input file is opened, QtlMovie displays all audio and subtitle tracks
+        which are available in the file.
+        But it also pre-selects the tracks which should be most likely adequate for the user
+        (or "target audience").
+        QtlMovie makes the assumption that the user prefers to watch the film in original version
+        with subtitles in his own language.
+        The initial default stream selection is performed as follow:</p>
+      <ul>
+        <li>Default audio stream selection:
+          <ul>
+            <li>Try to determine the "original version" stream if one is flagged as such.</li>
+            <li>If not possible, keep the first audio track not matching any language in the
+              intended audience language codes (supposed to be the original audio, considering
+              any audience language as dubbing).</li>
+            <li>Otherwise, keep first audio without visual/hearing impaired indicator.</li>
+          </ul>
+        </li>
+        <li>Default subtitle stream selection:
+          In all cases, consider only subtitle in the intended audience language codes.
+          If this list is empty, there will be no default subtitle.
+          Within the various subtitles in the audience language codes, the following criteria apply.
+          <ul>
+            <li>If the audio stream is in the audience language codes, keep the first "forced"
+              subtitle (the "forced" subtitle are used only when the audio track of the same
+              language contains dialogues in another language).</li>
+            <li>If the audio stream is not in the audience language codes, keep the subtitles which are either
+              (in order of preference)
+              <ul>
+                <li>complete</li>
+                <li>for hearing/visual impaired</li>
+                <li>other</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>The "Keep intermediate files" option indicates that all intermediate files which were created
+        in the transcoding process shall not be deleted after completion.
+        These files are created in a temporary directory with the same name as the output file and
+        extension <code>.qtlmovie.temp</code>.
+        This option is usually reserved for debug purpose.</p>
+      <p>Finally, the "Max log" option indicates the number of text lines to retain in the log window.
+        When this threshold is reached, the first lines are deleted.</p>
+      <hr/>
+      <h2><a id="platforms">Platforms notes</a></h2>
+      <h3><a id="windows">Windows</a></h3>
+      <p>QtlMovie is primarily developed on Windows. The binary installer for QtlMovie includes
+        all required media tools. Running the QtlMovie binary installer is sufficient to get
+        a fully functional system.</p>
+      <p>The media tools are installed in the same directory tree as QtlMovie but you may
+        select alternate versions of these tools in the settings menu.</p>
+      <p>There is one binary installer for 32-bit systems and another one for 64-bit systems.
+        However, the 64-bit installer mostly contains 32-bit executables. FFmpeg is the only
+        64-bit executable in the installer. There is no performance advantage in using 64-bit
+        executables for all other tools, including QtlMovie itself.</p>
+      <h3><a id="linux">Linux</a></h3>
+      <p>QtlMovie has been tested on Red Hat and Ubuntu Linux systems and proved to work correctly.
+        There is currently no RPM or Debian packaging for QtlMovie, you will have to
+        recompile it.</p>
+      <p>FFmpeg needs to be available in version 1.2 or higher. Mkisofs shall be used with version 2,
+        the version 3 has proven to be broken. There is apparently no distro packaging for
+        telxcc and you need to recompile it. All media tools are searched by QtlMovie in $PATH.</p>
+      <p>On several systems, the standard version of FFmpeg which comes with the distro repositories
+        is outdated and a more recent version may be needed.</p>
+      <p>On Ubuntu systems, FFmpeg has been pushed out in favor of <i>avconv</i>, a clone of FFmpeg.
+        The command <code>ffmpeg</code> is still present but it redirects to avconv. Since avconv
+        does not support a number of ffmpeg options which are used by QtlMovie, you may have to
+        install a real and recent version on ffmpeg.</p>
+      <h3><a id="otherpf">Other platforms</a></h3>
+      <p>QtlMovie should compile and properly function on any other platform which is supported by
+        the Qt framework. However, QtlMovie is useless without ffmpeg. You have to check the availability
+        of ffmpeg on a platform before attempting to use QtlMovie.</p>
       <hr/>
       <p>[<i><a href="#top">Back to top</a></i>]</p>
     </div>

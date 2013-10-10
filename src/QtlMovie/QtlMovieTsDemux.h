@@ -81,6 +81,16 @@ public:
     //!
     virtual void abort();
 
+    //!
+    //! Check if the input file has M2TS format.
+    //! This information is available after reading at least one packet from the file.
+    //! @return True if the input file has M2TS format.
+    //!
+    bool isM2tsFile() const
+    {
+        return _isM2ts;
+    }
+
 protected:
     //!
     //! Emit the completed() signal.
@@ -105,6 +115,7 @@ protected:
 
 private:
     QtsTsFile _file;    //!< TS file.
+    bool      _isM2ts;  //!< File has M2TS format.
     int       _timerId; //!< Repetitive timer.
 
     // Unaccessible operations.

@@ -58,7 +58,9 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _selectedVideoStreamIndex(-1),
     _selectedAudioStreamIndex(-1),
     _selectedSubtitleStreamIndex(-1),
-    _externalSubtitleFileName()
+    _externalSubtitleFileName(),
+    _isTs(false),
+    _isM2ts(false)
 {
     Q_ASSERT(log != 0);
     Q_ASSERT(settings != 0);
@@ -83,7 +85,9 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _selectedVideoStreamIndex(other._selectedVideoStreamIndex),
     _selectedAudioStreamIndex(other._selectedAudioStreamIndex),
     _selectedSubtitleStreamIndex(other._selectedSubtitleStreamIndex),
-    _externalSubtitleFileName(other._externalSubtitleFileName)
+    _externalSubtitleFileName(other._externalSubtitleFileName),
+    _isTs(other._isTs),
+    _isM2ts(other._isM2ts)
 {
     // Update media info when the file name is changed.
     connect(this, SIGNAL(fileNameChanged(QString)), this, SLOT(updateMediaInfo(QString)));
@@ -198,10 +202,13 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
         qSort(_streams.begin(), _streams.end(), QtlMovieDvd::lessThan);
     }
 
+    // Is the file a transport stream?
+    _isTs = _ffInfo.value("format.format_name").toLower() == "mpegts";
+
     // Analyze TS file if subtitles with unknown types are detected.
     // Usually, this is due to Teletext subtitles.
     bool searchTeletext = false;
-    if (_ffInfo.value("format.format_name").toLower() == "mpegts") {
+    if (_isTs) {
         foreach (const QtlMovieStreamInfoPtr& stream, _streams) {
             if (!stream.isNull() && stream->streamType() == QtlMovieStreamInfo::Subtitle && stream->subtitleType() == QtlMovieStreamInfo::SubOther) {
                 searchTeletext = true;
@@ -289,6 +296,11 @@ void QtlMovieInputFile::teletextSearchTerminated(bool success)
     // Cleanup the teletext searcher.
     if (_teletextSearch != 0) {
         _log->debug(tr("Search for Teletext subtitles completed"));
+
+        // We have analyzed part of the file. Is this an M2TS file?
+        _isM2ts = _teletextSearch->isM2tsFile();
+
+        // Cleanup the search object.
         _teletextSearch->deleteLater();
         _teletextSearch = 0;
     }

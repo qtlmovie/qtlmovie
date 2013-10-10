@@ -51,6 +51,15 @@ class QtsTsFile : public QFile
 
 public:
     //!
+    //! Describe the packet format inside a TS file.
+    //!
+    enum TsFileType {
+        AutoDetect,  //!< Automatically detect on input, same as TsFile on output.
+        TsFile,      //!< Standard MPEG-2 Transport Stream file, 188 bytes per TS packet.
+        M2tsFile     //!< M2TS file (BluRay and some IP-TV), 4-byte timestamp followed by 188-byte TS packet.
+    };
+
+    //!
     //! Constructor.
     //! @param [in] parent Optional parent object.
     //!
@@ -59,9 +68,10 @@ public:
     //!
     //! Constructor.
     //! @param [in] name File name.
+    //! @param [in] type TS packet format.
     //! @param [in] parent Optional parent object.
     //!
-    explicit QtsTsFile(const QString& name, QObject* parent = 0);
+    explicit QtsTsFile(const QString& name, TsFileType type = AutoDetect, QObject* parent = 0);
 
     //!
     //! Open the file.
@@ -82,13 +92,66 @@ public:
     //!
     //! Write TS packets to the file.
     //! @param [in] buffer Buffer containing the TS packets to write.
+    //! If the file format is M2tsFile, a zero 4-byte timestamp is inserted before each packet.
     //! @param [in] packetCount Number of TS packets to write from @a buffer.
     //! @return True on success, false on error.
     //!
     bool write(const QtsTsPacket* buffer, int packetCount = 1);
 
+    //!
+    //! Write one TS packet with timestamp to the file.
+    //! @param [in] packet TS packet to write.
+    //! @param [in] timeStamp Time stamp to write (will be converted to big endian before writing).
+    //! Ignored if the file format is not M2tsFile.
+    //! @return True on success, false on error.
+    //!
+    bool writeWithTimeStamp(quint32 timeStamp, const QtsTsPacket* packet);
+
+    //!
+    //! Get the TS packet format.
+    //! If initially set to AutoDetect on an input file, the returned value
+    //! will be either TsFile or M2tsFile after reading the first packet.
+    //! @return The TS packet format.
+    //!
+    TsFileType tsFileType() const
+    {
+        return _tsFileType;
+    }
+
+    //!
+    //! Set the TS packet format.
+    //! Must be called before open().
+    //! @return The TS packet format.
+    //!
+    void setTsFileType(const TsFileType& tsFileType);
+
 private:
-    QtlByteBlock _inBuffer; //!< Buffer for partially read packets.
+    TsFileType   _tsFileType; //!< Packet format.
+    QtlByteBlock _inBuffer;   //!< Buffer for partially read packets or initial auto-detection.
+
+    //!
+    //! Read enough packets in _inBuffer to determine the packet size.
+    //! @return True on success, false on error. When true is returned,
+    //! it is guaranteed that _tsFileType is no longer AutoDetect.
+    //!
+    bool autoDetectFileFormat();
+
+    //!
+    //! Make sure that the internal input buffer contains at least a given number of bytes.
+    //! Read input file if necessary.
+    //! @param size Requested byte count in buffer.
+    //! @return False on read error. When true, the target number of bytes may not be
+    //! reached if no data is currently available from the file.
+    //!
+    bool fillBuffer(int size);
+
+    //!
+    //! Write raw data to the file.
+    //! @param [in] data Address of data to write.
+    //! @param [in] size Number of bytes to write from @a data.
+    //! @return True on success, false on error.
+    //!
+    bool writeRawData(const void* data, int size);
 
     // Unaccessible operations.
     QtsTsFile() Q_DECL_EQ_DELETE;
