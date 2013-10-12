@@ -97,3 +97,9 @@ FORMS += QtlMovieMainWindow.ui \
 RESOURCES += QtlMovie.qrc
 
 win32:RC_FILE += QtlMovie.rc
+
+OTHER_FILES += \
+    help/qtlmovie.html \
+    help/qtlmovie-user.html \
+    help/qtlmovie-build.html \
+    help/default.css

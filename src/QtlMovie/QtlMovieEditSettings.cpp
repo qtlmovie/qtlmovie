@@ -151,6 +151,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkCreateChapters->setChecked(_settings->chapterMinutes() > 0);
     _ui.spinChapterMinutes->setValue(_settings->chapterMinutes() > 0 ? _settings->chapterMinutes() : 5);
     _ui.checkDvdRemuxAfterTranscode->setChecked(_settings->dvdRemuxAfterTranscode());
+    _ui.radioPal->setChecked(_settings->createPalDvd());
+    _ui.radioNtsc->setChecked(!_settings->createPalDvd());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -199,6 +201,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setSrtUseVideoSizeHint(_ui.checkBoxSrtUseVideoSize->isChecked());
     _settings->setChapterMinutes(_ui.checkCreateChapters->isChecked() ? _ui.spinChapterMinutes->value() : 0);
     _settings->setDvdRemuxAfterTranscode(_ui.checkDvdRemuxAfterTranscode->isChecked());
+    _settings->setCreatePalDvd(_ui.radioPal->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

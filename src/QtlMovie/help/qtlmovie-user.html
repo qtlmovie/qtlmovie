@@ -100,10 +100,10 @@
         VTS_nn_0.IFO, VTS_nn_0.VOB (optional), VTS_nn_1.VOB, etc.
         The video content starts in VTS_nn_1.VOB and extends to other VOB's.
         Each VOB has a maximum size of 1 GB.
-        Finding the main film of the DVD is usually easy, this is the largest video content (sum of all 
+        Finding the main film of the DVD is usually easy, this is the largest video content (sum of all
         the VTS_nn_*.VOB).</p>
       <p>QtlMovie recognizes this structure. To transcode a film, simply select as input file the
-        information file VTS_nn_0.IFO or any VTS_nn_*.VOB. QtlMovie will automatically find all VOB's for 
+        information file VTS_nn_0.IFO or any VTS_nn_*.VOB. QtlMovie will automatically find all VOB's for
         the film. QtlMovie also automatically finds the associated information file VTS_nn_0.IFO.
         This is an important file since it contains the language names of the audio and subtitle tracks
         and the color palette of the subtitles. When ripping a DVD, do not forget to include the .IFO
@@ -126,8 +126,8 @@
       <h3><a id="dvdout">DVD output</a></h3>
       <p>QtlMovie always produces DVD with the following characteristics:</p>
       <ul>
-        <li>PAL format.</li>
-        <li>MPEG-2 video, 16:9, 720 x 576, 25 frames/second. The average bitrate is 4 Mb/s
+        <li>PAL (720 x 576, 25 frames/second) or NTSC (720 x 480, 30 frames/second) format.</li>
+        <li>MPEG-2 video, 16:9. The average bitrate is 4 Mb/s
           (adjustable in the settings) but is automatically reduced when necessary so
           that the output fits in a 4.7 GB DVD media.</li>
         <li>MPEG-1 layer 2 audio, stereo, sampled at 48 kHz. The audio bitrate is 192 kb/s.</li>
@@ -219,6 +219,7 @@
         Trancoding a movie can take a long time and limiting the transcoded duration can be helpful
         in a test phase, to verify the video quality or the audio or subtitle language for instance.</p>
       <p>The "DVD output" area is used only when transcoding to a DVD.
+        The PAL vs. NTSC options indicate the format of all created DVD's.
         The specified video bitrate is used by default as "average bitrate".
         However, QtlMovie ensures that the output can fit into a standard 4.7 GB DVD medium
         and reduces the bitrate accordingly when necessary.</p>

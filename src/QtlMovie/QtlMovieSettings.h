@@ -39,6 +39,7 @@
 #include <QtCore>
 #include "QtlMovieExecFile.h"
 #include "QtlLogger.h"
+#include "QtlMovie.h"
 
 //!
 //! Description of the global settings of the application.
@@ -631,6 +632,39 @@ public:
     //!
     void setDvdBurner(const QString& dvdBurner);
 
+    //!
+    //! Check if the format of created DVD is PAL or NTSC.
+    //! @return True if DVD shall be created in PAL format, false in NTSC format.
+    //!
+    bool createPalDvd() const
+    {
+        return _createPalDvd;
+    }
+
+    //!
+    //! Set the format of created DVD (PAL or NTSC).
+    //! @param [in] createPalDvd True if DVD shall be created in PAL format, false in NTSC format.
+    //!
+    void setCreatePalDvd(bool createPalDvd);
+
+    //!
+    //! Get the video width of created DVD.
+    //! @return The video width of created DVD.
+    //!
+    int dvdVideoWidth() const
+    {
+        return _createPalDvd ? QTL_DVD_PAL_VIDEO_WIDTH : QTL_DVD_NTSC_VIDEO_WIDTH;
+    }
+
+    //!
+    //! Get the video height of created DVD.
+    //! @return The video height of created DVD.
+    //!
+    int dvdVideoHeight() const
+    {
+        return _createPalDvd ? QTL_DVD_PAL_VIDEO_HEIGHT : QTL_DVD_NTSC_VIDEO_HEIGHT;
+    }
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -664,6 +698,7 @@ private:
     bool                  _srtUseVideoSizeHint;    //!< Insertion of SRT/SSA/ASS subtitles uses original video size as a hint.
     int                   _chapterMinutes;         //!< Create chapters of this number of minutes.
     bool                  _dvdRemuxAfterTranscode; //!< Remux audio/video after transcode to DVD.
+    bool                  _createPalDvd;           //!< Create DVD in PAL format (false: NTSC).
 
     //!
     //! Write an XML element with a "value" integer attribute.

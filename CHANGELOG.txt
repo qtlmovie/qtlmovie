@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.1 (2013-10-12)
+- Added settings to create NTSC or PAL DVD.
+
 Version 1.2.0 (2013-10-11)
 - Improved help files.
 - Support M2TS input files.

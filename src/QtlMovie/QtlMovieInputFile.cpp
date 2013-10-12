@@ -390,8 +390,8 @@ bool QtlMovieInputFile::isDvdCompliant() const
         streamCount(QtlMovieStreamInfo::Subtitle) == 0 &&
         !videoStream.isNull() &&
         !audioStream.isNull() &&
-        videoStream->width() == QTL_DVD_VIDEO_WIDTH &&
-        videoStream->height() == QTL_DVD_VIDEO_HEIGHT &&
+        videoStream->width() == _settings->dvdVideoWidth() &&
+        videoStream->height() == _settings->dvdVideoHeight() &&
         qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
         _ffInfo.value("format.format_name") == "mpeg" &&
         _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video" &&

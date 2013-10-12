@@ -128,7 +128,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _ffmpegProbeSeconds(200),
     _srtUseVideoSizeHint(true),
     _chapterMinutes(5),
-    _dvdRemuxAfterTranscode(true)
+    _dvdRemuxAfterTranscode(true),
+    _createPalDvd(true)
 {
     Q_ASSERT(log != 0);
 
@@ -338,6 +339,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setBoolAttribute(xml, "srtUseVideoSizeHint", _srtUseVideoSizeHint);
     setIntAttribute(xml, "chapterMinutes", _chapterMinutes);
     setBoolAttribute(xml, "dvdRemuxAfterTranscode", _dvdRemuxAfterTranscode);
+    setBoolAttribute(xml, "createPalDvd", _createPalDvd);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -390,6 +392,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     bool srtUseVideoSizeHint = _srtUseVideoSizeHint;
     int chapterMinutes = _chapterMinutes;
     bool dvdRemuxAfterTranscode = _dvdRemuxAfterTranscode;
+    bool createPalDvd = _createPalDvd;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -422,6 +425,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getBoolAttribute(xml, "srtUseVideoSizeHint", srtUseVideoSizeHint) &&
                     !getIntAttribute(xml, "chapterMinutes", chapterMinutes) &&
                     !getBoolAttribute(xml, "dvdRemuxAfterTranscode", dvdRemuxAfterTranscode) &&
+                    !getBoolAttribute(xml, "createPalDvd", createPalDvd) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -460,6 +464,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setSrtUseVideoSizeHint(srtUseVideoSizeHint);
         setChapterMinutes(chapterMinutes);
         setDvdRemuxAfterTranscode(dvdRemuxAfterTranscode);
+        setCreatePalDvd(createPalDvd);
     }
     else {
         // Format an error string.
@@ -705,6 +710,14 @@ void QtlMovieSettings::setDvdBurner(const QString& dvdBurner)
 {
     if (_dvdBurner != dvdBurner) {
         _dvdBurner = dvdBurner;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setCreatePalDvd(bool createPalDvd)
+{
+    if (_createPalDvd != createPalDvd) {
+        _createPalDvd = createPalDvd;
         _isModified = true;
     }
 }

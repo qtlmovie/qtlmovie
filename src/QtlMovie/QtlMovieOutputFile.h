@@ -136,20 +136,6 @@ public:
     //!
     static QString fileExtension(OutputType outputType);
 
-    //!
-    //! Get the video frame rate for a given output type.
-    //! @param [in] outputType Output type.
-    //! @return The number of frames per seconde.
-    //!
-    static int frameRate(OutputType outputType);
-
-    //!
-    //! Check if an output type contains video.
-    //! @param [in] outputType Output type.
-    //! @return True if there is video in this type of file.
-    //!
-    static int containsVideo(OutputType outputType);
-
 private:
     QtlLogger*              _log;         //!< Where to log errors.
     const QtlMovieSettings* _settings;    //!< Application settings.

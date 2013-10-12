@@ -144,5 +144,5 @@ void QtlMovieDvdAuthorProcess::updateEnvironment(QProcessEnvironment& env)
 {
     // Ensure that a default video format is defined.
     // Otherwise, DVD Author complains.
-    env.insert("VIDEO_FORMAT", "PAL");
+    env.insert("VIDEO_FORMAT", settings()->createPalDvd() ? "PAL" : "NTSC");
 }

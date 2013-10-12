@@ -351,13 +351,13 @@ bool QtlMovieJob::buildScenario()
 
     // Do we need to add a first pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
-    // - The final output contains video (into which the subtitles must be burnt).
     // - Not DVD or DVB subtitles. These are directly processed by FFmpeg from the input file.
     //   No need to have a separate first pass to extract them.
+    // - The final output file is not simply a subtitle extraction.
     if (!subtitleStream.isNull() &&
         subtitleStream->subtitleType() != QtlMovieStreamInfo::SubDvd &&
         subtitleStream->subtitleType() != QtlMovieStreamInfo::SubDvb &&
-        QtlMovieOutputFile::containsVideo(outputType)) {
+        outputType != QtlMovieOutputFile::SubRip) {
 
         // Extract subtitles in an intermediate file.
         // Do not provide a suffix, addExtractSubtitle() will update it for us.
@@ -657,11 +657,11 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
 
         // Video filter: DVD output is always 720x576, 16:9.
         QString videoFilters;
-        QtlMovieFFmpeg::addResizeVideoFilter(videoFilters, width, height, dar, QTL_DVD_VIDEO_WIDTH, QTL_DVD_VIDEO_HEIGHT, QTL_DVD_DAR);
+        QtlMovieFFmpeg::addResizeVideoFilter(videoFilters, width, height, dar, settings()->dvdVideoWidth(), settings()->dvdVideoHeight(), QTL_DVD_DAR);
 
         // Add subtitles processing to video filter.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
-            !addSubtitleStreamVideoFilter(videoFilters, inputFile, QTL_DVD_VIDEO_WIDTH, QTL_DVD_VIDEO_HEIGHT)) {
+            !addSubtitleStreamVideoFilter(videoFilters, inputFile, settings()->dvdVideoWidth(), settings()->dvdVideoHeight())) {
             return false;
         }
 
@@ -669,7 +669,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         QStringList args;
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "mpeg2video"
-             << "-target" << "pal-dvd"  // Select presets for DVD (PAL format).
+             << "-target" << (settings()->createPalDvd() ? "pal-dvd" : "ntsc-dvd")  // Select presets for DVD.
              << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::DvdFile)
              << "-b:v" << QString::number(bitrate)
              << "-aspect" << QTL_DVD_DAR_FFMPEG

@@ -166,17 +166,31 @@ QStringList QtlMovieFFmpeg::paletteOptions(const QtlByteBlock& palette)
 
 QStringList QtlMovieFFmpeg::frameRateOptions(const QtlMovieSettings* settings, QtlMovieOutputFile::OutputType outputType)
 {
-    Q_UNUSED(settings);
-    const int frameRate = QtlMovieOutputFile::frameRate(outputType);
-    if (frameRate <= 0) {
-        // Unspecified frame rate, no option.
-        return QStringList();
+    // Get frame rate by output type.
+    int frameRate = 0;
+
+    switch (outputType) {
+    case QtlMovieOutputFile::DvdFile:
+    case QtlMovieOutputFile::DvdImage:
+    case QtlMovieOutputFile::DvdBurn:
+        frameRate = settings->createPalDvd() ? QTL_DVD_PAL_FRAME_RATE : QTL_DVD_NTSC_FRAME_RATE;
+        break;
+    case QtlMovieOutputFile::Ipad:
+        frameRate = QTL_IPAD_FRAME_RATE;
+        break;
+    case QtlMovieOutputFile::SubRip:
+    case QtlMovieOutputFile::None:
+    default:
+        frameRate = 0;
+        break;
     }
-    else {
-        QStringList args;
+
+    // Build the argument list.
+    QStringList args;
+    if (frameRate > 0) {
         args << "-r" << QString::number(frameRate);
-        return args;
     }
+    return args;
 }
 
 

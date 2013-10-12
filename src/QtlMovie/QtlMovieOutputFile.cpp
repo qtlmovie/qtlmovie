@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieOutputFile.h"
+#include "QtlMovie.h"
 
 
 //----------------------------------------------------------------------------
@@ -171,45 +172,5 @@ QString QtlMovieOutputFile::fileExtension(QtlMovieOutputFile::OutputType outputT
     case SubRip:   return ".srt";
     case None:     return "";
     default:       return "";
-    }
-}
-
-
-//----------------------------------------------------------------------------
-// Get the video frame rate for a given output type.
-//----------------------------------------------------------------------------
-
-int QtlMovieOutputFile::frameRate(QtlMovieOutputFile::OutputType outputType)
-{
-    switch (outputType) {
-    case DvdFile:
-    case DvdImage:
-    case DvdBurn:
-    case Ipad:
-        return 25;
-    case SubRip:
-    case None:
-    default:
-        return 0;
-    }
-}
-
-
-//----------------------------------------------------------------------------
-// Check if an output type contains video.
-//----------------------------------------------------------------------------
-
-int QtlMovieOutputFile::containsVideo(QtlMovieOutputFile::OutputType outputType)
-{
-    switch (outputType) {
-    case DvdFile:
-    case DvdImage:
-    case DvdBurn:
-    case Ipad:
-        return true;
-    case SubRip:
-    case None:
-    default:
-        return false;
     }
 }
