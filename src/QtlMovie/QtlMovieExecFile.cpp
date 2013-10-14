@@ -92,16 +92,19 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
     QStringList dirs;
     const QChar sep(QDir::separator());
 
-    // Start with the application directory and its subdirectories.
+    // Start with the application directory.
     const QString appDir(absoluteNativeFilePath(QCoreApplication::applicationDirPath()));
-    dirs << appDir << (appDir + sep + "wintools");
+    dirs << appDir;
 
-    // On Windows, add various standard locations for media tools.
-    // When running the application from the build tree, also add "../../../wintools"
-    // from the application executable. This is a sort of hack which should not be
-    // too dangerous when run into a real installation.
+    // On Windows,
+    // - Add the wintools subdirectory.
+    // - Add various standard locations for media tools.
+    // - When running the application from the build tree, also add "../../../wintools"
+    //   from the application executable. This is a sort of hack which should not be
+    //   too dangerous when run into a real installation.
 #if defined(Q_OS_WIN)
-    dirs << "C:\\Program Files\\FFmpeg\\bin"
+    dirs << (appDir + sep + "wintools")
+         << "C:\\Program Files\\FFmpeg\\bin"
          << "C:\\Program Files (x86)\\FFmpeg\\bin"
          << "C:\\Program Files\\DVD Decrypter"
          << "C:\\Program Files (x86)\\DVD Decrypter"
