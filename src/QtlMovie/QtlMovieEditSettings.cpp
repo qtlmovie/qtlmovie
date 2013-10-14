@@ -144,7 +144,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkBoxSameAsInput->setChecked(_settings->defaultOutputDirIsInput());
     (_settings->transcodeComplete() ? _ui.radioButtonComplete : _ui.radioButtonPartial)->setChecked(true);
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
-    _ui.spinDvdBitrate->setValue(_settings->dvdVideoBitRate() / 1000); // input is kb/s
+    _ui.spinDvdBitrate->setValue(_settings->dvdVideoBitRate() / 1000);   // input is kb/s
+    _ui.spinIpadBitrate->setValue(_settings->ipadVideoBitRate() / 1000); // input is kb/s
     _ui.checkBoxKeepIntermediateFiles->setChecked(_settings->keepIntermediateFiles());
     _ui.spinFFmpegProbeSeconds->setValue(_settings->ffmpegProbeSeconds());
     _ui.checkBoxSrtUseVideoSize->setChecked(_settings->srtUseVideoSizeHint());
@@ -195,7 +196,8 @@ void QtlMovieEditSettings::applySettings()
     _settings->setAudienceLanguages(qtlListItems(_ui.listLanguages));
     _settings->setTranscodeComplete(_ui.radioButtonComplete->isChecked());
     _settings->setTranscodeSeconds(_ui.spinMaxTranscode->value());
-    _settings->setDvdVideoBitRate(_ui.spinDvdBitrate->value() * 1000); // input is kb/s
+    _settings->setDvdVideoBitRate(_ui.spinDvdBitrate->value() * 1000);   // input is kb/s
+    _settings->setIpadVideoBitRate(_ui.spinIpadBitrate->value() * 1000); // input is kb/s
     _settings->setKeepIntermediateFiles(_ui.checkBoxKeepIntermediateFiles->isChecked());
     _settings->setFFmpegProbeSeconds(_ui.spinFFmpegProbeSeconds->value());
     _settings->setSrtUseVideoSizeHint(_ui.checkBoxSrtUseVideoSize->isChecked());

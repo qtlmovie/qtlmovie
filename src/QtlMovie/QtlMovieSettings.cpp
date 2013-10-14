@@ -33,6 +33,7 @@
 
 #include "QtlMovieSettings.h"
 #include "QtlStringList.h"
+#include "QtlMovie.h"
 
 
 //----------------------------------------------------------------------------
@@ -123,7 +124,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _audienceLanguages(),
     _transcodeComplete(true),
     _transcodeSeconds(0),
-    _dvdVideoBitRate(4000000),     // Default value: 4 Mb/s.
+    _dvdVideoBitRate(QTL_DVD_DEFAULT_VIDEO_BITRATE),
+    _ipadVideoBitRate(QTL_IPAD_DEFAULT_VIDEO_BITRATE),
     _keepIntermediateFiles(false),
     _ffmpegProbeSeconds(200),
     _srtUseVideoSizeHint(true),
@@ -334,6 +336,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setBoolAttribute(xml, "transcodeComplete", _transcodeComplete);
     setIntAttribute(xml, "transcodeSeconds", _transcodeSeconds);
     setIntAttribute(xml, "dvdVideoBitRate", _dvdVideoBitRate);
+    setIntAttribute(xml, "ipadVideoBitRate", _ipadVideoBitRate);
     setBoolAttribute(xml, "keepIntermediateFiles", _keepIntermediateFiles);
     setIntAttribute(xml, "ffmpegProbeSeconds", _ffmpegProbeSeconds);
     setBoolAttribute(xml, "srtUseVideoSizeHint", _srtUseVideoSizeHint);
@@ -387,6 +390,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     bool transcodeComplete = _transcodeComplete;
     int transcodeSeconds = _transcodeSeconds;
     int dvdVideoBitRate = _dvdVideoBitRate;
+    int ipadVideoBitRate = _ipadVideoBitRate;
     bool keepIntermediateFiles = _keepIntermediateFiles;
     int ffmpegProbeSeconds = _ffmpegProbeSeconds;
     bool srtUseVideoSizeHint = _srtUseVideoSizeHint;
@@ -420,6 +424,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getBoolAttribute(xml, "transcodeComplete", transcodeComplete) &&
                     !getIntAttribute(xml, "transcodeSeconds", transcodeSeconds) &&
                     !getIntAttribute(xml, "dvdVideoBitRate", dvdVideoBitRate) &&
+                    !getIntAttribute(xml, "ipadVideoBitRate", ipadVideoBitRate) &&
                     !getBoolAttribute(xml, "keepIntermediateFiles", keepIntermediateFiles) &&
                     !getIntAttribute(xml, "ffmpegProbeSeconds", ffmpegProbeSeconds) &&
                     !getBoolAttribute(xml, "srtUseVideoSizeHint", srtUseVideoSizeHint) &&
@@ -459,6 +464,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setTranscodeComplete(transcodeComplete);
         setTranscodeSeconds(transcodeSeconds);
         setDvdVideoBitRate(dvdVideoBitRate);
+        setIpadVideoBitRate(ipadVideoBitRate);
         setKeepIntermediateFiles(keepIntermediateFiles);
         setFFmpegProbeSeconds(ffmpegProbeSeconds);
         setSrtUseVideoSizeHint(srtUseVideoSizeHint);
@@ -662,6 +668,14 @@ void QtlMovieSettings::setDvdVideoBitRate(int dvdVideoBitRate)
 {
     if (_dvdVideoBitRate != dvdVideoBitRate) {
         _dvdVideoBitRate = dvdVideoBitRate;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setIpadVideoBitRate(int ipadVideoBitRate)
+{
+    if (_ipadVideoBitRate != ipadVideoBitRate) {
+        _ipadVideoBitRate = ipadVideoBitRate;
         _isModified = true;
     }
 }

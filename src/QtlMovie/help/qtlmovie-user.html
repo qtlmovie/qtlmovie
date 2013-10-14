@@ -158,7 +158,8 @@
       <p>QtlMovie always produces iPad files with the following characteristics:</p>
       <ul>
         <li>MP4 file format.</li>
-        <li>AVC / H.264 video, baseline profile, level 3.0. The average bitrate is 2.5 Mb/s.
+        <li>AVC / H.264 video, baseline profile, level 3.0.
+          The average bitrate is 2.5 Mb/s (adjustable in the settings).
           The display aspect ratio is unchanged (no black border is added).
           The frame size is unchanged, unless the input size exceeds 1024 x 768 in which case the
           size is reduced to fit within a 1024 x 768 bounding box, preserving the input aspect ratio.</li>
@@ -231,6 +232,15 @@
         This also enforces a DVD-compliant multiplexing when the input file already has DVD-compliant
         audio and video and is not re-encoded.
         It is recommended to let this option checked.</p>
+      <p>The "iPad output" area is used only when transcoding for iPad.
+        The specified video bitrate is used by default as "average bitrate".</p>
+      <p>The "Subtitles insertion" area is used only when inserting subtitles.
+        The option "Use original video size as a hint for SRT/SSA/ASS character shape"
+        is somewhat cryptic. If checked, the original size of the video is used to
+        alter the character size of text-based subtitles. The FFmpeg documentation
+        recommends to use it but the experience shows that sometimes it produces
+        a strange characters size. This is why it is unchecked by default. You may
+        try to check it and decide whether it is useful or not.</p>
       <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
         Currently, the only option is the "Probe size".
         This is the amount of seconds which are analyzed at the beginning of the input file to determine

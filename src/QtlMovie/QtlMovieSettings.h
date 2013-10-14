@@ -530,6 +530,21 @@ public:
     void setDvdVideoBitRate(int dvdVideoBitRate);
 
     //!
+    //! Get the video bitrate for iPad output in bits / second.
+    //! @return Video bitrate for iPad output in bits / second.
+    //!
+    int ipadVideoBitRate() const
+    {
+        return _ipadVideoBitRate;
+    }
+
+    //!
+    //! Set the video bitrate for iPad output in bits / second.
+    //! @param [in] ipadVideoBitRate Video bitrate for iPad output in bits / second.
+    //!
+    void setIpadVideoBitRate(int ipadVideoBitRate);
+
+    //!
     //! Check if the intermediate files shall be kept after completion.
     //! @return If true, the intermediate files shall be kept after completion.
     //! If false, they are automatically deleted.
@@ -693,6 +708,7 @@ private:
     bool                  _transcodeComplete;      //!< Transcode complete video file.
     int                   _transcodeSeconds;       //!< Max time to transcode when _transcodeComplete is false.
     int                   _dvdVideoBitRate;        //!< Video bitrate for DVD output in bits / second.
+    int                   _ipadVideoBitRate;       //!< Video bitrate for iPad output in bits / second.
     bool                  _keepIntermediateFiles;  //!< Do not delete intermediate files after transcoding.
     int                   _ffmpegProbeSeconds;     //!< Initial probe size in media playout seconds for ffprobe / ffmpeg.
     bool                  _srtUseVideoSizeHint;    //!< Insertion of SRT/SSA/ASS subtitles uses original video size as a hint.

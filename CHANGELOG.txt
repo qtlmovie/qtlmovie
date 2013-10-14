@@ -6,6 +6,8 @@ Version 1.2.2
 - Bug fix: When a file was dragged/dropped into the edit box for input file,
   output file or subtitle file and not otherwise edited, the application was
   not properly notified and the file was ignored.
+- Added settings to specify the video bitrate for iPad. The default value
+  remains 2.5 Mb/s.
 
 Version 1.2.1 (2013-10-12)
 - Added settings to create NTSC or PAL DVD.

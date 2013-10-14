@@ -906,7 +906,7 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
              << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Ipad)
-             << "-b:v" << QString::number(QTL_IPAD_VIDEO_BITRATE)
+             << "-b:v" << QString::number(settings()->ipadVideoBitRate())
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
              << "-preset" << "slow"
