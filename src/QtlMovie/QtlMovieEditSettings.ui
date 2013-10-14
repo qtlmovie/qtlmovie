@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>567</width>
-    <height>515</height>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -469,7 +469,7 @@
           <string>iPad output</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="labelIpadBitrate">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -483,6 +483,43 @@
            </widget>
           </item>
           <item row="0" column="1">
+           <widget class="QRadioButton" name="radioIpad12">
+            <property name="text">
+             <string>iPad 1, 2, mini (1024x768)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="radioIpad34">
+            <property name="text">
+             <string>iPad 3, 4 (2048x1536)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelResolution">
+            <property name="text">
+             <string>Screen size :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1" colspan="3">
            <widget class="QSpinBox" name="spinIpadBitrate">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">

@@ -680,6 +680,47 @@ public:
         return _createPalDvd ? QTL_DVD_PAL_VIDEO_HEIGHT : QTL_DVD_NTSC_VIDEO_HEIGHT;
     }
 
+    //!
+    //! Define the screen size of an iPad.
+    //!
+    enum IpadScreenSize {
+        Ipad12Size,  //!< iPad 1, 2, mini (1024x768)
+        Ipad34Size   //!< iPad 3, 4 (2048x1536)
+    };
+
+    //!
+    //! Get the iPad screen size.
+    //! @return The iPad screen size.
+    //!
+    IpadScreenSize ipadScreenSize() const
+    {
+        return _ipadScreenSize;
+    }
+
+    //!
+    //! Set the iPad screen size.
+    //! @param [in] ipadScreenSize The iPad screen size.
+    //!
+    void setIpadScreenSize(IpadScreenSize ipadScreenSize);
+
+    //!
+    //! Get the video width of iPad.
+    //! @return The video width of iPad.
+    //!
+    int ipadVideoWidth() const
+    {
+        return _ipadScreenSize == Ipad12Size ? QTL_IPAD12_VIDEO_WIDTH : QTL_IPAD34_VIDEO_WIDTH;
+    }
+
+    //!
+    //! Get the video height of iPad.
+    //! @return The video height of iPad.
+    //!
+    int ipadVideoHeight() const
+    {
+        return _ipadScreenSize == Ipad12Size ? QTL_IPAD12_VIDEO_HEIGHT : QTL_IPAD34_VIDEO_HEIGHT;
+    }
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -715,6 +756,7 @@ private:
     int                   _chapterMinutes;         //!< Create chapters of this number of minutes.
     bool                  _dvdRemuxAfterTranscode; //!< Remux audio/video after transcode to DVD.
     bool                  _createPalDvd;           //!< Create DVD in PAL format (false: NTSC).
+    IpadScreenSize        _ipadScreenSize;         //!< iPad screen size.
 
     //!
     //! Write an XML element with a "value" integer attribute.

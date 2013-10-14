@@ -8,6 +8,7 @@ Version 1.2.2
   not properly notified and the file was ignored.
 - Added settings to specify the video bitrate for iPad. The default value
   remains 2.5 Mb/s.
+- Added settings to specify the iPad screen size (iPad 1/2/mini vs. iPad 3/4).
 
 Version 1.2.1 (2013-10-12)
 - Added settings to create NTSC or PAL DVD.

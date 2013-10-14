@@ -920,10 +920,10 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
         const float dar = videoStream->displayAspectRatio();
 
         // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
-        // resize the video. The maximum output size is 1024x768.
+        // resize the video. The maximum output size depends on the iPad screen size in the settings.
         int widthOut = 0;
         int heightOut = 0;
-        QtlMovieFFmpeg::addBoundedSizeOptions(args, videoFilters, width, height, dar, QTL_IPAD_VIDEO_WIDTH, QTL_IPAD_VIDEO_HEIGHT, 1.0, widthOut, heightOut);
+        QtlMovieFFmpeg::addBoundedSizeOptions(args, videoFilters, width, height, dar, settings()->ipadVideoWidth(), settings()->ipadVideoHeight(), 1.0, widthOut, heightOut);
 
         // Add subtitles processing.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||

@@ -55,8 +55,10 @@
 #define QTL_IPAD_AUDIO_BITRATE           160000  //!< AAC audio bitrate (bits per second) for iPad.
 #define QTL_IPAD_AUDIO_SAMPLING           48000  //!< AAC audio sampling rate (Hz) for iPad.
 #define QTL_IPAD_DEFAULT_VIDEO_BITRATE  2500000  //!< H.264 video default bitrate for iPad.
-#define QTL_IPAD_VIDEO_WIDTH               1024  //!< Video width (pixels) for iPad.
-#define QTL_IPAD_VIDEO_HEIGHT               768  //!< Video height (pixels) for iPad.
+#define QTL_IPAD12_VIDEO_WIDTH             1024  //!< Video width (pixels) for iPad 1, 2 & mini.
+#define QTL_IPAD12_VIDEO_HEIGHT             768  //!< Video height (pixels) for iPad 1, 2 & mini.
+#define QTL_IPAD34_VIDEO_WIDTH             2048  //!< Video width (pixels) for iPad 3 & 4.
+#define QTL_IPAD34_VIDEO_HEIGHT            1536  //!< Video height (pixels) for iPad 3 & 4.
 #define QTL_IPAD_FRAME_RATE                  25  //!< Frames per second for iPad.
 
 //!

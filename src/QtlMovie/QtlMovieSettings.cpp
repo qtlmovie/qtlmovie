@@ -131,7 +131,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _srtUseVideoSizeHint(true),
     _chapterMinutes(5),
     _dvdRemuxAfterTranscode(true),
-    _createPalDvd(true)
+    _createPalDvd(true),
+    _ipadScreenSize(Ipad12Size)
 {
     Q_ASSERT(log != 0);
 
@@ -343,6 +344,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "chapterMinutes", _chapterMinutes);
     setBoolAttribute(xml, "dvdRemuxAfterTranscode", _dvdRemuxAfterTranscode);
     setBoolAttribute(xml, "createPalDvd", _createPalDvd);
+    setIntAttribute(xml, "ipadScreenSize", int(_ipadScreenSize));
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -397,6 +399,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     int chapterMinutes = _chapterMinutes;
     bool dvdRemuxAfterTranscode = _dvdRemuxAfterTranscode;
     bool createPalDvd = _createPalDvd;
+    int ipadScreenSize = int(_ipadScreenSize);
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -431,6 +434,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "chapterMinutes", chapterMinutes) &&
                     !getBoolAttribute(xml, "dvdRemuxAfterTranscode", dvdRemuxAfterTranscode) &&
                     !getBoolAttribute(xml, "createPalDvd", createPalDvd) &&
+                    !getIntAttribute(xml, "ipadScreenSize", ipadScreenSize) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -471,6 +475,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setChapterMinutes(chapterMinutes);
         setDvdRemuxAfterTranscode(dvdRemuxAfterTranscode);
         setCreatePalDvd(createPalDvd);
+        setIpadScreenSize(IpadScreenSize(ipadScreenSize));
     }
     else {
         // Format an error string.
@@ -732,6 +737,14 @@ void QtlMovieSettings::setCreatePalDvd(bool createPalDvd)
 {
     if (_createPalDvd != createPalDvd) {
         _createPalDvd = createPalDvd;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setIpadScreenSize(QtlMovieSettings::IpadScreenSize ipadScreenSize)
+{
+    if (_ipadScreenSize != ipadScreenSize) {
+        _ipadScreenSize = ipadScreenSize;
         _isModified = true;
     }
 }

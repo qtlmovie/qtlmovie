@@ -161,8 +161,8 @@
         <li>AVC / H.264 video, baseline profile, level 3.0.
           The average bitrate is 2.5 Mb/s (adjustable in the settings).
           The display aspect ratio is unchanged (no black border is added).
-          The frame size is unchanged, unless the input size exceeds 1024 x 768 in which case the
-          size is reduced to fit within a 1024 x 768 bounding box, preserving the input aspect ratio.</li>
+          The frame size is unchanged, unless the input size exceeds the iPad native screen resolution in
+          which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
         <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
       </ul>
       <h3><a id="subout">Subtitle extraction</a></h3>
@@ -233,6 +233,9 @@
         audio and video and is not re-encoded.
         It is recommended to let this option checked.</p>
       <p>The "iPad output" area is used only when transcoding for iPad.
+        The "Screen size" options specify the type of iPad to target.
+        The corresponding screen resolution will be used as maximum video size.
+        Larger videos will be resized to fit within the selected iPad resolution.
         The specified video bitrate is used by default as "average bitrate".</p>
       <p>The "Subtitles insertion" area is used only when inserting subtitles.
         The option "Use original video size as a hint for SRT/SSA/ASS character shape"
