@@ -181,6 +181,16 @@ public:
     static QString parentPath(const QString& path, int upLevels = 1);
 
     //!
+    //! Get the "short path name" of a file path.
+    //! On Windows platforms, return the path name in DOS 8.3 convention.
+    //! On other platforms, return the input @a path.
+    //! @param [in] path The path of the file or directory.
+    //! If the file or directory does not exist, the result is unpredictable.
+    //! @return The equivalent short path name or the empty string on error.
+    //!
+    static QString shortPath(const QString& path);
+
+    //!
     //! Read the content of a binary file.
     //! Error reporting is minimal.
     //! @param [in] fileName Name of file to read.

@@ -2,14 +2,21 @@
 QtlMovie Change Log
 ===================
 
-Version 1.2.2
+Version 1.2.3 (2013-10-16)
+- Workaround for a bug in ffmpeg on Windows: When the option -passlogfile
+  contains non-ASCII characters, the path of the log file as built by
+  ffmpeg is wrong and ffmpeg fails with "no such file or directory".
+  Now use the DOS 8.3 short path of the temporary directory for
+  temporary ffmpeg pass log files.
+
+Version 1.2.2 (2013-10-14)
 - Bug fix: When a file was dragged/dropped into the edit box for input file,
   output file or subtitle file and not otherwise edited, the application was
   not properly notified and the file was ignored.
 - Added settings to specify the video bitrate for iPad. The default value
   remains 2.5 Mb/s.
 - Added settings to specify the iPad screen size (iPad 1/2/mini vs. iPad 3/4).
-- Windows installer now intergrates official telxcc v 2.5.1 (required to support
+- Windows installer now integrates official telxcc v 2.5.1 (required to support
   M2TS files, previous version of QtlMovie used a patched version of telxcc).
 
 Version 1.2.1 (2013-10-12)

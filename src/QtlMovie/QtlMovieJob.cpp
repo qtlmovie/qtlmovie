@@ -105,19 +105,16 @@ bool QtlMovieJob::start()
     // in the same directory as the output file.
     _tempDir = QtlFile::absoluteNativeFilePath(_outputFile->fileName() + ".qtlmovie.temp");
 
-    // Build the list of actions to execute.
-    if (!buildScenario()) {
-        return false;
-    }
-
     // Create the temporary directory.
     QDir dir;
     if (!dir.mkpath(_tempDir)) {
         return errorFalse(tr("Cannot create temporary directory %1").arg(_tempDir));
     }
 
+    // Build the list of actions to execute.
     // Notify of the job start.
-    if (!QtlMovieAction::start()) {
+    if (!buildScenario() || !QtlMovieAction::start()) {
+        cleanup();
         return false;
     }
 
@@ -165,6 +162,20 @@ void QtlMovieJob::abort()
 
 void QtlMovieJob::emitCompleted(bool success, const QString& message)
 {
+    // Cleanup the job.
+    cleanup();
+
+    // Notify superclass.
+    QtlMovieAction::emitCompleted(success, message);
+}
+
+
+//----------------------------------------------------------------------------
+// Cleanup the job environment.
+//----------------------------------------------------------------------------
+
+void QtlMovieJob::cleanup()
+{
     // Cleanup all remaining actions (in case of error).
     while (!_actionList.isEmpty()) {
         _actionList.takeFirst()->deleteLater();
@@ -178,9 +189,6 @@ void QtlMovieJob::emitCompleted(bool success, const QString& message)
     if (exists && (empty || !settings()->keepIntermediateFiles()) && !dir.removeRecursively()) {
         log()->line(tr("Error deleting %1").arg(_tempDir));
     }
-
-    // Notify superclass.
-    QtlMovieAction::emitCompleted(success, message);
 }
 
 
@@ -665,6 +673,16 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
             return false;
         }
 
+        // We do the transcoding in two passes. We must specify a log file for the feedback between pass 1 and 2.
+        // On Windows, there is a specific problem with the handling of the log file path handling. See
+        // http://ffmpeg-users.933282.n4.nabble.com/Weird-characters-in-created-passlogfile-on-Windows-td4661845.html
+        // To avoid the problem, we use the "short path name" of the temporary directory, ie. the old DOS 8.3 name.
+        // The operation is transparent on non-Windows systems.
+        const QString shortTempDir(QtlFile::shortPath(_tempDir));
+        if (shortTempDir.isEmpty()) {
+            return errorFalse(tr("Error converting %1 to short path").arg(_tempDir));
+        }
+
         // Common video options.
         QStringList args;
         args << "-map" << videoStream->ffSpecifier()
@@ -675,7 +693,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
              << "-aspect" << QTL_DVD_DAR_FFMPEG
              << QtlMovieFFmpeg::videoFilterOptions(videoFilters)
              << "-threads" << "auto"
-             << "-passlogfile" << (_tempDir + QDir::separator() + "fflog");
+             << "-passlogfile" << (shortTempDir + QDir::separator() + "fflog");
 
         // Pass 1 and 2 arguments.
         pass1Args << args << "-pass" << "1";

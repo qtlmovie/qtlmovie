@@ -116,6 +116,11 @@ private:
     QList<QtlMovieAction*>    _actionList;     //!< List of actions to execute.
 
     //!
+    //! Cleanup the job environment.
+    //!
+    void cleanup();
+
+    //!
     //! Build the list of actions to execute to perform the job.
     //! @return True on success, false on error (not started).
     //!

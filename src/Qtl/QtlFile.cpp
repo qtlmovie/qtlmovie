@@ -36,6 +36,10 @@
 #include <QFileInfo>
 #include <QDir>
 
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#endif
+
 
 //----------------------------------------------------------------------------
 // Constructor.
@@ -335,6 +339,46 @@ QString QtlFile::parentPath(const QString& path, int upLevels)
         info = QFileInfo(info.absolutePath());
     }
     return absoluteNativeFilePath(info.absoluteFilePath());
+}
+
+
+//-----------------------------------------------------------------------------
+// Get the "short path name" of a file path.
+//-----------------------------------------------------------------------------
+
+QString QtlFile::shortPath(const QString& path)
+{
+#if defined(Q_OS_WIN)
+    // On Windows, invoke GetShortPathName.
+    // Derived from
+    // http://erasmusjam.wordpress.com/2012/10/01/get-8-3-windows-short-path-names-in-a-qt-application/
+
+    // Convert path into a nul-terminated wide string.
+    QVector<wchar_t> input(path.size() + 1);
+    path.toWCharArray(&input[0]);
+    input[path.size()] = L'\0';
+
+    // Get the length of the corresponding short path.
+    // We specify an empty output buffer. Thus, the returned value is the required
+    // length to hold the path name, INCLUDING the terminating nul character.
+    int length = ::GetShortPathName(&input[0], NULL, 0);
+    if (length <= 0) {
+        // Error, typically non-existent file.
+        return QString();
+    }
+
+    // Get the actual short path. This time, the returned value is the length
+    // of the returned path, EXCLUDING the terminating nul character.
+    QVector<wchar_t> output(length);
+    length = ::GetShortPathName(&input[0], &output[0], length);
+
+    // Convert returned wide string as a QString.
+    return (length <= 0 || length >= output.size()) ? QString() : QString::fromWCharArray(&output[0], length);
+
+#else
+    // On non-Windows platforms, return the input path, unchanged.
+    return path;
+#endif
 }
 
 
