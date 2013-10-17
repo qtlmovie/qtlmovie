@@ -25,6 +25,13 @@
             <li><a href="#subout">Subtitle extraction</a></li>
           </ul>
         </li>
+        <li><a href="#miscfeat">Miscellaneous features</a>
+          <ul>
+            <li><a href="#logwin">The log window</a></li>
+            <li><a href="#fileprop">Input file properties</a></li>
+            <li><a href="#audiotest">Audio test</a></li>
+          </ul>
+        </li>
         <li><a href="#settings">Settings and options</a>
           <ul>
             <li><a href="#dirsettings">"Directories" tab</a></li>
@@ -170,6 +177,28 @@
         The subtitle format must be text (SRT, SSA, ASS or Teletext).
         Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
         The output subtitle file format is SRT.</p>
+      <hr/>
+      <h2><a id="miscfeat">Miscellaneous features</a></h2>
+      <h3><a id="logwin">The log window</a></h3>
+      <p>The log window is the bottom part of the QtlMovie main window.
+        All external commands are displayed there, with their output and error messages.
+        This is mainly a debug feature which can be ignored by most users.</p>
+      <p>Using the "Tools" menu, the log window can be cleared or saved in a text file.
+        There is also a "Log Debug" option which activates more debug traces in the log window.
+        When reporting a problem about QtlMovie, it is a good idea to clear the log window,
+        activate the debug, perform the operations which exhibit the problem, save the log
+        into a text file and attach this text file to the problem report.</p>
+      <h3><a id="fileprop">Input file properties</a></h3>
+      <p>The "Input File Properties" option in the "Tools" menu displays all properties of
+        the input file as reported by <i>ffprobe</i>.
+        This provides a more precise view of the file and its streams but requires some
+        knownledge about FFmpeg.</p>
+      <h3><a id="audiotest">Audio test</a></h3>
+      <p>The "Test Audio" option in the "Tools" menu opens a dialog box for testing the
+        audio streams in the input file. This is useful when the languages of the audio
+        tracks are not correctly identified in the input file. Using this dialog box,
+        the user can select and play the various audio tracks in order to recognize the
+        language of each track.</p>
       <hr/>
       <h2><a id="settings">Settings and options</a></h2>
       <p>The QtlMovie settings are accessible using the "Tools" menu.</p>
