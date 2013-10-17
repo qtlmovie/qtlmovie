@@ -3,6 +3,7 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.3 (2013-10-16)
+- Bug fix: "Test Audio" feature was not working well. Fixed.
 - Workaround for a bug in ffmpeg on Windows: When the option -passlogfile
   contains non-ASCII characters, the path of the log file as built by
   ffmpeg is wrong and ffmpeg fails with "no such file or directory".

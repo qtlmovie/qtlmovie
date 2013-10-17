@@ -72,10 +72,7 @@ public:
     //! Check if the audio test is currently playing.
     //! @return True if the audio test is currently playing.
     //!
-    bool playing() const
-    {
-        return _process != 0 || _audio != 0;
-    }
+    bool playing() const;
 
 public slots:
     //!
@@ -106,10 +103,13 @@ private slots:
     //!
     void audioStateChanged(QAudio::State audioState);
     //!
-    //! Invoked when the FFmpeg process completes.
-    //! @param [in] success True when the process completed successfully, false otherwise.
+    //! Invoked when audio data is available from ffmpeg output.
     //!
-    void ffmpegCompleted(bool success);
+    void ffmpegDataReady();
+    //!
+    //! Perform termination operations if the process and the audio output engine are completed.
+    //!
+    void cleanup();
 
 protected:
     //!
@@ -117,11 +117,6 @@ protected:
     //! @param event Notified event.
     //!
     virtual void closeEvent(QCloseEvent* event);
-    //!
-    //! Event handler to handle timer.
-    //! @param event Notified event.
-    //!
-    virtual void timerEvent(QTimerEvent* event);
 
 private:
     Ui::QtlMovieAudioTestDialog _ui;           //!< UI from Qt Designer.
@@ -129,15 +124,17 @@ private:
     const QtlMovieSettings*     _settings;     //!< Application settings.
     QtlLogger*                  _log;          //!< Message logger.
     QtlMovieFFmpegProcess*      _process;      //!< FFmpeg process.
-    QAudioOutput*               _audio;        //!< Audio output device.
+    QAudioOutput                _audio;        //!< Audio output device.
     int                         _startSecond;  //!< Starting time of current audio play.
+    bool                        _started;      //!< Audio playout explicitely started.
     bool                        _closePending; //!< When true, close the dialog asap.
-    int                         _pollTimerId;  //!< Polling timer id.
 
     //!
-    //! Perform termination operations if the process and the audio output engine are completed.
+    //! Return the audio format used in the test.
+    //! Format: PCM, 16-bit, signed, little endian, mono, sampled at 44.1 kHz.
+    //! @return The audio format used in the test.
     //!
-    void cleanup();
+    static QAudioFormat audioFormat();
 
     // Unaccessible operations.
     QtlMovieAudioTestDialog() Q_DECL_EQ_DELETE;

@@ -49,7 +49,6 @@ SOURCES += \
     QtlUtils.cpp \
     QtlFixedSizeTableWidget.cpp \
     QtlHexa.cpp \
-    QtlPipe.cpp \
     QtlButtonGrid.cpp \
     QtlAutoGrid.cpp
 
@@ -76,7 +75,6 @@ HEADERS += \
     images/browser-left.h \
     images/browser-home.h \
     QtlIncrement.h \
-    QtlPipe.h \
     QtlButtonGrid.h \
     QtlAutoGrid.h
 

@@ -3,9 +3,8 @@ QtlMovie "to do" list
 =====================
 
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
-  as initial directory.
-
-- Fix "Audio Test" features. Does not always work.
+  as initial directory. Seems due to a Qt bug (or missing feature). For more
+  details, see https://bugreports.qt-project.org/browse/QTBUG-33962
 
 - Integrate DVD Decrypter: Directly rip DVD. Try to read VOB. In case of error,
   load stream desc from IFO only. Then add an initial DVD Decrypter pass in the
