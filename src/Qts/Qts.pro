@@ -86,3 +86,6 @@ HEADERS += \
     QtsProgramAssociationTable.h \
     QtsProgramMapTable.h \
     QtsStandaloneTableDemux.h
+
+TRANSLATIONS += \
+    locale/qts_fr.ts

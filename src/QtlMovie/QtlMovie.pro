@@ -103,3 +103,6 @@ OTHER_FILES += \
     help/qtlmovie-user.html \
     help/qtlmovie-build.html \
     help/default.css
+
+TRANSLATIONS += \
+    locale/qtlmovie_fr.ts

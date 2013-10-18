@@ -147,7 +147,7 @@ if ($NoBuild) {
     Set-QtPath
 }
 else {
-    & (Join-Path $PSScriptRoot build.ps1) -Release -NoPause
+    & (Join-Path $PSScriptRoot build.ps1) -Release -Translations -NoPause
 }
 
 # Build the installer.

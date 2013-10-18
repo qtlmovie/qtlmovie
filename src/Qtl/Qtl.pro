@@ -50,7 +50,8 @@ SOURCES += \
     QtlFixedSizeTableWidget.cpp \
     QtlHexa.cpp \
     QtlButtonGrid.cpp \
-    QtlAutoGrid.cpp
+    QtlAutoGrid.cpp \
+    QtlTranslator.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -76,7 +77,11 @@ HEADERS += \
     images/browser-home.h \
     QtlIncrement.h \
     QtlButtonGrid.h \
-    QtlAutoGrid.h
+    QtlAutoGrid.h \
+    QtlTranslator.h
 
 FORMS += \
     QtlBrowserDialog.ui
+
+TRANSLATIONS += \
+    locale/qtl_fr.ts

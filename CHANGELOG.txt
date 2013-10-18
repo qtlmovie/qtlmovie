@@ -2,6 +2,11 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.4
+- QtlMovie is now internationalized. The current only maintained translation
+  is French. Looking for volunteers for other languages. Help files are not
+  yet translated.
+
 Version 1.2.3 (2013-10-16)
 - Bug fix: "Test Audio" feature was not working well. Fixed.
 - Workaround for a bug in ffmpeg on Windows: When the option -passlogfile

@@ -144,6 +144,12 @@ Section "Install"
     SetOutPath "$INSTDIR\plugins\platforms"
     File "${QtPluginDir}\platforms\qwindows.dll"
 
+    SetOutPath "$INSTDIR\translations"
+    File "${QtPluginDir}\..\translations\qt*_fr.qm"
+    File "${RootDir}\src\Qtl\locale\qtl_fr.qm"
+    File "${RootDir}\src\Qts\locale\qts_fr.qm"
+    File "${RootDir}\src\QtlMovie\locale\qtlmovie_fr.qm"
+
     SetOutPath "$INSTDIR\fonts"
     File "${RootDir}\fonts\fonts.conf.template"
     File "${RootDir}\fonts\subfont.ttf"
@@ -218,6 +224,8 @@ Section "Uninstall"
     Delete "$INSTDIR\plugins\platforms\qwindows.dll"
     RMDir  "$INSTDIR\plugins\platforms"
     RMDir  "$INSTDIR\plugins"
+
+    RMDir /r "$INSTDIR\translations"
 
     Delete "$INSTDIR\QtlMovie.exe"
     Delete "$INSTDIR\Qt5Core.dll"

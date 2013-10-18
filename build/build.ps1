@@ -49,15 +49,20 @@
   The release and debug versions are built in ..\build-Win32-Release and
   ..\build-Win32-Debug respectively.
 
+  If neither -Release nor -Debug no -Translation is provided, build both versions
+  and translation files. Otherwise, build only the requested versions.
+
  .PARAMETER Debug
 
-  Build the debug version. If neither -Release nor -Debug is provided,
-  build both versions.
+  Build the debug version.
 
  .PARAMETER Release
 
-  Build the release version. If neither -Release nor -Debug is provided,
-  build both versions.
+  Build the release version.
+
+ .PARAMETER Translations
+
+  Build the translation files.
 
  .PARAMETER NoPause
 
@@ -68,6 +73,7 @@
 param(
     [switch]$Release = $false,
     [switch]$Debug = $false,
+    [switch]$Translations = $false,
     [switch]$NoPause = $false
 )
 
@@ -80,14 +86,16 @@ Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 Set-QtPath
 
 # Default arguments: build all.
-if (-not $Release -and -not $Debug) {
+if (-not $Release -and -not $Debug -and -not $Translations) {
     $Release = $true
     $Debug = $true
+    $Translations = $true
 }
 
 # Project file
 $RootDir=(Split-Path -Parent $PSScriptRoot)
-$ProjectFile = Get-QtProjectFile (Join-Path $RootDir src)
+$SrcDir=(Join-Path $RootDir src)
+$ProjectFile = Get-QtProjectFile $SrcDir
 if ($ProjectFile -eq $null) {
     Write-Error "No project file found"
 }
@@ -115,6 +123,11 @@ else {
         qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug CONFIG+=declarative_debug
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
+    }
+
+    # Release translation files.
+    if ($Translations) {
+        Get-ChildItem $SrcDir -Recurse -File -Filter *.ts | ForEach-Object {lrelease $_.FullName}
     }
 }
 

@@ -26,31 +26,38 @@
 //
 //----------------------------------------------------------------------------
 //
-// Main program for the QtlMovie application.
+// Qtl, Qt utility library.
+// Define the class QtlTranslator.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieMainWindow.h"
 #include "QtlTranslator.h"
-#include "QtsTsPacket.h"
-#include <QApplication>
 
-int main(int argc, char *argv[])
+
+//----------------------------------------------------------------------------
+// Constructor.
+//----------------------------------------------------------------------------
+
+QtlTranslator::QtlTranslator(const QString& fileNamePrefix, const QString& localeName, const QStringList& directories, QObject* parent) :
+    QTranslator(parent)
 {
-    // Application initialization.
-    QApplication a(argc, argv);
+    // Actual file name.
+    const QString fileName(fileNamePrefix + "_" + (localeName.isEmpty() ? QLocale::system().name() : localeName));
 
-    // Install translations.
-    QtlTranslator trQt("qt");
-    QtlTranslator trQtl("qtl");
-    QtlTranslator trQts("qts");
-    QtlTranslator trQtlMovie("qtlmovie");
+    // Add Qt translation directory and application directory.
+    QStringList dirs(directories);
+    dirs << QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+         << QCoreApplication::applicationDirPath()
+         << (QCoreApplication::applicationDirPath() + QDir::separator() + "translations");
 
-    // Various sanity checks.
-    QtsTsPacket::sanityCheck();
+    // Try to load the file from the first possible directory.
+    bool success = false;
+    for (QStringList::ConstIterator it = dirs.begin(); !success && it != dirs.end(); ++it) {
+        success = load(fileName, *it);
+    }
 
-    // Run the application GUI.
-    QtlMovieMainWindow w;
-    w.show();
-    return a.exec();
+    // If found, install translator.
+    if (success) {
+        QCoreApplication::installTranslator(this);
+    }
 }

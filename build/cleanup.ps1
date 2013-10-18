@@ -88,6 +88,7 @@ $files = @(Get-ChildItem -Recurse (Split-Path -Parent $PSScriptRoot) | Where-Obj
     $_.Name -like "*.lib" -or
     $_.Name -like "*.dll" -or
     $_.Name -like "*.exe" -or
+    $_.Name -like "*.qm" -or
     $_.Name -like "*.autosave" -or
     $_.Name -like "object_script.*.release" -or
     $_.Name -like "object_script.*.debug")

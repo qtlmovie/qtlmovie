@@ -25,32 +25,47 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//
-// Main program for the QtlMovie application.
-//
+//!
+//! @file QtlTranslator.h
+//!
+//! Declare the class QtlTranslator.
+//! Qtl, Qt utility library.
+//!
 //----------------------------------------------------------------------------
 
-#include "QtlMovieMainWindow.h"
-#include "QtlTranslator.h"
-#include "QtsTsPacket.h"
-#include <QApplication>
+#ifndef QTLTRANSLATOR_H
+#define QTLTRANSLATOR_H
 
-int main(int argc, char *argv[])
+#include <QtCore>
+
+//!
+//! A subclass of QTranslator with extended file search capabilities.
+//!
+class QtlTranslator : public QTranslator
 {
-    // Application initialization.
-    QApplication a(argc, argv);
+#if !defined (DOXYGEN)
+    Q_OBJECT
+#endif
 
-    // Install translations.
-    QtlTranslator trQt("qt");
-    QtlTranslator trQtl("qtl");
-    QtlTranslator trQts("qts");
-    QtlTranslator trQtlMovie("qtlmovie");
+public:
+    //!
+    //! Constructor.
+    //! The translator is automatically installed in the application.
+    //! @param [in] fileNamePrefix Same as the @a filename parameter in QTranslator::load()
+    //! without the locale name part.
+    //! @param [in] localeName Locale name. Defaults to the system locale.
+    //! @param [in] directories List of directories to search for the file. The Qt translation
+    //! directory is automatically added at the end of the list.
+    //! @param [in] parent Optional parent object.
+    //!
+    explicit QtlTranslator(const QString& fileNamePrefix,
+                           const QString& localeName = QString(),
+                           const QStringList& directories = QStringList(),
+                           QObject *parent = 0);
 
-    // Various sanity checks.
-    QtsTsPacket::sanityCheck();
+private:
+    // Unaccessible operation.
+    QtlTranslator() Q_DECL_EQ_DELETE;
+};
 
-    // Run the application GUI.
-    QtlMovieMainWindow w;
-    w.show();
-    return a.exec();
-}
+#endif // QTLTRANSLATOR_H

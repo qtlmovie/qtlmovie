@@ -90,3 +90,6 @@ if $BUILD_DEBUG; then
     cd $BUILDDIR_DEBUG
     qmake $PROJECT_FILE -r CONFIG+=debug CONFIG+=declarative_debug && make -j${NPROCESS} --no-print-directory -k
 fi
+
+# Build translation files.
+find $SRCDIR -name '*.ts' -exec lrelease {} \;

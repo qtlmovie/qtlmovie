@@ -10,3 +10,4 @@ build-*-[Dd]ebug
 *.a
 *.o
 *.pro.user
+*.qm

@@ -54,6 +54,7 @@ find $ROOT \
        -iname '*.lib' -o \
        -iname '*.dll' -o \
        -iname '*.exe' -o \
+       -iname '*.qm' -o \
        -iname '*.log' -o \
        -iname '*.tmp' -o \
        -iname '*~' -o \
