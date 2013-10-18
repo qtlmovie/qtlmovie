@@ -40,6 +40,7 @@
             <li><a href="#liscsettings">"Miscellaneous" tab</a></li>
           </ul>
         </li>
+        <li><a href="#cmdline">Command line syntax</a></li>
         <li><a href="#platforms">Platforms notes</a>
           <ul>
             <li><a href="#windows">Windows</a></li>
@@ -332,6 +333,25 @@
         This option is usually reserved for debug purpose.</p>
       <p>Finally, the "Max log" option indicates the number of text lines to retain in the log window.
         When this threshold is reached, the first lines are deleted.</p>
+      <hr/>
+      <h2><a id="cmdline">Command line syntax</a></h2>
+      <p>QtlMovie is normally started from the desktop menu without command line argument.
+        This is sufficient for normal usage.</p>
+      <p>However, a few options can be provided on the command line.
+        The syntax is the following:</p>
+      <div class="sample">
+        <p>QtlMovie [-l <i>locale</i>] [<i>inputfile</i>]</p>
+      </div>
+      <p>The <i>locale</i> specifies an alternate locale such as "en" or "fr_FR".
+        By default, the system locale is used.</p>
+      <p>The <i>inputfile</i> specifies a video input file which is automatically open
+        when QtlMovie starts.</p>
+      <p>Example: If your system's locale is supported by QtlMovie but you are not
+        satisfied by the translations, you can revert to English by editing the QtlMovie
+        command in the desktop menus as follow:</p>
+      <div class="sample">
+        <p>QtlMovie -l en</p>
+      </div>
       <hr/>
       <h2><a id="platforms">Platforms notes</a></h2>
       <h3><a id="windows">Windows</a></h3>

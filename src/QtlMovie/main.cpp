@@ -33,24 +33,43 @@
 #include "QtlMovieMainWindow.h"
 #include "QtlTranslator.h"
 #include "QtsTsPacket.h"
-#include <QApplication>
+#include <QtCore>
+#include <QtDebug>
 
 int main(int argc, char *argv[])
 {
     // Application initialization.
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+
+    // Decode command line arguments.
+    const QStringList args(QCoreApplication::arguments());
+    QString locale;
+    QString inputFile;
+    for (int i = 1; i < args.size(); ++i) {
+        if (args[i] == "-l" && i+1 < args.size()) {
+            // Option "-l" means locale name
+            locale = args[++i];
+        }
+        else if (!args[i].startsWith("-")) {
+            // Not an option, this is the input file.
+            inputFile = args[i];
+        }
+        else {
+            qWarning() << "Unknow option:" << args[i];
+        }
+    }
 
     // Install translations.
-    QtlTranslator trQt("qt");
-    QtlTranslator trQtl("qtl");
-    QtlTranslator trQts("qts");
-    QtlTranslator trQtlMovie("qtlmovie");
+    QtlTranslator trQt("qt", locale);
+    QtlTranslator trQtl("qtl", locale);
+    QtlTranslator trQts("qts", locale);
+    QtlTranslator trQtlMovie("qtlmovie", locale);
 
     // Various sanity checks.
     QtsTsPacket::sanityCheck();
 
     // Run the application GUI.
-    QtlMovieMainWindow w;
-    w.show();
-    return a.exec();
+    QtlMovieMainWindow win(0, inputFile);
+    win.show();
+    return app.exec();
 }

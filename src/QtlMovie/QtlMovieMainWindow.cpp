@@ -48,7 +48,7 @@
 // Constructor.
 //-----------------------------------------------------------------------------
 
-QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent) :
+QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFileName) :
     QMainWindow(parent),
     _settings(0),
     _inFile(0),
@@ -91,9 +91,8 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent) :
     connect(_outFile, SIGNAL(fileNameChanged(QString)), this, SLOT(outputFileNameChanged(QString)));
 
     // If a command line argument is provided, use it as input file.
-    const QStringList args(QCoreApplication::arguments());
-    if (args.size() > 1) {
-        _inFile->setFileName(args[1]);
+    if (!initialFileName.isEmpty()) {
+        _inFile->setFileName(initialFileName);
     }
 }
 

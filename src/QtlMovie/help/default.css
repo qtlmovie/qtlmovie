@@ -41,3 +41,8 @@ h2 {
     padding-left: 5em;
     padding-right: 5em;
 }
+.sample {
+    padding-left: 2em;
+    font-family: "Courier New",Monospace;
+    font-weight: bold;
+}

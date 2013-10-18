@@ -5,7 +5,9 @@ QtlMovie Change Log
 Version 1.2.4
 - QtlMovie is now internationalized. The current only maintained translation
   is French. Looking for volunteers for other languages. Help files are not
-  yet translated.
+  yet translated. The system locale is used by default (when supported by
+  QtlMovie). Another locale can be specified on the command line. Example:
+  "QtlMovie -l en" starts in English.
 
 Version 1.2.3 (2013-10-16)
 - Bug fix: "Test Audio" feature was not working well. Fixed.
