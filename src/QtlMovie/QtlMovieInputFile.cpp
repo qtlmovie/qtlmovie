@@ -378,7 +378,7 @@ bool QtlMovieInputFile::isDvdCompliant() const
 {
     // The DVD-compliant files we generate have the following characteristics:
     // - MPEG-PS file format.
-    // - Exactly 2 streams: one video and one audio.
+    // - Exactly 2 streams: one MPEG-2 video and one AC-3 audio.
     // - Same video size and aspect ratio.
 
     const QtlMovieStreamInfoPtr videoStream(firstStream(QtlMovieStreamInfo::Video));
@@ -395,7 +395,7 @@ bool QtlMovieInputFile::isDvdCompliant() const
         qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
         _ffInfo.value("format.format_name") == "mpeg" &&
         _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video" &&
-        _ffInfo.valueOfStream(audioStream->ffIndex(), "codec_name") == "mp2";
+        _ffInfo.valueOfStream(audioStream->ffIndex(), "codec_name") == "ac3";
 }
 
 

@@ -705,7 +705,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         // Common audio options.
         QStringList args;
         args << "-map" << audioStream->ffSpecifier()
-             << "-codec:a" << "mp2"  // MPEG-2 audio layer 2
+             << "-codec:a" << "ac3"  // AC-3 audio (Dolby Digital)
              << "-ac" << "2"         // Remix to 2 channels (stereo)
              << "-ar" << QString::number(QTL_DVD_AUDIO_SAMPLING)
              << "-b:a" << QString::number(QTL_DVD_AUDIO_BITRATE);
@@ -772,13 +772,13 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
     // Remux audio and video in a dvdauthor-compatible way.
     // At that point, we know that there are one audio and one video stream.
     // Add a process to extract audio in a separate file.
-    const QString audioFile(_tempDir + QDir::separator() + "audio.mp2");
+    const QString audioFile(_tempDir + QDir::separator() + "audio.ac3");
     QStringList args(QtlMovieFFmpeg::inputArguments(settings()));
     args << "-i" << remuxInput
          << "-vn"  // Drop video stream
          << "-map" << "0:a"
          << "-codec:a" << "copy"
-         << QtlMovieFFmpeg::outputArguments(settings(), audioFile, "mp2");
+         << QtlMovieFFmpeg::outputArguments(settings(), audioFile, "ac3");
 
     // Add the process for audio extraction.
     // Note that this never fails since the argument list is not empty.
@@ -834,6 +834,7 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
     // and delete any previous content ("-o" - lowercase - does not delete previous content).
     QStringList args;
     args << "-t"               // Create a "title" in the DVD.
+         << "-a" << "ac3+2ch"  // Audio is AC-3 stereo.
          << "-O" << dvdRoot    // Output directory (-O, uppercase, means delete previous content).
          << chapterOptions(int(inputFile->durationInSeconds()), settings()->chapterMinutes() * 60)
          << mpegFileName;      // MPEG file for this title.
