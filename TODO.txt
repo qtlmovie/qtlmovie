@@ -3,6 +3,12 @@ QtlMovie "to do" list
 =====================
 
 - Check if MP2 is a valid audio for NTSC DVD. Otherwise, use AC-3 for DVD.
+  Test PAL DVD with AC-3 on DVD player (take care of DVD Author options).
+  Accept MP2 track as DVD-compliant if default is PAL. Check actual audio stream
+  type of DVD-compliant MPEG files (again, take care of DVD Author options).
+
+- Integrate CCextractor: Support for North American EIA-608/708 Closed Caption.
+  Need some stream samples to test first.
 
 - Implement multi-language help files (file qtlmovie_fr.html for instance).
 
