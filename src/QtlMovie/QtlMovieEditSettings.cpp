@@ -156,6 +156,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioNtsc->setChecked(!_settings->createPalDvd());
     _ui.radioIpad12->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad12Size);
     _ui.radioIpad34->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad34Size);
+    _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -207,6 +208,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdRemuxAfterTranscode(_ui.checkDvdRemuxAfterTranscode->isChecked());
     _settings->setCreatePalDvd(_ui.radioPal->isChecked());
     _settings->setIpadScreenSize(_ui.radioIpad12->isChecked() ? QtlMovieSettings::Ipad12Size : QtlMovieSettings::Ipad34Size);
+    _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

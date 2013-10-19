@@ -721,6 +721,21 @@ public:
         return _ipadScreenSize == Ipad12Size ? QTL_IPAD12_VIDEO_HEIGHT : QTL_IPAD34_VIDEO_HEIGHT;
     }
 
+    //!
+    //! Do we force transcoding even if input file is already DVD-compliant.
+    //! @return True to force transcoding even if input file is already DVD-compliant.
+    //!
+    bool forceDvdTranscode() const
+    {
+        return _forceDvdTranscode;
+    }
+
+    //!
+    //! Force transcoding even if input file is already DVD-compliant.
+    //! @param [in] forceDvdTranscode True to force transcoding even if input file is already DVD-compliant.
+    //!
+    void setForceDvdTranscode(bool forceDvdTranscode);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -757,6 +772,7 @@ private:
     bool                  _dvdRemuxAfterTranscode; //!< Remux audio/video after transcode to DVD.
     bool                  _createPalDvd;           //!< Create DVD in PAL format (false: NTSC).
     IpadScreenSize        _ipadScreenSize;         //!< iPad screen size.
+    bool                  _forceDvdTranscode;      //!< Force transcoding even if input file is already DVD-compliant.
 
     //!
     //! Write an XML element with a "value" integer attribute.

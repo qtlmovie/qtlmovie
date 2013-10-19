@@ -4,10 +4,11 @@ QtlMovie Change Log
 
 Version 1.2.4 (2013-10-19)
 - Encoding for DVD now transcodes audio to AC-3 instead of MPEG-2 Audio Layer 2.
-- When encoding for DVD, if the input video stream is already DDV-compliant,
+- When encoding for DVD, if the input video stream is already DVD-compliant,
   do not re-encode video. Simply re-encode audio and remux. This is useful
   for video files from analog-to-digital acquisition cards which produce
-  DVD-compliant files with MPEG-2 audio instead of AC-3.
+  DVD-compliant files with MPEG-2 audio instead of AC-3. Previously, the
+  re-encoding was skipped only if the complete file was DVD_compliant.
 - Automatic detection DVD-compliant files (full file or video only) can be
   disabled in the settings. This is useful to force a transcoding when the
   file seems DVD-compliant but is not really (too large for instance).

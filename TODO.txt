@@ -2,8 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Add settings to force re-encoding of DVD-compliant files + update help files.
-
 - Fix QtlLineEdit bug: when editing in the middle of the text, the cursor always
   jumps to end of line.
 

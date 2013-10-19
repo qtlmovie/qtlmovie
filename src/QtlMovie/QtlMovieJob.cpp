@@ -635,7 +635,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
     if (videoStream.isNull()) {
         return errorFalse(tr("No selected video stream"));
     }
-    else if (inputFile->selectedVideoStreamIsDvdCompliant()) {
+    else if (!settings()->forceDvdTranscode() && inputFile->selectedVideoStreamIsDvdCompliant()) {
         // Video is DVD compliant, simply copy the video stream.
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "copy"
@@ -730,7 +730,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
 bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, const QString& outputFileName)
 {
     // Check if the input file looks like one of our DVD-compliant MPEG files.
-    const bool dvdCompliant = inputFile->isDvdCompliant();
+    const bool dvdCompliant = !settings()->forceDvdTranscode() && inputFile->isDvdCompliant();
 
     // Video and audio stream to transcode.
     const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());

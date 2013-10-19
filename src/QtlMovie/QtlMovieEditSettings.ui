@@ -460,6 +460,13 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="0" colspan="4">
+           <widget class="QCheckBox" name="checkForceDvdTranscode">
+            <property name="text">
+             <string>Force transcoding even if the input file or video is DVD-compliant</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

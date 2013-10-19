@@ -132,7 +132,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _chapterMinutes(5),
     _dvdRemuxAfterTranscode(true),
     _createPalDvd(true),
-    _ipadScreenSize(Ipad12Size)
+    _ipadScreenSize(Ipad12Size),
+    _forceDvdTranscode(false)
 {
     Q_ASSERT(log != 0);
 
@@ -345,6 +346,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setBoolAttribute(xml, "dvdRemuxAfterTranscode", _dvdRemuxAfterTranscode);
     setBoolAttribute(xml, "createPalDvd", _createPalDvd);
     setIntAttribute(xml, "ipadScreenSize", int(_ipadScreenSize));
+    setBoolAttribute(xml, "forceDvdTranscode", _forceDvdTranscode);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -400,6 +402,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     bool dvdRemuxAfterTranscode = _dvdRemuxAfterTranscode;
     bool createPalDvd = _createPalDvd;
     int ipadScreenSize = int(_ipadScreenSize);
+    bool forceDvdTranscode = _forceDvdTranscode;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -435,6 +438,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getBoolAttribute(xml, "dvdRemuxAfterTranscode", dvdRemuxAfterTranscode) &&
                     !getBoolAttribute(xml, "createPalDvd", createPalDvd) &&
                     !getIntAttribute(xml, "ipadScreenSize", ipadScreenSize) &&
+                    !getBoolAttribute(xml, "forceDvdTranscode", forceDvdTranscode) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -476,6 +480,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setDvdRemuxAfterTranscode(dvdRemuxAfterTranscode);
         setCreatePalDvd(createPalDvd);
         setIpadScreenSize(IpadScreenSize(ipadScreenSize));
+        setForceDvdTranscode(forceDvdTranscode);
     }
     else {
         // Format an error string.
@@ -745,6 +750,14 @@ void QtlMovieSettings::setIpadScreenSize(QtlMovieSettings::IpadScreenSize ipadSc
 {
     if (_ipadScreenSize != ipadScreenSize) {
         _ipadScreenSize = ipadScreenSize;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setForceDvdTranscode(bool forceDvdTranscode)
+{
+    if (_forceDvdTranscode != forceDvdTranscode) {
+        _forceDvdTranscode = forceDvdTranscode;
         _isModified = true;
     }
 }
