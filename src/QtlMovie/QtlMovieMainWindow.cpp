@@ -195,7 +195,9 @@ void QtlMovieMainWindow::inputFileNameEdited()
 void QtlMovieMainWindow::inputFileNameChanged(const QString& fileName)
 {
     // Set the input file name in the edit box.
-    _ui.editInputFile->setText(fileName);
+    if (_ui.editInputFile->text() != fileName) {
+        _ui.editInputFile->setText(fileName);
+    }
 
     // Clear stream information in input file.
     clearInputStreamInfo();
@@ -415,7 +417,9 @@ void QtlMovieMainWindow::outputFileNameEdited()
 void QtlMovieMainWindow::outputFileNameChanged(const QString& fileName)
 {
     // Set the output file name in the edit box.
-    _ui.editOutputFile->setText(fileName);
+    if (_ui.editOutputFile->text() != fileName) {
+        _ui.editOutputFile->setText(fileName);
+    }
 }
 
 

@@ -17,6 +17,8 @@ Version 1.2.4 (2013-10-19)
   yet translated. The system locale is used by default (when supported by
   QtlMovie). Another locale can be specified on the command line. Example:
   "QtlMovie -l en" starts in English.
+- Bug fix: When editing the input or output file name, the cursor jumped to
+  the end of line after each character. Fixed.
 
 Version 1.2.3 (2013-10-16)
 - Bug fix: "Test Audio" feature was not working well. Fixed.
