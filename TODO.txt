@@ -2,7 +2,7 @@
 QtlMovie "to do" list
 =====================
 
-- Test PAL DVD with AC-3 on DVD player (take care of DVD Author options).
+- Do not reencode video for DVD if already compliant but audio is not.
 
 - Integrate CCextractor: Support for North American EIA-608/708 Closed Caption.
   Need some stream samples to test first.
