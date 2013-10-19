@@ -624,16 +624,26 @@ QStringList QtlMovieJob::chapterOptions(int totalSeconds, int chapterSeconds)
 
 bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile, const QString& outputFileName)
 {
-    // Video and audio stream to transcode.
+    // Start FFmpeg argument lists (input file and audio options).
+    QStringList args;
+    args << QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette())
+         << QtlMovieFFmpeg::dvdAudioOptions(settings(), inputFile->selectedAudioStreamInfo());
+
+    // Video stream to transcode.
     const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
-    const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
-    // Start FFmpeg argument lists. There are two argument lists, one for each encoding pass.
-    QStringList pass1Args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
-    QStringList pass2Args(pass1Args);
-
-    // Process selected video stream.
-    if (!videoStream.isNull()) {
+    if (videoStream.isNull()) {
+        return errorFalse(tr("No selected video stream"));
+    }
+    else if (inputFile->selectedVideoStreamIsDvdCompliant()) {
+        // Video is DVD compliant, simply copy the video stream.
+        args << "-map" << videoStream->ffSpecifier()
+             << "-codec:v" << "copy"
+             << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "dvd");
+        return addFFmpeg(tr("Transcoding audio only"), args);
+    }
+    else {
+        // Transcode video in two passes.
         // Compute video bitrate. Start with value from settings.
         qint64 bitrate = settings()->dvdVideoBitRate();
         if (_outSeconds> 0) {
@@ -684,7 +694,6 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         }
 
         // Common video options.
-        QStringList args;
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "mpeg2video"
              << "-target" << (settings()->createPalDvd() ? "pal-dvd" : "ntsc-dvd")  // Select presets for DVD.
@@ -695,32 +704,22 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
              << "-threads" << "auto"
              << "-passlogfile" << (shortTempDir + QDir::separator() + "fflog");
 
-        // Pass 1 and 2 arguments.
-        pass1Args << args << "-pass" << "1";
-        pass2Args << args << "-pass" << "2";
+        // There are two argument lists, one for each encoding pass.
+        // The output of the first pass is useless and sent to the null device (only the log is useful).
+        QStringList pass1Args;
+        QStringList pass2Args;
+
+        pass1Args << args
+                  << "-pass" << "1"
+                  << QtlMovieFFmpeg::outputArguments(settings(), QTL_NULL_DEVICE, "dvd");
+
+        pass2Args << args
+                  << "-pass" << "2"
+                  << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "dvd");
+
+        // Add 2 processes for video transcoding.
+        return addFFmpeg(tr("Transcoding, pass 1"), pass1Args) && addFFmpeg(tr("Transcoding, pass 2"), pass2Args);
     }
-
-    // Process selected audio stream.
-    if (!audioStream.isNull()) {
-        // Common audio options.
-        QStringList args;
-        args << "-map" << audioStream->ffSpecifier()
-             << "-codec:a" << "ac3"  // AC-3 audio (Dolby Digital)
-             << "-ac" << "2"         // Remix to 2 channels (stereo)
-             << "-ar" << QString::number(QTL_DVD_AUDIO_SAMPLING)
-             << "-b:a" << QString::number(QTL_DVD_AUDIO_BITRATE);
-
-        // Pass 1 and 2 arguments.
-        pass1Args << args;
-        pass2Args << args;
-    }
-
-    // The output of the first pass is useless and sent to the null device (only the log is useful).
-    pass1Args << QtlMovieFFmpeg::outputArguments(settings(), QTL_NULL_DEVICE, "dvd");
-    pass2Args << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "dvd");
-
-    // Add 2 process for video transcoding.
-    return addFFmpeg(tr("Transcoding, pass 1"), pass1Args) && addFFmpeg(tr("Transcoding, pass 2"), pass2Args);
 }
 
 

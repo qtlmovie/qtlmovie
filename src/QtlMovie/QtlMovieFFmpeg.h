@@ -36,7 +36,9 @@
 #define QTLMOVIEFFMPEG_H
 
 #include "QtlByteBlock.h"
+#include "QtlMovie.h"
 #include "QtlMovieSettings.h"
+#include "QtlMovieStreamInfo.h"
 #include "QtlMovieOutputFile.h"
 
 //!
@@ -91,6 +93,14 @@ namespace QtlMovieFFmpeg
     //! @return FFmpeg options, possibly empty.
     //!
     QStringList frameRateOptions(const QtlMovieSettings* settings, QtlMovieOutputFile::OutputType outputType);
+
+    //!
+    //! Build an audio conversion FFmpeg options list for DVD transcoding.
+    //! @param [in] settings Application settings.
+    //! @param [in] audioStream Audio stream description. Can be null.
+    //! @return FFmpeg options, possibly empty.
+    //!
+    QStringList dvdAudioOptions(const QtlMovieSettings* settings, const QtlMovieStreamInfoPtr& audioStream);
 
     //!
     //! Build FFmpeg command line arguments to insert a video filter string.

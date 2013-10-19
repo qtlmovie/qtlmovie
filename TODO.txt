@@ -2,7 +2,10 @@
 QtlMovie "to do" list
 =====================
 
-- Do not reencode video for DVD if already compliant but audio is not.
+- Add settings to force re-encoding of DVD-compliant files + update help files.
+
+- Fix QtlLineEdit bug: when editing in the middle of the text, the cursor always
+  jumps to end of line.
 
 - Integrate CCextractor: Support for North American EIA-608/708 Closed Caption.
   Need some stream samples to test first.

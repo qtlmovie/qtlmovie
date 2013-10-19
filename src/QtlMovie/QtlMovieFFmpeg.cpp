@@ -195,6 +195,24 @@ QStringList QtlMovieFFmpeg::frameRateOptions(const QtlMovieSettings* settings, Q
 
 
 //----------------------------------------------------------------------------
+// Build an audio conversion FFmpeg options list for DVD transcoding.
+//----------------------------------------------------------------------------
+
+QStringList QtlMovieFFmpeg::dvdAudioOptions(const QtlMovieSettings* settings, const QtlMovieStreamInfoPtr& audioStream)
+{
+    QStringList args;
+    if (!audioStream.isNull()) {
+        args << "-map" << audioStream->ffSpecifier()
+             << "-codec:a" << "ac3"  // AC-3 audio (Dolby Digital)
+             << "-ac" << "2"         // Remix to 2 channels (stereo)
+             << "-ar" << QString::number(QTL_DVD_AUDIO_SAMPLING)
+             << "-b:a" << QString::number(QTL_DVD_AUDIO_BITRATE);
+    }
+    return args;
+}
+
+
+//----------------------------------------------------------------------------
 // Build FFmpeg command line arguments to insert a video filter string.
 //----------------------------------------------------------------------------
 

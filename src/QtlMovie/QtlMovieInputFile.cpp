@@ -381,21 +381,31 @@ bool QtlMovieInputFile::isDvdCompliant() const
     // - Exactly 2 streams: one MPEG-2 video and one AC-3 audio.
     // - Same video size and aspect ratio.
 
-    const QtlMovieStreamInfoPtr videoStream(firstStream(QtlMovieStreamInfo::Video));
     const QtlMovieStreamInfoPtr audioStream(firstStream(QtlMovieStreamInfo::Audio));
 
-    return
-        streamCount(QtlMovieStreamInfo::Video) == 1 &&
-        streamCount(QtlMovieStreamInfo::Audio) == 1 &&
-        streamCount(QtlMovieStreamInfo::Subtitle) == 0 &&
-        !videoStream.isNull() &&
-        !audioStream.isNull() &&
-        videoStream->width() == _settings->dvdVideoWidth() &&
-        videoStream->height() == _settings->dvdVideoHeight() &&
-        qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
-        _ffInfo.value("format.format_name") == "mpeg" &&
-        _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video" &&
-        _ffInfo.valueOfStream(audioStream->ffIndex(), "codec_name") == "ac3";
+    return  streamCount(QtlMovieStreamInfo::Video) == 1 &&
+            streamCount(QtlMovieStreamInfo::Audio) == 1 &&
+            streamCount(QtlMovieStreamInfo::Subtitle) == 0 &&
+            selectedVideoStreamIsDvdCompliant() &&
+            !audioStream.isNull() &&
+            _ffInfo.value("format.format_name") == "mpeg" &&
+            _ffInfo.valueOfStream(audioStream->ffIndex(), "codec_name") == "ac3";
+}
+
+
+//----------------------------------------------------------------------------
+// Check if the selected video stream is DVD-compliant.
+//----------------------------------------------------------------------------
+
+bool QtlMovieInputFile::selectedVideoStreamIsDvdCompliant() const
+{
+    const QtlMovieStreamInfoPtr videoStream(selectedVideoStreamInfo());
+
+    return  !videoStream.isNull() &&
+            videoStream->width() == _settings->dvdVideoWidth() &&
+            videoStream->height() == _settings->dvdVideoHeight() &&
+            qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
+            _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video";
 }
 
 

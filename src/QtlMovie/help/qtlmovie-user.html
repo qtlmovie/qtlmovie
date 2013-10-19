@@ -79,6 +79,14 @@
         It is self-sufficient and does not depend on any prior installation.</p>
       <hr/>
       <h2><a id="infiles">Input files</a></h2>
+      <p>When a file is open, all available video, audio and subtitle streams are displayed
+        using a compact grid of radio buttons which allow the selection of the output streams.
+        Each stream button displays only the most important selection criteria such as video size,
+        languages or properties like "for visual/hearing impaired".</p>
+      <p><strong>Hint:</strong> Each stream button has a "tooltip" feature which gives more details
+        on the stream such as the encoding, bitrate or metadata. Simply move the mouse over
+        the button to get more details. You may also have a precise technical description
+        of all streams using the <a href="#fileprop">Input file properties</a> dialog.</p>
       <h3><a id="avin">Audio/video input</a></h3>
       <p>Input files can be any type of multimedia file which is accepted as input by ffmpeg.
         This include the container file format (MPG, AVI, MKV, TS, M2TS, etc.), the video format
@@ -152,7 +160,10 @@
         If the result is satisfactory, the resulting MPEG file can be used as input to produce a DVD ISO image.</p>
       <p>When producing a DVD ISO image, QtlMovie tries to guess if the input file is already
         a DVD-compliant MPEG file or not. In the first case, QtlMovie does not re-encode the
-        input file and directly creates the DVD structure from the input MPEG file.</p>
+        input file and directly creates the DVD structure from the input MPEG file.
+        If the input file is not fully DVD-compliant but its video stream is DVD-compliant,
+        the video is not transcoded to save time and QtlMovie performs the audio transcoding and
+        remux only.</p>
       <p>A DVD ISO image can also be used as input file. In this case, the only possible
         output type is burning the image to a physical media.</p>
       <p>A consequence of these features is that a DVD can be created either at once, from the orginal

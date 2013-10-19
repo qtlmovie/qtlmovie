@@ -133,6 +133,14 @@ public:
     bool isDvdCompliant() const;
 
     //!
+    //! Check if the selected video stream is DVD-compliant.
+    //! To generate a DVD from this kind of file, we can simply copy the audio
+    //! stream without re-encoding. This saves much time.
+    //! @return True if the selected video stream is DVD-compliant, false otherwise.
+    //!
+    bool selectedVideoStreamIsDvdCompliant() const;
+
+    //!
     //! Check if the file seems to be a DVD ISO image.
     //! In fact, check that the file name ends in ".iso".
     //! @return True if the file seems to be a DVD ISO image.
