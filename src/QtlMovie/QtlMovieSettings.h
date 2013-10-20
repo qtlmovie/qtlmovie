@@ -355,6 +355,52 @@ public:
     }
 
     //!
+    //! Get the explicit CCExtractor executable path.
+    //! This is the path that was manually entered into the settings.
+    //! @return CCExtractor executable path.
+    //!
+    QString ccextractorExplicitExecutable() const
+    {
+        return _ccextractorExplicit->fileName();
+    }
+
+    //!
+    //! Get the default CCExtractor executable path.
+    //! This is the executable which was automatically detected in the system.
+    //! @return CCExtractor executable path.
+    //!
+    QString ccextractorDefaultExecutable() const
+    {
+        return _ccextractorDefault->fileName();
+    }
+
+    //!
+    //! Get the actual CCExtractor executable.
+    //! This is the command to execute.
+    //! @return Actual CCExtractor executable, never null.
+    //!
+    const QtlMovieExecFile* ccextractor() const
+    {
+        return _ccextractorExplicit->isSet() ? _ccextractorExplicit : _ccextractorDefault;
+    }
+
+    //!
+    //! Set the explicit CCExtractor executable path.
+    //! Empty by default, the executable is automatically located.
+    //! @param [in] ccextractorExecutable CCExtractor executable path.
+    //!
+    void setCcextractorExplicitExecutable(const QString& ccextractorExecutable);
+
+    //!
+    //! Get the HTML description of the actual CCExtractor product.
+    //! @return HTML description.
+    //!
+    QString ccextractorHtmlDescription() const
+    {
+        return _ccextractorExplicit->isSet() ? _ccextractorExplicit->htmlDescription() : _ccextractorDefault->htmlDescription();
+    }
+
+    //!
     //! Get the explicit DvdDecrypter executable path.
     //! This is the path that was manually entered into the settings.
     //! @return DvdDecrypter executable path.
@@ -753,6 +799,8 @@ private:
     QtlMovieExecFile*     _growisofsExplicit;      //!< Growisofs explicit executable description.
     QtlMovieExecFile*     _telxccDefault;          //!< Telxcc default executable description.
     QtlMovieExecFile*     _telxccExplicit;         //!< Telxcc explicit executable description.
+    QtlMovieExecFile*     _ccextractorDefault;     //!< CCExtractor default executable description.
+    QtlMovieExecFile*     _ccextractorExplicit;    //!< CCExtractor explicit executable description.
     QtlMovieExecFile*     _dvddecrypterDefault;    //!< DvdDecrypter default executable description.
     QtlMovieExecFile*     _dvddecrypterExplicit;   //!< DvdDecrypter explicit executable description.
     int                   _maxLogLines;            //!< Maximum lines in the log window.

@@ -164,7 +164,7 @@ void QtlMovieExecFile::startGetVersion()
         QtlProcess::newInstance(fileName(),       // command
                                 _versionOptions,  // arguments
                                 5000,             // timeout after 5 seconds.
-                                10000,            // max output size in bytes
+                                32768,            // max output size in bytes
                                 this);            // parent object
 
     // Get notification at process termination.

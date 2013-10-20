@@ -60,6 +60,9 @@ QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(const QtlMovieSettings* setting
     _ui.telxccTitle->setText(title(settings->telxcc()));
     _ui.telxccDescription->setText(settings->telxcc()->htmlDescription());
 
+    _ui.ccextractorTitle->setText(title(settings->ccextractor()));
+    _ui.ccextractorDescription->setText(settings->ccextractor()->htmlDescription());
+
     _ui.dvddecrypterTitle->setText(title(settings->dvddecrypter()));
     _ui.dvddecrypterDescription->setText(settings->dvddecrypter()->htmlDescription());
 }

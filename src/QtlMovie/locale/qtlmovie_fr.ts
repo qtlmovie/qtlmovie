@@ -103,16 +103,21 @@
     </message>
     <message>
         <location filename="../QtlMovieAboutMediaTools.ui" line="688"/>
+        <source>CCExtractor</source>
+        <translation>CCExtractor</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAboutMediaTools.ui" line="820"/>
         <source>DVD Decrypter</source>
         <translation>DVD Decrypter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAboutMediaTools.cpp" line="74"/>
+        <location filename="../QtlMovieAboutMediaTools.cpp" line="77"/>
         <source>&lt;b&gt;%1 home page&lt;/b&gt;: %2</source>
         <translation>&lt;b&gt;Site de %1&lt;/b&gt;: %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAboutMediaTools.cpp" line="79"/>
+        <location filename="../QtlMovieAboutMediaTools.cpp" line="82"/>
         <source>Windows builds: %1</source>
         <translation>Binaires Windows: %1</translation>
     </message>
@@ -213,14 +218,15 @@
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="50"/>
         <location filename="../QtlMovieEditSettings.ui" line="92"/>
-        <location filename="../QtlMovieEditSettings.ui" line="172"/>
-        <location filename="../QtlMovieEditSettings.ui" line="189"/>
-        <location filename="../QtlMovieEditSettings.ui" line="203"/>
-        <location filename="../QtlMovieEditSettings.ui" line="231"/>
-        <location filename="../QtlMovieEditSettings.ui" line="252"/>
+        <location filename="../QtlMovieEditSettings.ui" line="122"/>
+        <location filename="../QtlMovieEditSettings.ui" line="179"/>
+        <location filename="../QtlMovieEditSettings.ui" line="196"/>
+        <location filename="../QtlMovieEditSettings.ui" line="210"/>
+        <location filename="../QtlMovieEditSettings.ui" line="238"/>
         <location filename="../QtlMovieEditSettings.ui" line="259"/>
-        <location filename="../QtlMovieEditSettings.ui" line="283"/>
-        <location filename="../QtlMovieEditSettings.cpp" line="80"/>
+        <location filename="../QtlMovieEditSettings.ui" line="266"/>
+        <location filename="../QtlMovieEditSettings.ui" line="290"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="81"/>
         <source>Browse ...</source>
         <translation>Chercher ...</translation>
     </message>
@@ -250,220 +256,225 @@
         <translation>Outils Media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="122"/>
+        <location filename="../QtlMovieEditSettings.ui" line="129"/>
         <source>FFprobe :</source>
         <translation>FFprobe :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="139"/>
+        <location filename="../QtlMovieEditSettings.ui" line="146"/>
         <source>FFmpeg :</source>
         <translation>FFmpeg :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="179"/>
+        <location filename="../QtlMovieEditSettings.ui" line="186"/>
         <source>DVD Decrypter :</source>
         <translation>DVD Decrypter :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="196"/>
+        <location filename="../QtlMovieEditSettings.ui" line="203"/>
         <source>growisofs :</source>
         <translation>growisofs :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="210"/>
+        <location filename="../QtlMovieEditSettings.ui" line="217"/>
         <source>mkisofs :</source>
         <translation>mkisofs :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="217"/>
+        <location filename="../QtlMovieEditSettings.ui" line="224"/>
         <source>telxcc :</source>
         <translation>telxcc :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="224"/>
+        <location filename="../QtlMovieEditSettings.ui" line="231"/>
         <source>DVD Author :</source>
         <translation>DVD Author :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="304"/>
+        <location filename="../QtlMovieEditSettings.ui" line="313"/>
+        <source>CCExtractor :</source>
+        <translation>CCExtractor :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="328"/>
         <source>Transcoding</source>
         <translation>Transcodage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="310"/>
+        <location filename="../QtlMovieEditSettings.ui" line="334"/>
         <source>Transcoding duration</source>
         <translation>Durée de transcodage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="316"/>
+        <location filename="../QtlMovieEditSettings.ui" line="340"/>
         <source>Transcode complete video</source>
         <translation>Transcoder la vidéo complète</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="332"/>
-        <location filename="../QtlMovieEditSettings.ui" line="601"/>
+        <location filename="../QtlMovieEditSettings.ui" line="356"/>
+        <location filename="../QtlMovieEditSettings.ui" line="625"/>
         <source> seconds</source>
         <translation> secondes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="345"/>
+        <location filename="../QtlMovieEditSettings.ui" line="369"/>
         <source>Stop transcoding after :</source>
         <translation>Arrêt du transcodage après :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="355"/>
+        <location filename="../QtlMovieEditSettings.ui" line="379"/>
         <source>DVD output</source>
         <translation>Sortie DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="367"/>
-        <location filename="../QtlMovieEditSettings.ui" line="488"/>
+        <location filename="../QtlMovieEditSettings.ui" line="391"/>
+        <location filename="../QtlMovieEditSettings.ui" line="512"/>
         <source>Video bitrate :</source>
         <translation>Débit vidéo :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="374"/>
+        <location filename="../QtlMovieEditSettings.ui" line="398"/>
         <source>Create chapters :</source>
         <translation>Création de chapitres :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="381"/>
+        <location filename="../QtlMovieEditSettings.ui" line="405"/>
         <source>NTSC</source>
         <translation>NTSC</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="388"/>
+        <location filename="../QtlMovieEditSettings.ui" line="412"/>
         <source>PAL</source>
         <translation>PAL</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="398"/>
+        <location filename="../QtlMovieEditSettings.ui" line="422"/>
         <source>Format :</source>
         <translation>Format :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="424"/>
-        <location filename="../QtlMovieEditSettings.ui" line="538"/>
+        <location filename="../QtlMovieEditSettings.ui" line="448"/>
+        <location filename="../QtlMovieEditSettings.ui" line="562"/>
         <source> kb/s</source>
         <translation> kb/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="443"/>
+        <location filename="../QtlMovieEditSettings.ui" line="467"/>
         <source> minutes</source>
         <translation> minutes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="459"/>
+        <location filename="../QtlMovieEditSettings.ui" line="483"/>
         <source>Remux audio/video after transcode (remove potential synchronization errors with DVD Author)</source>
         <translation>Remultiplexer l&apos;audio et la vidéo après le transcodage (évite des erreurs de synchronisation avec DVD Author)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="466"/>
+        <location filename="../QtlMovieEditSettings.ui" line="490"/>
         <source>Force transcoding even if the input file or video is DVD-compliant</source>
         <translation>Forcer le transcodage même si le fichier ou sa vidéo sont déjà compatibles DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="476"/>
+        <location filename="../QtlMovieEditSettings.ui" line="500"/>
         <source>iPad output</source>
         <translation>Sortie iPad</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="495"/>
+        <location filename="../QtlMovieEditSettings.ui" line="519"/>
         <source>iPad 1, 2, mini (1024x768)</source>
         <translation>iPad 1, 2, mini (1024x768)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="505"/>
+        <location filename="../QtlMovieEditSettings.ui" line="529"/>
         <source>iPad 3, 4 (2048x1536)</source>
         <translation>iPad 3, 4 (2048x1536)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="512"/>
+        <location filename="../QtlMovieEditSettings.ui" line="536"/>
         <source>Screen size :</source>
         <translation>Taille d&apos;écran :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="560"/>
+        <location filename="../QtlMovieEditSettings.ui" line="584"/>
         <source>Subtitles insertion</source>
         <translation>Insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="566"/>
+        <location filename="../QtlMovieEditSettings.ui" line="590"/>
         <source>Use original video size as a hint for SRT/SSA/ASS character shape</source>
         <translation>Utiliser la taille vidéo originale pour ajuster la taille des caractères SRT/SSA/ASS</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="576"/>
+        <location filename="../QtlMovieEditSettings.ui" line="600"/>
         <source>FFmpeg options</source>
         <translation>Options FFmpeg</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="588"/>
+        <location filename="../QtlMovieEditSettings.ui" line="612"/>
         <source>Probe size :</source>
         <translation>Temps de détection :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="634"/>
+        <location filename="../QtlMovieEditSettings.ui" line="658"/>
         <source>Miscellaneous</source>
         <translation>Divers</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="640"/>
+        <location filename="../QtlMovieEditSettings.ui" line="664"/>
         <source>Target audience language codes</source>
         <translation>Codes de langues de l&apos;audience ciblée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="646"/>
+        <location filename="../QtlMovieEditSettings.ui" line="670"/>
         <source>Add ...</source>
         <translation>Ajouter ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="653"/>
+        <location filename="../QtlMovieEditSettings.ui" line="677"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="676"/>
+        <location filename="../QtlMovieEditSettings.ui" line="700"/>
         <source>Intermediate files</source>
         <translation>Fichiers intermédiaires</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="682"/>
+        <location filename="../QtlMovieEditSettings.ui" line="706"/>
         <source>Keep intermediate files</source>
         <translation>Garder les fichiers intermédiaires</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="692"/>
+        <location filename="../QtlMovieEditSettings.ui" line="716"/>
         <source>Log panel</source>
         <translation>Fenêtre de journal (log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="704"/>
+        <location filename="../QtlMovieEditSettings.ui" line="728"/>
         <source>Max log :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="717"/>
+        <location filename="../QtlMovieEditSettings.ui" line="741"/>
         <source> lines</source>
         <translation> lignes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="97"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="98"/>
         <source>No default %1 found</source>
         <translation>Pas trouvé de %1 par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="100"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="101"/>
         <source>Default: %1</source>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="285"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="288"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="298"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="301"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -775,7 +786,7 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="52"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="478"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="482"/>
         <source>Start ...</source>
         <translation>Démarrer ...</translation>
     </message>
@@ -840,7 +851,7 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="235"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="769"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="773"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
@@ -871,7 +882,7 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="261"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="474"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="478"/>
         <source>Transcode ...</source>
         <translation>Transcoder ...</translation>
     </message>
@@ -956,80 +967,80 @@ Le remplacer?</translation>
         <translation>Sélection d&apos;un fichier de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="283"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="285"/>
         <source>File not found or invalid subtitle file:
 %1</source>
         <translation>Fichier de sous-titres introuvable ou incorrect:
 %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="379"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="381"/>
         <source>Internal error, invalid stream type</source>
         <translation>Erreur interne, type de flux invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="431"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="435"/>
         <source>Internal error, cannot get output file type</source>
         <translation>Erreur interne, impossible de déterminer le type de fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="438"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="442"/>
         <source>Cannot burn DVD, specify the burning device in settings</source>
         <translation>Impossible de graver un DVD, spécifier d&apos;abord le nom du graveur dans les options</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="465"/>
         <location filename="../QtlMovieMainWindow.cpp" line="469"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="473"/>
         <source>Cancel ...</source>
         <translation>Annuler ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="501"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="505"/>
         <source>Internal error, transcoding job already created.</source>
         <translation>Erreur interne, transcodage déjà créé</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="568"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="572"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="618"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="622"/>
         <source>Do you want to abort the current transcoding ?</source>
         <translation>Voulez-vous annuler le transcodage en cours ?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="667"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="671"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="696"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="700"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="710"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="714"/>
         <source>DVD Decrypter not found, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="734"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="738"/>
         <source>Save Error</source>
         <translation>Erreur de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="774"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="778"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="775"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="779"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="776"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="780"/>
         <source>Built</source>
         <translation>Généré le </translation>
     </message>
@@ -1098,39 +1109,39 @@ Le remplacer?</translation>
 <context>
     <name>QtlMovieSettings</name>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="204"/>
-        <location filename="../QtlMovieSettings.cpp" line="252"/>
-        <location filename="../QtlMovieSettings.cpp" line="279"/>
+        <location filename="../QtlMovieSettings.cpp" line="214"/>
+        <location filename="../QtlMovieSettings.cpp" line="262"/>
+        <location filename="../QtlMovieSettings.cpp" line="289"/>
         <source>No attribute &quot;%1&quot; in element &lt;%2&gt;</source>
         <translation>Pas d&apos;attribut &quot;%1&quot; dans l&apos;élement &lt;%2&gt;</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="210"/>
+        <location filename="../QtlMovieSettings.cpp" line="220"/>
         <source>Invalid integer value: %1</source>
         <translation>Valeur numérique incorrecte: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="291"/>
+        <location filename="../QtlMovieSettings.cpp" line="301"/>
         <source>Invalid boolean value: %1</source>
         <translation>Valeur booléenne incorrecte: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="310"/>
+        <location filename="../QtlMovieSettings.cpp" line="320"/>
         <source>Error creating file %1</source>
         <translation>Impossible de créer le fichier %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="376"/>
+        <location filename="../QtlMovieSettings.cpp" line="387"/>
         <source>Error opening file %1</source>
         <translation>Impossible d&apos;ouvrir le fichier %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="412"/>
+        <location filename="../QtlMovieSettings.cpp" line="424"/>
         <source>The file is not a valid QtlMovie settings file</source>
         <translation>Le fichier n&apos;est pas un fichier d&apos;options QtlMovie valide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="487"/>
+        <location filename="../QtlMovieSettings.cpp" line="501"/>
         <source>Error loading %1
 %2
 Line %3, column %4</source>
@@ -1139,37 +1150,42 @@ Line %3, column %4</source>
 Ligne %3, colonne %4</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="517"/>
+        <location filename="../QtlMovieSettings.cpp" line="531"/>
         <source>Error searching for FFmpeg, install FFmpeg or set explicit path in settings.</source>
         <translation>FFmpeg introuvable, installerl FFmpeg ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="520"/>
+        <location filename="../QtlMovieSettings.cpp" line="534"/>
         <source>Error searching for FFprobe, install FFmpeg or set explicit path in settings.</source>
         <translation>FFprobe introuvable, installerl FFprobe ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="523"/>
+        <location filename="../QtlMovieSettings.cpp" line="537"/>
         <source>Error searching for DvdAuthor, install it or set explicit path in settings.</source>
         <translation>DVD Author introuvable, installerl DVD Author ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="526"/>
+        <location filename="../QtlMovieSettings.cpp" line="540"/>
         <source>Error searching for mkisofs, install it or set explicit path in settings.</source>
         <translation>Mkisofs introuvable, installerl mkisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="529"/>
+        <location filename="../QtlMovieSettings.cpp" line="543"/>
         <source>Error searching for growisofs, install it or set explicit path in settings.</source>
         <translation>Growisofs introuvable, installerl growisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="532"/>
+        <location filename="../QtlMovieSettings.cpp" line="546"/>
         <source>Error searching for telxcc, install it or set explicit path in settings.</source>
         <translation>Telxcc introuvable, installerl telxcc ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="535"/>
+        <location filename="../QtlMovieSettings.cpp" line="549"/>
+        <source>Error searching for CCExtractor, install it or set explicit path in settings.</source>
+        <translation>CCExtractor introuvable, installerl CCExtractor ou définir son emplacement dans les options.</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettings.cpp" line="552"/>
         <source>Error searching for DVD Decrypter, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, installerl DVD Decrypter ou définir son emplacement dans les options.</translation>
     </message>

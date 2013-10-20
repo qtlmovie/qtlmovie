@@ -1,0 +1,6 @@
+Download latest binaries from:
+  http://sourceforge.net/projects/ccextractor/files/
+Latest version:
+  http://sourceforge.net/projects/ccextractor/files/ccextractor/0.67/ccextractor.0.67-windows.binaries.zip
+Extract ccextractorwin.exe here and rename as:
+  ccextractor.exe

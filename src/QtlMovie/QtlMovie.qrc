@@ -9,5 +9,6 @@
         <file>help/default.css</file>
         <file>help/qtlmovie.html</file>
         <file>help/qtlmovie-build.html</file>
+        <file>images/ccextractor-logo.png</file>
     </qresource>
 </RCC>

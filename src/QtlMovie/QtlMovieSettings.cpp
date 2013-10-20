@@ -106,6 +106,16 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
                                         log,
                                         this)),
     _telxccExplicit(new QtlMovieExecFile(*_telxccDefault, "", this)),
+    _ccextractorDefault(new QtlMovieExecFile("CCExtractor",
+                                             "http://ccextractor.sourceforge.net/",
+                                             "http://sourceforge.net/projects/ccextractor/files/ccextractor/",
+                                             "ccextractor",
+                                             QStringList("-null"),
+                                             QString(),
+                                             "----",
+                                             log,
+                                             this)),
+    _ccextractorExplicit(new QtlMovieExecFile(*_ccextractorDefault, "", this)),
     _dvddecrypterDefault(new QtlMovieExecFile("DVD Decrypter",
                                               "http://www.videohelp.com/tools/DVD-Decrypter",
                                               "http://www.videohelp.com/download/SetupDVDDecrypter_3.5.4.0.exe",
@@ -326,6 +336,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setStringAttribute(xml, "mkisofsExecutable", _mkisofsExplicit->fileName());
     setStringAttribute(xml, "growisofsExecutable", _growisofsExplicit->fileName());
     setStringAttribute(xml, "telxccExecutable", _telxccExplicit->fileName());
+    setStringAttribute(xml, "ccextractorExecutable", _ccextractorExplicit->fileName());
     setStringAttribute(xml, "dvddecrypterExecutable", _dvddecrypterExplicit->fileName());
     setIntAttribute(xml, "maxLogLines", _maxLogLines);
     setStringAttribute(xml, "initialInputDir", _initialInputDir);
@@ -384,6 +395,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     QString mkisofsExecutable;
     QString growisofsExecutable;
     QString telxccExecutable;
+    QString ccextractorExecutable;
     QString dvddecrypterExecutable;
     int maxLogLines =_maxLogLines;
     QString initialInputDir(_initialInputDir);
@@ -420,6 +432,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getStringAttribute(xml, "mkisofsExecutable", mkisofsExecutable) &&
                     !getStringAttribute(xml, "growisofsExecutable", growisofsExecutable) &&
                     !getStringAttribute(xml, "telxccExecutable", telxccExecutable) &&
+                    !getStringAttribute(xml, "ccextractorExecutable", ccextractorExecutable) &&
                     !getStringAttribute(xml, "dvddecrypterExecutable", dvddecrypterExecutable) &&
                     !getIntAttribute(xml, "maxLogLines", maxLogLines) &&
                     !getStringAttribute(xml, "initialInputDir", initialInputDir) &&
@@ -460,6 +473,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setMkisofsExplicitExecutable(mkisofsExecutable);
         setGrowisofsExplicitExecutable(growisofsExecutable);
         setTelxccExplicitExecutable(telxccExecutable);
+        setCcextractorExplicitExecutable(ccextractorExecutable);
         setDvdDecrypterExplicitExecutable(dvddecrypterExecutable);
         setMaxLogLines(maxLogLines);
         setInitialInputDir(initialInputDir);
@@ -531,6 +545,9 @@ void QtlMovieSettings::reportMissingTools() const
     if (!telxcc()->isSet()) {
         _log->line(tr("Error searching for telxcc, install it or set explicit path in settings."));
     }
+    if (!ccextractor()->isSet()) {
+        _log->line(tr("Error searching for CCExtractor, install it or set explicit path in settings."));
+    }
     if (!dvddecrypter()->isSet()) {
         _log->line(tr("Error searching for DVD Decrypter, install it or set explicit path in settings."));
     }
@@ -592,6 +609,13 @@ void QtlMovieSettings::setGrowisofsExplicitExecutable(const QString& growisofsEx
 void QtlMovieSettings::setTelxccExplicitExecutable(const QString& telxccExecutable)
 {
     if (_telxccExplicit->setFileName(telxccExecutable)) {
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setCcextractorExplicitExecutable(const QString& ccextractorExecutable)
+{
+    if (_ccextractorExplicit->setFileName(ccextractorExecutable)) {
         _isModified = true;
     }
 }
