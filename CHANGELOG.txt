@@ -5,7 +5,7 @@ QtlMovie Change Log
 Version 1.2.5
 - US Closed Captions subtitles (CEA-608/708) are now supported thanks to
   the integration of CCExtractor. Currently, the CC are numbered as follow:
-  1: channel 1, field 1, 2: channel 1, field 1, 3: channel 2, field 1,
+  1: channel 1, field 1, 2: channel 1, field 2, 3: channel 2, field 1,
   4: channel 2, field 2. This may not be ideal. Feedback from US users required.
 - Bug fix: On Windows, enforce the DVD burner device to be a drive name.
 
