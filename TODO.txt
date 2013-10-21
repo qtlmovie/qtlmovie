@@ -2,9 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Integrate CCextractor: Support for North American EIA-608/708 Closed Caption.
-  Need some stream samples to test first.
-
 - Implement multi-language help files (file qtlmovie_fr.html for instance).
 
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"

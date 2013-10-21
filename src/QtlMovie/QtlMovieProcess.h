@@ -100,6 +100,13 @@ public:
     }
 
     //!
+    //! Set the command line arguments.
+    //! The process must not be already started.
+    //! @return The command line arguments.
+    //!
+    void setArguments(const QStringList& arguments);
+
+    //!
     //! Return the device from which  standard output can be read.
     //! @return A device from which to read or zero if @a hasBinaryOutput is false.
     //!
@@ -119,9 +126,9 @@ protected:
     //! Process one text line from standard error or standard output.
     //! Simply log the line. Subclasses may overwrite it.
     //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
-    //! @param [in] line Text line.
+    //! @param [in] textLine Text line.
     //!
-    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line);
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& textLine);
 
     //!
     //! Update the QProcessEnvironment for the target process before it starts.
@@ -153,7 +160,7 @@ private slots:
 private:
     QProcess*               _process;         //!< Process instance.
     const QtlMovieExecFile* _execFile;        //!< Process executable file.
-    const QStringList       _arguments;       //!< Command line arguments.
+    QStringList             _arguments;       //!< Command line arguments.
     bool                    _hasBinaryOutput; //!< Treat standard output as binary data.
     QString                 _stdOutput;       //!< Standard error buffer.
     QString                 _stdError;        //!< Standard error buffer.

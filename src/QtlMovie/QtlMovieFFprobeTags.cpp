@@ -78,9 +78,6 @@ void QtlMovieFFprobeTags::loadFFprobeOutput(const QString& ffprobeOutput)
 
 void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
 {
-    // Clear the returned container.
-    streams.clear();
-
     // Loop on all streams.
     const int ffStreamCount = intValue("format.nb_streams");
     for (int index = 0; index < ffStreamCount; ++index) {
@@ -137,6 +134,7 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
         info->setStreamId(intValueOfStream(index, "id", -1));
 
         // Subtitle type is based on codec name.
+        // Closed Captions are embedded in a video stream and are not detected by ffprobe.
         if (info->streamType() == QtlMovieStreamInfo::Subtitle) {
             if (codecName == "subrip" || codecName == "srt") {
                 info->setSubtitleType(QtlMovieStreamInfo::SubRip);

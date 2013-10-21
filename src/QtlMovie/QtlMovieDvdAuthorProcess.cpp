@@ -121,13 +121,11 @@ void QtlMovieDvdAuthorProcess::processOutputLine(QProcess::ProcessChannel channe
         // Progression indicator in pass 1. We double the size of the total
         // so that full progression is 50% of the total.
         emitProgress(mb, 2 * totalMb);
-        log()->text(".");
     }
     else if (percent >= 0) {
         // Progression indicator in pass 2.
         // Adjust so that 0% of pass 2 means 50% of the total.
         emitProgress(100 + percent, 200);
-        log()->text(".");
     }
     else {
         // None is found, there is no progress indicator. Delegate to superclass.

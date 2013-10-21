@@ -75,7 +75,5 @@ void QtlMovieGrowisofsProcess::processOutputLine(QProcess::ProcessChannel channe
         // Report progression.
         // We use displayed values / 1000 to avoid integer overflow.
         emitProgress(int(current / 1000), int(maximum / 1000));
-        // Simply echo a dot in the log.
-        log()->text(".");
     }
 }

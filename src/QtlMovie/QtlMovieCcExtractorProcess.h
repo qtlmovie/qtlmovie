@@ -26,18 +26,60 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieVersion.h
+//! @file QtlMovieCcExtractorProcess.h
 //!
-//! Declare the version of the product.
+//! Declare the class QtlMovieCcExtractorProcess.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEVERSION_H
-#define QTLMOVIEVERSION_H
+#ifndef QTLMOVIECCEXTRACTORPROCESS_H
+#define QTLMOVIECCEXTRACTORPROCESS_H
+
+#include <QtCore>
+#include "QtlLogger.h"
+#include "QtlMovieProcess.h"
 
 //!
-//! Version of the product.
+//! An execution of CCExtractor.
 //!
-#define QTLMOVIE_VERSION "1.2.5"
+class QtlMovieCcExtractorProcess : public QtlMovieProcess
+{
+#if !defined (DOXYGEN)
+    Q_OBJECT
+#endif
 
-#endif // QTLMOVIEVERSION_H
+public:
+    //!
+    //! Constructor.
+    //! @param [in] arguments Growisofs command line arguments.
+    //! @param [in] settings Application settings.
+    //! @param [in] log Message logger.
+    //! @param [in] parent Optional parent object.
+    //!
+    QtlMovieCcExtractorProcess(const QStringList& arguments,
+                               const QtlMovieSettings* settings,
+                               QtlLogger* log,
+                               QObject *parent = 0);
+
+    //!
+    //! Build a list of options which limit the extraction duration.
+    //! @param totalSeconds Number of seconds or negative if there is no limit.
+    //! @return Arguments for CCExtractor, possibly empty.
+    //!
+    static QStringList durationOptions(int totalSeconds);
+
+protected:
+    //!
+    //! Process one text line from standard error.
+    //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
+    //! @param [in] line Text line.
+    //!
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line);
+
+private:
+    // Unaccessible operations.
+    QtlMovieCcExtractorProcess() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlMovieCcExtractorProcess)
+};
+
+#endif // QTLMOVIECCEXTRACTORPROCESS_H

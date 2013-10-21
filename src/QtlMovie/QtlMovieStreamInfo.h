@@ -200,10 +200,32 @@ public:
     }
 
     //!
-    //! Get the Teletext page number (Teletext subtitles only).
+    //! Set the Teletext page number (Teletext subtitles only).
     //! @param [in] teletextPage The Teletext page number.
     //!
     void setTeletextPage(int teletextPage);
+
+    //!
+    //! Get the Close Captions number (CC subtitles only).
+    //! The CC are numbered as follow:
+    //! - 1: channel 1, field 1
+    //! - 2: channel 1, field 1
+    //! - 3: channel 2, field 1
+    //! - 4: channel 2, field 2
+    //! This may not be ideal. Feedback from US users required.
+    //! @return The Close Captions number or -1 if unknown.
+    //!
+    int ccNumber() const
+    {
+        return _ccNumber;
+    }
+
+    //!
+    //! Set the Close Captions number (CC subtitles only).
+    //! @param [in] ccNumber The Close Captions number.
+    //! @see ccNumber()
+    //!
+    void setCcNumber(int ccNumber);
 
     //!
     //! Get the video frame width in pixels (video and DVD subtitles).
@@ -413,6 +435,7 @@ public:
         SubDvd,      //!< DVD subtitles or VobSub, .sub + .idx files.
         SubDvb,      //!< DVB subtitles (in transport streams only).
         SubTeletext, //!< Teletext subtitles (in transport streams only).
+        SubCc,       //!< CEA-608/708 Closed Captions.
         SubOther,    //!< Other type of subtitles.
         SubNone      //!< Not a subtitle stream or file.
     };
@@ -470,6 +493,7 @@ private:
     int          _streamId;         //!< Physical stream id in input file.
     SubtitleType _subtitleType;     //!< Subtitle type.
     int          _teletextPage;     //!< Teletext page number (Teletext subtitles only).
+    int          _ccNumber;         //!< Closed Captions channel and field.
     int          _width;            //!< Video frame width in pixels.
     int          _height;           //!< Video frame height in pixels.
     float        _dar;              //!< Video frame display aspect ratio.

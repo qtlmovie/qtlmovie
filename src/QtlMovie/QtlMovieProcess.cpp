@@ -57,6 +57,18 @@ QtlMovieProcess::QtlMovieProcess(const QtlMovieExecFile* execFile,
 
 
 //----------------------------------------------------------------------------
+// Set the command line arguments.
+//----------------------------------------------------------------------------
+
+void QtlMovieProcess::setArguments(const QStringList& arguments)
+{
+    if (!isStarted()) {
+        _arguments = arguments;
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Start the process.
 //----------------------------------------------------------------------------
 
@@ -81,8 +93,8 @@ bool QtlMovieProcess::start()
     _process->setProcessEnvironment(env);
 
     // Display the command in the log window.
-    log()->line(exec + " " + _arguments.join(" "), QColor("blue"));
-    log()->line("");
+    line(exec + " " + _arguments.join(" "), QColor("blue"));
+    line("");
 
     // Differenciate standard error and standard output channels.
     _process->setProcessChannelMode(QProcess::SeparateChannels);
@@ -172,10 +184,10 @@ void QtlMovieProcess::processCompleted(bool success, const QString& message)
     // Flush standard error.
     readData();
     if (!_stdOutput.isEmpty()) {
-        log()->line(_stdOutput);
+        line(_stdOutput);
     }
     if (!_stdError.isEmpty()) {
-        log()->line(_stdError);
+        line(_stdError);
     }
 
     // Let superclass notify clients.
@@ -198,11 +210,11 @@ void QtlMovieProcess::updateEnvironment(QProcessEnvironment& env)
 // Process one text line from standard error or standard output.
 //----------------------------------------------------------------------------
 
-void QtlMovieProcess::processOutputLine(QProcess::ProcessChannel channel, const QString& line)
+void QtlMovieProcess::processOutputLine(QProcess::ProcessChannel channel, const QString& textLine)
 {
     // Simply log the line. Subclasses may overwrite it.
     Q_UNUSED(channel);
-    log()->line(line);
+    line(textLine);
 }
 
 

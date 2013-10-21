@@ -314,10 +314,20 @@ private slots:
     //!
     void foundTeletextSubtitles(QtlMovieStreamInfoPtr stream);
     //!
+    //! Invoked when a Closed Captions stream is found.
+    //! @param [in] stream A smart pointer to the stream info data.
+    //!
+    void foundClosedCaptions(QtlMovieStreamInfoPtr stream);
+    //!
     //! Invoked when the search for Teletext subtitles completes.
     //! @param [in] success True on success, false on error.
     //!
     void teletextSearchTerminated(bool success);
+    //!
+    //! Invoked when a search for Closed Captions completes.
+    //! @param [in] success True on success, false on error.
+    //!
+    void closedCaptionsSearchTerminated(bool success);
 
 private:
     QtlLogger*                  _log;            //!< Where to log errors.
@@ -328,12 +338,26 @@ private:
     QtlMovieStreamInfoPtrVector _dvdIfoStreams;  //!< Stream info from the DVD .IFO file (when applicable).
     QtlByteBlock                _dvdPalette;     //!< DVD color palette in RGB format.
     QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
+    int     _ffprobeInProgress;                  //!< Execution of ffprobe in progress.
+    int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.
     int     _selectedVideoStreamIndex;           //!< Index of video stream to transcode.
     int     _selectedAudioStreamIndex;           //!< Index of audio stream to transcode.
     int     _selectedSubtitleStreamIndex;        //!< Index of subtitle stream to transcode.
     QString _externalSubtitleFileName;           //!< Subtitle file name, can be empty.
     bool    _isTs;                               //!< File is a transport stream (TS or M2TS format).
     bool    _isM2ts;                             //!< File has M2TS format.
+
+    //!
+    //! Start a Closed Caption search.
+    //! @param [in] ccChannel Channel to search.
+    //!
+    void startClosedCaptionsSearch(int ccChannel);
+
+    //!
+    //! Report that new media info has been found.
+    //! If no more operation in progress, emit mediaInfoChanged().
+    //!
+    void newMediaInfo();
 
     // Unaccessible operations.
     QtlMovieInputFile() Q_DECL_EQ_DELETE;

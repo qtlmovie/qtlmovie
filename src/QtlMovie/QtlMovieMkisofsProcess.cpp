@@ -77,8 +77,6 @@ void QtlMovieMkisofsProcess::processOutputLine(QProcess::ProcessChannel channel,
     else {
         // Report progression.
         emitProgress(percent, 100);
-        // Simply echo a dot in the log.
-        log()->text(".");
     }
 }
 

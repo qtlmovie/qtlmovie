@@ -53,8 +53,8 @@ public:
     void loadFFprobeOutput(const QString& ffprobeOutput);
 
     //!
-    //! Analyze the FFprobe tags and build a list of stream info.
-    //! @param [out] streams The list of streams to build.
+    //! Analyze the FFprobe tags and add in a list of stream info.
+    //! @param [in,out] streams The list of streams to build.
     //!
     void buildStreamInfo(QtlMovieStreamInfoPtrVector& streams);
 

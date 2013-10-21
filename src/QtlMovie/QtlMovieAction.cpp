@@ -45,10 +45,42 @@ QtlMovieAction::QtlMovieAction(const QtlMovieSettings* settings, QtlLogger* log,
     _description(),
     _startTime(),
     _started(false),
-    _completed(false)
+    _completed(false),
+    _silent(false)
 {
     Q_ASSERT(log != 0);
     Q_ASSERT(settings != 0);
+}
+
+
+//----------------------------------------------------------------------------
+// Implementation of QtlLogger.
+//----------------------------------------------------------------------------
+
+void QtlMovieAction::text(const QString& text)
+{
+    if (_log != 0 && !_silent) {
+        _log->text(text);
+    }
+}
+
+void QtlMovieAction::line(const QString& line, const QColor& color)
+{
+    if (_log != 0) {
+        if (_silent) {
+            _log->debug(line);
+        }
+        else {
+            _log->line(line, color);
+        }
+    }
+}
+
+void QtlMovieAction::debug(const QString& line, const QColor& color)
+{
+    if (_log != 0) {
+        _log->debug(line, color);
+    }
 }
 
 
@@ -68,8 +100,8 @@ bool QtlMovieAction::start()
 
         // Display the action description in the log window.
         if (!_description.isEmpty()) {
-            _log->line("");
-            _log->line(tr("Start %1").arg(_description));
+            line("");
+            line(tr("Start %1").arg(_description));
         }
 
         // Immediately emit started() to avoid emitting completed() without a previous started().
@@ -109,6 +141,9 @@ void QtlMovieAction::emitProgress(int current, int maximum, int remainingSeconds
 
     // Emit the signal.
     emit progress(_description, current, maximum, elapsed, remainingSeconds);
+
+    // Simply echo a dot in the log.
+    text(".");
 }
 
 
@@ -120,7 +155,7 @@ void QtlMovieAction::emitCompleted(bool success, const QString& message)
 {
     // Log optional error message.
     if (!message.isEmpty()) {
-        _log->line(message, success ? QColor() : QColor("red"));
+        line(message, success ? QColor() : QColor("red"));
     }
 
     // Emit completed() only once.

@@ -73,7 +73,7 @@
       </ul>
       <p>QtlMovie is based on the Qt framework. It works on Windows, Linux and should
         work on any platform which is supported by Qt version 5. QtlMovie uses external free software
-        such as ffmpeg, DVD Author, telxcc or mkisofs which are available on Windows and Linux.</p>
+        such as ffmpeg, DVD Author, telxcc, CCExtractor or mkisofs which are available on Windows and Linux.</p>
       <p>QtlMovie is available either as source code or binary installer for Windows.
         The binary installer for Windows comes prepackaged with Qt5 libraries and all required media tools.
         It is self-sufficient and does not depend on any prior installation.</p>
@@ -101,7 +101,8 @@
         <li>SubStation Alpha (SSA, ASS).</li>
         <li>DVD subtitles (input file stream only, not external subtitle file).</li>
         <li>DVB subtitles (transport stream input file stream only, not external subtitle file).</li>
-        <li>Teletext subtitles (transport stream input file stream only, not external subtitle file)..</p>
+        <li>Teletext subtitles (transport stream input file stream only, not external subtitle file).</li>
+        <li>Closed Captions (US CEA-608/708 from input file stream only, not external subtitle file).</li>
       </ul>
       <p>Important: The subtitles are always hardcoded ("<i>burnt</i>") into the video by QtlMovie.
         The output file never contains independent subtitle streams.</p>
@@ -186,7 +187,7 @@
       </ul>
       <h3><a id="subout">Subtitle extraction</a></h3>
       <p>QtlMovie can also be used to extract subtitle streams from the input files.
-        The subtitle format must be text (SRT, SSA, ASS or Teletext).
+        The subtitle format must be text (SRT, SSA, ASS, Teletext or Closed Captions).
         Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
         The output subtitle file format is SRT.</p>
       <hr/>

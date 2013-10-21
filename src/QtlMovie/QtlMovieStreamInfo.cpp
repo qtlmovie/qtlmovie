@@ -46,6 +46,7 @@ QtlMovieStreamInfo::QtlMovieStreamInfo() :
     _streamId(-1),
     _subtitleType(SubNone),
     _teletextPage(-1),
+    _ccNumber(-1),
     _width(0),
     _height(0),
     _dar(1.0),
@@ -123,6 +124,7 @@ QString QtlMovieStreamInfo::fileExtension(SubtitleType type)
         return ".sub"; // there is also an associated ".idx" file.
     case SubDvb:
     case SubTeletext:
+    case SubCc:
     case SubOther:
     case SubNone:
     default:
@@ -328,6 +330,9 @@ QString QtlMovieStreamInfo::description(bool compact) const
         if (_teletextPage > 0) {
             add(result, QStringLiteral("Teletext %1%2").arg(compact ? "" : "page ").arg(_teletextPage));
         }
+        if (_ccNumber > 0) {
+            add(result, QStringLiteral("Closed Captions #%1").arg(_ccNumber));
+        }
     }
 
     // End with free format title.
@@ -375,6 +380,11 @@ void QtlMovieStreamInfo::setFFIndex(int ffIndex)
 void QtlMovieStreamInfo::setTeletextPage(int teletextPage)
 {
     _teletextPage = teletextPage < 0 ? -1 : teletextPage;
+}
+
+void QtlMovieStreamInfo::setCcNumber(int ccNumber)
+{
+    _ccNumber = ccNumber >= 1 && ccNumber <= 4 ? ccNumber : -1;
 }
 
 void QtlMovieStreamInfo::setWidth(int width)

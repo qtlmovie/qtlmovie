@@ -59,7 +59,9 @@ SOURCES += main.cpp \
     QtlMovieTeletextSearch.cpp \
     QtlMovieTsDemux.cpp \
     QtlMovieMkisofsProcess.cpp \
-    QtlMovieGrowisofsProcess.cpp
+    QtlMovieGrowisofsProcess.cpp \
+    QtlMovieClosedCaptionsSearch.cpp \
+    QtlMovieCcExtractorProcess.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -86,7 +88,9 @@ HEADERS += \
     QtlMovieTeletextSearch.h \
     QtlMovieTsDemux.h \
     QtlMovieMkisofsProcess.h \
-    QtlMovieGrowisofsProcess.h
+    QtlMovieGrowisofsProcess.h \
+    QtlMovieClosedCaptionsSearch.h \
+    QtlMovieCcExtractorProcess.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

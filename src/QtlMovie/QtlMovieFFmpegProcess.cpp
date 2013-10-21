@@ -91,10 +91,10 @@ void QtlMovieFFmpegProcess::updateEnvironment(QProcessEnvironment& env)
     // Search for fonts.conf.template in these directories.
     QString fontConfigTemplate(QtlFile::search(QTLFC_TEMPLATE_NAME, searchPath));
     if (fontConfigTemplate.isEmpty()) {
-        log()->line(tr("Cannot find %1, may be a problem to insert subtitles").arg(QTLFC_TEMPLATE_NAME));
+        line(tr("Cannot find %1, may be a problem to insert subtitles").arg(QTLFC_TEMPLATE_NAME));
     }
     else if (_tempDir.isEmpty()) {
-        log()->line(tr("Cannot create %1, no temporary directory defined, may be a problem to insert subtitles").arg(QTLFC_ACTUAL_NAME));
+        line(tr("Cannot create %1, no temporary directory defined, may be a problem to insert subtitles").arg(QTLFC_ACTUAL_NAME));
     }
     else if (createFontConfig(fontConfigTemplate, actualPath)) {
         // Define environment variables.
@@ -115,11 +115,11 @@ bool QtlMovieFFmpegProcess::createFontConfig(const QString& templateFile, const 
     QFile inFile(templateFile);
     QFile outFile(actualFile);
     if (!inFile.open(QFile::ReadOnly)) {
-        log()->line(tr("Cannot open %1, may be a problem to insert subtitles").arg(inFile.fileName()));
+        line(tr("Cannot open %1, may be a problem to insert subtitles").arg(inFile.fileName()));
         return false;
     }
     if (!outFile.open(QFile::WriteOnly)) {
-        log()->line(tr("Cannot create %1, may be a problem to insert subtitles").arg(outFile.fileName()));
+        line(tr("Cannot create %1, may be a problem to insert subtitles").arg(outFile.fileName()));
         return false;
     }
 
@@ -179,7 +179,5 @@ void QtlMovieFFmpegProcess::processOutputLine(QProcess::ProcessChannel channel, 
     else {
         // Report progression.
         emitProgress(timeInSeconds, _inputDurationInSeconds);
-        // Simply echo a dot in the log.
-        log()->text(".");
     }
 }

@@ -38,6 +38,7 @@
 #include "QtlMovieDvdAuthorProcess.h"
 #include "QtlMovieMkisofsProcess.h"
 #include "QtlMovieGrowisofsProcess.h"
+#include "QtlMovieCcExtractorProcess.h"
 #include "QtlStringList.h"
 
 
@@ -97,7 +98,7 @@ bool QtlMovieJob::start()
         // Delete the previous output file to avoid using it by mistake if the conversion fails.
         if (!out.remove()) {
             // Failed to delete it. Continue anyway, will be overwritten by converter.
-            log()->line(tr("Failed to delete %1").arg(_outputFile->fileName()));
+            line(tr("Failed to delete %1").arg(_outputFile->fileName()));
         }
     }
 
@@ -187,7 +188,7 @@ void QtlMovieJob::cleanup()
     const bool exists = dir.exists();
     const bool empty = !exists || dir.entryList().isEmpty();
     if (exists && (empty || !settings()->keepIntermediateFiles()) && !dir.removeRecursively()) {
-        log()->line(tr("Error deleting %1").arg(_tempDir));
+        line(tr("Error deleting %1").arg(_tempDir));
     }
 }
 
@@ -200,7 +201,7 @@ bool QtlMovieJob::startNextAction()
 {
     // Check that there is something to start.
     if (_actionList.isEmpty()) {
-        log()->line(tr("Internal error, no more process to start"));
+        line(tr("Internal error, no more process to start"));
         return false;
     }
 
@@ -211,7 +212,7 @@ bool QtlMovieJob::startNextAction()
 
     // Start the next process.
     if (!next->start()) {
-        log()->line(tr("Failed to start process."));
+        line(tr("Failed to start process."));
         actionCompleted(false);
         return false;
     }
@@ -286,7 +287,8 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
         return subtitleType == QtlMovieStreamInfo::SubRip ||
                 subtitleType == QtlMovieStreamInfo::SubSsa ||
                 subtitleType == QtlMovieStreamInfo::SubAss ||
-                subtitleType == QtlMovieStreamInfo::SubTeletext;
+                subtitleType == QtlMovieStreamInfo::SubTeletext ||
+                subtitleType == QtlMovieStreamInfo::SubCc;
 
     case QtlMovieOutputFile::None:
         // It is always possible to do nothing.
@@ -438,7 +440,7 @@ bool QtlMovieJob::addFFmpeg(const QString& description, const QStringList ffmpeg
         return false;
     }
     else {
-        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments, _outSeconds, _tempDir, settings(), log(), this);
+        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments, _outSeconds, _tempDir, settings(), this, this);
         process->setDescription(description);
         _actionList.append(process);
         return true;
@@ -472,6 +474,7 @@ bool QtlMovieJob::addSubtitleFileVideoFilter(QString& videoFilters, int widthIn,
     case QtlMovieStreamInfo::SubDvd:
     case QtlMovieStreamInfo::SubDvb:
     case QtlMovieStreamInfo::SubTeletext:
+    case QtlMovieStreamInfo::SubCc:
     case QtlMovieStreamInfo::SubOther:
     case QtlMovieStreamInfo::SubNone:
     default:
@@ -582,6 +585,7 @@ bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlM
     case QtlMovieStreamInfo::SubAss:
     case QtlMovieStreamInfo::SubSsa:
     case QtlMovieStreamInfo::SubTeletext:
+    case QtlMovieStreamInfo::SubCc:
         // These subtitles were extracted from the file in a previous pass. Ignore them now.
         return true;
 
@@ -659,7 +663,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
                 if (bitrate > maxBitrate) {
                     bitrate = maxBitrate;
                 }
-                log()->line(tr("Max video bitrate to fit in DVD: %1 b/s, using %2 b/s").arg(maxBitrate).arg(bitrate));
+                line(tr("Max video bitrate to fit in DVD: %1 b/s, using %2 b/s").arg(maxBitrate).arg(bitrate));
             }
         }
 
@@ -754,7 +758,7 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
 
     // Perform the 2-pass audio/video encoding, except for DVD-compliant files.
     if (dvdCompliant) {
-        log()->line(tr("Found DVD-compliant audio/video encoding, will not re-encode"));
+        line(tr("Found DVD-compliant audio/video encoding, will not re-encode"));
     }
     else if (!addTranscodeAudioVideoToDvd(inputFile, transcodeOutput)) {
         return false;
@@ -801,7 +805,7 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
     // Add an action to delete the intermediate files now.
     // If the job continues with an ISO image file generation, this save a lot of transient disk space.
     if (!settings()->keepIntermediateFiles()) {
-        QtlMovieDeleteAction* eraser = new QtlMovieDeleteAction(QtlStringList(transcodeOutput, audioFile), settings(), log(), this);
+        QtlMovieDeleteAction* eraser = new QtlMovieDeleteAction(QtlStringList(transcodeOutput, audioFile), settings(), this, this);
         eraser->setDescription(tr("Cleaning up intermediate audio/video files"));
         _actionList.append(eraser);
     }
@@ -839,7 +843,7 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
          << mpegFileName;      // MPEG file for this title.
 
     // Add the DVD author process.
-    QtlMovieProcess* process = new QtlMovieDvdAuthorProcess(args, settings(), log(), this);
+    QtlMovieProcess* process = new QtlMovieDvdAuthorProcess(args, settings(), this, this);
     process->setDescription(tr("Creating DVD structure pass 1: add movie"));
     _actionList.append(process);
 
@@ -852,13 +856,13 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
     // This save a lot of transient disk space before creating the ISO image.
     if (!settings()->keepIntermediateFiles()) {
         // If the input was not DVD-compliant, the MPEG file was a temporary one.
-        QtlMovieDeleteAction* eraser = new QtlMovieDeleteAction(QStringList(mpegFileName), settings(), log(), this);
+        QtlMovieDeleteAction* eraser = new QtlMovieDeleteAction(QStringList(mpegFileName), settings(), this, this);
         eraser->setDescription(tr("Cleaning up intermediate MPEG file"));
         _actionList.append(eraser);
     }
 
     // Add the second DVD author process.
-    process = new QtlMovieDvdAuthorProcess(args, settings(), log(), this);
+    process = new QtlMovieDvdAuthorProcess(args, settings(), this, this);
     process->setDescription(tr("Creating DVD structure pass 2: DVD table of content"));
     _actionList.append(process);
 
@@ -872,7 +876,7 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
          << dvdRoot;                 // Root directory of file structure.
 
     // Add the mkisofs process.
-    process = new QtlMovieMkisofsProcess(args, settings(), log(), this);
+    process = new QtlMovieMkisofsProcess(args, settings(), this, this);
     process->setDescription(tr("Creating DVD ISO image file"));
     _actionList.append(process);
 
@@ -895,7 +899,7 @@ bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
     args << "-dvd-compat" << "-Z" << (dvdBurner + "=" + isoFile);
 
     // Add the growisofs process to the job.
-    QtlMovieProcess* process = new QtlMovieGrowisofsProcess(args, settings(), log(), this);
+    QtlMovieProcess* process = new QtlMovieGrowisofsProcess(args, settings(), this, this);
     process->setDescription(tr("Burning DVD ISO image file"));
     _actionList.append(process);
 
@@ -996,6 +1000,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
             outType = QtlMovieStreamInfo::SubAss;
             break;
         case QtlMovieStreamInfo::SubTeletext:
+        case QtlMovieStreamInfo::SubCc:
             outType = QtlMovieStreamInfo::SubRip;
             break;
         default:
@@ -1029,8 +1034,37 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         }
 
         // Add the telxcc process.
-        QtlMovieProcess* process = new QtlMovieProcess(settings()->telxcc(), args, false, settings(), log(), this);
+        QtlMovieProcess* process = new QtlMovieProcess(settings()->telxcc(), args, false, settings(), this, this);
         process->setDescription(tr("Extracting Teletext subtitles as SRT"));
+        _actionList.append(process);
+        return true;
+    }
+    else if (inType == QtlMovieStreamInfo::SubCc) {
+        // Closed Caption subtitles are extracted using CCextractor, not ffmpeg.
+        if (outType != QtlMovieStreamInfo::SubRip) {
+            return errorFalse(tr("Closed Captions subtitles can be extracted as SRT only"));
+        }
+
+        // Closed Captions channel and field.
+        const int channel = (stream->ccNumber() + 1) / 2;
+        const int field = (stream->ccNumber() - 1) % 2 + 1;
+
+        // Build CCExtractor options.
+        QStringList args;
+        args << "--gui_mode_reports"     // Report info to GUI.
+             << "-noteletext"            // Closed Captions only, ignore Teletext.
+             << "-srt"                   // Output format is SRT.
+             << "-utf8"                  // UTF-8 output.
+             << QString::number(-field); // Field number.
+        if (channel > 1) {
+            args << "-cc2";              // Extract from channel 2.
+        }
+        args << "-o" << outputFileName   // SRT output file.
+             << inputFile->fileName();   // Input file.
+
+        // Add the CCExtractor process.
+        QtlMovieCcExtractorProcess* process = new QtlMovieCcExtractorProcess(args, settings(), this, this);
+        process->setDescription(tr("Extracting Closed Captions as SRT"));
         _actionList.append(process);
         return true;
     }

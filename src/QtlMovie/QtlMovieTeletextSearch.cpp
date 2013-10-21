@@ -48,6 +48,9 @@ QtlMovieTeletextSearch::QtlMovieTeletextSearch(const QString& fileName,
     QtlMovieTsDemux(fileName, settings, log, parent),
     _demux(this)
 {
+    // No need to report in search phase.
+    setSilent(true);
+
     // Set the demux to collect the PAT.
     _demux.addPid(QTS_PID_PAT);
 }
@@ -59,7 +62,7 @@ QtlMovieTeletextSearch::QtlMovieTeletextSearch(const QString& fileName,
 
 void QtlMovieTeletextSearch::handleTable(QtsSectionDemux& demux, const QtsTable& table)
 {
-    log()->debug(tr("Teletext search: Received table id %1 on PID %2").arg(table.tableId()).arg(table.sourcePid()));
+    debug(tr("Teletext search: Received table id %1 on PID %2").arg(table.tableId()).arg(table.sourcePid()));
 
     // Process the table.
     switch (table.tableId()) {
@@ -72,7 +75,7 @@ void QtlMovieTeletextSearch::handleTable(QtsSectionDemux& demux, const QtsTable&
             demux.removePid(QTS_PID_PAT);
             // Add a filter on the PMT PID of all services.
             foreach (const QtsProgramAssociationTable::ServiceEntry& service, pat.serviceList) {
-                log()->debug(tr("Teletext search: Found service id %1, PMT PID %2").arg(service.serviceId).arg(service.pmtPid));
+                debug(tr("Teletext search: Found service id %1, PMT PID %2").arg(service.serviceId).arg(service.pmtPid));
                 demux.addPid(service.pmtPid);
             }
         }

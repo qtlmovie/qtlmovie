@@ -356,6 +356,7 @@ void QtlMovieMainWindow::inputFileFormatChanged()
 
         const QtlMovieStreamInfoPtr stream(_inFile->streamInfo(si));
         Q_ASSERT(!stream.isNull());
+        _ui.log->debug(tr("Found stream: %1").arg(stream->description(false)));
 
         QtlButtonGrid* box = 0;
         bool selected = false;

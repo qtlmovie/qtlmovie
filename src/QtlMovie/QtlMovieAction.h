@@ -42,7 +42,7 @@
 //!
 //! A class which represents an action which starts, progresses and completes.
 //!
-class QtlMovieAction : public QObject
+class QtlMovieAction : public QObject, public QtlLogger
 {
 #if !defined (DOXYGEN)
     Q_OBJECT
@@ -58,21 +58,19 @@ public:
     QtlMovieAction(const QtlMovieSettings* settings, QtlLogger* log, QObject *parent = 0);
 
     //!
+    //! Virtual destructor.
+    //!
+    virtual ~QtlMovieAction()
+    {
+    }
+
+    //!
     //! Get the application settings.
     //! @return The application settings.
     //!
     const QtlMovieSettings* settings() const
     {
         return _settings;
-    }
-
-    //!
-    //! Get the message logger.
-    //! @return The message logger.
-    //!
-    QtlLogger* log() const
-    {
-        return _log;
     }
 
     //!
@@ -133,6 +131,47 @@ public:
         return _completed;
     }
 
+    //!
+    //! Check if unimportant messages are skipped.
+    //! @return True if unimportant messages are skipped.
+    //!
+    bool isSilent() const
+    {
+        return _silent;
+    }
+
+    //!
+    //! Set if unimportant messages are skipped.
+    //! @param [in] silent If true, unimportant messages are skipped.
+    //!
+    void setSilent(bool silent)
+    {
+        _silent = silent;
+    }
+
+    //!
+    //! Log text.
+    //! Implementation of QtlLogger.
+    //! @param [in] text Text to log.
+    //!
+    virtual void text(const QString& text);
+
+    //!
+    //! Log a line of text.
+    //! Implementation of QtlLogger.
+    //! @param [in] line Line to log. No need to contain a trailing new-line character.
+    //! @param [in] color When a valid color is passed, try to display the text in this color.
+    //!
+    virtual void line(const QString& line, const QColor& color = QColor());
+
+    //!
+    //! Log a line of debug text.
+    //! Implementation of QtlLogger.
+    //! @param [in] line Line to log. No need to contain a trailing new-line character.
+    //! @param [in] color When a valid color is passed, try to display the text in this color.
+    //!
+    virtual void debug(const QString& line, const QColor& color = QColor());
+
 signals:
     //!
     //! Emitted when the action starts.
@@ -183,6 +222,7 @@ private:
     QDateTime               _startTime;   //!< Start time.
     bool                    _started;     //!< start() was called.
     bool                    _completed;   //!< completed() has been signaled.
+    bool                    _silent;      //!< Do not report unimportant messages.
 
     // Unaccessible operations.
     QtlMovieAction() Q_DECL_EQ_DELETE;

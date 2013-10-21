@@ -34,6 +34,7 @@
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovieDvd.h"
 #include "QtlMovieTeletextSearch.h"
+#include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovie.h"
 #include "QtlProcess.h"
 
@@ -55,6 +56,8 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _dvdIfoStreams(),
     _dvdPalette(),
     _teletextSearch(0),
+    _ffprobeInProgress(false),
+    _ccSearchCount(0),
     _selectedVideoStreamIndex(-1),
     _selectedAudioStreamIndex(-1),
     _selectedSubtitleStreamIndex(-1),
@@ -81,7 +84,9 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _streams(other._streams),
     _dvdIfoStreams(other._dvdIfoStreams),
     _dvdPalette(other._dvdPalette),
-    _teletextSearch(0), // don't copy
+    _teletextSearch(0),        // don't copy
+    _ffprobeInProgress(false), // don't copy
+    _ccSearchCount(0),         // don't copy
     _selectedVideoStreamIndex(other._selectedVideoStreamIndex),
     _selectedAudioStreamIndex(other._selectedAudioStreamIndex),
     _selectedSubtitleStreamIndex(other._selectedSubtitleStreamIndex),
@@ -169,7 +174,33 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
 
     // Get notified of process termination and starts the process.
     connect(process, SIGNAL(terminated(QtlProcessResult)), this, SLOT(ffprobeTerminated(QtlProcessResult)));
+    _ffprobeInProgress = true;
     process->start();
+
+    // Look for Closed Captions on channels 1 and 2.
+    startClosedCaptionsSearch(1);
+    startClosedCaptionsSearch(2);
+}
+
+
+//----------------------------------------------------------------------------
+// Start a Closed Caption search.
+//----------------------------------------------------------------------------
+
+void QtlMovieInputFile::startClosedCaptionsSearch(int ccChannel)
+{
+    // Create a new instance of CC search.
+    QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName(), ccChannel, _settings, _log, this);
+    connect(cc, SIGNAL(foundClosedCaptions(QtlMovieStreamInfoPtr)), this, SLOT(foundClosedCaptions(QtlMovieStreamInfoPtr)));
+    connect(cc, SIGNAL(completed(bool)), this, SLOT(closedCaptionsSearchTerminated(bool)));
+
+    // Start it.
+    if (cc->start()) {
+        _ccSearchCount++;
+    }
+    else {
+        delete cc;
+    }
 }
 
 
@@ -179,6 +210,9 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
 
 void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
 {
+    // FFprobe terminated.
+    _ffprobeInProgress = false;
+
     // Filter ffprobe process execution.
     if (result.hasError()) {
         _log->line(tr("FFprobe error: %1").arg(result.errorMessage()));
@@ -246,9 +280,7 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
     }
 
     // Notify the new media information only when nothing more to do.
-    if (!searchTeletext) {
-        emit mediaInfoChanged();
-    }
+    newMediaInfo();
 }
 
 
@@ -292,6 +324,17 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
 
 
 //----------------------------------------------------------------------------
+// Invoked when a Closed Captions stream is found.
+//----------------------------------------------------------------------------
+
+void QtlMovieInputFile::foundClosedCaptions(QtlMovieStreamInfoPtr stream)
+{
+    // Append the new stream in the input file.
+    _streams.append(stream);
+}
+
+
+//----------------------------------------------------------------------------
 // Invoked when the search for Teletext subtitles completes.
 //----------------------------------------------------------------------------
 
@@ -310,7 +353,36 @@ void QtlMovieInputFile::teletextSearchTerminated(bool success)
     }
 
     // Notify the new media information.
-    emit mediaInfoChanged();
+    newMediaInfo();
+}
+
+
+//----------------------------------------------------------------------------
+// Invoked when a search for Closed Captions completes.
+//----------------------------------------------------------------------------
+
+void QtlMovieInputFile::closedCaptionsSearchTerminated(bool success)
+{
+    // Decrement the number of searches.
+    if (_ccSearchCount > 0) {
+        _ccSearchCount--;
+    }
+
+    // Notify the new media information.
+    newMediaInfo();
+}
+
+
+//----------------------------------------------------------------------------
+// Report that new media info has been found.
+//----------------------------------------------------------------------------
+
+void QtlMovieInputFile::newMediaInfo()
+{
+    if (!_ffprobeInProgress && _teletextSearch == 0 && _ccSearchCount <= 0) {
+        // No more operation in progress, notify the new media information.
+        emit mediaInfoChanged();
+    }
 }
 
 
