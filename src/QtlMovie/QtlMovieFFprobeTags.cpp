@@ -147,11 +147,14 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
             else if (codecName == "ass") {
                 info->setSubtitleType(QtlMovieStreamInfo::SubAss);
             }
-            else if (codecName == "vosub" || codecName == "dvdsub") {
+            else if (codecName == "vobsub" || codecName == "dvdsub") {
                 info->setSubtitleType(QtlMovieStreamInfo::SubDvd);
             }
             else if (codecName == "dvbsub") {
                 info->setSubtitleType(QtlMovieStreamInfo::SubDvb);
+            }
+            else if (codecName == "teletext" || codecName == "dvb_teletext") {
+                info->setSubtitleType(QtlMovieStreamInfo::SubTeletext);
             }
             else if (!codecName.isEmpty()) {
                 info->setSubtitleType(QtlMovieStreamInfo::SubOther);

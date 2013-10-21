@@ -205,12 +205,15 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
     // Is the file a transport stream?
     _isTs = _ffInfo.value("format.format_name").toLower() == "mpegts";
 
-    // Analyze TS file if subtitles with unknown types are detected.
-    // Usually, this is due to Teletext subtitles.
+    // If Teletext subtitles are detected, ffprobe does not report the Teletext page value
+    // and we need to analyze the file. Sometimes, ffprobe does not even detect that the
+    // subtitles are Teletext (unknown subtitle type) and we need to analyze the file as well.
     bool searchTeletext = false;
     if (_isTs) {
         foreach (const QtlMovieStreamInfoPtr& stream, _streams) {
-            if (!stream.isNull() && stream->streamType() == QtlMovieStreamInfo::Subtitle && stream->subtitleType() == QtlMovieStreamInfo::SubOther) {
+            if (!stream.isNull() &&
+                stream->streamType() == QtlMovieStreamInfo::Subtitle &&
+                ((stream->subtitleType() == QtlMovieStreamInfo::SubTeletext && stream->teletextPage() < 0) || stream->subtitleType() == QtlMovieStreamInfo::SubOther)) {
                 searchTeletext = true;
                 break;
             }
@@ -267,13 +270,14 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
             const QtlMovieStreamInfoPtr& s(*it);
             if (s->streamId() == stream->streamId()) {
                 // Found a previous stream with same PID.
-                // If the new stream's ffmpeg index is unknow, get it from the previous stream on same PID.
+                // If the new stream's ffmpeg index is unknown, get it from the previous stream on same PID.
                 if (stream->ffIndex() < 0) {
                     stream->setFFIndex(s->ffIndex());
                 }
-                // If the previous stream was unknown subtitle, remove it
+                // If the previous stream is unknown subtitle or teletext with unknown page, remove it
                 // since we know have a better characterization of the stream.
-                if (s->streamType() == QtlMovieStreamInfo::Subtitle && s->subtitleType() == QtlMovieStreamInfo::SubOther) {
+                if (s->streamType() == QtlMovieStreamInfo::Subtitle &&
+                    (s->subtitleType() == QtlMovieStreamInfo::SubOther || (s->subtitleType() == QtlMovieStreamInfo::SubTeletext && s->teletextPage() < 0))) {
                     _streams.erase(it);
                     // We can stop now and we must since our iterator is broken by erase().
                     break;
