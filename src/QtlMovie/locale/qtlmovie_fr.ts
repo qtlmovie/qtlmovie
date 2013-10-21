@@ -206,7 +206,7 @@
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="34"/>
-        <location filename="../QtlMovieEditSettings.h" line="134"/>
+        <location filename="../QtlMovieEditSettings.h" line="142"/>
         <source>Default input directory</source>
         <translation>Répertoire d&apos;entrée par défaut</translation>
     </message>
@@ -469,12 +469,17 @@
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="288"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="199"/>
+        <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
+        <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.cpp" line="303"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="301"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="316"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -510,6 +515,11 @@
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.h" line="126"/>
+        <source>Locate CCExtractor executable</source>
+        <translation>Recherche de l&apos;exécutable CCExtractor</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.h" line="134"/>
         <source>Locate DvdDecrypter executable</source>
         <translation>Recherche de l&apos;exécutable DVD Decrypter</translation>
     </message>

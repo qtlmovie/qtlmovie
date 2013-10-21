@@ -119,6 +119,14 @@ private slots:
     }
 
     //!
+    //! Invoked by the "Browse..." button for the CCExtractor executable.
+    //!
+    void browseCcextractor()
+    {
+        browseFile(_ui.editCcextractor, tr("Locate CCExtractor executable"));
+    }
+
+    //!
     //! Invoked by the "Browse..." button for the DvdDecrypter executable.
     //!
     void browseDvdDecrypter()

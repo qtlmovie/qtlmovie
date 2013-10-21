@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.5
+- Bug fix: On Windows, enforce the DVD burner device to be a drive name.
+
 Version 1.2.4 (2013-10-19)
 - Encoding for DVD now transcodes audio to AC-3 instead of MPEG-2 Audio Layer 2.
 - When encoding for DVD, if the input video stream is already DVD-compliant,

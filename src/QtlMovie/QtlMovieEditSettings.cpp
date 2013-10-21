@@ -186,6 +186,21 @@ void QtlMovieEditSettings::applySettings()
 {
     Q_ASSERT(_settings != 0);
 
+    // On Windows, ensures that the DVD burner is only a device letter followed by a colon.
+#if defined(Q_OS_WIN)
+    QString dvd(_ui.editDvdBurner->text());
+    if (dvd.length() >= 2 && dvd[1] == ':') {
+        // Truncate after ':'
+        dvd.truncate(2);
+        _ui.editDvdBurner->setText(dvd.toUpper());
+    }
+    else if (!dvd.isEmpty()) {
+        // Incorrect device name.
+        qtlError(this, tr("Ignore incorrect DVD burner device %1, must be a drive name").arg(dvd));
+        _ui.editDvdBurner->setText("");
+    }
+#endif
+
     // Load the settings with the values from the UI.
     _settings->setMaxLogLines(_ui.spinMaxLogLines->value());
     _settings->setFFmpegExplicitExecutable(_ui.editFFmpeg->text());
