@@ -20,7 +20,11 @@
         </li>
         <li><a href="#outfiles">Output files</a>
           <ul>
-            <li><a href="#dvdout">DVD output</a></li>
+            <li><a href="#dvdout">DVD output</a>
+              <ul>
+                <li><a href="#dvdouttv">Creating a DVD from a TV recording</a></li>
+              </ul>
+            </li>
             <li><a href="#ipadout">iPad output</a></li>
             <li><a href="#subout">Subtitle extraction</a></li>
           </ul>
@@ -95,14 +99,20 @@
         requests the user to select exactly one video and one audio stream.</p>
       <h3><a id="subin">Subtitle input</a></h3>
       <p>At most one subtitle source can be specified. This can be a stream of the input file or an external subtitle file.</p>
-      <p>The following subtitles formats are supported:</p>
+      <p>The following subtitles formats are supported.
+        The note <sup><i>[F]</i></sup> indicates that the format can also be read from an external subtitle file,
+        independently of the input file. All other subtitle formats must be present in the input file.
+        The note <sup><i>[T]</i></sup> indicates that the subtitle format can be used only in MPEG transport
+        stream files (TS or M2TS).
+        The note <sup><i>[E]</i></sup> indicates that the subtitle format is
+        <a href="#subout">extractible as SRT</a> by QtlMovie.</p>
       <ul>
-        <li>SubRip (SRT).</li>
-        <li>SubStation Alpha (SSA, ASS).</li>
-        <li>DVD subtitles (input file stream only, not external subtitle file).</li>
-        <li>DVB subtitles (transport stream input file stream only, not external subtitle file).</li>
-        <li>Teletext subtitles (transport stream input file stream only, not external subtitle file).</li>
-        <li>Closed Captions (US CEA-608/708 from input file stream only, not external subtitle file).</li>
+        <li>SubRip (SRT) <sup><i>[F]</i></sup> <sup><i>[E]</i></sup>.</li>
+        <li>SubStation Alpha (SSA, ASS) <sup><i>[F]</i></sup> <sup><i>[E]</i></sup>.</li>
+        <li>DVD subtitles.</li>
+        <li>DVB subtitles <sup><i>[T]</i></sup>.</li>
+        <li>Teletext subtitles <sup><i>[T]</i></sup> <sup><i>[E]</i></sup>.</li>
+        <li>Closed Captions (US CEA-608/708) <sup><i>[E]</i></sup>.</li>
       </ul>
       <p>Important: The subtitles are always hardcoded ("<i>burnt</i>") into the video by QtlMovie.
         The output file never contains independent subtitle streams.</p>
@@ -133,7 +143,7 @@
         to rip it and copy the movie files to your hard drive. Do not forget to rip the VTS_nn_0.IFO
         with the corresponding VOB files.</p>
       <p>It is unclear if DVD Decrypter is available on platforms other than Windows but similar
-        tools exist on Linux. On Windows platforms, DVD Decrypter comes pre-pakaged with the
+        tools exist on Linux. On Windows platforms, DVD Decrypter comes pre-packaged with the
         binary installer of QtlMovie. You can launch it from QtlMovie from the Tools menu.
         Then, you can rip the film out of the DVD media. In a future version, QtlMovie
         may automatically invoke DVD Decrypter as part of the transcoding process when the DVD
@@ -166,14 +176,44 @@
         the video is not transcoded to save time and QtlMovie performs the audio transcoding and
         remux only.</p>
       <p>A DVD ISO image can also be used as input file. In this case, the only possible
-        output type is burning the image to a physical media.</p>
+        output type is burning the image to a physical medium.</p>
       <p>A consequence of these features is that a DVD can be created either at once, from the orginal
-        video file to the DVD physical media, or in several phases. In the later case, the output
+        video file to the DVD physical medium, or in several phases. In the later case, the output
         of a phase (MPEG file, ISO image) can be used as input for the next phase without the pain
         of audio/video re-encoding.</p>
       <p>When the output type type is burning to a physical media, the so-called <i>output file name</i>
         designates the ISO image in fact. The default DVD burning device shall be selected in the settings menu.
         The ISO image is never deleted and can be reused to burn additional media.</p>
+      <h4><a id="dvdouttv">Creating a DVD from a TV recording</a></h4>
+      <p>When creating a DVD from a TV recording, some editing is usually required. Typically, there is some
+        extra content to delete at the beginning and end. If the recorded program contains ads, you may want
+        to delete them also.</p>
+      <p>QtlMovie is not a video editor and you need an external tool to remove the unwanted
+        parts of the movie file. Open-source tools such as AviDemux or Virtual Dub can do that.
+        On Windows, there is also a simpler freeware (not open-source unfortunately) named Free Video Dub.</p>
+      <p>You should use one of these tools to <i>edit</i> the video (namely cut the unwanted parts) but not re-encode it.
+        Tools like Free Video Dub are typically dedicated to remove video sequences and cannot re-encode anyway.
+        With tools like AviDemux, explicitely select the <i>copy</i> option for video and audio tracks
+        to avoid re-encoding.</p>
+      <p>You also have to pay attention to one point.
+        If the original file contains a subtitle stream you want to use, you should not edit the original video file.
+        It may depend on the editing tool, but most of the time the subtitle streams are lost after editing.
+        Instead, you should use the following scenario:</p>
+      <ul>
+        <li>Use QtlMovie to generate a <i>DVD MPEG File</i> with the complete content.
+          Select the required audio and subtitle streams.
+          This is the longest part, where the re-encoding takes place</li>
+        <li>Edit this MPEG file and cut the unwanted parts.
+          Save the result as MPEG file without re-encoding. This is usually fast.</li>
+        <li>Use QtlMovie again to open the edited MPEG file and create the DVD from it.
+          This is also usually fast since QtlMovie recognizes the MPEG file as being
+          DVD-compliant and does not perform any re-encoding.</li>
+      </ul>
+      <p>This method is always the preferred one, even if the input file is simple and
+        contains only one video, one audio track and no subtitle. It is more
+        reliable and more robust to edit an MPEG-2 video file than most other formats.
+        Editing a video file without re-encoding requires to cut on intra-frames only
+        and MPEG-2 files are easier to edit than AVC / H.264 for instance.</p>
       <h3><a id="ipadout">iPad output</a></h3>
       <p>QtlMovie always produces iPad files with the following characteristics:</p>
       <ul>
@@ -276,7 +316,7 @@
         audio and video and is not re-encoded.
         It is recommended to let this option checked.</p>
       <p>The option "Force transcoding even if the input file or video is DVD-compliant"
-        does what is says... This can be useful to force a transcoding when the
+        does what it says... This can be useful to force a transcoding when the
         file seems DVD-compliant but is not really (too large for instance).</p>
       <p>The "iPad output" area is used only when transcoding for iPad.
         The "Screen size" options specify the type of iPad to target.
@@ -320,14 +360,14 @@
             <li>If not possible, keep the first audio track not matching any language in the
               intended audience language codes (supposed to be the original audio, considering
               any audience language as dubbing).</li>
-            <li>Otherwise, keep first audio without visual/hearing impaired indicator.</li>
+            <li>Otherwise, keep first audio without visual impaired indicator.</li>
           </ul>
         </li>
         <li>Default subtitle stream selection:
-          In all cases, consider only subtitle in the intended audience language codes.
-          If this list is empty, there will be no default subtitle.
-          Within the various subtitles in the audience language codes, the following criteria apply.
           <ul>
+            <li>In all cases, consider only the subtitles in the intended audience language codes.
+              If the list of target audience languages is empty, there will be no default subtitle.
+              Within the various subtitles in the audience language codes, the following criteria apply.</li>
             <li>If the audio stream is in the audience language codes, keep the first "forced"
               subtitle (the "forced" subtitle are used only when the audio track of the same
               language contains dialogues in another language).</li>
@@ -335,7 +375,7 @@
               (in order of preference)
               <ul>
                 <li>complete</li>
-                <li>for hearing/visual impaired</li>
+                <li>for hearing impaired</li>
                 <li>other</li>
               </ul>
             </li>
