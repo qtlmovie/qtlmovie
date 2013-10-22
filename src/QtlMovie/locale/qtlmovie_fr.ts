@@ -68,6 +68,97 @@
         <source>Step %1/%2 - %3</source>
         <translation>Etape %1/%2 - %3</translation>
     </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="252"/>
+        <source>#%1</source>
+        <translation>#%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="259"/>
+        <source>%1x%2</source>
+        <translation>%1x%2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="265"/>
+        <source>4:3</source>
+        <translation>4:3</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="268"/>
+        <source>16:9</source>
+        <translation>16:9</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="271"/>
+        <source>DAR 1:%1</source>
+        <translation>DAR 1:%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="276"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="295"/>
+        <source>%1 b/s</source>
+        <translation>%1 b/s</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="280"/>
+        <source>%1 f/s</source>
+        <translation>%1 f/s</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="287"/>
+        <source>forced</source>
+        <translation>forcés</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="302"/>
+        <source>mono</source>
+        <translation>mono</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="305"/>
+        <source>stereo</source>
+        <translation>stéréo</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="308"/>
+        <source>%1 channels</source>
+        <translation>%1 canaux</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="313"/>
+        <source>@%1 Hz</source>
+        <translation>@%1 Hz</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="324"/>
+        <source>commentary</source>
+        <translation>commentaires</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="327"/>
+        <source>visual impaired</source>
+        <translation>malvoyants</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="331"/>
+        <source>hearing impaired</source>
+        <translation>malentendants</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="334"/>
+        <source>Teletext %1%2</source>
+        <translation>Teletext %1%2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="334"/>
+        <source>page </source>
+        <translation>page </translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="337"/>
+        <source>Closed Captions #%1</source>
+        <translation>Closed Captions #%1</translation>
+    </message>
 </context>
 <context>
     <name>QtlMovieAboutMediaTools</name>
@@ -1081,10 +1172,6 @@ Le remplacer?</translation>
         <location filename="../QtlMovieMainWindow.cpp" line="781"/>
         <source>Built</source>
         <translation>Généré le </translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;&lt;b&gt;QtlMovie&lt;/b&gt;: A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools&lt;/p&gt;&lt;p&gt;Version </source>
-        <translation type="obsolete">&lt;p&gt;&lt;b&gt;QtlMovie&lt;/b&gt;: Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media&lt;/p&gt;&lt;p&gt;Version </translation>
     </message>
 </context>
 <context>

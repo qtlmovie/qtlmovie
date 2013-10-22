@@ -249,42 +249,42 @@ QString QtlMovieStreamInfo::description(bool compact) const
 
     // Start with FFmpeg stream index.
     if (_ffIndex >= 0) {
-        add(result, QStringLiteral("#%1").arg(_ffIndex));
+        add(result, QObject::tr("#%1").arg(_ffIndex));
     }
 
     // Specific video options.
     if (_streamType == Video) {
         // Video frame size.
         if (_width > 0 && _height > 0) {
-            add(result, QStringLiteral("%1x%2").arg(_width).arg(_height));
+            add(result, QObject::tr("%1x%2").arg(_width).arg(_height));
         }
         // Display aspect ratio.
         if (_dar > 0.001) {
             // Translate common display aspect ratios.
             if (qAbs(_dar - (float(4) / float(3))) < 0.001) {
-                add(result, "4:3");
+                add(result, QObject::tr("4:3"));
             }
             else if (qAbs(_dar - (float(16) / float(9))) < 0.001) {
-                add(result, "16:9");
+                add(result, QObject::tr("16:9"));
             }
             else {
-                add(result, QStringLiteral("DAR %1").arg(_dar, 0, 'f', 3));
+                add(result, QObject::tr("DAR 1:%1").arg(_dar, 0, 'f', 3));
             }
         }
         // Bit rate.
         if (!compact && _bitRate > 0) {
-            add(result, QStringLiteral("%1 b/s").arg(_bitRate));
+            add(result, QObject::tr("%1 b/s").arg(_bitRate));
         }
         // Frame rate.
         if (!compact && _frameRate > 0.001) {
-            add(result, QStringLiteral("%1 f/s").arg(_frameRate, 0, 'f', 1));
+            add(result, QObject::tr("%1 f/s").arg(_frameRate, 0, 'f', 1));
         }
     }
     else {
         // Not a video stream. Display language.
         add(result, _language);
         if (_forced) {
-            add(result, "forced");
+            add(result, QObject::tr("forced"));
         }
     }
 
@@ -292,25 +292,25 @@ QString QtlMovieStreamInfo::description(bool compact) const
     if (_streamType == Audio) {
         // Bit rate.
         if (!compact && _bitRate > 0) {
-            add(result, QStringLiteral("%1 b/s").arg(_bitRate));
+            add(result, QObject::tr("%1 b/s").arg(_bitRate));
         }
         // Number of channels.
         switch (_audioChannels) {
         case 0:
             break;
         case 1:
-            add(result, "mono");
+            add(result, QObject::tr("mono"));
             break;
         case 2:
-            add(result, "stereo");
+            add(result, QObject::tr("stereo"));
             break;
         default:
-            add(result, QStringLiteral("%1 channels").arg(_audioChannels));
+            add(result, QObject::tr("%1 channels").arg(_audioChannels));
             break;
         }
         // Sampling rate.
         if (!compact && _samplingRate > 0) {
-            add(result, QStringLiteral("@%1 Hz").arg(_samplingRate));
+            add(result, QObject::tr("@%1 Hz").arg(_samplingRate));
         }
     }
 
@@ -320,18 +320,21 @@ QString QtlMovieStreamInfo::description(bool compact) const
     }
 
     // Other non-video options.
-    if (_streamType != Video) {
-        if (_commentary) {
-            add(result, "commentary");
-        }
+    if (_streamType != Video && _commentary) {
+        add(result, QObject::tr("commentary"));
+    }
+    if (_streamType == Audio && _impaired) {
+        add(result, QObject::tr("visual impaired"));
+    }
+    if (_streamType == Subtitle) {
         if (_impaired) {
-            add(result, compact ? "impaired" : "visual/hearing impaired");
+            add(result, QObject::tr("hearing impaired"));
         }
         if (_teletextPage > 0) {
-            add(result, QStringLiteral("Teletext %1%2").arg(compact ? "" : "page ").arg(_teletextPage));
+            add(result, QObject::tr("Teletext %1%2").arg(compact ? "" : QObject::tr("page ")).arg(_teletextPage));
         }
         if (_ccNumber > 0) {
-            add(result, QStringLiteral("Closed Captions #%1").arg(_ccNumber));
+            add(result, QObject::tr("Closed Captions #%1").arg(_ccNumber));
         }
     }
 

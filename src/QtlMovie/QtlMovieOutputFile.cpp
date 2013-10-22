@@ -146,6 +146,7 @@ QString QtlMovieOutputFile::outputTypeName(QtlMovieOutputFile::OutputType output
 
 QString QtlMovieOutputFile::outputIdName(QtlMovieOutputFile::OutputType outputType)
 {
+    // These are identifiers, do not translate.
     switch (outputType) {
     case DvdFile:  return "dvdfile";
     case DvdImage: return "dvdiso";

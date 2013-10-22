@@ -2,7 +2,10 @@
 QtlMovie Change Log
 ===================
 
-Version 1.2.5
+Version 1.2.6 (2013-13-22)
+- Fixed typos in help files and translations.
+
+Version 1.2.5 (2013-13-21)
 - US Closed Captions subtitles (CEA-608/708) are now supported thanks to
   the integration of CCExtractor. Currently, the CC are numbered as follow:
   1: channel 1, field 1, 2: channel 1, field 2, 3: channel 2, field 1,
