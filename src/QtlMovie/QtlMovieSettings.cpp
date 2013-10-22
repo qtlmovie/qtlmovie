@@ -98,7 +98,7 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _growisofsExplicit(new QtlMovieExecFile(*_growisofsDefault, "", this)),
     _telxccDefault(new QtlMovieExecFile("Telxcc",
                                         "https://github.com/forers/telxcc",
-                                        QString(),
+                                        "https://forers.com/download/telxcc/telxcc-windows-x86-v2.5.1.zip",
                                         "telxcc",
                                         QStringList("-h"),
                                         QString(),
