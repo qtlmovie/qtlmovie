@@ -51,13 +51,16 @@ SOURCES += \
     QtlHexa.cpp \
     QtlButtonGrid.cpp \
     QtlAutoGrid.cpp \
-    QtlTranslator.cpp
+    QtlTranslator.cpp \
+    QtlVersion.cpp \
+    QtlNewVersionChecker.cpp
 
 HEADERS += \
     QtlByteBlock.h \
     QtlFile.h \
     QtlLineEdit.h \
     QtlLogger.h \
+    QtlNullLogger.h \
     QtlPlainTextLogger.h \
     QtlBrowserDialog.h \
     QtlProcess.h \
@@ -78,7 +81,9 @@ HEADERS += \
     QtlIncrement.h \
     QtlButtonGrid.h \
     QtlAutoGrid.h \
-    QtlTranslator.h
+    QtlTranslator.h \
+    QtlVersion.h \
+    QtlNewVersionChecker.h
 
 FORMS += \
     QtlBrowserDialog.ui

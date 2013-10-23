@@ -113,6 +113,11 @@ private slots:
     //!
     void showHelp();
     //!
+    //! Invoked by the "Search New Version" button.
+    //! @param [in] silent Do not report errors or no new version.
+    //!
+    void searchNewVersion(bool silent = false);
+    //!
     //! Invoked when the edition of the input file name changed in the edit box.
     //!
     void inputFileNameEdited();

@@ -36,6 +36,7 @@
 #include "QtlMovieAudioTestDialog.h"
 #include "QtlMovieAboutMediaTools.h"
 #include "QtlMovieInputFilePropertiesDialog.h"
+#include "QtlNewVersionChecker.h"
 #include "QtlBrowserDialog.h"
 #include "QtlMovieVersion.h"
 #include "QtlIncrement.h"
@@ -790,4 +791,46 @@ void QtlMovieMainWindow::showHelp()
 {
     QtlBrowserDialog box(this, "qrc:/help/qtlmovie.html", "QtlMovie Help", ":/images/qtlmovie-logo.png");
     box.exec();
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked by the "Search New Version" button.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::searchNewVersion(bool silent)
+{
+    // Build URL and file name template.
+    QString directoryUrl("http://sourceforge.net/projects/qtlmovie/files/");
+    QString filePrefix;
+    QString fileSuffix;
+
+#if defined (Q_OS_WIN)
+    // On Windows, fetch the binary installer.
+    if (qtlRunningOnWin64()) {
+        directoryUrl.append("win64/");
+        filePrefix = "QtlMovie-Win64-";
+        fileSuffix = ".exe";
+    }
+    else {
+        directoryUrl.append("win32/");
+        filePrefix = "QtlMovie-Win32-";
+        fileSuffix = ".exe";
+    }
+#else
+    // On other OS, fetch the source archive.
+    directoryUrl.append("src/");
+    filePrefix = "QtlMovie-";
+    fileSuffix = "-src.zip";
+#endif
+
+    // Start searching for new versions.
+    QtlNewVersionChecker::newInstance(QtlVersion(QTLMOVIE_VERSION),
+                                      directoryUrl,
+                                      filePrefix,
+                                      fileSuffix,
+                                      "/download", // The download suffix for SourceForge URL's.
+                                      silent,
+                                      _ui.log,
+                                      this);
 }

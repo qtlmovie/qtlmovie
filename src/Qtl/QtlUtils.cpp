@@ -55,6 +55,26 @@ int qtlQtVersion()
 
 
 //-----------------------------------------------------------------------------
+// Check if the application is running on a 64-bit version of Windows.
+//-----------------------------------------------------------------------------
+
+bool qtlRunningOnWin64()
+{
+#if defined(_WIN64) || defined(Q_OS_WIN64)
+    // Compiled on Win64, can run only on Win64.
+    return true;
+#elif defined(_WIN32) || defined(Q_OS_WIN)
+    // Running on another flavor of Windows, we must check.
+    BOOL win64 = FALSE;
+    return ::IsWow64Process(::GetCurrentProcess(), &win64) && win64;
+#else
+    // Not running on Windows at all.
+    return false;
+#endif
+}
+
+
+//-----------------------------------------------------------------------------
 // Convert a string into an integer.
 //-----------------------------------------------------------------------------
 

@@ -208,6 +208,8 @@
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
+    <addaction name="actionSearchNewVersion"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutMediaTools"/>
     <addaction name="actionAboutQt"/>
@@ -316,6 +318,11 @@
    </property>
    <property name="text">
     <string>Log Debug</string>
+   </property>
+  </action>
+  <action name="actionSearchNewVersion">
+   <property name="text">
+    <string>Search New Version</string>
    </property>
   </action>
  </widget>
@@ -666,6 +673,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSearchNewVersion</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>searchNewVersion()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -692,5 +715,6 @@
   <slot>transcodingStopped(bool)</slot>
   <slot>transcodingProgress(QString,int,int,int,int)</slot>
   <slot>setOutputFileType()</slot>
+  <slot>searchNewVersion()</slot>
  </slots>
 </ui>

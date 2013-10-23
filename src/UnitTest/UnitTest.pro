@@ -54,7 +54,8 @@ SOURCES += \
     main.cpp \
     QtlTest.cpp \
     QtsProgramMapTableTest.cpp \
-    QtlHexaTest.cpp
+    QtlHexaTest.cpp \
+    QtlVersionTest.cpp
 
 HEADERS += \
     QtsData/psi_tot_tnt_sections.h \
