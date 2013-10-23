@@ -103,6 +103,13 @@ namespace QtlMovieFFmpeg
     QStringList dvdAudioOptions(const QtlMovieSettings* settings, const QtlMovieStreamInfoPtr& audioStream);
 
     //!
+    //! Format the argument of an ffmpeg filter using proper escaping.
+    //! @param [in] argument The argument plain text.
+    //! @return The corresponding string to add in the filter description.
+    //!
+    QString escapedFilterArgument(const QString& argument);
+
+    //!
     //! Build FFmpeg command line arguments to insert a video filter string.
     //! @param [in] videoFilters A video filter string.
     //! @return FFmpeg command line arguments. Can be empty if no video filter is specified.

@@ -346,7 +346,7 @@ QString QtlFile::parentPath(const QString& path, int upLevels)
 // Get the "short path name" of a file path.
 //-----------------------------------------------------------------------------
 
-QString QtlFile::shortPath(const QString& path)
+QString QtlFile::shortPath(const QString& path, bool keepOnError)
 {
 #if defined(Q_OS_WIN)
     // On Windows, invoke GetShortPathName.
@@ -364,16 +364,20 @@ QString QtlFile::shortPath(const QString& path)
     int length = ::GetShortPathName(&input[0], NULL, 0);
     if (length <= 0) {
         // Error, typically non-existent file.
-        return QString();
+        return keepOnError ? path : QString();
     }
 
     // Get the actual short path. This time, the returned value is the length
     // of the returned path, EXCLUDING the terminating nul character.
     QVector<wchar_t> output(length);
     length = ::GetShortPathName(&input[0], &output[0], length);
+    if (length <= 0 || length >= output.size()) {
+        // Error, should not happen since the length was previously returned.
+        return keepOnError ? path : QString();
+    }
 
     // Convert returned wide string as a QString.
-    return (length <= 0 || length >= output.size()) ? QString() : QString::fromWCharArray(&output[0], length);
+    return QString::fromWCharArray(&output[0], length);
 
 #else
     // On non-Windows platforms, return the input path, unchanged.

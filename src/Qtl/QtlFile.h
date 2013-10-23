@@ -53,7 +53,7 @@
 //! Null file device.
 //!
 #if defined(Q_OS_WIN)
-#define QTL_NULL_DEVICE "nul"
+#define QTL_NULL_DEVICE "NUL"
 #else
 #define QTL_NULL_DEVICE "/dev/null"
 #endif
@@ -186,9 +186,12 @@ public:
     //! On other platforms, return the input @a path.
     //! @param [in] path The path of the file or directory.
     //! If the file or directory does not exist, the result is unpredictable.
-    //! @return The equivalent short path name or the empty string on error.
+    //! @param [in] keepOnError If true and the conversion fails, return
+    //! the same @a path.
+    //! @return The equivalent short path name or the empty string on error
+    //! and @a keepOnError is false.
     //!
-    static QString shortPath(const QString& path);
+    static QString shortPath(const QString& path, bool keepOnError);
 
     //!
     //! Read the content of a binary file.

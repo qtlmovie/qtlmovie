@@ -112,6 +112,18 @@ bool QtlMovieJob::start()
         return errorFalse(tr("Cannot create temporary directory %1").arg(_tempDir));
     }
 
+    // Being based on the output file name, the temporary directory may contain
+    // any type of character. This has proven to be harmless on Unix systems.
+    // On Windows, at least two problems were identified:
+    // - Non-ASCII characters in the -passlogfile option for ffmpeg.
+    //   See the bug report at http://trac.ffmpeg.org/ticket/3056
+    // - A single quote in the specification of the subtitle file for the "ass"
+    //   and "subtitles" video filters in ffmpeg. Special characters are
+    //   escaped but the single quote is special here.
+    // To avoid the problem, we use the "short path name" of the temporary directory,
+    // ie. the old DOS 8.3 name. The operation is transparent on non-Windows systems.
+    _tempDir = QtlFile::shortPath(_tempDir, true);
+
     // Build the list of actions to execute.
     // Notify of the job start.
     if (!buildScenario() || !QtlMovieAction::start()) {
@@ -490,20 +502,13 @@ bool QtlMovieJob::addSubtitleFileVideoFilter(QString& videoFilters, int widthIn,
 
 bool QtlMovieJob::addTextSubtitleFileVideoFilter(QString& videoFilters, const QString& filterName, int widthIn, int heightIn, const QString& subtitleFileName)
 {
-    // Build an "escaped" version of the file name.
-    // All :,;'\ are escaped with a \.
-    QString file(subtitleFileName);
-    file.replace(QRegExp("\\\\"), "\\\\");
-    file.replace(QRegExp("([:,;'])"), "\\\\1");
-
     // Subtitles filter.
     if (!videoFilters.isEmpty()) {
         videoFilters.append(",");
     }
     videoFilters.append(filterName);
-    videoFilters.append("=filename='");
-    videoFilters.append(file);
-    videoFilters.append("'");
+    videoFilters.append("=filename=");
+    videoFilters.append(QtlMovieFFmpeg::escapedFilterArgument(subtitleFileName));
 
     // If the original video size is known, add it as a hint.
     if (settings()->srtUseVideoSizeHint() && widthIn > 0 && heightIn > 0) {
@@ -687,16 +692,6 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
             return false;
         }
 
-        // We do the transcoding in two passes. We must specify a log file for the feedback between pass 1 and 2.
-        // On Windows, there is a specific problem with the handling of the log file path handling. See
-        // http://ffmpeg-users.933282.n4.nabble.com/Weird-characters-in-created-passlogfile-on-Windows-td4661845.html
-        // To avoid the problem, we use the "short path name" of the temporary directory, ie. the old DOS 8.3 name.
-        // The operation is transparent on non-Windows systems.
-        const QString shortTempDir(QtlFile::shortPath(_tempDir));
-        if (shortTempDir.isEmpty()) {
-            return errorFalse(tr("Error converting %1 to short path").arg(_tempDir));
-        }
-
         // Common video options.
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "mpeg2video"
@@ -706,7 +701,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
              << "-aspect" << QTL_DVD_DAR_FFMPEG
              << QtlMovieFFmpeg::videoFilterOptions(videoFilters)
              << "-threads" << "auto"
-             << "-passlogfile" << (shortTempDir + QDir::separator() + "fflog");
+             << "-passlogfile" << (_tempDir + QDir::separator() + "fflog");
 
         // There are two argument lists, one for each encoding pass.
         // The output of the first pass is useless and sent to the null device (only the log is useful).

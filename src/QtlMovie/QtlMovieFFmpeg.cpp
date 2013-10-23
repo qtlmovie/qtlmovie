@@ -57,7 +57,7 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
     //
     // And now the second trick;
     //
-    // Note that 8 Mbits/s = 1 Mbyte per second. And so the probe size in megabytes
+    // Note that 8 Mbit/s = 1 Mbyte/s. And so the probe size in megabytes
     // is equal to the number of seconds. Since the unit of -analyzeduration is the
     // micro-second, the arguments -analyzeduration and -probesize are identical.
     const QString sizeSpec(QStringLiteral("%1M").arg(seconds));
@@ -209,6 +209,31 @@ QStringList QtlMovieFFmpeg::dvdAudioOptions(const QtlMovieSettings* settings, co
              << "-b:a" << QString::number(QTL_DVD_AUDIO_BITRATE);
     }
     return args;
+}
+
+
+//----------------------------------------------------------------------------
+// Format the argument of an ffmpeg filter using proper escaping.
+//----------------------------------------------------------------------------
+
+QString QtlMovieFFmpeg::escapedFilterArgument(const QString& argument)
+{
+    // The string we transform. At the end, we will enclose it in single quotes.
+    QString escaped(argument);
+
+    // All \ are escaped with another \.
+    // We must do it now since we are going to insert a lot of other \ afterwards.
+    escaped.replace("\\", "\\\\");
+
+    // All =:,; are escaped with a \.
+    escaped.replace(QRegExp("([=:,;])"), "\\\\1");
+
+    // The quotes cannot be escaped within quotes. We must close the quoted string,
+    // escape the quote and reopen the quote sequence.
+    escaped.replace("'", "'\\\\\\''");
+
+    // Return the escaped argument between quotes.
+    return "'" + escaped + "'";
 }
 
 

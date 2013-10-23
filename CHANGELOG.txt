@@ -3,6 +3,9 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.6 (2013-13-22)
+- Bug fix: On Windows, if the output file name contained a single quote (')
+  and text subtitles from the input file were inserted in the output file,
+  the conversion failed. Fixed.
 - Fixed typos in help files and translations.
 
 Version 1.2.5 (2013-13-21)
