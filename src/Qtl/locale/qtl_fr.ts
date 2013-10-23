@@ -4,17 +4,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../QtlUtils.cpp" line="87"/>
+        <location filename="../QtlUtils.cpp" line="107"/>
         <source>%1 h %2 mn %3 sec.</source>
         <translation>%1 h %2 mn %3 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="90"/>
+        <location filename="../QtlUtils.cpp" line="110"/>
         <source>%1 mn %2 sec.</source>
         <translation>%1 mn %2 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="93"/>
+        <location filename="../QtlUtils.cpp" line="113"/>
         <source>%1 sec.</source>
         <translation>%1 sec.</translation>
     </message>
@@ -25,6 +25,69 @@
         <location filename="../QtlBrowserDialog.ui" line="33"/>
         <source>Close</source>
         <translation>Fermer</translation>
+    </message>
+</context>
+<context>
+    <name>QtlNewVersionChecker</name>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="120"/>
+        <source>Found %1 proxies, using proxy %2:%3</source>
+        <translation>%1 proxies détectés, utilisation du proxy %2:%3</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="130"/>
+        <source>Searching new versions in %1</source>
+        <translation>Recherche de nouvelle version dans %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="134"/>
+        <source>Error browsing %1</source>
+        <translation>Erreur de recherche sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="228"/>
+        <source>Found version %1 at %2</source>
+        <translation>Version %1 trouvée dans %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="257"/>
+        <source>Download failed: %1</source>
+        <translation>Erreur de téléchargement: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="263"/>
+        <source>Too many redirections on %1</source>
+        <translation>Trop de redirections sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="272"/>
+        <source>End of search in %1</source>
+        <translation>Fin de recherche dans %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="277"/>
+        <source>A new version of QtlMovie is available.</source>
+        <translation>Une nouvelle version de QtlMovie est disponible</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="278"/>
+        <source>Your version is %1.</source>
+        <translation>Votre version est la %1.</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="279"/>
+        <source>Version %1 is available online at:</source>
+        <translation>La version %1 est disponible en ligne sur:</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="285"/>
+        <source>No new version found, this: %1, latest: %2</source>
+        <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlNewVersionChecker.cpp" line="289"/>
+        <source>No new version is available</source>
+        <translation>Pas de nouvelle version disponible</translation>
     </message>
 </context>
 <context>

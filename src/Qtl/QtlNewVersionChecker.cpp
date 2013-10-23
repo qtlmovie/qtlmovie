@@ -271,6 +271,25 @@ void QtlNewVersionChecker::httpFinished()
         // End of search.
         _log->debug(tr("End of search in %1").arg(_currentUrl.toString()));
 
-        //@@@@@ emitcompleted
+        if (_latestVersion.isValid() && _latestVersion > _currentVersion) {
+            // New version found.
+            const QString text(QStringLiteral("%1<br/>%2<br/>%3<br/>%4")
+                               .arg(tr("A new version of QtlMovie is available."))
+                               .arg(tr("Your version is %1.").arg(_currentVersion.text()))
+                               .arg(tr("Version %1 is available online at:").arg(_latestVersion.text()))
+                               .arg(qtlHtmlLink(_latestUrl.toString())));
+            QMessageBox::information(qtlWidgetAncestor(this), qtlApplicationName(), text);
+        }
+        else if (_silent) {
+            // No new version, silent mode.
+            _log->debug(tr("No new version found, this: %1, latest: %2").arg(_currentVersion.text()).arg(_latestVersion.text()));
+        }
+        else {
+            // No new version, feedback mode.
+            QMessageBox::information(qtlWidgetAncestor(this), qtlApplicationName(), tr("No new version is available"));
+        }
+
+        // End of processing.
+        emitCompleted("");
     }
 }

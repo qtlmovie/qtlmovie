@@ -95,6 +95,11 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     if (!initialFileName.isEmpty()) {
         _inFile->setFileName(initialFileName);
     }
+
+    // Start a search for a new version online.
+    if (_settings->newVersionCheck()) {
+        searchNewVersion(true);
+    }
 }
 
 

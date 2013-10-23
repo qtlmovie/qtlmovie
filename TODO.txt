@@ -2,12 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Complete check for new version:
-  - report result
-  - settings for silent autocheck at startup (+ help files)
-  - silent autocheck at startup
-  - update translations.
-
 - Implement multi-language help files (file qtlmovie_fr.html for instance).
 
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"

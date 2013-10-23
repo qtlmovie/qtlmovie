@@ -85,7 +85,7 @@ signals:
     //! @param [in] latestVersion If @a success is true, contains the latest available version.
     //! @param [in] latestUrl If @a success is true, contains URL of the latest available version.
     //!
-    void completed(bool success, const QtlVersion& latestVersion, const QUrl& lastestUrl);
+    void completed(bool success, const QtlVersion& latestVersion, const QUrl& latestUrl);
 
 private slots:
     //!

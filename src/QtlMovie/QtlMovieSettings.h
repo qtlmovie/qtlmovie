@@ -782,6 +782,21 @@ public:
     //!
     void setForceDvdTranscode(bool forceDvdTranscode);
 
+    //!
+    //! Do we check for a new version of QtlMovie on startup.
+    //! @return True to check for a new version of QtlMovie on startup.
+    //!
+    bool newVersionCheck() const
+    {
+        return _newVersionCheck;
+    }
+
+    //!
+    //! Check for a new version of QtlMovie on startup.
+    //! @param [in] newVersionCheck True to check for a new version of QtlMovie on startup.
+    //!
+    void setNewVersionCheck(bool newVersionCheck);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -821,6 +836,7 @@ private:
     bool                  _createPalDvd;           //!< Create DVD in PAL format (false: NTSC).
     IpadScreenSize        _ipadScreenSize;         //!< iPad screen size.
     bool                  _forceDvdTranscode;      //!< Force transcoding even if input file is already DVD-compliant.
+    bool                  _newVersionCheck;        //!< Automatically check new version on startup.
 
     //!
     //! Write an XML element with a "value" integer attribute.

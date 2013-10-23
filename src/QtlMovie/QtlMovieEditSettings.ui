@@ -758,6 +758,25 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBoxVersionCheck">
+         <property name="title">
+          <string>Version check</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QCheckBox" name="checkNewVersionCheck">
+            <property name="text">
+             <string>Automatically search for a new version on startup</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="spacerMisc">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

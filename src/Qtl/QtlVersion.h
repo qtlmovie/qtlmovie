@@ -26,7 +26,7 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file: QtlVersion
+//! @file: QtlVersion.h
 //!
 //! Declare the class QtlVersion.
 //! Qtl, Qt utility library.

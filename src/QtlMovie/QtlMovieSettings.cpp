@@ -143,7 +143,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _dvdRemuxAfterTranscode(true),
     _createPalDvd(true),
     _ipadScreenSize(Ipad12Size),
-    _forceDvdTranscode(false)
+    _forceDvdTranscode(false),
+    _newVersionCheck(true)
 {
     Q_ASSERT(log != 0);
 
@@ -358,6 +359,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setBoolAttribute(xml, "createPalDvd", _createPalDvd);
     setIntAttribute(xml, "ipadScreenSize", int(_ipadScreenSize));
     setBoolAttribute(xml, "forceDvdTranscode", _forceDvdTranscode);
+    setBoolAttribute(xml, "newVersionCheck", _newVersionCheck);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -415,6 +417,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     bool createPalDvd = _createPalDvd;
     int ipadScreenSize = int(_ipadScreenSize);
     bool forceDvdTranscode = _forceDvdTranscode;
+    bool newVersionCheck = _newVersionCheck;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -452,6 +455,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getBoolAttribute(xml, "createPalDvd", createPalDvd) &&
                     !getIntAttribute(xml, "ipadScreenSize", ipadScreenSize) &&
                     !getBoolAttribute(xml, "forceDvdTranscode", forceDvdTranscode) &&
+                    !getBoolAttribute(xml, "newVersionCheck", newVersionCheck) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -495,6 +499,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setCreatePalDvd(createPalDvd);
         setIpadScreenSize(IpadScreenSize(ipadScreenSize));
         setForceDvdTranscode(forceDvdTranscode);
+        setNewVersionCheck(newVersionCheck);
     }
     else {
         // Format an error string.
@@ -782,6 +787,14 @@ void QtlMovieSettings::setForceDvdTranscode(bool forceDvdTranscode)
 {
     if (_forceDvdTranscode != forceDvdTranscode) {
         _forceDvdTranscode = forceDvdTranscode;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setNewVersionCheck(bool newVersionCheck)
+{
+    if (_newVersionCheck != newVersionCheck) {
+        _newVersionCheck = newVersionCheck;
         _isModified = true;
     }
 }

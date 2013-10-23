@@ -7,7 +7,8 @@ Version 1.2.6 (2013-13-22)
   and text subtitles from the input file were inserted in the output file,
   the conversion failed. Fixed.
 - Fixed typos in help files and translations.
-- Added check for new version.
+- Added check for a new version either when the application starts (can be
+  disabled in the settings) or manually from the "Help" menu.
 
 Version 1.2.5 (2013-13-21)
 - US Closed Captions subtitles (CEA-608/708) are now supported thanks to
