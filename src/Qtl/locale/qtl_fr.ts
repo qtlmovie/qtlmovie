@@ -66,8 +66,8 @@
     </message>
     <message>
         <location filename="../QtlNewVersionChecker.cpp" line="277"/>
-        <source>A new version of QtlMovie is available.</source>
-        <translation>Une nouvelle version de QtlMovie est disponible</translation>
+        <source>A new version of %1 is available.</source>
+        <translation>Une nouvelle version de %1 est disponible.</translation>
     </message>
     <message>
         <location filename="../QtlNewVersionChecker.cpp" line="278"/>

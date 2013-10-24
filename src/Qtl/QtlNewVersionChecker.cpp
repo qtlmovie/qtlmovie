@@ -274,7 +274,7 @@ void QtlNewVersionChecker::httpFinished()
         if (_latestVersion.isValid() && _latestVersion > _currentVersion) {
             // New version found.
             const QString text(QStringLiteral("%1<br/>%2<br/>%3<br/>%4")
-                               .arg(tr("A new version of QtlMovie is available."))
+                               .arg(tr("A new version of %1 is available.").arg(qtlApplicationName()))
                                .arg(tr("Your version is %1.").arg(_currentVersion.text()))
                                .arg(tr("Version %1 is available online at:").arg(_latestVersion.text()))
                                .arg(qtlHtmlLink(_latestUrl.toString())));
