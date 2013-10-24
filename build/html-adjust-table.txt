@@ -1,0 +1,119 @@
+161	iexcl	¡	inverted exclamation mark
+162	cent	¢	cent
+163	pound	£	pound
+164	curren	¤	currency
+165	yen	¥	yen
+166	brvbar	¦	broken vertical bar
+167	sect	§	section
+168	uml	¨	spacing diaeresis
+169	copy	©	copyright
+170	ordf	ª	feminine ordinal indicator
+171	laquo	«	angle quotation mark (left)
+172	not	¬	negation
+173	shy	­	soft hyphen
+174	reg	®	registered trademark
+175	macr	¯	spacing macron
+176	deg	°	degree
+177	plusmn	±	plus-or-minus
+178	sup2	²	superscript 2
+179	sup3	³	superscript 3
+180	acute	´	spacing acute
+181	micro	µ	micro
+182	para	¶	paragraph
+183	middot	·	middle dot
+184	cedil	¸	spacing cedilla
+185	sup1	¹	superscript 1
+186	ordm	º	masculine ordinal indicator
+187	raquo	»	angle quotation mark (right)
+188	frac14	¼	fraction 1/4
+189	frac12	½	fraction 1/2
+190	frac34	¾	fraction 3/4
+191	iquest	¿	inverted question mark
+192	Agrave	À	capital a, grave accent
+193	Aacute	Á	capital a, acute accent
+194	Acirc	Â	capital a, circumflex accent
+195	Atilde	Ã	capital a, tilde
+196	Auml	Ä	capital a, umlaut mark
+197	Aring	Å	capital a, ring
+198	AElig	Æ	capital ae
+199	Ccedil	Ç	capital c, cedilla
+200	Egrave	È	capital e, grave accent
+201	Eacute	É	capital e, acute accent
+202	Ecirc	Ê	capital e, circumflex accent
+203	Euml	Ë	capital e, umlaut mark
+204	Igrave	Ì	capital i, grave accent
+205	Iacute	Í	capital i, acute accent
+206	Icirc	Î	capital i, circumflex accent
+207	Iuml	Ï	capital i, umlaut mark
+208	ETH	Ð	capital eth, Icelandic
+209	Ntilde	Ñ	capital n, tilde
+210	Ograve	Ò	capital o, grave accent
+211	Oacute	Ó	capital o, acute accent
+212	Ocirc	Ô	capital o, circumflex accent
+213	Otilde	Õ	capital o, tilde
+214	Ouml	Ö	capital o, umlaut mark
+215	times	×	multiplication
+216	Oslash	Ø	capital o, slash
+217	Ugrave	Ù	capital u, grave accent
+218	Uacute	Ú	capital u, acute accent
+219	Ucirc	Û	capital u, circumflex accent
+220	Uuml	Ü	capital u, umlaut mark
+221	Yacute	Ý	capital y, acute accent
+222	THORN	Þ	capital THORN, Icelandic
+223	szlig	ß	small sharp s, German
+224	agrave	à	small a, grave accent
+225	aacute	á	small a, acute accent
+226	acirc	â	small a, circumflex accent
+227	atilde	ã	small a, tilde
+228	auml	ä	small a, umlaut mark
+229	aring	å	small a, ring
+230	aelig	æ	small ae
+231	ccedil	ç	small c, cedilla
+232	egrave	è	small e, grave accent
+233	eacute	é	small e, acute accent
+234	ecirc	ê	small e, circumflex accent
+235	euml	ë	small e, umlaut mark
+236	igrave	ì	small i, grave accent
+237	iacute	í	small i, acute accent
+238	icirc	î	small i, circumflex accent
+239	iuml	ï	small i, umlaut mark
+240	eth	ð	small eth, Icelandic
+241	ntilde	ñ	small n, tilde
+242	ograve	ò	small o, grave accent
+243	oacute	ó	small o, acute accent
+244	ocirc	ô	small o, circumflex accent
+245	otilde	õ	small o, tilde
+246	ouml	ö	small o, umlaut mark
+247	divide	÷	division
+248	oslash	ø	small o, slash
+249	ugrave	ù	small u, grave accent
+250	uacute	ú	small u, acute accent
+251	ucirc	û	small u, circumflex accent
+252	uuml	ü	small u, umlaut mark
+253	yacute	ý	small y, acute accent
+254	thorn	þ	small thorn, Icelandic
+255	yuml	ÿ	small y, umlaut mark
+338	OElig	Œ	capital ligature OE
+339	oelig	œ	small ligature oe
+352	Scaron	Š	capital S with caron
+353	scaron	š	small S with caron
+376	Yuml	Ÿ	capital Y with diaeres
+8211	ndash	–	en dash
+8212	mdash	—	em dash
+8216	lsquo	‘	left single quotation mark
+8217	rsquo	’	right single quotation mark
+8218	sbquo	‚	single low-9 quotation mark
+8220	ldquo	“	left double quotation mark
+8221	rdquo	”	right double quotation mark
+8222	bdquo	„	double low-9 quotation mark
+8224	dagger	†	dagger
+8225	Dagger	‡	double dagger
+8226	bull	•	bullet
+8230	hellip	…	horizontal ellipsis
+8240	permil	‰	per mille
+8242	prime	′	minutes
+8243	Prime	″	seconds
+8249	lsaquo	‹	single left angle quotation
+8250	rsaquo	›	single right angle quotation
+8254	oline	‾	overline
+8364	euro	€	euro

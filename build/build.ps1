@@ -105,6 +105,12 @@ else {
     $BuildDirRelease = $BuildDirBase + "-Release"
     $BuildDirDebug = $BuildDirBase + "-Debug"
 
+    # Release translation files.
+    if ($Translations) {
+        Get-ChildItem $SrcDir -Recurse -File -Filter *.ts | ForEach-Object {lrelease $_.FullName}
+        & (Join-Path $PSScriptRoot html-adjust.ps1) -NoPause
+    }
+
     # Build project in release mode.
     if ($Release) {
         Write-Output "Building Release version..."
@@ -123,11 +129,6 @@ else {
         qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug CONFIG+=declarative_debug
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
-    }
-
-    # Release translation files.
-    if ($Translations) {
-        Get-ChildItem $SrcDir -Recurse -File -Filter *.ts | ForEach-Object {lrelease $_.FullName}
     }
 }
 

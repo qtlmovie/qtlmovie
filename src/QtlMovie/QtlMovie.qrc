@@ -4,11 +4,14 @@
         <file>images/ffmpeg-logo.png</file>
         <file>images/gnu-logo.png</file>
         <file>images/dvd-logo.png</file>
+        <file>images/ccextractor-logo.png</file>
         <file>images/dvddecrypter-logo.png</file>
-        <file>help/qtlmovie-user.html</file>
         <file>help/default.css</file>
         <file>help/qtlmovie.html</file>
+        <file>help/qtlmovie-user.html</file>
         <file>help/qtlmovie-build.html</file>
-        <file>images/ccextractor-logo.png</file>
+        <file>help/qtlmovie_fr.html</file>
+        <file>help/qtlmovie-user_fr.html</file>
+        <file>help/qtlmovie-build_fr.html</file>
     </qresource>
 </RCC>

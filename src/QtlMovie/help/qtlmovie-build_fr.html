@@ -1,0 +1,268 @@
+<html>
+  <head>
+    <title>Building QtlMovie</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" href="default.css" rel="stylesheet"/>
+  </head>
+  <body>
+
+    <h1><a id="top">Building QtlMovie</a></h1>
+
+    <div class="toc">
+      <h2>Content</h2>
+      <ul>
+        <li>Back to <a href="qtlmovie.html">QtlMovie Documentation</a></li>
+        <li><a href="#linux">Building QtlMovie on Linux</a>
+          <ul>
+            <li><a href="#linreq">Pre-requisites</a></li>
+            <li><a href="#linmanbuild">Building QtlMovie manually</a></li>
+            <li><a href="#linqtcreator">Building QtlMovie using Qt Creator</a></li>
+            <li><a href="#lincleanup">Multi-platform build</a></li>
+            <li><a href="#lindoxy">Building the Doxygen documentation</a></li>
+            <li><a href="#rhbuild">Building Qt 5 on Red Hat Entreprise Linux</a>
+              <ul>
+                <li><a href="#rhqt510build">Compiling and installing Qt 5.1.0 on RHEL 6</a></li>
+                <li><a href="#rhqt510user">Using Qt 5.1.0 on RHEL 6</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#windows">Building QtlMovie on Windows</a>
+          <ul>
+            <li><a href="#winreq">Pre-requisites</a></li>
+            <li><a href="#winqt">Qt requirements</a></li>
+            <li><a href="#winps1">Windows PowerShell requirements</a></li>
+            <li><a href="#winmanbuild">Building QtlMovie manually</a></li>
+            <li><a href="#winqtcreator">Building QtlMovie using Qt Creator</a></li>
+            <li><a href="#wincleanup">Multi-platform build</a></li>
+            <li><a href="#windoxy">Building the Doxygen documentation</a></li>
+            <li><a href="#winexec">Executing Qt applications</a></li>
+            <li><a href="#wininstaller">Building the QtlMovie binary installer for Windows</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <hr/>
+
+      <h2><a id="linux">Building QtlMovie on Linux</a></h2>
+
+      <h3><a id="linreq">Pre-requisites</a></h3>
+
+      <p>QtlMovie can be built on any Linux platform supporting Qt 5.</p>
+      <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
+        is required. Qt Creator is recommended to edit and modify the project.
+        Simply building the product without modification does not require Qt Creator.</p>
+      <p>When using Red Hat Entreprise Linux 6 (RHEL6), as well as its clones CentOS and
+        Scientific Linux, see <a href="#rhbuild">below</a> for more details.</p>
+      <p>Qt can be installed in system directories (<code>/usr/bin</code> et al.) from
+        the distro packages or using binary installers from
+        <a href="http://qt-project.org/">http://qt-project.org/</a>. In the later
+        case, Qt is installed inside <code>/usr/local</code>.
+        The script <code>build/QtSetEnvironment.rc</code> searches <code>/usr/local</code>
+        for the most recent installation of Qt and add the required directories to the PATH.
+        <code>QtSetEnvironment.rc</code> is automatically dot-sourced by all build scripts.</p>
+
+      <h3><a id="linmanbuild">Building QtlMovie manually</a></h3>
+
+      <p>Run the script <code>build/build.sh</code>.</p>
+
+      <h3><a id="linqtcreator">Building QtlMovie using Qt Creator</a></h3>
+
+      <p>Qt Creator shall be launched using the script <code>build/QtCreator.sh</code>.
+        This script ensures that the appropriate environment is setup for the latest version of Qt.
+        The QtlMovie project is automatically open.</p>
+      <p>The first time Qt Creator is launched, accept all defaults for the project
+        configuration, especially the <i>shadow build</i> configuration.</p>
+
+      <h3><a id="lincleanup">Multi-platform build</a></h3>
+
+      <p>When the project directory tree was previously used to build QtlMovie for
+        another platform (either using a shared disk or as a result of a copy),
+        clean up first using the script <code>build/cleanup.sh</code>.</p>
+      <p>This script removes all previously generated files, including the Qt Creator
+        platform-specific <i>.pro.user</i> files.</p>
+
+      <h3><a id="lindoxy">Building the Doxygen documentation</a></h3>
+
+      <p>Run the script <code>build/build-doc.sh</code>.</p>
+
+      <h3><a id="rhbuild">Building Qt 5 on Red Hat Entreprise Linux</a></h3>
+
+      <p>RHEL 6, as well as its clones CentOS and Scientific Linux, ships with Qt 4.6.
+        There is no pre-built RPM packages for Qt 5 on the standard repositories.</p>
+      <p>Binary installers of Qt 5 for Linux are available at 
+        <a href="http://qt-project.org/">http://qt-project.org/</a>.
+        The Qt 5.0.2 installer cannot be installed on RHEL 6 since it requires
+        more recent versions of all core GCC libraries. This has been partially
+        fixed with Qt 5.1.0: the installer runs correctly but the installed Qt
+        does not (it still requires more recent versions of core GCC libraries).</p>
+      <p>The remaining option is to recompile Qt 5 on RHEL 6.</p>
+
+      <h4><a id="rhqt510build">Compiling and installing Qt 5.1.0 on RHEL 6</a></h4>
+
+      <p>Download from <a href="http://qt-project.org/">http://qt-project.org/</a>
+        the source tarballs. The following files have been successfully used:</p>
+      <ul>
+        <li><a href="http://download.qt-project.org/archive/qt/5.1/5.1.0/single/qt-everywhere-opensource-src-5.1.0.tar.gz">
+            qt-everywhere-opensource-src-5.1.0.tar.gz</a></li>
+        <li><a href="http://download.qt-project.org/official_releases/qtcreator/2.7/2.7.2/qt-creator-2.7.2-src.tar.gz">
+            qt-creator-2.7.2-src.tar.gz</a></li>
+      </ul>
+      <p>Prerequisites: Install at least the following packages from the standard
+        RHEL/CentOS/SL repositories.</p>
+      <p>This is just a potential list from the system on which the procedure was
+        successfully tested. Maybe not all of them are required. Maybe some more are
+        required, were present on the tested system but not listed here. Specifically,
+        all <code>-devel</code> packages were listed. All these development packages may not be
+        required to build Qt and Qt Creator but it is difficult to determine which one
+        should be excluded. So, apply the following yum install command and try.</p>
+<pre>
+sudo yum install \
+     make gcc gcc-c++ bison python ruby libtool autoconf \
+     alsa-lib-devel atk-devel audiofile-devel boost-devel bzip2-devel \
+     cairo-devel check-devel cryptopp-devel cups-devel dbus-devel \
+     dbus-glib-devel enchant-devel esound-devel ffmpeg-spice-devel \
+     fontconfig-devel freetype-devel gamin-devel GConf2-devel geoclue-devel \
+     gettext-devel giflib-devel glib2-devel glibc-devel glib-devel gmp-devel \
+     gnome-desktop-devel gnome gnome-libs-devel gnome-menus-devel \
+     gnome-utils-devel gnome-vfs2-devel gnutls-devel gstreamer-devel \
+     gstreamer-plugins-base-devel gtk2-devel gtk+-devel hal-devel imlib-devel \
+     jasper-devel java-1.6.0-openjdk-devel kernel-devel keyutils-libs-devel \
+     krb5-devel lcms-devel libao-devel libart_lgpl-devel libbonobo-devel \
+     libbonoboui-devel libcom_err-devel libdrm-devel libffi-devel \
+     libgcrypt-devel libglade2-devel libgnomecanvas-devel libgnome-devel \
+     libgnomeui-devel libgpg-error-devel libICE-devel libicu-devel \
+     libIDL-devel libjpeg-turbo-devel libmcrypto-devel libmnetutil-devel \
+     libmng-devel libmutil-devel libpaper-devel libpng-devel libselinux-devel \
+     libsepol-devel libSM-devel libsoup-devel libstdc++-devel \
+     libtiff-devellibX11-devel libXau-devel libxcb-devel libXcomposite-devel \
+     libXcursor-devel libXdamage-devel libXdmcp-devel libXext-devel \
+     libXfixes-devel libXft-devel libXi-devel libXinerama-devel libxml2-devel \
+     libXmu-devel libXp-devel libXpm-devel libXrandr-devel libXrender-devel \
+     libxslt-devel libXt-devel libXxf86vm-devel mesa-libGL-devel \
+     mesa-libGLU-devel mysql-devel NetworkManager-devel opencryptoki-devel \
+     openmotif-devel openssl-devel ORBit2-devel ORBit-devel pango-devel \
+     pcre-devel pcsc-lite-devel perl-devel pixman-devel popt-devel \
+     postgresql-devel pygobject2-devel python-devel sip-devel sqlite-devel \
+     startup-notification-devel t1lib-devel unixODBC-devel webkitgtk-devel \
+     xcb-util-devel xorg-x11-proto-devel zlib-devel
+</pre>
+      <p>The script <code>build/redhat-build-qt510.sh</code> builds and installs
+        Qt-5.1.0 on RHEL 6. Qt and Qt Creator are installed in <code>/usr/local</code> and do not
+        interfere with the standard Qt 4 installation on RHEL 6.</p>
+
+      <h4><a id="rhqt510user">Using Qt 5.1.0 on RHEL 6</a></h4>
+
+      <p>The variables PATH and LD_LIBRARY_PATH shall be set to include the latest
+        version of the Qt and Qt Creator in <code>/usr/local</code>.
+        The file <code>build/QtSetEnvironment.rc</code> shall be source's from bash
+        shell scripts before using Qt applications.</p>
+      <hr/>
+
+      <h2><a id="windows">Building QtlMovie on Windows</a></h2>
+
+      <p>There are probably different ways of building QtlMovie on Windows platforms.
+        This chapter describes a proven way to do it but feel free to experiment...</p>
+
+      <h3><a id="winreq">Pre-requisites</a></h3>
+
+      <p>The following products shall be installed before building QtlMovie.
+        The minimum version numbers are indicated but later versions will probably work.</p>
+      <ul>
+        <li>Qt 5.0 (MinGW build environment)</li>
+        <li>NullSoft Scriptable Install System (NSIS) 2.46</li>
+        <li>Windows PowerShell 3.0</li>
+        <li>Microsoft .NET Framework 4.5</li>
+      </ul>
+
+      <h3><a id="winqt">Qt requirements</a></h3>
+
+      <p>QtlMovie can be built on any Windows platform supporting Qt 5.
+        The MinGW version is recommended. Using Qt for Visual Studio may
+        work but has not been tested.</p>
+      <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
+        is required. Qt Creator is recommended to edit and modify the project.
+        Simply building the product without modification does not require Qt Creator.</p>
+      <p>Qt must be installed using the binary installers from
+        <a href="http://qt-project.org/">http://qt-project.org/</a>.
+        Use the default installation location in <code>C:\Qt</code>.
+        As an example, the Qt 5.1.1 installer file is
+        <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
+          qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
+
+      <h3><a id="winps1">Windows PowerShell requirements</a></h3>
+
+      <p>All Windows scripts in the build directory use the Windows PowerShell.
+        The minimum required PowerShell version is 3.0.</p>
+      <p>
+        To display the current version, start a PowerShell command window and enter the
+        following command (here version 3.0):</p>
+<pre>
+PS> $PSVersionTable.PSVersion
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+3      0      -1     -1
+</pre>
+      <p>PowerShell 3.0 comes with Windows 8. For Windows 7, download and install
+        <a href="http://www.microsoft.com/en-us/download/details.aspx?id=34595">PowerShell 3.0</a>.</p>
+      <p>Prior to installing PowerShell 3.0, download and install Microsoft
+        <a href="http://www.microsoft.com/en-us/download/details.aspx?id=30653">.NET Framework 4.5</a>
+        (or use the direct link to
+        <a href="http://go.microsoft.com/fwlink/?LinkId=225702">dotnetfx45_full_x86_x64.exe</a>
+        for 64-bit systems).
+      <p>After installing .NET 4.5 and PowerShell 3.0, do not forget to run Windows Update
+        since many security updates are likely to emerge. Also expect a few reboots.</p>
+      <p>A Windows PowerShell script file name has a <i>.ps1</i> extension. The Windows
+        default action on double-click is to edit the script file using notepad.
+        This is not convenient. The registry file <code>build\WindowsPowerShellTools.reg</code>
+        modifies the default behavior so that a script is executed on double-click.</p>
+      <p>If double-clicking on a <i>.ps1</i> file does not execute the script, activate
+        <code>build\WindowsPowerShellTools.reg</code> (double-click and accept modifications).
+        The effect is permanent.</p>
+
+      <h3><a id="winmanbuild">Building QtlMovie manually</a></h3>
+
+      <p>Execute the script <code>build\build.ps1</code>.</p>
+
+      <h3><a id="winqtcreator">Building QtlMovie using Qt Creator</a></h3>
+
+      <p>Qt Creator shall be launched using the script <code>build\QtCreator.ps1</code>.
+        This script ensures that the appropriate environment is setup for the latest version of Qt.
+        The QtlMovie project is automatically open.</p>
+      <p>The first time Qt Creator is launched, accept all defaults for the project
+        configuration, especially the <i>shadow build</i> configuration.</p>
+
+      <h3><a id="wincleanup">Multi-platform build</a></h3>
+
+      <p>When the project directory tree was previously used to build QtlMovie for
+        another platform (either using a shared disk or as a result of a copy),
+        clean up first using the script <code>build\cleanup.ps1</code>.</p>
+      <p>This script removes all previously generated files, including the Qt Creator
+        platform-specific <i>.pro.user</i> files.</p>
+
+      <h3><a id="windoxy">Building the Doxygen documentation</a></h3>
+
+      <p>Execute the script <code>build\build-doc.ps1</code>.</p>
+
+      <h3><a id="winexec">Executing Qt applications</a></h3>
+
+      <p>To manually run Qt applications, the appropriate environment shall be setup
+        first. Execute the script <code>build\QtCommandLine.ps1</code> to create a
+        PowerShell command window with the appropriate setup to run Qt applications
+        such as the <code>QtlMovie.exe</code> you just compiled.</p>
+
+      <h3><a id="wininstaller">Building the QtlMovie binary installer for Windows</a></h3>
+
+      <p>The binary installer is created using NSIS, the NullSoft Scriptable Install
+        System. NSIS is free software and is available for download at
+        <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
+        NSIS version 2.46 has been used by QtlMovie.</p>
+      <p>To build the QtlMovie binary installer for Windows, execute the script
+        <code>build\build-installer.ps1</code>.</p>
+      <hr/>
+      <p>[<i><a href="#top">Retour en haut de page</a></i>]</p>
+    </div>
+  </body>
+</html>
