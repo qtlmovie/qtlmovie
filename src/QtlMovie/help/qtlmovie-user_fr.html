@@ -448,39 +448,47 @@
       <div class="sample">
         <p>QtlMovie -l en</p>
       </div>
-
       <hr/>
+
       <h2><a id="platforms">Notes sur les syst&egrave;mes d'exploitation</a></h2>
 
       <h3><a id="windows">Windows</a></h3>
-      <p>QtlMovie is primarily developed on Windows. The binary installer for QtlMovie includes
-        all required media tools. Running the QtlMovie binary installer is sufficient to get
-        a fully functional system.</p>
-      <p>The media tools are installed in the same directory tree as QtlMovie but you may
-        select alternate versions of these tools in the settings menu.</p>
-      <p>There is one binary installer for 32-bit systems and another one for 64-bit systems.
-        However, the 64-bit installer mostly contains 32-bit executables. FFmpeg is the only
-        64-bit executable in the installer. There is no performance advantage in using 64-bit
-        executables for all other tools, including QtlMovie itself.</p>
+
+      <p>QtlMovie est principalement d&eacute;velopp&eacute; sur Windows. L'installeur binaire de QtlMovie
+        inclut tous les outils media n&eacute;cessaires. Lancer l'installeur binaire de QtlMovie
+        est suffisant pour avoir un syst&egrave;me pleinement fonctionnel.</p>
+      <p>Les outils media sont install&eacute;s sous le r&eacute;pertoire d'installation de QtlMovie
+        mais vous pouvez s&eacute;lectionner d'autres versions de ces outils dans le menu d'options.</p>
+      <p>Il y a un installeur binaire de QtlMovie pour les syst&egrave;mes 32-bit et un autre pour
+        les syst&egrave;mes 64-bit.
+        Toutefois, l'installeur 64-bit contient essentiellement des ex&eacute;cutables 32-bit.
+        FFmpeg est le seul ex&eacute;cutable 64-bit dans l'installeur.
+        Il n'y a aucun gain notable de performance &agrave; attendre d'ex&eacute;cutables 64-bit
+        pour les autres outils, y compris QtlMovie lui-m&ecirc;me.</p>
 
       <h3><a id="linux">Linux</a></h3>
-      <p>QtlMovie has been tested on Red Hat and Ubuntu Linux systems and proved to work correctly.
-        There is currently no RPM or Debian packaging for QtlMovie, you will have to
-        recompile it.</p>
-      <p>FFmpeg needs to be available in version 1.2 or higher. Mkisofs shall be used with version 2,
-        the version 3 has proven to be broken. There is apparently no distro packaging for
-        telxcc and you need to recompile it. All media tools are searched by QtlMovie in $PATH.</p>
-      <p>On several systems, the standard version of FFmpeg which comes with the distro repositories
-        is outdated and a more recent version may be needed.</p>
-      <p>On Ubuntu systems, FFmpeg has been pushed out in favor of <i>avconv</i>, a clone of FFmpeg.
-        The command <code>ffmpeg</code> is still present but it redirects to avconv. Since avconv
-        does not support a number of ffmpeg options which are used by QtlMovie, you may have to
-        install a real and recent version on ffmpeg.</p>
+
+      <p>QtlMovie a &eacute;t&eacute; test&eacute; sur des syst&egrave;mes Linux Red Hat et Ubuntu et a montr&eacute;
+        qu'il fonctionnait correctement. Il n'y a actuellement aucun package RPM
+        ou Debian pour QtlMovie. Vous devrez le recompiler.</p>
+      <p>FFmpeg doit &ecirc;tre disponible en version 1.2 ou sup&eacute;rieure.
+        Mkisofs doit &ecirc;tre pr&eacute;sent en version 2, la version 3 ne fonctionne pas correctement.
+        Il n'y a apparemment pas de package pour telxcc ou CCExtractor dans les distributions
+        standards et vous devrez les recompiler.</p>
+      <p>Tous les outils media sont localis&eacute;s par QtlMovie via $PATH.</p>
+      <p>Sur plusieurs types de syst&egrave;mes, la version stardard de FFmpeg est ancienne
+        et une version plus &agrave; jour peut &ecirc;tre n&eacute;cessaire.</p>
+      <p>Sur les syst&egrave;mes Ubuntu, FFmpeg a &eacute;t&eacute; remplac&eacute; par <i>avconv</i>, un clone de FFmpeg.
+        La commande <code>ffmpeg</code> est toujours pr&eacute;sente mais elle est redirig&eacute;e sur avconv.
+        Comme avconv ne supporte pas plusieurs des options de ffmpeg utilis&eacute;es par QtlMovie,
+        vous aurez peut-&ecirc;tre &agrave; installer une version authentique et r&eacute;cente de ffmpeg.</p>
 
       <h3><a id="otherpf">Autres plates-formes</a></h3>
-      <p>QtlMovie should compile and properly function on any other platform which is supported by
-        the Qt framework. However, QtlMovie is useless without ffmpeg. You have to check the availability
-        of ffmpeg on a platform before attempting to use QtlMovie.</p>
+
+      <p>QtlMovie devrait pouvoir &ecirc;tre compil&eacute; et fonctionner correctement sur toute
+        plate-forme support&eacute;e par Qt. Toutefois, QtlMovie n'est rien sans ffmpeg.
+        Vous devez d'abord v&eacute;rifier la disponibilit&eacute; de ffmpeg sur une plate-forme
+        avant d'envisager d'utiliser QtlMovie.</p>
 
       <hr/>
       <p>[<i><a href="#top">Retour en haut de page</a></i>]</p>
