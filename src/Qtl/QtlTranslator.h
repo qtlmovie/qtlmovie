@@ -63,7 +63,25 @@ public:
                            const QStringList& directories = QStringList(),
                            QObject *parent = 0);
 
+    //!
+    //! Get the list of all loaded locales using this class.
+    //! @return The list of all loaded locales using this class, most recent first.
+    //!
+    static QStringList loadedLocales();
+
+    //!
+    //! Search a locale variant of a file, based on all loaded locales.
+    //! In the list of all loaded locales, seach the first existing file
+    //! in the form <basename>_<locale>.<suffix>.
+    //! @param [in] fileName A file name.
+    //! @return The first existing locale variant or @a fileName if none is found.
+    //!
+    static QString searchLocaleFile(const QString& fileName);
+
 private:
+    static QStringList _loadedLocales;       //!< List of loaded locales.
+    static QMutex      _loadedLocalesMutex;  //!< Synchronize access to _loadedLocales.
+
     // Unaccessible operation.
     QtlTranslator() Q_DECL_EQ_DELETE;
 };

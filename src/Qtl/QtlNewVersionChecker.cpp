@@ -270,23 +270,35 @@ void QtlNewVersionChecker::httpFinished()
     else {
         // End of search.
         _log->debug(tr("End of search in %1").arg(_currentUrl.toString()));
+        const QString app(qtlApplicationName());
 
         if (_latestVersion.isValid() && _latestVersion > _currentVersion) {
             // New version found.
-            const QString text(QStringLiteral("%1<br/>%2<br/>%3<br/>%4")
-                               .arg(tr("A new version of %1 is available.").arg(qtlApplicationName()))
-                               .arg(tr("Your version is %1.").arg(_currentVersion.text()))
-                               .arg(tr("Version %1 is available online at:").arg(_latestVersion.text()))
-                               .arg(qtlHtmlLink(_latestUrl.toString())));
-            QMessageBox::information(qtlWidgetAncestor(this), qtlApplicationName(), text);
+            QMessageBox::information(qtlWidgetAncestor(this),
+                                     app,
+                                     tr("A new version of %1 is available<br/>Your version is %2<br/>Version %3 is available online at:<br/>%4")
+                                     .arg(app)
+                                     .arg(_currentVersion.text())
+                                     .arg(_latestVersion.text())
+                                     .arg(qtlHtmlLink(_latestUrl.toString())));
         }
         else if (_silent) {
             // No new version, silent mode.
             _log->debug(tr("No new version found, this: %1, latest: %2").arg(_currentVersion.text()).arg(_latestVersion.text()));
         }
+        else if (!_latestVersion.isValid()){
+            QMessageBox::information(qtlWidgetAncestor(this), app, tr("Unable to find any version of %1 online").arg(app));
+        }
+        else if (_latestVersion == _currentVersion){
+            QMessageBox::information(qtlWidgetAncestor(this), app, tr("You are using the latest version of %1").arg(app));
+        }
         else {
-            // No new version, feedback mode.
-            QMessageBox::information(qtlWidgetAncestor(this), qtlApplicationName(), tr("No new version is available"));
+            QMessageBox::information(qtlWidgetAncestor(this),
+                                     app,
+                                     tr("Your version of %1 is %2<br/>More recent than %3, the latest available online")
+                                     .arg(app)
+                                     .arg(_currentVersion.text())
+                                     .arg(_latestVersion.text()));
         }
 
         // End of processing.

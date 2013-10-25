@@ -35,12 +35,29 @@
 
 
 //----------------------------------------------------------------------------
+// Static objects.
+//----------------------------------------------------------------------------
+
+QStringList QtlTranslator::_loadedLocales;
+QMutex QtlTranslator::_loadedLocalesMutex;
+
+
+//----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
 QtlTranslator::QtlTranslator(const QString& fileNamePrefix, const QString& localeName, const QStringList& directories, QObject* parent) :
     QTranslator(parent)
 {
+    // Insert locale in the list. Make sure it at in first position in the list (ie. "most recent").
+    if (!localeName.isEmpty()) {
+        QMutexLocker lock(&_loadedLocalesMutex);
+        if (_loadedLocales.isEmpty() || _loadedLocales.first() != localeName) {
+            _loadedLocales.removeAll(localeName);
+            _loadedLocales.prepend(localeName);
+        }
+    }
+
     // Actual file name.
     const QString fileName(fileNamePrefix + "_" + (localeName.isEmpty() ? QLocale::system().name() : localeName));
 
@@ -60,4 +77,41 @@ QtlTranslator::QtlTranslator(const QString& fileNamePrefix, const QString& local
     if (success) {
         QCoreApplication::installTranslator(this);
     }
+}
+
+
+//----------------------------------------------------------------------------
+// Get the list of all loaded locales using this class.
+//----------------------------------------------------------------------------
+
+QStringList QtlTranslator::loadedLocales()
+{
+    QMutexLocker lock(&_loadedLocalesMutex);
+    return _loadedLocales;
+}
+
+
+//----------------------------------------------------------------------------
+// Search a locale variant of a file, based on all loaded locales.
+//----------------------------------------------------------------------------
+
+QString QtlTranslator::searchLocaleFile(const QString& fileName)
+{
+    // Get base name and suffix.
+    const int index = fileName.lastIndexOf(QRegExp("[\\.\\\\/]"));
+    const bool hasSuffix = index >= 0 && fileName[index] == '.';
+    const QString baseName(hasSuffix ? fileName.left(index) : fileName);
+    const QString suffix(hasSuffix ? fileName.mid(index) : QString());
+
+    // Loop on all locales starting at most recent.
+    QMutexLocker lock(&_loadedLocalesMutex);
+    foreach (const QString& loc, _loadedLocales) {
+        const QString name(baseName + "_" + loc + suffix);
+        if (QFile(name).exists()) {
+            return name;
+        }
+    }
+
+    // Not found, return original file name.
+    return fileName;
 }

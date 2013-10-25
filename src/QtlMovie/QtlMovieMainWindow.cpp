@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieMainWindow.h"
+#include "QtlMovieVersion.h"
 #include "QtlMovie.h"
 #include "QtlMovieEditSettings.h"
 #include "QtlMovieAudioTestDialog.h"
@@ -38,7 +39,7 @@
 #include "QtlMovieInputFilePropertiesDialog.h"
 #include "QtlNewVersionChecker.h"
 #include "QtlBrowserDialog.h"
-#include "QtlMovieVersion.h"
+#include "QtlTranslator.h"
 #include "QtlIncrement.h"
 #include "QtlProcess.h"
 #include "QtlUtils.h"
@@ -794,7 +795,10 @@ void QtlMovieMainWindow::about()
 
 void QtlMovieMainWindow::showHelp()
 {
-    QtlBrowserDialog box(this, "qrc:/help/qtlmovie.html", "QtlMovie Help", ":/images/qtlmovie-logo.png");
+    QtlBrowserDialog box(this,
+                         "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
+                         "QtlMovie Help",
+                         ":/images/qtlmovie-logo.png");
     box.exec();
 }
 
