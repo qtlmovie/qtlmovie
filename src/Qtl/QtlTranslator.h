@@ -66,13 +66,14 @@ public:
     //!
     //! Get the list of all loaded locales using this class.
     //! @return The list of all loaded locales using this class, most recent first.
+    //! This list is never empty, its last element is the system locale.
     //!
     static QStringList loadedLocales();
 
     //!
     //! Search a locale variant of a file, based on all loaded locales.
     //! In the list of all loaded locales, seach the first existing file
-    //! in the form <basename>_<locale>.<suffix>.
+    //! in the form {basename}_{locale}.{suffix}.
     //! @param [in] fileName A file name.
     //! @return The first existing locale variant or @a fileName if none is found.
     //!

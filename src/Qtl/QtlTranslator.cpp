@@ -49,10 +49,14 @@ QMutex QtlTranslator::_loadedLocalesMutex;
 QtlTranslator::QtlTranslator(const QString& fileNamePrefix, const QString& localeName, const QStringList& directories, QObject* parent) :
     QTranslator(parent)
 {
+    // Make sure the system locale is always last in the list.
+    loadedLocales();
+
     // Insert locale in the list. Make sure it at in first position in the list (ie. "most recent").
     if (!localeName.isEmpty()) {
         QMutexLocker lock(&_loadedLocalesMutex);
-        if (_loadedLocales.isEmpty() || _loadedLocales.first() != localeName) {
+        Q_ASSERT(!_loadedLocales.isEmpty());
+        if (_loadedLocales.first() != localeName) {
             _loadedLocales.removeAll(localeName);
             _loadedLocales.prepend(localeName);
         }
@@ -87,6 +91,12 @@ QtlTranslator::QtlTranslator(const QString& fileNamePrefix, const QString& local
 QStringList QtlTranslator::loadedLocales()
 {
     QMutexLocker lock(&_loadedLocalesMutex);
+
+    // Make sure the system locale is always last in the list.
+    if (_loadedLocales.isEmpty()) {
+        _loadedLocales << QLocale::system().name();
+    }
+
     return _loadedLocales;
 }
 
@@ -98,17 +108,32 @@ QStringList QtlTranslator::loadedLocales()
 QString QtlTranslator::searchLocaleFile(const QString& fileName)
 {
     // Get base name and suffix.
-    const int index = fileName.lastIndexOf(QRegExp("[\\.\\\\/]"));
+    const int index = fileName.lastIndexOf(QRegExp("[\\.\\\\/:]"));
     const bool hasSuffix = index >= 0 && fileName[index] == '.';
     const QString baseName(hasSuffix ? fileName.left(index) : fileName);
     const QString suffix(hasSuffix ? fileName.mid(index) : QString());
 
+    // Get all locales, do not lock the list during the file search.
+    const QStringList locales(loadedLocales());
+
     // Loop on all locales starting at most recent.
-    QMutexLocker lock(&_loadedLocalesMutex);
-    foreach (const QString& loc, _loadedLocales) {
-        const QString name(baseName + "_" + loc + suffix);
-        if (QFile(name).exists()) {
-            return name;
+    foreach (const QString& locale, locales) {
+        QString loc(locale);
+        // Seach all reduced forms of locale.
+        for (int len = loc.length(); len > 0; len = loc.lastIndexOf('_')) {
+            // Search using next reduced form of locale.
+            loc.truncate(len);
+            const QString name(baseName + "_" + loc + suffix);
+            if (QFile(name).exists()) {
+                return name;
+            }
+            // Special case, "en" (English) is the default language of files.
+            // The <prefix>_en<suffix> usually does not exist. The English file is <prefix><suffix>.
+            // We must handle this case here since other locale may exist in the list but
+            // "en" is explicitely present here, so we want English at that point.
+            if (loc.toLower() == "en" && QFile(fileName).exists()) {
+                return fileName;
+            }
         }
     }
 
