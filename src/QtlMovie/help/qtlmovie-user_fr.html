@@ -175,141 +175,162 @@
       <h2><a id="outfiles">Fichiers de sortie</a></h2>
 
       <h3><a id="dvdout">Cr&eacute;ation de DVD</a></h3>
-      <p>QtlMovie always produces DVD with the following characteristics:</p>
+
+      <p>Les DVD cr&eacute;&eacute;s par QtlMovie ont tous les caract&eacute;ristiques suivantes:</p>
       <ul>
-        <li>PAL (720 x 576, 25 frames/second) or NTSC (720 x 480, 30 frames/second) format.</li>
-        <li>MPEG-2 video, 16:9. The average bitrate is 4 Mb/s
-          (adjustable in the settings) but is automatically reduced when necessary so
-          that the output fits in a 4.7 GB DVD media.</li>
-        <li>AC-3 audio (aka Dolby Digital), stereo, sampled at 48 kHz. The audio bitrate is 192 kb/s.</li>
+        <li>Format PAL (720 x 576, 25 images/seconde) ou NTSC (720 x 480, 30 images/seconde).</li>
+        <li>Vid&eacute;o MPEG-2, 16:9. Le d&eacute;bit binaire moyen est de 4 Mb/s (ajustable dans les options)
+          mais il est automatiquement r&eacute;duit si n&eacute;cessaire de mani&egrave;re &agrave; ce que le DVD tienne
+          sur un media de 4.7 GB.</li>
+        <li>Audio AC-3 (Dolby Digital), st&eacute;r&eacute;o, &eacute;chantillonn&eacute; &agrave; 48 kHz. Le d&eacute;bit binaire audio est de 192 kb/s.</li>
       </ul>
-      <p>The output video has a 16:9 aspect ratio. Black borders are added when necessary so
-        that the meaningful image part has the same aspect ratio as the input file.</p>
-      <p>QtlMovie can produce several types of DVD output:</p>
+      <p>Les proportions d'affichage vid&eacute;o sont de 16:9. Des bordures noires sont ajout&eacute;es au besoin de telle sorte que la
+        partie utile de l'image garde les proportions d'origine.</p>
+      <p>QtlMovie peut produire differents types de sortie DVD:</p>
       <ul>
-        <li>An MPEG file (.mpg) with a DVD-compliant content.</li>
-        <li>An ISO image of the DVD media.</li>
-        <li>Burn the DVD media.</li>
+        <li>Fichier MPEG (.mpg) avec un encodage compatible DVD.</li>
+        <li>Image ISO du media DVD.</li>
+        <li>Gravage du media DVD.</li>
       </ul>
-      <p>The first option can be used to check the resulting audio/video using standard media players.
-        If the result is satisfactory, the resulting MPEG file can be used as input to produce a DVD ISO image.</p>
-      <p>When producing a DVD ISO image, QtlMovie tries to guess if the input file is already
-        a DVD-compliant MPEG file or not. In the first case, QtlMovie does not re-encode the
-        input file and directly creates the DVD structure from the input MPEG file.
-        If the input file is not fully DVD-compliant but its video stream is DVD-compliant,
-        the video is not transcoded to save time and QtlMovie performs the audio transcoding and
-        remux only.</p>
-      <p>A DVD ISO image can also be used as input file. In this case, the only possible
-        output type is burning the image to a physical medium.</p>
-      <p>A consequence of these features is that a DVD can be created either at once, from the orginal
-        video file to the DVD physical medium, or in several phases. In the later case, the output
-        of a phase (MPEG file, ISO image) can be used as input for the next phase without the pain
-        of audio/video re-encoding.</p>
-      <p>When the output type type is burning to a physical media, the so-called <i>output file name</i>
-        designates the ISO image in fact. The default DVD burning device shall be selected in the settings menu.
-        The ISO image is never deleted and can be reused to burn additional media.</p>
+      <p>La premi&egrave;re option est utile pour tester la vid&eacute;o r&eacute;sultat en utilisant
+        n'importe quelle lecteur media.
+        Si le r&eacute;sultat est satisfaisant, le fichier MPEG peut &ecirc;tre utilis&eacute; en entr&eacute;e
+        de QtlMovie pour produire l'image DVD.</p>
+      <p>Quand QtlMovie produit une image ISO pour DVD, il essaie de d&eacute;terminer si l'encodage du fichier
+        d'entr&eacute;e est d&eacute;j&agrave; compatible DVD. Si c'est le cas, QtlMovie ne r&eacute;-encode pas le contenu
+        et cr&eacute;e directement la structure DVD &agrave; partir du fichier d'entr&eacute;e.
+        Si le fichier d'entr&eacute;e n'est pas compl&egrave;tement compatible DVD mais que sa piste vid&eacute;o l'est,
+        la vid&eacute;o n'est pas r&eacute;-encod&eacute;e pour gagner du temps et QtlMovie n'effectue que le
+        r&eacute;-encodage audio et le multiplexage.</p>
+      <p>Un fichier image ISO de DVD peut &eacute;galement &ecirc;tre utilis&eacute; comme fichier d'entr&eacute;e.
+        Dans ce cas, la seule option est de graver l'image sur un support physique.</p>
+      <p>En cons&eacute;quence, un DVD peut &ecirc;tre cr&eacute;&eacute; soit en une seule fois, depuis le fichier vid&eacute;o d'origine
+        jusqu'au media physique du DVD, soit en plusieurs phases. Dans ce dernier cas, la sortie d'une
+        phase (fichier MPEG ou image ISO) peut &ecirc;tre r&eacute;utilis&eacute;e en entr&eacute;e de la phase suivante sans
+        avoir &agrave; effectuer de r&eacute;-encodage.</p>
+      <p>Quand le format de sortie est la gravure sur un media physique, ce qu'on appelle le
+        <i>fichier de sortie</i> est alors le nom de l'image ISO. Le nom du graveur de DVD
+        doit &ecirc;tre s&eacute;lectionn&eacute; dans le menu des options. L'image ISO n'est jamais d&eacute;truite
+        automatiquement et peut &ecirc;tre r&eacute;utilis&eacute;e pour graver des copies additionnelles.</p>
 
       <h4><a id="dvdouttv">Cr&eacute;ation d'un DVD &agrave; partir d'un enregistrement TV</a></h4>
-      <p>When creating a DVD from a TV recording, some editing is usually required. Typically, there is some
-        extra content to delete at the beginning and end. If the recorded program contains ads, you may want
-        to delete them also.</p>
-      <p>QtlMovie is not a video editor and you need an external tool to remove the unwanted
-        parts of the movie file. Open-source tools such as AviDemux or Virtual Dub can do that.
-        On Windows, there is also a simpler freeware (not open-source unfortunately) named Free Video Dub.</p>
-      <p>You should use one of these tools to <i>edit</i> the video (namely cut the unwanted parts) but not re-encode it.
-        Tools like Free Video Dub are typically dedicated to remove video sequences and cannot re-encode anyway.
-        With tools like AviDemux, explicitely select the <i>copy</i> option for video and audio tracks
-        to avoid re-encoding.</p>
-      <p>You also have to pay attention to one point.
-        If the original file contains a subtitle stream you want to use, you should not edit the original video file.
-        It may depend on the editing tool, but most of the time the subtitle streams are lost after editing.
-        Instead, you should use the following scenario:</p>
+
+      <p>Quand on cr&eacute;e un DVD &agrave; partir d'un enregistrement TV, il y a souvent un peu d'&eacute;dition &agrave; faire.
+        Typiquement, il y a du contenu superflu &agrave; supprimer au d&eacute;but et &agrave; la fin.
+        De plus, si le programme enregistr&eacute; contient des publicit&eacute;s, on peut vouloir les supprimer.</p>
+      <p>QtlMovie n'est pas un &eacute;diteur vid&eacute;o et vous devez utiliser un autre outil.
+        Il existe des logiciels libres comme AviDemux ou Virtual Dub pour cela.
+        Sur Windows, il existe aussi un <i>freeware</i> (qui n'est pas <i>open source</i> malheureusement)
+        appel&eacute; Free Video Dub.</p>
+      <p>Vous devez utiliser un de ces outils pour <i>&eacute;diter</i> la vid&eacute;o (c'est &agrave; dire supprimer les
+        parties inutiles) mais pas pour la r&eacute;-encoder. Les outils comme Free Video Dub sont d&eacute;di&eacute;s
+        exclusivement &agrave; la suppression de s&eacute;quences vid&eacute;o et ne peuvent pas r&eacute;-encoder de toute mani&egrave;re.
+        Avec les outils comme AviDemux, il faut explicitement s&eacute;lectionner l'option <i>copie</i>
+        sur les pistes audio et vid&eacute;o pour &eacute;viter le r&eacute;-encodage.</p>
+      <p>Il faut &eacute;galement faire attention &agrave; un point particulier. 
+        Si le fichier d'origine contient une piste de sous-titre que vous voulez conserver,
+        vous devez &eacute;viter d'&eacute;diter le fichier d'origine. Avec beaucoup d'outils, les pistes
+        ind&eacute;pendantes de sous-titres sont perdues apr&egrave;s &eacute;dition.
+        Vous devez donc appliquer un sc&eacute;nario comme suit:</p>
       <ul>
-        <li>Use QtlMovie to generate a <i>DVD MPEG File</i> with the complete content.
-          Select the required audio and subtitle streams.
-          This is the longest part, where the re-encoding takes place</li>
-        <li>Edit this MPEG file and cut the unwanted parts.
-          Save the result as MPEG file without re-encoding. This is usually fast.</li>
-        <li>Use QtlMovie again to open the edited MPEG file and create the DVD from it.
-          This is also usually fast since QtlMovie recognizes the MPEG file as being
-          DVD-compliant and does not perform any re-encoding.</li>
+        <li>Utiliser QtlMovie pour g&eacute;n&eacute;rer un <i>fichier DVD MPEG</i> avec le contenu complet.
+          S&eacute;lectionner les pistes audio et sous-titres.
+          C'est la partie la plus longue, l&agrave; o&ugrave; se produit le r&eacute;-encodage.</li>
+        <li>Editer le fichier MPEG r&eacute;sultant et supprimer les parties inutiles.
+          Sauvegarder le r&eacute;sultat en fichier MPEG sans r&eacute;-encoder. C'est normalement rapide.</li>
+        <li>Utiliser QtlMovie &agrave; nouveau en ouvrant le fichier MPEG &eacute;dit&eacute; et cr&eacute;er le DVD &agrave; partir de ce fichier.
+          C'est &eacute;galement rapide car QtlMovie reconnait le fichier comme compatible DVD et
+          n'effectue aucun r&eacute;-encodage.</li>
       </ul>
-      <p>This method is always the preferred one, even if the input file is simple and
-        contains only one video, one audio track and no subtitle. It is more
-        reliable and more robust to edit an MPEG-2 video file than most other formats.
-        Editing a video file without re-encoding requires to cut on intra-frames only
-        and MPEG-2 files are easier to edit than AVC / H.264 for instance.</p>
+      <p>Cette m&eacute;thode est toujours pr&eacute;f&eacute;rable, m&ecirc;me si le fichier d'entr&eacute;e est
+        simple et ne contient qu'une piste vid&eacute;o, une piste audio et pas de sous-titres.
+        En effet, il est plus fiable et plus robuste d'&eacute;diter un fichier encod&eacute; en
+        MPEG-2 que la plupart des autres formats.
+        Editer une vid&eacute;o sans r&eacute;-encodage impose &eacute;galement d'effectuer les
+        coupures sur des images "intra" seulement et les fichiers MPEG-2 sont
+        plus faciles &agrave; &eacute;diter que l'AVC / H.264 par exemple.</p>
 
       <h3><a id="ipadout">Cr&eacute;ation d'une vid&eacute;o pour iPad</a></h3>
-      <p>QtlMovie always produces iPad files with the following characteristics:</p>
+
+      <p>Les fichiers vid&eacute;o pour iPad produits par QtlMovie ont toujours les caract&eacute;ristiques suivantes:</p>
       <ul>
-        <li>MP4 file format.</li>
-        <li>AVC / H.264 video, baseline profile, level 3.0.
-          The average bitrate is 2.5 Mb/s (adjustable in the settings).
-          The display aspect ratio is unchanged (no black border is added).
-          The frame size is unchanged, unless the input size exceeds the iPad native screen resolution in
-          which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
-        <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
+        <li>Format de fichier MP4.</li>
+        <li>Vid&eacute;o AVC / H.264, profil de base, niveau 3.0.
+          Le d&eacute;bit binaire moyen est de 2.5 Mb/s (ajustable dans les options).
+          Les proportions d'affichage sont inchang&eacute;es (aucun bordure noire n'est ajout&eacute;e).
+          La taille d'image est inchang&eacute;e, sauf si la taille de l'entr&eacute;e exc&egrave;de la r&eacute;solution
+          native de l'iPad, auquel cas la taille est r&eacute;duite pour tenir &agrave; l'int&eacute;rieur
+          de cette r&eacute;solution tout en pr&eacute;servant les proportions d'origine.</li>
+        <li>Audio AAC, st&eacute;r&eacute;o, &eacute;chantillonn&eacute; &agrave; 48 kHz. Le d&eacute;bit binaire audio est de 160 kb/s.</li>
       </ul>
 
       <h3><a id="subout">Extraction de sous-titres</a></h3>
-      <p>QtlMovie can also be used to extract subtitle streams from the input files.
-        The subtitle format must be text (SRT, SSA, ASS, Teletext or Closed Captions).
-        Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
-        The output subtitle file format is SRT.</p>
+
+      <p>QtlMovie peut aussi &ecirc;tre utilis&eacute; pour extraire une piste de sous-titres du fichier d'entr&eacute;e.
+        Le format de la piste de sous-titre doit &ecirc;tre du texte (SRT, SSA, ASS, Teletext ou Closed Captions).
+        Les sous-titres <i>bitmap</i> comme les sous-titres DVD ou DVB ne peuvent pas &ecirc;tre extraits.
+        Le format du fichier de sous-titres cr&eacute;&eacute; est SRT.</p>
 
       <hr/>
       <h2><a id="miscfeat">Autres fonctionnalit&eacute;s</a></h2>
 
       <h3><a id="logwin">La fen&ecirc;tre de journal (log)</a></h3>
-      <p>The log window is the bottom part of the QtlMovie main window.
-        All external commands are displayed there, with their output and error messages.
-        This is mainly a debug feature which can be ignored by most users.</p>
-      <p>Using the "Tools" menu, the log window can be cleared or saved in a text file.
-        There is also a "Log Debug" option which activates more debug traces in the log window.
-        When reporting a problem about QtlMovie, it is a good idea to clear the log window,
-        activate the debug, perform the operations which exhibit the problem, save the log
-        into a text file and attach this text file to the problem report.</p>
+      <p>La fen&ecirc;tre de journal (ou <i>log</i>) est la partie inf&eacute;rieure de la fen&ecirc;tre principale de QtlMovie.
+        Toutes les commandes externes sont affich&eacute;es l&agrave;, avec leurs messages et leurs erreurs.
+        C'est principalement une fonctionnalit&eacute; de debug qui peut &ecirc;tre ignor&eacute;e par la plupart des utilisateurs.</p>
+      <p>Avec le menu "Outils", la fen&ecirc;tre de journal peut &ecirc;tre effac&eacute;e ou sauvegard&eacute;e dans un fichier texte.
+        Il y a &eacute;galement une option "Activer le debug" qui affiche plus de traces de debug dans la fen&ecirc;tre de journal.
+        Avant de reporter un probl&egrave;me sur QtlMovie, il est conseill&eacute; d'effacer d'abord la fen&ecirc;tre de journal,
+        activer le debug, effectuer l'op&eacute;ration qui met en &eacute;vidence le probl&egrave;me, sauvegarder le journal
+        dans un fichier texte et attacher ce fichier texte au rapport de probl&egrave;me.</p>
+
 
       <h3><a id="fileprop">Propri&eacute;t&eacute;s du fichier d'entr&eacute;e</a></h3>
-      <p>The "Input File Properties" option in the "Tools" menu displays all properties of
-        the input file as reported by <i>ffprobe</i>.
-        This provides a more precise view of the file and its streams but requires some
-        knownledge about FFmpeg.</p>
+
+      <p>L'option "Propri&eacute;t&eacute;s du fichier d'entr&eacute;e" affiche toutes les propri&eacute;t&eacute;s du
+        fichier d'entr&eacute;e telles que d&eacute;tect&eacute;es par <i>ffprobe</i>.
+        Cela donne une vue plus pr&eacute;cise de la structure du fichier et de ses flux
+        mais requiert une certaine connaissance de FFmpeg.</p>
 
       <h3><a id="audiotest">Test audio</a></h3>
-      <p>The "Test Audio" option in the "Tools" menu opens a dialog box for testing the
-        audio streams in the input file. This is useful when the languages of the audio
-        tracks are not correctly identified in the input file. Using this dialog box,
-        the user can select and play the various audio tracks in order to recognize the
-        language of each track.</p>
+
+      <p>L'option "Tester les pistes audio" ouvre une fen&ecirc;tre pour tester le son des pistes audio du fichier.
+        Cela peut &ecirc;tre utile quand les langues des pistes audio ne sont pas correctement identifi&eacute;es dans
+        le fichier d'entr&eacute;e. Avec cette option, vous pouvez s&eacute;lectionner et &eacute;couter les diff&eacute;rentes pistes
+        audio et ainsi reconnaitre la langue.</p>
 
       <hr/>
       <h2><a id="settings">Options</a></h2>
-      <p>The QtlMovie settings are accessible using the "Tools" menu.</p>
+
+      <p>Le param&eacute;trage des options de QtlMovie est accessible par le menu "Outils".</p>
 
       <h3><a id="dirsettings">Onglet "R&eacute;pertoires"</a></h3>
-      <p>The "Default input directory" is where the "Browse" button is initially set when no input
-        file is currently selected. By default, this is the user's home directory.</p>
-      <p>The "Default output directory" area defines where the output file shall be
-        created by default. The default output file name inside the output directory is
-        the same as the input file with the extension corresponding to the output file type.</p>
-      <p>If the option "Same as input directory" is checked, the default location for the output
-        file is the same as the input file. Otherwise, a specific directory can be selected for
-        each output type.</p>
-      <p>The "DVD burning device" designates the device name for the DVD burner.
-        On Windows, it shall be a device letter like "D:" or "E:".
-        On Unix systems, it shall be a device path such as "/dev/dvd".
-        Unlike input and output directories, this is not a default value which can be changed in the GUI,
-        this is the actual device name which is unconditionally used when "Burn DVD" is selected as output type.
-        This makes sense since most computers have only one DVD drive.
-        Note that the default output directory for type "Burn DVD" is not the burning device, this is the
-        directory where the ISO image files are stored before burning. There are two different default
-        output directories for output types "DVD ISO Image" and "Burn DVD" since images of the later type
-        are typically created in a temporary directory that the user wants to clean up on a regular basis.</p>
+
+      <p>Le "r&eacute;pertoire d'entr&eacute;e par d&eacute;faut" est l&agrave; o&ugrave; le bouton "Chercher" ira quand aucun
+        fichier d'entr&eacute;e n'est pr&eacute;c&eacute;demment s&eacute;lectionn&eacute;. Par d&eacute;faut, c'est le r&eacute;pertoire de
+        base de l'utilisateur.</p>
+      <p>Les diff&eacute;rents "r&eacute;pertoires de sortie par d&eacute;faut" d&eacute;finissent o&ugrave; seront cr&eacute;&eacute;s par
+        d&eacute;faut les fichiers de sorties. Le nom de fichier par d&eacute;faut dans ce r&eacute;pertoire par
+        d&eacute;faut est le m&ecirc;me que le fichier d'entr&eacute;e avec l'extension correspondant au type de sortie.</p>
+      <p>Si l'option "identique au r&eacute;pertoire du fichier d'entr&eacute;e" est coch&eacute;e, le r&eacute;pertoire par d&eacute;faut
+        du fichier de sortie est le r&eacute;pertoire du fichier d'entr&eacute;e. Autrement, un r&eacute;pertoire par
+        d&eacute;faut peut &ecirc;tre s&eacute;lectionn&eacute; par type de sortie.</p>
+      <p>Le "graveur DVD" d&eacute;signe le lecteur pour graver les DVD.
+        Sur Windows, cela doit &ecirc;tre une lettre de p&eacute;riph&eacute;rique comme "D:" ou "E:".
+        Sur Linux, ce doit &ecirc;tre un nom de p&eacute;riph&eacute;rique comme "/dev/dvd".
+        Contrairement aux r&eacute;pertoires d'entr&eacute;e et de sortie, ce n'est pas un nom qui peut &ecirc;tre
+        modifi&eacute; dans la fen&ecirc;tre principale de QtlMovie. C'est le nom du p&eacute;riph&eacute;rique qui sera
+        utilis&eacute; dans tous les cas pour graver un DVD. C'est assez logique car la plupart des
+        ordinateurs n'ont qu'un seul graveur DVD.
+        A noter que le r&eacute;pertoire par d&eacute;faut du type de sortie "Gravage DVD" n'est pas le p&eacute;riph&eacute;rique
+        de gravage, c'est le r&eacute;pertoire o&ugrave; sont cr&eacute;&eacute;es les images ISO avant gravage.
+        Il y a deux r&eacute;pertoires distincts de sortie par d&eacute;faut pour les types "Image ISO DVD" et
+        "Gravage DVD" puisque les images de ce dernier type sont typiquement cr&eacute;&eacute;es dans un
+        espace temporaire que l'utilisateur voudra nettoyer r&eacute;guli&egrave;rement.</p>
 
       <h3><a id="toolssettings">Onglet "Outils Media"</a></h3>
-      <p>This tab specifies the location of the executable files for the external media tools which are used by QtlMovie:</p>
+
+      <p>Cet onglet sp&eacute;cifie les emplacement des ex&eacute;cutables des diff&eacute;rents outils media utilis&eacute;s par  QtlMovie:</p>
       <ul>
         <li>FFmpeg</li>
         <li>FFprobe</li>
@@ -320,131 +341,153 @@
         <li>CCExtractor</li>
         <li>DVD Decrypter</li>
       </ul>
-      <p>For each tool, the "Default" value is the location where QtlMovie has found the corresponding executable.
-        The way QtlMovie locates the media tools depends on the operating system.
-        On Windows, they are searched first in the <code>wintools</code> subdirectory inside the QtlMovie
-        installation area, then in various predefined locations for each tool (typically within
-        <code>C:\Program File</code> and finally in the <code>Path</code> environment variable.
-        On Unix systems, the media tools are searched in the <code>PATH</code> environment variable.</p>
-      <p>For each tool, a specific alternate executable can be selected in the corresponding edit box
-        or using the corresponding "Browse" button.</p>
+      <p>Pour chaque outil, le nom par d&eacute;faut est l'emplacement o&ugrave; QtlMovie a trouv&eacute; l'ex&eacute;cutable
+        correspondant. La mani&egrave;re dont QtlMovie recherche ces ex&eacute;cutables
+        d&eacute;pend du syst&egrave;me d'exploitation.
+        Sur Windows, ils sont recherch&eacute;s d'abord dans le sous-r&eacute;pertoire <code>wintools</code>,
+        sous le r&eacute;pertoire d'installation de QtlMovie, puis dans diff&eacute;rents emplacements pr&eacute;d&eacute;finis
+        propres &agrave; chaque outil (typiquement dans <code>C:\Program Files</code>) et finalement
+        en utilisant la variable d'environnement <code>Path</code>.
+        Sur les syst&egrave;mes Unix, les outils sont recherch&eacute;s exclusivement en utilisant la
+        variable d'environnement <code>PATH</code>.</p>
+      <p>Pour chaque outil, un ex&eacute;cutable sp&eacute;cifique peut &ecirc;tre s&eacute;lectionn&eacute; dans la 
+        zone d'&eacute;dition ou en utilisant le bouton "Chercher" correspondant.</p>
 
       <h3><a id="transcsettings">Onglet "Transcodage"</a></h3>
-      <p>This tab groups all the settings which affect the audio and video transcoding.</p>
-      <p>The "Transcoding duration" indicates whether the entire input file shall be transcoded
-        or if the output file shall be truncated after a given number of seconds.
-        Note that this indicates the playout duration of the output file,
-        not the duration of the transcoding operation.
-        Trancoding a movie can take a long time and limiting the transcoded duration can be helpful
-        in a test phase, to verify the video quality or the audio or subtitle language for instance.</p>
-      <p>The "DVD output" area is used only when transcoding to a DVD.
-        The PAL vs. NTSC options indicate the format of all created DVD's.
-        The specified video bitrate is used by default as "average bitrate".
-        However, QtlMovie ensures that the output can fit into a standard 4.7 GB DVD medium
-        and reduces the bitrate accordingly when necessary.</p>
-      <p>When checked, the "Create chapters" option creates chapters on the DVD.
-        All chapters have the same specified number of minutes.</p>
-      <p>When checked, the option "Remux audio/video after transcode" forces an additional remuxing of
-        the audio and video after transcoding. This takes some additional time but this removes potential
-        synchronization errors with DVD Author when the DVD file structure is created.
-        This also enforces a DVD-compliant multiplexing when the input file already has DVD-compliant
-        audio and video and is not re-encoded.
-        It is recommended to let this option checked.</p>
-      <p>The option "Force transcoding even if the input file or video is DVD-compliant"
-        does what it says... This can be useful to force a transcoding when the
-        file seems DVD-compliant but is not really (too large for instance).</p>
-      <p>The "iPad output" area is used only when transcoding for iPad.
-        The "Screen size" options specify the type of iPad to target.
-        The corresponding screen resolution will be used as maximum video size.
-        Larger videos will be resized to fit within the selected iPad resolution.
-        The specified video bitrate is used by default as "average bitrate".</p>
-      <p>The "Subtitles insertion" area is used only when inserting subtitles.
-        The option "Use original video size as a hint for SRT/SSA/ASS character shape"
-        is somewhat cryptic. If checked, the original size of the video is used to
-        alter the character size of text-based subtitles. The FFmpeg documentation
-        recommends to use it but the experience shows that sometimes it produces
-        a strange characters size. This is why it is unchecked by default. You may
-        try to check it and decide whether it is useful or not.</p>
-      <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
-        Currently, the only option is the "Probe size".
-        This is the amount of seconds which are analyzed at the beginning of the input file to determine
-        the number and type of audio, video and subtitle streams.
-        The FFmpeg default value is 5 seconds.
-        This is usually enough for most files.
-        However, some MPEG files do not list all their streams at the beginning of the file and
-        some streams which appear late in the file (subtitles for instance) may not be detected.
-        As a consequence, the default probe size for QtlMovie is 200 seconds.
-        It is recommended to not reduce this size.
-        It can be increased if you suspect that some streams are not detected.</p>
+
+      <p>Cet onglet regroupe les options qui affectent le transcodage audio et vid&eacute;o.</p>
+      <p>La "Dur&eacute;e de transcodage" indique si tout le fichier doit &ecirc;tre transcod&eacute;
+        ou si le fichier de sortie doit &ecirc;tre tronqu&eacute; apr&egrave;s un certain nombre de secondes.
+        A noter qu'il s'agit ici de la dur&eacute;e de film transcod&eacute;, pas de la dur&eacute;e de
+        l'op&eacute;ration de transcodage.
+        Transcoder un film peut prendre beaucoup de temps et limiter la dur&eacute;e de transcodage
+        peut &ecirc;tre utile en phase de test, pour v&eacute;rifier la qualit&eacute; vid&eacute;o ou la langue des
+        pistes audio et sous-titres par exemple.</p>
+      <p>La zone "Sortie DVD" est utilis&eacute;e lors de la cr&eacute;ation de DVD.
+        L'option PAL / NTSC d&eacute;finit le format des DVD cr&eacute;&eacute;s.
+        Le d&eacute;bit vid&eacute;o est utilis&eacute; comme d&eacute;bit binaire moyen pour les pistes vid&eacute;o.
+        Toutefois, QtlMovie s'assure que l'image de sortie tienne sur un media standard de 4.7 GB
+        et r&eacute;duit le d&eacute;bit au besoin.</p>
+      <p>L'option "Cr&eacute;ation de chapitres" permet de cr&eacute;er des chapitres sur le DVD.
+        Tous les chapitres ont la m&ecirc;me dur&eacute;e, exprim&eacute;e en minutes.</p>
+      <p>L'option "Remultiplexer l'audio et la vid&eacute;o apr&egrave;s le transcodage" force un
+        remultiplexage additionnel de l'audio et la vid&eacute;o apr&egrave;s transcodage. Cela prend
+        un peu plus de temps mais cela supprime des erreurs potentielles de synchronisation
+        avec DVD Author quand la structure de fichiers du DVD est cr&eacute;&eacute;e.
+        Cela force aussi un multiplexage compatible DVD quand le fichier d'entr&eacute;e
+        a une vid&eacute;o et un audio d&eacute;j&agrave; compatibles DVD et ne sont donc pas r&eacute;-encod&eacute;s.
+        Il est recommand&eacute; de laisser cette option activ&eacute;e.</p>
+      <p>L'option "Forcer le transcodage m&ecirc;me si le fichier ou sa vid&eacute;o sont d&eacute;j&agrave; compatibles DVD"
+        fait ce qu'elle dit... Cela peut &ecirc;tre utile pour forcer le transcodage quand le
+        fichier semble compatible DVD mais ne l'est pas vraiment (trop grand par exemple).</p>
+      <p>La zone "Sortie iPad" est utilis&eacute;e pour le transcodage vers iPad.
+        L'option "Taille d'&eacute;cran" sp&eacute;cifie le type d'iPad cible.
+        La r&eacute;solution d'&eacute;cran sera utilis&eacute;e en tant que taille vid&eacute;o maximum.
+        Les vid&eacute;os plus grandes seront retaill&eacute;es pour tenir &agrave; l'int&eacute;rieur de cette r&eacute;solution.
+        Le d&eacute;bit vid&eacute;o est utilis&eacute; comme d&eacute;bit binaire moyen pour les pistes vid&eacute;o.</p>
+      <p>La zone "Insertion de sous-titres" est utilis&eacute;e pour l'insertion de sous-titres.
+        L'option "Utiliser la taille vid&eacute;o originale pour ajuster la taille des caract&egrave;res SRT/SSA/ASS"
+        est un peu &eacute;trange. Quand elle est s&eacute;lectionn&eacute;e, la taille originale de la vid&eacute;o
+        est utilis&eacute;e pour influer sur la taille des sous-titres en mode texte.
+        La documentation FFmpeg recommande de l'utiliser mais l'exp&eacute;rience montre
+        que cela produit parfois des tailles de caract&egrave;res &eacute;trange. C'est pourquoi
+        cette option n'est pas s&eacute;lectionn&eacute;e par d&eacute;faut. Vous pouvez essayer de
+        l'activer pour v&eacute;rifier et d&eacute;cider ensuite si elle est utile ou non.</p>
+      <p>Les "Options FFmpeg" sp&eacute;cifient quelques options suppl&eacute;mentaires
+        sp&eacute;cifiques &agrave; FFmpeg.
+        Pour l'instant, la seule option est le "Temps de d&eacute;tection".
+        C'est le nombre de secondes qui sont analys&eacute;es en d&eacute;but de fichier d'entr&eacute;e
+        pour d&eacute;terminer le nombre et le type des flux vid&eacute;o, audio et sous-titres.
+        La valeur par d&eacute;faut de FFmpeg est de 5 secondes.
+        C'est en g&eacute;n&eacute;ral suffisant pour la plupart des fichiers.
+        Toutefois, certains fichiers MPEG ne disposent pas d'une liste explicite
+        de leurs flux en d&eacute;but de fichier. Comme certains flux peuvent n'apparaitre
+        que tardivement dans le fichier (des sous-titres par exemple), ils peuvent
+        ne pas &ecirc;tre d&eacute;tect&eacute;s sur une dur&eacute;e trop courte.
+        Par cons&eacute;quent, le temps de d&eacute;tection par d&eacute;faut de QtlMovie est 200 secondes.
+        Il n'est pas recommand&eacute; de r&eacute;duire cette taille.
+        Elle peut &ecirc;tre augment&eacute;e si vous suspectez certains flux de ne pas &ecirc;tre d&eacute;tect&eacute;s.</p>
 
       <h3><a id="liscsettings">Onglet "Divers"</a></h3>
-      <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
-      <p>The "Target audience language codes" lists the codes which are used to identify the
-        language of the "target audience".
-        This needs some explanation.
-        When an input file is opened, QtlMovie displays all audio and subtitle tracks
-        which are available in the file.
-        But it also pre-selects the tracks which should be most likely adequate for the user
-        (or "target audience").
-        QtlMovie makes the assumption that the user prefers to watch the film in original version
-        with subtitles in his own language.
-        The initial default stream selection is performed as follow:</p>
+
+      <p>Comme son nom l'indique, cet onglet regroupe les options qui n'ont pas trouv&eacute; leur place ailleurs.</p>
+      <p>La liste des "codes de langues de l'audience cibl&eacute;e" contient les codes
+        utilis&eacute;s par les diff&eacute;rents standards pour identifier la ou les langues
+        de "l'audience cibl&eacute;e".
+        Ce terme m&eacute;rite une explication.
+        Quand un fichier d'entr&eacute;e est ouvert, QtlMovie affiche la liste des pistes audio
+        et sous-titres pr&eacute;sentes dans le fichier.
+        Mais QtlMovie pr&eacute;-s&eacute;lectionne &eacute;galement les pistes qui lui semblent les plus
+        appropri&eacute;es pour l'utilisateur (ou "audience cibl&eacute;e").
+        QtlMovie fait l'hypoth&egrave;se que l'utilisateur pr&eacute;f&egrave;re regarder les films
+        en version originale sous-titr&eacute;e.
+        La s&eacute;lection initiale des pistes s'effectue de la mani&egrave;re suivante:</p>
       <ul>
-        <li>Default audio stream selection:
+        <li>S&eacute;lection de la piste audio par d&eacute;faut:
           <ul>
-            <li>Try to determine the "original version" stream if one is flagged as such.</li>
-            <li>If not possible, keep the first audio track not matching any language in the
-              intended audience language codes (supposed to be the original audio, considering
-              any audience language as dubbing).</li>
-            <li>Otherwise, keep first audio without visual impaired indicator.</li>
+            <li>Recherche de la piste identifi&eacute;e comme "version originale" s'il en existe une.</li>
+            <li>S'il n'y en a pas (ce qui est souvent le cas), recherche de la premi&egrave;re piste
+              audio qui ne correspond &agrave; aucune langue de la liste de l'audience cibl&eacute;e
+              (et donc suppos&eacute;e &ecirc;tre la version originale, consid&eacute;rant que les langues
+              de l'audience cibl&eacute;e sont du doublage).</li>
+            <li>Si aucune piste ne r&eacute;pond &agrave; ces crit&eacute;res, s&eacute;lection de la premi&egrave;re piste
+              audio sans indication "description audio pour malvoyants"..</li>
           </ul>
         </li>
-        <li>Default subtitle stream selection:
+        <li>S&eacute;lection de la piste de sous-titre par d&eacute;faut:
           <ul>
-            <li>In all cases, consider only the subtitles in the intended audience language codes.
-              If the list of target audience languages is empty, there will be no default subtitle.
-              Within the various subtitles in the audience language codes, the following criteria apply.</li>
-            <li>If the audio stream is in the audience language codes, keep the first "forced"
-              subtitle (the "forced" subtitle are used only when the audio track of the same
-              language contains dialogues in another language).</li>
-            <li>If the audio stream is not in the audience language codes, keep the subtitles which are either
-              (in order of preference)
+            <li>Dans tous les cas, on ne retient que les pistes de sous-titres avec un code
+              de langue dans la liste de l'audience cibl&eacute;e. Si cette liste est vide,
+              aucune piste de sous-titre ne sera s&eacute;lectionn&eacute;e.
+              Parmi les diff&eacute;rentes pistes de sous-titres d'une langue de l'audience cibl&eacute;e,
+              on applique les crit&egrave;res suivants.</li>
+            <li>Si la piste audio s&eacute;lectionn&eacute;e est d'une langue de l'audience cibl&eacute;e,
+              on retient la premi&egrave;re piste de sous-titres identifi&eacute;e comme "forc&eacute;e"
+              (les sous-titres "forc&eacute;s" ne sont utilis&eacute;s que quand la piste audio est de la
+              m&ecirc;me langue mais contient des passages dans une langue &eacute;trang&egrave;re).</li>
+            <li>Si la piste audio s&eacute;lectionn&eacute;e n'est pas d'une langue de l'audience cibl&eacute;e,
+              on retient la premi&egrave;re piste de sous-titres qui r&eacute;pond aux crit&egrave;res suivants
+              (par ordre de pr&eacute;f&eacute;rence):
               <ul>
-                <li>complete</li>
-                <li>for hearing impaired</li>
-                <li>other</li>
+                <li>complets</li>
+                <li>pour malentendants</li>
+                <li>autres</li>
               </ul>
             </li>
           </ul>
         </li>
       </ul>
-      <p>The "Keep intermediate files" option indicates that all intermediate files which were created
-        in the transcoding process shall not be deleted after completion.
-        These files are created in a temporary directory with the same name as the output file and
-        extension <code>.qtlmovie.temp</code>.
-        This option is usually reserved for debug purpose.</p>
-      <p>The "Max log" option indicates the number of text lines to retain in the log window.
-        When this threshold is reached, the first lines are deleted.</p>
-      <p>The option "Automatically search for a new version at startup" indicates if a new
-        version of QtlMovie is searched online each time the application starts. When disabled, it
-        is possible to manually search for a new version using the menu "Help" / "Search New Version".</p>
-
+      <p>L'option "Garder les fichiers interm&eacute;diaires" indique que tous les fichiers
+        interm&eacute;diaires cr&eacute;&eacute;s lors du processus de transcodage doivent &eacute;tre conserv&eacute;s
+        &agrave; la fin de l'op&eacute;ration. Ces fichiers sont cr&eacute;&eacute;s dans un r&eacute;pertoire temporaire
+        avec le m&ecirc;me nom que le fichier de sortie et l'extension <code>.qtlmovie.temp</code>.
+        Cette option est normalement r&eacute;serv&eacute;e &agrave; des fins de debug.</p>
+      <p>L'option "taille max" de la fen&ecirc;tre de journal indique le nombre maximum de 
+        lignes de texte &agrave; garder dans cette fen&ecirc;tre. Au-del&agrave;, les lignes les plus
+        anciennes sont effac&eacute;es.</p>
+      <p>L'option "Rechercher automatiquement une nouvelle version au d&eacute;marrage"
+        indique que QtlMovie recherche automatiquement ses nouvelles versions sur Internet
+        au d&eacute;marrage. Si cette option est d&eacute;sactiv&eacute;e, il est toujours possible
+        d'effectuer une recherche manuelle de nouvelle version depuis le menu
+        "Aide" / "Recherche de version".</p>
       <hr/>
+
       <h2><a id="cmdline">Syntaxe de la ligne de commande</a></h2>
-      <p>QtlMovie is normally started from the desktop menu without command line argument.
-        This is sufficient for normal usage.</p>
-      <p>However, a few options can be provided on the command line.
-        The syntax is the following:</p>
+
+      <p>QtlMovie est normalement d&eacute;marr&eacute; depuis les menus de l'environnement de bureau.
+        C'est suffisant pour la plupart des usages.</p>
+      <p>Toutefois, quelques options sont accept&eacute;es sur la ligne de commande.
+        La syntaxe est la suivante:</p>
       <div class="sample">
         <p>QtlMovie [-l <i>locale</i>] [<i>inputfile</i>]</p>
       </div>
-      <p>The <i>locale</i> specifies an alternate locale such as "en" or "fr_FR".
-        By default, the system locale is used.</p>
-      <p>The <i>inputfile</i> specifies a video input file which is automatically open
-        when QtlMovie starts.</p>
-      <p>Example: If your system's locale is supported by QtlMovie but you are not
-        satisfied by the translations, you can revert to English by editing the QtlMovie
-        command in the desktop menus as follow:</p>
+      <p>Le param&egrave;tre <i>locale</i> sp&eacute;cifie une autre langue pour l'interface graphique, comme "en" ou "fr_FR".
+        Par d&eacute;faut, la langue du syst&egrave;me est utilis&eacute;e.</p>
+      <p>Le param&egrave;tre <i>inputfile</i> sp&eacute;cifie un fichier vid&eacute;o &agrave; ouvrir automatiquement
+        au lancement.</p>
+      <p>Exemple: Si la langue de votre syst&egrave;me est support&eacute;e par QtlMovie mais vous
+        n'&ecirc;tes pas satisfait par les traductions, vous pouvez forcer le d&eacute;marrage de
+        QtlMovie en anglais en &eacute;ditant la ligne de commande dans les menus du syst&egrave;me comme suit:</p>
       <div class="sample">
         <p>QtlMovie -l en</p>
       </div>

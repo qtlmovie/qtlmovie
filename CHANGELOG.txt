@@ -2,6 +2,11 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.7 (2013-13-26)
+- Help files are now fully translated. QtlMovie can work completely in another
+  languages. Current translations are English and French. Native speakers will
+  be required for additional languages.
+
 Version 1.2.6 (2013-13-22)
 - Bug fix: On Windows, if the output file name contained a single quote (')
   and text subtitles from the input file were inserted in the output file,

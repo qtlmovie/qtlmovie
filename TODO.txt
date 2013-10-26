@@ -2,8 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Implement multi-language help files (file qtlmovie_fr.html for instance).
-
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory. Seems due to a Qt bug (or missing feature). For more
   details, see https://bugreports.qt-project.org/browse/QTBUG-33962
