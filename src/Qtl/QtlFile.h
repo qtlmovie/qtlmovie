@@ -194,16 +194,91 @@ public:
     static QString shortPath(const QString& path, bool keepOnError);
 
     //!
+    //! Get the "short path name" of the file.
+    //! On Windows platforms, return the path name in DOS 8.3 convention.
+    //! On other platforms, return the input @a path.
+    //! @param [in] keepOnError If true and the conversion fails, return
+    //! the same as fileName().
+    //! @return The equivalent short path name or the empty string on error
+    //! and @a keepOnError is false.
+    //!
+    QString shortPath(bool keepOnError) const
+    {
+        return shortPath(_fileName, keepOnError);
+    }
+
+    //!
     //! Read the content of a binary file.
     //! Error reporting is minimal.
     //! @param [in] fileName Name of file to read.
     //! @param [in] maxSize Maximum size to read.
     //! If the file is larger than @a maxSize, skip the rest of the file.
     //! If negative, read the entire file.
-    //! @return A byte array containing the file or en empty array on error.
+    //! @return A byte array containing the file or an empty array on error.
     //! It is not possible to differentiate an empty file and an error.
     //!
     static QtlByteBlock readBinaryFile(const QString& fileName, int maxSize = -1);
+
+    //!
+    //! Read the binary content of the file.
+    //! Error reporting is minimal.
+    //! @param [in] maxSize Maximum size to read.
+    //! If the file is larger than @a maxSize, skip the rest of the file.
+    //! If negative, read the entire file.
+    //! @return A byte array containing the file or an empty array on error.
+    //! It is not possible to differentiate an empty file and an error.
+    //!
+    QtlByteBlock readBinary(int maxSize = -1) const
+    {
+        return readBinaryFile(_fileName, maxSize);
+    }
+
+    //!
+    //! Read the content of a text file.
+    //! Error reporting is minimal.
+    //! @param [in] fileName Name of file to read.
+    //! @param [in] maxSize Maximum number of characters to return.
+    //! If the file is larger than @a maxSize, skip the rest of the file.
+    //! If negative, read the entire file.
+    //! @return A list of strings containing the text lines of the file or an empty list on error.
+    //! It is not possible to differentiate an empty file and an error.
+    //!
+    static QStringList readTextLinesFile(const QString& fileName, int maxSize = -1);
+
+    //!
+    //! Read the text content of the file.
+    //! Error reporting is minimal.
+    //! @param [in] maxSize Maximum number of characters to return.
+    //! If the file is larger than @a maxSize, skip the rest of the file
+    //! (do not truncate the last line, so the actual number of returned characters may be larger).
+    //! If negative, read the entire file.
+    //! @return A list of strings containing the text lines of the file or an empty list on error.
+    //! It is not possible to differentiate an empty file and an error.
+    //!
+    QStringList readTextLines(int maxSize = -1) const
+    {
+        return readTextLinesFile(_fileName, maxSize);
+    }
+
+    //!
+    //! Read the content of a text file.
+    //! Error reporting is minimal.
+    //! @param [in] fileName Name of file to read.
+    //! @return The text content of the file or an empty string on error.
+    //! It is not possible to differentiate an empty file and an error.
+    //!
+    static QString readTextFile(const QString& fileName);
+
+    //!
+    //! Read the text content of the file.
+    //! Error reporting is minimal.
+    //! @return The text content of the file or an empty string on error.
+    //! It is not possible to differentiate an empty file and an error.
+    //!
+    QString readText() const
+    {
+        return readTextFile(_fileName);
+    }
 
     //!
     //! Read a portion of a binary file at the current position.

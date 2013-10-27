@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.8 (2013-13-27)
+- Added a "release notes" viewer".
+
 Version 1.2.7 (2013-13-26)
 - Help files are now fully translated. QtlMovie can work completely in another
   languages. Current translations are English and French. Native speakers will

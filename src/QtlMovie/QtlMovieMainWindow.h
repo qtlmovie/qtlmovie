@@ -113,6 +113,10 @@ private slots:
     //!
     void showHelp();
     //!
+    //! Invoked by the "Release Notes" button.
+    //!
+    void showReleaseNotes();
+    //!
     //! Invoked by the "Search New Version" button.
     //! @param [in] silent Do not report errors or no new version.
     //!

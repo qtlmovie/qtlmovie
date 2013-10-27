@@ -406,6 +406,48 @@ QtlByteBlock QtlFile::readBinaryFile(const QString& fileName, int maxSize)
 
 
 //-----------------------------------------------------------------------------
+// Read the content of a text file.
+//-----------------------------------------------------------------------------
+
+QStringList QtlFile::readTextLinesFile(const QString& fileName, int maxSize)
+{
+    // Open the file. Note: the ~QFile() destructor will close it.
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) {
+        return QStringList();
+    }
+
+    // Read the file line by line.
+    QTextStream text(&file);
+    QStringList lines;
+    int size = 0;
+    while (maxSize < 0 || size < maxSize) {
+        const QString line(text.readLine(maxSize < 0 ? 0 : qint64(maxSize - size)));
+        if (line.isNull()) { // end of file
+            break;
+        }
+        size += line.length();
+        lines << line;
+    }
+
+    return lines;
+}
+
+QString QtlFile::readTextFile(const QString& fileName)
+{
+    // Open the file. Note: the ~QFile() destructor will close it.
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) {
+        return QString();
+    }
+
+    // Read the file line by line.
+    QTextStream text(&file);
+    return text.readAll();
+}
+
+
+//-----------------------------------------------------------------------------
 // Read a portion of a binary file at a given position.
 //-----------------------------------------------------------------------------
 

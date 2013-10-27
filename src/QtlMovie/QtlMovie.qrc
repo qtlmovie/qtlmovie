@@ -6,6 +6,7 @@
         <file>images/dvd-logo.png</file>
         <file>images/ccextractor-logo.png</file>
         <file>images/dvddecrypter-logo.png</file>
+        <file alias="changelog.txt">../../CHANGELOG.txt</file>
         <file>help/default.css</file>
         <file>help/qtlmovie.html</file>
         <file>help/qtlmovie-user.html</file>

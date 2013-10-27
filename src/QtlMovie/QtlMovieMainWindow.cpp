@@ -39,6 +39,7 @@
 #include "QtlMovieInputFilePropertiesDialog.h"
 #include "QtlNewVersionChecker.h"
 #include "QtlBrowserDialog.h"
+#include "QtlTextFileViewer.h"
 #include "QtlTranslator.h"
 #include "QtlIncrement.h"
 #include "QtlProcess.h"
@@ -797,8 +798,22 @@ void QtlMovieMainWindow::showHelp()
 {
     QtlBrowserDialog box(this,
                          "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
-                         "QtlMovie Help",
+                         tr("QtlMovie Help"),
                          ":/images/qtlmovie-logo.png");
+    box.exec();
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked by the "Release Notes" button.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::showReleaseNotes()
+{
+    QtlTextFileViewer box(this,
+                          QtlTranslator::searchLocaleFile(":/changelog.txt"),
+                          tr("QtlMovie Release Notes"),
+                          ":/images/qtlmovie-logo.png");
     box.exec();
 }
 

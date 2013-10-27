@@ -53,7 +53,8 @@ SOURCES += \
     QtlAutoGrid.cpp \
     QtlTranslator.cpp \
     QtlVersion.cpp \
-    QtlNewVersionChecker.cpp
+    QtlNewVersionChecker.cpp \
+    QtlTextFileViewer.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -83,10 +84,12 @@ HEADERS += \
     QtlAutoGrid.h \
     QtlTranslator.h \
     QtlVersion.h \
-    QtlNewVersionChecker.h
+    QtlNewVersionChecker.h \
+    QtlTextFileViewer.h
 
 FORMS += \
-    QtlBrowserDialog.ui
+    QtlBrowserDialog.ui \
+    QtlTextFileViewer.ui
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

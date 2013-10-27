@@ -26,39 +26,43 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlBrowserDialog.
+//
 //
 //----------------------------------------------------------------------------
 
-#include "QtlBrowserDialog.h"
-#include "ui_QtlBrowserDialog.h"
-#include "images/browser-left.h"
-#include "images/browser-right.h"
-#include "images/browser-home.h"
+#include "QtlTextFileViewer.h"
+#include "ui_QtlTextFileViewer.h"
+#include "QtlFile.h"
 
 
 //----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlBrowserDialog::QtlBrowserDialog(QWidget *parent, const QString& url, const QString& title, const QString& icon) :
+QtlTextFileViewer::QtlTextFileViewer(QWidget* parent,
+                                     const QString& fileName,
+                                     const QString& title,
+                                     const QString& icon) :
     QDialog(parent),
-    _ui(new Ui::QtlBrowserDialog)
+    _ui(new Ui::QtlTextFileViewer)
 {
     // Build the UI as defined in Qt Designer.
     _ui->setupUi(this);
 
-    // Set the built-in browser button images.
-    _ui->buttonBackward->setIcon(QIcon(QPixmap(browser_left_xpm)));
-    _ui->buttonForward->setIcon(QIcon(QPixmap(browser_right_xpm)));
-    _ui->buttonHome->setIcon(QIcon(QPixmap(browser_home_xpm)));
+    // The defaut font for the text window is console-like.
+    // Select "Monospace" family. When not found (Windows), use a typewriter style font.
+    // This double specification is necessary since 1) "Monospace" is known on X11 but
+    // not on Windows, 2) QFont::setStyleHint() is ineffective on X11.
+    QFont font("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    _ui->text->setFont(font);
 
     // Set the user-defined properties.
     setWindowTitle(title);
     if (!icon.isEmpty()) {
         setWindowIcon(QIcon(icon));
     }
-    setUrl(url);
+    setTextFile(fileName);
 }
 
 
@@ -66,7 +70,7 @@ QtlBrowserDialog::QtlBrowserDialog(QWidget *parent, const QString& url, const QS
 // Destructor.
 //----------------------------------------------------------------------------
 
-QtlBrowserDialog::~QtlBrowserDialog()
+QtlTextFileViewer::~QtlTextFileViewer()
 {
     delete _ui;
     _ui = 0;
@@ -74,15 +78,20 @@ QtlBrowserDialog::~QtlBrowserDialog()
 
 
 //----------------------------------------------------------------------------
-// Set the home URL.
+// Manipulate text to display in the box.
 //----------------------------------------------------------------------------
 
-void QtlBrowserDialog::setUrl(const QString& url)
+void QtlTextFileViewer::setTextFile(const QString& fileName)
 {
-    if (url.isEmpty()) {
-        _ui->text->clear();
-    }
-    else {
-        _ui->text->setSource(QUrl(url));
-    }
+    _ui->text->setPlainText(QtlFile::readTextFile(fileName));
+}
+
+QString QtlTextFileViewer::text() const
+{
+    return _ui->text->toPlainText();
+}
+
+void QtlTextFileViewer::clear()
+{
+    _ui->text->setPlainText(QString());
 }

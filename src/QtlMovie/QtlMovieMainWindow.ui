@@ -208,6 +208,7 @@
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
+    <addaction name="actionReleaseNotes"/>
     <addaction name="actionSearchNewVersion"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
@@ -323,6 +324,11 @@
   <action name="actionSearchNewVersion">
    <property name="text">
     <string>Search New Version</string>
+   </property>
+  </action>
+  <action name="actionReleaseNotes">
+   <property name="text">
+    <string>Release Notes ...</string>
    </property>
   </action>
  </widget>
@@ -689,6 +695,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionReleaseNotes</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>showReleaseNotes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -716,5 +738,6 @@
   <slot>transcodingProgress(QString,int,int,int,int)</slot>
   <slot>setOutputFileType()</slot>
   <slot>searchNewVersion()</slot>
+  <slot>showReleaseNotes()</slot>
  </slots>
 </ui>

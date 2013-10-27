@@ -26,18 +26,74 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieVersion.h
+//! @file QtlTextFileViewer.h
 //!
-//! Declare the version of the product.
+//! Declare the class QtlTextFileViewer.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEVERSION_H
-#define QTLMOVIEVERSION_H
+#ifndef QTLTEXTFILEVIEWER_H
+#define QTLTEXTFILEVIEWER_H
+
+#include <QtCore>
+#include <QDialog>
+
+// UI from Qt Designer.
+namespace Ui {
+    class QtlTextFileViewer;
+}
 
 //!
-//! Version of the product.
+//! A subclass of QDialog which displays the content of a text file.
+//! The design of the UI is done using Qt Designer.
 //!
-#define QTLMOVIE_VERSION "1.2.8"
+class QtlTextFileViewer : public QDialog
+{
+#if !defined (DOXYGEN)
+    Q_OBJECT
+#endif
 
-#endif // QTLMOVIEVERSION_H
+public:
+    //!
+    //! Constructor.
+    //! @param [in] parent Optional parent widget.
+    //! @param [in] fileName Optional text file name.
+    //! @param [in] title Optional dialog window title.
+    //! @param [in] icon Optional icon file name.
+    //!
+    explicit QtlTextFileViewer(QWidget *parent = 0,
+                               const QString& fileName = QString(),
+                               const QString& title = QString(),
+                               const QString& icon = QString());
+
+    //!
+    //! Destructor.
+    //!
+    virtual ~QtlTextFileViewer();
+
+    //!
+    //! Load a new text file to display in the box.
+    //! @param [in] fileName Text file name.
+    //!
+    void setTextFile(const QString& fileName);
+
+    //!
+    //! Get the text content of the viewer.
+    //! @return The text content of the viewer.
+    //!
+    QString text() const;
+
+    //!
+    //! Clear the text content.
+    //!
+    void clear();
+
+private:
+    Ui::QtlTextFileViewer* _ui;   //!< UI from Qt Designer.
+
+    // Unaccessible operations.
+    QtlTextFileViewer() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlTextFileViewer)
+};
+
+#endif // QTLTEXTFILEVIEWER_H
