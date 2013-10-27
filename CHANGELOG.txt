@@ -3,6 +3,10 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.8 (2013-13-27)
+- Fixed a performance problem when opening a file without Closed Captions. The
+  search for the presence of CC delayed the display of the other streams. Now,
+  all other streams are displayed at once. The (unsuccessful) search for CC
+  completes in the background.
 - Added a "release notes" viewer".
 
 Version 1.2.7 (2013-13-26)

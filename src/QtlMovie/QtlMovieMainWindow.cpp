@@ -355,9 +355,6 @@ void QtlMovieMainWindow::inputFileFormatChanged()
     // Clear previous stream info.
     clearInputStreamInfo();
 
-    // Select the "best" default video/audio/subtitles streams.
-    _inFile->selectDefaultStreams(_settings->audienceLanguages());
-
     // Loop on all input streams.
     const int streamCount = _inFile->streamCount();
     for (int si = 0; si < streamCount; ++si) {

@@ -368,8 +368,11 @@ void QtlMovieInputFile::closedCaptionsSearchTerminated(bool success)
         _ccSearchCount--;
     }
 
-    // Notify the new media information.
-    newMediaInfo();
+    // Notify the new media information when no more operation in progress
+    // but do not change the selection.
+    if (_ccSearchCount <= 0) {
+        emit mediaInfoChanged();
+    }
 }
 
 
@@ -379,7 +382,21 @@ void QtlMovieInputFile::closedCaptionsSearchTerminated(bool success)
 
 void QtlMovieInputFile::newMediaInfo()
 {
-    if (!_ffprobeInProgress && _teletextSearch == 0 && _ccSearchCount <= 0) {
+    // Notify the new media information when no more operation in progress.
+    // Do no take search for Closed Captions into account for the following reasons:
+    // - If no CC is present, the "search duration" of CCExtractor is ineffective
+    //   and CCExtractor will read the entire input file. This can take a lot of
+    //   time which delays the display of the other streams and will not bring
+    //   any new information since there is no CC
+    // - CC have no metadata and will never affect the default stream selection.
+    //   So, there is no inconvenient to notify mediaInfoChanged before CC search
+    //   is completed. If some CC is finally found, we will emit it again and only
+    //   the new CC streams will appear.
+
+    if (!_ffprobeInProgress && _teletextSearch == 0) {
+        // Select the "best" default video/audio/subtitles streams.
+        selectDefaultStreams(_settings->audienceLanguages());
+
         // No more operation in progress, notify the new media information.
         emit mediaInfoChanged();
     }
