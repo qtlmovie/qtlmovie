@@ -67,7 +67,23 @@ unix|mingw|gcc {
     QMAKE_CXXFLAGS += -fno-strict-aliasing
 }
 
+# Custom variable QMAKE_LRELEASE points to the translation file compiler.
+
+isEmpty(QMAKE_LRELEASE) {
+    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
+    else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+
+# Translation files handling.
+
+updateqm.input = TRANSLATIONS
+updateqm.output = locale/${QMAKE_FILE_BASE}.qm
+updateqm.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm locale/${QMAKE_FILE_BASE}.qm
+updateqm.CONFIG += no_link target_predeps
+QMAKE_EXTRA_COMPILERS += updateqm
+
 # If qts is in the config, add dependencies.
+
 qts {
     CONFIG *= qtl # Qts depends on Qtl
     LIBS += -L../Qts/$$PASS/ -lQts
@@ -77,6 +93,7 @@ qts {
 }
 
 # If qtl is in the config, add dependencies.
+
 qtl {
     LIBS += -L../Qtl/$$PASS/ -lQtl
     PRE_TARGETDEPS += ../Qtl/$$PASS/libQtl.a

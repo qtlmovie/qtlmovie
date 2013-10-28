@@ -32,7 +32,10 @@
 ;  If Win64 is defined, generate a 64-bit installer (default: 32-bit installer).
 ;
 ;  This script uses the following required symbols:
-;  ProductVersion, BuildDir, RootDir, QtDllDir, QtPluginDir, OutDir.
+;  - ProductVersion: QtlMovie version.
+;  - RootDir: Project top-level directory.
+;  - BuildDir: Build top-level directory.
+;  - QtDir: Qt installation directory.
 ;
 ;-----------------------------------------------------------------------------
 
@@ -69,9 +72,9 @@ Name "QtlMovie"
 
 ; Installer file name.
 !ifdef Win64
-    OutFile "${OutDir}\QtlMovie-Win64-${ProductVersion}.exe"
+    OutFile "${BuildDir}\QtlMovie-Win64-${ProductVersion}.exe"
 !else
-    OutFile "${OutDir}\QtlMovie-Win32-${ProductVersion}.exe"
+    OutFile "${BuildDir}\QtlMovie-Win32-${ProductVersion}.exe"
 !endif
 
 ; Use XP manifest.
@@ -125,30 +128,30 @@ Section "Install"
 
     ; Install product files.
     SetOutPath "$INSTDIR"
-    File "${BuildDir}\QtlMovie.exe"
-    File "${QtDllDir}\Qt5Core.dll"
-    File "${QtDllDir}\Qt5Network.dll"
-    File "${QtDllDir}\Qt5Gui.dll"
-    File "${QtDllDir}\Qt5Widgets.dll"
-    File "${QtDllDir}\Qt5Multimedia.dll"
-    File "${QtDllDir}\libgcc_s_dw2-1.dll"
-    File "${QtDllDir}\libstdc++-6.dll"
-    File "${QtDllDir}\libwinpthread-1.dll"
-    File "${QtDllDir}\icuin51.dll"
-    File "${QtDllDir}\icuuc51.dll"
-    File "${QtDllDir}\icudt51.dll"
+    File "${BuildDir}\QtlMovie\release\QtlMovie.exe"
+    File "${QtDir}\bin\Qt5Core.dll"
+    File "${QtDir}\bin\Qt5Network.dll"
+    File "${QtDir}\bin\Qt5Gui.dll"
+    File "${QtDir}\bin\Qt5Widgets.dll"
+    File "${QtDir}\bin\Qt5Multimedia.dll"
+    File "${QtDir}\bin\libgcc_s_dw2-1.dll"
+    File "${QtDir}\bin\libstdc++-6.dll"
+    File "${QtDir}\bin\libwinpthread-1.dll"
+    File "${QtDir}\bin\icuin51.dll"
+    File "${QtDir}\bin\icuuc51.dll"
+    File "${QtDir}\bin\icudt51.dll"
     File "${RootDir}\build\qt.conf"
     File "${RootDir}\LICENSE.txt"
     File "${RootDir}\CHANGELOG.txt"
 
     SetOutPath "$INSTDIR\plugins\platforms"
-    File "${QtPluginDir}\platforms\qwindows.dll"
+    File "${QtDir}\plugins\platforms\qwindows.dll"
 
     SetOutPath "$INSTDIR\translations"
-    File "${QtPluginDir}\..\translations\qt*_fr.qm"
-    File "${RootDir}\src\Qtl\locale\qtl_fr.qm"
-    File "${RootDir}\src\Qts\locale\qts_fr.qm"
-    File "${RootDir}\src\QtlMovie\locale\qtlmovie_fr.qm"
+    File "${QtDir}\translations\qt*_fr.qm"
+    File "${BuildDir}\Qtl\locale\qtl_fr.qm"
+    File "${BuildDir}\Qts\locale\qts_fr.qm"
+    File "${BuildDir}\QtlMovie\locale\qtlmovie_fr.qm"
 
     SetOutPath "$INSTDIR\fonts"
     File "${RootDir}\fonts\fonts.conf.template"

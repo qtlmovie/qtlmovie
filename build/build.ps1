@@ -49,8 +49,8 @@
   The release and debug versions are built in ..\build-Win32-Release and
   ..\build-Win32-Debug respectively.
 
-  If neither -Release nor -Debug no -Translation is provided, build both versions
-  and translation files. Otherwise, build only the requested versions.
+  If neither -Release nor -Debug is provided, build both versions.
+  Otherwise, build only the requested versions.
 
  .PARAMETER Debug
 
@@ -59,10 +59,6 @@
  .PARAMETER Release
 
   Build the release version.
-
- .PARAMETER Translations
-
-  Build the translation files.
 
  .PARAMETER NoPause
 
@@ -73,7 +69,6 @@
 param(
     [switch]$Release = $false,
     [switch]$Debug = $false,
-    [switch]$Translations = $false,
     [switch]$NoPause = $false
 )
 
@@ -86,10 +81,9 @@ Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 Set-QtPath
 
 # Default arguments: build all.
-if (-not $Release -and -not $Debug -and -not $Translations) {
+if (-not $Release -and -not $Debug) {
     $Release = $true
     $Debug = $true
-    $Translations = $true
 }
 
 # Project file
@@ -105,11 +99,8 @@ else {
     $BuildDirRelease = $BuildDirBase + "-Release"
     $BuildDirDebug = $BuildDirBase + "-Debug"
 
-    # Release translation files.
-    if ($Translations) {
-        Get-ChildItem $SrcDir -Recurse -File -Filter *.ts | ForEach-Object {lrelease $_.FullName}
-        & (Join-Path $PSScriptRoot html-adjust.ps1) -NoPause
-    }
+    # Adjust special characters in HTML files.
+    & (Join-Path $PSScriptRoot html-adjust.ps1) -NoPause
 
     # Build project in release mode.
     if ($Release) {
