@@ -99,9 +99,6 @@ else {
     $BuildDirRelease = $BuildDirBase + "-Release"
     $BuildDirDebug = $BuildDirBase + "-Debug"
 
-    # Adjust special characters in HTML files.
-    & (Join-Path $PSScriptRoot html-adjust.ps1) -NoPause
-
     # Build project in release mode.
     if ($Release) {
         Write-Output "Building Release version..."
