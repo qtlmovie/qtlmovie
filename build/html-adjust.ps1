@@ -40,6 +40,7 @@
 #-----------------------------------------------------------------------------
 
 param(
+    [switch]$Reverse = $false,
     [switch]$NoPause = $false
 )
 
@@ -57,14 +58,19 @@ $CharTableFile = (Join-Path $Script.DirectoryName "$($Script.BaseName)-table.txt
 
 # Load the character table from a text file.
 # Each line of the file has the format: unicode-value<tab>symbol<tab>....
-# Create the hash table $CharTable indexed by unicode values.
+# Create the hash table $CharTable indexed by unicode values (or reverse).
 $CharTable = @{}
 Get-Content -Encoding UTF8 $CharTableFile | ForEach-Object {
     $fields = $_.Split("`t")
     if ($fields.Length -ge 2) {
         $unicode = $fields[0] -as [int]
         if ($unicode -ne $null) {
-            $CharTable[$unicode] = $fields[1]
+            if ($Reverse) {
+                $CharTable[$fields[1]] = [string][char]$unicode
+            }
+            else {
+                $CharTable[$unicode] = $fields[1]
+            }
         }
     }
 }
@@ -75,18 +81,59 @@ function ProcessLines()
 {
     foreach ($line in $input) {
         $result = ""
-        foreach ($c in $line.ToCharArray()) {
-            $unicode = [int]$c
-            if ($unicode -lt 128) {
-                $result += $c
-            }
-            else {
-                $sym = $CharTable[$unicode]
-                if ($sym -eq $null) {
+        if ($Reverse) {
+            # Convert HTML sequences into unicode characters.
+            $start = 0
+            do {
+                # Locate next "&...;" structure.
+                $amp = $line.IndexOf("&", $start)
+                if ($amp -ge 0) {
+                    $semi = $line.IndexOf(";", $amp)
+                }
+                else {
+                    $semi = -1
+                }
+                # Get corresponding unicode.
+                if ($semi -gt 0) {
+                    $unicode = $CharTable[$line.Substring($amp + 1, $semi - $amp - 1)]
+                }
+                else {
+                    $unicode = $null
+                }
+                # Perform the replacement if found
+                if ($unicode -ne $null) {
+                    # Sequence and unicode replacement found.
+                    $result += $line.Substring($start, $amp - $start)
+                    $result += $unicode
+                    $start = $semi + 1
+                }
+                elseif ($semi -gt 0) {
+                    # Sequence found but no unicode replacement, copy sequence.
+                    $result += $line.Substring($start, $semi - $start + 1)
+                    $start = $semi + 1
+                }
+                else {
+                    # Sequence not found, copy rest of line.
+                    $result += $line.Substring($start)
+                    $start = $line.Length
+                }
+            } while ($start -lt $line.Length)
+        }
+        else {
+            # Convert unicode characters into HTML sequences.
+            foreach ($c in $line.ToCharArray()) {
+                $unicode = [int]$c
+                if ($unicode -lt 128) {
                     $result += $c
                 }
                 else {
-                    $result += "&" + $sym + ";"
+                    $sym = $CharTable[$unicode]
+                    if ($sym -eq $null) {
+                        $result += $c
+                    }
+                    else {
+                        $result += "&" + $sym + ";"
+                    }
                 }
             }
         }
