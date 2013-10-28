@@ -7,11 +7,11 @@ Version 1.2.8 (2013-13-27)
   search for the presence of CC delayed the display of the other streams. Now,
   all other streams are displayed at once. The (unsuccessful) search for CC
   completes in the background.
-- Added a "release notes" viewer".
+- Added a "release notes" viewer from menu "Help".
 
 Version 1.2.7 (2013-13-26)
 - Help files are now fully translated. QtlMovie can work completely in another
-  languages. Current translations are English and French. Native speakers will
+  language. Current translations are English and French. Native speakers will
   be required for additional languages.
 
 Version 1.2.6 (2013-13-22)
