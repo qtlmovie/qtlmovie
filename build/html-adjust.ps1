@@ -49,7 +49,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
 
 # Directories.
 $RootDir=(Split-Path -Parent $PSScriptRoot)
-$SrcDir=(Join-Path $RootDir src)
+$HelpDir=(Join-Path $RootDir help)
 
 # Character table file.
 $Script = (Get-Item $PSCommandPath)
@@ -95,7 +95,7 @@ function ProcessLines()
 }
 
 # Process all non-English HTML files (with a "_locale" suffix in base name).
-Get-ChildItem $SrcDir -Recurse -Include *_*.html | ForEach-Object {
+Get-ChildItem $HelpDir -Recurse -Include *_*.html | ForEach-Object {
     Write-Output "Updating '$_' ..."
     # Get transformed content.
     $Lines = (Get-Content -Encoding UTF8 $_ | ProcessLines)
