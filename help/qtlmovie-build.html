@@ -190,6 +190,21 @@ sudo yum install \
         As an example, the Qt 5.1.1 installer file is
         <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
           qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
+      <p>The version of Qt which comes with the binary installer uses shared libraries.
+        This is fine for development and tests but inconvenient for deployments on other machines.
+        The binary installer for QtlMovie embeds a statically linked version of QtlMovie.
+        To build this executable, it is necessary to use a special version of Qt with
+        static libraries. There is no prebuilt Qt installer for that. It is necessary
+        to download the Qt source archive and recompile it statically. The script
+        <code>build\windows-build-qt-static.ps1</code> does exactly that. It downloads
+        the last known version of the Qt source file (edit the default parameter value to change this),
+        recompiles and installs a static version of Qt.</p>
+      <p>Note that this static version of Qt complements but does not replace the dynamic version which
+        comes with the Qt binary installer. It is necessary to install the binary installer first.
+        This creates <code>C:\Qt</code> and installs MinGW. Then, the static version is built
+        and installed in <code>C:\Qt\Static</code>. The dynamic version is used for development and
+        testing, especially when using Qt Creator. The static version is used when building the
+        binary installer for QtlMovie.</p>
 
       <h3><a id="winps1">Windows PowerShell requirements</a></h3>
 
@@ -225,6 +240,8 @@ Major  Minor  Build  Revision
       <h3><a id="winmanbuild">Building QtlMovie manually</a></h3>
 
       <p>Execute the script <code>build\build.ps1</code>.</p>
+      <p>QtlMovie is build against the dynamic version of Qt by default.
+        Specify the parameter <code>-Static</code> to build against the static version.</p>
 
       <h3><a id="winqtcreator">Building QtlMovie using Qt Creator</a></h3>
 
@@ -260,7 +277,9 @@ Major  Minor  Build  Revision
         <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
         NSIS version 2.46 has been used by QtlMovie.</p>
       <p>To build the QtlMovie binary installer for Windows, execute the script
-        <code>build\build-installer.ps1</code>.</p>
+        <code>build\build-installer.ps1</code>.
+        This script builds QtlMovie against the static version of Qt.
+        Be sure to have <a href="#winqt">built and installed</a> this static version first.</p>
       <hr/>
       <p>[<i><a href="#top">Back to top</a></i>]</p>
     </div>

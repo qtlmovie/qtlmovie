@@ -198,6 +198,21 @@ sudo yum install \
         A titre d'exemple, l'installeur binaire pour Qt 5.1.1 est
         <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
           qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
+      <p>La version de Qt qui vient avec l'installeur binaire utilise des librairies dynamiques (DLL).
+        C'est suffisant pour le développement et les tests mais cela pose des problèmes de déploiement
+        sur les autres machines. L'installeur binaire de QtlMovie amène une version statique de QtlMovie,
+        sans librairies partagées. Pour construire cet exécutable, il est nécessaire d'utiliser une
+        version spéciale de Qt, avec des librairies statiques et non dynamiques. Il n'existe
+        pas d'installeur pour cela. Il faut télécharger l'archive des sources de Qt et le recompiler
+        statiquement. C'est ce que fait le script <code>build\windows-build-qt-static.ps1</code>.
+        Il télécharge la dernière version identifiée de Qt (éditer le paramètre par défaut pour en changer),
+        recompile et installe une version statique de Qt.</p>
+      <p>Cette version statique est complémentaire par rapport à la version dynamique installée
+        par défaut, elle ne la remplace pas. Il faut d'abord installer l'installeur binaire
+        de Qt. Il crée <code>C:\Qt</code> et installe MinGW. Ensuite, la version statique est
+        construite et installée dans <code>C:\Qt\Static</code>. La version dynamique est utilisée
+        pour le développement et les tests, notamment avec Qt Creator. La version statique est
+        utilisée pour construire l'installeur binaire de QtlMovie.</p>
 
       <h3><a id="winps1">Windows PowerShell</a></h3>
 
@@ -233,6 +248,8 @@ Major  Minor  Build  Revision
       <h3><a id="winmanbuild">Construire QtlMovie manuellement</a></h3>
 
       <p>Exécuter le script <code>build\build.ps1</code>.</p>
+      <p>Par défaut, QtlMovie est construit en utilisant la version dynamique de Qt.
+        Spécifier le paramètre <code>-Static</code> pour construire QtlMovie avec la version statique de Qt.</p>
 
       <h3><a id="winqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
 
@@ -269,7 +286,9 @@ Major  Minor  Build  Revision
         <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
         NSIS version 2.46 a été utilisé pour QtlMovie.</p>
       <p>Pour construire l'installeur binaire de QtlMovie, exécuter le script
-        <code>build\build-installer.ps1</code>.</p>
+        <code>build\build-installer.ps1</code>.
+        Ce script construit QtlMovie en utilisant la version statique de Qt.
+        Assurez vous d'avoir <a href="#winqt">construit et installé</a> cette version statique au préalable.</p>
 
       <hr/>
       <p>[<i><a href="#top">Retour en haut de page</a></i>]</p>
