@@ -1,6 +1,8 @@
 build-[Dd]oxygen
 build-*-[Rr]elease
 build-*-[Dd]ebug
+build-*-[Rr]elease-[Ss]tatic
+build-*-[Dd]ebug-[Ss]tatic
 *~
 *.bak
 *.exe

@@ -99,7 +99,7 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
     // On Windows,
     // - Add the wintools subdirectory.
     // - Add various standard locations for media tools.
-    // - When running the application from the build tree, also add "../../../wintools"
+    // - When running the application from the build tree, also add "../../wintools"
     //   from the application executable. This is a sort of hack which should not be
     //   too dangerous when run into a real installation.
 #if defined(Q_OS_WIN)
@@ -108,7 +108,7 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
          << "C:\\Program Files (x86)\\FFmpeg\\bin"
          << "C:\\Program Files\\DVD Decrypter"
          << "C:\\Program Files (x86)\\DVD Decrypter"
-         << QtlFile::absoluteNativeFilePath(QFileInfo(QFileInfo(QFileInfo(appDir).path()).path()).path() + sep + "wintools");
+         << (QtlFile::parentPath(appDir, 2) + sep + "wintools");
 #endif
 
     // End up with the standard executable search path.

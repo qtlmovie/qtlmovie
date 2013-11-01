@@ -528,11 +528,16 @@ function Search-File
  .PARAMETER QtRoot
 
   Root directory where Qt installations are dropped (default: C:\Qt).
+
+ .PARAMETER Static
+
+  Use the static version of Qt which is under the $QtRoot\Static.
 #>
 function Set-QtPath
 {
     param(
-        [String] $QtRoot = "C:\Qt"
+        [String] $QtRoot = "C:\Qt",
+        [switch] $Static = $false
     )
 
     # Hash table of Qt bin directories. Indexed by names of a few standard commands.
@@ -546,7 +551,7 @@ function Set-QtPath
     # one single "Get-ChildItem -Recurse" instead of the manual exploration in
     # function Get-QtBinDir. This was much simpler but also 10 times slower.
 
-    $QtSkipDirectories = @("doc", "examples", "imports", "include", "lib", "libexec", "opt", "plugins", "qml", "share", "src")
+    $QtSkipDirectories = @("doc", "examples", "imports", "include", "lib", "libexec", "opt", "plugins", "qml", "share", "src", "static")
 
     # This function explores a tree of directories and updates $QtBinMap.
     # Always sort subdirectories exploration in order to use the latest Qt installation
@@ -580,6 +585,14 @@ function Set-QtPath
     # Get Qt bin directories.
 
     Get-QtBinDir $QtRoot ([REF]$QtBinMap)
+
+    # When using static Qt, only keep gcc, then seach again in $QtRoot\Static
+
+    if ($Static) {
+        $QtBinMap["qmake"] = ""
+        $QtBinMap["qtcreator"] = ""
+        Get-QtBinDir $QtRoot\Static ([REF]$QtBinMap)
+    }
 
     # Initial system path, without interfering commands.
 

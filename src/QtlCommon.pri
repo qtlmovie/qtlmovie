@@ -35,6 +35,7 @@
 CONFIG *= qt
 CONFIG *= thread
 CONFIG *= largefile
+CONFIG -= debug_and_release
 
 QT *= core
 QT *= gui

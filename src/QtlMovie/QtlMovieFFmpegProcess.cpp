@@ -81,12 +81,12 @@ void QtlMovieFFmpegProcess::updateEnvironment(QProcessEnvironment& env)
     const QString applicationDirectory(QCoreApplication::applicationDirPath());
 
     // Search fonts.conf.template in "fonts" subdirectory from application.
-    // When running the application from the build tree, also add "../../../fonts"
+    // When running the application from the build tree, also add "../../fonts"
     // from the application executable. This is a sort of hack which should not be
     // too dangerous when run into a real installation.
     QStringList searchPath;
     searchPath << (applicationDirectory + sep + QStringLiteral(QTLFC_FONT_DIR_NAME))
-               << (QtlFile::parentPath(applicationDirectory, 3) + sep + QStringLiteral(QTLFC_FONT_DIR_NAME));
+               << (QtlFile::parentPath(applicationDirectory, 2) + sep + QStringLiteral(QTLFC_FONT_DIR_NAME));
 
     // Search for fonts.conf.template in these directories.
     QString fontConfigTemplate(QtlFile::search(QTLFC_TEMPLATE_NAME, searchPath));

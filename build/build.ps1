@@ -60,6 +60,10 @@
 
   Build the release version.
 
+ .PARAMETER Static
+
+  Use the static version of Qt which is under the $QtRoot\Static.
+
  .PARAMETER NoPause
 
   Do not wait for the user to press <enter> at end of execution. By default,
@@ -69,6 +73,7 @@
 param(
     [switch]$Release = $false,
     [switch]$Debug = $false,
+    [switch]$Static = $false,
     [switch]$NoPause = $false
 )
 
@@ -78,7 +83,16 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
 Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 
 # Build a safe environment for the latest Qt version.
-Set-QtPath
+if ($Static) {
+    Set-QtPath -Static
+    $DirSuffix = "-Static"
+    $QMakeOption = "CONFIG+=static"
+}
+else {
+    Set-QtPath
+    $DirSuffix = ""
+    $QMakeOption = ""
+}
 
 # Default arguments: build all.
 if (-not $Release -and -not $Debug) {
@@ -96,15 +110,15 @@ if ($ProjectFile -eq $null) {
 else {
     # Build directories for release and debug.
     $BuildDirBase = (Join-Path $RootDir "build-Win32")
-    $BuildDirRelease = $BuildDirBase + "-Release"
-    $BuildDirDebug = $BuildDirBase + "-Debug"
+    $BuildDirRelease = $BuildDirBase + "-Release" + $DirSuffix
+    $BuildDirDebug = $BuildDirBase + "-Debug" + $DirSuffix
 
     # Build project in release mode.
     if ($Release) {
         Write-Output "Building Release version..."
         [void] (New-Item -ItemType Directory -Force $BuildDirRelease)
         Push-Location $BuildDirRelease
-        qmake $ProjectFile -r -spec win32-g++
+        qmake $ProjectFile -r -spec win32-g++ CONFIG+=release $QMakeOption
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
     }
@@ -114,7 +128,7 @@ else {
         Write-Output "Building Debug version..."
         [void] (New-Item -ItemType Directory -Force $BuildDirDebug)
         Push-Location $BuildDirDebug
-        qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug CONFIG+=declarative_debug
+        qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug $QMakeOption
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
     }
