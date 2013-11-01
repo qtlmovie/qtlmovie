@@ -121,7 +121,7 @@ if (-not $NoSource) {
 $RootDir = (Split-Path -Parent $PSScriptRoot)
 $SrcDir = (Join-Path $RootDir "src")
 $ProjectFile = Get-QtProjectFile $SrcDir
-$BuildDir = (Join-Path $RootDir "build-Win32-Release")
+$BuildDir = (Join-Path $RootDir "build-Win32-Release-Static")
 
 # Get the product name.
 if (-not $ProductName -and $ProjectFile) {
@@ -144,17 +144,17 @@ if (-not $Version) {
 
 # Build the project in release mode.
 if ($NoBuild) {
-    Set-QtPath
+    Set-QtPath -Static
 }
 else {
-    & (Join-Path $PSScriptRoot build.ps1) -Release -NoPause
+    & (Join-Path $PSScriptRoot build.ps1) -Release -Static -NoPause
 }
 
 # Build the installer.
 if (-not $NoInstaller) {
 
     # Locate Qt installation directory.
-    $QtDir = Split-Path -Parent (Split-Path -Parent (Get-FileInPath Qt5Core.dll $env:Path))
+    $QtDir = Split-Path -Parent (Split-Path -Parent (Get-FileInPath qmake.exe $env:Path))
 
     # Locate NSIS, the Nullsoft Scriptable Installation System.
     $NsisExe = Get-FileInPath makensis.exe "$env:Path;C:\Program Files\NSIS;C:\Program Files (x86)\NSIS"
