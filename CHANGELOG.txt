@@ -3,6 +3,7 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.9
+- Windows installer is now internationalized.
 - Windows executable is now statically linked and the installer no longer
   embeds Qt DLL's.
 

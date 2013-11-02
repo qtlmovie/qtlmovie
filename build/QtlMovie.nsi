@@ -36,6 +36,7 @@
 ;  - RootDir: Project top-level directory.
 ;  - BuildDir: Build top-level directory.
 ;  - QtDir: Qt installation directory.
+;  - Win64: If defined, generate an installer for 64-bit systems.
 ;
 ;-----------------------------------------------------------------------------
 
@@ -48,34 +49,16 @@ Name "QtlMovie"
 !include "x64.nsh"
 !verbose pop
 
-; In 64-bit installers, don't use registry redirection. Also prevent execution
-; of 64-bit installers on 32-bit systems (the installer itself is 32-bit and
-; can run on 32-bit systems but it contains some 64-bit executables).
-!ifdef Win64
-    function .onInit
-        ${If} ${RunningX64}
-            SetRegView 64
-        ${Else}
-            MessageBox MB_OK|MB_ICONSTOP \
-                "This is a 64-bit version of QtlMovie.$\r$\n\
-                You have a 32-bit version of Windows.$\r$\n\
-                Please use a 32-bit version of QtlMovie on this system."
-            Quit
-        ${EndIf}
-    functionEnd
-    function un.onInit
-        ${If} ${RunningX64}
-            SetRegView 64
-        ${EndIf}
-    functionEnd
-!endif
-
 ; Installer file name.
 !ifdef Win64
     OutFile "${BuildDir}\QtlMovie-Win64-${ProductVersion}.exe"
 !else
     OutFile "${BuildDir}\QtlMovie-Win32-${ProductVersion}.exe"
 !endif
+
+; Registry entry for product info and uninstallation info.
+!define ProductKey "Software\QtlMovie"
+!define UninstallKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\QtlMovie"
 
 ; Use XP manifest.
 XPStyle on
@@ -88,20 +71,13 @@ RequestExecutionLevel admin
 !define MUI_ICON "${RootDir}\src\QtlMovie\images\qtlmovie-logo.ico"
 !define MUI_UNICON "${RootDir}\src\QtlMovie\images\qtlmovie-logo.ico"
 
-; Installer pages
-!insertmacro MUI_PAGE_DIRECTORY
-!insertmacro MUI_PAGE_INSTFILES
+; Language selection dialog
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
-; Uninstaller pages
-!insertmacro MUI_UNPAGE_CONFIRM
-!insertmacro MUI_UNPAGE_INSTFILES
-
-; Languages
-!insertmacro MUI_LANGUAGE "English"
-
-; Registry entry for product info and uninstallation info.
-!define ProductKey "Software\QtlMovie"
-!define UninstallKey "Software\Microsoft\Windows\CurrentVersion\Uninstall\QtlMovie"
+; Remember the installer language for the current user in the registry.
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "${ProductKey}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 ; Default installation folder
 !ifdef Win64
@@ -113,6 +89,57 @@ RequestExecutionLevel admin
 ; Get installation folder from registry if available from a previous installation.
 InstallDirRegKey HKLM "${ProductKey}" "InstallDir"
 
+; Installer pages
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+
+; Uninstaller pages
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+; Languages
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "French"
+
+;-----------------------------------------------------------------------------
+; Initialization functions
+;-----------------------------------------------------------------------------
+
+; Installation initialization.
+function .onInit
+
+    ; Language selection.
+    !insertmacro MUI_LANGDLL_DISPLAY
+
+    ; In 64-bit installers, don't use registry redirection. Also prevent execution
+    ; of 64-bit installers on 32-bit systems (the installer itself is 32-bit and
+    ; can run on 32-bit systems but it contains some 64-bit executables).
+    !ifdef Win64
+        ${If} ${RunningX64}
+            SetRegView 64
+        ${Else}
+            MessageBox MB_OK|MB_ICONSTOP \
+                "This is a 64-bit version of QtlMovie.$\r$\n\
+                You have a 32-bit version of Windows.$\r$\n\
+                Please use a 32-bit version of QtlMovie on this system."
+            Quit
+        ${EndIf}
+    !endif
+functionEnd
+
+; Uninstallation initialization.
+function un.onInit
+
+    ; Retrieve the installer language.
+    !insertmacro MUI_UNGETLANGUAGE
+
+    ; In 64-bit installers, don't use registry redirection.
+    !ifdef Win64
+        ${If} ${RunningX64}
+            SetRegView 64
+        ${EndIf}
+    !endif
+functionEnd
 
 ;-----------------------------------------------------------------------------
 ; Installation section
@@ -241,6 +268,7 @@ Section "Uninstall"
     Delete "$SMPROGRAMS\QtlMovie.lnk"
 
     ; Delete registry entries
+    DeleteRegKey HKCU "${ProductKey}"
     DeleteRegKey HKLM "${ProductKey}"
     DeleteRegKey HKLM "${UninstallKey}"
 
