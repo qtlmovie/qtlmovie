@@ -14,6 +14,7 @@ Codecs:
  .EVIL. a64_multi            Multicolor charset for Commodore 64 (encoders: a64multi )
  .EVIL. a64_multi5           Multicolor charset for Commodore 64, extended with 5th color (colram) (encoders: a64multi5 )
  D.V..S aasc                 Autodesk RLE
+ D.VIL. aic                  Apple Intermediate Codec
  DEVIL. amv                  AMV Video
  D.V.L. anm                  Deluxe Paint Animation
  D.V.L. ansi                 ASCII/ANSI art
@@ -47,7 +48,7 @@ Codecs:
  D.V.L. dfa                  Chronomaster DFA
  DEV.LS dirac                Dirac (decoders: dirac libschroedinger ) (encoders: libschroedinger )
  DEVIL. dnxhd                VC3/DNxHD
- DEVI.S dpx                  DPX image
+ DEVI.S dpx                  DPX (Digital Picture Exchange) image
  D.V.L. dsicinvideo          Delphine Software International CIN video
  DEVIL. dvvideo              DV (Digital Video)
  D.V..S dxa                  Feeble Files/ScummVM DXA
@@ -63,13 +64,14 @@ Codecs:
  DEV.L. flv1                 FLV / Sorenson Spark / Sorenson H.263 (Flash Video) (decoders: flv ) (encoders: flv )
  D.V..S fraps                Fraps
  D.VI.S frwu                 Forward Uncompressed
- ..V... g2m                  GoToMeeting
+ D.V.L. g2m                  Go2Meeting
  DEV..S gif                  GIF (Graphics Interchange Format)
  DEV.L. h261                 H.261
  DEV.L. h263                 H.263 / H.263-1996, H.263+ / H.263-1998 / H.263 version 2
  D.V.L. h263i                Intel H.263
  DEV.L. h263p                H.263+ / H.263-1998 / H.263 version 2
  DEV.LS h264                 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (encoders: libx264 libx264rgb )
+ D.V.LS hevc                 H.265 / HEVC
  DEVI.S huffyuv              HuffYUV
  D.V.L. idcin                id Quake II CIN video (decoders: idcinvideo )
  D.VI.. idf                  iCEDraw text
@@ -80,7 +82,7 @@ Codecs:
  D.V.L. indeo4               Intel Indeo Video Interactive 4
  D.V.L. indeo5               Intel Indeo Video Interactive 5
  D.V.L. interplayvideo       Interplay MVE video
- DEVILS jpeg2000             JPEG 2000 (decoders: j2k libopenjpeg ) (encoders: j2k libopenjpeg )
+ DEVILS jpeg2000             JPEG 2000 (decoders: jpeg2000 libopenjpeg ) (encoders: jpeg2000 libopenjpeg )
  DEVILS jpegls               JPEG-LS
  D.VIL. jv                   Bitmap Brothers JV video
  D.V.L. kgv1                 Kega Game Video
@@ -122,7 +124,7 @@ Codecs:
  D.VIL. pictor               Pictor/PC Paint
  DEV..S png                  PNG (Portable Network Graphics) image
  DEVI.S ppm                  PPM (Portable PixelMap) image
- DEVIL. prores               Apple ProRes (iCodec Pro) (decoders: prores prores_lgpl ) (encoders: prores prores_anatoliy prores_kostya )
+ DEVIL. prores               Apple ProRes (iCodec Pro) (decoders: prores prores_lgpl ) (encoders: prores prores_aw prores_ks )
  D.VIL. ptx                  V.Flash PTX image
  D.VI.S qdraw                Apple QuickDraw
  D.V.L. qpeg                 Q-team QPEG
@@ -134,7 +136,7 @@ Codecs:
  DEV.L. roq                  id RoQ video (decoders: roqvideo ) (encoders: roqvideo )
  D.V.L. rpza                 QuickTime video (RPZA)
  DEV.L. rv10                 RealVideo 1.0
- DEV.L. rv20                 RealVideo 1.0
+ DEV.L. rv20                 RealVideo 2.0
  D.V.L. rv30                 RealVideo 3.0
  D.V.L. rv40                 RealVideo 4.0
  D.V.L. sanm                 LucasArts SMUSH video
@@ -142,6 +144,7 @@ Codecs:
  D.VI.S sgirle               SGI RLE 8-bit
  D.V.L. smackvideo           Smacker video (decoders: smackvid )
  D.V.L. smc                  QuickTime Graphics (SMC)
+ D.V... smv                  Sigmatel Motion Video (decoders: smvjpeg )
  DEV.LS snow                 Snow
  D.VIL. sp5x                 Sunplus JPEG (SP5X)
  DEVI.S sunrast              Sun Rasterfile image
@@ -183,7 +186,8 @@ Codecs:
  D.V.L. vp6a                 On2 VP6 (Flash version, with alpha channel)
  D.V.L. vp6f                 On2 VP6 (Flash version)
  DEV.L. vp8                  On2 VP8 (decoders: vp8 libvpx ) (encoders: libvpx )
- ..V.L. vp9                  Google VP9
+ D.V.L. vp9                  Google VP9
+ D.VILS webp                 WebP
  DEV.L. wmv1                 Windows Media Video 7
  DEV.L. wmv2                 Windows Media Video 8
  D.V.L. wmv3                 Windows Media Video 9
@@ -211,6 +215,7 @@ Codecs:
  DEA.L. adpcm_adx            SEGA CRI ADX ADPCM
  D.A.L. adpcm_afc            ADPCM Nintendo Gamecube AFC
  D.A.L. adpcm_ct             ADPCM Creative Technology
+ D.A.L. adpcm_dtk            ADPCM Nintendo Gamecube DTK
  D.A.L. adpcm_ea             ADPCM Electronic Arts
  D.A.L. adpcm_ea_maxis_xa    ADPCM Electronic Arts Maxis CDROM XA
  D.A.L. adpcm_ea_r1          ADPCM Electronic Arts R1
@@ -219,6 +224,7 @@ Codecs:
  D.A.L. adpcm_ea_xas         ADPCM Electronic Arts XAS
  DEA.L. adpcm_g722           G.722 ADPCM (decoders: g722 ) (encoders: g722 )
  DEA.L. adpcm_g726           G.726 ADPCM (decoders: g726 ) (encoders: g726 )
+ D.A.L. adpcm_g726le         G.726 ADPCM little-endian (decoders: g726le )
  D.A.L. adpcm_ima_amv        ADPCM IMA AMV
  D.A.L. adpcm_ima_apc        ADPCM IMA CRYO APC
  D.A.L. adpcm_ima_dk3        ADPCM IMA Duck DK3
@@ -228,6 +234,7 @@ Codecs:
  D.A.L. adpcm_ima_iss        ADPCM IMA Funcom ISS
  D.A.L. adpcm_ima_oki        ADPCM IMA Dialogic OKI
  DEA.L. adpcm_ima_qt         ADPCM IMA QuickTime
+ D.A.L. adpcm_ima_rad        ADPCM IMA Radical
  D.A.L. adpcm_ima_smjpeg     ADPCM IMA Loki SDL MJPEG
  DEA.L. adpcm_ima_wav        ADPCM IMA WAV
  D.A.L. adpcm_ima_ws         ADPCM IMA Westwood
@@ -243,9 +250,9 @@ Codecs:
  DEA.L. amr_nb               AMR-NB (Adaptive Multi-Rate NarrowBand) (decoders: amrnb libopencore_amrnb ) (encoders: libopencore_amrnb )
  DEA.L. amr_wb               AMR-WB (Adaptive Multi-Rate WideBand) (decoders: amrwb libopencore_amrwb ) (encoders: libvo_amrwbenc )
  D.A..S ape                  Monkey's Audio
- D.A.L. atrac1               Atrac 1 (Adaptive TRansform Acoustic Coding)
- D.A.L. atrac3               Atrac 3 (Adaptive TRansform Acoustic Coding 3)
- ..A.L. atrac3p              Sony ATRAC3+
+ D.A.L. atrac1               ATRAC1 (Adaptive TRansform Acoustic Coding)
+ D.A.L. atrac3               ATRAC3 (Adaptive TRansform Acoustic Coding 3)
+ ..A.L. atrac3p              ATRAC3+ (Adaptive TRansform Acoustic Coding 3+)
  D.A.L. binkaudio_dct        Bink Audio (DCT)
  D.A.L. binkaudio_rdft       Bink Audio (RDFT)
  D.A.L. bmv_audio            Discworld II BMV audio
@@ -268,6 +275,7 @@ Codecs:
  D.A.L. interplay_dpcm       DPCM Interplay
  D.A.L. mace3                MACE (Macintosh Audio Compression/Expansion) 3:1
  D.A.L. mace6                MACE (Macintosh Audio Compression/Expansion) 6:1
+ D.A.L. metasound            Voxware MetaSound
  D.A..S mlp                  MLP (Meridian Lossless Packing)
  D.A.L. mp1                  MP1 (MPEG audio layer 1) (decoders: mp1 mp1float )
  DEA.L. mp2                  MP2 (MPEG audio layer 2) (decoders: mp2 mp2float ) (encoders: mp2 libtwolame )
@@ -317,7 +325,7 @@ Codecs:
  D.A.L. ra_288               RealAudio 2.0 (28.8K) (decoders: real_288 )
  D.A..S ralf                 RealAudio Lossless
  DEA.L. roq_dpcm             DPCM id RoQ
- D.A.L. s302m                SMPTE 302M
+ DEA..S s302m                SMPTE 302M
  D.A..S shorten              Shorten
  D.A.L. sipr                 RealAudio SIPR / ACELP.NET
  D.A.L. smackaudio           Smacker audio (decoders: smackaud )
@@ -329,14 +337,14 @@ Codecs:
  D.A..S tak                  TAK (Tom's lossless Audio Kompressor)
  D.A..S truehd               TrueHD
  D.A.L. truespeech           DSP Group TrueSpeech
- D.A..S tta                  TTA (True Audio)
+ DEA..S tta                  TTA (True Audio)
  D.A.L. twinvq               VQF TwinVQ
  D.A.L. vima                 LucasArts VIMA audio
  D.A.L. vmdaudio             Sierra VMD audio
  DEA.L. vorbis               Vorbis (decoders: vorbis libvorbis ) (encoders: vorbis libvorbis )
  ..A.L. voxware              Voxware RT29 Metasound
  D.A... wavesynth            Wave synthesis pseudo-codec
- D.A.LS wavpack              WavPack
+ DEA.LS wavpack              WavPack (encoders: wavpack libwavpack )
  D.A.L. westwood_snd1        Westwood Audio (SND1) (decoders: ws_snd1 )
  D.A..S wmalossless          Windows Media Audio Lossless
  D.A.L. wmapro               Windows Media Audio 9 Professional
@@ -344,7 +352,9 @@ Codecs:
  DEA.L. wmav2                Windows Media Audio 2
  D.A.L. wmavoice             Windows Media Audio Voice
  D.A.L. xan_dpcm             DPCM Xan
+ ..D... dvd_nav_packet       DVD Nav packet
  ..D... klv                  SMPTE 336M Key-Length-Value (KLV) metadata
+ DES... ass                  ASS (Advanced SSA) subtitle
  DES... dvb_subtitle         DVB subtitles (decoders: dvbsub ) (encoders: dvbsub )
  ..S... dvb_teletext         DVB teletext
  DES... dvd_subtitle         DVD subtitles (decoders: dvdsub ) (encoders: dvdsub )
@@ -358,7 +368,7 @@ Codecs:
  D.S... realtext             RealText subtitle
  D.S... sami                 SAMI subtitle
  DES... srt                  SubRip subtitle with embedded timing
- DES... ssa                  SSA (SubStation Alpha) / ASS (Advanced SSA) subtitle (decoders: ass ) (encoders: ass )
+ DES... ssa                  SSA (SubStation Alpha) subtitle
  DES... subrip               SubRip subtitle
  D.S... subviewer            SubViewer subtitle
  D.S... subviewer1           SubViewer v1 subtitle

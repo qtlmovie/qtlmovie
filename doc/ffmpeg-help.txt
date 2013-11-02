@@ -24,15 +24,17 @@ Print help / information / capabilities:
 -pix_fmts           show available pixel formats
 -layouts            show standard channel layouts
 -sample_fmts        show available audio sample formats
+-colors             show available color names
 
 Global options (affect whole program instead of just one file:
--loglevel loglevel  set libav* logging level
--v loglevel         set libav* logging level
+-loglevel loglevel  set logging level
+-v loglevel         set logging level
 -report             generate a report
 -max_alloc bytes    set maximum size of a single allocated block
 -y                  overwrite output files
--n                  do not overwrite output files
+-n                  never overwrite output files
 -stats              print progress report during encoding
+-max_error_rate ratio of errors (0.0: no errors, 1.0: 100% error  maximum error rate
 -bits_per_raw_sample number  set the number of bits per raw sample
 -vol volume         change audio volume (256=normal)
 
@@ -49,8 +51,10 @@ Per-file main options:
 -timestamp time     set the recording timestamp ('now' to set the current time)
 -metadata string=string  add metadata
 -target type        specify target file type ("vcd", "svcd", "dvd", "dv", "dv50", "pal-vcd", "ntsc-svcd", ...)
+-apad               audio pad
 -frames number      set the number of frames to record
 -filter filter_graph  set stream filtergraph
+-filter_script filename  read stream filtergraph description from a file
 -reinit_filter      reinit filtergraph on input parameter changes
 
 Video options:
@@ -83,6 +87,7 @@ Subtitle options:
 -scodec codec       force subtitle codec ('copy' to copy stream)
 -stag fourcc/tag    force subtitle tag/fourcc
 -fix_sub_duration   fix subtitles duration
+-canvas_size size   set canvas size (WxH or abbreviation)
 -spre preset        set the subtitle options to the indicated preset
 
 

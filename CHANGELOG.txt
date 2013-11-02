@@ -3,9 +3,11 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.9
+- Integrated official FFmpeg 2.1 with Windows installer.
 - Windows installer is now internationalized.
 - Windows executable is now statically linked and the installer no longer
-  embeds Qt DLL's.
+  embeds Qt DLL's. The installer is smaller and the risk to miss required
+  new DLL's is reduced.
 
 Version 1.2.8 (2013-13-27)
 - Fixed a performance problem when opening a file without Closed Captions. The

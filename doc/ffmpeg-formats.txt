@@ -10,6 +10,7 @@ File formats:
  DE ac3             raw AC-3
  D  act             ACT Voice file format
  D  adf             Artworx Data Format
+ D  adp             ADP
   E adts            ADTS AAC (Advanced Audio Coding)
  DE adx             CRI ADX
  D  aea             MD STUDIO audio
@@ -27,7 +28,7 @@ File formats:
  DE ast             AST (Audio Stream)
  DE au              Sun AU
  DE avi             AVI (Audio Video Interleaved)
- D  avisynth        AVISynth
+ D  avisynth        AviSynth script
   E avm2            SWF (ShockWave Flash) (AVM2)
  D  avr             AVR (Audio Visual Research)
  D  avs             AVS
@@ -37,6 +38,7 @@ File formats:
  D  bink            Bink
  DE bit             G.729 BIT file format
  D  bmv             Discworld II BMV
+ D  boa             Black Ops Audio
  D  brstm           BRSTM (Binary Revolution Stream)
  D  c93             Interplay C93
   E caca            caca (color ASCII art) output device
@@ -46,6 +48,7 @@ File formats:
  D  cdxl            Commodore CDXL video
  D  concat          Virtual concatenation script
   E crc             CRC testing
+ DE data            raw data
  DE daud            D-Cinema audio
  D  dfa             Chronomaster DFA
  DE dirac           raw Dirac
@@ -85,6 +88,7 @@ File formats:
  DE h261            raw H.261
  DE h263            raw H.263
  DE h264            raw H.264 video
+ D  hevc            raw HEVC video
   E hls             Apple HTTP Live Streaming
  D  hls,applehttp   Apple HTTP Live Streaming
  DE ico             Microsoft Windows ICO
@@ -106,6 +110,7 @@ File formats:
  D  jv              Bitmap Brothers JV
  DE latm            LOAS/LATM
  D  lavfi           Libavfilter virtual input device
+ D  libmodplug      ModPlug demuxer
  D  lmlm4           raw lmlm4
  D  loas            LOAS AudioSyncStream
  D  lvf             LVF
@@ -163,12 +168,13 @@ File formats:
  D  qcp             QCP
  D  r3d             REDCODE R3D
  DE rawvideo        raw video
-  E rcv             VC-1 test bitstream
  D  realtext        RealText subtitle format
+ D  redspark        RedSpark
  D  rl2             RL2
  DE rm              RealMedia
  DE roq             raw id RoQ
  D  rpl             RPL / ARMovie
+ D  rsd             GameCube RSD
  DE rso             Lego Mindstorms RSO
  DE rtp             RTP output
  DE rtsp            RTSP output
@@ -217,8 +223,8 @@ File formats:
  DE u32be           PCM unsigned 32-bit big-endian
  DE u32le           PCM unsigned 32-bit little-endian
  DE u8              PCM unsigned 8-bit
- D  vc1             raw VC-1
- D  vc1test         VC-1 test bitstream
+ DE vc1             raw VC-1 video
+ DE vc1test         VC-1 test bitstream
   E vcd             MPEG-1 Systems / MPEG program stream (VCD)
  D  vfwcap          VfW video capture
  D  vivo            Vivo
@@ -232,11 +238,11 @@ File formats:
  DE wav             WAV / WAVE (Waveform Audio)
  D  wc3movie        Wing Commander III movie
   E webm            WebM
- D  webvtt          WebVTT subtitle
+ DE webvtt          WebVTT subtitle
  D  wsaud           Westwood Studios audio
  D  wsvqa           Westwood Studios VQA
  DE wtv             Windows Television (WTV)
- DE wv              WavPack
+ DE wv              raw WavPack
  D  xa              Maxis XA
  D  xbin            eXtended BINary text (XBIN)
  D  xmv             Microsoft XMV
