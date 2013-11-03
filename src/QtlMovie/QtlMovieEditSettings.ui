@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>567</width>
-    <height>542</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -538,7 +538,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <spacer name="horizontalSpacer_2">
+           <spacer name="spacerIpadSize">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -572,6 +572,106 @@
             </property>
             <property name="value">
              <number>2500</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxAviOutput">
+         <property name="title">
+          <string>AVI output</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinAviWidth">
+            <property name="suffix">
+             <string/>
+            </property>
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="value">
+             <number>880</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="labelAviSizeMiddle">
+            <property name="text">
+             <string>x</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="spinAviHeight">
+            <property name="suffix">
+             <string/>
+            </property>
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="value">
+             <number>352</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelAviBitrate">
+            <property name="text">
+             <string>Video bitrate :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelAviMaxSize">
+            <property name="text">
+             <string>Max size :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <spacer name="spacerAviSize">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1" colspan="4">
+           <widget class="QSpinBox" name="spinAviBitrate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> kb/s</string>
+            </property>
+            <property name="minimum">
+             <number>300</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>1200</number>
             </property>
            </widget>
           </item>

@@ -2,26 +2,27 @@
 QtlMovie Change Log
 ===================
 
-Version 1.2.9
+Version 1.2.9 (2013-11-03)
+- Added "AVI" output type for highly compressed file storage and exchange.
 - Integrated official FFmpeg 2.1 with Windows installer.
 - Windows installer is now internationalized.
 - Windows executable is now statically linked and the installer no longer
   embeds Qt DLL's. The installer is smaller and the risk to miss required
   new DLL's is reduced.
 
-Version 1.2.8 (2013-13-27)
+Version 1.2.8 (2013-10-27)
 - Fixed a performance problem when opening a file without Closed Captions. The
   search for the presence of CC delayed the display of the other streams. Now,
   all other streams are displayed at once. The (unsuccessful) search for CC
   completes in the background.
 - Added a "release notes" viewer from menu "Help".
 
-Version 1.2.7 (2013-13-26)
+Version 1.2.7 (2013-10-26)
 - Help files are now fully translated. QtlMovie can work completely in another
   language. Current translations are English and French. Native speakers will
   be required for additional languages.
 
-Version 1.2.6 (2013-13-22)
+Version 1.2.6 (2013-10-22)
 - Bug fix: On Windows, if the output file name contained a single quote (')
   and text subtitles from the input file were inserted in the output file,
   the conversion failed. Fixed.
@@ -29,7 +30,7 @@ Version 1.2.6 (2013-13-22)
 - Added check for a new version either when the application starts (can be
   disabled in the settings) or manually from the "Help" menu.
 
-Version 1.2.5 (2013-13-21)
+Version 1.2.5 (2013-10-21)
 - US Closed Captions subtitles (CEA-608/708) are now supported thanks to
   the integration of CCExtractor. Currently, the CC are numbered as follow:
   1: channel 1, field 1, 2: channel 1, field 2, 3: channel 2, field 1,

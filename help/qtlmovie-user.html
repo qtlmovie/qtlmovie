@@ -28,6 +28,7 @@
               </ul>
             </li>
             <li><a href="#ipadout">iPad output</a></li>
+            <li><a href="#aviout">AVI output</a></li>
             <li><a href="#subout">Subtitle extraction</a></li>
           </ul>
         </li>
@@ -69,12 +70,14 @@
       <ul>
         <li>Create a simple video DVD with one movie, no menu, no alternate language.</li>
         <li>Create video files for the iPad.</li>
+        <li>Create highly compressed AVI video files.</li>
       </ul>
       <p>QtlMovie main features are:</p>
       <ul>
         <li>Take any type of common audio/video file as input.</li>
         <li>Produce DVD ISO images and optionally burn them.</li>
         <li>Produce video files for iPad viewing.</li>
+        <li>Produce highly compressed AVI video files for storage or interchange.</li>
         <li>Keep only one audio track.</li>
         <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
           but does not keep subtitles as a separate stream.</li>
@@ -237,12 +240,26 @@
       <p>QtlMovie always produces iPad files with the following characteristics:</p>
       <ul>
         <li>MP4 file format.</li>
-        <li>AVC / H.264 video, baseline profile, level 3.0.
+        <li>MPEG-4 part 10 / AVC / H.264 video, baseline profile, level 3.0.
           The average bitrate is 2.5 Mb/s (adjustable in the settings).
           The display aspect ratio is unchanged (no black border is added).
           The frame size is unchanged, unless the input size exceeds the iPad native screen resolution in
           which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
         <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
+      </ul>
+
+      <h3><a id="aviout">AVI output</a></h3>
+
+      <p>QtlMovie always produces AVI files with the following characteristics:</p>
+      <ul>
+        <li>AVI file format.</li>
+        <li>MPEG-4 part 2 / DivX / Xvid / H.263 video.
+          The average bitrate is 1.2 Mb/s (adjustable in the settings).
+          The display aspect ratio is unchanged (no black border is added).
+          The frame size is unchanged, unless the input size exceeds a predefined maximum size
+          (880x352, adjustable in the settings) in which case the size is reduced to fit within
+          this resolution, preserving the input aspect ratio.</li>
+        <li>MP3 audio, stereo, sampled at 48 kHz. The audio bitrate is 128 kb/s.</li>
       </ul>
 
       <h3><a id="subout">Subtitle extraction</a></h3>
@@ -358,6 +375,10 @@
         The "Screen size" options specify the type of iPad to target.
         The corresponding screen resolution will be used as maximum video size.
         Larger videos will be resized to fit within the selected iPad resolution.
+        The specified video bitrate is used by default as "average bitrate".</p>
+      <p>The "AVI output" area is used only when transcoding to AVI files.
+        The "Max size" options specify the maximum resolution of the output video.
+        Larger videos will be resized to fit within this resolution.
         The specified video bitrate is used by default as "average bitrate".</p>
       <p>The "Subtitles insertion" area is used only when inserting subtitles.
         The option "Use original video size as a hint for SRT/SSA/ASS character shape"

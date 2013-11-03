@@ -144,7 +144,10 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _createPalDvd(true),
     _ipadScreenSize(Ipad12Size),
     _forceDvdTranscode(false),
-    _newVersionCheck(true)
+    _newVersionCheck(true),
+    _aviVideoBitRate(QTL_AVI_DEFAULT_VIDEO_BITRATE),
+    _aviMaxVideoWidth(QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH),
+    _aviMaxVideoHeight(QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT)
 {
     Q_ASSERT(log != 0);
 
@@ -360,6 +363,9 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "ipadScreenSize", int(_ipadScreenSize));
     setBoolAttribute(xml, "forceDvdTranscode", _forceDvdTranscode);
     setBoolAttribute(xml, "newVersionCheck", _newVersionCheck);
+    setIntAttribute(xml, "aviVideoBitRate", _aviVideoBitRate);
+    setIntAttribute(xml, "aviMaxVideoWidth", _aviMaxVideoWidth);
+    setIntAttribute(xml, "aviMaxVideoHeight", _aviMaxVideoHeight);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -418,6 +424,9 @@ bool QtlMovieSettings::load(const QString& fileName)
     int ipadScreenSize = int(_ipadScreenSize);
     bool forceDvdTranscode = _forceDvdTranscode;
     bool newVersionCheck = _newVersionCheck;
+    int aviVideoBitRate = _aviVideoBitRate;
+    int aviMaxVideoWidth = _aviMaxVideoWidth;
+    int aviMaxVideoHeight = _aviMaxVideoHeight;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -456,6 +465,9 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "ipadScreenSize", ipadScreenSize) &&
                     !getBoolAttribute(xml, "forceDvdTranscode", forceDvdTranscode) &&
                     !getBoolAttribute(xml, "newVersionCheck", newVersionCheck) &&
+                    !getIntAttribute(xml, "aviVideoBitRate", aviVideoBitRate) &&
+                    !getIntAttribute(xml, "aviMaxVideoWidth", aviMaxVideoWidth) &&
+                    !getIntAttribute(xml, "aviMaxVideoHeight", aviMaxVideoHeight) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -500,6 +512,9 @@ bool QtlMovieSettings::load(const QString& fileName)
         setIpadScreenSize(IpadScreenSize(ipadScreenSize));
         setForceDvdTranscode(forceDvdTranscode);
         setNewVersionCheck(newVersionCheck);
+        setAviVideoBitRate(aviVideoBitRate);
+        setAviMaxVideoWidth(aviMaxVideoWidth);
+        setAviMaxVideoHeight(aviMaxVideoHeight);
     }
     else {
         // Format an error string.
@@ -795,6 +810,30 @@ void QtlMovieSettings::setNewVersionCheck(bool newVersionCheck)
 {
     if (_newVersionCheck != newVersionCheck) {
         _newVersionCheck = newVersionCheck;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setAviVideoBitRate(int aviVideoBitRate)
+{
+    if (_aviVideoBitRate != aviVideoBitRate) {
+        _aviVideoBitRate = aviVideoBitRate;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setAviMaxVideoWidth(int aviMaxVideoWidth)
+{
+    if (_aviMaxVideoWidth != aviMaxVideoWidth) {
+        _aviMaxVideoWidth = aviMaxVideoWidth;
+        _isModified = true;
+    }
+}
+
+void QtlMovieSettings::setAviMaxVideoHeight(int aviMaxVideoHeight)
+{
+    if (_aviMaxVideoHeight != aviMaxVideoHeight) {
+        _aviMaxVideoHeight = aviMaxVideoHeight;
         _isModified = true;
     }
 }

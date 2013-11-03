@@ -797,6 +797,51 @@ public:
     //!
     void setNewVersionCheck(bool newVersionCheck);
 
+    //!
+    //! Get the video bitrate for AVI output in bits / second.
+    //! @return The video bitrate for AVI output in bits / second.
+    //!
+    int aviVideoBitRate() const
+    {
+        return _aviVideoBitRate;
+    }
+
+    //!
+    //! Set the video bitrate for AVI output in bits / second.
+    //! @param [in] aviVideoBitRate The video bitrate for AVI output in bits / second.
+    //!
+    void setAviVideoBitRate(int aviVideoBitRate);
+
+    //!
+    //! Get the maximum video width for AVI output in pixels.
+    //! @return The maximum video width for AVI output in pixels.
+    //!
+    int aviMaxVideoWidth() const
+    {
+        return _aviMaxVideoWidth;
+    }
+
+    //!
+    //! Set the maximum video width for AVI output in pixels.
+    //! @param [in] aviMaxVideoWidth The maximum video width for AVI output in pixels.
+    //!
+    void setAviMaxVideoWidth(int aviMaxVideoWidth);
+
+    //!
+    //! Get the maximum video height for AVI output in pixels.
+    //! @return The maximum video height for AVI output in pixels.
+    //!
+    int aviMaxVideoHeight() const
+    {
+        return _aviMaxVideoHeight;
+    }
+
+    //!
+    //! Set the maximum video height for AVI output in pixels.
+    //! @param [in] aviMaxVideoHeight The maximum video height for AVI output in pixels.
+    //!
+    void setAviMaxVideoHeight(int aviMaxVideoHeight);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -837,6 +882,9 @@ private:
     IpadScreenSize        _ipadScreenSize;         //!< iPad screen size.
     bool                  _forceDvdTranscode;      //!< Force transcoding even if input file is already DVD-compliant.
     bool                  _newVersionCheck;        //!< Automatically check new version on startup.
+    int                   _aviVideoBitRate;        //!< Video bitrate for AVI output in bits / second.
+    int                   _aviMaxVideoWidth;       //!< Maximum video width for AVI output in pixels.
+    int                   _aviMaxVideoHeight;      //!< Maximum video height for AVI output in pixels.
 
     //!
     //! Write an XML element with a "value" integer attribute.

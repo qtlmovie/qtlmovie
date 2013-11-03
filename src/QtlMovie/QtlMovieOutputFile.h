@@ -75,6 +75,7 @@ public:
         DvdImage, //!< DVD ISO image.
         DvdBurn,  //!< DVD ISO image and burn it.
         Ipad,     //!< iPad target.
+        Avi,      //!< AVI target (highly compressed).
         SubRip,   //!< Subtitles only in SRT format.
         None      //!< No output.
     };

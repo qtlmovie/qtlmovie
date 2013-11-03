@@ -28,6 +28,7 @@
               </ul>
             </li>
             <li><a href="#ipadout">Création d'une vidéo pour iPad</a></li>
+            <li><a href="#aviout">Création d'un fichier AVI</a></li>
             <li><a href="#subout">Extraction de sous-titres</a></li>
           </ul>
         </li>
@@ -69,12 +70,14 @@
       <ul>
         <li>Création d'un DVD vidéo simple avec un film, sans menu ni option de langue.</li>
         <li>Création d'une vidéo pour iPad.</li>
+        <li>Création d'un fichier AVI hautement compressé.</li>
       </ul>
       <p>Les principales fonctionnalités de QtlMovie sont les suivantes:</p>
       <ul>
         <li>Lecture de n'importe quel type courant de fichier audio/vidéo en entrée.</li>
         <li>Création d'images ISO pour DVD et les graver en option.</li>
         <li>Création de fichiers audio/vidéo adaptés pour iPad.</li>
+        <li>Création d'un fichier audio/vidéo AVI hautement compressé pour stockage ou échange de fichier.</li>
         <li>Ne conserver qu'une seule piste audio.</li>
         <li>En option, incruster une piste de sous-titrage dans la vidéo mais
           sans conserver de flux de sous-titrage indépendant dans le fichier..</li>
@@ -255,13 +258,27 @@
       <p>Les fichiers vidéo pour iPad produits par QtlMovie ont toujours les caractéristiques suivantes:</p>
       <ul>
         <li>Format de fichier MP4.</li>
-        <li>Vidéo AVC / H.264, profil de base, niveau 3.0.
+        <li>Vidéo MPEG-4 partie 10 / AVC / H.264, profil de base, niveau 3.0.
           Le débit binaire moyen est de 2.5 Mb/s (ajustable dans les options).
           Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
           La taille d'image est inchangée, sauf si la taille de l'entrée excède la résolution
           native de l'iPad, auquel cas la taille est réduite pour tenir à l'intérieur
           de cette résolution tout en préservant les proportions d'origine.</li>
         <li>Audio AAC, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 160 kb/s.</li>
+      </ul>
+
+      <h3><a id="aviout">Création d'un fichier AVI</a></h3>
+
+      <p>Les fichiers vidéo AVI produits par QtlMovie ont toujours les caractéristiques suivantes:</p>
+      <ul>
+        <li>Format de fichier AVI.</li>
+        <li>Vidéo MPEG-4 partie 2 / DivX / Xvid / H.263.
+          Le débit binaire moyen est de 1.2 Mb/s (ajustable dans les options).
+          Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
+          La taille d'image est inchangée, sauf si la taille de l'entrée excède une résolution
+          prédéfinie (880x352, ajustable dans les options), auquel cas la taille est réduite pour
+          tenir à l'intérieur de cette résolution tout en préservant les proportions d'origine.</li>
+        <li>Audio MP3, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 128 kb/s.</li>
       </ul>
 
       <h3><a id="subout">Extraction de sous-titres</a></h3>
@@ -383,6 +400,10 @@
       <p>La zone "Sortie iPad" est utilisée pour le transcodage vers iPad.
         L'option "Taille d'écran" spécifie le type d'iPad cible.
         La résolution d'écran sera utilisée en tant que taille vidéo maximum.
+        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.
+        Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+      <p>La zone "Sortie AVI" est utilisée pour le transcodage en fichier AVI.
+        L'option "Taille max" spécifie la résolution vidéo maximum.
         Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.
         Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
       <p>La zone "Insertion de sous-titres" est utilisée pour l'insertion de sous-titres.

@@ -61,6 +61,13 @@
 #define QTL_IPAD34_VIDEO_HEIGHT            1536  //!< Video height (pixels) for iPad 3 & 4.
 #define QTL_IPAD_FRAME_RATE                  25  //!< Frames per second for iPad.
 
+#define QTL_AVI_AUDIO_BITRATE            128000  //!< MP3 audio bitrate (bits per second) for AVI.
+#define QTL_AVI_AUDIO_SAMPLING            48000  //!< MP3 audio sampling rate (Hz) for AVI.
+#define QTL_AVI_DEFAULT_VIDEO_BITRATE   1200000  //!< H.263/Xvid/DivX video default bitrate for AVI.
+#define QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH     880  //!< Default max video width (pixels) for AVI.
+#define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT    352  //!< Default max video height (pixels) for AVI.
+#define QTL_AVI_FRAME_RATE                   24  //!< Frames per second for AVI.
+
 //!
 //! Percentage of DVD ISO image overhead.
 //!

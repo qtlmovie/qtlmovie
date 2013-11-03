@@ -249,6 +249,14 @@ private:
     bool addTranscodeToIpad(const QtlMovieInputFile* inputFile, const QString& outputFileName);
 
     //!
+    //! Add a process for transcoding to AVI.
+    //! @param [in] inputFile The input file.
+    //! @param [in] outputFileName The output file name.
+    //! @return True on success, false on error.
+    //!
+    bool addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QString& outputFileName);
+
+    //!
     //! Add a process for extracting subtitles into a file.
     //! The supported input subtitle types are SRT, SSA, ASS and Teletext (MPEG-TS input file only).
     //! @param [in] inputFile The input file.

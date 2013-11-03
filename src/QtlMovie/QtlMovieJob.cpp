@@ -288,6 +288,7 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
     case QtlMovieOutputFile::DvdImage:
     case QtlMovieOutputFile::DvdBurn:
     case QtlMovieOutputFile::Ipad:
+    case QtlMovieOutputFile::Avi:
         // Require any audio and video type.
         // Require a supported or no subtitle type.
         return inputFile->selectedAudioStreamIndex() >= 0 &&
@@ -416,6 +417,10 @@ bool QtlMovieJob::buildScenario()
     }
     case QtlMovieOutputFile::Ipad: {
         success = addTranscodeToIpad(inputForTranscoding, _outputFile->fileName());
+        break;
+    }
+    case QtlMovieOutputFile::Avi: {
+        success = addTranscodeToAvi(inputForTranscoding, _outputFile->fileName());
         break;
     }
     case QtlMovieOutputFile::SubRip: {
@@ -967,6 +972,89 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
 
     // Add the FFmpeg process.
     return addFFmpeg(tr("Transcoding audio/video"), args);
+}
+
+
+//----------------------------------------------------------------------------
+// Add a process for transcoding to AVI.
+//----------------------------------------------------------------------------
+
+bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QString& outputFileName)
+{
+    // Video and audio stream to transcode.
+    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
+
+    if (videoStream.isNull()) {
+        return errorFalse(tr("No selected video stream"));
+    }
+
+    // Start FFmpeg argument list.
+    QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
+
+    // Process selected audio stream.
+    if (!audioStream.isNull()) {
+        args << "-map" << audioStream->ffSpecifier()
+             << "-codec:a" << "mp3"         // MP3 (MPEG-2 Audio Layer 3)
+             << "-ac" << "2"                // Remix to 2 channels (stereo)
+             << "-ar" << QString::number(QTL_AVI_AUDIO_SAMPLING)
+             << "-b:a" << QString::number(QTL_AVI_AUDIO_BITRATE);
+    }
+
+    // Process selected video stream.
+    QString videoFilters;
+
+    // Common video options.
+    args << "-map" << videoStream->ffSpecifier()
+         << "-codec:v" << "mpeg4"      // H.263 (MPEG-4 part 2)
+         << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Avi)
+         << "-b:v" << QString::number(settings()->aviVideoBitRate());
+
+    // Get the characteristics of the video stream.
+    const int width = videoStream->width();
+    const int height = videoStream->height();
+    const float dar = videoStream->displayAspectRatio();
+
+    // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
+    // resize the video. The maximum output size depends on the iPad screen size in the settings.
+    int widthOut = 0;
+    int heightOut = 0;
+    QtlMovieFFmpeg::addBoundedSizeOptions(args,
+                                          videoFilters,
+                                          width,
+                                          height,
+                                          dar,
+                                          settings()->aviMaxVideoWidth(),
+                                          settings()->aviMaxVideoHeight(),
+                                          1.0,
+                                          widthOut,
+                                          heightOut);
+
+    // Add subtitles processing.
+    if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
+        !addSubtitleStreamVideoFilter(videoFilters, inputFile, widthOut, heightOut)) {
+        return false;
+    }
+
+    // Insert the video filter specification.
+    args << QtlMovieFFmpeg::videoFilterOptions(videoFilters)
+         << "-passlogfile" << (_tempDir + QDir::separator() + "fflog");
+
+    // There are two argument lists, one for each encoding pass.
+    // The output of the first pass is useless and sent to the null device (only the log is useful).
+    QStringList pass1Args;
+    QStringList pass2Args;
+
+    pass1Args << args
+              << "-pass" << "1"
+              << QtlMovieFFmpeg::outputArguments(settings(), QTL_NULL_DEVICE, "avi");
+
+    pass2Args << args
+              << "-pass" << "2"
+              << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "avi");
+
+    // Add 2 processes for video transcoding.
+    return addFFmpeg(tr("Transcoding, pass 1"), pass1Args) && addFFmpeg(tr("Transcoding, pass 2"), pass2Args);
 }
 
 

@@ -160,6 +160,9 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioIpad34->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad34Size);
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
+    _ui.spinAviBitrate->setValue(_settings->aviVideoBitRate() / 1000); // input is kb/s
+    _ui.spinAviWidth->setValue(_settings->aviMaxVideoWidth());
+    _ui.spinAviHeight->setValue(_settings->aviMaxVideoHeight());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -229,6 +232,9 @@ void QtlMovieEditSettings::applySettings()
     _settings->setIpadScreenSize(_ui.radioIpad12->isChecked() ? QtlMovieSettings::Ipad12Size : QtlMovieSettings::Ipad34Size);
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());
+    _settings->setAviVideoBitRate(_ui.spinAviBitrate->value() * 1000);  // input is kb/s
+    _settings->setAviMaxVideoWidth(_ui.spinAviWidth->value());
+    _settings->setAviMaxVideoHeight(_ui.spinAviHeight->value());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
