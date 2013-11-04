@@ -5,3 +5,4 @@ ffmpeg -codecs >ffmpeg-codecs.txt
 ffmpeg -bsfs >ffmpeg-bitstream-filters.txt
 ffmpeg -layouts >ffmpeg-layouts.txt
 ffmpeg -filters >ffmpeg-filters.txt
+ffmpeg -protocols >ffmpeg-protocols.txt
