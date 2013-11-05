@@ -55,6 +55,7 @@ QtlMovieJob::QtlMovieJob(const QtlMovieInputFile* inputFile,
     _inputFile(inputFile),
     _outputFile(outputFile),
     _outSeconds(0),
+    _actionCount(0),
     _tempDir(),
     _actionList()
 {
@@ -125,8 +126,14 @@ bool QtlMovieJob::start()
     _tempDir = QtlFile::shortPath(_tempDir, true);
 
     // Build the list of actions to execute.
+    if (!buildScenario()) {
+        cleanup();
+        return false;
+    }
+    _actionCount = _actionList.size();
+
     // Notify of the job start.
-    if (!buildScenario() || !QtlMovieAction::start()) {
+    if (!QtlMovieAction::start()) {
         cleanup();
         return false;
     }

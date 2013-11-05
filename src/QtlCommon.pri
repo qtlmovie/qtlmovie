@@ -43,6 +43,12 @@ QT *= widgets
 QT *= network
 QT *= multimedia
 
+# On Windows with Qt >= 5.2, use module winextras.
+
+win32:greaterThan(QT_MAJOR_VERSION, 4) {
+    greaterThan(QT_MAJOR_VERSION, 5)|greaterThan(QT_MINOR_VERSION, 1): QT *= winextras
+}
+
 # Determine build pass (release or debug).
 
 build_pass:CONFIG(debug, debug|release):PASS = debug

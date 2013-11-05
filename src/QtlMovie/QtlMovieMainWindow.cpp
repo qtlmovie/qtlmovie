@@ -54,6 +54,10 @@
 QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFileName) :
     QMainWindow(parent),
     _settings(0),
+#if defined(QTL_WINEXTRAS)
+    _taskbarButton(0),
+    _taskbarProgress(0),
+#endif
     _inFile(0),
     _outFile(0),
     _job(0),
@@ -62,6 +66,14 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
+
+    // Setup the Windows taskbar button.
+#if defined(QTL_WINEXTRAS)
+    _taskbarButton = new QWinTaskbarButton(this);
+    _taskbarButton->setWindow(windowHandle());
+    _taskbarProgress = _taskbarButton->progress();
+    _taskbarProgress->setRange(0, 1000);
+#endif
 
     // Connect the "About Qt" action.
     connect(_ui.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -497,6 +509,11 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
     _ui.progressBarEncode->setRange(0, started ? 0 : 100);
     _ui.progressBarEncode->reset();
     _ui.labelRemainingTime->setVisible(false);
+
+    // Set the Windows task bar button.
+#if defined(QTL_WINEXTRAS)
+    _taskbarProgress->setVisible(started);
+#endif
 }
 
 
@@ -588,6 +605,23 @@ void QtlMovieMainWindow::transcodingProgress(const QString& description, int cur
     else {
         _ui.labelRemainingTime->setVisible(false);
     }
+
+    // Update the Windows task bar button.
+#if defined(QTL_WINEXTRAS)
+    // Compute a value between 0 and 1000 reflecting the global progress.
+    // First, compute duration of one action. This assumes that all actions
+    // have the same duration, which is of course wrong. But never mind.
+    const int actionCount = _job == 0 ? 0 : _job->totalActionCount();
+    const int actionDuration = actionCount == 0 ? 1000 : 1000 / actionCount;
+    // Then, compute initial progress of current action.
+    int progressValue = actionDuration * (_job == 0 ? 0 : _job->currentActionCount());
+    // Finally, add progress within current action, if available.
+    if (maximum > 0) {
+        progressValue += (actionDuration * current) / maximum;
+    }
+    // Display the progress.
+    _taskbarProgress->setValue(progressValue);
+#endif
 }
 
 

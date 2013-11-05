@@ -36,14 +36,18 @@
 #ifndef QTLMOVIEMAINWINDOW_H
 #define QTLMOVIEMAINWINDOW_H
 
+#include <QtCore>
+#include <QtWidgets>
 #include "ui_QtlMovieMainWindow.h"
 #include "QtlLogger.h"
 #include "QtlMovieJob.h"
 #include "QtlMovieInputFile.h"
 #include "QtlMovieOutputFile.h"
 #include "QtlMovieSettings.h"
-#include <QVector>
-#include <QDateTime>
+
+#if defined(QTL_WINEXTRAS)
+#include <QtWinExtras>
+#endif
 
 //!
 //! A subclass of QMainWindow which implements the UI for the application.
@@ -192,6 +196,10 @@ protected:
 private:
     Ui::QtlMovieMainWindow _ui;                 //!< UI from Qt Designer.
     QtlMovieSettings*      _settings;           //!< Global settings.
+#if defined(QTL_WINEXTRAS)
+    QWinTaskbarButton*     _taskbarButton;      //!< The application button in the Windows task bar.
+    QWinTaskbarProgress*   _taskbarProgress;    //!< The progress indicator in the Windows task bar.
+#endif
     QtlMovieInputFile*     _inFile;             //!< Input file description.
     QtlMovieOutputFile*    _outFile;            //!< Output file description.
     QtlMovieJob*           _job;                //!< Current transcoding job.

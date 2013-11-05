@@ -41,6 +41,14 @@
 #include <numeric>
 
 //!
+//! The symbol is defined when the Qt module winextras is available.
+//! This means on Windows with Qt version >= 5.2.0.
+//!
+#if defined(DOXYGEN) || (defined(Q_OS_WIN) && QT_VERSION >= QT_VERSION_CHECK(5,2,0))
+#define QTL_WINEXTRAS 1
+#endif
+
+//!
 //! Return the runtime version of Qt as an integer, 0xMMNNPP (MM = major, NN = minor, PP = patch).
 //! Similar to the macro QT_VERSION but applies to the runtime version, not to the compile-time version.
 //! @return Qt version as an integer, 0xMMNNPP.

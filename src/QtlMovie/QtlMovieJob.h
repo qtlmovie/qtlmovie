@@ -79,6 +79,26 @@ public:
     virtual void abort();
 
     //!
+    //! Get the total number of actions in this job.
+    //! Available after start.
+    //! @return The total number of actions in this job.
+    //!
+    int totalActionCount() const
+    {
+        return isStarted() ? _actionCount : 0;
+    }
+
+    //!
+    //! Get the index of currently executing action.
+    //! Available after start.
+    //! @return The index of currently executing action.
+    //!
+    int currentActionCount() const
+    {
+        return isStarted() ? _actionCount - _actionList.size() : 0;
+    }
+
+    //!
     //! Check if it is possible to transcode an input file (with its streams selections) to an output type.
     //! @param [in] inputFile The input file.
     //! @param [in] outputType The target output type.
@@ -112,6 +132,7 @@ private:
     const QtlMovieInputFile*  _inputFile;      //!< Input file.
     const QtlMovieOutputFile* _outputFile;     //!< Output file.
     int                       _outSeconds;     //!< Output file duration in seconds.
+    int                       _actionCount;    //!< Number of actions to execute on start.
     QString                   _tempDir;        //!< Directory of temporary files, to delete after completion.
     QList<QtlMovieAction*>    _actionList;     //!< List of actions to execute.
 
