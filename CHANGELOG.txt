@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.10
+- On Windows with Aero desktop, added a progress bar on the application icon.
+
 Version 1.2.9 (2013-11-03)
 - Added "AVI" output type for highly compressed file storage and exchange.
 - Integrated official FFmpeg 2.1 with Windows installer.

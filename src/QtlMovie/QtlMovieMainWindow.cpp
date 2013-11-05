@@ -67,8 +67,17 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
 
-    // Setup the Windows taskbar button.
 #if defined(QTL_WINEXTRAS)
+    // The following sequence is a mystery. If not present, the taskbar progress does not work.
+    // But the Qt documentation is not really clear on what this does.
+    if (QtWin::isCompositionEnabled()) {
+        QtWin::enableBlurBehindWindow(this);
+    }
+    else {
+        QtWin::disableBlurBehindWindow(this);
+    }
+
+    // Setup the Windows taskbar button.
     _taskbarButton = new QWinTaskbarButton(this);
     _taskbarButton->setWindow(windowHandle());
     _taskbarProgress = _taskbarButton->progress();
