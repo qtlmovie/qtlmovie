@@ -44,6 +44,7 @@
 #include "QtlIncrement.h"
 #include "QtlProcess.h"
 #include "QtlUtils.h"
+#include "QtlSysInfo.h"
 #include <QtWidgets>
 
 
@@ -871,7 +872,7 @@ void QtlMovieMainWindow::searchNewVersion(bool silent)
 
 #if defined (Q_OS_WIN)
     // On Windows, fetch the binary installer.
-    if (qtlRunningOnWin64()) {
+    if (QtlSysInfo::runningOnWin64()) {
         directoryUrl.append("win64/");
         filePrefix = "QtlMovie-Win64-";
         fileSuffix = ".exe";

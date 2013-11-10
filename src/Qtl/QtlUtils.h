@@ -56,14 +56,6 @@
 int qtlQtVersion();
 
 //!
-//! Check if the application is running on a 64-bit version of Windows.
-//! This cannot be detected by conditional compilation since a 32-bit
-//! Windows application may run on a 64-bit system.
-//! @return True if the application is running on a 64-bit version of Windows.
-//!
-bool qtlRunningOnWin64();
-
-//!
 //! Construct a QString from a raw memory area containing UTF-8 characters.
 //! @param [in] addr Starting address.
 //! @param [in] size Size in bytes.

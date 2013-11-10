@@ -40,6 +40,7 @@
 #include "QtlMovieGrowisofsProcess.h"
 #include "QtlMovieCcExtractorProcess.h"
 #include "QtlStringList.h"
+#include "QtlSysInfo.h"
 
 
 //----------------------------------------------------------------------------
@@ -707,12 +708,12 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         // Common video options.
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "mpeg2video"
+             << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
              << "-target" << (settings()->createPalDvd() ? "pal-dvd" : "ntsc-dvd")  // Select presets for DVD.
              << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::DvdFile)
              << "-b:v" << QString::number(bitrate)
              << "-aspect" << QTL_DVD_DAR_FFMPEG
              << QtlMovieFFmpeg::videoFilterOptions(videoFilters)
-             << "-threads" << "auto"
              << "-passlogfile" << (_tempDir + QDir::separator() + "fflog");
 
         // There are two argument lists, one for each encoding pass.
@@ -934,14 +935,14 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
         // Common video options.
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
+             << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
              << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Ipad)
              << "-b:v" << QString::number(settings()->ipadVideoBitRate())
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
              << "-preset" << "slow"
              << "-profile:v" << "baseline"   // AVC profile
-             << "-level" << "30"             // AVC level 3.0
-             << "-threads" << "auto";        // Autodetect a suitable number of threads to use.
+             << "-level" << "30";            // AVC level 3.0
 
         // Get the characteristics of the video stream.
         const int width = videoStream->width();

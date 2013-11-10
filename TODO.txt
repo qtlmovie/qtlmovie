@@ -2,11 +2,6 @@
 QtlMovie "to do" list
 =====================
 
-- Fix "-threads" option, "auto" does not seem to work.
-  Message: [AVFilterGraph @ 0000000002563c80] Unable to parse option value "auto"
-  Maybe a positioning problem for option.
-  -> Implement a portable way (Linux/Windows) to get the number of CPU.
-
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory. Seems due to a Qt bug (or missing feature). For more
   details, see https://bugreports.qt-project.org/browse/QTBUG-33962

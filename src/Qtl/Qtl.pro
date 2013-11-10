@@ -54,7 +54,8 @@ SOURCES += \
     QtlTranslator.cpp \
     QtlVersion.cpp \
     QtlNewVersionChecker.cpp \
-    QtlTextFileViewer.cpp
+    QtlTextFileViewer.cpp \
+    QtlSysInfo.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -85,7 +86,8 @@ HEADERS += \
     QtlTranslator.h \
     QtlVersion.h \
     QtlNewVersionChecker.h \
-    QtlTextFileViewer.h
+    QtlTextFileViewer.h \
+    QtlSysInfo.h
 
 FORMS += \
     QtlBrowserDialog.ui \
