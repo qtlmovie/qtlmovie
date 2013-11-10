@@ -208,6 +208,7 @@ if (-not $NoSource) {
 
         # Delete 3rd party executables.
         Get-ChildItem -Recurse (Join-Path $TempRoot wintools*) | Where-Object {$_.Name -like "*.exe"} | ForEach-Object {Remove-Item -Force $_.FullName}
+        Get-ChildItem -Recurse (Join-Path $TempRoot linuxtools) | Where-Object {$_.Name -like "*.rpm"} | ForEach-Object {Remove-Item -Force $_.FullName}
 
         # Create the source zip file.
         Get-ChildItem -Recurse (Split-Path $TempRoot) | New-ZipFile $SrcArchive -Force -Root $TempDir

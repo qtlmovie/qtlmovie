@@ -79,14 +79,18 @@ NPROCESS=$(( (${NCPU:-1} + 1) / 2))
 # Search for Qt installations out of system directories.
 source ${SCRIPTDIR}/QtSetEnvironment.rc
 
+# If the command qmake-qt5 exists, use it. Otherwise, use qmake.
+QMAKE=$(which qmake-qt5 2>/dev/null)
+QMAKE=${QMAKE:-qmake}
+
 # Build release and/or debug releases.
 if $BUILD_RELEASE; then
     mkdir -p $BUILDDIR_RELEASE
     cd $BUILDDIR_RELEASE
-    qmake $PROJECT_FILE -r && make -j${NPROCESS} --no-print-directory -k
+    $QMAKE $PROJECT_FILE -r CONFIG+=release && make -j${NPROCESS} --no-print-directory -k
 fi
 if $BUILD_DEBUG; then
     mkdir -p $BUILDDIR_DEBUG
     cd $BUILDDIR_DEBUG
-    qmake $PROJECT_FILE -r CONFIG+=debug CONFIG+=declarative_debug && make -j${NPROCESS} --no-print-directory -k
+    $QMAKE $PROJECT_FILE -r CONFIG+=debug && make -j${NPROCESS} --no-print-directory -k
 fi

@@ -13,3 +13,8 @@ build-*-[Dd]ebug-[Ss]tatic
 *.o
 *.pro.user
 *.qm
+*.rpm
+*.zip
+*.tgz
+*.gz
+*.bz2
