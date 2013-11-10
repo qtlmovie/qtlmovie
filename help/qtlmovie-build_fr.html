@@ -17,6 +17,7 @@
             <li><a href="#linreq">Pré-requis</a></li>
             <li><a href="#linmanbuild">Construire QtlMovie manuellement</a></li>
             <li><a href="#linqtcreator">Construire QtlMovie avec Qt Creator</a></li>
+            <li><a href="#fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></li>
             <li><a href="#lincleanup">Construction multi-platformes</a></li>
             <li><a href="#lindoxy">Construire la documentation Doxygen</a></li>
             <li><a href="#rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a>
@@ -76,6 +77,25 @@
         Le projet QtlMovie est automatiquement ouvert.</p>
       <p>La première fois que Qt Creator est lancé, accepter toutes les options
         par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
+
+      <h3><a id="fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></h3>
+
+      <p>Exécuter le script <code>build/build-rpm.sh</code>.
+        Le package RPM est construit dans le répertoire <code>build-QtlMovie-Desktop-Release</code>.
+        Le package RPM se nomme <code>qtlmovie-1.2.10-0.fc19.x86_64.rpm</code> par exemple,
+        où "1.2.10" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
+      <p>Suivant les règles habituelles de gestion de package, le package RPM ne contient que QtlMovie.
+        Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
+        Noter les points suivants sur les packages non-standards:</p>
+      <ul>
+        <li>Le package <i>ffmpeg</i> est disponible via RPMfusion mais pas dans les dépots standards de Fedora.
+          Voir sur <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> pour une description de la
+          manière de configurer RPMfusion dans les dépots par défaut de votre système.</li>
+        <li>Les packages <i>ccextractor</i> et <i>telxcc</i> ne sont pas disponibles dans les divers dépots
+          standards de Fedora. Ces packages doivent être reconstruits manuellement en utilisant les scripts
+          <code>linuxtools/ccextractor-rpmbuild.sh</code> et <code>linuxtools/telxcc-rpmbuild.sh</code>.
+          Ces scripts téléchargent les dernières versions des sources en ligne et reconstruisent les packages.</li>
+      </ul>
 
       <h3><a id="lincleanup">Construction multi-platformes</a></h3>
 
