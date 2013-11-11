@@ -68,9 +68,9 @@ fi
 QTLMOVIE_SRC=QtlMovie-${QTLMOVIE_VERSION}-src.zip
 TMPDIR=/tmp/qtlmovie-rpmbuild-$$
 TMPROOT=$TMPDIR/QtlMovie-${QTLMOVIE_VERSION}
-mkdir -p $TMPROOT || exit 1
-tar -C $ROOTDIR -cpf - --exclude=.git --exclude="*.exe" --exclude="*.rpm" . | tar -C $TMPROOT -xpf -
-$TMPROOT/build/cleanup.sh >/dev/null
+mkdir -p $TMPROOT $BUILDDIR || exit 1
+tar -C $ROOTDIR -cpf - --exclude=.git --exclude="*.exe" --exclude="*.zip" --exclude="*.rpm" . | tar -C $TMPROOT -xpf -
+$TMPROOT/build/cleanup.sh --deep >/dev/null
 rm -f $BUILDDIR/$QTLMOVIE_SRC
 (cd $TMPDIR; zip -r -9 -q $BUILDDIR/$QTLMOVIE_SRC QtlMovie-${QTLMOVIE_VERSION})
 

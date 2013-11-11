@@ -30,7 +30,15 @@
 #  Unix script to clean up the project directory tree.
 #  Back to a clean state of source files.
 # 
+#  With option --deep, delete absolutely all non-source files, including the
+#  git repository and the content of the SourceForge mirror. This is typically
+#  done on a COPY of the project directory tree to create an archive of the
+#  source code.
+#
 #-----------------------------------------------------------------------------
+
+DEEP=false
+[ "$1" = "--deep" ] && DEEP=true
 
 ROOT=$(cd $(dirname $0)/..; pwd)
 
@@ -43,6 +51,7 @@ rm -rfv $ROOT/build-* $ROOT/src/*.pro.user*
 # - Delete object files, libraries, Qt metafiles, etc.
 find $ROOT \
     -type d -iname 'wintools*' -prune , \
+    -type d -iname sourceforge -prune , \
     -type d \( -iname debug -o -iname release \) -exec rm -rfv {} \; -printf 'Deleted %p\n' -prune , \
     \( -iname 'Makefile*' -o \
        -iname 'moc_*' -o \
@@ -66,6 +75,12 @@ find $ROOT \
 
 # Remove executable right from source files.
 find $ROOT -iname 'build-*' -prune , ! -type d ! -iname '*.sh' -exec chmod 640 {} \;
+
+# In deep mode, delete git repository and non-original files in SourceForge mirror.
+if $DEEP; then
+    rm -rf $ROOT/.git $ROOT/sourceforge/web/doc $ROOT/sourceforge/web/doxy
+    find $ROOT \( -iname '*.exe' -o -iname '*.rpm' -o -iname '*.zip' \) -exec rm {} \; -printf 'Deleted %p\n'
+fi
 
 # Unixify the end of lines on text files.
 find $ROOT \( \

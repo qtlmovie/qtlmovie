@@ -194,21 +194,11 @@ if (-not $NoSource) {
         [void] (New-Item -ItemType Directory -Force $TempDir)
         Copy-Item $RootDir $TempRoot -Recurse
 
-        # Cleanup the temporary tree.
-        & (Join-Path (Join-Path $TempRoot build) cleanup.ps1) -NoPause -Silent
-
-        # Delete the .git repository from the source tree.
-        $GitRep = (Join-Path $TempRoot .git)
-        if (Test-Path $GitRep) {
-            Remove-Item -Recurse -Force $GitRep
-        }
-
         # Create the wintools zip file.
         Get-ChildItem -Recurse (Join-Path $TempRoot wintools*) | New-ZipFile $WintoolsArchive -Force -Root $TempRoot
 
-        # Delete 3rd party executables.
-        Get-ChildItem -Recurse (Join-Path $TempRoot wintools*) | Where-Object {$_.Name -like "*.exe"} | ForEach-Object {Remove-Item -Force $_.FullName}
-        Get-ChildItem -Recurse (Join-Path $TempRoot linuxtools) | Where-Object {$_.Name -like "*.rpm"} | ForEach-Object {Remove-Item -Force $_.FullName}
+        # Cleanup the temporary tree.
+        & (Join-Path (Join-Path $TempRoot build) cleanup.ps1) -Deep -NoPause -Silent
 
         # Create the source zip file.
         Get-ChildItem -Recurse (Split-Path $TempRoot) | New-ZipFile $SrcArchive -Force -Root $TempDir

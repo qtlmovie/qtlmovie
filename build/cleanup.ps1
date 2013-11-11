@@ -57,20 +57,29 @@
  .PARAMETER Silent
 
   Do not report deleted files.
+
+ .PARAMETER Deep
+
+  Delete absolutely all non-source files, including the git repository and
+  the content of the SourceForge mirror. This is typically done on a COPY
+  of the project directory tree to create an archive of the source code.
 #>
 [CmdletBinding(SupportsShouldProcess=$true)]
 param(
     [switch]$NoPause = $false,
-    [switch]$Silent = $false
+    [switch]$Silent = $false,
+    [switch]$Deep = $false
 )
 
+$RootDir = Split-Path -Parent $PSScriptRoot
 
 # Note that we cannot pipe Get-ChildItem directly into Remove-Item since Get-ChildItem -Recurse
 # return directories first, followed by their content. So, we first get the list of files and
 # directories to remove and then we delete them, if not yet deleted by a previous recursion.
 
-$files = @(Get-ChildItem -Recurse (Split-Path -Parent $PSScriptRoot) | Where-Object {
+$files = @(Get-ChildItem -Recurse $RootDir | Where-Object {
     ($_.FullName -notlike '*\wintools*\*') -and
+    ($_.FullName -notlike '*\sourceforge\*') -and
     (($_.Name -like "build-*" -and (Test-Path $_.FullName -PathType Container)) -or
     $_.Name -like "debug" -or
     $_.Name -like "release" -or
@@ -94,13 +103,26 @@ $files = @(Get-ChildItem -Recurse (Split-Path -Parent $PSScriptRoot) | Where-Obj
     $_.Name -like "object_script.*.debug")
 }).FullName
 
-foreach ($file in $files) {
+function Delete($file) {
     if ((Test-Path $file) -and $PSCmdlet.ShouldProcess($file,"Delete")) {
         if (-not $Silent) {
             "Deleting $file"
         }
-        Remove-Item -Recurse $file
+        Remove-Item $file -Recurse -Force
     }
+}
+
+foreach ($file in $files) {
+    Delete $file
+}
+
+if ($Deep) {
+    Delete "$RootDir\.git"
+    Delete "$RootDir\sourceforge\web\doc"
+    Delete "$RootDir\sourceforge\web\doxy"
+    Get-ChildItem -Recurse $RootDir | Where-Object {
+        ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.zip")
+    } | ForEach-Object { Delete $_.FullName }
 }
 
 if (-not $NoPause) {
