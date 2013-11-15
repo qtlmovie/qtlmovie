@@ -126,9 +126,16 @@ void QtlNewVersionChecker::startRequest(const QUrl& url)
         _reply->deleteLater();
     }
 
-    // Start the HTTP request, read the headers.
+    // Build the HTTP request.
+    // By default, QNetworkRequest sets User-Agent to "Mozilla/5.0".
+    // For some unknown reason, this is a problem for some proxy servers which end up in "504 Gateway Timeout".
+    // Simply setting any other User-Agent fixes the problem.
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, "Qtl");
+
+    // Send the HTTP request, read the headers.
     _log->debug(tr("Searching new versions in %1").arg(url.toString()));
-    _reply = _netwManager.get(QNetworkRequest(url));
+    _reply = _netwManager.get(request);
     if (_reply == 0) {
         // Cannot send the request.
         emitCompleted(tr("Error browsing %1").arg(url.toString()));
