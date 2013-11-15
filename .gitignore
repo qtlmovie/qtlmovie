@@ -12,6 +12,7 @@ build-*-[Dd]ebug-[Ss]tatic
 *.a
 *.o
 *.pro.user
+*.pro.user.*
 *.qm
 *.rpm
 *.zip
