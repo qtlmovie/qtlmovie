@@ -26,12 +26,12 @@ BuildRequires: qt5-qttools-devel
 # The packages ccextractor and telxcc are not available in standard
 # repositories but packages are available on the QtlMovie site.
 
-Requires: ffmpeg
+Requires: ffmpeg >= 1.2
 Requires: genisoimage
 Requires: dvd+rw-tools
 Requires: dvdauthor
-Requires: ccextractor
-Requires: telxcc
+Requires: ccextractor >= 0.67
+Requires: telxcc >= 2.5.1
 
 %description
 QtlMovie is a graphical frontend to FFmpeg, DVD Author, telxcc, CCExtractor,
@@ -51,12 +51,18 @@ build/build.sh
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/usr/bin $RPM_BUILD_ROOT/usr/share/qt5/translations
+mkdir -p \
+    $RPM_BUILD_ROOT/usr/bin \
+    $RPM_BUILD_ROOT/usr/share/qt5/translations \
+    $RPM_BUILD_ROOT/usr/share/applications \
+    $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/apps
 cp build-QtlMovie-Desktop-Release/QtlMovie/QtlMovie $RPM_BUILD_ROOT/usr/bin
 cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
    build-QtlMovie-Desktop-Release/QtlMovie/locale/qtlmovie_fr.qm \
    build-QtlMovie-Desktop-Release/Qts/locale/qts_fr.qm \
    $RPM_BUILD_ROOT/usr/share/qt5/translations
+cp build/QtlMovie.desktop $RPM_BUILD_ROOT/usr/share/applications
+cp src/QtlMovie/images/qtlmovie-logo.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/apps/qtlmovie.png
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -67,4 +73,6 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/qt5/translations/qtl_fr.qm
 /usr/share/qt5/translations/qtlmovie_fr.qm
 /usr/share/qt5/translations/qts_fr.qm
+/usr/share/applications/QtlMovie.desktop
+/usr/share/icons/hicolor/64x64/apps/qtlmovie.png
 %doc CHANGELOG.txt LICENSE.txt TODO.txt

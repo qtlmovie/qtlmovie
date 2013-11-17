@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=QtlMovie %U
+Icon=qtlmovie
+Name=QtlMovie
+Name[fr]=QtlMovie
+GenericName=DVD and iPad factory
+GenericName[fr]=Fabrication de DVD et iPad
+Comment=Qt frontend for FFmpeg
+Comment[fr]=Frontal Qt pour FFmpeg
+Categories=Qt;AudioVideo;MultiMedia;DiscBurning;System;Filesystem;
+X-KDE-StartupNotify=true
