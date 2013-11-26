@@ -4,17 +4,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../QtlUtils.cpp" line="107"/>
+        <location filename="../QtlUtils.cpp" line="87"/>
         <source>%1 h %2 mn %3 sec.</source>
         <translation>%1 h %2 mn %3 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="110"/>
+        <location filename="../QtlUtils.cpp" line="90"/>
         <source>%1 mn %2 sec.</source>
         <translation>%1 mn %2 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="113"/>
+        <location filename="../QtlUtils.cpp" line="93"/>
         <source>%1 sec.</source>
         <translation>%1 sec.</translation>
     </message>
@@ -35,57 +35,57 @@
         <translation>%1 proxies détectés, utilisation du proxy %2:%3</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="130"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="137"/>
         <source>Searching new versions in %1</source>
         <translation>Recherche de nouvelle version dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="134"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="141"/>
         <source>Error browsing %1</source>
         <translation>Erreur de recherche sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="228"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="235"/>
         <source>Found version %1 at %2</source>
         <translation>Version %1 trouvée dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="257"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="264"/>
         <source>Download failed: %1</source>
         <translation>Erreur de téléchargement: %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="263"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="270"/>
         <source>Too many redirections on %1</source>
         <translation>Trop de redirections sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="272"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="279"/>
         <source>End of search in %1</source>
         <translation>Fin de recherche dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="279"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="286"/>
         <source>A new version of %1 is available&lt;br/&gt;Your version is %2&lt;br/&gt;Version %3 is available online at:&lt;br/&gt;%4</source>
         <translation>Une nouvelle version de %1 est disponible&lt;br/&gt;Votre version est la %2&lt;br/&gt;La version %3 est disponible en ligne sur:&lt;br/&gt;%4</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="290"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="297"/>
         <source>Unable to find any version of %1 online</source>
         <translation>Impossible de trouver une quelconque version de %1 en ligne</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="293"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="300"/>
         <source>You are using the latest version of %1</source>
         <translation>Vous utilisez la version la plus à jour de %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="298"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="305"/>
         <source>Your version of %1 is %2&lt;br/&gt;More recent than %3, the latest available online</source>
         <translation>Votre version de %1 est la %2&lt;br/&gt;Plus récente que la %3, la plus récente en ligne</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="287"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="294"/>
         <source>No new version found, this: %1, latest: %2</source>
         <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
     </message>

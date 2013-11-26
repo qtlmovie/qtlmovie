@@ -44,7 +44,10 @@
             <li><a href="#dirsettings">"Directories" tab</a></li>
             <li><a href="#toolssettings">"Media Tools" tab</a></li>
             <li><a href="#transcsettings">"Transcoding" tab</a></li>
-            <li><a href="#liscsettings">"Miscellaneous" tab</a></li>
+            <li><a href="#dvdsettings">"DVD" tab</a></li>
+            <li><a href="#ipadsettings">"iPad" tab</a></li>
+            <li><a href="#avisettings">"AVI" tab</a></li>
+            <li><a href="#miscsettings">"Miscellaneous" tab</a></li>
           </ul>
         </li>
         <li><a href="#cmdline">Command line syntax</a></li>
@@ -355,9 +358,35 @@
         not the duration of the transcoding operation.
         Trancoding a movie can take a long time and limiting the transcoded duration can be helpful
         in a test phase, to verify the video quality or the audio or subtitle language for instance.</p>
-      <p>The "DVD output" area is used only when transcoding to a DVD.
-        The PAL vs. NTSC options indicate the format of all created DVD's.
-        The specified video bitrate is used by default as "average bitrate".
+      <p>The "Subtitles insertion" area is used only when inserting subtitles.
+        The option "Use original video size as a hint for SRT/SSA/ASS character shape"
+        is somewhat cryptic. If checked, the original size of the video is used to
+        alter the character size of text-based subtitles. The FFmpeg documentation
+        recommends to use it but the experience shows that sometimes it produces
+        a strange characters size. This is why it is unchecked by default. You may
+        try to check it and decide whether it is useful or not.</p>
+      <p>The "Keep intermediate files" option indicates that all intermediate files which were created
+        in the transcoding process shall not be deleted after completion.
+        These files are created in a temporary directory with the same name as the output file and
+        extension <code>.qtlmovie.temp</code>.
+        This option is usually reserved for debug purpose.</p>
+      <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
+        Currently, the only option is the "Probe size".
+        This is the amount of seconds which are analyzed at the beginning of the input file to determine
+        the number and type of audio, video and subtitle streams.
+        The FFmpeg default value is 5 seconds.
+        This is usually enough for most files.
+        However, some MPEG files do not list all their streams at the beginning of the file and
+        some streams which appear late in the file (subtitles for instance) may not be detected.
+        As a consequence, the default probe size for QtlMovie is 200 seconds.
+        It is recommended to not reduce this size.
+        It can be increased if you suspect that some streams are not detected.</p>
+
+      <h3><a id="dvdsettings">"DVD" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the generation of DVD's.</p>
+      <p>The PAL vs. NTSC options indicate the format of all created DVD's.</p>
+      <p>The specified video bitrate is used by default as "average bitrate".
         However, QtlMovie ensures that the output can fit into a standard 4.7 GB DVD medium
         and reduces the bitrate accordingly when necessary.</p>
       <p>When checked, the "Create chapters" option creates chapters on the DVD.
@@ -371,35 +400,23 @@
       <p>The option "Force transcoding even if the input file or video is DVD-compliant"
         does what it says... This can be useful to force a transcoding when the
         file seems DVD-compliant but is not really (too large for instance).</p>
-      <p>The "iPad output" area is used only when transcoding for iPad.
-        The "Screen size" options specify the type of iPad to target.
-        The corresponding screen resolution will be used as maximum video size.
-        Larger videos will be resized to fit within the selected iPad resolution.
-        The specified video bitrate is used by default as "average bitrate".</p>
-      <p>The "AVI output" area is used only when transcoding to AVI files.
-        The "Max size" options specify the maximum resolution of the output video.
-        Larger videos will be resized to fit within this resolution.
-        The specified video bitrate is used by default as "average bitrate".</p>
-      <p>The "Subtitles insertion" area is used only when inserting subtitles.
-        The option "Use original video size as a hint for SRT/SSA/ASS character shape"
-        is somewhat cryptic. If checked, the original size of the video is used to
-        alter the character size of text-based subtitles. The FFmpeg documentation
-        recommends to use it but the experience shows that sometimes it produces
-        a strange characters size. This is why it is unchecked by default. You may
-        try to check it and decide whether it is useful or not.</p>
-      <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
-        Currently, the only option is the "Probe size".
-        This is the amount of seconds which are analyzed at the beginning of the input file to determine
-        the number and type of audio, video and subtitle streams.
-        The FFmpeg default value is 5 seconds.
-        This is usually enough for most files.
-        However, some MPEG files do not list all their streams at the beginning of the file and
-        some streams which appear late in the file (subtitles for instance) may not be detected.
-        As a consequence, the default probe size for QtlMovie is 200 seconds.
-        It is recommended to not reduce this size.
-        It can be increased if you suspect that some streams are not detected.</p>
 
-      <h3><a id="liscsettings">"Miscellaneous" tab</a></h3>
+      <h3><a id="ipadsettings">"iPad" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the generation of video files for the iPad.</p>
+      <p>The "Screen size" options specify the type of iPad to target.
+        The corresponding screen resolution will be used as maximum video size.
+        Larger videos will be resized to fit within the selected iPad resolution.</p>
+      <p>The specified video bitrate is used by default as "average bitrate".</p>
+
+      <h3><a id="avisettings">"AVI" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the generation of AVI files.</p>
+      <p>The "Max size" options specify the maximum resolution of the output video.
+        Larger videos will be resized to fit within this resolution.</p>
+      <p>The specified video bitrate is used by default as "average bitrate".</p>
+
+      <h3><a id="miscsettings">"Miscellaneous" tab</a></h3>
 
       <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
       <p>The "Target audience language codes" lists the codes which are used to identify the
@@ -441,11 +458,6 @@
           </ul>
         </li>
       </ul>
-      <p>The "Keep intermediate files" option indicates that all intermediate files which were created
-        in the transcoding process shall not be deleted after completion.
-        These files are created in a temporary directory with the same name as the output file and
-        extension <code>.qtlmovie.temp</code>.
-        This option is usually reserved for debug purpose.</p>
       <p>The "Max log" option indicates the number of text lines to retain in the log window.
         When this threshold is reached, the first lines are deleted.</p>
       <p>The option "Automatically search for a new version at startup" indicates if a new

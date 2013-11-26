@@ -44,7 +44,10 @@
             <li><a href="#dirsettings">Onglet "Répertoires"</a></li>
             <li><a href="#toolssettings">Onglet "Outils Media"</a></li>
             <li><a href="#transcsettings">Onglet "Transcodage"</a></li>
-            <li><a href="#liscsettings">Onglet "Divers"</a></li>
+            <li><a href="#dvdsettings">Onglet "DVD"</a></li>
+            <li><a href="#ipadsettings">Onglet "iPad"</a></li>
+            <li><a href="#avisettings">Onglet "AVI"</a></li>
+            <li><a href="#miscsettings">Onglet "Divers"</a></li>
           </ul>
         </li>
         <li><a href="#cmdline">Syntaxe de la ligne de commande</a></li>
@@ -380,32 +383,6 @@
         Transcoder un film peut prendre beaucoup de temps et limiter la durée de transcodage
         peut être utile en phase de test, pour vérifier la qualité vidéo ou la langue des
         pistes audio et sous-titres par exemple.</p>
-      <p>La zone "Sortie DVD" est utilisée lors de la création de DVD.
-        L'option PAL / NTSC définit le format des DVD créés.
-        Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.
-        Toutefois, QtlMovie s'assure que l'image de sortie tienne sur un media standard de 4.7 GB
-        et réduit le débit au besoin.</p>
-      <p>L'option "Création de chapitres" permet de créer des chapitres sur le DVD.
-        Tous les chapitres ont la même durée, exprimée en minutes.</p>
-      <p>L'option "Remultiplexer l'audio et la vidéo après le transcodage" force un
-        remultiplexage additionnel de l'audio et la vidéo après transcodage. Cela prend
-        un peu plus de temps mais cela supprime des erreurs potentielles de synchronisation
-        avec DVD Author quand la structure de fichiers du DVD est créée.
-        Cela force aussi un multiplexage compatible DVD quand le fichier d'entrée
-        a une vidéo et un audio déjà compatibles DVD et ne sont donc pas ré-encodés.
-        Il est recommandé de laisser cette option activée.</p>
-      <p>L'option "Forcer le transcodage même si le fichier ou sa vidéo sont déjà compatibles DVD"
-        fait ce qu'elle dit... Cela peut être utile pour forcer le transcodage quand le
-        fichier semble compatible DVD mais ne l'est pas vraiment (trop grand par exemple).</p>
-      <p>La zone "Sortie iPad" est utilisée pour le transcodage vers iPad.
-        L'option "Taille d'écran" spécifie le type d'iPad cible.
-        La résolution d'écran sera utilisée en tant que taille vidéo maximum.
-        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.
-        Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
-      <p>La zone "Sortie AVI" est utilisée pour le transcodage en fichier AVI.
-        L'option "Taille max" spécifie la résolution vidéo maximum.
-        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.
-        Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
       <p>La zone "Insertion de sous-titres" est utilisée pour l'insertion de sous-titres.
         L'option "Utiliser la taille vidéo originale pour ajuster la taille des caractères SRT/SSA/ASS"
         est un peu étrange. Quand elle est sélectionnée, la taille originale de la vidéo
@@ -414,6 +391,11 @@
         que cela produit parfois des tailles de caractères étrange. C'est pourquoi
         cette option n'est pas sélectionnée par défaut. Vous pouvez essayer de
         l'activer pour vérifier et décider ensuite si elle est utile ou non.</p>
+      <p>L'option "Garder les fichiers intermédiaires" indique que tous les fichiers
+        intermédiaires créés lors du processus de transcodage doivent étre conservés
+        à la fin de l'opération. Ces fichiers sont créés dans un répertoire temporaire
+        avec le même nom que le fichier de sortie et l'extension <code>.qtlmovie.temp</code>.
+        Cette option est normalement réservée à des fins de debug.</p>
       <p>Les "Options FFmpeg" spécifient quelques options supplémentaires
         spécifiques à FFmpeg.
         Pour l'instant, la seule option est le "Temps de détection".
@@ -429,7 +411,42 @@
         Il n'est pas recommandé de réduire cette taille.
         Elle peut être augmentée si vous suspectez certains flux de ne pas être détectés.</p>
 
-      <h3><a id="liscsettings">Onglet "Divers"</a></h3>
+      <h3><a id="dvdsettings">Onglet "DVD"</a></h3>
+
+      <p>Cet onglet regroupe les options qui affectent la création de DVD.</p>
+      <p>L'option PAL / NTSC définit le format des DVD créés.</p>
+      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.
+        Toutefois, QtlMovie s'assure que l'image de sortie tienne sur un media standard de 4.7 GB
+        et réduit le débit au besoin.</p>
+      <p>L'option "Création de chapitres" permet de créer des chapitres sur le DVD.
+        Tous les chapitres ont la même durée, exprimée en minutes.</p>
+      <p>L'option "Remultiplexer l'audio et la vidéo après le transcodage" force un
+        remultiplexage additionnel de l'audio et la vidéo après transcodage. Cela prend
+        un peu plus de temps mais cela supprime des erreurs potentielles de synchronisation
+        avec DVD Author quand la structure de fichiers du DVD est créée.
+        Cela force aussi un multiplexage compatible DVD quand le fichier d'entrée
+        a une vidéo et un audio déjà compatibles DVD et ne sont donc pas ré-encodés.
+        Il est recommandé de laisser cette option activée.</p>
+      <p>L'option "Forcer le transcodage même si le fichier ou sa vidéo sont déjà compatibles DVD"
+        fait ce qu'elle dit... Cela peut être utile pour forcer le transcodage quand le
+        fichier semble compatible DVD mais ne l'est pas vraiment (trop grand par exemple).</p>
+
+      <h3><a id="ipadsettings">Onglet "iPad"</a></h3>
+
+      <p>Cet onglet regroupe les options qui affectent la création de fichiers vidéo pour iPad.</p>
+      <p>L'option "Taille d'écran" spécifie le type d'iPad cible.
+        La résolution d'écran sera utilisée en tant que taille vidéo maximum.
+        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
+      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+
+      <h3><a id="avisettings">Onglet "AVI"</a></h3>
+
+      <p>Cet onglet regroupe les options qui affectent la création de fichiers AVI.</p>
+      <p>L'option "Taille max" spécifie la résolution vidéo maximum.
+        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
+      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+
+      <h3><a id="miscsettings">Onglet "Divers"</a></h3>
 
       <p>Comme son nom l'indique, cet onglet regroupe les options qui n'ont pas trouvé leur place ailleurs.</p>
       <p>La liste des "codes de langues de l'audience ciblée" contient les codes
@@ -478,11 +495,6 @@
           </ul>
         </li>
       </ul>
-      <p>L'option "Garder les fichiers intermédiaires" indique que tous les fichiers
-        intermédiaires créés lors du processus de transcodage doivent étre conservés
-        à la fin de l'opération. Ces fichiers sont créés dans un répertoire temporaire
-        avec le même nom que le fichier de sortie et l'extension <code>.qtlmovie.temp</code>.
-        Cette option est normalement réservée à des fins de debug.</p>
       <p>L'option "taille max" de la fenêtre de journal indique le nombre maximum de 
         lignes de texte à garder dans cette fenêtre. Au-delà, les lignes les plus
         anciennes sont effacées.</p>
