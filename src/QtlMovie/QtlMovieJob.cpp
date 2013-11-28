@@ -35,6 +35,7 @@
 #include "QtlMovieDeleteAction.h"
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovieFFmpegProcess.h"
+#include "QtlMovieFFmpegVolumeDetect.h"
 #include "QtlMovieDvdAuthorProcess.h"
 #include "QtlMovieMkisofsProcess.h"
 #include "QtlMovieGrowisofsProcess.h"
@@ -58,10 +59,26 @@ QtlMovieJob::QtlMovieJob(const QtlMovieInputFile* inputFile,
     _outSeconds(0),
     _actionCount(0),
     _tempDir(),
-    _actionList()
+    _actionList(),
+    _variables()
 {
     Q_ASSERT(inputFile != 0);
     Q_ASSERT(outputFile != 0);
+}
+
+
+//----------------------------------------------------------------------------
+// Store / retrieve a variable in the job.
+//----------------------------------------------------------------------------
+
+void QtlMovieJob::setVariable(const QString& name, const QStringList& value)
+{
+    _variables.insert(name, value);
+}
+
+QStringList QtlMovieJob::getVariable(const QString& name) const
+{
+    return _variables.value(name);
 }
 
 
@@ -380,7 +397,7 @@ bool QtlMovieJob::buildScenario()
     // Subtitle stream in input file.
     const QtlMovieStreamInfoPtr subtitleStream(_inputFile->selectedSubtitleStreamInfo());
 
-    // Do we need to add a first pass to extract subtitles? Yes if:
+    // Do we need to add an initial pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
     // - Not DVD or DVB subtitles. These are directly processed by FFmpeg from the input file.
     //   No need to have a separate first pass to extract them.
@@ -405,6 +422,26 @@ bool QtlMovieJob::buildScenario()
         QtlMovieInputFile* next = new QtlMovieInputFile(*_inputFile, this);
         next->setExternalSubtitleFileName(subtitleFile);
         inputForTranscoding = next;
+    }
+
+    // Selected audio stream in input file.
+    const QtlMovieStreamInfoPtr audioStream(inputForTranscoding->selectedAudioStreamInfo());
+
+    // Check if we need an initial pass to determine the audio volume of the input file.
+    // This is required if audio normalization is requested and both input and output contain audio.
+    if (settings()->audioNormalize() && !audioStream.isNull() && outputType != QtlMovieOutputFile::SubRip) {
+
+        // Add an initial pass to evaluate the audio volume.
+        QtlMovieFFmpegVolumeDetect* process =
+                new QtlMovieFFmpegVolumeDetect(_inputFile->ffmpegInputFileSpecification(),
+                                               audioStream->ffSpecifier(),
+                                               _outSeconds,
+                                               _tempDir,
+                                               settings(),
+                                               this,
+                                               this);
+        process->setDescription(tr("Evaluate audio level"));
+        _actionList.append(process);
     }
 
     // Build the ffmpeg command for the main process.
@@ -968,6 +1005,7 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
     // Process selected audio stream.
     if (!audioStream.isNull()) {
         args << "-map" << audioStream->ffSpecifier()
+             << QTL_AUDIO_FILTER_VARREF     // Potential audio filter will be inserted here.
              << "-codec:a" << "aac"         // AAC (Advanced Audio Coding, MPEG-4 part 3)
              << "-strict" << "experimental" // Allow experimental features, aac codec is one.
              << "-ac" << "2"                // Remix to 2 channels (stereo)
@@ -1003,6 +1041,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     // Process selected audio stream.
     if (!audioStream.isNull()) {
         args << "-map" << audioStream->ffSpecifier()
+             << QTL_AUDIO_FILTER_VARREF     // Potential audio filter will be inserted here.
              << "-codec:a" << "mp3"         // MP3 (MPEG-2 Audio Layer 3)
              << "-ac" << "2"                // Remix to 2 channels (stereo)
              << "-ar" << QString::number(QTL_AVI_AUDIO_SAMPLING)

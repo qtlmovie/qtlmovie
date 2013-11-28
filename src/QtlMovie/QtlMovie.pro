@@ -61,7 +61,8 @@ SOURCES += main.cpp \
     QtlMovieMkisofsProcess.cpp \
     QtlMovieGrowisofsProcess.cpp \
     QtlMovieClosedCaptionsSearch.cpp \
-    QtlMovieCcExtractorProcess.cpp
+    QtlMovieCcExtractorProcess.cpp \
+    QtlMovieFFmpegVolumeDetect.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -90,7 +91,8 @@ HEADERS += \
     QtlMovieMkisofsProcess.h \
     QtlMovieGrowisofsProcess.h \
     QtlMovieClosedCaptionsSearch.h \
-    QtlMovieCcExtractorProcess.h
+    QtlMovieCcExtractorProcess.h \
+    QtlMovieFFmpegVolumeDetect.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

@@ -206,8 +206,9 @@ QStringList QtlMovieFFmpeg::dvdAudioOptions(const QtlMovieSettings* settings, co
     QStringList args;
     if (!audioStream.isNull()) {
         args << "-map" << audioStream->ffSpecifier()
-             << "-codec:a" << "ac3"  // AC-3 audio (Dolby Digital)
-             << "-ac" << "2"         // Remix to 2 channels (stereo)
+             << QTL_AUDIO_FILTER_VARREF  // Potential audio filter will be inserted here.
+             << "-codec:a" << "ac3"      // AC-3 audio (Dolby Digital).
+             << "-ac" << "2"             // Remix to 2 channels (stereo).
              << "-ar" << QString::number(QTL_DVD_AUDIO_SAMPLING)
              << "-b:a" << QString::number(QTL_DVD_AUDIO_BITRATE);
     }

@@ -841,7 +841,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Peak level :</string>
+             <string>Max peak level :</string>
             </property>
            </widget>
           </item>

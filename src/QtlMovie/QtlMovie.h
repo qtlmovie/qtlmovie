@@ -68,9 +68,10 @@
 #define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT    352  //!< Default max video height (pixels) for AVI.
 #define QTL_AVI_FRAME_RATE                   24  //!< Frames per second for AVI.
 
-#define QTL_DEFAULT_AUDIO_NORMALIZE        true  //!< Normalize audio level by default.
+#define QTL_DEFAULT_AUDIO_NORMALIZE       false  //!< Do not normalize audio level by default.
 #define QTL_DEFAULT_AUDIO_MEAN_LEVEL        -20  //!< Normalized mean audio level, in dBFS.
 #define QTL_DEFAULT_AUDIO_PEAK_LEVEL         -1  //!< Normalized peak audio level, in dBFS.
+#define QTL_AUDIO_NORMALIZATION_TOLERANCE   1.0  //!< Do not normalize audio if mean level is that close to target level.
 
 //!
 //! Percentage of DVD ISO image overhead.
@@ -120,5 +121,15 @@
 //! searching for Teletext subtitles.
 //!
 #define QTL_TS_PACKETS_CHUNK 100
+
+//!
+//! Name of the "Job Variable" (see @link QtlMovieJob::setVariable() @endlink) for audio filter.
+//!
+#define QTL_AUDIO_FILTER_VARNAME "AUDIOFILTER"
+
+//!
+//! Reference to the "Job Variable" (see @link QtlMovieJob::setVariable() @endlink) for audio filter.
+//!
+#define QTL_AUDIO_FILTER_VARREF "{" QTL_AUDIO_FILTER_VARNAME "}"
 
 #endif // QTLMOVIE_H

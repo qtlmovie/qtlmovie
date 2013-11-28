@@ -868,7 +868,7 @@ public:
 
     //!
     //! Set the target mean level in dBFS for audio normalization.
-    //! @param [in] The target mean level in dBFS for audio normalization.
+    //! @param [in] audioNormalizeMean The target mean level in dBFS for audio normalization.
     //!
     void setAudioNormalizeMean(int audioNormalizeMean);
 
@@ -883,7 +883,7 @@ public:
 
     //!
     //! Set the target peak level in dBFS for audio normalization.
-    //! @param [in] The target peak level in dBFS for audio normalization.
+    //! @param [in] audioNormalizePeak The target peak level in dBFS for audio normalization.
     //!
     void setAudioNormalizePeak(int audioNormalizePeak);
 
@@ -893,7 +893,7 @@ public:
     enum AudioNormalizeMode {
         Compress,   //!< Align to target mean level, compress the dynamic range.
         AlignPeak,  //!< Align to target peak level, mean level will be lower than the target value.
-        Clip        //!< Align to target mean level, clip high audio, 
+        Clip        //!< Align to target mean level, clip high audio,
     };
 
     //!

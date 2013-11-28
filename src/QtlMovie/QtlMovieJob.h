@@ -99,6 +99,20 @@ public:
     }
 
     //!
+    //! Store a variable in the job.
+    //! @param [in] name Variable name.
+    //! @param [in] value Variable value as a list of strings.
+    //!
+    void setVariable(const QString& name, const QStringList& value);
+
+    //!
+    //! Get the value of a variable in the job.
+    //! @param [in] name Variable name.
+    //! @return Variable value as a list of strings.
+    //!
+    QStringList getVariable(const QString& name) const;
+
+    //!
     //! Check if it is possible to transcode an input file (with its streams selections) to an output type.
     //! @param [in] inputFile The input file.
     //! @param [in] outputType The target output type.
@@ -135,6 +149,7 @@ private:
     int                       _actionCount;    //!< Number of actions to execute on start.
     QString                   _tempDir;        //!< Directory of temporary files, to delete after completion.
     QList<QtlMovieAction*>    _actionList;     //!< List of actions to execute.
+    QMap<QString,QStringList> _variables;      //!< Set of job variables.
 
     //!
     //! Cleanup the job environment.

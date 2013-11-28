@@ -137,6 +137,20 @@ protected:
     //!
     virtual void updateEnvironment(QProcessEnvironment& env);
 
+    //!
+    //! Store a variable in the parent job.
+    //! @param [in] name Variable name.
+    //! @param [in] value Variable value as a list of strings.
+    //!
+    void setJobVariable(const QString& name, const QStringList& value);
+
+    //!
+    //! Get the value of a variable in the job.
+    //! @param [in] name Variable name.
+    //! @return Variable value as a list of strings.
+    //!
+    QStringList getJobVariable(const QString& name) const;
+
 private slots:
     //!
     //! Read as much data as possible from the process standard error

@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieProcess.h"
+#include "QtlMovieJob.h"
 #include "QtlUtils.h"
 
 
@@ -91,6 +92,31 @@ bool QtlMovieProcess::start()
     QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
     updateEnvironment(env);
     _process->setProcessEnvironment(env);
+
+    // Replace variables in the argument list.
+    for (QStringList::iterator it = _arguments.begin(); it != _arguments.end(); ) {
+         if (it->startsWith("{") && it->endsWith("}")) {
+             // Found a "{varname}" reference, get its value.
+             const QString name(it->mid(1, it->length() - 2));
+             const QStringList value(getJobVariable(name));
+
+             // Remove the reference from the argument list.
+             // Now it points to the next element, can be end().
+             it = _arguments.erase(it);
+
+             // Insert all string values.
+             foreach (const QString& arg, value) {
+                 // Insert arg before *it, return an iterator to the inserted element.
+                 it = _arguments.insert(it, arg);
+                 // Point to next element.
+                 it++;
+             }
+         }
+         else {
+             // Not a variable reference, move to next element.
+             it++;
+         }
+    }
 
     // Display the command in the log window.
     line(exec + " " + _arguments.join(" "), QColor("blue"));
@@ -254,4 +280,25 @@ void QtlMovieProcess::processOutputBuffer(QProcess::ProcessChannel channel, QStr
         // Process the line.
         processOutputLine(channel, line);
     }
+}
+
+
+//----------------------------------------------------------------------------
+// Store / retrieve a variable in the parent job.
+//----------------------------------------------------------------------------
+
+void QtlMovieProcess::setJobVariable(const QString& name, const QStringList& value)
+{
+    // Get the parent job, if any.
+    QtlMovieJob* job = qobject_cast<QtlMovieJob*>(parent());
+    if (job != 0) {
+        job->setVariable(name, value);
+    }
+}
+
+QStringList QtlMovieProcess::getJobVariable(const QString& name) const
+{
+    // Get the parent job, if any.
+    QtlMovieJob* job = qobject_cast<QtlMovieJob*>(parent());
+    return job == 0 ? QStringList() : job->getVariable(name);
 }
