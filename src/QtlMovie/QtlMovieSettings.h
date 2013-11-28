@@ -842,6 +842,75 @@ public:
     //!
     void setAviMaxVideoHeight(int aviMaxVideoHeight);
 
+    //!
+    //! Check if audio level shall be normalized.
+    //! @return True if audio level shall be normalized.
+    //!
+    bool audioNormalize() const
+    {
+        return _audioNormalize;
+    }
+
+    //!
+    //! Set if audio level shall be normalized.
+    //! @param [in] audioNormalize True if audio level shall be normalized.
+    //!
+    void setAudioNormalize(bool audioNormalize);
+
+    //!
+    //! Get the target mean level in dBFS for audio normalization.
+    //! @return The target mean level in dBFS for audio normalization.
+    //!
+    int audioNormalizeMean() const
+    {
+        return _audioNormalizeMean;
+    }
+
+    //!
+    //! Set the target mean level in dBFS for audio normalization.
+    //! @param [in] The target mean level in dBFS for audio normalization.
+    //!
+    void setAudioNormalizeMean(int audioNormalizeMean);
+
+    //!
+    //! Get the target peak level in dBFS for audio normalization.
+    //! @return The target peak level in dBFS for audio normalization.
+    //!
+    int audioNormalizePeak() const
+    {
+        return _audioNormalizePeak;
+    }
+
+    //!
+    //! Set the target peak level in dBFS for audio normalization.
+    //! @param [in] The target peak level in dBFS for audio normalization.
+    //!
+    void setAudioNormalizePeak(int audioNormalizePeak);
+
+    //!
+    //! Define how to normalize the audio when the input dymanic range is too large.
+    //!
+    enum AudioNormalizeMode {
+        Compress,   //!< Align to target mean level, compress the dynamic range.
+        AlignPeak,  //!< Align to target peak level, mean level will be lower than the target value.
+        Clip        //!< Align to target mean level, clip high audio, 
+    };
+
+    //!
+    //! Get how to normalize audio when the input dynamic range is too large.
+    //! @return How to normalize audio when the input dynamic range is too large.
+    //!
+    AudioNormalizeMode audioNormalizeMode() const
+    {
+        return _audioNormalizeMode;
+    }
+
+    //!
+    //! Set how to normalize audio when the input dynamic range is too large.
+    //! @param [in] audioNormalizeMode How to normalize audio when the input dynamic range is too large.
+    //!
+    void setAudioNormalizeMode(AudioNormalizeMode audioNormalizeMode);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -885,6 +954,10 @@ private:
     int                   _aviVideoBitRate;        //!< Video bitrate for AVI output in bits / second.
     int                   _aviMaxVideoWidth;       //!< Maximum video width for AVI output in pixels.
     int                   _aviMaxVideoHeight;      //!< Maximum video height for AVI output in pixels.
+    bool                  _audioNormalize;         //!< Normalize audio level.
+    int                   _audioNormalizeMean;     //!< Target mean level in dBFS for audio normalization.
+    int                   _audioNormalizePeak;     //!< Target peak level in dBFS for audio normalization.
+    AudioNormalizeMode    _audioNormalizeMode;     //!< How to normalize audio when the input dynamic range is too large.
 
     //!
     //! Write an XML element with a "value" integer attribute.

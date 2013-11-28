@@ -68,6 +68,10 @@
 #define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT    352  //!< Default max video height (pixels) for AVI.
 #define QTL_AVI_FRAME_RATE                   24  //!< Frames per second for AVI.
 
+#define QTL_DEFAULT_AUDIO_NORMALIZE        true  //!< Normalize audio level by default.
+#define QTL_DEFAULT_AUDIO_MEAN_LEVEL        -20  //!< Normalized mean audio level, in dBFS.
+#define QTL_DEFAULT_AUDIO_PEAK_LEVEL         -1  //!< Normalized peak audio level, in dBFS.
+
 //!
 //! Percentage of DVD ISO image overhead.
 //!

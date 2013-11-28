@@ -179,6 +179,12 @@ private slots:
     //!
     void createChapterToggled(bool createChapters);
 
+    //!
+    //! Invoked when the check box "normalize audio level" is toggled.
+    //! @param normalize State of the check box.
+    //!
+    void setNormalizeAudioSelectable(bool normalize);
+
 private:
     //!
     //! Description of an output directory settings.

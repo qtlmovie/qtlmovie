@@ -450,7 +450,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="spacerTranscoding">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -588,7 +588,7 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <spacer name="verticalSpacer_3">
+        <spacer name="spacerDvd">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -683,7 +683,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <spacer name="verticalSpacer_4">
+        <spacer name="spacerIpad">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -794,7 +794,149 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <spacer name="verticalSpacer_2">
+        <spacer name="spaceAvi">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabAudio">
+      <attribute name="title">
+       <string>Audio</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="groupBoxNormalizeAudio">
+         <property name="title">
+          <string>Audio normalization</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelAudioMeanLevel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Mean level :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelAudioPeakLevel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Peak level :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinAudioMeanLevel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> dBFS</string>
+            </property>
+            <property name="minimum">
+             <number>-1000</number>
+            </property>
+            <property name="maximum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>-20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkBoxNormalizeAudio">
+            <property name="text">
+             <string>Normalize audio level</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QGroupBox" name="groupBoxNomalizeAudioMode">
+            <property name="title">
+             <string>When the input dynamic range is too large</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QRadioButton" name="radioAudioCompress">
+               <property name="text">
+                <string>Align to mean level and compress</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioAudioAlignPeak">
+               <property name="text">
+                <string>Align to peak level</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioAudioClip">
+               <property name="text">
+                <string>Align to mean level and clip</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="spinAudioPeakLevel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> dBFS</string>
+            </property>
+            <property name="minimum">
+             <number>-1000</number>
+            </property>
+            <property name="maximum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacerAudio">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1227,6 +1369,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBoxNormalizeAudio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>setNormalizeAudioSelectable(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>resetValues(QAbstractButton*)</slot>
@@ -1245,5 +1403,6 @@
   <slot>createChapterToggled(bool)</slot>
   <slot>browseDvdBurner()</slot>
   <slot>browseCcextractor()</slot>
+  <slot>setNormalizeAudioSelectable(bool)</slot>
  </slots>
 </ui>

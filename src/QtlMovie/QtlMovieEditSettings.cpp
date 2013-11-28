@@ -163,6 +163,12 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.spinAviBitrate->setValue(_settings->aviVideoBitRate() / 1000); // input is kb/s
     _ui.spinAviWidth->setValue(_settings->aviMaxVideoWidth());
     _ui.spinAviHeight->setValue(_settings->aviMaxVideoHeight());
+    _ui.checkBoxNormalizeAudio->setChecked(_settings->audioNormalize());
+    _ui.spinAudioMeanLevel->setValue(_settings->audioNormalizeMean());
+    _ui.spinAudioPeakLevel->setValue(_settings->audioNormalizePeak());
+    _ui.radioAudioCompress->setChecked(_settings->audioNormalizeMode() == QtlMovieSettings::Compress);
+    _ui.radioAudioAlignPeak->setChecked(_settings->audioNormalizeMode() == QtlMovieSettings::AlignPeak);
+    _ui.radioAudioClip->setChecked(_settings->audioNormalizeMode() == QtlMovieSettings::Clip);
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -235,6 +241,18 @@ void QtlMovieEditSettings::applySettings()
     _settings->setAviVideoBitRate(_ui.spinAviBitrate->value() * 1000);  // input is kb/s
     _settings->setAviMaxVideoWidth(_ui.spinAviWidth->value());
     _settings->setAviMaxVideoHeight(_ui.spinAviHeight->value());
+    _settings->setAudioNormalize(_ui.checkBoxNormalizeAudio->isChecked());
+    _settings->setAudioNormalizeMean(_ui.spinAudioMeanLevel->value());
+    _settings->setAudioNormalizePeak(_ui.spinAudioPeakLevel->value());
+    if (_ui.radioAudioCompress->isChecked()) {
+        _settings->setAudioNormalizeMode(QtlMovieSettings::Compress);
+    }
+    else if (_ui.radioAudioAlignPeak->isChecked()) {
+        _settings->setAudioNormalizeMode(QtlMovieSettings::AlignPeak);
+    }
+    else if (_ui.radioAudioClip->isChecked()) {
+        _settings->setAudioNormalizeMode(QtlMovieSettings::Clip);
+    }
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -396,4 +414,21 @@ void QtlMovieEditSettings::enableDeleteAudienceLanguage()
 void QtlMovieEditSettings::createChapterToggled(bool createChapters)
 {
     _ui.spinChapterMinutes->setEnabled(createChapters);
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when the check box "normalize audio level" is toggled.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::setNormalizeAudioSelectable(bool normalize)
+{
+    // Enable / disable all widget within the "audio normalization" group box.
+    const QList<QWidget*> children(_ui.groupBoxNormalizeAudio->findChildren<QWidget*>());
+    foreach (QWidget* child, children) {
+        // Do not disable the "normalize audio", this is the one which triggers this event.
+        if (child != _ui.checkBoxNormalizeAudio) {
+            child->setEnabled(normalize);
+        }
+    }
 }

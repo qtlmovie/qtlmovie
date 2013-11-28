@@ -147,7 +147,12 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _newVersionCheck(true),
     _aviVideoBitRate(QTL_AVI_DEFAULT_VIDEO_BITRATE),
     _aviMaxVideoWidth(QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH),
-    _aviMaxVideoHeight(QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT)
+    _aviMaxVideoHeight(QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT),
+    _audioNormalize(QTL_DEFAULT_AUDIO_NORMALIZE),
+    _audioNormalizeMean(QTL_DEFAULT_AUDIO_MEAN_LEVEL),
+    _audioNormalizePeak(QTL_DEFAULT_AUDIO_PEAK_LEVEL),
+    _audioNormalizeMode(Compress)
+
 {
     Q_ASSERT(log != 0);
 
@@ -366,6 +371,10 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "aviVideoBitRate", _aviVideoBitRate);
     setIntAttribute(xml, "aviMaxVideoWidth", _aviMaxVideoWidth);
     setIntAttribute(xml, "aviMaxVideoHeight", _aviMaxVideoHeight);
+    setBoolAttribute(xml, "audioNormalize", _audioNormalize);
+    setIntAttribute(xml, "audioNormalizeMean", _audioNormalizeMean);
+    setIntAttribute(xml, "audioNormalizePeak", _audioNormalizePeak);
+    setIntAttribute(xml, "audioNormalizeMode", int(_audioNormalizeMode));
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -427,6 +436,10 @@ bool QtlMovieSettings::load(const QString& fileName)
     int aviVideoBitRate = _aviVideoBitRate;
     int aviMaxVideoWidth = _aviMaxVideoWidth;
     int aviMaxVideoHeight = _aviMaxVideoHeight;
+    bool audioNormalize = _audioNormalize;
+    int audioNormalizeMean = _audioNormalizeMean;
+    int audioNormalizePeak = _audioNormalizePeak;
+    int audioNormalizeMode = int(_audioNormalizeMode);
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -468,6 +481,10 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "aviVideoBitRate", aviVideoBitRate) &&
                     !getIntAttribute(xml, "aviMaxVideoWidth", aviMaxVideoWidth) &&
                     !getIntAttribute(xml, "aviMaxVideoHeight", aviMaxVideoHeight) &&
+                    !getBoolAttribute(xml, "audioNormalize", audioNormalize) &&
+                    !getIntAttribute(xml, "audioNormalizeMean", audioNormalizeMean) &&
+                    !getIntAttribute(xml, "audioNormalizePeak", audioNormalizePeak) &&
+                    !getIntAttribute(xml, "audioNormalizeMode", audioNormalizeMode) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -515,6 +532,10 @@ bool QtlMovieSettings::load(const QString& fileName)
         setAviVideoBitRate(aviVideoBitRate);
         setAviMaxVideoWidth(aviMaxVideoWidth);
         setAviMaxVideoHeight(aviMaxVideoHeight);
+        setAudioNormalize(audioNormalize);
+        setAudioNormalizeMean(audioNormalizeMean);
+        setAudioNormalizePeak(audioNormalizePeak);
+        setAudioNormalizeMode(AudioNormalizeMode(audioNormalizeMode));
     }
     else {
         // Format an error string.
@@ -647,34 +668,10 @@ void QtlMovieSettings::setDvdDecrypterExplicitExecutable(const QString& dvddecry
     }
 }
 
-void QtlMovieSettings::setMaxLogLines(int maxLogLines)
-{
-    if (_maxLogLines != maxLogLines) {
-        _maxLogLines = maxLogLines;
-        _isModified = true;
-    }
-}
-
 QString QtlMovieSettings::initialInputDir() const
 {
     // The default initial input directory is user's home.
     return _initialInputDir.isEmpty() ? QtlFile::absoluteNativeFilePath(QDir::homePath()) : _initialInputDir;
-}
-
-void QtlMovieSettings::setInitialInputDir(const QString& initialInputDir)
-{
-    if (_initialInputDir != initialInputDir) {
-        _initialInputDir = initialInputDir;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDefaultOutputDirIsInput(bool defaultOutDirIsInput)
-{
-    if (_defaultOutDirIsInput != defaultOutDirIsInput) {
-        _defaultOutDirIsInput = defaultOutDirIsInput;
-        _isModified = true;
-    }
 }
 
 QString QtlMovieSettings::defaultOutputDir(const QString& outputType, bool force) const
@@ -702,138 +699,36 @@ void QtlMovieSettings::setAudienceLanguages(const QStringList& audienceLanguages
     }
 }
 
-void QtlMovieSettings::setTranscodeSeconds(int transcodeSeconds)
-{
-    if (_transcodeSeconds != transcodeSeconds) {
-        _transcodeSeconds = transcodeSeconds;
-        _isModified = true;
+#define SETTER(method, type, parameter)           \
+    void QtlMovieSettings::method(type parameter) \
+    {                                             \
+        if (_##parameter != parameter) {          \
+            _##parameter = parameter;             \
+            _isModified = true;                   \
+        }                                         \
     }
-}
 
-void QtlMovieSettings::setTranscodeComplete(bool transcodeComplete)
-{
-    if (_transcodeComplete != transcodeComplete) {
-        _transcodeComplete = transcodeComplete;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDvdVideoBitRate(int dvdVideoBitRate)
-{
-    if (_dvdVideoBitRate != dvdVideoBitRate) {
-        _dvdVideoBitRate = dvdVideoBitRate;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setIpadVideoBitRate(int ipadVideoBitRate)
-{
-    if (_ipadVideoBitRate != ipadVideoBitRate) {
-        _ipadVideoBitRate = ipadVideoBitRate;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setKeepIntermediateFiles(bool keepIntermediateFiles)
-{
-    if (_keepIntermediateFiles != keepIntermediateFiles) {
-        _keepIntermediateFiles = keepIntermediateFiles;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setFFmpegProbeSeconds(int ffmpegProbeSeconds)
-{
-    if (_ffmpegProbeSeconds != ffmpegProbeSeconds) {
-        _ffmpegProbeSeconds = ffmpegProbeSeconds;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setSrtUseVideoSizeHint(bool srtUseVideoSizeHint)
-{
-    if (_srtUseVideoSizeHint != srtUseVideoSizeHint) {
-        _srtUseVideoSizeHint = srtUseVideoSizeHint;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setChapterMinutes(int chapterMinutes)
-{
-    if (_chapterMinutes != chapterMinutes) {
-        _chapterMinutes = chapterMinutes;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDvdRemuxAfterTranscode(bool dvdRemuxAfterTranscode)
-{
-    if (_dvdRemuxAfterTranscode != dvdRemuxAfterTranscode) {
-        _dvdRemuxAfterTranscode = dvdRemuxAfterTranscode;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDvdBurner(const QString& dvdBurner)
-{
-    if (_dvdBurner != dvdBurner) {
-        _dvdBurner = dvdBurner;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setCreatePalDvd(bool createPalDvd)
-{
-    if (_createPalDvd != createPalDvd) {
-        _createPalDvd = createPalDvd;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setIpadScreenSize(QtlMovieSettings::IpadScreenSize ipadScreenSize)
-{
-    if (_ipadScreenSize != ipadScreenSize) {
-        _ipadScreenSize = ipadScreenSize;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setForceDvdTranscode(bool forceDvdTranscode)
-{
-    if (_forceDvdTranscode != forceDvdTranscode) {
-        _forceDvdTranscode = forceDvdTranscode;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setNewVersionCheck(bool newVersionCheck)
-{
-    if (_newVersionCheck != newVersionCheck) {
-        _newVersionCheck = newVersionCheck;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setAviVideoBitRate(int aviVideoBitRate)
-{
-    if (_aviVideoBitRate != aviVideoBitRate) {
-        _aviVideoBitRate = aviVideoBitRate;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setAviMaxVideoWidth(int aviMaxVideoWidth)
-{
-    if (_aviMaxVideoWidth != aviMaxVideoWidth) {
-        _aviMaxVideoWidth = aviMaxVideoWidth;
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setAviMaxVideoHeight(int aviMaxVideoHeight)
-{
-    if (_aviMaxVideoHeight != aviMaxVideoHeight) {
-        _aviMaxVideoHeight = aviMaxVideoHeight;
-        _isModified = true;
-    }
-}
+SETTER(setMaxLogLines, int, maxLogLines)
+SETTER(setInitialInputDir, const QString&, initialInputDir)
+SETTER(setDefaultOutputDirIsInput, bool, defaultOutDirIsInput)
+SETTER(setTranscodeSeconds, int, transcodeSeconds)
+SETTER(setTranscodeComplete, bool, transcodeComplete)
+SETTER(setDvdVideoBitRate, int, dvdVideoBitRate)
+SETTER(setIpadVideoBitRate, int, ipadVideoBitRate)
+SETTER(setKeepIntermediateFiles, bool, keepIntermediateFiles)
+SETTER(setFFmpegProbeSeconds, int, ffmpegProbeSeconds)
+SETTER(setSrtUseVideoSizeHint, bool, srtUseVideoSizeHint)
+SETTER(setChapterMinutes, int, chapterMinutes)
+SETTER(setDvdRemuxAfterTranscode, bool, dvdRemuxAfterTranscode)
+SETTER(setDvdBurner, const QString&, dvdBurner)
+SETTER(setCreatePalDvd, bool, createPalDvd)
+SETTER(setIpadScreenSize, QtlMovieSettings::IpadScreenSize, ipadScreenSize)
+SETTER(setForceDvdTranscode, bool, forceDvdTranscode)
+SETTER(setNewVersionCheck, bool, newVersionCheck)
+SETTER(setAviVideoBitRate, int, aviVideoBitRate)
+SETTER(setAviMaxVideoWidth, int, aviMaxVideoWidth)
+SETTER(setAviMaxVideoHeight, int, aviMaxVideoHeight)
+SETTER(setAudioNormalize, bool, audioNormalize)
+SETTER(setAudioNormalizeMean, int, audioNormalizeMean)
+SETTER(setAudioNormalizePeak, int, audioNormalizePeak)
+SETTER(setAudioNormalizeMode, AudioNormalizeMode, audioNormalizeMode)
