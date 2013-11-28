@@ -5,6 +5,7 @@ QtlMovie Change Log
 Version 1.2.10
 - On Windows with Aero desktop, added a progress bar on the application icon.
 - Reorganized "Edit Settings" tabs.
+- Integrated official FFmpeg 2.1.1 with Windows installer.
 - Fixed a problem with option -threads in ffmpeg.
 - Fixed a problem when searching for a new version behind one specific brand
   of proxy server (did not like the default Qt User-Agent).
