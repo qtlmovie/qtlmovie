@@ -12,6 +12,7 @@ Version 1.2.10
 - Fixed a problem when searching for a new version behind one specific brand
   of proxy server (did not like the default Qt User-Agent).
 - Integrated official FFmpeg 2.1.1 with Windows installer.
+- Prebuilt Windows binary uses Qt 5.2.0.
 - Provide a RPM package for QtlMovie on Fedora Linux. Added scripts to build
   custom RPM packages for ccextractor and telxcc which do not have packages
   in standard repositories.

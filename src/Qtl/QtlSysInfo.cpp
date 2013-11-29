@@ -35,6 +35,8 @@
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
 #include <unistd.h>
+#elif defined(Q_OS_WIN)
+#include <windows.h>
 #endif
 
 
