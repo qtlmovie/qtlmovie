@@ -47,6 +47,7 @@
             <li><a href="#dvdsettings">"DVD" tab</a></li>
             <li><a href="#ipadsettings">"iPad" tab</a></li>
             <li><a href="#avisettings">"AVI" tab</a></li>
+            <li><a href="#audiosettings">"Audio" tab</a></li>
             <li><a href="#miscsettings">"Miscellaneous" tab</a></li>
           </ul>
         </li>
@@ -415,6 +416,37 @@
       <p>The "Max size" options specify the maximum resolution of the output video.
         Larger videos will be resized to fit within this resolution.</p>
       <p>The specified video bitrate is used by default as "average bitrate".</p>
+
+      <h3><a id="audiosettings">"Audio" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the audio transcoding.
+        Note that most audio transcoding options like bit rate, sample rate or number of channels
+        are fixed to the appropriate value for a given target (DVD, iPad, AVI) and cannot be modified.</p>
+      <p>When the option "Normalize audio level" is checked, QtlMovie performs audio
+        normalization on the transcoded audio track. This adds an initial pass on the file
+        to determine the input audio level. The corresponding audio normalization it then
+        performed in the general transcoding passes.</p>
+      <p>The "Mean level" option specifies the target mean audio level after normalization.
+        The level -20 dBFS is commonly used for cinema. Pop/rock concerts may be raised
+        to -12 dBFS but higher values (closer to zero) may compress the dynamics too much.
+        Be aware that the target level is only an approximated value. The actual output
+        audio level can vary in the range +1/-1 dB depending the target transcoding type.
+        The "Max peak level" option specifies the maximum audio peak level after normalization.
+        In theory, 0 dBFS is ideal but -1 dBFS should be preferred to avoid clipping.</p>
+      <p>When the input dynamic is too large for the target normalization, several options
+        are possible.</p>
+      <ul>
+        <li>Align to mean level and compress: The target mean level is used and dynamic
+          compression is performed (similar to standard MP3 conversions).
+          This is the default and should be fine for most usages.</li>
+        <li>Align to peak level: No compression or distortion is introduced but the actual mean
+          level will be lower than the specified target mean level. This may be preferred to
+          keep a high fidelity. But remember that the audio is compressed anyway so there
+          is no real "high fidelity".</li>
+        <li>Align to mean level level and clip: The target mean level is used and no
+          compression is performed. But the highest sounds are clipped and this may
+          introduced nasty sound effects.</li>
+      </ul>
 
       <h3><a id="miscsettings">"Miscellaneous" tab</a></h3>
 

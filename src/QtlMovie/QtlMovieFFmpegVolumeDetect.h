@@ -40,6 +40,11 @@
 //!
 //! An execution of FFmpeg with the audio filter "volumedetect".
 //!
+//! At end of execution, determine if audio normalization is required and
+//! compute the corresponding audio filter. This audio filter is stored in
+//! the job variables and will be applied in any subsequent FFmpeg transcoding
+//! process.
+//!
 class QtlMovieFFmpegVolumeDetect : public QtlMovieFFmpegProcess
 {
 #if !defined (DOXYGEN)
@@ -82,8 +87,8 @@ protected:
     virtual void emitCompleted(bool success, const QString& message = QString());
 
 private:
-    float _meanLevel;  //!< Measured audio mean level in dBFS.
-    float _peakLevel;  //!< Measured audio peak level in dBFS.
+    qreal _meanLevel;  //!< Measured audio mean level in dBFS.
+    qreal _peakLevel;  //!< Measured audio peak level in dBFS.
 
     //!
     //! Build the FFmpeg command line options.
@@ -102,11 +107,16 @@ private:
     void buildAudioFilter();
 
     //!
-    //! Build a "volume" filter.
-    //! @param [in] offset Volume adjustment in dB.
-    //! @return Filter string.
+    //! Build a the string image of a real number.
+    //! Force "+" sign for positive number.
+    //! @param [in] value Real value.
+    //! @param [in] fractional Number of fractional digits.
+    //! @return Image string.
     //!
-    QString volumeFilter(float offset);
+    static QString realToString(qreal value, int fractional = 1)
+    {
+        return QStringLiteral("%1%2").arg(value > 0.0 ? "+" : "").arg(value, 0, 'f', fractional);
+    }
 
     //!
     //! Build a "compand" filter.
@@ -116,7 +126,7 @@ private:
     //! @param [in] outPeak Output peak volume.
     //! @return Filter string.
     //!
-    QString compandFilter(float inMean, float inPeak, float outMean, float outPeak);
+    QString compandFilter(qreal inMean, qreal inPeak, qreal outMean, qreal outPeak);
 
     // Unaccessible operations.
     QtlMovieFFmpegVolumeDetect() Q_DECL_EQ_DELETE;

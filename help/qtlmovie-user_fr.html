@@ -47,6 +47,7 @@
             <li><a href="#dvdsettings">Onglet "DVD"</a></li>
             <li><a href="#ipadsettings">Onglet "iPad"</a></li>
             <li><a href="#avisettings">Onglet "AVI"</a></li>
+            <li><a href="#audiosettings">Onglet "Audio"</a></li>
             <li><a href="#miscsettings">Onglet "Divers"</a></li>
           </ul>
         </li>
@@ -445,6 +446,42 @@
       <p>L'option "Taille max" spécifie la résolution vidéo maximum.
         Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
       <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+
+      <h3><a id="audiosettings">Onglet "Audio"</a></h3>
+
+      <p>Cet onglet regroupe les options qui affectent le transcodage audio.
+        Il est à noter que les principales options de transcodage audio comme le
+        débit binaire, la fréquence d'échantillonnage ou le nombre de canaux
+        sont fixes pour une cible donnée (DVD, iPad, AVI) et ne peuvent être modifiées.</p>
+      <p>Quand l'option "Normaliser le niveau audio" est cochée, QtlMovie effectue
+        une normalisation sur la piste audio. Ceci ajoute une passe initiale sur le
+        fichier pour déterminer le niveau audio. La normalisation correspondante
+        est ensuite effectuée pendant les passes générales de transcodage.</p>
+      <p>L'option "Niveau moyen" spécifie le niveau audio moyen ciblé après normalisation.
+        Le niveau -20 dBFS est utilisé couramment pour le cinéma. Les concerts pop/rock
+        peuvent accepter un niveau de -12 dBFS mais des valeurs plus grandes (donc plus
+        proches de zéro) peuvent trop compresser la dynamique. Il faut être conscient
+        que ce niveau cible est une valeur approximative. Le niveau réel obtenu peut
+        varier de +1/-1 dB selon le type de transcodage utilisé.
+        L'option "Niveau de pic max" spécifie le niveau de pic audio maximum après normalisation.
+        En théorie, la valeur idéale est 0 dBFS mais -1 dBFS est conseillé pour éviter
+        l'écrêtage audio.</p>
+      <p>Quand la dynamique est trop grande pour la normalisation demandée, plusieurs
+        options sont possibles.</p>
+      <ul>
+        <li>Aligner sur le niveau moyen et compresser: Le niveau moyen cible est respecté
+          et de la compression de dynamique est utilisée pour limiter au niveau de pic maximum
+          (comme pour une compression MP3 typique). C'est l'option par défaut et convient
+          à la plupart des usages.</li>
+        <li>Aligner sur le niveau de pic: Aucune compression de dynamique ni aucun distorsion
+          n'est introduite mais le moyen audio moyen obtenu sera plus faible que le niveau
+          moyen demandé. Cette solution peut être préférable pour garder une haute fidélité.
+          Mais il faut se souvenir que l'audio est compressée tout de même et qu'il n'a pas
+          véritablement de "haute fidélité".</li>
+        <li>Aligner sur le niveau moyen et écrêter: Le niveau moyen cible est respecté
+          et aucune compression de dynamique n'est effectuée. Mais les sons les plus
+          forts sont écrêtés, ce qui peut introduire des effets sonores désagréables.</li>
+      </ul>
 
       <h3><a id="miscsettings">Onglet "Divers"</a></h3>
 

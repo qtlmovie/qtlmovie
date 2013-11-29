@@ -4,16 +4,14 @@ QtlMovie Change Log
 
 Version 1.2.10
 - Added audio normalization. Not enabled by default, edit settings first.
-  The results are not always precise, expect a variation of +1/-1 dB from
-  the requested normalized level, depending on the output audio codec.
-  Currently, the dynamic compression is not yet supported; when it is required,
-  the "align peak level" strategy is used instead.
-- On Windows with Aero desktop, added a progress bar on the application icon.
+  See help on audio settings for more details.
 - Reorganized "Edit Settings" tabs.
-- Integrated official FFmpeg 2.1.1 with Windows installer.
 - Fixed a problem with option -threads in ffmpeg.
+- On Windows with Aero desktop, added a progress bar on the application icon.
+  Require Qt 5.2 or higher.
 - Fixed a problem when searching for a new version behind one specific brand
   of proxy server (did not like the default Qt User-Agent).
+- Integrated official FFmpeg 2.1.1 with Windows installer.
 - Provide a RPM package for QtlMovie on Fedora Linux. Added scripts to build
   custom RPM packages for ccextractor and telxcc which do not have packages
   in standard repositories.

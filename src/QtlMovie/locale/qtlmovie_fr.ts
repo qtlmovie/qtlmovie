@@ -764,11 +764,6 @@
         <source>Audio filter: &quot;%1&quot;</source>
         <translation>Filtre audio: &quot;%1&quot;</translation>
     </message>
-    <message>
-        <location filename="../QtlMovieFFmpegVolumeDetect.cpp" line="210"/>
-        <source>The audio compression is not yet supported, aligning on peak level instead</source>
-        <translation>La compression audio n&apos;est pas supportée actuellement, remplacée par l&apos;alignement sur le niveau de pic</translation>
-    </message>
 </context>
 <context>
     <name>QtlMovieInputFile</name>

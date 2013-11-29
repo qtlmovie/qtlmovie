@@ -93,7 +93,7 @@ void QtlMovieFFmpegVolumeDetect::processOutputLine(QProcess::ProcessChannel chan
     if (line.contains("[Parsed_volumedetect_", Qt::CaseInsensitive)) {
 
         // Determine which value it is, intercept mean_volume and max_volume.
-        float* value = 0;
+        qreal* value = 0;
         if (line.contains("mean_volume:", Qt::CaseInsensitive)) {
             value = &_meanLevel;
         }
@@ -107,7 +107,7 @@ void QtlMovieFFmpegVolumeDetect::processOutputLine(QProcess::ProcessChannel chan
             line1.replace(QRegExp("^.*:\\s*"), "");
             line1.replace(QRegExp("\\s+.*$"), "");
             bool ok = false;
-            const float f = line1.toFloat(&ok);
+            const qreal f = line1.toDouble(&ok);
             if (ok) {
                 *value = f;
             }
@@ -148,8 +148,8 @@ void QtlMovieFFmpegVolumeDetect::buildAudioFilter()
     line(tr("Audio volume analysis completed, mean level = %1 dBFS, peak level = %2 dBFS").arg(_meanLevel).arg(_peakLevel));
 
     // Target audio levels.
-    const float outMean = float(settings()->audioNormalizeMean());
-    const float outPeak = float(settings()->audioNormalizePeak());
+    const qreal outMean = qreal(settings()->audioNormalizeMean());
+    const qreal outPeak = qreal(settings()->audioNormalizePeak());
 
     // Check configuration consistency.
     if (outPeak <= outMean) {
@@ -164,19 +164,19 @@ void QtlMovieFFmpegVolumeDetect::buildAudioFilter()
     }
 
     // Compute input and output dynamic ranges.
-    const float inDynamics = _peakLevel - _meanLevel;
-    const float outDynamics = outPeak - outMean;
+    const qreal inDynamics = _peakLevel - _meanLevel;
+    const qreal outDynamics = outPeak - outMean;
 
     // Compute the audio filter.
     QString audioFilter;
     if (inDynamics <= outDynamics || settings()->audioNormalizeMode() == QtlMovieSettings::Clip) {
         // The input dynamics is in the output range, simply adjust the volume to the target mean level.
         // Same if we clip the audio in case the input dynamics is too large.
-        audioFilter = volumeFilter(outMean - _meanLevel);
+        audioFilter = "volume=" + realToString(outMean - _meanLevel) + "dB";
     }
     else if (settings()->audioNormalizeMode() == QtlMovieSettings::AlignPeak) {
         // The input dynamics is too large and we simply adjust the volume to align the peak level.
-        audioFilter = volumeFilter(outPeak - _peakLevel);
+        audioFilter = "volume=" + realToString(outPeak - _peakLevel) + "dB";
     }
     else {
         // The input dynamics is too large and we must compress the dynamics.
@@ -192,21 +192,75 @@ void QtlMovieFFmpegVolumeDetect::buildAudioFilter()
 
 
 //----------------------------------------------------------------------------
-// Build a "volume" filter.
-//----------------------------------------------------------------------------
-
-QString QtlMovieFFmpegVolumeDetect::volumeFilter(float offset)
-{
-    return QStringLiteral("volume=%1%2dB").arg(offset > 0.0 ? "+" : "").arg(offset, 0, 'f', 1);
-}
-
-
-//----------------------------------------------------------------------------
 // Build a "compand" filter.
 //----------------------------------------------------------------------------
 
-QString QtlMovieFFmpegVolumeDetect::compandFilter(float inMean, float inPeak, float outMean, float outPeak)
+QString QtlMovieFFmpegVolumeDetect::compandFilter(qreal inMean, qreal inPeak, qreal outMean, qreal outPeak)
 {
-    line(tr("The audio compression is not yet supported, aligning on peak level instead"), QColor("red"));
-    return volumeFilter(outPeak - inPeak);
+    // Check validity.
+    if (inMean > inPeak || inPeak > 0.0 || outMean > outPeak || outPeak > 0.0) {
+        return "";
+    }
+
+    // General parameters, currently hardcoded.
+    const qreal attacks = 0.002; // seconds
+    const qreal decays  = 0.2;   // seconds
+    const qreal knee    = 10.0;  // ?
+    const qreal gain    = 0.0;   // dB
+    const qreal volume  = 0.0;   // dB
+    const qreal delay   = 0.0;   // seconds
+
+    // List of points in the transfer function in dBFS.
+    QList<QPointF> transfer;
+
+    // The first point is at "noise level", -70dB but at least inMean - 10dB.
+    // The noise level remains unchanged to avoid upraising the noise.
+    const qreal noise = qMin(-70.0, inMean - 10.0);
+    transfer << QPointF(noise, noise);
+
+    // The mean level is shifted. The mid points in [noise, mean] and [mean, peak]
+    // are shifted by the same amount but must remain in the range noise + 1/3 (mean - noise)
+    // to peak - 1/3 (peak - mean).
+    const qreal meanShift = outMean - inMean;
+    const qreal inMidBelowMean = noise + (inMean - noise) / 2.0;
+    const qreal outMidBelowMean = qMax(inMidBelowMean + meanShift, noise + 0.33 * (outMean - noise));
+    const qreal inMidAboveMean = inMean + (inPeak - inMean) / 2.0;
+    const qreal outMidAboveMean = qMin(inMidAboveMean + meanShift, outPeak - 0.33 * (outPeak - outMean));
+
+    // Mid point between noise and mid-below-mean.
+    transfer << QPointF(noise + (inMidBelowMean - noise) / 2.0, noise + (outMidBelowMean - noise) / 2.0);
+
+    // Mean level and its surrounding mid points.
+    transfer << QPointF(inMidBelowMean, outMidBelowMean);
+    transfer << QPointF(inMean, outMean);
+    transfer << QPointF(inMidAboveMean, outMidAboveMean);
+
+    // Mid point between mid-above-mean and peak.
+    transfer << QPointF(inMidAboveMean + (inPeak - inMidAboveMean) / 2.0, outMidAboveMean + (outPeak - outMidAboveMean) / 2.0);
+
+    // End of transfer function: inPeak and Full Scale (0 dBFS) map to outPeak.
+    transfer << QPointF(inPeak, outPeak);
+    if (inPeak < 0.0) {
+        transfer << QPointF(0.0, outPeak);
+    }
+
+    // Build the string representation of the transfer function.
+    QString transferString;
+    foreach (const QPointF& point, transfer) {
+        if (!transferString.isEmpty()) {
+            transferString += ' ';
+        }
+        transferString += realToString(point.x());
+        transferString += '/';
+        transferString += realToString(point.y());
+    }
+
+    // Build the audio filter string.
+    return "compand=attacks=" + realToString(attacks, 3) +
+            ":decays=" + realToString(decays, 3) +
+            ":points=" + transferString +
+            ":soft-knee=" + realToString(knee) +
+            ":gain=" + realToString(gain) +
+            ":volume=" + realToString(volume) +
+            ":delay=" + realToString(delay, 3);
 }
