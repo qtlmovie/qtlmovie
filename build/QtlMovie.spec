@@ -57,6 +57,7 @@ mkdir -p \
     $RPM_BUILD_ROOT/usr/share/applications \
     $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/apps
 cp build-QtlMovie-Desktop-Release/QtlMovie/QtlMovie $RPM_BUILD_ROOT/usr/bin
+strip $RPM_BUILD_ROOT/usr/bin/QtlMovie
 cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
    build-QtlMovie-Desktop-Release/QtlMovie/locale/qtlmovie_fr.qm \
    build-QtlMovie-Desktop-Release/Qts/locale/qts_fr.qm \

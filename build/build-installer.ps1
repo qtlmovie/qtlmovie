@@ -150,6 +150,9 @@ else {
     & (Join-Path $PSScriptRoot build.ps1) -Release -Static -NoPause
 }
 
+# Strip all executables.
+Get-ChildItem -Recurse $BuildDir -Include *.exe | ForEach-Object { strip $_.FullName }
+
 # Build the installer.
 if (-not $NoInstaller) {
 
