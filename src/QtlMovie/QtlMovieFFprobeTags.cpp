@@ -113,6 +113,7 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
         const float dar = floatValueOfStream(index, "display_aspect_ratio");
         info->setWidth(width);
         info->setHeight(height);
+        info->setRotation(intValueOfStream(index, "tags.rotate"));
 
         // If display aspect ratio is not specified, assume pixel aspect ratio = 1
         // (square pixels), hence DAR = width / height.

@@ -722,10 +722,12 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
             }
         }
 
-        // Get the characteristics of the input video stream.
-        const int width = videoStream->width();
-        const int height = videoStream->height();
-        const float dar = videoStream->displayAspectRatio();
+        // Add video rotation options if required.
+        int width = 0;
+        int height = 0;
+        float dar = 1.0;
+        QString videoFilters;
+        QtlMovieFFmpeg::addRotateOptions(settings(), videoStream, args, videoFilters, width, height, dar);
 
         // We always adjust the size of the video. We must know the input video size.
         if (width <= 0 || height <= 0) {
@@ -733,8 +735,13 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         }
 
         // Video filter: DVD output is always 720x576, 16:9.
-        QString videoFilters;
-        QtlMovieFFmpeg::addResizeVideoFilter(videoFilters, width, height, dar, settings()->dvdVideoWidth(), settings()->dvdVideoHeight(), QTL_DVD_DAR);
+        QtlMovieFFmpeg::addResizeVideoFilter(videoFilters,
+                                             width,
+                                             height,
+                                             dar,
+                                             settings()->dvdVideoWidth(),
+                                             settings()->dvdVideoHeight(),
+                                             QTL_DVD_DAR);
 
         // Add subtitles processing to video filter.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
@@ -981,16 +988,26 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
              << "-profile:v" << "baseline"   // AVC profile
              << "-level" << "30";            // AVC level 3.0
 
-        // Get the characteristics of the video stream.
-        const int width = videoStream->width();
-        const int height = videoStream->height();
-        const float dar = videoStream->displayAspectRatio();
+        // Add video rotation options if required.
+        int width = 0;
+        int height = 0;
+        float dar = 1.0;
+        QtlMovieFFmpeg::addRotateOptions(settings(), videoStream, args, videoFilters, width, height, dar);
 
         // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
         // resize the video. The maximum output size depends on the iPad screen size in the settings.
         int widthOut = 0;
         int heightOut = 0;
-        QtlMovieFFmpeg::addBoundedSizeOptions(args, videoFilters, width, height, dar, settings()->ipadVideoWidth(), settings()->ipadVideoHeight(), 1.0, widthOut, heightOut);
+        QtlMovieFFmpeg::addBoundedSizeOptions(args,
+                                              videoFilters,
+                                              width,
+                                              height,
+                                              dar,
+                                              settings()->ipadVideoWidth(),
+                                              settings()->ipadVideoHeight(),
+                                              1.0,
+                                              widthOut,
+                                              heightOut);
 
         // Add subtitles processing.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
@@ -1057,10 +1074,11 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
          << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Avi)
          << "-b:v" << QString::number(settings()->aviVideoBitRate());
 
-    // Get the characteristics of the video stream.
-    const int width = videoStream->width();
-    const int height = videoStream->height();
-    const float dar = videoStream->displayAspectRatio();
+    // Add video rotation options if required.
+    int width = 0;
+    int height = 0;
+    float dar = 1.0;
+    QtlMovieFFmpeg::addRotateOptions(settings(), videoStream, args, videoFilters, width, height, dar);
 
     // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
     // resize the video. The maximum output size depends on the iPad screen size in the settings.

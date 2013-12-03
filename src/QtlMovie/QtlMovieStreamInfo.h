@@ -273,6 +273,21 @@ public:
     void setDisplayAspectRatio(float dar);
 
     //!
+    //! Get the video frame rotation in degrees.
+    //! @return The video frame rotation in degrees.
+    //!
+    int rotation() const
+    {
+        return _rotation;
+    }
+
+    //!
+    //! Set the video frame rotation in degrees.
+    //! @param [in] rotation The video frame rotation in degrees.
+    //!
+    void setRotation(int rotation);
+
+    //!
     //! Check if the stream is "forced" (mostly subtitles).
     //! Forced subtitles for a given language shall be displayed when the selected
     //! audio stream has the same language. They typically correspond to fragment
@@ -497,6 +512,7 @@ private:
     int          _width;            //!< Video frame width in pixels.
     int          _height;           //!< Video frame height in pixels.
     float        _dar;              //!< Video frame display aspect ratio.
+    int          _rotation;         //!< Video frame rotation in degrees.
     bool         _forced;           //!< Forced stream.
     bool         _impaired;         //!< For hearing/visual impaired.
     int          _bitRate;          //!< Bitrate (bits/second).

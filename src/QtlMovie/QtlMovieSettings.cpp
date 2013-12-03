@@ -151,8 +151,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _audioNormalize(QTL_DEFAULT_AUDIO_NORMALIZE),
     _audioNormalizeMean(QTL_DEFAULT_AUDIO_MEAN_LEVEL),
     _audioNormalizePeak(QTL_DEFAULT_AUDIO_PEAK_LEVEL),
-    _audioNormalizeMode(Compress)
-
+    _audioNormalizeMode(Compress),
+    _autoRotateVideo(true)
 {
     Q_ASSERT(log != 0);
 
@@ -375,6 +375,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "audioNormalizeMean", _audioNormalizeMean);
     setIntAttribute(xml, "audioNormalizePeak", _audioNormalizePeak);
     setIntAttribute(xml, "audioNormalizeMode", int(_audioNormalizeMode));
+    setBoolAttribute(xml, "autoRotateVideo", _autoRotateVideo);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -440,6 +441,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     int audioNormalizeMean = _audioNormalizeMean;
     int audioNormalizePeak = _audioNormalizePeak;
     int audioNormalizeMode = int(_audioNormalizeMode);
+    bool autoRotateVideo = _autoRotateVideo;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -485,6 +487,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "audioNormalizeMean", audioNormalizeMean) &&
                     !getIntAttribute(xml, "audioNormalizePeak", audioNormalizePeak) &&
                     !getIntAttribute(xml, "audioNormalizeMode", audioNormalizeMode) &&
+                    !getBoolAttribute(xml, "autoRotateVideo", autoRotateVideo) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -536,6 +539,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setAudioNormalizeMean(audioNormalizeMean);
         setAudioNormalizePeak(audioNormalizePeak);
         setAudioNormalizeMode(AudioNormalizeMode(audioNormalizeMode));
+        setAutoRotateVideo(autoRotateVideo);
     }
     else {
         // Format an error string.
@@ -612,62 +616,6 @@ void QtlMovieSettings::normalize(QStringList& list)
 // Set the various elementary properties.
 //----------------------------------------------------------------------------
 
-void QtlMovieSettings::setFFmpegExplicitExecutable(const QString& ffmpegExecutable)
-{
-    if (_ffmpegExplicit->setFileName(ffmpegExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setFFprobeExplicitExecutable(const QString& ffprobeExecutable)
-{
-    if (_ffprobeExplicit->setFileName(ffprobeExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDvdAuthorExplicitExecutable(const QString& dvdauthorExecutable)
-{
-    if (_dvdauthorExplicit->setFileName(dvdauthorExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setMkisofsExplicitExecutable(const QString& mkisofsExecutable)
-{
-    if (_mkisofsExplicit->setFileName(mkisofsExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setGrowisofsExplicitExecutable(const QString& growisofsExecutable)
-{
-    if (_growisofsExplicit->setFileName(growisofsExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setTelxccExplicitExecutable(const QString& telxccExecutable)
-{
-    if (_telxccExplicit->setFileName(telxccExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setCcextractorExplicitExecutable(const QString& ccextractorExecutable)
-{
-    if (_ccextractorExplicit->setFileName(ccextractorExecutable)) {
-        _isModified = true;
-    }
-}
-
-void QtlMovieSettings::setDvdDecrypterExplicitExecutable(const QString& dvddecrypterExecutable)
-{
-    if (_dvddecrypterExplicit->setFileName(dvddecrypterExecutable)) {
-        _isModified = true;
-    }
-}
-
 QString QtlMovieSettings::initialInputDir() const
 {
     // The default initial input directory is user's home.
@@ -732,3 +680,21 @@ SETTER(setAudioNormalize, bool, audioNormalize)
 SETTER(setAudioNormalizeMean, int, audioNormalizeMean)
 SETTER(setAudioNormalizePeak, int, audioNormalizePeak)
 SETTER(setAudioNormalizeMode, AudioNormalizeMode, audioNormalizeMode)
+SETTER(setAutoRotateVideo, bool, autoRotateVideo)
+
+#define EXE_SETTER(method, parameter)                       \
+    void QtlMovieSettings::method(const QString& parameter) \
+    {                                                       \
+        if (_##parameter->setFileName(parameter)) {         \
+            _isModified = true;                             \
+        }                                                   \
+    }
+
+EXE_SETTER(setFFmpegExplicitExecutable, ffmpegExplicit)
+EXE_SETTER(setFFprobeExplicitExecutable, ffprobeExplicit)
+EXE_SETTER(setDvdAuthorExplicitExecutable, dvdauthorExplicit)
+EXE_SETTER(setMkisofsExplicitExecutable, mkisofsExplicit)
+EXE_SETTER(setGrowisofsExplicitExecutable, growisofsExplicit)
+EXE_SETTER(setTelxccExplicitExecutable, telxccExplicit)
+EXE_SETTER(setCcextractorExplicitExecutable, ccextractorExplicit)
+EXE_SETTER(setDvdDecrypterExplicitExecutable, dvddecrypterExplicit)

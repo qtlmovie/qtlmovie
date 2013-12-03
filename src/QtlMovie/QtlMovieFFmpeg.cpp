@@ -33,6 +33,7 @@
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovie.h"
 #include "QtlStringList.h"
+#include "QtlUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -393,4 +394,67 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
 
     // Add a command line option to set aspect ratio.
     ffmpegArguments << "-aspect" << QString::number(darOut, 'f', 3);
+}
+
+
+//----------------------------------------------------------------------------
+// Build a video rotation FFmpeg options list .
+//----------------------------------------------------------------------------
+
+void QtlMovieFFmpeg::addRotateOptions(const QtlMovieSettings* settings,
+                                      const QtlMovieStreamInfoPtr& videoStream,
+                                      QStringList& ffmpegArguments,
+                                      QString& videoFilters,
+                                      int& width,
+                                      int& height,
+                                      float& dar)
+{
+    // Check video stream.
+    if (videoStream.isNull()) {
+        width = height = 0;
+        dar = 1.0;
+        return;
+    }
+
+    // Get initial video size.
+    width = videoStream->width();
+    height = videoStream->height();
+    dar = videoStream->displayAspectRatio();
+
+    // Always use rotation angle in range [0..360[ degrees.
+    const int rotation = videoStream->rotation() % 360;
+
+    // If the auto rotate option is disabled, do nothing.
+    if (!settings->autoRotateVideo() || rotation == 0) {
+        return;
+    }
+
+    // Make sure the "rotate" metadata is removed from output file.
+    ffmpegArguments << ("-metadata:s:" + videoStream->ffSpecifier()) << "rotate=";
+
+    // If the rotation is exactly a portrait/landscape swap, swap input width and height.
+    if (rotation == 90 || rotation == 270) {
+        qSwap(width, height);
+        if (dar != 0.0) {
+            dar = 1.0 / dar;
+        }
+    }
+
+    // Add a video filter to rotate.
+    if (!videoFilters.isEmpty()) {
+        videoFilters.append(",");
+    }
+    if (rotation == 90) {
+        videoFilters.append(QStringLiteral("rotate=PI/2:ow=%1:oh=%2").arg(width).arg(height));
+    }
+    else if (rotation == 180) {
+        videoFilters.append("rotate=PI");
+    }
+    else if (rotation == 270) {
+        videoFilters.append(QStringLiteral("rotate=-PI/2:ow=%1:oh=%2").arg(width).arg(height));
+    }
+    else {
+        // Convert degrees to radians.
+        videoFilters.append(QStringLiteral("rotate=%1").arg(float(rotation) * 3.1415 / 180.0, 0, 'f', 3));
+    }
 }

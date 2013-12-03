@@ -374,6 +374,25 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBoxVideoTransformation">
+         <property name="title">
+          <string>Video transformation</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QCheckBox" name="checkBoxAutoRotateVideo">
+            <property name="text">
+             <string>Rotate video based on input metadata (useful for iPhone video files)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBoxSubtitles">
          <property name="title">
           <string>Subtitles insertion</string>

@@ -911,6 +911,21 @@ public:
     //!
     void setAudioNormalizeMode(AudioNormalizeMode audioNormalizeMode);
 
+    //!
+    //! Check if automatic rotation of video shall be applied.
+    //! @return True if automatic rotation of video shall be applied.
+    //!
+    bool autoRotateVideo() const
+    {
+        return _autoRotateVideo;
+    }
+
+    //!
+    //! Set if automatic rotation of video shall be applied.
+    //! @param [in] autoRotateVideo True if automatic rotation of video shall be applied.
+    //!
+    void setAutoRotateVideo(bool autoRotateVideo);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -958,6 +973,7 @@ private:
     int                   _audioNormalizeMean;     //!< Target mean level in dBFS for audio normalization.
     int                   _audioNormalizePeak;     //!< Target peak level in dBFS for audio normalization.
     AudioNormalizeMode    _audioNormalizeMode;     //!< How to normalize audio when the input dynamic range is too large.
+    bool                  _autoRotateVideo;        //!< Use "rotate" metadata to rotate output video.
 
     //!
     //! Write an XML element with a "value" integer attribute.

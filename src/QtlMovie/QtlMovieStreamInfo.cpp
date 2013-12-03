@@ -50,6 +50,7 @@ QtlMovieStreamInfo::QtlMovieStreamInfo() :
     _width(0),
     _height(0),
     _dar(1.0),
+    _rotation(0),
     _forced(false),
     _impaired(false),
     _bitRate(0),
@@ -192,6 +193,9 @@ void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const Q
         if (qAbs(dest->_dar - 1.0) < 0.001) {
             dest->_dar = src->_dar;
         }
+        if (dest->_rotation == 0) {
+            dest->_rotation = src->_rotation;
+        }
         if (!dest->_forced) {
             dest->_forced = src->_forced;
         }
@@ -269,6 +273,15 @@ QString QtlMovieStreamInfo::description(bool compact) const
             }
             else {
                 add(result, QObject::tr("DAR 1:%1").arg(_dar, 0, 'f', 3));
+            }
+        }
+        // Video rotation.
+        if (_rotation != 0) {
+            if (compact) {
+                add(result, QObject::tr("%1 degrees").arg(_rotation));
+            }
+            else {
+                add(result, QObject::tr("rotate %1 degrees").arg(_rotation));
             }
         }
         // Bit rate.
@@ -403,6 +416,11 @@ void QtlMovieStreamInfo::setHeight(int height)
 void QtlMovieStreamInfo::setDisplayAspectRatio(float dar)
 {
     _dar = dar < 0.001 ? 0.0 : dar;
+}
+
+void QtlMovieStreamInfo::setRotation(int rotation)
+{
+    _rotation = rotation % 360;
 }
 
 void QtlMovieStreamInfo::setBitRate(int bitRate)

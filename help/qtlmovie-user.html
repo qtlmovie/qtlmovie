@@ -359,6 +359,14 @@
         not the duration of the transcoding operation.
         Trancoding a movie can take a long time and limiting the transcoded duration can be helpful
         in a test phase, to verify the video quality or the audio or subtitle language for instance.</p>
+      <p>The "Video transformation" area is used for the common video transformation operations.
+        When the option "Rotate video based on input metadata" is checked, the orientation
+        of the output video is automatically modified based on the "rotate" metadata in the
+        input file. This is useful for video files which were shot using an iPhone or other
+        Apple devices. The iPhone orientation (portrait, landscape, upside-down, etc) is
+        stored in private metadata but the video file has a fixed orientation. Such video files
+        are correctly played on Apple video players such as QuickTime but not on standard video
+        players. This option fixes this.</p>
       <p>The "Subtitles insertion" area is used only when inserting subtitles.
         The option "Use original video size as a hint for SRT/SSA/ASS character shape"
         is somewhat cryptic. If checked, the original size of the video is used to

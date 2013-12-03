@@ -158,6 +158,24 @@ namespace QtlMovieFFmpeg
                                float parOut,
                                int& widthOut,
                                int& heightOut);
+
+    //!
+    //! Build a video rotation FFmpeg options list .
+    //! @param [in] settings Application settings.
+    //! @param [in] videoStream Video stream description.
+    //! @param [in,out] ffmpegArguments A list of FFmpeg arguments which is updated.
+    //! @param [in,out] videoFilters A video filter string which is updated.
+    //! @param [out] width New video width in pixels after rotation.
+    //! @param [out] height New video height in pixels after rotation.
+    //! @param [out] dar New display aspect ratio after rotation.
+    //!
+    void addRotateOptions(const QtlMovieSettings* settings,
+                          const QtlMovieStreamInfoPtr& videoStream,
+                          QStringList& ffmpegArguments,
+                          QString& videoFilters,
+                          int& width,
+                          int& height,
+                          float& dar);
 }
 
 #endif // QTLMOVIEFFMPEG_H
