@@ -148,6 +148,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
     _ui.spinDvdBitrate->setValue(_settings->dvdVideoBitRate() / 1000);   // input is kb/s
     _ui.spinIpadBitrate->setValue(_settings->ipadVideoBitRate() / 1000); // input is kb/s
+    _ui.spinIphoneBitrate->setValue(_settings->iphoneVideoBitRate() / 1000); // input is kb/s
     _ui.checkBoxKeepIntermediateFiles->setChecked(_settings->keepIntermediateFiles());
     _ui.spinFFmpegProbeSeconds->setValue(_settings->ffmpegProbeSeconds());
     _ui.checkBoxSrtUseVideoSize->setChecked(_settings->srtUseVideoSizeHint());
@@ -158,6 +159,9 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioNtsc->setChecked(!_settings->createPalDvd());
     _ui.radioIpad12->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad12Size);
     _ui.radioIpad34->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad34Size);
+    _ui.radioIphone3->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone3Size);
+    _ui.radioIphone4->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone4Size);
+    _ui.radioIphone5->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone5Size);
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
     _ui.spinAviBitrate->setValue(_settings->aviVideoBitRate() / 1000); // input is kb/s
@@ -230,6 +234,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setTranscodeSeconds(_ui.spinMaxTranscode->value());
     _settings->setDvdVideoBitRate(_ui.spinDvdBitrate->value() * 1000);   // input is kb/s
     _settings->setIpadVideoBitRate(_ui.spinIpadBitrate->value() * 1000); // input is kb/s
+    _settings->setIphoneVideoBitRate(_ui.spinIphoneBitrate->value() * 1000); // input is kb/s
     _settings->setKeepIntermediateFiles(_ui.checkBoxKeepIntermediateFiles->isChecked());
     _settings->setFFmpegProbeSeconds(_ui.spinFFmpegProbeSeconds->value());
     _settings->setSrtUseVideoSizeHint(_ui.checkBoxSrtUseVideoSize->isChecked());
@@ -237,6 +242,15 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdRemuxAfterTranscode(_ui.checkDvdRemuxAfterTranscode->isChecked());
     _settings->setCreatePalDvd(_ui.radioPal->isChecked());
     _settings->setIpadScreenSize(_ui.radioIpad12->isChecked() ? QtlMovieSettings::Ipad12Size : QtlMovieSettings::Ipad34Size);
+    if (_ui.radioIphone3->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone3Size);
+    }
+    else if (_ui.radioIphone4->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone4Size);
+    }
+    else if (_ui.radioIphone5->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone5Size);
+    }
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());
     _settings->setAviVideoBitRate(_ui.spinAviBitrate->value() * 1000);  // input is kb/s

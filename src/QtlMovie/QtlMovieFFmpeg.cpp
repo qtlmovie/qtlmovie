@@ -179,6 +179,9 @@ QStringList QtlMovieFFmpeg::frameRateOptions(const QtlMovieSettings* settings, Q
     case QtlMovieOutputFile::Ipad:
         frameRate = QTL_IPAD_FRAME_RATE;
         break;
+    case QtlMovieOutputFile::Iphone:
+        frameRate = QTL_IPHONE_FRAME_RATE;
+        break;
     case QtlMovieOutputFile::Avi:
         frameRate = QTL_AVI_FRAME_RATE;
         break;

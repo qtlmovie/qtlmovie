@@ -136,6 +136,7 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _transcodeSeconds(0),
     _dvdVideoBitRate(QTL_DVD_DEFAULT_VIDEO_BITRATE),
     _ipadVideoBitRate(QTL_IPAD_DEFAULT_VIDEO_BITRATE),
+    _iphoneVideoBitRate(QTL_IPHONE_DEFAULT_VIDEO_BITRATE),
     _keepIntermediateFiles(false),
     _ffmpegProbeSeconds(200),
     _srtUseVideoSizeHint(true),
@@ -143,6 +144,7 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _dvdRemuxAfterTranscode(true),
     _createPalDvd(true),
     _ipadScreenSize(Ipad12Size),
+    _iphoneScreenSize(Iphone4Size),
     _forceDvdTranscode(false),
     _newVersionCheck(true),
     _aviVideoBitRate(QTL_AVI_DEFAULT_VIDEO_BITRATE),
@@ -359,6 +361,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "transcodeSeconds", _transcodeSeconds);
     setIntAttribute(xml, "dvdVideoBitRate", _dvdVideoBitRate);
     setIntAttribute(xml, "ipadVideoBitRate", _ipadVideoBitRate);
+    setIntAttribute(xml, "iphoneVideoBitRate", _iphoneVideoBitRate);
     setBoolAttribute(xml, "keepIntermediateFiles", _keepIntermediateFiles);
     setIntAttribute(xml, "ffmpegProbeSeconds", _ffmpegProbeSeconds);
     setBoolAttribute(xml, "srtUseVideoSizeHint", _srtUseVideoSizeHint);
@@ -366,6 +369,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setBoolAttribute(xml, "dvdRemuxAfterTranscode", _dvdRemuxAfterTranscode);
     setBoolAttribute(xml, "createPalDvd", _createPalDvd);
     setIntAttribute(xml, "ipadScreenSize", int(_ipadScreenSize));
+    setIntAttribute(xml, "iphoneScreenSize", int(_iphoneScreenSize));
     setBoolAttribute(xml, "forceDvdTranscode", _forceDvdTranscode);
     setBoolAttribute(xml, "newVersionCheck", _newVersionCheck);
     setIntAttribute(xml, "aviVideoBitRate", _aviVideoBitRate);
@@ -425,6 +429,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     int transcodeSeconds = _transcodeSeconds;
     int dvdVideoBitRate = _dvdVideoBitRate;
     int ipadVideoBitRate = _ipadVideoBitRate;
+    int iphoneVideoBitRate = _iphoneVideoBitRate;
     bool keepIntermediateFiles = _keepIntermediateFiles;
     int ffmpegProbeSeconds = _ffmpegProbeSeconds;
     bool srtUseVideoSizeHint = _srtUseVideoSizeHint;
@@ -432,6 +437,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     bool dvdRemuxAfterTranscode = _dvdRemuxAfterTranscode;
     bool createPalDvd = _createPalDvd;
     int ipadScreenSize = int(_ipadScreenSize);
+    int iphoneScreenSize = int(_iphoneScreenSize);
     bool forceDvdTranscode = _forceDvdTranscode;
     bool newVersionCheck = _newVersionCheck;
     int aviVideoBitRate = _aviVideoBitRate;
@@ -471,6 +477,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "transcodeSeconds", transcodeSeconds) &&
                     !getIntAttribute(xml, "dvdVideoBitRate", dvdVideoBitRate) &&
                     !getIntAttribute(xml, "ipadVideoBitRate", ipadVideoBitRate) &&
+                    !getIntAttribute(xml, "iphoneVideoBitRate", iphoneVideoBitRate) &&
                     !getBoolAttribute(xml, "keepIntermediateFiles", keepIntermediateFiles) &&
                     !getIntAttribute(xml, "ffmpegProbeSeconds", ffmpegProbeSeconds) &&
                     !getBoolAttribute(xml, "srtUseVideoSizeHint", srtUseVideoSizeHint) &&
@@ -478,6 +485,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getBoolAttribute(xml, "dvdRemuxAfterTranscode", dvdRemuxAfterTranscode) &&
                     !getBoolAttribute(xml, "createPalDvd", createPalDvd) &&
                     !getIntAttribute(xml, "ipadScreenSize", ipadScreenSize) &&
+                    !getIntAttribute(xml, "iphoneScreenSize", iphoneScreenSize) &&
                     !getBoolAttribute(xml, "forceDvdTranscode", forceDvdTranscode) &&
                     !getBoolAttribute(xml, "newVersionCheck", newVersionCheck) &&
                     !getIntAttribute(xml, "aviVideoBitRate", aviVideoBitRate) &&
@@ -523,6 +531,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setTranscodeSeconds(transcodeSeconds);
         setDvdVideoBitRate(dvdVideoBitRate);
         setIpadVideoBitRate(ipadVideoBitRate);
+        setIphoneVideoBitRate(iphoneVideoBitRate);
         setKeepIntermediateFiles(keepIntermediateFiles);
         setFFmpegProbeSeconds(ffmpegProbeSeconds);
         setSrtUseVideoSizeHint(srtUseVideoSizeHint);
@@ -530,6 +539,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setDvdRemuxAfterTranscode(dvdRemuxAfterTranscode);
         setCreatePalDvd(createPalDvd);
         setIpadScreenSize(IpadScreenSize(ipadScreenSize));
+        setIphoneScreenSize(IphoneScreenSize(iphoneScreenSize));
         setForceDvdTranscode(forceDvdTranscode);
         setNewVersionCheck(newVersionCheck);
         setAviVideoBitRate(aviVideoBitRate);
@@ -613,7 +623,7 @@ void QtlMovieSettings::normalize(QStringList& list)
 
 
 //----------------------------------------------------------------------------
-// Set the various elementary properties.
+// Get/set the various elementary properties.
 //----------------------------------------------------------------------------
 
 QString QtlMovieSettings::initialInputDir() const
@@ -647,6 +657,26 @@ void QtlMovieSettings::setAudienceLanguages(const QStringList& audienceLanguages
     }
 }
 
+int QtlMovieSettings::iphoneVideoWidth() const
+{
+    switch (_iphoneScreenSize) {
+        case Iphone3Size: return QTL_IPHONE3_VIDEO_WIDTH;
+        case Iphone4Size: return QTL_IPHONE4_VIDEO_WIDTH;
+        case Iphone5Size: return QTL_IPHONE5_VIDEO_WIDTH;
+        default: return -1;
+    }
+}
+
+int QtlMovieSettings::iphoneVideoHeight() const
+{
+    switch (_iphoneScreenSize) {
+        case Iphone3Size: return QTL_IPHONE3_VIDEO_HEIGHT;
+        case Iphone4Size: return QTL_IPHONE4_VIDEO_HEIGHT;
+        case Iphone5Size: return QTL_IPHONE5_VIDEO_HEIGHT;
+        default: return -1;
+    }
+}
+
 #define SETTER(method, type, parameter)           \
     void QtlMovieSettings::method(type parameter) \
     {                                             \
@@ -663,6 +693,7 @@ SETTER(setTranscodeSeconds, int, transcodeSeconds)
 SETTER(setTranscodeComplete, bool, transcodeComplete)
 SETTER(setDvdVideoBitRate, int, dvdVideoBitRate)
 SETTER(setIpadVideoBitRate, int, ipadVideoBitRate)
+SETTER(setIphoneVideoBitRate, int, iphoneVideoBitRate)
 SETTER(setKeepIntermediateFiles, bool, keepIntermediateFiles)
 SETTER(setFFmpegProbeSeconds, int, ffmpegProbeSeconds)
 SETTER(setSrtUseVideoSizeHint, bool, srtUseVideoSizeHint)
@@ -671,6 +702,7 @@ SETTER(setDvdRemuxAfterTranscode, bool, dvdRemuxAfterTranscode)
 SETTER(setDvdBurner, const QString&, dvdBurner)
 SETTER(setCreatePalDvd, bool, createPalDvd)
 SETTER(setIpadScreenSize, QtlMovieSettings::IpadScreenSize, ipadScreenSize)
+SETTER(setIphoneScreenSize, QtlMovieSettings::IphoneScreenSize, iphoneScreenSize)
 SETTER(setForceDvdTranscode, bool, forceDvdTranscode)
 SETTER(setNewVersionCheck, bool, newVersionCheck)
 SETTER(setAviVideoBitRate, int, aviVideoBitRate)

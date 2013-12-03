@@ -117,7 +117,7 @@ void QtlMovieOutputFile::setDefaultFileName(const QString& inputFileName)
 QList<QtlMovieOutputFile::OutputType> QtlMovieOutputFile::outputTypes()
 {
     QList<OutputType> list;
-    list << DvdFile << DvdImage << DvdBurn << Ipad << Avi << SubRip;
+    list << DvdFile << DvdImage << DvdBurn << Ipad << Iphone << Avi << SubRip;
     return list;
 }
 
@@ -133,6 +133,7 @@ QString QtlMovieOutputFile::outputTypeName(QtlMovieOutputFile::OutputType output
     case DvdImage: return tr("DVD ISO Image");
     case DvdBurn:  return tr("Burn DVD");
     case Ipad:     return tr("iPad");
+    case Iphone:   return tr("iPhone");
     case Avi:      return tr("AVI");
     case SubRip:   return tr("SRT Subtitles");
     case None:     return "";
@@ -153,6 +154,7 @@ QString QtlMovieOutputFile::outputIdName(QtlMovieOutputFile::OutputType outputTy
     case DvdImage: return "dvdiso";
     case DvdBurn:  return "dvdburn";
     case Ipad:     return "ipad";
+    case Iphone:   return "iphone";
     case Avi:      return "avi";
     case SubRip:   return "srt";
     case None:     return "none";
@@ -172,6 +174,7 @@ QString QtlMovieOutputFile::fileExtension(QtlMovieOutputFile::OutputType outputT
     case DvdImage: return ".iso";
     case DvdBurn:  return ".iso";
     case Ipad:     return ".mp4";
+    case Iphone:   return ".mp4";
     case Avi:      return ".avi";
     case SubRip:   return ".srt";
     case None:     return "";

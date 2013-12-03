@@ -277,12 +277,15 @@ private:
     bool addBurnDvd(const QString& isoFile, const QString& dvdBurner);
 
     //!
-    //! Add a process for transcoding to iPad.
+    //! Add a process for transcoding to MP4 (iPad, iPhone).
     //! @param [in] inputFile The input file.
     //! @param [in] outputFileName The output file name.
+    //! @param [in] outputType Output file type (either iPad or iPhone).
     //! @return True on success, false on error.
     //!
-    bool addTranscodeToIpad(const QtlMovieInputFile* inputFile, const QString& outputFileName);
+    bool addTranscodeToMp4(const QtlMovieInputFile* inputFile,
+                           const QString& outputFileName,
+                           QtlMovieOutputFile::OutputType outputType);
 
     //!
     //! Add a process for transcoding to AVI.

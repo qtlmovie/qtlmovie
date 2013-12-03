@@ -7,6 +7,9 @@ Version 1.2.11
   rotation on video. This is useful for video files from an iPhone which
   are sometimes upside down, depending on the iPhone orientation at the
   time the video was shot. Can be disabled in the settings.
+- Added "iPhone" output type. Same kind of conversion as iPad but size
+  and bitrate parameters are different.
+- Video frame rate for iPad and iPhone is now 30 f/s instead of 25.
 
 Version 1.2.10
 - Added audio normalization. Not enabled by default, edit settings first.

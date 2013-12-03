@@ -40,33 +40,44 @@
 //
 // Transcoding presets.
 //
-#define QTL_DVD_AUDIO_BITRATE           192000  //!< MPEG-1 Level 2 audio bitrate (bits per second) for DVD.
-#define QTL_DVD_AUDIO_SAMPLING           48000  //!< MPEG-1 Level 2 audio sampling rate (Hz) for DVD.
-#define QTL_DVD_DEFAULT_VIDEO_BITRATE  4000000  //!< MPEG-2 video default bitrate for DVD.
-#define QTL_DVD_PAL_VIDEO_WIDTH            720  //!< Video width (pixels) for PAL DVD.
-#define QTL_DVD_PAL_VIDEO_HEIGHT           576  //!< Video height (pixels) for PAL DVD.
-#define QTL_DVD_PAL_FRAME_RATE              25  //!< Frames per second for PAL DVD.
-#define QTL_DVD_NTSC_VIDEO_WIDTH           720  //!< Video width (pixels) for NTSC DVD.
-#define QTL_DVD_NTSC_VIDEO_HEIGHT          480  //!< Video height (pixels) for NTSC DVD.
-#define QTL_DVD_NTSC_FRAME_RATE             30  //!< Frames per second for NTSC DVD.
-#define QTL_DVD_DAR                 (16.0/9.0)  //!< Display aspect ratio for DVD.
-#define QTL_DVD_DAR_FFMPEG              "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
+#define QTL_DVD_AUDIO_BITRATE            192000  //!< MPEG-1 Level 2 audio bitrate (bits per second) for DVD.
+#define QTL_DVD_AUDIO_SAMPLING            48000  //!< MPEG-1 Level 2 audio sampling rate (Hz) for DVD.
+#define QTL_DVD_DEFAULT_VIDEO_BITRATE   4000000  //!< MPEG-2 video default bitrate for DVD.
+#define QTL_DVD_PAL_VIDEO_WIDTH             720  //!< Video width (pixels) for PAL DVD.
+#define QTL_DVD_PAL_VIDEO_HEIGHT            576  //!< Video height (pixels) for PAL DVD.
+#define QTL_DVD_PAL_FRAME_RATE               25  //!< Frames per second for PAL DVD.
+#define QTL_DVD_NTSC_VIDEO_WIDTH            720  //!< Video width (pixels) for NTSC DVD.
+#define QTL_DVD_NTSC_VIDEO_HEIGHT           480  //!< Video height (pixels) for NTSC DVD.
+#define QTL_DVD_NTSC_FRAME_RATE              30  //!< Frames per second for NTSC DVD.
+#define QTL_DVD_DAR                  (16.0/9.0)  //!< Display aspect ratio for DVD.
+#define QTL_DVD_DAR_FFMPEG               "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 
-#define QTL_IPAD_AUDIO_BITRATE           160000  //!< AAC audio bitrate (bits per second) for iPad.
-#define QTL_IPAD_AUDIO_SAMPLING           48000  //!< AAC audio sampling rate (Hz) for iPad.
-#define QTL_IPAD_DEFAULT_VIDEO_BITRATE  2500000  //!< H.264 video default bitrate for iPad.
-#define QTL_IPAD12_VIDEO_WIDTH             1024  //!< Video width (pixels) for iPad 1, 2 & mini.
-#define QTL_IPAD12_VIDEO_HEIGHT             768  //!< Video height (pixels) for iPad 1, 2 & mini.
-#define QTL_IPAD34_VIDEO_WIDTH             2048  //!< Video width (pixels) for iPad 3 & 4.
-#define QTL_IPAD34_VIDEO_HEIGHT            1536  //!< Video height (pixels) for iPad 3 & 4.
-#define QTL_IPAD_FRAME_RATE                  25  //!< Frames per second for iPad.
+#define QTL_IPAD_AUDIO_BITRATE            160000  //!< AAC audio bitrate (bits per second) for iPad.
+#define QTL_IPAD_AUDIO_SAMPLING            48000  //!< AAC audio sampling rate (Hz) for iPad.
+#define QTL_IPAD_DEFAULT_VIDEO_BITRATE   2500000  //!< H.264 video default bitrate for iPad.
+#define QTL_IPAD12_VIDEO_WIDTH              1024  //!< Video width (pixels) for iPad 1, 2 & mini.
+#define QTL_IPAD12_VIDEO_HEIGHT              768  //!< Video height (pixels) for iPad 1, 2 & mini.
+#define QTL_IPAD34_VIDEO_WIDTH              2048  //!< Video width (pixels) for iPad 3 & 4.
+#define QTL_IPAD34_VIDEO_HEIGHT             1536  //!< Video height (pixels) for iPad 3 & 4.
+#define QTL_IPAD_FRAME_RATE                   30  //!< Frames per second for iPad.
 
-#define QTL_AVI_AUDIO_BITRATE            128000  //!< MP3 audio bitrate (bits per second) for AVI.
-#define QTL_AVI_AUDIO_SAMPLING            48000  //!< MP3 audio sampling rate (Hz) for AVI.
-#define QTL_AVI_DEFAULT_VIDEO_BITRATE   1200000  //!< H.263/Xvid/DivX video default bitrate for AVI.
-#define QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH     880  //!< Default max video width (pixels) for AVI.
-#define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT    352  //!< Default max video height (pixels) for AVI.
-#define QTL_AVI_FRAME_RATE                   24  //!< Frames per second for AVI.
+#define QTL_IPHONE_AUDIO_BITRATE          160000  //!< AAC audio bitrate (bits per second) for iPhone.
+#define QTL_IPHONE_AUDIO_SAMPLING          48000  //!< AAC audio sampling rate (Hz) for iPhone.
+#define QTL_IPHONE_DEFAULT_VIDEO_BITRATE 2000000  //!< H.264 video default bitrate for iPhone.
+#define QTL_IPHONE3_VIDEO_WIDTH              480  //!< Video width (pixels) for iPhone 1/3G/3GS.
+#define QTL_IPHONE3_VIDEO_HEIGHT             320  //!< Video height (pixels) for iPhone 1/3G/3GS.
+#define QTL_IPHONE4_VIDEO_WIDTH              960  //!< Video width (pixels) for iPhone 4/4S.
+#define QTL_IPHONE4_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 4/4S.
+#define QTL_IPHONE5_VIDEO_WIDTH             1136  //!< Video width (pixels) for iPhone 5C/5S.
+#define QTL_IPHONE5_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 5C/5S.
+#define QTL_IPHONE_FRAME_RATE                 30  //!< Frames per second for iPhone.
+
+#define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.
+#define QTL_AVI_AUDIO_SAMPLING             48000  //!< MP3 audio sampling rate (Hz) for AVI.
+#define QTL_AVI_DEFAULT_VIDEO_BITRATE    1200000  //!< H.263/Xvid/DivX video default bitrate for AVI.
+#define QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH      880  //!< Default max video width (pixels) for AVI.
+#define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT     352  //!< Default max video height (pixels) for AVI.
+#define QTL_AVI_FRAME_RATE                    24  //!< Frames per second for AVI.
 
 #define QTL_DEFAULT_AUDIO_NORMALIZE       false  //!< Do not normalize audio level by default.
 #define QTL_DEFAULT_AUDIO_MEAN_LEVEL        -20  //!< Normalized mean audio level, in dBFS.

@@ -313,6 +313,7 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
     case QtlMovieOutputFile::DvdImage:
     case QtlMovieOutputFile::DvdBurn:
     case QtlMovieOutputFile::Ipad:
+    case QtlMovieOutputFile::Iphone:
     case QtlMovieOutputFile::Avi:
         // Require any audio and video type.
         // Require a supported or no subtitle type.
@@ -460,8 +461,9 @@ bool QtlMovieJob::buildScenario()
                 addBurnDvd(_outputFile->fileName(), settings()->dvdBurner());
         break;
     }
-    case QtlMovieOutputFile::Ipad: {
-        success = addTranscodeToIpad(inputForTranscoding, _outputFile->fileName());
+    case QtlMovieOutputFile::Ipad:
+    case QtlMovieOutputFile::Iphone: {
+        success = addTranscodeToMp4(inputForTranscoding, _outputFile->fileName(), outputType);
         break;
     }
     case QtlMovieOutputFile::Avi: {
@@ -963,11 +965,35 @@ bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
 // Add a process for transcoding to iPad.
 //----------------------------------------------------------------------------
 
-bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const QString& outputFileName)
+bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
+                                    const QString& outputFileName,
+                                    QtlMovieOutputFile::OutputType outputType)
 {
     // Video and audio stream to transcode.
     const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
     const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
+
+    // Output-specific parameters.
+    int maxWidth = 0;
+    int maxHeight = 0;
+    int audioBitrate = 0;
+    int audioSamplingRate = 0;
+    switch (outputType) {
+    case QtlMovieOutputFile::Ipad:
+        maxWidth = settings()->ipadVideoWidth();
+        maxHeight = settings()->ipadVideoHeight();
+        audioBitrate = QTL_IPAD_AUDIO_BITRATE;
+        audioSamplingRate = QTL_IPAD_AUDIO_SAMPLING;
+        break;
+    case QtlMovieOutputFile::Iphone:
+        maxWidth = settings()->iphoneVideoWidth();
+        maxHeight = settings()->iphoneVideoHeight();
+        audioBitrate = QTL_IPHONE_AUDIO_BITRATE;
+        audioSamplingRate = QTL_IPHONE_AUDIO_SAMPLING;
+        break;
+    default:
+        return errorFalse(tr("Unsupported output type for MP4"));
+    }
 
     // Start FFmpeg argument list.
     QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
@@ -980,7 +1006,7 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
              << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
-             << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Ipad)
+             << QtlMovieFFmpeg::frameRateOptions(settings(), outputType)
              << "-b:v" << QString::number(settings()->ipadVideoBitRate())
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
@@ -1003,8 +1029,8 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
                                               width,
                                               height,
                                               dar,
-                                              settings()->ipadVideoWidth(),
-                                              settings()->ipadVideoHeight(),
+                                              maxWidth,
+                                              maxHeight,
                                               1.0,
                                               widthOut,
                                               heightOut);
@@ -1026,8 +1052,8 @@ bool QtlMovieJob::addTranscodeToIpad(const QtlMovieInputFile* inputFile, const Q
              << "-codec:a" << "aac"         // AAC (Advanced Audio Coding, MPEG-4 part 3)
              << "-strict" << "experimental" // Allow experimental features, aac codec is one.
              << "-ac" << "2"                // Remix to 2 channels (stereo)
-             << "-ar" << QString::number(QTL_IPAD_AUDIO_SAMPLING)
-             << "-b:a" << QString::number(QTL_IPAD_AUDIO_BITRATE);
+             << "-ar" << QString::number(audioSamplingRate)
+             << "-b:a" << QString::number(audioBitrate);
     }
 
     // The FFmpeg argument list ends with the output file name.

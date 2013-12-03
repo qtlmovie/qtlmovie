@@ -591,6 +591,21 @@ public:
     void setIpadVideoBitRate(int ipadVideoBitRate);
 
     //!
+    //! Get the video bitrate for iPhone output in bits / second.
+    //! @return Video bitrate for iPhone output in bits / second.
+    //!
+    int iphoneVideoBitRate() const
+    {
+        return _iphoneVideoBitRate;
+    }
+
+    //!
+    //! Set the video bitrate for iPhone output in bits / second.
+    //! @param [in] iphoneVideoBitRate Video bitrate for iPhone output in bits / second.
+    //!
+    void setIphoneVideoBitRate(int iphoneVideoBitRate);
+
+    //!
     //! Check if the intermediate files shall be kept after completion.
     //! @return If true, the intermediate files shall be kept after completion.
     //! If false, they are automatically deleted.
@@ -766,6 +781,42 @@ public:
     {
         return _ipadScreenSize == Ipad12Size ? QTL_IPAD12_VIDEO_HEIGHT : QTL_IPAD34_VIDEO_HEIGHT;
     }
+
+    //!
+    //! Define the screen size of an iPhone.
+    //!
+    enum IphoneScreenSize {
+        Iphone3Size,  //!< iPhone 1/3G/3GS (480x320)
+        Iphone4Size,  //!< iPhone 4/4S (960x640)
+        Iphone5Size   //!< iPhone 5/5S (1136x640)
+    };
+
+    //!
+    //! Get the iPhone screen size.
+    //! @return The iPhone screen size.
+    //!
+    IphoneScreenSize iphoneScreenSize() const
+    {
+        return _iphoneScreenSize;
+    }
+
+    //!
+    //! Set the iPhone screen size.
+    //! @param [in] iphoneScreenSize The iPhone screen size.
+    //!
+    void setIphoneScreenSize(IphoneScreenSize iphoneScreenSize);
+
+    //!
+    //! Get the video width of iPhone.
+    //! @return The video width of iPhone.
+    //!
+    int iphoneVideoWidth() const;
+
+    //!
+    //! Get the video height of iPhone.
+    //! @return The video height of iPhone.
+    //!
+    int iphoneVideoHeight() const;
 
     //!
     //! Do we force transcoding even if input file is already DVD-compliant.
@@ -957,6 +1008,7 @@ private:
     int                   _transcodeSeconds;       //!< Max time to transcode when _transcodeComplete is false.
     int                   _dvdVideoBitRate;        //!< Video bitrate for DVD output in bits / second.
     int                   _ipadVideoBitRate;       //!< Video bitrate for iPad output in bits / second.
+    int                   _iphoneVideoBitRate;     //!< Video bitrate for iPhone output in bits / second.
     bool                  _keepIntermediateFiles;  //!< Do not delete intermediate files after transcoding.
     int                   _ffmpegProbeSeconds;     //!< Initial probe size in media playout seconds for ffprobe / ffmpeg.
     bool                  _srtUseVideoSizeHint;    //!< Insertion of SRT/SSA/ASS subtitles uses original video size as a hint.
@@ -964,6 +1016,7 @@ private:
     bool                  _dvdRemuxAfterTranscode; //!< Remux audio/video after transcode to DVD.
     bool                  _createPalDvd;           //!< Create DVD in PAL format (false: NTSC).
     IpadScreenSize        _ipadScreenSize;         //!< iPad screen size.
+    IphoneScreenSize      _iphoneScreenSize;       //!< iPhone screen size.
     bool                  _forceDvdTranscode;      //!< Force transcoding even if input file is already DVD-compliant.
     bool                  _newVersionCheck;        //!< Automatically check new version on startup.
     int                   _aviVideoBitRate;        //!< Video bitrate for AVI output in bits / second.

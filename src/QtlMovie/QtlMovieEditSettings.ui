@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
+    <width>604</width>
     <height>490</height>
    </rect>
   </property>
@@ -667,14 +667,16 @@
        <item row="0" column="2">
         <widget class="QRadioButton" name="radioIpad34">
          <property name="text">
-          <string>iPad 3/4 (2048x1536)</string>
+          <string>iPad 3 / 4
+(2048x1536)</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
         <widget class="QRadioButton" name="radioIpad12">
          <property name="text">
-          <string>iPad 1/2/mini (1024x768)</string>
+          <string>iPad 1 / 2 / mini
+(1024x768)</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -703,6 +705,111 @@
        </item>
        <item row="2" column="1">
         <spacer name="spacerIpad">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabIphone">
+      <attribute name="title">
+       <string>iPhone</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayoutIphone">
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelIphoneBitrate">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Video bitrate :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="4">
+        <widget class="QSpinBox" name="spinIphoneBitrate">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string> kb/s</string>
+         </property>
+         <property name="minimum">
+          <number>500</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+         <property name="singleStep">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>2000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="radioIphone3">
+         <property name="text">
+          <string>iPhone 1 / 3G / 3GS
+(480x320)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="radioIphone4">
+         <property name="text">
+          <string>iPhone 4 / 4S
+(960x640)</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QRadioButton" name="radioIphone5">
+         <property name="text">
+          <string>iPhone 5 / 5S
+(1136x640)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <spacer name="spacerIphoneSize">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelResolution">
+         <property name="text">
+          <string>Screen size :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <spacer name="spacerIphone">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
