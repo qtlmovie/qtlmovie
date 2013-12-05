@@ -667,7 +667,7 @@
        <item row="0" column="2">
         <widget class="QRadioButton" name="radioIpad34">
          <property name="text">
-          <string>iPad 3 / 4
+          <string>iPad 3 / 4 / mini 2 / Air
 (2048x1536)</string>
          </property>
         </widget>
@@ -675,7 +675,7 @@
        <item row="0" column="1">
         <widget class="QRadioButton" name="radioIpad12">
          <property name="text">
-          <string>iPad 1 / 2 / mini
+          <string>iPad 1 / 2 / mini 1
 (1024x768)</string>
          </property>
          <property name="checked">
