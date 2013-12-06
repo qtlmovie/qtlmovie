@@ -129,7 +129,7 @@ function Download-Stats ([String]$FileName, [String]$Version, [DateTime]$StartDa
     # Invoke the SourceForge download stats API
     $D1 = $StartDate.ToString("yyyy-MM-dd")
     $D2 = $EndDate.ToString("yyyy-MM-dd")
-    Write-Debug "Getting stat for $D1 to $D2: $FileName"
+    Write-Debug "Getting stat for $D1 to $D2 : $FileName"
     $json = (Invoke-RestMethod "$Url/$FileName/stats/json?start_date=$D1&end_date=$D2")
 
     # Extract stats for each day.
