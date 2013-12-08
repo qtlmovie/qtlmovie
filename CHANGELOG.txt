@@ -2,6 +2,10 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.12
+- Fixed a performance problem during the initial audio level analysis when
+  audio normalization was required.
+
 Version 1.2.11
 - Use the "rotate" metadata from the input file to apply the corresponding
   rotation on video. This is useful for video files from an iPhone which

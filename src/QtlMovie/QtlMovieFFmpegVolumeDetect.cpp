@@ -50,7 +50,6 @@ QStringList QtlMovieFFmpegVolumeDetect::commandLineOptions(const QString& inputF
          << "-stats"                 // Print progress report (caught by our output analysis).
          << "-loglevel" << "info"    // Must report info.
          << QtlMovieFFmpeg::probeArguments(settings)
-         << "-fflags" << "+genpts"   // Make FFmpeg generate PTS (time stamps).
          << "-i" << inputFile        // Input file containing the audio.
          << "-map" << audioStream    // Audio stream selection.
          << "-af" << "volumedetect"  // Run "volumedetect" filter on this audio stream.
