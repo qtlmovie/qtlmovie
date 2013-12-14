@@ -69,20 +69,26 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _ui.setupUi(this);
 
 #if defined(QTL_WINEXTRAS)
-    // The following sequence is a mystery. If not present, the taskbar progress does not work.
-    // But the Qt documentation is not really clear on what this does.
-    if (QtWin::isCompositionEnabled()) {
-        QtWin::enableBlurBehindWindow(this);
-    }
-    else {
-        QtWin::disableBlurBehindWindow(this);
-    }
+    // On Windows Vista, it has been reported that QtlMovie crashes on exit
+    // when using a progress bar on icon. To avoid that, we use it only on
+    // Windows 7 and higher.
+    if ((QSysInfo::WindowsVersion & QSysInfo::WV_NT_based) != 0 && QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7) {
 
-    // Setup the Windows taskbar button.
-    _taskbarButton = new QWinTaskbarButton(this);
-    _taskbarButton->setWindow(windowHandle());
-    _taskbarProgress = _taskbarButton->progress();
-    _taskbarProgress->setRange(0, 1000);
+        // The following sequence is a mystery. If not present, the taskbar progress does not work.
+        // But the Qt documentation is not really clear on what this does.
+        if (QtWin::isCompositionEnabled()) {
+            QtWin::enableBlurBehindWindow(this);
+        }
+        else {
+            QtWin::disableBlurBehindWindow(this);
+        }
+
+        // Setup the Windows taskbar button.
+        _taskbarButton = new QWinTaskbarButton(this);
+        _taskbarButton->setWindow(windowHandle());
+        _taskbarProgress = _taskbarButton->progress();
+        _taskbarProgress->setRange(0, 1000);
+    }
 #endif
 
     // Connect the "About Qt" action.
@@ -522,7 +528,9 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 
     // Set the Windows task bar button.
 #if defined(QTL_WINEXTRAS)
-    _taskbarProgress->setVisible(started);
+    if (_taskbarProgress != 0) {
+        _taskbarProgress->setVisible(started);
+    }
 #endif
 }
 
@@ -618,19 +626,25 @@ void QtlMovieMainWindow::transcodingProgress(const QString& description, int cur
 
     // Update the Windows task bar button.
 #if defined(QTL_WINEXTRAS)
-    // Compute a value between 0 and 1000 reflecting the global progress.
-    // First, compute duration of one action. This assumes that all actions
-    // have the same duration, which is of course wrong. But never mind.
-    const int actionCount = _job == 0 ? 0 : _job->totalActionCount();
-    const int actionDuration = actionCount == 0 ? 1000 : 1000 / actionCount;
-    // Then, compute initial progress of current action.
-    int progressValue = actionDuration * (_job == 0 ? 0 : _job->currentActionCount());
-    // Finally, add progress within current action, if available.
-    if (maximum > 0) {
-        progressValue += (actionDuration * current) / maximum;
+    if (_taskbarProgress != 0) {
+
+        // Compute a value between 0 and 1000 reflecting the global progress.
+        // First, compute duration of one action. This assumes that all actions
+        // have the same duration, which is of course wrong. But never mind.
+        const int actionCount = _job == 0 ? 0 : _job->totalActionCount();
+        const int actionDuration = actionCount == 0 ? 1000 : 1000 / actionCount;
+
+        // Then, compute initial progress of current action.
+        int progressValue = actionDuration * (_job == 0 ? 0 : _job->currentActionCount());
+
+        // Finally, add progress within current action, if available.
+        if (maximum > 0) {
+            progressValue += (actionDuration * current) / maximum;
+        }
+
+        // Display the progress.
+        _taskbarProgress->setValue(progressValue);
     }
-    // Display the progress.
-    _taskbarProgress->setValue(progressValue);
 #endif
 }
 

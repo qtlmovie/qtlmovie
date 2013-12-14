@@ -2,6 +2,8 @@
 QtlMovie "to do" list
 =====================
 
+- Unit tests no longer build with Qt 5.2, investigate...
+
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory. Seems due to a Qt bug (or missing feature). For more
   details, see https://bugreports.qt-project.org/browse/QTBUG-33962

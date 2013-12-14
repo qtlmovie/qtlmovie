@@ -2,6 +2,11 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.13
+- On Windows, the progress bar overlay on the application icon is no longer
+  used for Windows versions prior to Windows 7. Crashes were reported on Vista
+  when the application exits (maybe a Qt 5.2.0 problem).
+
 Version 1.2.12
 - Fixed a performance problem during the initial audio level analysis when
   audio normalization was required.
