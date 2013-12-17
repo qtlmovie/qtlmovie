@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieStreamInfo.h"
+#include "QtlIsoLanguages.h"
 
 
 //----------------------------------------------------------------------------
@@ -295,7 +296,7 @@ QString QtlMovieStreamInfo::description(bool compact) const
     }
     else {
         // Not a video stream. Display language.
-        add(result, _language);
+        add(result, QtlIsoLanguages::instance()->languageName(_language));
         if (_forced) {
             add(result, QObject::tr("forced"));
         }
