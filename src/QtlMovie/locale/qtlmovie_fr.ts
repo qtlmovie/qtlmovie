@@ -69,103 +69,103 @@
         <translation>Etape %1/%2 - %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="256"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="257"/>
         <source>#%1</source>
         <translation>#%1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="263"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="264"/>
         <source>%1x%2</source>
         <translation>%1x%2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="269"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="270"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="272"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="273"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="275"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="276"/>
         <source>DAR 1:%1</source>
         <translation>DAR 1:%1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="281"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="282"/>
         <source>%1 degrees</source>
         <translation>%1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="284"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="285"/>
         <source>rotate %1 degrees</source>
         <translation>rotation de %1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="289"/>
-        <location filename="../QtlMovieStreamInfo.cpp" line="308"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="290"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="309"/>
         <source>%1 b/s</source>
         <translation>%1 b/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="293"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="294"/>
         <source>%1 f/s</source>
         <translation>%1 f/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="300"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="301"/>
         <source>forced</source>
         <translation>forcés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="315"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="316"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="318"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="319"/>
         <source>stereo</source>
         <translation>stéréo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="321"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="322"/>
         <source>%1 channels</source>
         <translation>%1 canaux</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="326"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="327"/>
         <source>@%1 Hz</source>
         <translation>@%1 Hz</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="337"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="338"/>
         <source>commentary</source>
         <translation>commentaires</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="340"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="341"/>
         <source>visual impaired</source>
         <translation>malvoyants</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="344"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="345"/>
         <source>hearing impaired</source>
         <translation>malentendants</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="347"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="348"/>
         <source>Teletext %1%2</source>
         <translation>Teletext %1%2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="347"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="348"/>
         <source>page </source>
         <translation>page </translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="350"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="351"/>
         <source>Closed Captions #%1</source>
         <translation>Closed Captions #%1</translation>
     </message>

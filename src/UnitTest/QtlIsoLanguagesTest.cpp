@@ -95,7 +95,7 @@ void QtlIsoLanguagesTest::testLanguage2LetterCodes()
 {
     const QStringList languages2Letter(QtlIsoLanguages::instance()->language2LetterCodes());
 
-    QVERIFY(languages2Letter.size() == 172);
+    QVERIFY(languages2Letter.size() == 173);
 
     foreach (const QString& code, languages2Letter) {
         QVERIFY(code.length() == 2);

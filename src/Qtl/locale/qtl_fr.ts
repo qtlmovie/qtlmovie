@@ -760,7 +760,7 @@
     </message>
     <message>
         <location filename="../QtlIsoLanguages.cpp" line="319"/>
-        <location filename="../QtlIsoLanguages.cpp" line="514"/>
+        <location filename="../QtlIsoLanguages.cpp" line="515"/>
         <source>Nauru</source>
         <translation>Nauru</translation>
     </message>
@@ -1096,7 +1096,7 @@
     </message>
     <message>
         <location filename="../QtlIsoLanguages.cpp" line="386"/>
-        <location filename="../QtlIsoLanguages.cpp" line="567"/>
+        <location filename="../QtlIsoLanguages.cpp" line="568"/>
         <source>Tonga</source>
         <translation>Tonga</translation>
     </message>
@@ -1472,596 +1472,597 @@
     </message>
     <message>
         <location filename="../QtlIsoLanguages.cpp" line="467"/>
+        <location filename="../QtlIsoLanguages.cpp" line="468"/>
         <source>Hebrew</source>
         <translation>Hébreu</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="468"/>
+        <location filename="../QtlIsoLanguages.cpp" line="469"/>
         <source>Herero</source>
         <translation>Herero</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="469"/>
+        <location filename="../QtlIsoLanguages.cpp" line="470"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="470"/>
+        <location filename="../QtlIsoLanguages.cpp" line="471"/>
         <source>Hiri Motu</source>
         <translation>Hiri Motu</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="471"/>
+        <location filename="../QtlIsoLanguages.cpp" line="472"/>
         <source>Croatian</source>
         <translation>Croate</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="472"/>
+        <location filename="../QtlIsoLanguages.cpp" line="473"/>
         <source>Hungarian</source>
         <translation>Hongrois</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="473"/>
+        <location filename="../QtlIsoLanguages.cpp" line="474"/>
         <source>Igbo</source>
         <translation>Igbo</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="474"/>
+        <location filename="../QtlIsoLanguages.cpp" line="475"/>
         <source>Icelandic</source>
         <translation>Islandais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="475"/>
+        <location filename="../QtlIsoLanguages.cpp" line="476"/>
         <source>Ido</source>
         <translation>Ido</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="476"/>
+        <location filename="../QtlIsoLanguages.cpp" line="477"/>
         <source>Sichuan Yi</source>
         <translation>Yi de Sichuan</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="477"/>
+        <location filename="../QtlIsoLanguages.cpp" line="478"/>
         <source>Inuktitut</source>
         <translation>Inuktitut</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="478"/>
+        <location filename="../QtlIsoLanguages.cpp" line="479"/>
         <source>Indonesian</source>
         <translation>Indonésien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="479"/>
+        <location filename="../QtlIsoLanguages.cpp" line="480"/>
         <source>Inupiaq</source>
         <translation>Inupiaq</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="480"/>
+        <location filename="../QtlIsoLanguages.cpp" line="481"/>
         <source>Italian</source>
         <translation>Italien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="481"/>
+        <location filename="../QtlIsoLanguages.cpp" line="482"/>
         <source>Javanese</source>
         <translation>Javanais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="482"/>
+        <location filename="../QtlIsoLanguages.cpp" line="483"/>
         <source>Japanese</source>
         <translation>Japonais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="483"/>
+        <location filename="../QtlIsoLanguages.cpp" line="484"/>
         <source>Greenlandic</source>
         <translation>Groenlandais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="484"/>
+        <location filename="../QtlIsoLanguages.cpp" line="485"/>
         <source>Kannada</source>
         <translation>Kannada</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="485"/>
+        <location filename="../QtlIsoLanguages.cpp" line="486"/>
         <source>Kashmiri</source>
         <translation>Kashmiri</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="486"/>
+        <location filename="../QtlIsoLanguages.cpp" line="487"/>
         <source>Kanuri</source>
         <translation>Kanouri</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="487"/>
+        <location filename="../QtlIsoLanguages.cpp" line="488"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="488"/>
+        <location filename="../QtlIsoLanguages.cpp" line="489"/>
         <source>Central Khmer</source>
         <translation>Khmer Central</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="489"/>
+        <location filename="../QtlIsoLanguages.cpp" line="490"/>
         <source>Kikuyu</source>
         <translation>Kikuyu</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="490"/>
+        <location filename="../QtlIsoLanguages.cpp" line="491"/>
         <source>Kinyarwanda</source>
         <translation>Rwandais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="491"/>
+        <location filename="../QtlIsoLanguages.cpp" line="492"/>
         <source>Kirghiz</source>
         <translation>Kirghiz</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="492"/>
+        <location filename="../QtlIsoLanguages.cpp" line="493"/>
         <source>Komi</source>
         <translation>Kom</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="493"/>
+        <location filename="../QtlIsoLanguages.cpp" line="494"/>
         <source>Kongo</source>
         <translation>Kongo</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="494"/>
+        <location filename="../QtlIsoLanguages.cpp" line="495"/>
         <source>Korean</source>
         <translation>Coréen</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="495"/>
+        <location filename="../QtlIsoLanguages.cpp" line="496"/>
         <source>Kuanyama</source>
         <translation>Kuanyama</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="496"/>
+        <location filename="../QtlIsoLanguages.cpp" line="497"/>
         <source>Kurdish</source>
         <translation>Kurde</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="497"/>
+        <location filename="../QtlIsoLanguages.cpp" line="498"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="498"/>
+        <location filename="../QtlIsoLanguages.cpp" line="499"/>
         <source>Latvian</source>
         <translation>Letton</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="499"/>
+        <location filename="../QtlIsoLanguages.cpp" line="500"/>
         <source>Limburgan</source>
         <translation>Limbourgeois</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="500"/>
+        <location filename="../QtlIsoLanguages.cpp" line="501"/>
         <source>Lingala</source>
         <translation>Lingala</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="501"/>
+        <location filename="../QtlIsoLanguages.cpp" line="502"/>
         <source>Lithuanian</source>
         <translation>Lituanien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="502"/>
+        <location filename="../QtlIsoLanguages.cpp" line="503"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgeois</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="503"/>
+        <location filename="../QtlIsoLanguages.cpp" line="504"/>
         <source>Luba-Katanga</source>
         <translation>Luba-Katanga</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="504"/>
+        <location filename="../QtlIsoLanguages.cpp" line="505"/>
         <source>Ganda</source>
         <translation>Ganda</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="505"/>
+        <location filename="../QtlIsoLanguages.cpp" line="506"/>
         <source>Macedonian</source>
         <translation>Macédonien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="506"/>
+        <location filename="../QtlIsoLanguages.cpp" line="507"/>
         <source>Marshallese</source>
         <translation>Marshall</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="507"/>
+        <location filename="../QtlIsoLanguages.cpp" line="508"/>
         <source>Malayalam</source>
         <translation>Malayalam</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="508"/>
+        <location filename="../QtlIsoLanguages.cpp" line="509"/>
         <source>Maori</source>
         <translation>Maori</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="509"/>
+        <location filename="../QtlIsoLanguages.cpp" line="510"/>
         <source>Marathi</source>
         <translation>Marathe</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="510"/>
+        <location filename="../QtlIsoLanguages.cpp" line="511"/>
         <source>Malay</source>
         <translation>Malais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="511"/>
+        <location filename="../QtlIsoLanguages.cpp" line="512"/>
         <source>Malagasy</source>
         <translation>Malgache</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="512"/>
+        <location filename="../QtlIsoLanguages.cpp" line="513"/>
         <source>Maltese</source>
         <translation>Maltais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="513"/>
+        <location filename="../QtlIsoLanguages.cpp" line="514"/>
         <source>Mongolian</source>
         <translation>Mongol</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="515"/>
+        <location filename="../QtlIsoLanguages.cpp" line="516"/>
         <source>Navajo</source>
         <translation>Navaho</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="516"/>
+        <location filename="../QtlIsoLanguages.cpp" line="517"/>
         <source>South Ndebele</source>
         <translation>Ndébélé du Sud</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="517"/>
+        <location filename="../QtlIsoLanguages.cpp" line="518"/>
         <source>North Ndebele</source>
         <translation>Ndébélé du Nord</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="518"/>
+        <location filename="../QtlIsoLanguages.cpp" line="519"/>
         <source>Ndonga</source>
         <translation>Ndonga</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="519"/>
+        <location filename="../QtlIsoLanguages.cpp" line="520"/>
         <source>Nepali</source>
         <translation>Népalais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="520"/>
+        <location filename="../QtlIsoLanguages.cpp" line="521"/>
         <source>Norwegian Nynorsk</source>
         <translation>Norvégien Nvnorsk</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="521"/>
+        <location filename="../QtlIsoLanguages.cpp" line="522"/>
         <source>Norwegian Bokmal</source>
         <translation>Norvégien Bokmal</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="522"/>
+        <location filename="../QtlIsoLanguages.cpp" line="523"/>
         <source>Norwegian</source>
         <translation>Norvégien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="523"/>
+        <location filename="../QtlIsoLanguages.cpp" line="524"/>
         <source>Chichewa</source>
         <translation>Chichewa</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="524"/>
+        <location filename="../QtlIsoLanguages.cpp" line="525"/>
         <source>Occitan</source>
         <translation>Occitan</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="525"/>
+        <location filename="../QtlIsoLanguages.cpp" line="526"/>
         <source>Ojibwa</source>
         <translation>Ojibwa</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="526"/>
+        <location filename="../QtlIsoLanguages.cpp" line="527"/>
         <source>Oriya</source>
         <translation>Oriya</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="527"/>
+        <location filename="../QtlIsoLanguages.cpp" line="528"/>
         <source>Oromo</source>
         <translation>Galla</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="528"/>
+        <location filename="../QtlIsoLanguages.cpp" line="529"/>
         <source>Ossetian</source>
         <translation>Ossète</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="529"/>
+        <location filename="../QtlIsoLanguages.cpp" line="530"/>
         <source>Punjabi</source>
         <translation>Pendjabi</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="530"/>
+        <location filename="../QtlIsoLanguages.cpp" line="531"/>
         <source>Persian</source>
         <translation>Persan</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="531"/>
+        <location filename="../QtlIsoLanguages.cpp" line="532"/>
         <source>Pali</source>
         <translation>Pali</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="532"/>
+        <location filename="../QtlIsoLanguages.cpp" line="533"/>
         <source>Polish</source>
         <translation>Polonais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="533"/>
+        <location filename="../QtlIsoLanguages.cpp" line="534"/>
         <source>Portuguese</source>
         <translation>Portugais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="534"/>
+        <location filename="../QtlIsoLanguages.cpp" line="535"/>
         <source>Pushto</source>
         <translation>Pachto</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="535"/>
+        <location filename="../QtlIsoLanguages.cpp" line="536"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="536"/>
+        <location filename="../QtlIsoLanguages.cpp" line="537"/>
         <source>Romansh</source>
         <translation>Romanche</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="537"/>
+        <location filename="../QtlIsoLanguages.cpp" line="538"/>
         <source>Romanian</source>
         <translation>Roumain</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="538"/>
+        <location filename="../QtlIsoLanguages.cpp" line="539"/>
         <source>Rundi</source>
         <translation>Rundi</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="539"/>
+        <location filename="../QtlIsoLanguages.cpp" line="540"/>
         <source>Russian</source>
         <translation>Russe</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="540"/>
+        <location filename="../QtlIsoLanguages.cpp" line="541"/>
         <source>Sango</source>
         <translation>Sango</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="541"/>
+        <location filename="../QtlIsoLanguages.cpp" line="542"/>
         <source>Sanskrit</source>
         <translation>Sanskrit</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="542"/>
+        <location filename="../QtlIsoLanguages.cpp" line="543"/>
         <source>Sinhala</source>
         <translation>Singhalais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="543"/>
+        <location filename="../QtlIsoLanguages.cpp" line="544"/>
         <source>Slovak</source>
         <translation>Slovaque</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="544"/>
+        <location filename="../QtlIsoLanguages.cpp" line="545"/>
         <source>Slovenian</source>
         <translation>Slovène</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="545"/>
+        <location filename="../QtlIsoLanguages.cpp" line="546"/>
         <source>Northern Sami</source>
         <translation>Sami du Nord</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="546"/>
+        <location filename="../QtlIsoLanguages.cpp" line="547"/>
         <source>Samoan</source>
         <translation>Samoan</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="547"/>
+        <location filename="../QtlIsoLanguages.cpp" line="548"/>
         <source>Shona</source>
         <translation>Shona</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="548"/>
+        <location filename="../QtlIsoLanguages.cpp" line="549"/>
         <source>Sindhi</source>
         <translation>Sindhi</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="549"/>
+        <location filename="../QtlIsoLanguages.cpp" line="550"/>
         <source>Somali</source>
         <translation>Somali</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="550"/>
+        <location filename="../QtlIsoLanguages.cpp" line="551"/>
         <source>Sotho</source>
         <translation>Sotho</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="551"/>
+        <location filename="../QtlIsoLanguages.cpp" line="552"/>
         <source>Spanish</source>
         <translation>Espagnol</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="552"/>
+        <location filename="../QtlIsoLanguages.cpp" line="553"/>
         <source>Sardinian</source>
         <translation>Sarde</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="553"/>
+        <location filename="../QtlIsoLanguages.cpp" line="554"/>
         <source>Serbian</source>
         <translation>Serbe</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="554"/>
+        <location filename="../QtlIsoLanguages.cpp" line="555"/>
         <source>Swati</source>
         <translation>Swati</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="555"/>
+        <location filename="../QtlIsoLanguages.cpp" line="556"/>
         <source>Sundanese</source>
         <translation>Soudanais</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="556"/>
+        <location filename="../QtlIsoLanguages.cpp" line="557"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="557"/>
+        <location filename="../QtlIsoLanguages.cpp" line="558"/>
         <source>Swedish</source>
         <translation>Suédois</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="558"/>
+        <location filename="../QtlIsoLanguages.cpp" line="559"/>
         <source>Tahitian</source>
         <translation>Tahitien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="559"/>
+        <location filename="../QtlIsoLanguages.cpp" line="560"/>
         <source>Tamil</source>
         <translation>Tamoul</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="560"/>
+        <location filename="../QtlIsoLanguages.cpp" line="561"/>
         <source>Tatar</source>
         <translation>Tatar</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="561"/>
+        <location filename="../QtlIsoLanguages.cpp" line="562"/>
         <source>Telugu</source>
         <translation>Télougou</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="562"/>
+        <location filename="../QtlIsoLanguages.cpp" line="563"/>
         <source>Tajik</source>
         <translation>Tadjik</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="563"/>
+        <location filename="../QtlIsoLanguages.cpp" line="564"/>
         <source>Tagalog</source>
         <translation>Tagalog</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="564"/>
+        <location filename="../QtlIsoLanguages.cpp" line="565"/>
         <source>Thai</source>
         <translation>Thaï</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="565"/>
+        <location filename="../QtlIsoLanguages.cpp" line="566"/>
         <source>Tibetan</source>
         <translation>Tibétain</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="566"/>
+        <location filename="../QtlIsoLanguages.cpp" line="567"/>
         <source>Tigrinya</source>
         <translation>Tigrigna</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="568"/>
+        <location filename="../QtlIsoLanguages.cpp" line="569"/>
         <source>Tswana</source>
         <translation>Tswana</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="569"/>
+        <location filename="../QtlIsoLanguages.cpp" line="570"/>
         <source>Tsonga</source>
         <translation>Tsonga</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="570"/>
+        <location filename="../QtlIsoLanguages.cpp" line="571"/>
         <source>Turkmen</source>
         <translation>Turkmène</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="571"/>
+        <location filename="../QtlIsoLanguages.cpp" line="572"/>
         <source>Turkish</source>
         <translation>Turc</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="572"/>
+        <location filename="../QtlIsoLanguages.cpp" line="573"/>
         <source>Twi</source>
         <translation>Twi</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="573"/>
+        <location filename="../QtlIsoLanguages.cpp" line="574"/>
         <source>Uighur</source>
         <translation>Ouïgour</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="574"/>
+        <location filename="../QtlIsoLanguages.cpp" line="575"/>
         <source>Ukrainian</source>
         <translation>Ukrainien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="575"/>
+        <location filename="../QtlIsoLanguages.cpp" line="576"/>
         <source>Urdu</source>
         <translation>Ourdou</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="576"/>
+        <location filename="../QtlIsoLanguages.cpp" line="577"/>
         <source>Uzbek</source>
         <translation>Ouszbek</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="577"/>
+        <location filename="../QtlIsoLanguages.cpp" line="578"/>
         <source>Venda</source>
         <translation>Venda</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="578"/>
+        <location filename="../QtlIsoLanguages.cpp" line="579"/>
         <source>Vietnamese</source>
         <translation>Vietnamien</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="579"/>
+        <location filename="../QtlIsoLanguages.cpp" line="580"/>
         <source>Volapuk</source>
         <translation>Volapük</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="580"/>
+        <location filename="../QtlIsoLanguages.cpp" line="581"/>
         <source>Welsh</source>
         <translation>Gallois</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="581"/>
+        <location filename="../QtlIsoLanguages.cpp" line="582"/>
         <source>Walloon</source>
         <translation>Wallon</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="582"/>
+        <location filename="../QtlIsoLanguages.cpp" line="583"/>
         <source>Wolof</source>
         <translation>Wolof</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="583"/>
+        <location filename="../QtlIsoLanguages.cpp" line="584"/>
         <source>Xhosa</source>
         <translation>Xhosa</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="584"/>
+        <location filename="../QtlIsoLanguages.cpp" line="585"/>
         <source>Yiddish</source>
         <translation>Yiddish</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="585"/>
+        <location filename="../QtlIsoLanguages.cpp" line="586"/>
         <source>Yoruba</source>
         <translation>Yoruba</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="586"/>
+        <location filename="../QtlIsoLanguages.cpp" line="587"/>
         <source>Zhuang</source>
         <translation>Zhuang</translation>
     </message>
     <message>
-        <location filename="../QtlIsoLanguages.cpp" line="587"/>
+        <location filename="../QtlIsoLanguages.cpp" line="588"/>
         <source>Zulu</source>
         <translation>Zoulou</translation>
     </message>

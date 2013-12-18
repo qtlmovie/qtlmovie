@@ -464,6 +464,7 @@ QtlIsoLanguages::QtlIsoLanguages()
     addLanguage("guj",    "", "gu", QObject::tr("Gujarati"));
     addLanguage("hat",    "", "ht", QObject::tr("Haitian Creole"));
     addLanguage("hau",    "", "ha", QObject::tr("Hausa"));
+    addLanguage("",       "", "iw", QObject::tr("Hebrew")); // obsolete but still used
     addLanguage("heb",    "", "he", QObject::tr("Hebrew"));
     addLanguage("her",    "", "hz", QObject::tr("Herero"));
     addLanguage("hin",    "", "hi", QObject::tr("Hindi"));
