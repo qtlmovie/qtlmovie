@@ -86,12 +86,10 @@ Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 if ($Static) {
     Set-QtPath -Static
     $DirSuffix = "-Static"
-    $QMakeOption = "CONFIG+=static"
 }
 else {
     Set-QtPath
     $DirSuffix = ""
-    $QMakeOption = ""
 }
 
 # Default arguments: build all.
@@ -118,7 +116,7 @@ else {
         Write-Output "Building Release version..."
         [void] (New-Item -ItemType Directory -Force $BuildDirRelease)
         Push-Location $BuildDirRelease
-        qmake $ProjectFile -r -spec win32-g++ CONFIG+=release $QMakeOption
+        qmake $ProjectFile -r -spec win32-g++ CONFIG+=release
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
     }
@@ -128,7 +126,7 @@ else {
         Write-Output "Building Debug version..."
         [void] (New-Item -ItemType Directory -Force $BuildDirDebug)
         Push-Location $BuildDirDebug
-        qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug $QMakeOption
+        qmake $ProjectFile -r -spec win32-g++ CONFIG+=debug
         mingw32-make -j4 --no-print-directory -k
         Pop-Location
     }

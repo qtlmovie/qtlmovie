@@ -1,0 +1,189 @@
+[toc align_right="yes" depth="3"]
+
+h1. How to build a static Qt for Windows/MinGW
+
+h2. Dynamic and static versions of Qt
+
+h3. Why a static Qt?
+
+On Windows, the pre-built environments from "qt-project.org":http://qt-project.org/downloads are dynamically linked. This means that your Qt application dynamically references the Qt DLL's which are installed with the pre-built environment.
+
+This is probably the preferred environment for developing and debugging since everything is there and ready to use. However, when it comes to deploying an application on systems without pre-installed Qt environments, it becomes complicated. There are several DLL’s to deploy with the application. Even using the classical "DLL Dependency Walker":http://www.dependencywalker.com/ tool, you cannot find all required DLL’s since some of them are dynamically loaded at execution. So, when the application is ready to deploy, it is easier to build a static version of it. But building a static version of the application requires a static version of the Qt environment in addition to the pre-built dynamic Qt environment.
+
+This article describes an automated way of downloading, building and installing a static Qt development environment using a Windows PowerShell script.
+
+Note that building and installing a static version of Qt on Windows was somewhat problematic up to Qt 4. But Qt 5 has now a much better support for static builds on Windows and this script takes advantage of that.
+
+h3. MinGW vs. MSVC
+
+On Windows, two pre-built environments can be downloaded: one using MinGW and one using Microsoft Visual Studio. The two environments are incompatible and cannot be mixed. You have to chose one.
+
+This article describes how to build a static version of Qt in a MinGW environment. If you need a static Qt for MSVC, you may probably find some ideas here but there is definitely some extra work.
+
+h3. Target environment
+
+When you develop Qt applications on Windows and need to deploy them later on "general purpose" Windows machines, the recommended Qt environment contains two distinct builds of the same version of Qt:
+
+* A dynamic version, installed in *C:\Qt* from a pre-built package.
+* A static version, installed in *C:\Qt\Static* using the procedure which is described in this article.
+
+The pre-built dynamic environment shall be used for development and debugging. In addition to the Qt command line tools (qmake, moc, uic, lupdate, lrelease, etc.), it contains the high-level GUI tools such as Qt Creator, Assistant, Linguist, etc. The installation is straighforward, everything is here, well integrated, working like a charm.
+
+The static environment shall be used to release the deployment version of the application, after it has been fully developed and debugged using the dynamic environment. The static environment contains only the Qt command line tools. There are at least two reasons for not building static versions of the GUI tools. First, releasing a new version of an application is typically a task that you automate using a script and there is no need for GUI tools at this stage. Second, it is probably impossible to build a static version of Qt Creator because of the lack of support for plugins in a static environment.
+
+h3. Restrictions in a static environment
+
+Although building a static version of your application makes it easier to deploy, there are some restrictions in a static environment. Be sure to check that your application complies with these constraints before going further.
+
+# There are licensing issues in distributing applications embedding Qt code in a static link. See "here":http://qt-project.org/products/licensing and "here":https://blog.qt.digia.com/blog/2009/11/30/qt-making-the-right-licensing-decision/ for more details. While you are probably safe if your application is distributed according to the terms of a recognized free and open-source license, you should definitely check the licensing issue for proprietary or closed-source applications.
+# The application cannot use a dynamic modular approach using plugins. But you cannot both ask for a static environment and for a dynamic loading of your own DLL's.
+
+Also note the following points:
+
+* The static executable file of the application is bigger than the dynamic one since all used Qt code is copied into the executable. However, if your application has only one executable, the total deployed size is smaller since only the Qt code which is actually used is linked. When deploying a dynamic version of the application, you have to install all required Qt DLL's with the application and the overall size of all these DLL's is larger than the static application.
+* A Qt static build means that no Qt or MinGW DLL's are used. However, the static executable file of the application still references the Windows DLL's such as kernel32.dll or user32.dll. These DLL's, however, are installed with Windows and do not need to be deployed with the application.
+
+h2. Prerequisites
+
+h3. Dynamic pre-built Qt environment
+
+Install the dynamic pre-built package from "qt-project.org":http://qt-project.org/downloads. Select the package named "Qt for Windows 32-bit (MinGW, OpenGL)". The exact name and version may vary. You can also "browse the tree of installation packages":http://download.qt-project.org/official_releases/qt/.
+
+Preferably plan the installation of the same version of Qt for the dynamic and static builds. This is not a strict requirement but it is a safe configuration. At the time of writing of this article, the latest Qt version is "*5.2.0*":http://download.qt-project.org/official_releases/qt/5.2/5.2.0/qt-windows-opensource-5.2.0-mingw48_opengl-x86-offline.exe.
+
+During installation, select the default installation location (*C:\Qt*). Be sure to add the MinGW environment in the installation (selectable in the "Tools" branch of the installation options).
+
+If you have a separated MinGW environment that you prefer to use and do not install the one from the Qt package installer, be sure to specify the option *-MingwDir* in the static build script (see below).
+
+h3. Windows PowerShell
+
+The script which builds the static Qt environment is a PowerShell script.
+
+The PowerShell version 3.0 or higher is required. PowerShell 3.0 comes with Windows 8 but it can be installed on Windows 7 as well from "Microsoft download":http://www.microsoft.com/en-us/download/details.aspx?id=34595. It is probably impossible to install PowerShell 3.0 on Windows XP or Vista. This article consequently applies to Windows 7 and higher only.
+
+h3. 7-Zip
+
+The build script also requires "7-Zip":http://www.7-zip.org/ to uncompress the downloaded Qt source code. Be sure to install it first.
+
+h2. Building the Qt static environment
+
+h3. Download and run, all done
+
+Download the script named "windows-build-qt-static.ps1":https://sourceforge.net/p/qtlmovie/code/ci/master/tree/build/windows-build-qt-static.ps1?format=raw and execute it.
+
+The above link fetches the script directly from the git repository of a small open-source project named "QtlMovie":http://sourceforge.net/projects/qtlmovie/. You may want to have a look at the various build scripts in this project for sample application builds and installations.
+
+The *windows-build-qt-static.ps1* script can be directly invoked from the Windows Explorer if you are ok with the default parameter values (see below). If you are not familiar with PowerShell, simply right-click on the file and select "Run with PowerShell".
+
+The script performs the following steps:
+
+# Download Qt source code.
+# Build a static version of Qt using the MinGW compiler in the pre-built dynamic environment. It builds the libraries and the command line tools (qmake, moc, uic, lupdate, lrelease, etc.)
+# Install the static version of Qt in C:\Static\ by default.
+
+h3. Command line syntax
+
+Alternatively, you can invoke the script from the PowerShell prompt using the following syntax:
+
+*windows-build-qt-static.ps1 [-QtSrcUrl _url_] [-QtStaticDir _directory_] [-QtVersion _string_] [-MingwDir _directory_] [-NoPause]*
+
+h3. Command line parameters
+
+*-QtSrcUrl _url_*
+
+Specify the URL of the Qt source file archive. By default, the latest identified version is hardcoded ("Qt 5.2.0":http://download.qt-project.org/official_releases/qt/5.2/5.2.0/single/qt-everywhere-opensource-src-5.2.0.7z at the time of this article was written).
+
+Instead of using the parameter on the command line, you may want to modify the default value in the script using another URL / version. Update the following line:
+
+@
+    $QtSrcUrl = "http://download.qt-project.org/official_releases/qt/5.2/5.2.0/single/qt-everywhere-opensource-src-5.2.0.7z",
+@
+
+*-QtStaticDir _directory_*
+
+Specify the root directory where the static versions of Qt are installed. By default: *C:\Qt\Static*.
+
+*-QtVersion _string_*
+
+Specify the Qt version. By default, the script tries to extract the version number from the Qt source file name. Usually, this is sufficient, the script will find "5.2.0" or "5.0.0-rc1" for instance. If the naming scheme of the Qt source file changes one day, you may need to specify an explicit value to this parameter.
+
+*-MingwDir _directory_*
+
+Specify the root directory of the MinGW environment. By default, use the version which was installed by the prebuilt Qt environment.
+
+When the prebuilt environment for Qt 5.2.0 is installed for instance, the script locates MinGW in *C:\Qt\Qt5.2.0\Tools\mingw48_32*. If you chose not to install MinGW as part of the prebuilt environment for Qt, you have to specify the root directory of your MinGW installation.
+
+*-NoPause*
+
+Do not wait for the user to press _enter_ at the end of execution. By default, the scripts executes a _pause_ instruction at the end of execution, which is useful when the script was run from the Windows Explorer.
+
+h2. Using the Qt static environment
+
+h3. Command line
+
+This section describes how to use the static Qt environment from the command line, either the traditional Windows command shell (cmd.exe) or the Windows PowerShell.
+
+Simply add the _bin_ subdirectory of the static Qt environment in front of the _Path_ environment variable. For Qt 5.2.0, this is *C:\Qt\Static\5.2.0\bin*.
+
+Do not forget to also include the MinGW environment in the path. With the dynamic pre-built Qt environment, you may want to add Qt Creator also.
+
+The following commands summarize the command line setups for the various environments.
+
+Dynamic pre-built Qt with the traditional Windows command shell:
+@
+set Path=C:\Qt\Qt5.2.0\5.2.0\mingw48_32\bin;C:\Qt\Qt5.2.0\Tools\mingw48_32\bin;C:\Qt\Qt5.2.0\Tools\QtCreator\bin;C:\Windows\System32;C:\Windows
+@
+
+Dynamic pre-built Qt with the Windows PowerShell:
+@
+$env:Path=C:\Qt\Qt5.2.0\5.2.0\mingw48_32\bin;C:\Qt\Qt5.2.0\Tools\mingw48_32\bin;C:\Qt\Qt5.2.0\Tools\QtCreator\bin;C:\Windows\System32;C:\Windows
+@
+
+Static Qt build with the traditional Windows command shell:
+@
+set Path=C:\Qt\Static\5.2.0\bin;C:\Qt\Qt5.2.0\Tools\mingw48_32\bin;C:\Windows\System32;C:\Windows
+@
+
+Static Qt build with the Windows PowerShell:
+@
+$env:Path=C:\Qt\Static\5.2.0\bin;C:\Qt\Qt5.2.0\Tools\mingw48_32\bin;C:\Windows\System32;C:\Windows
+@
+
+h3. Using the Qt static environment with Qt Creator
+
+This section describes how to use the static Qt environment from Qt Creator. Note that Qt Creator itself is part of the dynamic pre-built environment. By default, it builds the applications for this dynamic environment. But it is possible to configure it to additionally use the static Qt environment.
+
+The following description is based on a vanilla Qt 5.2.0 / Qt Creator 3.0.0 installation, without additional customization of Qt Creator. Change the version numbers to adapt to your configuration.
+
+h4. Qt Creator setup
+
+Open the Qt Creator options edit box (menu "Tools" then "Options..."). Select "Build & Run".
+
+Go to tab "Qt Versions". In the "qmake location" table, there must be an "Auto-detected" part and a "Manual" part. In the "Auto-detected" part, there should be one line named "Qt 5.2.0 MinGW 32bit C:\Qt\Qt5.2.0\5.2.0\mingw48_32\bin\qmake.exe". The "Manual" part is initially empty.
+
+Click "Add", browse to C:\Qt\Static\5.2.0\bin and select "qmake.exe". The version name is automatically set to "Qt 5.2.0 (5.2.0)". You should set a more meaningful name such as "Qt 5.2.0 MinGW Static 32bit"
+
+Then go to tab "Kits". Again, there must be an "Auto-detected" part and an initially empty "Manual" part. Click "Add". Set a meaningful name such as "Desktop Qt 5.2.0 MinGW Static 32bit". In the "Qt version" field, select your static environment, named "Qt 5.2.0 MinGW Static 32bit" if you followed the above advice.
+
+Then click "OK" to terminate the options setup.
+
+h4. Project setup
+
+In each project you want to deploy with a static build, edit the project setup (select "Projects" in the left vertical pane).
+
+Click "Add Kit" in the upper left corner and select your static kit, named "Desktop Qt 5.2.0 MinGW Static 32bit" if you followed the above advice.
+
+The new kit for your project is configured. Note that, by default, there are distinct build directories for the dynamic and static versions of your project.
+
+Now you can build your application in any combination of static vs. dynamic and release vs. debug. In the bottom part of the left pane, the project selector (the computer icon with the name of your project and either "Release" or "Debug") lets you select the combination you want.
+
+Note that it is recommended to build only release versions of the application with the static environment. Avoid building a debug version of the application with the static environment. There are several reasons for that:
+
+* The recommended environment for the development, debug and test phase is the pre-built dynamic environment, not the static one.
+* The size of a static application in debug mode is insanely huge. For a given application, the following sizes have been observed for the application executable file:
+** Dynamic + Release: 1 MB
+** Dynamic + Debug: 33 MB
+** Static + Release: 16 MB
+** Static + Debug: 297 MB
+
+[[Category:HowTo]][[Category:Windows]][[Category:MinGW]]

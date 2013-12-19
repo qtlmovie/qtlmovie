@@ -143,6 +143,7 @@ function Main
         @"
 
 # [QT-STATIC-PATCH]
+CONFIG += static
 QMAKE_LFLAGS += -static -static-libgcc
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer
