@@ -143,7 +143,6 @@ function Main
         @"
 
 # [QT-STATIC-PATCH]
-CONFIG += static
 QMAKE_LFLAGS += -static -static-libgcc
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer
@@ -165,9 +164,15 @@ DEFINES += QT_STATIC_BUILD
     # Configure, compile and install Qt.
     Push-Location $QtSrcDir
     cmd /c "configure.bat -static -debug-and-release -platform win32-g++ -prefix $QtDir `        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -qt-freetype -opengl desktop -qt-sql-sqlite -no-openssl `        -opensource -confirm-license `        -make libs -nomake tools -nomake examples -nomake tests"
-    mingw32-make -j4
-    mingw32-make install
+    mingw32-make -k -j4
+    mingw32-make -k install
     Pop-Location
+
+    # Patch Qt's installed mkspecs for static build of application.
+    $File = "$QtDir\mkspecs\win32-g++\qmake.conf"
+    @"
+CONFIG += static
+"@ | Out-File -Append $File -Encoding Ascii
 
     Exit-Script
 }
