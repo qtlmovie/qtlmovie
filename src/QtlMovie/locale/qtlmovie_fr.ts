@@ -69,105 +69,110 @@
         <translation>Etape %1/%2 - %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="257"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="258"/>
         <source>#%1</source>
         <translation>#%1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="264"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="265"/>
         <source>%1x%2</source>
         <translation>%1x%2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="270"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="421"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="273"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="424"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="276"/>
-        <source>DAR 1:%1</source>
-        <translation>DAR 1:%1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="282"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="272"/>
         <source>%1 degrees</source>
         <translation>%1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="285"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="275"/>
         <source>rotate %1 degrees</source>
         <translation>rotation de %1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="290"/>
-        <location filename="../QtlMovieStreamInfo.cpp" line="309"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="280"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="299"/>
         <source>%1 b/s</source>
         <translation>%1 b/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="294"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="284"/>
         <source>%1 f/s</source>
         <translation>%1 f/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="301"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="291"/>
         <source>forced</source>
         <translation>forcés</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="316"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="306"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="319"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="309"/>
         <source>stereo</source>
         <translation>stéréo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="322"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="312"/>
         <source>%1 channels</source>
         <translation>%1 canaux</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="327"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="317"/>
         <source>@%1 Hz</source>
         <translation>@%1 Hz</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="338"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="328"/>
         <source>commentary</source>
         <translation>commentaires</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="341"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="331"/>
         <source>visual impaired</source>
         <translation>malvoyants</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="345"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="335"/>
         <source>hearing impaired</source>
         <translation>malentendants</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="348"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="338"/>
         <source>Teletext %1%2</source>
         <translation>Teletext %1%2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="348"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="338"/>
         <source>page </source>
         <translation>page </translation>
     </message>
     <message>
-        <location filename="../QtlMovieStreamInfo.cpp" line="351"/>
+        <location filename="../QtlMovieStreamInfo.cpp" line="341"/>
         <source>Closed Captions #%1</source>
         <translation>Closed Captions #%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="427"/>
+        <source>%1</source>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieStreamInfo.cpp" line="430"/>
+        <source>DAR %1</source>
+        <translation>DAR %1</translation>
     </message>
 </context>
 <context>
@@ -1072,7 +1077,7 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="52"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="516"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="537"/>
         <source>Start ...</source>
         <translation>Démarrer ...</translation>
     </message>
@@ -1083,162 +1088,167 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="68"/>
-        <location filename="../QtlMovieMainWindow.ui" line="101"/>
-        <location filename="../QtlMovieMainWindow.ui" line="178"/>
+        <location filename="../QtlMovieMainWindow.ui" line="175"/>
+        <location filename="../QtlMovieMainWindow.ui" line="252"/>
         <source>Browse ...</source>
         <translation>Parcourir ...</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="75"/>
-        <location filename="../QtlMovieMainWindow.ui" line="111"/>
-        <location filename="../QtlMovieMainWindow.ui" line="168"/>
+        <location filename="../QtlMovieMainWindow.ui" line="185"/>
+        <location filename="../QtlMovieMainWindow.ui" line="242"/>
         <source>File :</source>
         <translation>Fichier :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="95"/>
+        <location filename="../QtlMovieMainWindow.ui" line="107"/>
+        <source>Force Display Aspect Ratio :</source>
+        <translation>Forcer le format d&apos;affichage :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieMainWindow.ui" line="169"/>
         <source>Input file</source>
         <translation>Fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="121"/>
+        <location filename="../QtlMovieMainWindow.ui" line="195"/>
         <source>Video</source>
         <translation>Vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="133"/>
+        <location filename="../QtlMovieMainWindow.ui" line="207"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="145"/>
+        <location filename="../QtlMovieMainWindow.ui" line="219"/>
         <source>Subtitles</source>
         <translation>Sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="160"/>
+        <location filename="../QtlMovieMainWindow.ui" line="234"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="198"/>
+        <location filename="../QtlMovieMainWindow.ui" line="272"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="207"/>
+        <location filename="../QtlMovieMainWindow.ui" line="281"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="220"/>
+        <location filename="../QtlMovieMainWindow.ui" line="294"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="238"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="837"/>
+        <location filename="../QtlMovieMainWindow.ui" line="312"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="868"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="243"/>
+        <location filename="../QtlMovieMainWindow.ui" line="317"/>
         <source>About Qt</source>
         <translation>A propos de Qt</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="248"/>
+        <location filename="../QtlMovieMainWindow.ui" line="322"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="251"/>
+        <location filename="../QtlMovieMainWindow.ui" line="325"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="256"/>
+        <location filename="../QtlMovieMainWindow.ui" line="330"/>
         <source>Open ...</source>
         <translation>Ouvrir ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="259"/>
+        <location filename="../QtlMovieMainWindow.ui" line="333"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="264"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="512"/>
+        <location filename="../QtlMovieMainWindow.ui" line="338"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="533"/>
         <source>Transcode ...</source>
         <translation>Transcoder ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="267"/>
+        <location filename="../QtlMovieMainWindow.ui" line="341"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="272"/>
+        <location filename="../QtlMovieMainWindow.ui" line="346"/>
         <source>Settings ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="277"/>
+        <location filename="../QtlMovieMainWindow.ui" line="351"/>
         <source>Input File Properties ...</source>
         <translation>Propriétés du fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="280"/>
+        <location filename="../QtlMovieMainWindow.ui" line="354"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="285"/>
+        <location filename="../QtlMovieMainWindow.ui" line="359"/>
         <source>Clear Log</source>
         <translation>Effacer le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="290"/>
+        <location filename="../QtlMovieMainWindow.ui" line="364"/>
         <source>Save Log ...</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="295"/>
+        <location filename="../QtlMovieMainWindow.ui" line="369"/>
         <source>Test Audio ...</source>
         <translation>Tester les pistes audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="298"/>
+        <location filename="../QtlMovieMainWindow.ui" line="372"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="303"/>
+        <location filename="../QtlMovieMainWindow.ui" line="377"/>
         <source>About Media Tools</source>
         <translation>A propos des outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="308"/>
+        <location filename="../QtlMovieMainWindow.ui" line="382"/>
         <source>DVD Decrypter ...</source>
         <translation>DVD Decrypter ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="313"/>
+        <location filename="../QtlMovieMainWindow.ui" line="387"/>
         <source>Help ...</source>
         <translation>Aide ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="321"/>
+        <location filename="../QtlMovieMainWindow.ui" line="395"/>
         <source>Log Debug</source>
         <translation>Activer le debug</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="326"/>
+        <location filename="../QtlMovieMainWindow.ui" line="400"/>
         <source>Search New Version</source>
         <translation>Rechercher une nouvelle version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="331"/>
+        <location filename="../QtlMovieMainWindow.ui" line="405"/>
         <source>Release Notes ...</source>
         <translation>Historique des versions</translation>
     </message>
@@ -1270,88 +1280,88 @@ Le remplacer?</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="392"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="410"/>
         <source>Found stream: %1</source>
         <translation>Flux détecté: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="415"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="433"/>
         <source>Internal error, invalid stream type</source>
         <translation>Erreur interne, type de flux invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="469"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="490"/>
         <source>Internal error, cannot get output file type</source>
         <translation>Erreur interne, impossible de déterminer le type de fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="476"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="497"/>
         <source>Cannot burn DVD, specify the burning device in settings</source>
         <translation>Impossible de graver un DVD, spécifier d&apos;abord le nom du graveur dans les options</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="503"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="507"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="524"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="528"/>
         <source>Cancel ...</source>
         <translation>Annuler ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="546"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="567"/>
         <source>Internal error, transcoding job already created.</source>
         <translation>Erreur interne, transcodage déjà créé</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="613"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="644"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="686"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="717"/>
         <source>Do you want to abort the current transcoding ?</source>
         <translation>Voulez-vous annuler le transcodage en cours ?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="735"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="766"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="764"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="795"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="778"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="809"/>
         <source>DVD Decrypter not found, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="802"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="833"/>
         <source>Save Error</source>
         <translation>Erreur de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="842"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="873"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="843"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="874"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="844"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="875"/>
         <source>Built</source>
         <translation>Généré le </translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="856"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="887"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="870"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="901"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>

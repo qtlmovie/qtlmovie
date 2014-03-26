@@ -6,7 +6,7 @@
 #
 
 # Description of Telxcc:
-TELXCC_VERSION=2.5.1
+TELXCC_VERSION=2.5.3
 TELXCC_RELEASE=0
 TELXCC_SRC=telxcc-${TELXCC_VERSION}.zip
 TELXCC_URL=https://github.com/forers/telxcc/archive/master.zip

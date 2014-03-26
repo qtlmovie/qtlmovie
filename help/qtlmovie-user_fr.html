@@ -31,6 +31,7 @@
             <li><a href="#iphoneout">Création d'une vidéo pour iPhone</a></li>
             <li><a href="#aviout">Création d'un fichier AVI</a></li>
             <li><a href="#subout">Extraction de sous-titres</a></li>
+            <li><a href="#forcedar">Forcer le format d'affichage</a></li>
           </ul>
         </li>
         <li><a href="#miscfeat">Autres fonctionnalités</a>
@@ -307,6 +308,18 @@
         Le format de la piste de sous-titre doit être du texte (SRT, SSA, ASS, Teletext ou Closed Captions).
         Les sous-titres <i>bitmap</i> comme les sous-titres DVD ou DVB ne peuvent pas être extraits.
         Le format du fichier de sous-titres créé est SRT.</p>
+
+      <h3><a id="forcedar">Forcer le format d'affichage</a></h3>
+
+      <p>Un format d'affichage incorrect est un problème fréquent dans les fichiers vidéo.
+        Par exemple, vous pouvez avoir un fichier qui est marqué avec un format d'affichage
+        4:3 mais, quand vous le visionnez, l'image parait compressée en largeur. Il est
+        probable que le format d'affichage original était 16:9 mais que, pour une raison
+        quelconque, il a été marqué par erreur en 4:3. En convertissant ce genre de vidéo,
+        il est pratique de forcer QtlMovie à utiliser le format d'affichage correct.</p>
+      <p>C'est le but de l'option "Forcer le format d'affichage". Quand elle est sélectionnée,
+        le format d'affichage entré manuellement est utilisé à la place de celui inscrit dans
+        le fichier d'entrée.</p>
 
       <hr/>
       <h2><a id="miscfeat">Autres fonctionnalités</a></h2>

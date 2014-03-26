@@ -8,6 +8,7 @@ License:        GPL
 URL:            http://ccextractor.sourceforge.net
 Vendor:         Carlos Fernandez (cfsmp3), Volker Quetschke.
 Source0:        http://sourceforge.net/projects/ccextractor/files/ccextractor/%{version}/ccextractor.src.%{version}.zip
+Patch0:         ccextractor.%{version}-linux.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gcc
@@ -23,6 +24,7 @@ look good) and Teletext based European subtitles.
 
 %prep
 %setup -q -n ccextractor.%{version}
+%patch0 -p1
 
 %build
 (cd linux; ./build)

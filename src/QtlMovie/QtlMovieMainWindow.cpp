@@ -372,6 +372,24 @@ void QtlMovieMainWindow::enableOutputTypes()
 
 
 //-----------------------------------------------------------------------------
+// Reset the content of the "forced display aspect ratio" with the
+// actual DAR of the selected video stream.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::resetForcedDisplayAspectRatio()
+{
+    _ui.editForceDAR->clear();
+
+    if (_inFile != 0) {
+        const QtlMovieStreamInfoPtr video(_inFile->selectedVideoStreamInfo());
+        if (!video.isNull()) {
+            _ui.editForceDAR->setText(video->displayAspectRatioString(true, true));
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
 // Invoked when new media information is available on the input file.
 //-----------------------------------------------------------------------------
 
@@ -430,6 +448,9 @@ void QtlMovieMainWindow::inputFileFormatChanged()
 
     // Enable / disable output types based on what is possible.
     enableOutputTypes();
+
+    // Reset the forced DAR.
+    resetForcedDisplayAspectRatio();
 }
 
 
@@ -545,6 +566,16 @@ void QtlMovieMainWindow::startTranscoding()
     if (_job != 0) {
         _ui.log->line(tr("Internal error, transcoding job already created."));
         return;
+    }
+
+    // Force the display aspect ratio of the video stream if required.
+    QtlMovieStreamInfoPtr video(_inFile->selectedVideoStreamInfo());
+    if (!video.isNull()) {
+        float forcedDar = 0.0;
+        if (_ui.checkForceDAR->isChecked()) {
+            forcedDar = qtlToFloat(_ui.editForceDAR->text());
+        }
+        video->setForcedDisplayAspectRatio(forcedDar);
     }
 
     // Setup the transcoding job.

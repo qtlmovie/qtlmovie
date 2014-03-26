@@ -97,6 +97,15 @@ qint64 qtlToInt64(const QString& str,
                   int base = 10);
 
 //!
+//! Convert a string into a float.
+//! Syntax like "x/y" and "x:y" are interpreted as rational numbers.
+//! @param [in] str String to convert.
+//! @param [in] def Value to return if @a str is not a valid float.
+//! @return The decoded value or @a def if invalid.
+//!
+float qtlToFloat(const QString& str, float def = 0.0);
+
+//!
 //! Format a duration into a string.
 //! @param [in] seconds Duration in seconds.
 //! @return Formatted string.

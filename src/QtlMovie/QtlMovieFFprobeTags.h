@@ -37,6 +37,7 @@
 
 #include <QtCore>
 #include "QtlMovieStreamInfo.h"
+#include "QtlUtils.h"
 
 //!
 //! Define a map of tags/values from ffprobe output.
@@ -84,7 +85,10 @@ public:
     //! @param [in] defaultValue Default value if tag not present or not an integer.
     //! @return Tag value.
     //!
-    float floatValue(const QString& name, float defaultValue = 0.0) const;
+    float floatValue(const QString& name, float defaultValue = 0.0) const
+    {
+        return qtlToFloat(value(name), defaultValue);
+    }
 
     //!
     //! Get the full name of a stream-specific tag in FFprobe output.

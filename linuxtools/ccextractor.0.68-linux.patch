@@ -1,0 +1,7 @@
+diff -Naur ccextractor.0.68/linux/build ccextractor.0.68-patched/linux/build
+--- ccextractor.0.68/linux/build	2013-12-18 09:33:04.000000000 +0100
++++ ccextractor.0.68-patched/linux/build	2014-03-26 19:33:28.107684534 +0100
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-g++ -Wno-write-strings -DHAVE_LIBPNG -DGPAC_CONFIG_LINUX -D_FILE_OFFSET_BITS=64  -I../src/gpacmp4/  -o ccextractor $(find ../src/ -name '*.cpp') $(find ../src/ -name '*.c') -lpng
++g++ -Wno-write-strings -DHAVE_LIBPNG -DGPAC_CONFIG_LINUX -D_FILE_OFFSET_BITS=64  -I../src/gpacmp4/ -I../src/libpng/ -o ccextractor $(find ../src/ -name '*.cpp') $(find ../src/ -name '*.c')

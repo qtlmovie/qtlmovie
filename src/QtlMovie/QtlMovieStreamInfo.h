@@ -259,18 +259,34 @@ public:
 
     //!
     //! Get the video frame display aspect ratio.
+    //! @param [in] original If true, ignore the forced DAR (if specified) and
+    //! always return the original DAR from the input file.
     //! @return The video frame display aspect ratio or 0.0 if unknown.
     //!
-    float displayAspectRatio() const
-    {
-        return _dar;
-    }
+    float displayAspectRatio(bool original = false) const;
 
     //!
-    //! Set the video frame display aspect ratio.
+    //! Get the video frame display aspect ratio as a string.
+    //! @param [in] original If true, ignore the forced DAR (if specified) and
+    //! always return the original DAR from the input file.
+    //! @param [in] validFloat If true, always return a string which can be interpreted
+    //! as a float using qtlToFloat().
+    //! @return A string representing the video frame display aspect ratio, empty if unknown.
+    //!
+    QString displayAspectRatioString(bool original = false, bool validFloat = false) const;
+
+    //!
+    //! Set the original video frame display aspect ratio.
     //! @param [in] dar The video frame display aspect ratio.
     //!
     void setDisplayAspectRatio(float dar);
+
+    //!
+    //! Force the video frame display aspect ratio to a value not identical to the original one.
+    //! @param [in] dar The forced video frame display aspect ratio. If zero, there is no more
+    //! forced DAR and the original DAR from the input file is used.
+    //!
+    void setForcedDisplayAspectRatio(float dar);
 
     //!
     //! Get the video frame rotation in degrees.
@@ -512,6 +528,7 @@ private:
     int          _width;            //!< Video frame width in pixels.
     int          _height;           //!< Video frame height in pixels.
     float        _dar;              //!< Video frame display aspect ratio.
+    float        _forcedDar;        //!< Manually forced video frame display aspect ratio.
     int          _rotation;         //!< Video frame rotation in degrees.
     bool         _forced;           //!< Forced stream.
     bool         _impaired;         //!< For hearing/visual impaired.

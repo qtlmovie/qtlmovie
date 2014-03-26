@@ -153,6 +153,11 @@ private slots:
     //!
     void enableOutputTypes();
     //!
+    //! Reset the content of the "forced display aspect ratio" with the
+    //! actual DAR of the selected video stream.
+    //!
+    void resetForcedDisplayAspectRatio();
+    //!
     //! Invoked when the edition of the output file name changed in the edit box.
     //!
     void outputFileNameEdited();

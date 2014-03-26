@@ -2,6 +2,15 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.14
+- Added the possibility to force a new display aspect ratio. Useful when the
+  input file is, for example, incorrectly labeled as 4:3 while it should be 16:9.
+- Linux precompiled RPM for Fedora 20.
+- Precompiled Windows binary uses Qt 5.2.1.
+- Windows installer includes FFmpeg 2.1.4, CCextractor 0.68 and telxcc 2.5.3.
+- Linux RPM's for CCextractor 0.68 and telxcc 2.5.3 are available on QtlMovie
+  SourceForge project (Fedora 20).
+
 Version 1.2.13
 - Display full translated language names (when available) for audio and
   subtitle tracks instead of language codes.

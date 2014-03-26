@@ -74,6 +74,45 @@ qint64 qtlToInt64(const QString& str, qint64 def, qint64 min, qint64 max, int ba
 
 
 //-----------------------------------------------------------------------------
+// Convert a string into a float.
+//-----------------------------------------------------------------------------
+
+float qtlToFloat(const QString& str, float def)
+{
+    // Try as an integer value.
+    bool ok = false;
+    const int iValue = str.toInt(&ok, 0);
+    if (ok) {
+        return float(iValue);
+    }
+
+    // Try as a float value.
+    const float fValue = str.toFloat(&ok);
+    if (ok) {
+        return fValue;
+    }
+
+    // Try as a fraction: "x:y" or "x/y".
+    int sep = str.indexOf(QChar(':'));
+    if (sep < 0) {
+        sep = str.indexOf(QChar('/'));
+    }
+    if (sep >= 0) {
+        const int x = str.left(sep).toInt(&ok);
+        if (ok) {
+            const int y = str.mid(sep + 1).toInt(&ok);
+            if (ok && y != 0) {
+                return float(x) / float(y);
+            }
+        }
+    }
+
+    // Cannot find a format.
+    return def;
+}
+
+
+//-----------------------------------------------------------------------------
 // Format a duration into a string.
 //-----------------------------------------------------------------------------
 

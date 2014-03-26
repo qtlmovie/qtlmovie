@@ -2,6 +2,8 @@
 QtlMovie "to do" list
 =====================
 
+- Bug with CCextractor 0.68: always detect 4 CC streams.
+
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory. Seems due to a Qt bug (or missing feature). For more
   details, see https://bugreports.qt-project.org/browse/QTBUG-33962

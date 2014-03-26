@@ -4,17 +4,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../QtlUtils.cpp" line="87"/>
+        <location filename="../QtlUtils.cpp" line="126"/>
         <source>%1 h %2 mn %3 sec.</source>
         <translation>%1 h %2 mn %3 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="90"/>
+        <location filename="../QtlUtils.cpp" line="129"/>
         <source>%1 mn %2 sec.</source>
         <translation>%1 mn %2 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="93"/>
+        <location filename="../QtlUtils.cpp" line="132"/>
         <source>%1 sec.</source>
         <translation>%1 sec.</translation>
     </message>

@@ -51,6 +51,7 @@ QtlMovieStreamInfo::QtlMovieStreamInfo() :
     _width(0),
     _height(0),
     _dar(1.0),
+    _forcedDar(0.0),
     _rotation(0),
     _forced(false),
     _impaired(false),
@@ -264,18 +265,7 @@ QString QtlMovieStreamInfo::description(bool compact) const
             add(result, QObject::tr("%1x%2").arg(_width).arg(_height));
         }
         // Display aspect ratio.
-        if (_dar > 0.001) {
-            // Translate common display aspect ratios.
-            if (qAbs(_dar - (float(4) / float(3))) < 0.001) {
-                add(result, QObject::tr("4:3"));
-            }
-            else if (qAbs(_dar - (float(16) / float(9))) < 0.001) {
-                add(result, QObject::tr("16:9"));
-            }
-            else {
-                add(result, QObject::tr("DAR 1:%1").arg(_dar, 0, 'f', 3));
-            }
-        }
+        add(result, displayAspectRatioString(true, false));
         // Video rotation.
         if (_rotation != 0) {
             if (compact) {
@@ -414,9 +404,41 @@ void QtlMovieStreamInfo::setHeight(int height)
     _height = height < 0 ? 0 : height;
 }
 
+float QtlMovieStreamInfo::displayAspectRatio(bool original) const
+{
+    return original || _forcedDar < 0.001 ? _dar : _forcedDar;
+}
+
+QString QtlMovieStreamInfo::displayAspectRatioString(bool original, bool validFloat) const
+{
+    const float dar = displayAspectRatio(original);
+    if (dar < 0.001) {
+        // Undefined DAR.
+        return validFloat ? QStringLiteral("0") : QString();
+    }
+    // Translate common display aspect ratios.
+    else if (qAbs(dar - (float(4) / float(3))) < 0.001) {
+        return QObject::tr("4:3");
+    }
+    else if (qAbs(dar - (float(16) / float(9))) < 0.001) {
+        return QObject::tr("16:9");
+    }
+    else if (validFloat) {
+        return QObject::tr("%1").arg(dar, 0, 'f', 3);
+    }
+    else {
+        return QObject::tr("DAR %1").arg(dar, 0, 'f', 3);
+    }
+}
+
 void QtlMovieStreamInfo::setDisplayAspectRatio(float dar)
 {
     _dar = dar < 0.001 ? 0.0 : dar;
+}
+
+void QtlMovieStreamInfo::setForcedDisplayAspectRatio(float dar)
+{
+    _forcedDar = dar < 0.001 ? 0.0 : dar;
 }
 
 void QtlMovieStreamInfo::setRotation(int rotation)

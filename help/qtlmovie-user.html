@@ -31,6 +31,7 @@
             <li><a href="#iphoneout">iPhone output</a></li>
             <li><a href="#aviout">AVI output</a></li>
             <li><a href="#subout">Subtitle extraction</a></li>
+            <li><a href="#forcedar">Forcing the display aspect ratio</a></li>
           </ul>
         </li>
         <li><a href="#miscfeat">Miscellaneous features</a>
@@ -287,8 +288,18 @@
         The subtitle format must be text (SRT, SSA, ASS, Teletext or Closed Captions).
         Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
         The output subtitle file format is SRT.</p>
-      <hr/>
 
+      <h3><a id="forcedar">Forcing the display aspect ratio</a></h3>
+
+      <p>A common problem in video files is the setting of an incorrect display aspect ratio.
+        For instance, you may get a file which is marked with a 4:3 aspect ratio but, when you
+        play it, the image looks compressed. It is probable that the original format was
+        16:9 but, for some reason, was incorrectly marked as 4:3. When converting this
+        type of video, it is useful to force QtlMovie to use the correct aspect ratio.</p>
+      <p>This is the purpose of the "Force display aspect ratio" option. When it is checked,
+        the manually entered aspect ratio is used instead of the one from the input file.</p>
+
+      <hr/>
       <h2><a id="miscfeat">Miscellaneous features</a></h2>
 
       <h3><a id="logwin">The log window</a></h3>

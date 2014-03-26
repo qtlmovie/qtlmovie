@@ -6,10 +6,11 @@
 #
 
 # Description of CCExtractor:
-CCEXTRACTOR_VERSION=0.67
+CCEXTRACTOR_VERSION=0.68
 CCEXTRACTOR_RELEASE=0
 CCEXTRACTOR_SRC=ccextractor.src.${CCEXTRACTOR_VERSION}.zip
 CCEXTRACTOR_URL=http://sourceforge.net/projects/ccextractor/files/ccextractor/${CCEXTRACTOR_VERSION}/${CCEXTRACTOR_SRC}
+CCEXTRACTOR_PATCH=ccextractor.${CCEXTRACTOR_VERSION}-linux.patch
 
 # This script:
 SCRIPT=$(basename $BASH_SOURCE)
@@ -37,6 +38,9 @@ fi
 
 # Download CCExtractor sources if not yet present.
 [ -e $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC ] || wget -O $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC $CCEXTRACTOR_URL
+
+# Get patch if present
+[ -e $SCRIPTDIR/$CCEXTRACTOR_PATCH ] && cp $SCRIPTDIR/$CCEXTRACTOR_PATCH $RPMBUILD/SOURCES/
 
 # Build CCExtractor rpm
 rpmbuild -ba -D "version ${CCEXTRACTOR_VERSION}" -D "release ${CCEXTRACTOR_RELEASE}${DISTRO}" $SCRIPTDIR/ccextractor.spec
