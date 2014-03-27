@@ -543,7 +543,7 @@ function Set-QtPath
     # Hash table of Qt bin directories. Indexed by names of a few standard commands.
     # Initially, the directories for these commands are unknown (empty strings).
 
-    $QtBinMap = @{qmake=""; qtcreator=""; gcc=""}
+    $QtBinMap = @{qmake=""; qtcreator=""; gcc=""; openssl=""}
 
     # In exploring the Qt installation, skip a few subdirectories which are known
     # to be useless. Since these directories contain hundredths of files, ignoring
@@ -585,6 +585,7 @@ function Set-QtPath
     # Get Qt bin directories.
 
     Get-QtBinDir $QtRoot ([REF]$QtBinMap)
+    Get-QtBinDir C:\OpenSSL ([REF]$QtBinMap)
 
     # When using static Qt, only keep gcc, then seach again in $QtRoot\Static
 
@@ -609,6 +610,7 @@ function Set-QtPath
         }
     }
 
+    Prepend-QtBinDir "openssl"
     Prepend-QtBinDir "qtcreator"
     Prepend-QtBinDir "gcc"
     Prepend-QtBinDir "qmake"
