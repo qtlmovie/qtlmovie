@@ -94,12 +94,16 @@ void QtlMovieClosedCaptionsSearch::emitCompleted(bool success, const QString& me
     debug(tr("Closed Captions search completed on channel %1").arg(_ccChannel));
 
     // Report CC if the resulting SRT file exists and is non empty.
+    // In fact, we check that the size is at least 10 characters.
+    // In version 0.68, CCextractor creates the file and writes an UTF-8 BOM.
+    // As a result, an "empty" CC file has 3 bytes. Below 10 characters,
+    // there cannot be any SRT time stamp, so this cannot be a valid SRT file.
     QFile file1(_output1);
     QFile file2(_output2);
-    if (file1.exists() && file1.size() > 0) {
+    if (file1.exists() && file1.size() > 10) {
         emitFoundClosedCaptions(1);
     }
-    if (file2.exists() && file2.size() > 0) {
+    if (file2.exists() && file2.size() > 10) {
         emitFoundClosedCaptions(2);
     }
     file1.remove();

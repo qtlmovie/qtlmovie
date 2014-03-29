@@ -1,4 +1,4 @@
-CCExtractor 0.67, Carlos Fernandez Sanz, Volker Quetschke.
+CCExtractor 0.68, Carlos Fernandez Sanz, Volker Quetschke.
 Teletext portions taken from Petr Kutalek's telxcc
 --------------------------------------------------------------------------
 Originally based on McPoodle's tools. Check his page for lots of information
@@ -19,7 +19,7 @@ File name related options:
             inputfile: file(s) to process
     -o outputfilename: Use -o parameters to define output filename if you don't
                        like the default ones (same as infile plus _1 or _2 when
-                       needed and .raw or .srt extension).
+                       needed and file extension, e.g. .srt).
                            -o or -o1 -> Name of the first (maybe only) output
                                         file.
                            -o2       -> Name of the second output file, when
@@ -93,6 +93,9 @@ Output formats:
                       ttxt    -> Timed Transcript (transcription with time
                                  info)
                       smptett -> SMPTE Timed Text (W3C TTML) format.
+                      spupng -> Set of .xml and .png files for use with
+                                dvdauthor's spumux.
+                                See "Notes on spupng output format"
                       null    -> Don't produce any file output
 
        Note: Teletext output can only be srt, txt or ttxt for now.
@@ -314,7 +317,7 @@ Options that affect debug data:
                        for debugging purposes.
           -parsedebug: Print debug info about the parsed container
                        file. (Only for TS/ASF files at the moment.)
-            -parsePAT: Print Program Allocation Table dump.
+            -parsePAT: Print Program Association Table dump.
             -parsePMT: Print Program Map Table dump.
  -investigate_packets: If no CC packets are detected based on the PMT, try
                        to find data in all packets by scanning.
@@ -347,3 +350,26 @@ itself, and many of the auxiliary tools (case conversion to name one)
 won't do anything yet. Feel free to submit samples that cause problems
 and feature requests.
 
+Notes on spupng output format:
+One .xml file is created per output field. A set of .png files are created in
+a directory with the same base name as the corresponding .xml file(s), but with
+a .d extension. Each .png file will contain an image representing one caption
+and named subNNNN.png, starting with sub0000.png.
+For example, the command:
+    ccextractor -out=spupng input.mpg
+will create the files:
+    input.xml
+    input.d/sub0000.png
+    input.d/sub0001.png
+    ...
+The command:
+    ccextractor -out=spupng -o /tmp/output -12 input.mpg
+will create the files:
+    /tmp/output_1.xml
+    /tmp/output_1.d/sub0000.png
+    /tmp/output_1.d/sub0001.png
+    ...
+    /tmp/output_2.xml
+    /tmp/output_2.d/sub0000.png
+    /tmp/output_2.d/sub0001.png
+    ...

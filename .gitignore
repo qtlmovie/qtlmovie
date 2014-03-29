@@ -19,3 +19,6 @@ build-*-[Dd]ebug-[Ss]tatic
 *.tgz
 *.gz
 *.bz2
+*.out
+*.log
+*.tmp
