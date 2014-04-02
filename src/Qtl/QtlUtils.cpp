@@ -72,6 +72,13 @@ qint64 qtlToInt64(const QString& str, qint64 def, qint64 min, qint64 max, int ba
     return ok && value >= min && value <= max ? value : def;
 }
 
+qint64 qtlToUInt64(const QString& str, quint64 def, quint64 min, quint64 max, int base)
+{
+    bool ok = false;
+    quint64 value = str.trimmed().toULongLong(&ok, base);
+    return ok && value >= min && value <= max ? value : def;
+}
+
 
 //-----------------------------------------------------------------------------
 // Convert a string into a float.
@@ -177,7 +184,7 @@ QString qtlApplicationName()
 // Get the first QWidget in the line of ancestors of an object.
 //-----------------------------------------------------------------------------
 
-QWidget*qtlWidgetAncestor(QObject* object)
+QWidget* qtlWidgetAncestor(QObject* object)
 {
     while (object != 0) {
         QWidget* widget = qobject_cast<QWidget*>(object);

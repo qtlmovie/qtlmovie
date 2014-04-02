@@ -157,7 +157,8 @@ namespace Qtl {
         HexBytesPerLine = 0x0020,  //!< Interpret @a lineWidth as number of displayed Bytes Per Line.
         HexCStyle       = 0x0040,  //!< C-style hexa value ("0xXX," instead of "XX").
         HexBinary       = 0x0080,  //!< Dump binary values ("XXXXXXXX" binary digits).
-        HexBinNibble    = 0x0100   //!< Binary values are grouped by nibble ("XXXX XXXX").
+        HexBinNibble    = 0x0100,  //!< Binary values are grouped by nibble ("XXXX XXXX").
+        HexCompact      = 0x0200   //!< Same as HexSingleLine without spaces.
     };
     Q_DECLARE_FLAGS(HexaFlags, HexaFlag)
 }

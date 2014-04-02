@@ -97,6 +97,23 @@ qint64 qtlToInt64(const QString& str,
                   int base = 10);
 
 //!
+//! Convert a string into a 64-bit unsigned integer.
+//! @param [in] str String to convert.
+//! @param [in] def Value to return if @a str is not a valid int in the range @a min to @a max.
+//! @param [in] min Minimum allowed value.
+//! @param [in] max Maximum allowed value.
+//! @param [in] base Base for conversion, 10 by default, must be between 2 and 36, or 0.
+//! If base is 0, the C language convention is used: If the string begins with "0x", base 16 is used;
+//! if the string begins with "0", base 8 is used; otherwise, base 10 is used.
+//! @return The decoded value or @a def if out of range.
+//!
+qint64 qtlToUInt64(const QString& str,
+                   quint64 def = Q_UINT64_C(0xFFFFFFFFFFFFFFFF),
+                   quint64 min = 0,
+                   quint64 max = Q_INT64_C(0xFFFFFFFFFFFFFFFF),
+                   int base = 10);
+
+//!
 //! Convert a string into a float.
 //! Syntax like "x/y" and "x:y" are interpreted as rational numbers.
 //! @param [in] str String to convert.

@@ -103,7 +103,7 @@ QString qtlHexa(const void* data, int size, Qtl::HexaFlags flags, int indent, in
         byteSuffix = ",";
         flags |= Qtl::HexHexa; // Enforce hexa flag
     }
-    else if (flags.testFlag(Qtl::HexHexa) || flags.testFlag(Qtl::HexSingleLine)) {
+    else if (flags.testFlag(Qtl::HexHexa) || flags.testFlag(Qtl::HexSingleLine) || flags.testFlag(Qtl::HexCompact)) {
         hexaWidth  = 2;
         bytePrefix = "";
         byteSuffix = "";
@@ -115,10 +115,10 @@ QString qtlHexa(const void* data, int size, Qtl::HexaFlags flags, int indent, in
     }
 
     // Specific case: simple dump, everything on one line.
-    if (flags.testFlag(Qtl::HexSingleLine)) {
+    if (flags.testFlag(Qtl::HexSingleLine) || flags.testFlag(Qtl::HexCompact)) {
         str.reserve((hexaWidth + 1) * size);
         for (int i = 0; i < size; ++i) {
-            if (i > 0) {
+            if (i > 0 && !flags.testFlag(Qtl::HexCompact)) {
                 str.append(QChar(' '));
             }
             str.append(bytePrefix);
