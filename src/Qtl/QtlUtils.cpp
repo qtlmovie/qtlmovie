@@ -285,3 +285,15 @@ QString qtlObjectHierarchy (QObject* object, const QString& prefix, int maxDepth
     output.flush();
     return result;
 }
+
+
+//----------------------------------------------------------------------------
+// Get a portable monospace font.
+//----------------------------------------------------------------------------
+
+QFont qtlMonospaceFont()
+{
+    QFont font("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    return font;
+}

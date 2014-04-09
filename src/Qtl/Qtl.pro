@@ -56,7 +56,10 @@ SOURCES += \
     QtlNewVersionChecker.cpp \
     QtlTextFileViewer.cpp \
     QtlSysInfo.cpp \
-    QtlIsoLanguages.cpp
+    QtlIsoLanguages.cpp \
+    QtlIntValidator.cpp \
+    QtlNamedIntComboBox.cpp \
+    QtlNamedIntSet.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -89,7 +92,10 @@ HEADERS += \
     QtlNewVersionChecker.h \
     QtlTextFileViewer.h \
     QtlSysInfo.h \
-    QtlIsoLanguages.h
+    QtlIsoLanguages.h \
+    QtlIntValidator.h \
+    QtlNamedIntComboBox.h \
+    QtlNamedIntSet.h
 
 FORMS += \
     QtlBrowserDialog.ui \

@@ -153,6 +153,12 @@ QWidget* qtlWidgetAncestor(QObject* object);
 QString qtlApplicationName();
 
 //!
+//! Get a portable monospace font.
+//! @return Font.
+//!
+QFont qtlMonospaceFont();
+
+//!
 //! Get all items in a QListWidget as a list of strings.
 //! @param [in] list The QListWidget.
 //! @return A list of all items in the QListWidget, in the same order.
