@@ -60,22 +60,37 @@ int qtlQtVersion()
 
 int qtlToInt(const QString& str, int def, int min, int max, int base)
 {
+    QString s(str);
+    s.remove(QRegExp(QStringLiteral("[\\s_]")));
     bool ok = false;
-    int value = str.trimmed().toInt(&ok, base);
+    int value = s.toInt(&ok, base);
+    return ok && value >= min && value <= max ? value : def;
+}
+
+quint32 qtlToUInt32(const QString& str, quint32 def, quint32 min, quint32 max, int base)
+{
+    QString s(str);
+    s.remove(QRegExp(QStringLiteral("[\\s_]")));
+    bool ok = false;
+    quint32 value = s.toULong(&ok, base);
     return ok && value >= min && value <= max ? value : def;
 }
 
 qint64 qtlToInt64(const QString& str, qint64 def, qint64 min, qint64 max, int base)
 {
+    QString s(str);
+    s.remove(QRegExp(QStringLiteral("[\\s_]")));
     bool ok = false;
-    qint64 value = str.trimmed().toLongLong(&ok, base);
+    qint64 value = s.toLongLong(&ok, base);
     return ok && value >= min && value <= max ? value : def;
 }
 
-qint64 qtlToUInt64(const QString& str, quint64 def, quint64 min, quint64 max, int base)
+quint64 qtlToUInt64(const QString& str, quint64 def, quint64 min, quint64 max, int base)
 {
+    QString s(str);
+    s.remove(QRegExp(QStringLiteral("[\\s_]")));
     bool ok = false;
-    quint64 value = str.trimmed().toULongLong(&ok, base);
+    quint64 value = s.toULongLong(&ok, base);
     return ok && value >= min && value <= max ? value : def;
 }
 
@@ -296,4 +311,39 @@ QFont qtlMonospaceFont()
     QFont font("Monospace");
     font.setStyleHint(QFont::TypeWriter);
     return font;
+}
+
+
+//----------------------------------------------------------------------------
+// Insert spaces at regular intervals in a string.
+//----------------------------------------------------------------------------
+
+QString qtlStringSpace(const QString& str, int groupSize, Qt::LayoutDirection direction, const QString& space)
+{
+    // Filter trivial cases where there is nothing to do.
+    if (groupSize <= 0 || space.isEmpty() || str.size() < groupSize) {
+        return str;
+    }
+
+    // Work on this string.
+    QString s(str);
+    switch (direction) {
+    case Qt::LeftToRight: {
+        for (int i = groupSize; i < s.size(); i += groupSize + space.size()) {
+            s.insert(i, space);
+        }
+        break;
+    }
+    case Qt::RightToLeft: {
+        for (int i = s.size() - groupSize; i > 0; i -= groupSize) {
+            s.insert(i, space);
+        }
+        break;
+    }
+    default:
+        // Don't do anything.
+        break;
+    }
+
+    return s;
 }

@@ -60,6 +60,22 @@ void* QtlByteBlock::enlarge(int n)
 
 
 //-----------------------------------------------------------------------------
+// Make sure there are at @n bytes available at the specified @a index.
+//-----------------------------------------------------------------------------
+
+void*QtlByteBlock::enlargeFrom(int index, int n)
+{
+    if (index < 0) {
+        index = size();
+    }
+    if (index + n > size()) {
+        resize(index + n);
+    }
+    return data() + index;
+}
+
+
+//-----------------------------------------------------------------------------
 // Append raw data to a byte block.
 //-----------------------------------------------------------------------------
 
@@ -75,7 +91,7 @@ void QtlByteBlock::append(const void* addr, int size)
 // Various methods to get strings
 //-----------------------------------------------------------------------------
 
-bool QtlByteBlock::getUtf8(int& index, int stringSize, QString& s)
+bool QtlByteBlock::getUtf8(int& index, int stringSize, QString& s) const
 {
     if (index < 0 || index + stringSize > size()) {
         return false;
@@ -87,14 +103,14 @@ bool QtlByteBlock::getUtf8(int& index, int stringSize, QString& s)
     }
 }
 
-QString QtlByteBlock::getUtf8(int index, int stringSize)
+QString QtlByteBlock::getUtf8(int index, int stringSize) const
 {
     return index < 0 || index + stringSize > size() ?
         QString() :
         QString::fromUtf8(reinterpret_cast<const char*>(data()) + index, qMin(stringSize, size() - index));
 }
 
-bool QtlByteBlock::getLatin1(int& index, int stringSize, QString& s)
+bool QtlByteBlock::getLatin1(int& index, int stringSize, QString& s) const
 {
     if (index < 0 || index + stringSize > size()) {
         return false;
@@ -106,7 +122,7 @@ bool QtlByteBlock::getLatin1(int& index, int stringSize, QString& s)
     }
 }
 
-QString QtlByteBlock::getLatin1(int index, int stringSize)
+QString QtlByteBlock::getLatin1(int index, int stringSize) const
 {
     return index < 0 || index + stringSize > size() ?
         QString() :

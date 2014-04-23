@@ -103,8 +103,18 @@ public:
     //!
     //! Increase size by @a n and return pointer to new n-byte area at end of block.
     //! @param [in] n Number of bytes to add.
+    //! @return Starting address of enlarged area.
     //!
     void* enlarge(int n);
+
+    //!
+    //! Make sure there are at @n bytes available at the specified @a index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index of area. If negative, append at end of data block.
+    //! @param [in] n Number of bytes to make available.
+    //! @return Starting address at @a index or a null pointer if @a index is negative.
+    //!
+    void* enlargeFrom(int index, int n);
 
     //!
     //! Append raw data to a byte block.
@@ -239,6 +249,254 @@ public:
     }
 
     //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt8(int index, quint8 i)
+    {
+        *(quint8*)(enlargeFrom(index, 1)) = i;
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt16(int index, quint16 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 2)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt32(int index, quint32 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 4)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt64(int index, quint64 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 8)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt8(int index, qint8 i)
+    {
+        *(qint8*)(enlargeFrom(index, 1)) = i;
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt16(int index, qint16 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 2)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt32(int index, qint32 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 4)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt64(int index, qint64 i)
+    {
+        qToBigEndian(i, (uchar*)(enlargeFrom(index, 8)));
+    }
+
+    //!
+    //! Store an integer in big endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! Template variant
+    //! @tparam INT An integer type.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    template<typename INT>
+    void storeToBigEndian(int index, INT i)
+    {
+        qToBigEndian<INT>(i, (uchar*)(enlargeFrom(index, sizeof(INT))));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendUInt16LittleEndian(quint16 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(2)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendUInt32LittleEndian(quint32 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(4)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendUInt64LittleEndian(quint64 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(8)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendInt16LittleEndian(qint16 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(2)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendInt32LittleEndian(qint32 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(4)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! @param [in] i Integer value to append.
+    //!
+    void appendInt64LittleEndian(qint64 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlarge(8)));
+    }
+
+    //!
+    //! Add an integer in little endian representation at the end.
+    //! Template variant
+    //! @tparam INT An integer type.
+    //! @param [in] i Integer value to append.
+    //!
+    template<typename INT>
+    void appendToLittleEndian(INT i)
+    {
+        qToLittleEndian<INT>(i, (uchar*)(enlarge(sizeof(INT))));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt16LittleEndian(int index, quint16 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 2)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt32LittleEndian(int index, quint32 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 4)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeUInt64LittleEndian(int index, quint64 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 8)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt16LittleEndian(int index, qint16 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 2)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt32LittleEndian(int index, qint32 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 4)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    void storeInt64LittleEndian(int index, qint64 i)
+    {
+        qToLittleEndian(i, (uchar*)(enlargeFrom(index, 8)));
+    }
+
+    //!
+    //! Store an integer in little endian representation at a given index.
+    //! The byte block is enlarged if necessary.
+    //! Template variant
+    //! @tparam INT An integer type.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //!
+    template<typename INT>
+    void storeToLittleEndian(int index, INT i)
+    {
+        qToLittleEndian<INT>(i, (uchar*)(enlargeFrom(index, sizeof(INT))));
+    }
+
+    //!
     //! Get an UTF-8 string at a given position.
     //! @param [in,out] index Index in the byte block where to read the data.
     //! If the data is correctly read, @a index is updated to point after the read data.
@@ -246,7 +504,7 @@ public:
     //! @param [out] s Returned string.
     //! @return True on success, false on error.
     //!
-    bool getUtf8(int& index, int stringSize, QString& s);
+    bool getUtf8(int& index, int stringSize, QString& s) const;
 
     //!
     //! Get an UTF-8 string at a given position.
@@ -254,7 +512,7 @@ public:
     //! @param [in] stringSize Requested string size in bytes.
     //! @return The string, possibly truncated to stay within the block.
     //!
-    QString getUtf8(int index, int stringSize);
+    QString getUtf8(int index, int stringSize) const;
 
     //!
     //! Get a Latin-1 string at a given position.
@@ -264,7 +522,7 @@ public:
     //! @param [out] s Returned string.
     //! @return True on success, false on error.
     //!
-    bool getLatin1(int& index, int stringSize, QString& s);
+    bool getLatin1(int& index, int stringSize, QString& s) const;
 
     //!
     //! Get a Latin1 string at a given position.
@@ -272,7 +530,7 @@ public:
     //! @param [in] stringSize Requested string size in bytes.
     //! @return The string, possibly truncated to stay within the block.
     //!
-    QString getLatin1(int index, int stringSize);
+    QString getLatin1(int index, int stringSize) const;
 
     //!
     //! Get an integer in big endian representation at a given position.
@@ -282,7 +540,7 @@ public:
     //! @return True on success, false on error.
     //!
     template<typename INT>
-    bool fromBigEndian(int& index, INT& i)
+    bool fromBigEndian(int& index, INT& i) const
     {
         if (index < 0 || index + sizeof(i) > size()) {
             return false;
@@ -300,9 +558,40 @@ public:
     //! @return The decoded integer value or zero if no space in byte block.
     //!
     template<typename INT>
-    INT fromBigEndian(int index)
+    INT fromBigEndian(int index) const
     {
         return index < 0 || index + int(sizeof(INT)) > size() ? 0 : qFromBigEndian<INT>(data() + index);
+    }
+
+    //!
+    //! Get an integer in little endian representation at a given position.
+    //! @param [in,out] index Index in the byte block where to read the data.
+    //! If the data is correctly read, @a index is updated to point after the read data.
+    //! @param [out] i Returned integer value.
+    //! @return True on success, false on error.
+    //!
+    template<typename INT>
+    bool fromLittleEndian(int& index, INT& i) const
+    {
+        if (index < 0 || index + sizeof(i) > size()) {
+            return false;
+        }
+        else {
+            i = qFromLittleEndian<INT>(data() + index);
+            index += sizeof(i);
+            return true;
+        }
+    }
+
+    //!
+    //! Get an integer in little endian representation at a given position.
+    //! @param [in] index Index in the byte block where to read the data.
+    //! @return The decoded integer value or zero if no space in byte block.
+    //!
+    template<typename INT>
+    INT fromLittleEndian(int index) const
+    {
+        return index < 0 || index + int(sizeof(INT)) > size() ? 0 : qFromLittleEndian<INT>(data() + index);
     }
 };
 
@@ -322,6 +611,26 @@ template<> inline void QtlByteBlock::appendToBigEndian(quint8 i)
 //! @param [in] i Integer value to append.
 //!
 template<> inline void QtlByteBlock::appendToBigEndian(qint8 i)
+{
+    ByteVector::append(quint8(i));
+}
+
+//!
+//! Add an integer in little endian representation at the end.
+//! Template specializations for performance
+//! @param [in] i Integer value to append.
+//!
+template<> inline void QtlByteBlock::appendToLittleEndian(quint8 i)
+{
+    ByteVector::append(i);
+}
+
+//!
+//! Add an integer in little endian representation at the end.
+//! Template specializations for performance
+//! @param [in] i Integer value to append.
+//!
+template<> inline void QtlByteBlock::appendToLittleEndian(qint8 i)
 {
     ByteVector::append(quint8(i));
 }

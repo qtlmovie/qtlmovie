@@ -387,6 +387,47 @@ QString QtlFile::shortPath(const QString& path, bool keepOnError)
 
 
 //-----------------------------------------------------------------------------
+// Enforce a suffix in a file name.
+//-----------------------------------------------------------------------------
+
+QString QtlFile::enforceSuffix(const QString& path, const QString& suffix, Qt::CaseSensitivity cs)
+{
+    return path.endsWith(suffix, cs) ? path : path + suffix;
+}
+
+
+//-----------------------------------------------------------------------------
+// Write the content of a binary file.
+//-----------------------------------------------------------------------------
+
+bool QtlFile::writeBinaryFile(const QString& fileName, const QtlByteBlock& content)
+{
+    // Open the file. Note: the ~QFile() destructor will close it.
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly)) {
+        return false;
+    }
+
+    // Write the file.
+    const char* current = reinterpret_cast<const char*>(content.data());
+    qint64 remain = content.size();
+    while (remain > 0) {
+        // Write as many bytes as possible.
+        const qint64 written = file.write(current, remain);
+        if (written <= 0) {
+            // Error occured.
+            return false;
+        }
+
+        // Next chunk.
+        current += written;
+        remain -= written;
+    }
+    return true;
+}
+
+
+//-----------------------------------------------------------------------------
 // Read the content of a binary file.
 //-----------------------------------------------------------------------------
 

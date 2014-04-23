@@ -208,6 +208,36 @@ public:
     }
 
     //!
+    //! Enforce a suffix in a file name.
+    //! If @a path does not end with @a suffix, it is added.
+    //! @param [in] path A file path.
+    //! @param [in] suffix The suffix to check or add.
+    //! @param [in] cs Indicates if the file names are case sensitive.
+    //! @return A file path ending with @a suffix.
+    //!
+    static QString enforceSuffix(const QString& path, const QString& suffix, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
+
+    //!
+    //! Write the content of a binary file.
+    //! Error reporting is minimal.
+    //! @param [in] fileName Name of file to write.
+    //! @param [in] content Content of the file to write.
+    //! @return True on success, false on error.
+    //!
+    static bool writeBinaryFile(const QString& fileName, const QtlByteBlock& content);
+
+    //!
+    //! Write the binary content of the file.
+    //! Error reporting is minimal.
+    //! @param [in] content Content of the file to write.
+    //! @return True on success, false on error.
+    //!
+    bool writeBinary(const QtlByteBlock& content)
+    {
+        return writeBinaryFile(_fileName, content);
+    }
+
+    //!
     //! Read the content of a binary file.
     //! Error reporting is minimal.
     //! @param [in] fileName Name of file to read.

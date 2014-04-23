@@ -48,7 +48,7 @@ QtlNamedIntComboBox::QtlNamedIntComboBox(QWidget* parent) :
     setInsertPolicy(InsertAtTop);
 
     // Transpose notification of text input into integer data.
-    connect(this, SIGNAL(currentTextChanged(QString)), this, SLOT(receiveCurrentText(QString)));
+    connect(this, &QtlNamedIntComboBox::currentTextChanged, this, &QtlNamedIntComboBox::receiveCurrentText);
 }
 
 
@@ -101,7 +101,7 @@ quint32 QtlNamedIntComboBox::currentValue() const
 
 void QtlNamedIntComboBox::setCurrentValue(quint32 currentValue)
 {
-    setCurrentText(QStringLiteral("%1").arg(ulong(currentValue)));
+    setCurrentText(_names.name(currentValue));
 }
 
 

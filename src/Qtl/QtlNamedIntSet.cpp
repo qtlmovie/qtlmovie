@@ -50,6 +50,37 @@ QtlNamedIntSet::QtlNamedIntSet(QtlLogger* log) :
 
 
 //----------------------------------------------------------------------------
+// Copy constructor.
+//----------------------------------------------------------------------------
+
+QtlNamedIntSet::QtlNamedIntSet(const QtlNamedIntSet& other) :
+    _log(other._log),
+    _mapByName(other._mapByName),
+    _defaultValue(other._defaultValue),
+    _defaultBase(other._defaultBase),
+    _defaultWidth(other._defaultWidth)
+{
+}
+
+
+//----------------------------------------------------------------------------
+// Assignment.
+//----------------------------------------------------------------------------
+
+const QtlNamedIntSet& QtlNamedIntSet::operator=(const QtlNamedIntSet& other)
+{
+    if (&other != this) {
+        _log = other._log;
+        _mapByName = other._mapByName;
+        _defaultValue = other._defaultValue;
+        _defaultBase = other._defaultBase;
+        _defaultWidth = other._defaultWidth;
+    }
+    return *this;
+}
+
+
+//----------------------------------------------------------------------------
 // Add a value.
 //----------------------------------------------------------------------------
 
@@ -169,7 +200,7 @@ QString QtlNamedIntSet::name(quint32 value, int defaultBase, bool addBasePrefix,
     case 10:
         return QStringLiteral("%1").arg(ulong(value), width, 10, QChar(' '));
     case 16:
-        return (addBasePrefix ? "0x" : "") + QStringLiteral("%1").arg(ulong(value), width, 16, QChar('0'));
+        return (addBasePrefix ? "0x" : "") + QStringLiteral("%1").arg(ulong(value), width, 16, QChar('0')).toUpper();
     case 8:
         return (addBasePrefix ? "0" : "") + QStringLiteral("%1").arg(ulong(value), width, 8, QChar('0'));
     default:

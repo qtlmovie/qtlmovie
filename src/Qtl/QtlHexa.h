@@ -38,6 +38,7 @@
 
 #include <QtCore>
 #include "QtlByteBlock.h"
+#include "QtlUtils.h"
 
 //!
 //! Interpret a string as a sequence of hexadecimal digits.
@@ -103,11 +104,15 @@ inline QtlByteBlock qtlHexaDecode(const QString& hexaString)
 //! @param [in] i The integer value to format.
 //! @param [in] width The number of hexadecimal digits.
 //! If negative or zero, use the "natural" width for @a i.
+//! @param [in] groupSize The number of characters between spaces.
+//! If negative or zero, do not insert spaces.
 //!
 template<typename INT>
-inline QString qtlHexaInt(INT i, int width = 0)
+inline QString qtlHexaInt(INT i, int width = 0, int groupSize = 0)
 {
-    return QStringLiteral("%1").arg(quint32(i), width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper();
+    return qtlStringSpace(QStringLiteral("%1").arg(quint32(i), width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper(),
+                          groupSize,
+                          Qt::RightToLeft);
 }
 
 //!
@@ -116,11 +121,15 @@ inline QString qtlHexaInt(INT i, int width = 0)
 //! @param [in] i The integer value to format.
 //! @param [in] width The number of hexadecimal digits.
 //! If negative or zero, use the "natural" width for @a i.
+//! @param [in] groupSize The number of characters between spaces.
+//! If negative or zero, do not insert spaces.
 //!
 template <>
-inline QString qtlHexaInt(quint64 i, int width)
+inline QString qtlHexaInt(quint64 i, int width, int groupSize)
 {
-    return QStringLiteral("%1").arg(i, width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper();
+    return qtlStringSpace(QStringLiteral("%1").arg(i, width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper(),
+                          groupSize,
+                          Qt::RightToLeft);
 }
 
 //!
@@ -129,11 +138,15 @@ inline QString qtlHexaInt(quint64 i, int width)
 //! @param [in] i The integer value to format.
 //! @param [in] width The number of hexadecimal digits.
 //! If negative or zero, use the "natural" width for @a i.
+//! @param [in] groupSize The number of characters between spaces.
+//! If negative or zero, do not insert spaces.
 //!
 template <>
-inline QString qtlHexaInt(qint64 i, int width)
+inline QString qtlHexaInt(qint64 i, int width, int groupSize)
 {
-    return QStringLiteral("%1").arg(quint64(i), width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper();
+    return qtlStringSpace(QStringLiteral("%1").arg(quint64(i), width <= 0 ? 2 * sizeof(i) : width, 16, QChar('0')).toUpper(),
+                          groupSize,
+                          Qt::RightToLeft);
 }
 
 //!

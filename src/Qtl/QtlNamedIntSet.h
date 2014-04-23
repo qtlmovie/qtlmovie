@@ -53,6 +53,18 @@ public:
     explicit QtlNamedIntSet(QtlLogger* log = 0);
 
     //!
+    //! Copy constructor.
+    //! @param [in] other Other instance to copy.
+    //!
+    QtlNamedIntSet(const QtlNamedIntSet& other);
+
+    //!
+    //! Assignment.
+    //! @param [in] other Other instance to copy.
+    //!
+    const QtlNamedIntSet& operator=(const QtlNamedIntSet& other);
+
+    //!
     //! Add a value.
     //! If a value with the same name already exists, replace it.
     //! @param [in] value Integer value to add.
@@ -87,7 +99,7 @@ public:
     //! Empty lines or lines starting with '#' are ignored.
     //! If a value with the same name already exists, replace it.
     //! Errors are logged if a logger was specified.
-    //! @param [in] definitions A list of strings of the form "value = name".
+    //! @param [in] fileName A text file containing lines of the form "value = name".
     //! Base prefix like "0x" or "0" are recognized in the value.
     //! @return True on success, false on error.
     //!
@@ -132,6 +144,16 @@ public:
     //! @return The name for @a value or a string representation.
     //!
     QString name(quint32 value, int defaultBase = -1, bool addBasePrefix = true, int width = -1) const;
+
+    //!
+    //! Check if an integer has a name.
+    //! @param [in] value The value to check the name of.
+    //! @return True if @a value has a name, false otherwise.
+    //!
+    bool hasName(quint32 value) const
+    {
+        return _mapByName.values().contains(value);
+    }
 
     //!
     //! Get the default value for value().
@@ -185,7 +207,7 @@ public:
 
     //!
     //! Set the default width for name().
-    //! @param [in] defaultBase The default width for name().
+    //! @param [in] defaultWidth The default width for name().
     //! @see name()
     //!
     void setDefaultWidth(int defaultWidth)

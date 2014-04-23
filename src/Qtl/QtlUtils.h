@@ -80,6 +80,23 @@ inline QString qtlQString(const void* addr, int size)
 int qtlToInt(const QString& str, int def = -1, int min = 0, int max = INT_MAX, int base = 10);
 
 //!
+//! Convert a string into a 32-bit unsigned integer.
+//! @param [in] str String to convert.
+//! @param [in] def Value to return if @a str is not a valid int in the range @a min to @a max.
+//! @param [in] min Minimum allowed value.
+//! @param [in] max Maximum allowed value.
+//! @param [in] base Base for conversion, 10 by default, must be between 2 and 36, or 0.
+//! If base is 0, the C language convention is used: If the string begins with "0x", base 16 is used;
+//! if the string begins with "0", base 8 is used; otherwise, base 10 is used.
+//! @return The decoded value or @a def if out of range.
+//!
+quint32 qtlToUInt32(const QString& str,
+                    quint32 def = 0xFFFFFFFFU,
+                    quint32 min = 0,
+                    quint32 max = 0xFFFFFFFFU,
+                    int base = 10);
+
+//!
 //! Convert a string into a 64-bit integer.
 //! @param [in] str String to convert.
 //! @param [in] def Value to return if @a str is not a valid int in the range @a min to @a max.
@@ -107,11 +124,11 @@ qint64 qtlToInt64(const QString& str,
 //! if the string begins with "0", base 8 is used; otherwise, base 10 is used.
 //! @return The decoded value or @a def if out of range.
 //!
-qint64 qtlToUInt64(const QString& str,
-                   quint64 def = Q_UINT64_C(0xFFFFFFFFFFFFFFFF),
-                   quint64 min = 0,
-                   quint64 max = Q_INT64_C(0xFFFFFFFFFFFFFFFF),
-                   int base = 10);
+quint64 qtlToUInt64(const QString& str,
+                    quint64 def = Q_UINT64_C(0xFFFFFFFFFFFFFFFF),
+                    quint64 min = 0,
+                    quint64 max = Q_INT64_C(0xFFFFFFFFFFFFFFFF),
+                    int base = 10);
 
 //!
 //! Convert a string into a float.
@@ -121,6 +138,19 @@ qint64 qtlToUInt64(const QString& str,
 //! @return The decoded value or @a def if invalid.
 //!
 float qtlToFloat(const QString& str, float def = 0.0);
+
+//!
+//! Insert spaces at regular intervals in a string.
+//! @param [in] str The string to update.
+//! @param [in] groupSize The number of characters between spaces. If negative or zero, do not insert spaces.
+//! @param [in] direction The direction from which the characters are counted.
+//! @param [in] space The space pattern to use.
+//! @return The modified string.
+//!
+QString qtlStringSpace(const QString& str,
+                       int groupSize,
+                       Qt::LayoutDirection direction = Qt::LeftToRight,
+                       const QString& space = QStringLiteral(" "));
 
 //!
 //! Format a duration into a string.

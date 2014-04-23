@@ -59,7 +59,8 @@ SOURCES += \
     QtlIsoLanguages.cpp \
     QtlIntValidator.cpp \
     QtlNamedIntComboBox.cpp \
-    QtlNamedIntSet.cpp
+    QtlNamedIntSet.cpp \
+    QtlErrorBase.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -95,7 +96,9 @@ HEADERS += \
     QtlIsoLanguages.h \
     QtlIntValidator.h \
     QtlNamedIntComboBox.h \
-    QtlNamedIntSet.h
+    QtlNamedIntSet.h \
+    QtlErrorBase.h \
+    QtlPointerList.h
 
 FORMS += \
     QtlBrowserDialog.ui \
