@@ -26,13 +26,12 @@
 #
 #----------------------------------------------------------------------------
 #
-# Qtl, Qt utility library.
-# Qmake project file for the Qtl library.
+# Qmake project file for the QtlMovie unitary tests.
 #
 #----------------------------------------------------------------------------
 
 CONFIG += qts qtl
-include(../QtlCommon.pri)
+include(../Qts/Qts.pri)
 
 TARGET = UnitTest
 TEMPLATE = app

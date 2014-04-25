@@ -293,7 +293,7 @@
         <translation>Recherche des Closed Captions terminée sur le canal %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieClosedCaptionsSearch.cpp" line="124"/>
+        <location filename="../QtlMovieClosedCaptionsSearch.cpp" line="128"/>
         <source>Found Closed Caption #%1</source>
         <translation>Closed Captions #%1 détectés</translation>
     </message>

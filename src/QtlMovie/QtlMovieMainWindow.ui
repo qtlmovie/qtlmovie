@@ -420,6 +420,7 @@
    <slots>
     <slot>saveToFile()</slot>
     <slot>setDebugMode(bool)</slot>
+    <slot>save()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -597,7 +598,7 @@
    <sender>actionSaveLog</sender>
    <signal>triggered()</signal>
    <receiver>log</receiver>
-   <slot>saveToFile()</slot>
+   <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

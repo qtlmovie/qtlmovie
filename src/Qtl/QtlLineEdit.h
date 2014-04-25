@@ -45,9 +45,7 @@
 //!
 class QtlLineEdit : public QLineEdit
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

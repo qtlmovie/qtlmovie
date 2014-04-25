@@ -44,9 +44,7 @@
 //!
 class QtlMovieDvdAuthorProcess : public QtlMovieProcess
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

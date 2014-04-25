@@ -44,9 +44,7 @@
 //!
 class QtlButtonGrid : public QtlAutoGrid
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

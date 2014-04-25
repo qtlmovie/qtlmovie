@@ -50,6 +50,10 @@ EXTRACT_STATIC = YES
 
 # Macro names that are defined before the preprocessor is started.
 PREDEFINED += DOXYGEN
+PREDEFINED += Q_OBJECT:=
+
+# Ignore automatically generated classes from Qt Designer (namespace Ui).
+EXCLUDE_SYMBOLS += Ui
 
 # Do not generate LaTex output.
 GENERATE_LATEX = NO

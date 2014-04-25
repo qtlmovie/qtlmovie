@@ -44,9 +44,7 @@
 //!
 class QtlFixedSizeTableWidget : public QTableWidget
 {
-    #if !defined (DOXYGEN)
     Q_OBJECT
-    #endif
 
 public:
     //!

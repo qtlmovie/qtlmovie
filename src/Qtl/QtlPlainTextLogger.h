@@ -45,9 +45,7 @@
 //!
 class QtlPlainTextLogger : public QPlainTextEdit, public QtlLogger
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!
@@ -85,10 +83,15 @@ public:
 public slots:
     //!
     //! Save the content of the log window in a file.
-    //! @param [in] fileName Name of the file to write the log window content into.
-    //! If empty (the default), ask the user to select a file.
+    //! Ask the user to select a file.
     //!
-    void saveToFile(const QString& fileName = QString());
+    void save();
+    //!
+    //! Save the content of the log window in a file.
+    //! @param [in] fileName Name of the file to write the log window content into.
+    //! If empty, ask the user to select a file.
+    //!
+    void saveToFile(const QString& fileName);
     //!
     //! Set / reset the debug mode.
     //! @param [in] on When true, the debug() lines are displayed. When false, they are discarded.

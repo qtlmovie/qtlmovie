@@ -150,6 +150,11 @@ void QtlPlainTextLogger::setDebugMode(bool on)
 // Save the content of the log window in a file.
 //-----------------------------------------------------------------------------
 
+void QtlPlainTextLogger::save()
+{
+    saveToFile(QString());
+}
+
 void QtlPlainTextLogger::saveToFile(const QString& fileName)
 {
     QString name(fileName);

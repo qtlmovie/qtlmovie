@@ -82,6 +82,18 @@ public:
     }
 
     //!
+    //! Constructor from a QByteArray.
+    //! @param [in] ba Byte array to copy.
+    //!
+    QtlByteBlock(const QByteArray& ba) :
+        ByteVector(ba.size())
+    {
+        if (size() > 0) {
+            ::memcpy(data(), ba.data(), size());
+        }
+    }
+
+    //!
     //! Constructor from a C string.
     //! @param [in] str A nul-terminated string.
     //!
@@ -91,6 +103,15 @@ public:
         if (size() > 0) {
             ::memcpy(data(), str, size());
         }
+    }
+
+    //!
+    //! Convert a QtlByteBlock into a QByteArray.
+    //! @return A byte array with the same content as this object.
+    //!
+    QByteArray toByteArray() const
+    {
+        return QByteArray(reinterpret_cast<const char*>(data()), size());
     }
 
     //!

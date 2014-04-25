@@ -46,9 +46,7 @@
 //!
 class QtlNewVersionChecker : public QObject
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

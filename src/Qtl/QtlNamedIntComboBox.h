@@ -46,9 +46,7 @@
 //!
 class QtlNamedIntComboBox : public QComboBox
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

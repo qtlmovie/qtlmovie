@@ -49,9 +49,7 @@ namespace Ui {
 //!
 class QtlTextFileViewer : public QDialog
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

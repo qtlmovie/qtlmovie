@@ -55,9 +55,7 @@
 //!
 class QtlMovieProcess : public QtlMovieAction
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

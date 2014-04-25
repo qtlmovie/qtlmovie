@@ -55,9 +55,7 @@
 //!
 class QtlMovieMainWindow : public QMainWindow
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

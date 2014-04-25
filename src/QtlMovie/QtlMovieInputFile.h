@@ -49,9 +49,7 @@
 //!
 class QtlMovieInputFile : public QtlFile
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

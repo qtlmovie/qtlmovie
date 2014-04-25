@@ -45,9 +45,7 @@
 //!
 class QtlMovieTeletextSearch : public QtlMovieTsDemux, private QtsTableHandlerInterface
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

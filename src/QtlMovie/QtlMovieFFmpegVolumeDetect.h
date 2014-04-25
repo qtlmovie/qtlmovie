@@ -47,9 +47,7 @@
 //!
 class QtlMovieFFmpegVolumeDetect : public QtlMovieFFmpegProcess
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

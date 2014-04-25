@@ -4,17 +4,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../QtlUtils.cpp" line="126"/>
+        <location filename="../QtlUtils.cpp" line="148"/>
         <source>%1 h %2 mn %3 sec.</source>
         <translation>%1 h %2 mn %3 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="129"/>
+        <location filename="../QtlUtils.cpp" line="151"/>
         <source>%1 mn %2 sec.</source>
         <translation>%1 mn %2 sec.</translation>
     </message>
     <message>
-        <location filename="../QtlUtils.cpp" line="132"/>
+        <location filename="../QtlUtils.cpp" line="154"/>
         <source>%1 sec.</source>
         <translation>%1 sec.</translation>
     </message>
@@ -2066,6 +2066,38 @@
         <source>Zulu</source>
         <translation>Zoulou</translation>
     </message>
+    <message>
+        <location filename="../QtlErrorBase.cpp" line="138"/>
+        <source>Fatal error: %1</source>
+        <translation>Erreur fatale: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlErrorBase.cpp" line="140"/>
+        <source>Fatal Error</source>
+        <translation>Erreur fatale</translation>
+    </message>
+    <message>
+        <location filename="../QtlErrorBase.cpp" line="140"/>
+        <source>%1
+Application will abort</source>
+        <translation>%1
+L&apos;application va s&apos;arrêter</translation>
+    </message>
+    <message>
+        <location filename="../QtlErrorBase.cpp" line="147"/>
+        <source>Error: %1</source>
+        <translation>Erreur: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlErrorBase.cpp" line="149"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../QtlNamedIntSet.cpp" line="120"/>
+        <source>Invalid &quot;value=name&quot;: %1</source>
+        <translation>Expression &quot;valeur=nom&quot; invalide: %1</translation>
+    </message>
 </context>
 <context>
     <name>QtlBrowserDialog</name>
@@ -2141,22 +2173,22 @@
 <context>
     <name>QtlPlainTextLogger</name>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="160"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="165"/>
         <source>Save Log</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="162"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="167"/>
         <source>Log files (*.log);;Text files (*.txt)</source>
         <translation>Fichiers journaux (*.log);;Fichiers texte (*.txt)</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="177"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="182"/>
         <source>Save Error</source>
         <translation>Erreur de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="177"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="182"/>
         <source>Error creating file %1</source>
         <translation>Erreur à la création du fichier %1</translation>
     </message>

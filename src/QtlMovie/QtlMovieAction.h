@@ -44,9 +44,7 @@
 //!
 class QtlMovieAction : public QObject, public QtlLogger
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

@@ -31,7 +31,7 @@
 #
 #----------------------------------------------------------------------------
 
-include(../QtlCommon.pri)
+include(Qtl.pri)
 
 TARGET = Qtl
 TEMPLATE = lib
@@ -60,7 +60,8 @@ SOURCES += \
     QtlIntValidator.cpp \
     QtlNamedIntComboBox.cpp \
     QtlNamedIntSet.cpp \
-    QtlErrorBase.cpp
+    QtlErrorBase.cpp \
+    QtlPlainTextEdit.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -98,7 +99,8 @@ HEADERS += \
     QtlNamedIntComboBox.h \
     QtlNamedIntSet.h \
     QtlErrorBase.h \
-    QtlPointerList.h
+    QtlPointerList.h \
+    QtlPlainTextEdit.h
 
 FORMS += \
     QtlBrowserDialog.ui \

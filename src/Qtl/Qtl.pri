@@ -26,7 +26,8 @@
 #
 #----------------------------------------------------------------------------
 #
-# Common qmake definition file. Must be included from all projects.
+# Common qmake definition file.
+# Must be included from all projects using the Qtl library.
 #
 #----------------------------------------------------------------------------
 
@@ -41,18 +42,6 @@ QT *= core
 QT *= gui
 QT *= widgets
 QT *= network
-QT *= multimedia
-
-# On Windows with Qt >= 5.2, use module winextras.
-
-win32:greaterThan(QT_MAJOR_VERSION, 4) {
-    greaterThan(QT_MAJOR_VERSION, 5)|greaterThan(QT_MINOR_VERSION, 1): QT *= winextras
-}
-
-# Determine build pass (release or debug).
-
-build_pass:CONFIG(debug, debug|release):PASS = debug
-else:build_pass:CONFIG(release, debug|release):PASS = release
 
 # Define the symbol DEBUG in debug mode.
 
@@ -89,21 +78,11 @@ updateqm.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm locale/${QMAKE_FILE_BA
 updateqm.CONFIG += no_link target_predeps
 QMAKE_EXTRA_COMPILERS += updateqm
 
-# If qts is in the config, add dependencies.
-
-qts {
-    CONFIG *= qtl # Qts depends on Qtl
-    LIBS += -L../Qts/$$PASS/ -lQts
-    PRE_TARGETDEPS += ../Qts/$$PASS/libQts.a
-    INCLUDEPATH += ../Qts
-    DEPENDPATH += ../Qts
-}
-
-# If qtl is in the config, add dependencies.
+# Applications using the Qtl library depends on it.
 
 qtl {
-    LIBS += -L../Qtl/$$PASS/ -lQtl
-    PRE_TARGETDEPS += ../Qtl/$$PASS/libQtl.a
+    LIBS += -L../Qtl -lQtl
+    PRE_TARGETDEPS += ../Qtl/libQtl.a
     INCLUDEPATH += ../Qtl
     DEPENDPATH += ../Qtl
 }

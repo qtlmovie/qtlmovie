@@ -49,9 +49,7 @@ namespace Ui {
 //!
 class QtlBrowserDialog : public QDialog
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

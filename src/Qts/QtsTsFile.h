@@ -45,9 +45,7 @@
 //!
 class QtsTsFile : public QFile
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

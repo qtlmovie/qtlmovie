@@ -46,9 +46,7 @@
 //!
 class QtlMovieEditSettings : public QDialog
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

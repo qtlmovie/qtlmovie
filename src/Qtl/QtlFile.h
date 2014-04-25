@@ -71,9 +71,7 @@
 //!
 class QtlFile : public QObject
 {
-#if !defined (DOXYGEN)
     Q_OBJECT
-#endif
 
 public:
     //!

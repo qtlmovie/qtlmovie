@@ -26,66 +26,21 @@
 #
 #----------------------------------------------------------------------------
 #
-# Qts, the Qt MPEG Transport Stream library.
-# Qmake project file for the Qts library.
+# Common qmake definition file.
+# Must be included from all projects using the Qts library.
 #
 #----------------------------------------------------------------------------
 
-CONFIG += qtl
-include(Qts.pri)
+# Applications using the Qts library depends on it and Qtl.
 
-TARGET = Qts
-TEMPLATE = lib
-CONFIG += staticlib
+qts {
+    CONFIG += qtl
+    LIBS += -L../Qts -lQts
+    PRE_TARGETDEPS += ../Qts/libQts.a
+    INCLUDEPATH += ../Qts
+    DEPENDPATH += ../Qts
+}
 
-SOURCES += \
-    QtsCore.cpp \
-    QtsCrc32.cpp \
-    QtsDescriptor.cpp \
-    QtsPesDemux.cpp \
-    QtsPesPacket.cpp \
-    QtsSection.cpp \
-    QtsTable.cpp \
-    QtsTsPacket.cpp \
-    QtsTsFile.cpp \
-    QtsSectionDemux.cpp \
-    QtsDemux.cpp \
-    QtsTeletextDescriptor.cpp \
-    QtsAbstractDescriptor.cpp \
-    QtsPsiUtils.cpp \
-    QtsDescriptorList.cpp \
-    QtsPrivateDataSpecifierDescriptor.cpp \
-    QtsProgramAssociationTable.cpp \
-    QtsAbstractTable.cpp \
-    QtsAbstractLongTable.cpp \
-    QtsProgramMapTable.cpp \
-    QtsStandaloneTableDemux.cpp
+# General application config
 
-HEADERS += \
-    QtsCore.h \
-    QtsCrc32.h \
-    QtsDescriptor.h \
-    QtsPesDemux.h \
-    QtsPesHandlerInterface.h \
-    QtsPesPacket.h \
-    QtsSection.h \
-    QtsSectionHandlerInterface.h \
-    QtsTable.h \
-    QtsTableHandlerInterface.h \
-    QtsTsPacket.h \
-    QtsTsFile.h \
-    QtsAbstractTable.h \
-    QtsAbstractLongTable.h \
-    QtsSectionDemux.h \
-    QtsDemux.h \
-    QtsAbstractDescriptor.h \
-    QtsTeletextDescriptor.h \
-    QtsPsiUtils.h \
-    QtsDescriptorList.h \
-    QtsPrivateDataSpecifierDescriptor.h \
-    QtsProgramAssociationTable.h \
-    QtsProgramMapTable.h \
-    QtsStandaloneTableDemux.h
-
-TRANSLATIONS += \
-    locale/qts_fr.ts
+include(../Qtl/Qtl.pri)
