@@ -50,6 +50,14 @@ public:
     typedef QVector<quint8> ByteVector;
 
     //!
+    //! Byte order for integer serializing and deserializing.
+    //!
+    enum ByteOrder {
+        BigEndian    = QSysInfo::BigEndian,    //!< Most significant byte first.
+        LittleEndian = QSysInfo::LittleEndian  //!< Least significant byte first.
+    };
+
+    //!
     //! Default constructor
     //! @param [in] size Size of the byte block.
     //! @param [in] value Value to assign to each byte.
@@ -518,6 +526,46 @@ public:
     }
 
     //!
+    //! Add an integer in a given byte order at the end.
+    //! @tparam INT An integer type.
+    //! @param [in] i Integer value to append.
+    //! @param [in] order The byte order to serialize @a i.
+    //!
+    template<typename INT>
+    void appendToByteOrder(INT i, ByteOrder order)
+    {
+        switch (order) {
+        case LittleEndian:
+            appendToLittleEndian(i);
+            break;
+        case BigEndian:
+            appendToBigEndian(i);
+            break;
+        }
+    }
+
+    //!
+    //! Store an integer in a given byte order at a given index.
+    //! The byte block is enlarged if necessary.
+    //! @tparam INT An integer type.
+    //! @param [in] index Index where to store the integer. If negative, append at end of data block.
+    //! @param [in] i Integer value to append.
+    //! @param [in] order The byte order to serialize @a i.
+    //!
+    template<typename INT>
+    void storeToByteOrder(int index, INT i, ByteOrder order)
+    {
+        switch (order) {
+        case LittleEndian:
+            storeToLittleEndian(index, i);
+            break;
+        case BigEndian:
+            storeToBigEndian(index, i);
+            break;
+        }
+    }
+
+    //!
     //! Get an UTF-8 string at a given position.
     //! @param [in,out] index Index in the byte block where to read the data.
     //! If the data is correctly read, @a index is updated to point after the read data.
@@ -613,6 +661,47 @@ public:
     INT fromLittleEndian(int index) const
     {
         return index < 0 || index + int(sizeof(INT)) > size() ? 0 : qFromLittleEndian<INT>(data() + index);
+    }
+
+    //!
+    //! Get an integer in a given byte order at a given position.
+    //! @param [in,out] index Index in the byte block where to read the data.
+    //! If the data is correctly read, @a index is updated to point after the read data.
+    //! @param [out] i Returned integer value.
+    //! @param [in] order The byte order to deserialize @a i.
+    //! @return True on success, false on error.
+    //!
+    template<typename INT>
+    bool fromByteOrder(int& index, INT& i, ByteOrder order) const
+    {
+        switch (order) {
+        case BigEndian:
+            return fromBigEndian(index, i);
+        case LittleEndian:
+            return fromLittleEndian(index, i);
+        default:
+            return false;
+        }
+    }
+
+    //!
+    //! Get an integer in a given byte order at a given position.
+    //! @param [in] index Index in the byte block where to read the data.
+    //! @param [in] order The byte order to deserialize the integer.
+    //! @return The decoded integer value or zero if no space in byte block.
+    //!
+    template<typename INT>
+    INT fromByteOrder(int index, ByteOrder order) const
+    {
+        if (index >= 0 && index + int(sizeof(INT)) <= size()) {
+            switch (order) {
+            case BigEndian:
+                return qFromBigEndian<INT>(data() + index);
+            case LittleEndian:
+                return qFromLittleEndian<INT>(data() + index);
+            }
+        }
+        return 0;
     }
 };
 

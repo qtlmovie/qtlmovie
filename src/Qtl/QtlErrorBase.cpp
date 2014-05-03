@@ -96,6 +96,13 @@ void QtlErrorBase::setSuccess()
     _errorMessage.clear();
 }
 
+void QtlErrorBase::invalidate()
+{
+    _valid = false;
+    _success = false;
+    _errorMessage.clear();
+}
+
 void QtlErrorBase::setError(const QString& message, ErrorType type)
 {
     _success = false;
@@ -103,7 +110,7 @@ void QtlErrorBase::setError(const QString& message, ErrorType type)
     if (type == QTL_INVALIDATE) {
         _valid = false;
     }
-    if (_autoReport || type == QTL_FATAL) {
+    if ((_autoReport && !message.isEmpty()) || type == QTL_FATAL) {
         reportError(_errorMessage, type == QTL_FATAL);
     }
 }

@@ -100,7 +100,11 @@ HEADERS += \
     QtlNamedIntSet.h \
     QtlErrorBase.h \
     QtlPointerList.h \
-    QtlPlainTextEdit.h
+    QtlPlainTextEdit.h \
+    QtlTlv.h \
+    QtlTlvList.h \
+    QtlTlvListTemplate.h \
+    QtlTlvTemplate.h
 
 FORMS += \
     QtlBrowserDialog.ui \

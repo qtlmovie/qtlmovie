@@ -148,6 +148,11 @@ protected:
     void setSuccess();
 
     //!
+    //! Invalidate this object without reporting a message.
+    //!
+    void invalidate();
+
+    //!
     //! Set an error message.
     //! @param [in] message The error message.
     //! @param [in] type Error type.
