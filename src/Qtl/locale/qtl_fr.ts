@@ -2067,29 +2067,29 @@
         <translation>Zoulou</translation>
     </message>
     <message>
-        <location filename="../QtlErrorBase.cpp" line="138"/>
+        <location filename="../QtlErrorBase.cpp" line="145"/>
         <source>Fatal error: %1</source>
         <translation>Erreur fatale: %1</translation>
     </message>
     <message>
-        <location filename="../QtlErrorBase.cpp" line="140"/>
+        <location filename="../QtlErrorBase.cpp" line="147"/>
         <source>Fatal Error</source>
         <translation>Erreur fatale</translation>
     </message>
     <message>
-        <location filename="../QtlErrorBase.cpp" line="140"/>
+        <location filename="../QtlErrorBase.cpp" line="147"/>
         <source>%1
 Application will abort</source>
         <translation>%1
 L&apos;application va s&apos;arrêter</translation>
     </message>
     <message>
-        <location filename="../QtlErrorBase.cpp" line="147"/>
+        <location filename="../QtlErrorBase.cpp" line="154"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../QtlErrorBase.cpp" line="149"/>
+        <location filename="../QtlErrorBase.cpp" line="156"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>

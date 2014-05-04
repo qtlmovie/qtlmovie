@@ -1,3 +1,6 @@
+%define         defined()   %{expand:%%{?%{1}:1}%%{!?%{1}:0}}
+%define         undefined() %{expand:%%{?%{1}:0}%%{!?%{1}:1}}
+
 Name:           ccextractor
 Version:        %{version}
 Release:        %{release}
@@ -8,8 +11,10 @@ License:        GPL
 URL:            http://ccextractor.sourceforge.net
 Vendor:         Carlos Fernandez (cfsmp3), Volker Quetschke.
 Source0:        http://sourceforge.net/projects/ccextractor/files/ccextractor/%{version}/ccextractor.src.%{version}.zip
-Patch0:         ccextractor.%{version}-linux.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+%if %{defined patch}
+Patch0:         %{patch}
+%endif
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -24,7 +29,9 @@ look good) and Teletext based European subtitles.
 
 %prep
 %setup -q -n ccextractor.%{version}
+%if %{defined patch}
 %patch0 -p1
+%endif
 
 %build
 (cd linux; ./build)

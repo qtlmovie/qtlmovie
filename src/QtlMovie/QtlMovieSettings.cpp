@@ -154,7 +154,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _audioNormalizeMean(QTL_DEFAULT_AUDIO_MEAN_LEVEL),
     _audioNormalizePeak(QTL_DEFAULT_AUDIO_PEAK_LEVEL),
     _audioNormalizeMode(Compress),
-    _autoRotateVideo(true)
+    _autoRotateVideo(true),
+    _playSoundOnCompletion(false)
 {
     Q_ASSERT(log != 0);
 
@@ -380,6 +381,7 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "audioNormalizePeak", _audioNormalizePeak);
     setIntAttribute(xml, "audioNormalizeMode", int(_audioNormalizeMode));
     setBoolAttribute(xml, "autoRotateVideo", _autoRotateVideo);
+    setBoolAttribute(xml, "playSoundOnCompletion", _playSoundOnCompletion);
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -448,6 +450,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     int audioNormalizePeak = _audioNormalizePeak;
     int audioNormalizeMode = int(_audioNormalizeMode);
     bool autoRotateVideo = _autoRotateVideo;
+    bool playSoundOnCompletion = _playSoundOnCompletion;
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -496,6 +499,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "audioNormalizePeak", audioNormalizePeak) &&
                     !getIntAttribute(xml, "audioNormalizeMode", audioNormalizeMode) &&
                     !getBoolAttribute(xml, "autoRotateVideo", autoRotateVideo) &&
+                    !getBoolAttribute(xml, "playSoundOnCompletion", playSoundOnCompletion) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -550,6 +554,7 @@ bool QtlMovieSettings::load(const QString& fileName)
         setAudioNormalizePeak(audioNormalizePeak);
         setAudioNormalizeMode(AudioNormalizeMode(audioNormalizeMode));
         setAutoRotateVideo(autoRotateVideo);
+        setPlaySoundOnCompletion(playSoundOnCompletion);
     }
     else {
         // Format an error string.
@@ -713,6 +718,7 @@ SETTER(setAudioNormalizeMean, int, audioNormalizeMean)
 SETTER(setAudioNormalizePeak, int, audioNormalizePeak)
 SETTER(setAudioNormalizeMode, AudioNormalizeMode, audioNormalizeMode)
 SETTER(setAutoRotateVideo, bool, autoRotateVideo)
+SETTER(setPlaySoundOnCompletion, bool, playSoundOnCompletion)
 
 #define EXE_SETTER(method, parameter)                       \
     void QtlMovieSettings::method(const QString& parameter) \

@@ -62,6 +62,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _inFile(0),
     _outFile(0),
     _job(0),
+    _sound(),
     _closePending(false),
     _updatingSelections(0)
 {
@@ -686,8 +687,20 @@ void QtlMovieMainWindow::transcodingProgress(const QString& description, int cur
 
 void QtlMovieMainWindow::transcodingStopped(bool success)
 {
-    // Delete transcoding job.
+    // Check if a transcoding job was actually in progress.
     if (_job != 0) {
+        // Play notification sound if required.
+        if (_settings->playSoundOnCompletion()) {
+            // Stop current play (if any).
+            _sound.stop();
+            // Set now sound source.
+            _sound.setSource(QUrl("qrc:/sounds/completion.wav"));
+            // Play the sound.
+            _sound.setVolume(1.0);
+            _sound.play();
+        }
+
+        // Delete transcoding job.
         _job->deleteLater();
         _job = 0;
     }

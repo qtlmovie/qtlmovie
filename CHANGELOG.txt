@@ -2,6 +2,12 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.15
+- Added an optional sound notification at the end of the transcoding process.
+  Must be enabled in the Settings / Transcoding tab.
+- Windows installer includes FFmpeg 2.2.1 and CCextractor 0.69.
+- Linux RPM's for CCextractor 0.69 is available on QtlMovie SourceForge project.
+
 Version 1.2.14
 - Added the possibility to force a new display aspect ratio. Useful when the
   input file is, for example, incorrectly labeled as 4:3 while it should be 16:9.

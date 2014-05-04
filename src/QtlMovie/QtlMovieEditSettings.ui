@@ -469,6 +469,22 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBoxNotification">
+         <property name="title">
+          <string>Notification</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QCheckBox" name="checkBoxPlaySound">
+            <property name="text">
+             <string>Play sound on completion</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="spacerTranscoding">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

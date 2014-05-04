@@ -975,6 +975,21 @@ public:
     //!
     void setAutoRotateVideo(bool autoRotateVideo);
 
+    //!
+    //! Check if a sound shall be played on transcoding completion.
+    //! @return True if a sound shall be played on transcoding completion.
+    //!
+    bool playSoundOnCompletion() const
+    {
+        return _playSoundOnCompletion;
+    }
+
+    //!
+    //! Set if a sound shall be played on transcoding completion.
+    //! @param [in] playSoundOnCompletion True if a sound shall be played on transcoding completion.
+    //!
+    void setPlaySoundOnCompletion(bool playSoundOnCompletion);
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -1025,6 +1040,7 @@ private:
     int                   _audioNormalizePeak;     //!< Target peak level in dBFS for audio normalization.
     AudioNormalizeMode    _audioNormalizeMode;     //!< How to normalize audio when the input dynamic range is too large.
     bool                  _autoRotateVideo;        //!< Use "rotate" metadata to rotate output video.
+    bool                  _playSoundOnCompletion;  //!< Play a sound on transcoding completion.
 
     //!
     //! Write an XML element with a "value" integer attribute.

@@ -14,5 +14,6 @@
         <file alias="help/qtlmovie_fr.html">../../help/qtlmovie_fr.html</file>
         <file alias="help/qtlmovie-user_fr.html">../../help/qtlmovie-user_fr.html</file>
         <file alias="help/qtlmovie-build_fr.html">../../help/qtlmovie-build_fr.html</file>
+        <file>sounds/completion.wav</file>
     </qresource>
 </RCC>

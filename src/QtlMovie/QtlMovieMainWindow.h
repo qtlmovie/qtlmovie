@@ -38,6 +38,7 @@
 
 #include <QtCore>
 #include <QtWidgets>
+#include <QSoundEffect>
 #include "ui_QtlMovieMainWindow.h"
 #include "QtlLogger.h"
 #include "QtlMovieJob.h"
@@ -206,6 +207,7 @@ private:
     QtlMovieInputFile*     _inFile;             //!< Input file description.
     QtlMovieOutputFile*    _outFile;            //!< Output file description.
     QtlMovieJob*           _job;                //!< Current transcoding job.
+    QSoundEffect           _sound;              //!< Sound player for notification.
     bool                   _closePending;       //!< Close the application as soon as possible.
     int                    _updatingSelections; //!< A counter to protect inputStreamSelectionUpdated().
 

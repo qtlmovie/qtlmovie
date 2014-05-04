@@ -17,6 +17,10 @@ copied or generated files from the repository.
 
 The various steps in the release process of a new version of QtlMovie are:
 
+- Check that all translations are up-to-date for any new text in the application.
+  On a Windows system, execute build\QtLinguist.ps1 to edit the translations.
+- Check that any new feature is properly documented in help/qtlmovie-user.html
+  and any translation in help/qtlmovie-user_*.html files.
 - On a Windows system, execute build\build-installer.ps1. It builds the Win32
   and Win64 installers and the source and wintools archives.
 - Execute either build\build-doc.ps1 (Windows) or build/build-doc.sh (Linux).
