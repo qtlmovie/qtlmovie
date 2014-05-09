@@ -40,8 +40,8 @@
 // Set the binary value.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-void QtlTlv<TAG,LENGTH>::setValue(const QtlByteBlock& value)
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+void QtlTlv<TAG,LENGTH,ORDER>::setValue(const QtlByteBlock& value)
 {
     const int max = intLengthMax();
     if (value.size() > max) {
@@ -57,11 +57,11 @@ void QtlTlv<TAG,LENGTH>::setValue(const QtlByteBlock& value)
 // Serialize the TLV at end of a given byte block.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-void QtlTlv<TAG,LENGTH>::appendTo(QtlByteBlock& data) const
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+void QtlTlv<TAG,LENGTH,ORDER>::appendTo(QtlByteBlock& data) const
 {
-    data.appendToByteOrder<TAG>(_tag, _order);
-    data.appendToByteOrder<LENGTH>(static_cast<LENGTH>(_value.size()), _order);
+    data.appendToByteOrder<TAG>(_tag, ORDER);
+    data.appendToByteOrder<LENGTH>(static_cast<LENGTH>(_value.size()), ORDER);
     data.append(_value);
 }
 
@@ -70,8 +70,8 @@ void QtlTlv<TAG,LENGTH>::appendTo(QtlByteBlock& data) const
 // Deserialize the TLV from a given byte block.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-bool QtlTlv<TAG,LENGTH>::readAt(const QtlByteBlock& data, int& index, int end)
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+bool QtlTlv<TAG,LENGTH,ORDER>::readAt(const QtlByteBlock& data, int& index, int end)
 {
     if (end < 0) {
         end = data.size();
@@ -86,8 +86,8 @@ bool QtlTlv<TAG,LENGTH>::readAt(const QtlByteBlock& data, int& index, int end)
     // Note 3: "tempIndex + int(length)" must be computed after cheching length validity.
     const bool ok =
             tempIndex + int(sizeof(TAG)) + int(sizeof(LENGTH)) <= end &&
-            data.fromByteOrder<TAG>(tempIndex, tag, _order) &&
-            data.fromByteOrder<LENGTH>(tempIndex, length, _order) &&
+            data.fromByteOrder<TAG>(tempIndex, tag, ORDER) &&
+            data.fromByteOrder<LENGTH>(tempIndex, length, ORDER) &&
             length + 1 >= 1 &&
             length <= lengthMax() &&
             tempIndex + int(length) <= end;

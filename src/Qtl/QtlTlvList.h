@@ -40,17 +40,19 @@
 
 //!
 //! A template class for lists of TLV items (Tag / Length / Value).
+//!
 //! @tparam TAG An integer type representing tag fields.
 //! @tparam LENGTH An integer type representing length fields.
+//! @tparam ORDER Byte order to use for serialization.
 //!
-template<typename TAG, typename LENGTH>
-class QtlTlvList: public QList< QtlTlv<TAG,LENGTH> >
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+class QtlTlvList: public QList< QtlTlv<TAG,LENGTH,ORDER> >
 {
 public:
     //!
     //! Type name for a TLV item in the list.
     //!
-    typedef QtlTlv<TAG,LENGTH> Tlv;
+    typedef QtlTlv<TAG,LENGTH,ORDER> Tlv;
 
     //!
     //! Type name for the superclass.
@@ -59,11 +61,9 @@ public:
 
     //!
     //! Default constructor.
-    //! @param [in] order Byte order to use for serialization.
     //!
-    QtlTlvList(QtlByteBlock::ByteOrder order = QtlByteBlock::BigEndian) :
+    QtlTlvList() :
         SuperClass(),
-        _order(order),
         _tagMap()
     {
     }
@@ -74,27 +74,8 @@ public:
     //!
     QtlTlvList(const QtlTlvList& other) :
         SuperClass(other),
-        _order(other._order),
         _tagMap(other._tagMap)
     {
-    }
-
-    //!
-    //! Get the byte order for serialization.
-    //! @return The byte order for serialization.
-    //!
-    QtlByteBlock::ByteOrder byteOrder() const
-    {
-        return _order;
-    }
-
-    //!
-    //! Set the byte order for serialization.
-    //! @param [in] order The byte order for serialization.
-    //!
-    void setByteOrder(const QtlByteBlock::ByteOrder& order)
-    {
-        _order = order;
     }
 
     //!
@@ -186,8 +167,7 @@ private:
     //!
     typedef QMap<TAG,TagDefinition> TagDefinitionMap;
 
-    QtlByteBlock::ByteOrder _order;  //!< Byte order for serialization.
-    TagDefinitionMap        _tagMap; //!< The map of tag definitions.
+    TagDefinitionMap _tagMap; //!< The map of tag definitions.
 };
 
 #include "QtlTlvListTemplate.h"

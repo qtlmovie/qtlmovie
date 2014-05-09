@@ -41,21 +41,36 @@
 
 //!
 //! A template class for TLV items (Tag / Length / Value).
+//!
 //! @tparam TAG An integer type representing tag fields.
 //! @tparam LENGTH An integer type representing length fields.
+//! @tparam ORDER Byte order to use for serialization.
 //!
-template<typename TAG, typename LENGTH>
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
 class QtlTlv
 {
 public:
     //!
+    //! Redefinition of the tag integer type.
+    //!
+    typedef TAG Tag;
+
+    //!
+    //! Redefinition of the length integer type.
+    //!
+    typedef LENGTH Length;
+
+    //!
+    //! Redefinition of the byte order for this class.
+    //!
+    static const QtlByteBlock::ByteOrder ByteOrder = ORDER;
+
+    //!
     //! Default constructor.
-    //! @param [in] order Byte order to use for serialization.
     //! @param [in] tag Tag value.
     //! @param [in] value Binary data.
     //!
-    explicit QtlTlv(QtlByteBlock::ByteOrder order = QtlByteBlock::BigEndian, TAG tag = 0, const QtlByteBlock& value = QtlByteBlock()) :
-        _order(order),
+    explicit QtlTlv(TAG tag = 0, const QtlByteBlock& value = QtlByteBlock()) :
         _tag(tag),
         _value()
     {
@@ -67,7 +82,6 @@ public:
     //! @param [in] other Other instance to copy.
     //!
     QtlTlv(const QtlTlv& other) :
-        _order(other._order),
         _tag(other._tag),
         _value(other._value)
     {
@@ -81,7 +95,6 @@ public:
     const QtlTlv& operator=(const QtlTlv& other)
     {
         if (&other != this) {
-            _order = other._order;
             _tag = other._tag;
             _value = other._value;
         }
@@ -95,7 +108,7 @@ public:
     //!
     bool operator==(const QtlTlv& other) const
     {
-        return _order == other._order && _tag == other._tag && _value == other._value;
+        return _tag == other._tag && _value == other._value;
     }
 
     //!
@@ -106,24 +119,6 @@ public:
     bool operator!=(const QtlTlv& other) const
     {
         return !operator==(other);
-    }
-
-    //!
-    //! Get the byte order for serialization.
-    //! @return The byte order for serialization.
-    //!
-    QtlByteBlock::ByteOrder byteOrder() const
-    {
-        return _order;
-    }
-
-    //!
-    //! Set the byte order for serialization.
-    //! @param [in] order The byte order for serialization.
-    //!
-    void setByteOrder(const QtlByteBlock::ByteOrder& order)
-    {
-        _order = order;
     }
 
     //!
@@ -178,7 +173,7 @@ public:
     void setIntValue(const INT& value)
     {
         _value.clear();
-        _value.appendToByteOrder<INT>(value, _order);
+        _value.appendToByteOrder<INT>(value, ORDER);
     }
 
     //!
@@ -192,7 +187,7 @@ public:
     bool getIntValue(INT& value) const
     {
         int index = 0;
-        return _value.size() == sizeof(INT) && _value.fromByteOrder<INT>(index, value, _order);
+        return _value.size() == sizeof(INT) && _value.fromByteOrder<INT>(index, value, ORDER);
     }
 
     //!
@@ -204,7 +199,7 @@ public:
     template<typename INT>
     INT getIntValue() const
     {
-        return _value.size() == sizeof(INT) ? _value.fromByteOrder<INT>(0, _order) : 0;
+        return _value.size() == sizeof(INT) ? _value.fromByteOrder<INT>(0, ORDER) : 0;
     }
 
     //!
@@ -224,9 +219,8 @@ public:
     bool readAt(const QtlByteBlock& data, int& index, int end = -1);
 
 private:
-    QtlByteBlock::ByteOrder _order;  //!< Byte order for serialization.
-    TAG                     _tag;    //!< Tag.
-    QtlByteBlock            _value;  //!< Binary value.
+    TAG          _tag;    //!< Tag.
+    QtlByteBlock _value;  //!< Binary value.
 
     //!
     //! Get the maximal value length as an @c int type.

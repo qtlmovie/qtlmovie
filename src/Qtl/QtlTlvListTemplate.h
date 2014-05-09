@@ -40,8 +40,8 @@
 // Serialize the TLV list at end of a given byte block.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-void QtlTlvList<TAG,LENGTH>::appendTo(QtlByteBlock& data) const
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+void QtlTlvList<TAG,LENGTH,ORDER>::appendTo(QtlByteBlock& data) const
 {
     foreach (const Tlv& tlv, *this) {
         tlv.appendTo(data);
@@ -53,15 +53,15 @@ void QtlTlvList<TAG,LENGTH>::appendTo(QtlByteBlock& data) const
 // Deserialize the TLV list from a given byte block.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-bool QtlTlvList<TAG,LENGTH>::readAt(const QtlByteBlock& data, int& index, int end)
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+bool QtlTlvList<TAG,LENGTH,ORDER>::readAt(const QtlByteBlock& data, int& index, int end)
 {
     if (end < 0) {
         end = data.size();
     }
     bool ok = true;
     int tempIndex = index;
-    Tlv tlv(_order);
+    Tlv tlv;
     while (tempIndex < end && ok) {
         ok = tlv.readAt(data, tempIndex, end);
         if (ok) {
@@ -76,8 +76,8 @@ bool QtlTlvList<TAG,LENGTH>::readAt(const QtlByteBlock& data, int& index, int en
 // Validate the TLV list according to its tags definitions.
 //----------------------------------------------------------------------------
 
-template<typename TAG, typename LENGTH>
-bool QtlTlvList<TAG,LENGTH>::validate() const
+template<typename TAG, typename LENGTH, QtlByteBlock::ByteOrder ORDER>
+bool QtlTlvList<TAG,LENGTH,ORDER>::validate() const
 {
     // Number of occurences of tags.
     QMap<TAG,int> tagCount;
