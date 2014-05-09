@@ -611,7 +611,7 @@ public:
     template<typename INT>
     bool fromBigEndian(int& index, INT& i) const
     {
-        if (index < 0 || index + sizeof(i) > size()) {
+        if (index < 0 || index + int(sizeof(i)) > size()) {
             return false;
         }
         else {
@@ -642,7 +642,7 @@ public:
     template<typename INT>
     bool fromLittleEndian(int& index, INT& i) const
     {
-        if (index < 0 || index + sizeof(i) > size()) {
+        if (index < 0 || index + int(sizeof(i)) > size()) {
             return false;
         }
         else {

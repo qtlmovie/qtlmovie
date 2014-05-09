@@ -89,7 +89,7 @@ const QtlErrorBase& QtlErrorBase::operator=(const QtlErrorBase& other)
 // Report success & error.
 //-----------------------------------------------------------------------------
 
-void QtlErrorBase::setSuccess()
+void QtlErrorBase::setSuccess() const
 {
     _valid = true;
     _success = true;
@@ -103,7 +103,7 @@ void QtlErrorBase::invalidate()
     _errorMessage.clear();
 }
 
-void QtlErrorBase::setError(const QString& message, ErrorType type)
+void QtlErrorBase::setError(const QString& message, ErrorType type) const
 {
     _success = false;
     _errorMessage = message;
@@ -120,7 +120,7 @@ void QtlErrorBase::setError(const QString& message, ErrorType type)
 // Report an error message.
 //-----------------------------------------------------------------------------
 
-void QtlErrorBase::reportError(const QString& message, bool fatal)
+void QtlErrorBase::reportError(const QString& message, bool fatal) const
 {
     // Actual error message.
     const QString& msg(message.isEmpty() ? _errorMessage : message);

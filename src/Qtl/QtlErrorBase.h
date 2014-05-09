@@ -145,7 +145,7 @@ protected:
     //!
     //! Report success of the last operation.
     //!
-    void setSuccess();
+    void setSuccess() const;
 
     //!
     //! Invalidate this object without reporting a message.
@@ -157,7 +157,7 @@ protected:
     //! @param [in] message The error message.
     //! @param [in] type Error type.
     //!
-    void setError(const QString& message, ErrorType type = QTL_ERROR);
+    void setError(const QString& message, ErrorType type = QTL_ERROR) const;
 
     //!
     //! Report an error message.
@@ -165,15 +165,15 @@ protected:
     //! of this instance. If still empty, do not report anything.
     //! @param [in] fatal If true, the application is aborted and this function never returns.
     //!
-    void reportError(const QString& message = QString(), bool fatal = false);
+    void reportError(const QString& message = QString(), bool fatal = false) const;
 
 private:
     static QtlNullLogger _nullLog;       //!< A void error logger.
     QtlLogger*           _log;           //!< Where to log errors, never null.
-    bool                 _valid;         //!< True if the object is valid for use.
-    bool                 _success;       //!< True if last operation was successful.
-    bool                 _autoReport;    //!< Automatically report errors.
-    QString              _errorMessage;  //!< Error message.
+    mutable bool         _valid;         //!< True if the object is valid for use.
+    mutable bool         _success;       //!< True if last operation was successful.
+    mutable bool         _autoReport;    //!< Automatically report errors.
+    mutable QString      _errorMessage;  //!< Error message.
 };
 
 #endif // QTLERRORBASE_H

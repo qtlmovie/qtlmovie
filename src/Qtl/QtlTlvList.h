@@ -125,7 +125,7 @@ public:
     //! @param [in] minSize Minimum size in bytes of the value of items with this tag.
     //! @param [in] maxSize Maximum size in bytes of the value of items with this tag.
     //!
-    void addTagDefinition(TAG& tag, int minCount, int maxCount, int minSize, int maxSize)
+    void addTagDefinition(TAG tag, int minCount, int maxCount, int minSize, int maxSize)
     {
         _tagMap.insert(tag, TagDefinition(minCount, maxCount, minSize, maxSize));
     }
@@ -136,6 +136,15 @@ public:
     void clearTagDefinitions()
     {
         _tagMap.clear();
+    }
+
+    //!
+    //! Get the number of tag definitions.
+    //! @return The number of tag definitions.
+    //!
+    int tagDefinitionsCount() const
+    {
+        return _tagMap.size();
     }
 
     //!

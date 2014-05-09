@@ -48,7 +48,6 @@ template<typename TAG, typename LENGTH>
 class QtlTlv
 {
 public:
-
     //!
     //! Default constructor.
     //! @param [in] order Byte order to use for serialization.

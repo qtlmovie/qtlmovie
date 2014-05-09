@@ -79,13 +79,19 @@ bool QtlTlv<TAG,LENGTH>::readAt(const QtlByteBlock& data, int& index, int end)
     TAG tag = 0;
     LENGTH length = 0;
     int tempIndex = index;
+    // Check the validity of the TLV data.
+    // Note 1: Must check "length >= 0" when LENGTH is a signed type.
+    // Note 2: But "length >= 0" generates a warning when LENGTH is an unsigned
+    // type on some compilers => use "length + 1 >= 1".
+    // Note 3: "tempIndex + int(length)" must be computed after cheching length validity.
     const bool ok =
-            tempIndex + sizeof(TAG) + sizeof(LENGTH) <= end &&
+            tempIndex + int(sizeof(TAG)) + int(sizeof(LENGTH)) <= end &&
             data.fromByteOrder<TAG>(tempIndex, tag, _order) &&
             data.fromByteOrder<LENGTH>(tempIndex, length, _order) &&
-            length >= 0 && // in case LENGTH is a signed type
+            length + 1 >= 1 &&
             length <= lengthMax() &&
-            tempIndex + static_cast<int>(length) <= end;
+            tempIndex + int(length) <= end;
+
     if (ok) {
         _tag = tag;
         _value = data.mid(tempIndex, static_cast<int>(length));

@@ -61,7 +61,8 @@ SOURCES += \
     QtlNamedIntComboBox.cpp \
     QtlNamedIntSet.cpp \
     QtlErrorBase.cpp \
-    QtlPlainTextEdit.cpp
+    QtlPlainTextEdit.cpp \
+    QtlPasswordDialog.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -104,7 +105,8 @@ HEADERS += \
     QtlTlv.h \
     QtlTlvList.h \
     QtlTlvListTemplate.h \
-    QtlTlvTemplate.h
+    QtlTlvTemplate.h \
+    QtlPasswordDialog.h
 
 FORMS += \
     QtlBrowserDialog.ui \
