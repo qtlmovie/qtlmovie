@@ -1,0 +1,25 @@
+#!/bin/bash
+# QtlMovie post-installation script on Ubuntu and Debian systems.
+
+if [[ "$1" = "configure" ]]; then
+    # Fix file permissions and ownership.
+    chown root:root \
+        /usr/bin/QtlMovie \
+        /usr/share/qt5/translations/qtl_fr.qm \
+        /usr/share/qt5/translations/qtlmovie_fr.qm \
+        /usr/share/qt5/translations/qts_fr.qm \
+        /usr/share/applications/QtlMovie.desktop \
+        /usr/share/icons/hicolor/64x64/apps/qtlmovie.png
+    chmod 0755 /usr/bin/QtlMovie
+    chmod 0644 \
+        /usr/share/qt5/translations/qtl_fr.qm \
+        /usr/share/qt5/translations/qtlmovie_fr.qm \
+        /usr/share/qt5/translations/qts_fr.qm \
+        /usr/share/applications/QtlMovie.desktop \
+        /usr/share/icons/hicolor/64x64/apps/qtlmovie.png
+
+    # Update menus if required.
+    [[ -x "$(which update-menus 2>/dev/null)" ]] && update-menus
+fi
+
+exit 0
