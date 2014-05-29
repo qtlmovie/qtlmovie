@@ -35,6 +35,7 @@
 ;  - ProductVersion: QtlMovie version.
 ;  - RootDir: Project top-level directory.
 ;  - BuildDir: Build top-level directory.
+;  - InstallerDir: Directory for binary installers.
 ;  - QtDir: Qt installation directory.
 ;  - Win64: If defined, generate an installer for 64-bit systems.
 ;
@@ -51,9 +52,9 @@ Name "QtlMovie"
 
 ; Installer file name.
 !ifdef Win64
-    OutFile "${BuildDir}\QtlMovie-Win64-${ProductVersion}.exe"
+    OutFile "${InstallerDir}\QtlMovie-Win64-${ProductVersion}.exe"
 !else
-    OutFile "${BuildDir}\QtlMovie-Win32-${ProductVersion}.exe"
+    OutFile "${InstallerDir}\QtlMovie-Win32-${ProductVersion}.exe"
 !endif
 
 ; Registry entry for product info and uninstallation info.

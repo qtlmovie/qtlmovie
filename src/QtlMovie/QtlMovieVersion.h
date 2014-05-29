@@ -38,6 +38,6 @@
 //!
 //! Version of the product.
 //!
-#define QTLMOVIE_VERSION "1.2.15"
+#define QTLMOVIE_VERSION "1.2.16"
 
 #endif // QTLMOVIEVERSION_H

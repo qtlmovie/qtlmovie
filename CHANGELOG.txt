@@ -2,6 +2,14 @@
 QtlMovie Change Log
 ===================
 
+Version 1.2.16
+- Added support for avconv when ffmpeg is not available, mainly for Ubuntu
+  users. Not all combinations of ffmpeg options have been tested and some
+  may not work since avconv is only partially compatible with ffmpeg.
+- Ubuntu 14.04 LTS .deb package is now built for QtlMovie.
+- Ubuntu packages for CCextractor 0.69 and telxcc 2.5.3 are available on
+  QtlMovie SourceForge project.
+
 Version 1.2.15
 - Added an optional sound notification at the end of the transcoding process.
   Must be enabled in the Settings / Transcoding tab.

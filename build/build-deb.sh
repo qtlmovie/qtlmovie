@@ -71,7 +71,7 @@ install -m 0644 $SCRIPTDIR/QtlMovie.desktop $TMPDIR/usr/share/applications
 install -m 0644 $SRCDIR/QtlMovie/images/qtlmovie-logo.png $TMPDIR/usr/share/icons/hicolor/64x64/apps/qtlmovie.png
 
 # Build the binary package
-dpkg --build $TMPDIR $BUILDDIR
+dpkg --build $TMPDIR $ROOTDIR/installers
 
 # Cleanup the temporary root.
 rm -rf $TMPDIR

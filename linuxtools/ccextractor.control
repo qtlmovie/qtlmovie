@@ -1,0 +1,13 @@
+Package: ccextractor
+Source: ccextractor
+Version: {VERSION}
+Maintainer: Carlos Fernandez (cfsmp3), Volker Quetschke
+Architecture: {ARCH}
+Section: free/video
+Priority: optional
+Depends: libc6
+Description: Closed captions extractor
+ A tool that analyzes video files and produces independent subtitle files from
+ the closed captions data. CCExtractor is portable, small, and very fast.
+ American TV captions (CEA-608 is well supported, and CEA-708 is starting to
+ look good) and Teletext based European subtitles.

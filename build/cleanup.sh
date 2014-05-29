@@ -47,12 +47,11 @@ ROOT=$(cd $(dirname $0)/..; pwd)
 rm -rfv $ROOT/build-* $ROOT/src/*.pro.user*
 
 # Delete spurious generated files in src tree. Could be left after incorrect build command.
-# - Recursively delete directories named release, Release, debug, Debug.
-# - Delete object files, libraries, Qt metafiles, etc.
 find $ROOT \
     -type d -iname 'wintools*' -prune , \
+    -type d -iname installers -prune , \
     -type d -iname sourceforge -prune , \
-    -type d \( -iname debug -o -iname release \) -exec rm -rfv {} \; -printf 'Deleted %p\n' -prune , \
+    -type d \( -iname debug -o -iname release \) -exec rm -rfv {} \; -prune , \
     \( -iname 'Makefile*' -o \
        -iname 'moc_*' -o \
        -iname '*.obj' -o \
@@ -71,7 +70,7 @@ find $ROOT \
        -iname '.directory' -o \
        -iname 'object_script.*.release' -o \
        -iname 'object_script.*.debug' \) \
-    -exec rm {} \; -printf 'Deleted %p\n'
+    -exec rm -rvf {} \;
 
 # Remove executable right from source files.
 find $ROOT -iname 'build-*' -prune , ! -type d ! -iname '*.sh' -exec chmod 640 {} \;
@@ -79,7 +78,7 @@ find $ROOT -iname 'build-*' -prune , ! -type d ! -iname '*.sh' -exec chmod 640 {
 # In deep mode, delete git repository and non-original files in SourceForge mirror.
 if $DEEP; then
     rm -rf $ROOT/.git $ROOT/sourceforge/web/doc $ROOT/sourceforge/web/doxy
-    find $ROOT \( -iname '*.exe' -o -iname '*.rpm' -o -iname '*.zip' \) -exec rm {} \; -printf 'Deleted %p\n'
+    find $ROOT \( -iname '*.exe' -o -iname '*.rpm' -o -iname '*.deb' -o -iname '*.zip' \) -exec rm -rvf {} \;
 fi
 
 # Unixify the end of lines on text files.
@@ -91,5 +90,6 @@ find $ROOT \( \
     -iname '*.pri' -o \
     -iname '*.js' -o \
     -iname '*.sh' -o \
+    -iname '*.html' -o \
     -iname '*.ui' \
-    \) -exec dos2unix -q {} \;
+    \) | xargs dos2unix -q

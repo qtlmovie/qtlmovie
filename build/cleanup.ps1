@@ -79,6 +79,7 @@ $RootDir = Split-Path -Parent $PSScriptRoot
 
 $files = @(Get-ChildItem -Recurse $RootDir | Where-Object {
     ($_.FullName -notlike '*\wintools*\*') -and
+    ($_.FullName -notlike '*\installers\*') -and
     ($_.FullName -notlike '*\sourceforge\*') -and
     (($_.Name -like "build-*" -and (Test-Path $_.FullName -PathType Container)) -or
     $_.Name -like "debug" -or
@@ -121,7 +122,7 @@ if ($Deep) {
     Delete "$RootDir\sourceforge\web\doc"
     Delete "$RootDir\sourceforge\web\doxy"
     Get-ChildItem -Recurse $RootDir | Where-Object {
-        ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.zip")
+        ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.deb" -or $_.Name -like "*.zip")
     } | ForEach-Object { Delete $_.FullName }
 }
 

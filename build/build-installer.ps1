@@ -120,6 +120,7 @@ if (-not $NoSource) {
 # Get the project directories.
 $RootDir = (Split-Path -Parent $PSScriptRoot)
 $SrcDir = (Join-Path $RootDir "src")
+$InstallerDir = (Join-Path $RootDir "installers")
 $ProjectFile = Get-QtProjectFile $SrcDir
 $BuildDir = (Join-Path $RootDir "build-Win32-Release-Static")
 
@@ -168,6 +169,7 @@ if (-not $NoInstaller) {
         "/DProductVersion=$Version" `
         "/DRootDir=$RootDir" `
         "/DBuildDir=$BuildDir" `
+        "/DInstallerDir=$InstallerDir" `
         "/DQtDir=$QtDir" `
         "$NsisScript"
 
@@ -177,6 +179,7 @@ if (-not $NoInstaller) {
         "/DProductVersion=$Version" `
         "/DRootDir=$RootDir" `
         "/DBuildDir=$BuildDir" `
+        "/DInstallerDir=$InstallerDir" `
         "/DQtDir=$QtDir" `
         "$NsisScript"
 }
@@ -184,8 +187,8 @@ if (-not $NoInstaller) {
 # Build the source archive.
 if (-not $NoSource) {
     # Source archive name.
-    $SrcArchive = (Join-Path $BuildDir "${ProductName}-${Version}-src.zip")
-    $WintoolsArchive = (Join-Path $BuildDir "${ProductName}-${Version}-wintools.zip")
+    $SrcArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-src.zip")
+    $WintoolsArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-wintools.zip")
 
     # Create a temporary directory.
     $TempDir = New-TempDirectory

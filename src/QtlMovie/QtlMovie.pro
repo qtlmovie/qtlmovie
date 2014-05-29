@@ -34,9 +34,9 @@ CONFIG += qts qtl
 include(../Qts/Qts.pri)
 
 # The application uses QtMultimedia and, on Windows with Qt >= 5.2, winextras.
-QT *= multimedia
+QT += multimedia
 win32:greaterThan(QT_MAJOR_VERSION, 4) {
-    greaterThan(QT_MAJOR_VERSION, 5)|greaterThan(QT_MINOR_VERSION, 1): QT *= winextras
+    greaterThan(QT_MAJOR_VERSION, 5)|greaterThan(QT_MINOR_VERSION, 1): QT += winextras
 }
 
 TARGET = QtlMovie

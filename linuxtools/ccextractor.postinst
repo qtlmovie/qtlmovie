@@ -1,0 +1,10 @@
+#!/bin/bash
+# ccextractor post-installation script on ubuntu and debian systems.
+
+if [[ "$1" = "configure" ]]; then
+    # Fix file permissions and ownership.
+    chown root:root /usr/bin/ccextractor
+    chmod 0755 /usr/bin/ccextractor
+fi
+
+exit 0

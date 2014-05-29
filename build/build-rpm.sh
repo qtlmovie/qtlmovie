@@ -80,4 +80,4 @@ rpmbuild -ba -D "version ${QTLMOVIE_VERSION}" -D "release ${QTLMOVIE_RELEASE}${D
 cp -f \
     $RPMBUILD/RPMS/*/qtlmovie-${QTLMOVIE_VERSION}-${QTLMOVIE_RELEASE}${DISTRO}.*.rpm \
     $RPMBUILD/SRPMS/qtlmovie-${QTLMOVIE_VERSION}-${QTLMOVIE_RELEASE}${DISTRO}.src.rpm \
-    $BUILDDIR
+    $ROOTDIR/installers

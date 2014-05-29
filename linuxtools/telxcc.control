@@ -1,0 +1,11 @@
+Package: telxcc
+Source: telxcc
+Version: {VERSION}
+Maintainer: Petr Kutalek
+Architecture: {ARCH}
+Section: free/video
+Priority: optional
+Depends: libc6
+Description: Teletext extractor
+ Telxcc is a utility extracting teletext Closed Captions from Transport Stream
+ binary files (TS & M2TS) into SubRip text files (SRT).

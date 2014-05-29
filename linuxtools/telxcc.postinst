@@ -1,0 +1,11 @@
+#!/bin/bash
+# telxcc post-installation script on ubuntu and debian systems.
+
+if [[ "$1" = "configure" ]]; then
+    # Fix file permissions and ownership.
+    chown root:root /usr/bin/telxcc /usr/share/man/man1/telxcc.1
+    chmod 0755 /usr/bin/telxcc
+    chmod 0644 /usr/share/man/man1/telxcc.1
+fi
+
+exit 0

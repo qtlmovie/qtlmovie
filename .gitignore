@@ -15,6 +15,7 @@ build-*-[Dd]ebug-[Ss]tatic
 *.pro.user.*
 *.qm
 *.rpm
+*.deb
 *.zip
 *.tgz
 *.gz

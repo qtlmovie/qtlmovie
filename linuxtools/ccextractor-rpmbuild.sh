@@ -14,7 +14,8 @@ CCEXTRACTOR_PATCH=ccextractor.${CCEXTRACTOR_VERSION}-linux.patch
 
 # This script:
 SCRIPT=$(basename $BASH_SOURCE)
-SCRIPTDIR=$(dirname $BASH_SOURCE)
+SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
+ROOTDIR=$(dirname $SCRIPTDIR)
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
 # User's rpmbuild environment:
@@ -69,4 +70,4 @@ rpmbuild -ba -D "version ${CCEXTRACTOR_VERSION}" -D "release ${CCEXTRACTOR_RELEA
 cp -f \
     $RPMBUILD/RPMS/*/ccextractor-${CCEXTRACTOR_VERSION}-${CCEXTRACTOR_RELEASE}${DISTRO}.*.rpm \
     $RPMBUILD/SRPMS/ccextractor-${CCEXTRACTOR_VERSION}-${CCEXTRACTOR_RELEASE}${DISTRO}.src.rpm \
-    $SCRIPTDIR
+    $ROOTDIR/installers

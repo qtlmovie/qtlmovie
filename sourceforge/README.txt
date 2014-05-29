@@ -27,11 +27,15 @@ The various steps in the release process of a new version of QtlMovie are:
   It builds the Doxygen documentation for the source code.
 - On a Fedora Linux system, execute build/build-rpm.sh. It builds the RPM
   package for Fedora.
+- On an Ubuntu Linux system, execute build/build-deb.sh. It builds the DEB
+  package for Ubuntu.
 - Copy the content of QtlMovie\help into QtlMovie\sourceforge\web\doc.
 - Copy the content of QtlMovie\build-doxygen\html into QtlMovie\sourceforge\web\doxy.
-- Copy QtlMovie\build-QtlMovie-Desktop-Release\qtlmovie-*-0.fc*.x86_64.rpm into
+- Copy QtlMovie\installers\qtlmovie-*-0.fc*.x86_64.rpm into
   QtlMovie\sourceforge\project\fedora.
-- From QtlMovie\build-Win32-Release-Static, copy
+- Copy QtlMovie\installers\qtlmovie_*_amd64.deb into
+  QtlMovie\sourceforge\project\ubuntu.
+- From QtlMovie\installers, copy
     - QtlMovie-*-src.zip      into QtlMovie\sourceforge\project\src
     - QtlMovie-*-wintools.zip into QtlMovie\sourceforge\project\src
     - QtlMovie-Win32-*.exe    into QtlMovie\sourceforge\project\win32

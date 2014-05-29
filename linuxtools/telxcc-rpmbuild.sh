@@ -13,7 +13,8 @@ TELXCC_URL=https://github.com/forers/telxcc/archive/master.zip
 
 # This script:
 SCRIPT=$(basename $BASH_SOURCE)
-SCRIPTDIR=$(dirname $BASH_SOURCE)
+SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
+ROOTDIR=$(dirname $SCRIPTDIR)
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
 # User's rpmbuild environment:
@@ -43,4 +44,4 @@ rpmbuild -ba -D "version ${TELXCC_VERSION}" -D "release ${TELXCC_RELEASE}${DISTR
 cp -f \
     $RPMBUILD/RPMS/*/telxcc-${TELXCC_VERSION}-${TELXCC_RELEASE}${DISTRO}.*.rpm \
     $RPMBUILD/SRPMS/telxcc-${TELXCC_VERSION}-${TELXCC_RELEASE}${DISTRO}.src.rpm \
-    $SCRIPTDIR
+    $ROOTDIR/installers

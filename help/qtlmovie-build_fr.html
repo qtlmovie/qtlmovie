@@ -18,6 +18,7 @@
             <li><a href="#linmanbuild">Construire QtlMovie manuellement</a></li>
             <li><a href="#linqtcreator">Construire QtlMovie avec Qt Creator</a></li>
             <li><a href="#fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></li>
+            <li><a href="#ubbuild">Construire le package DEB de QtlMovie pour Ubuntu</a></li>
             <li><a href="#lincleanup">Construction multi-platformes</a></li>
             <li><a href="#lindoxy">Construire la documentation Doxygen</a></li>
             <li><a href="#rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a>
@@ -50,7 +51,8 @@
 
       <h3><a id="linreq">Pré-requis</a></h3>
 
-      <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.</p>
+      <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.
+        Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
       <p>L'utilisation de Qt Creator n'est pas obligatoire.
         S'il est utilisé, Qt Creator version 2.7 ou plus requis.
         Qt Creator est recommandé pour éditer ou modifier le projet.
@@ -81,7 +83,7 @@
       <h3><a id="fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></h3>
 
       <p>Exécuter le script <code>build/build-rpm.sh</code>.
-        Le package RPM est construit dans le répertoire <code>build-QtlMovie-Desktop-Release</code>.
+        Le package RPM est construit dans le répertoire <code>installers</code>.
         Le package RPM se nomme <code>qtlmovie-1.2.10-0.fc19.x86_64.rpm</code> par exemple,
         où "1.2.10" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
       <p>Suivant les règles habituelles de gestion de package, le package RPM ne contient que QtlMovie.
@@ -94,6 +96,22 @@
         <li>Les packages <i>ccextractor</i> et <i>telxcc</i> ne sont pas disponibles dans les divers dépots
           standards de Fedora. Ces packages doivent être reconstruits manuellement en utilisant les scripts
           <code>linuxtools/ccextractor-rpmbuild.sh</code> et <code>linuxtools/telxcc-rpmbuild.sh</code>.
+          Ces scripts téléchargent les dernières versions des sources en ligne et reconstruisent les packages.</li>
+      </ul>
+
+      <h3><a id="ubbuild">Construire le package DEB de QtlMovie pour Ubuntu</a></h3>
+
+      <p>Exécuter le script <code>build/build-deb.sh</code>.
+        Le package DEB est construit dans le répertoire <code>installers</code>.
+        Le package DEB se nomme <code>qtlmovie_1.2.16_amd64.deb</code> par exemple,
+        où "1.2.16" est la version de QtlMovie et "amd64" est la plate-forme.</p>
+      <p>Suivant les règles habituelles de gestion de package, le package DEB ne contient que QtlMovie.
+        Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
+        Noter les points suivants sur les packages non-standards:</p>
+      <ul>
+        <li>Les packages <i>ccextractor</i> et <i>telxcc</i> ne sont pas disponibles dans les divers dépots
+          standards d'Ubuntu. Ces packages doivent être reconstruits manuellement en utilisant les scripts
+          <code>linuxtools/ccextractor-debbuild.sh</code> et <code>linuxtools/telxcc-debbuild.sh</code>.
           Ces scripts téléchargent les dernières versions des sources en ligne et reconstruisent les packages.</li>
       </ul>
 
