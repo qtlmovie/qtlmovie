@@ -176,6 +176,16 @@ void QtlMovieExecFile::startGetVersion()
 
 
 //----------------------------------------------------------------------------
+// Locate a marker into a string.
+//----------------------------------------------------------------------------
+
+int QtlMovieExecFile::markerPosition(const QString &marker, const QString &str)
+{
+    return marker.isEmpty() ? -1 : str.indexOf(marker, 0, Qt::CaseInsensitive);
+}
+
+
+//----------------------------------------------------------------------------
 // Invoked when the "get version" process completes.
 //----------------------------------------------------------------------------
 
@@ -186,25 +196,37 @@ void QtlMovieExecFile::getVersionTerminated(const QtlProcessResult& result)
         _log->line(tr("Error getting version for %1: %2").arg(_name).arg(result.errorMessage()));
     }
 
-    // Build version string as the concatenation of standard output and error.
-    _version = result.standardOutput();
-    _version.append(result.standardError());
+    // If both standard output and standard error are non-empty, shall we use one? Both? Concatenated? In which order?
+    // If either the version start or end marker is non empty and are found in only one of standard output or error,
+    // we use the one where a marker is found. Otherwise, we use a contenation of both.
+    _version.clear();
+    if (!result.standardOutput().isEmpty() && !result.standardError().isEmpty()) {
+        const bool markerInOutput = markerPosition(_versionStart, result.standardOutput()) >= 0 || markerPosition(_versionEnd, result.standardOutput()) >= 0;
+        const bool markerInError = markerPosition(_versionStart, result.standardError()) >= 0 || markerPosition(_versionEnd, result.standardError()) >= 0;
+        if (markerInError && !markerInOutput) {
+            _version = result.standardError();
+        }
+        else if (!markerInError && markerInOutput) {
+            _version = result.standardOutput();
+        }
+    }
+    if (_version.isEmpty()) {
+        // Build version string as the concatenation of standard output and error.
+        _version = result.standardOutput();
+        _version.append(result.standardError());
+    }
 
     // Cleanup line terminators, remove blanks lines.
     _version.replace(QRegExp("[\\r\\n]+"), "\n");
 
     // Extract version between markers, if any specified.
-    if (!_versionStart.isEmpty()) {
-        const int pos = _version.indexOf(_versionStart, 0, Qt::CaseInsensitive);
-        if (pos > 0) {
-            _version.remove(0, pos);
-        }
+    const int startPosition = markerPosition(_versionStart, _version);
+    if (startPosition > 0) {
+        _version.remove(0, startPosition);
     }
-    if (!_versionEnd.isEmpty()) {
-        const int pos = _version.indexOf(_versionEnd, 0, Qt::CaseInsensitive);
-        if (pos >= 0) {
-            _version.truncate(pos);
-        }
+    const int endPosition = markerPosition(_versionEnd, _version);
+    if (endPosition >= 0) {
+        _version.truncate(endPosition);
     }
 
     // Remove leading and trailing new-lines.

@@ -166,6 +166,15 @@ private:
     //!
     void startGetVersion();
 
+    //!
+    //! Locate a marker into a string.
+    //! @param [in] marker The marker to search, case insensitive.
+    //! @param [in] str The string into which we search.
+    //! @return -1 is @a marker is empty or not found in @a str.
+    //! Otherwise, return the position of @a marker in @a str.
+    //!
+    static int markerPosition(const QString& marker, const QString& str);
+
     // Unaccessible operations.
     QtlMovieExecFile() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlMovieExecFile)

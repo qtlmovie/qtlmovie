@@ -38,7 +38,8 @@ else
 fi
 
 # Download CCExtractor sources if not yet present.
-[ -e $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC ] || wget -O $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC $CCEXTRACTOR_URL
+[ -e $INSTDIR/$CCEXTRACTOR_SRC ] || wget -O $INSTDIR/$CCEXTRACTOR_SRC $CCEXTRACTOR_URL
+cp -f $INSTDIR/$CCEXTRACTOR_SRC $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC
 
 # The content of the zip file should start with ccextractor.<version>
 ZIPROOT=$(unzip -l $RPMBUILD/SOURCES/$CCEXTRACTOR_SRC | grep / | grep -v Archive: | sed -e 's/.* //' -e 's,/.*,,' | sort -u)

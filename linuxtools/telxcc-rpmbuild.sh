@@ -37,7 +37,8 @@ else
 fi
 
 # Download Telxcc sources if not yet present.
-[ -e $RPMBUILD/SOURCES/$TELXCC_SRC ] || wget -O $RPMBUILD/SOURCES/$TELXCC_SRC $TELXCC_URL
+[ -e $INSTDIR/$TELXCC_SRC ] || wget -O $INSTDIR/$TELXCC_SRC $TELXCC_URL
+cp -f $INSTDIR/$TELXCC_SRC $RPMBUILD/SOURCES/$TELXCC_SRC
 
 # Build Telxcc rpm
 rpmbuild -ba -D "version ${TELXCC_VERSION}" -D "release ${TELXCC_RELEASE}${DISTRO}" $SCRIPTDIR/telxcc.spec
