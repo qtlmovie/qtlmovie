@@ -58,7 +58,12 @@
         <li><a href="#platforms">Notes sur les systèmes d'exploitation</a>
           <ul>
             <li><a href="#windows">Windows</a></li>
-            <li><a href="#linux">Linux</a></li>
+            <li><a href="#linux">Linux</a>
+              <ul>
+                <li><a href="#fedora">Fedora et Red Hat Entreprise Linux</a></li>
+                <li><a href="#ubuntu">Ubuntu et Debian</a></li>
+              </ul>
+            </li>
             <li><a href="#otherpf">Autres plates-formes</a></li>
           </ul>
         </li>
@@ -628,21 +633,52 @@
       <h3><a id="linux">Linux</a></h3>
 
       <p>QtlMovie a été testé sur des systèmes Linux Fedora, Red Hat et Ubuntu et a montré
-        qu'il fonctionnait correctement.
-        Un package RPM binaire pour Fedora est disponible sur architecture x86_64.
-        Il n'y a actuellement aucun package Debian / Ubuntu pour QtlMovie. Vous devrez le recompiler.</p>
+        qu'il fonctionnait correctement.</p>
       <p>FFmpeg doit être disponible en version 1.2 ou supérieure.
+        Sur plusieurs types de systèmes, la version stardard de FFmpeg est ancienne
+        et une version plus à jour peut être nécessaire.
         Mkisofs doit être présent en version 2, la version 3 ne fonctionne pas correctement.
-        Il n'y a apparemment pas de package pour telxcc ou CCExtractor dans les distributions
-        standards et vous devrez les recompiler (il existe toutefois des packages RPM pour
-        Fedora disponibles dans la zone de téléchargement de QtlMovie).</p>
-      <p>Tous les outils media sont localisés par QtlMovie via $PATH.</p>
-      <p>Sur plusieurs types de systèmes, la version stardard de FFmpeg est ancienne
-        et une version plus à jour peut être nécessaire.</p>
-      <p>Sur les systèmes Ubuntu, FFmpeg a été remplacé par <i>avconv</i>, un clone de FFmpeg.
-        La commande <code>ffmpeg</code> est toujours présente mais elle est redirigée sur avconv.
-        Comme avconv ne supporte pas plusieurs des options de ffmpeg utilisées par QtlMovie,
-        vous aurez peut-être à installer une version authentique et récente de ffmpeg.</p>
+        Il n'y a habituellement pas de package pour telxcc ou CCExtractor dans les distributions
+        standards et vous devrez les télécharger depuis la zone de téléchargement de QtlMovie (voir ci-dessous).</p>
+      <p>Tous les outils media sont localisés par QtlMovie via <i>$PATH</i>.</p>
+
+      <h4><a id="fedora">Fedora et Red Hat Entreprise Linux</a></h4>
+
+      <p>Des packages binaires RPM pour Fedora sur architecture x86_64 sont disponibles sur le
+        <a href="https://sourceforge.net/projects/qtlmovie/files/fedora/">
+          site de distribution de QtlMovie pour Fedora sur SourceForge</a>
+        pour QtlMovie, Telxcc et CCExtractor.</p>
+      <p>Le package <i>ffmpeg</i> est disponible via RPMfusion mais pas dans les dépots standards de Fedora.
+        Voir sur <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> pour une description de la
+        manière de configurer RPMfusion dans les dépots par défaut de votre système.</p>
+
+      <h4><a id="ubuntu">Ubuntu et Debian</a></h4>
+
+      <p>Des packages binaires DEB pour Ubuntu sur architecture amd64 sont disponibles sur le
+        <a href="https://sourceforge.net/projects/qtlmovie/files/ubuntu/">
+          site de distribution de QtlMovie pour Ubuntu sur SourceForge</a>
+        pour QtlMovie, Telxcc et CCExtractor.</p>
+      <p>Pour diverses raisons, Ubuntu a décidé il y a quelques temps de supprimer
+        FFmpeg de leurs dépots. En remplacement, Ubuntu fournit <i>avconv</i> (package <i>libav-tools</i>),
+        un clone de FFmpeg. Cependant, les commandes <i>avconv</i> et <i>avprobe</i>
+        ne sont que partiellement compatibles avec <i>ffmpeg</i> et <i>ffprobe</i>.
+        Comme QtlMovie génère des commandes <i>ffmpeg</i> and <i>ffprobe</i> complexes,
+        celles-ci ne fonctionnent presque jamais avec <i>avconv</i> et <i>avprobe</i>.</p>
+      <p>La seule solution pour utiliser QtlMovie sur Ubuntu est d'installer une véritable
+        version originale de FFmpeg. La première manière est de recompiler FFmpeg depuis
+        les sources sur Ubuntu. C'est une procédure complexe qui n'est pas recommandée.
+        La seconde manière est d'utiliser une version de FFmpeg précompilée pour Ubuntu
+        comme décrit ci-dessous.</p>
+      <p>Des packages non-officiels pour Ubuntu peuvent être installés depuis un
+        <i>Personal Package Archive</i> (PPA). FFmpeg est disponible sur le
+        <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">PPA de Jon Severinsson</a>.
+        Les commandes ci-dessous illustrent la manière de déclarer ce PPA sur un système Ubuntu 14.04 LTS (Trusty)
+        et installer FFmpeg. Vous devez être <i>root</i> pour exécuter ces commandes.</p>
+<pre>
+add-apt-repository -s http://ppa.launchpad.net/jon-severinsson/ffmpeg/ubuntu
+apt-get update
+apt-get install ffmpeg
+</pre>
 
       <h3><a id="otherpf">Autres plates-formes</a></h3>
 

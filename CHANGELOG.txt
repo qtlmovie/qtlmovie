@@ -3,10 +3,8 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.16
-- Added support for avconv when ffmpeg is not available, mainly for Ubuntu
-  users. Not all combinations of ffmpeg options have been tested and some
-  may not work since avconv is only partially compatible with ffmpeg.
-- Ubuntu 14.04 LTS .deb package is now built for QtlMovie.
+- Ubuntu 14.04 LTS .deb package is now built for QtlMovie. Be sure to read the
+  user documentation for a description of how to install FFmpeg on Ubuntu.
 - Ubuntu packages for CCextractor 0.69 and telxcc 2.5.3 are available on
   QtlMovie SourceForge project.
 

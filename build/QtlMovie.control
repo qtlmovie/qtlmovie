@@ -7,7 +7,7 @@ Section: free/video
 Priority: optional
 Depends: libc6, libstdc++6, libgcc1, qttranslations5-l10n,
  libqt5core5a, libqt5gui5, libqt5widgets5, libqt5multimedia5, libqt5network5,
- libav-tools, genisoimage, growisofs, dvdauthor, telxcc, ccextractor
+ ffmpeg, genisoimage, growisofs, dvdauthor, telxcc, ccextractor
 Description: Graphical frontend to FFmpeg and other media tools
  QtlMovie is a graphical frontend to FFmpeg, DVD Author, telxcc, CCExtractor,
  mkisofs and growisofs.
