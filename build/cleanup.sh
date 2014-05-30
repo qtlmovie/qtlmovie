@@ -37,21 +37,16 @@
 #
 #-----------------------------------------------------------------------------
 
-DEEP=false
-[ "$1" = "--deep" ] && DEEP=true
+[ "$1" = "--deep" ] && DEEP=true || DEEP=false
 
 ROOT=$(cd $(dirname $0)/..; pwd)
 
-# Delete generated binary and documentation files.
-# Delete Qt Creator system-specific files (accept proposed defaults when restarting Qt Creator).
-rm -rfv $ROOT/build-* $ROOT/src/*.pro.user*
-
-# Delete spurious generated files in src tree. Could be left after incorrect build command.
+# Delete spurious generated files.
 find $ROOT \
     -type d -iname 'wintools*' -prune , \
     -type d -iname installers -prune , \
     -type d -iname sourceforge -prune , \
-    -type d \( -iname debug -o -iname release \) -exec rm -rfv {} \; -prune , \
+    -type d \( -iname debug -o -iname release -o -iname 'build-*' \) -print -prune , \
     \( -iname 'Makefile*' -o \
        -iname 'moc_*' -o \
        -iname '*.obj' -o \
@@ -66,23 +61,26 @@ find $ROOT \
        -iname '*.log' -o \
        -iname '*.tmp' -o \
        -iname '*~' -o \
+       -iname '*.pro.user*' -o \
        -iname '*.autosave' -o \
        -iname '.directory' -o \
        -iname 'object_script.*.release' -o \
        -iname 'object_script.*.debug' \) \
-    -exec rm -rvf {} \;
+    | xargs rm -rvf
 
 # Remove executable right from source files.
-find $ROOT -iname 'build-*' -prune , ! -type d ! -iname '*.sh' -exec chmod 640 {} \;
+find $ROOT -type d -iname 'build-*' -prune , ! -type d ! -iname '*.sh' | xargs chmod 640
+find $ROOT -iname '*.sh' -o -iname '*.postinst' | xargs chmod 750
 
-# In deep mode, delete git repository and non-original files in SourceForge mirror.
+# In deep mode, delete git repository, installers and non-original files in SourceForge mirror.
 if $DEEP; then
     rm -rf $ROOT/.git $ROOT/sourceforge/web/doc $ROOT/sourceforge/web/doxy
-    find $ROOT \( -iname '*.exe' -o -iname '*.rpm' -o -iname '*.deb' -o -iname '*.zip' \) -exec rm -rvf {} \;
+    find $ROOT -iname '*.exe' -o -iname '*.rpm' -o -iname '*.deb' -o -iname '*.zip' | xargs rm -vf
 fi
 
-# Unixify the end of lines on text files.
-find $ROOT \( \
+# Windowsify or unixify the end of lines on text files depending on their type.
+find $ROOT -iname '*.ps1' -o -iname '*.psm1' | xargs unix2dos -q
+find $ROOT \
     -iname '*.cpp' -o \
     -iname '*.h' -o \
     -iname '*.txt' -o \
@@ -92,4 +90,4 @@ find $ROOT \( \
     -iname '*.sh' -o \
     -iname '*.html' -o \
     -iname '*.ui' \
-    \) | xargs dos2unix -q
+    | xargs dos2unix -q
