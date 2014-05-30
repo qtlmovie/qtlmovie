@@ -38,11 +38,15 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(const QtlMovieSettings* settings, QWidget *parent) :
-    QDialog(parent)
+QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(QtlMovieSettings* settings, QWidget *parent) :
+    QDialog(parent),
+    _settings(settings)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
+
+    // Restore the window geometry from the saved settings.
+    _settings->restoreGeometry(this);
 
     // Media tools description.
     _ui.ffmpegTitle->setText(title(settings->ffmpeg()));
@@ -65,6 +69,20 @@ QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(const QtlMovieSettings* setting
 
     _ui.dvddecrypterTitle->setText(title(settings->dvddecrypter()));
     _ui.dvddecrypterDescription->setText(settings->dvddecrypter()->htmlDescription());
+}
+
+
+//-----------------------------------------------------------------------------
+// Event handler to handle window close.
+//-----------------------------------------------------------------------------
+
+void QtlMovieAboutMediaTools::closeEvent(QCloseEvent* event)
+{
+    // Accept to close the window.
+    event->accept();
+
+    // Save the geometry of the window.
+    _settings->saveGeometry(this, true);
 }
 
 

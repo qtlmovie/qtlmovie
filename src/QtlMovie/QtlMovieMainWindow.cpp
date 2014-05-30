@@ -107,6 +107,9 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _settings->load();
     applyUiSettings();
 
+    // Restore the window geometry from the saved settings.
+    _settings->restoreGeometry(this);
+
     // Report missing tools (FFmpeg, DvdAuthor, etc.)
     _settings->reportMissingTools();
 
@@ -751,34 +754,39 @@ QtlMovieMainWindow::CancelStatus QtlMovieMainWindow::proposeToCancelTranscoding(
 
 void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
 {
-    // If _closePending is already true, either this is a close following the completion
-    // of the transcoding cancelation or the cancelation does not work and the user tries
-    // to close again. In both cases, we accept the close.
     if (_closePending) {
+        // If _closePending is already true, either this is a close following the completion
+        // of the transcoding cancelation or the cancelation does not work and the user tries
+        // to close again. In both cases, we accept the close.
         event->accept();
-        return;
+    }
+    else {
+        // Check if should abort any transcoding.
+        switch (proposeToCancelTranscoding()) {
+        case NothingToCancel:
+            // It is always safe to close when no transcoding is in progress.
+            event->accept();
+            break;
+        case CancelRefused:
+            // The user refused to cancel the transcoding. Do not close.
+            event->ignore();
+            break;
+        case CancelInProgress:
+            // The user accepted to cancel the transcoding. However, we wait for the
+            // cancelation to complete before closing. Will close later.
+            _closePending = true;
+            event->ignore();
+            break;
+        default:
+            _ui.log->line(tr("Internal error, invalid cancel state"));
+            event->ignore();
+            break;
+        }
     }
 
-    // Check if should abort any transcoding.
-    switch (proposeToCancelTranscoding()) {
-    case NothingToCancel:
-        // It is always safe to close when no transcoding is in progress.
-        event->accept();
-        break;
-    case CancelRefused:
-        // The user refused to cancel the transcoding. Do not close.
-        event->ignore();
-        break;
-    case CancelInProgress:
-        // The user accepted to cancel the transcoding. However, we wait for the
-        // cancelation to complete before closing. Will close later.
-        _closePending = true;
-        event->ignore();
-        break;
-    default:
-        _ui.log->line(tr("Internal error, invalid cancel state"));
-        event->ignore();
-        break;
+    // If the event is accepted, save the geometry of the window.
+    if (event->isAccepted()) {
+        _settings->saveGeometry(this, true);
     }
 }
 
@@ -789,7 +797,7 @@ void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
 
 void QtlMovieMainWindow::showInputFileProperties()
 {
-    QtlMovieInputFilePropertiesDialog dialog(_inFile, this);
+    QtlMovieInputFilePropertiesDialog dialog(_inFile, _settings, this);
     dialog.exec();
 }
 

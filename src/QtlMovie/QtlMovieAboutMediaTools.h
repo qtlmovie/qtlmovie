@@ -50,13 +50,21 @@ class QtlMovieAboutMediaTools : public QDialog
 public:
     //!
     //! Constructor.
-    //! @param [in] settings The settings from which to load the initial values.
+    //! @param [in] settings Application settings.
     //! @param [in] parent Optional parent widget.
     //!
-    explicit QtlMovieAboutMediaTools(const QtlMovieSettings* settings, QWidget* parent = 0);
+    explicit QtlMovieAboutMediaTools(QtlMovieSettings* settings, QWidget* parent = 0);
+
+protected:
+    //!
+    //! Event handler to handle window close.
+    //! @param event Notified event.
+    //!
+    virtual void closeEvent(QCloseEvent* event);
 
 private:
-    Ui::QtlMovieAboutMediaTools _ui;   //!< UI from Qt Designer.
+    Ui::QtlMovieAboutMediaTools _ui;        //!< UI from Qt Designer.
+    QtlMovieSettings*           _settings;  //!< Application settings.
 
     //!
     //! Build an HTML title label for a media tool.

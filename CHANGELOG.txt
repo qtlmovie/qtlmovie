@@ -3,6 +3,9 @@ QtlMovie Change Log
 ===================
 
 Version 1.2.16
+- Save the size and position of all windows. Useful for screens with a size or
+  resolution which are not well suited for the default geometry of the
+  application windows. Resize once and keep the same size and position forever.
 - Ubuntu 14.04 LTS .deb package is now built for QtlMovie. Be sure to read the
   user documentation for a description of how to install FFmpeg on Ubuntu.
 - Ubuntu packages for CCextractor 0.69 and telxcc 2.5.3 are available on

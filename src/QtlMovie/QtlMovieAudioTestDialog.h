@@ -62,9 +62,9 @@ public:
     //!
     QtlMovieAudioTestDialog(const QtlMovieInputFile* inputFile,
                             int selectedStream,
-                            const QtlMovieSettings* settings,
+                            QtlMovieSettings* settings,
                             QtlLogger* log,
-                            QWidget *parent = 0);
+                            QWidget* parent = 0);
 
     //!
     //! Check if the audio test is currently playing.
@@ -119,7 +119,7 @@ protected:
 private:
     Ui::QtlMovieAudioTestDialog _ui;           //!< UI from Qt Designer.
     const QtlMovieInputFile*    _file;         //!< Input file containing audio streams to test.
-    const QtlMovieSettings*     _settings;     //!< Application settings.
+    QtlMovieSettings*           _settings;     //!< Application settings.
     QtlLogger*                  _log;          //!< Message logger.
     QtlMovieFFmpegProcess*      _process;      //!< FFmpeg process.
     QAudioOutput                _audio;        //!< Audio output device.

@@ -37,11 +37,15 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieInputFilePropertiesDialog::QtlMovieInputFilePropertiesDialog(const QtlMovieInputFile* inputFile, QWidget *parent) :
-    QDialog(parent)
+QtlMovieInputFilePropertiesDialog::QtlMovieInputFilePropertiesDialog(const QtlMovieInputFile* inputFile, QtlMovieSettings* settings, QWidget *parent) :
+    QDialog(parent),
+    _settings(settings)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
+
+    // Restore the window geometry from the saved settings.
+    _settings->restoreGeometry(this);
 
     // Define table widget headers.
     QStringList headers;
@@ -65,4 +69,18 @@ QtlMovieInputFilePropertiesDialog::QtlMovieInputFilePropertiesDialog(const QtlMo
     // Make sure the table is resized to fit content.
     _ui.propertiesTable->resizeColumnToContents(0);
     _ui.propertiesTable->resizeRowsToContents();
+}
+
+
+//-----------------------------------------------------------------------------
+// Event handler to handle window close.
+//-----------------------------------------------------------------------------
+
+void QtlMovieInputFilePropertiesDialog::closeEvent(QCloseEvent* event)
+{
+    // Accept to close the window.
+    event->accept();
+
+    // Save the geometry of the window.
+    _settings->saveGeometry(this, true);
 }

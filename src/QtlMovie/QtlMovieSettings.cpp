@@ -34,6 +34,7 @@
 #include "QtlMovieSettings.h"
 #include "QtlStringList.h"
 #include "QtlMovie.h"
+#include "QtlUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -155,7 +156,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     _audioNormalizePeak(QTL_DEFAULT_AUDIO_PEAK_LEVEL),
     _audioNormalizeMode(Compress),
     _autoRotateVideo(true),
-    _playSoundOnCompletion(false)
+    _playSoundOnCompletion(false),
+    _widgetsGeometry()
 {
     Q_ASSERT(log != 0);
 
@@ -200,6 +202,22 @@ void QtlMovieSettings::setBoolAttribute(QXmlStreamWriter& xml, const QString& na
 {
     xml.writeStartElement(name);
     xml.writeAttribute("value", value ? "true": "false");
+    xml.writeEndElement();
+}
+
+
+//----------------------------------------------------------------------------
+// Write an XML element with geometry attributes.
+//----------------------------------------------------------------------------
+
+void QtlMovieSettings::setGeometryAttribute(QXmlStreamWriter& xml, const QString& name, const QString& objectName, const QRect& geometry)
+{
+    xml.writeStartElement(name);
+    xml.writeAttribute("widget", objectName);
+    xml.writeAttribute("x", QString::number(geometry.x()));
+    xml.writeAttribute("y", QString::number(geometry.y()));
+    xml.writeAttribute("width", QString::number(geometry.width()));
+    xml.writeAttribute("height", QString::number(geometry.height()));
     xml.writeEndElement();
 }
 
@@ -271,7 +289,7 @@ bool QtlMovieSettings::getStringAttribute(QXmlStreamReader& xml, const QString& 
 
     // Check that the type attribute is defined.
     if (type.isEmpty()) {
-        xml.raiseError(tr("No attribute \"%1\" in element <%2>").arg("tyoe").arg(name));
+        xml.raiseError(tr("No attribute \"%1\" in element <%2>").arg("type").arg(name));
         return false;
     }
     else {
@@ -312,6 +330,37 @@ bool QtlMovieSettings::getBoolAttribute(QXmlStreamReader& xml, const QString& na
     else {
         xml.raiseError(tr("Invalid boolean value: %1").arg(stringValue));
         return false;
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Decode an XML element with geometry attributes.
+//----------------------------------------------------------------------------
+
+bool QtlMovieSettings::getGeometryAttribute(QXmlStreamReader& xml, const QString& name, QMap<QString, QRect>& valueMap)
+{
+    if (xml.name() != name) {
+        // Not the expected element.
+        return false;
+    }
+
+    // Get the attributes, skip the rest of the element.
+    const QString objectName(xml.attributes().value("widget").toString());
+    const int x = qtlToInt(xml.attributes().value("x").toString().trimmed());
+    const int y = qtlToInt(xml.attributes().value("y").toString().trimmed());
+    const int width = qtlToInt(xml.attributes().value("width").toString().trimmed());
+    const int height = qtlToInt(xml.attributes().value("height").toString().trimmed());
+    xml.skipCurrentElement();
+
+    // Check that the geometry is valid.
+    if (objectName.isEmpty() || x < 0 || y < 0 || width < 0 || height < 0) {
+        xml.raiseError(tr("Invalid geometry syntax in element <%1>").arg(name));
+        return false;
+    }
+    else {
+        valueMap[objectName] = QRect(x, y, width, height);
+        return true;
     }
 }
 
@@ -382,6 +431,9 @@ bool QtlMovieSettings::save(const QString& fileName)
     setIntAttribute(xml, "audioNormalizeMode", int(_audioNormalizeMode));
     setBoolAttribute(xml, "autoRotateVideo", _autoRotateVideo);
     setBoolAttribute(xml, "playSoundOnCompletion", _playSoundOnCompletion);
+    foreach (const QString& key, _widgetsGeometry.keys()) {
+        setGeometryAttribute(xml, "geometry", key, _widgetsGeometry[key]);
+    }
 
     // Finalize the XML document.
     xml.writeEndElement();
@@ -451,6 +503,7 @@ bool QtlMovieSettings::load(const QString& fileName)
     int audioNormalizeMode = int(_audioNormalizeMode);
     bool autoRotateVideo = _autoRotateVideo;
     bool playSoundOnCompletion = _playSoundOnCompletion;
+    QMap<QString,QRect> widgetsGeometry(_widgetsGeometry);
 
     // Read the XML document.
     QXmlStreamReader xml(&file);
@@ -500,6 +553,7 @@ bool QtlMovieSettings::load(const QString& fileName)
                     !getIntAttribute(xml, "audioNormalizeMode", audioNormalizeMode) &&
                     !getBoolAttribute(xml, "autoRotateVideo", autoRotateVideo) &&
                     !getBoolAttribute(xml, "playSoundOnCompletion", playSoundOnCompletion) &&
+                    !getGeometryAttribute(xml, "geometry", widgetsGeometry) &&
                     !xml.error()) {
                     // Unexpected element, ignore it.
                     xml.skipCurrentElement();
@@ -555,6 +609,9 @@ bool QtlMovieSettings::load(const QString& fileName)
         setAudioNormalizeMode(AudioNormalizeMode(audioNormalizeMode));
         setAutoRotateVideo(autoRotateVideo);
         setPlaySoundOnCompletion(playSoundOnCompletion);
+        foreach (const QString& widgetName, widgetsGeometry.keys()) {
+            setGeometry(widgetName, widgetsGeometry[widgetName]);
+        }
     }
     else {
         // Format an error string.
@@ -624,6 +681,53 @@ void QtlMovieSettings::normalize(QStringList& list)
         *it = it->toLower().trimmed();
     }
     list.sort();
+}
+
+
+//----------------------------------------------------------------------------
+// Save the geometry of a widget into the settings.
+//----------------------------------------------------------------------------
+
+void QtlMovieSettings::setGeometry(const QString& widgetName, const QRect& geometry)
+{
+    // Get the previous geometry for a widget with the same name.
+    const QMap<QString,QRect>::ConstIterator it = _widgetsGeometry.find(widgetName);
+
+    if (it == _widgetsGeometry.end() || it.value() != geometry) {
+        // There was one and the geometry changed.
+        _widgetsGeometry[widgetName] = geometry;
+        _isModified = true;
+    }
+}
+
+bool QtlMovieSettings::saveGeometry(const QWidget* widget, bool forceSave, const QString& fileName)
+{
+    if (widget == 0) {
+        return true;
+    }
+    else {
+        // Save the new geometry.
+        setGeometry(widget->objectName(), widget->geometry());
+        // Save the file if required.
+        return !_isModified || !forceSave || save(fileName);
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Restore the geometry of a widget from the settings.
+//----------------------------------------------------------------------------
+
+void QtlMovieSettings::restoreGeometry(QWidget* widget) const
+{
+    if (widget != 0) {
+        // Get the previous geometry for a widget with the same name.
+        const QMap<QString,QRect>::ConstIterator it = _widgetsGeometry.find(widget->objectName());
+        if (it != _widgetsGeometry.end()) {
+            // Found one, apply the geometry.
+            widget->setGeometry(it.value());
+        }
+    }
 }
 
 

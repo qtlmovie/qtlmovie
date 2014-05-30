@@ -37,6 +37,7 @@
 #define QTLMOVIESETTINGS_H
 
 #include <QtCore>
+#include <QWidget>
 #include "QtlMovieExecFile.h"
 #include "QtlLogger.h"
 #include "QtlMovie.h"
@@ -990,6 +991,30 @@ public:
     //!
     void setPlaySoundOnCompletion(bool playSoundOnCompletion);
 
+    //!
+    //! Set the geometry of a widget.
+    //! @param [in] widgetName The name of the widget to save the geometry.
+    //! @param [in] geometry The geometry of the widget.
+    //!
+    void setGeometry(const QString& widgetName, const QRect& geometry);
+
+    //!
+    //! Save the geometry of a widget into the settings.
+    //! @param [in] widget The widget to save the geometry.
+    //! @param [in] forceSave If true, force the save of the settings file if there
+    //! was a geometry change for @a widget.
+    //! @param fileName Name of file to create if @a forceSave is true. Use default name if empty.
+    //! @return True on success, false on save error.
+    //!
+    bool saveGeometry(const QWidget* widget, bool forceSave = false, const QString& fileName = "");
+
+    //!
+    //! Restore the geometry of a widget from the settings.
+    //! If not geometry was saved for a widget of that name, do not modify @a widget.
+    //! @param [in,out] widget The widget to restore the geometry.
+    //!
+    void restoreGeometry(QWidget* widget) const;
+
 private:
     bool                  _isModified;             //!< Object has unsaved changes.
     QtlLogger*            _log;                    //!< Where to log errors.
@@ -1041,6 +1066,7 @@ private:
     AudioNormalizeMode    _audioNormalizeMode;     //!< How to normalize audio when the input dynamic range is too large.
     bool                  _autoRotateVideo;        //!< Use "rotate" metadata to rotate output video.
     bool                  _playSoundOnCompletion;  //!< Play a sound on transcoding completion.
+    QMap<QString,QRect>   _widgetsGeometry;        //!< Saved widgets geometry.
 
     //!
     //! Write an XML element with a "value" integer attribute.
@@ -1066,6 +1092,15 @@ private:
     //! @param [in] value Boolean value.
     //!
     static void setBoolAttribute(QXmlStreamWriter& xml, const QString& name, bool value);
+
+    //!
+    //! Write an XML element with geometry attributes.
+    //! @param [in,out] xml XML stream.
+    //! @param [in] name Element name.
+    //! @param [in] objectName Object name.
+    //! @param [in] geometry Geometry value.
+    //!
+    static void setGeometryAttribute(QXmlStreamWriter& xml, const QString& name, const QString& objectName, const QRect& geometry);
 
     //!
     //! Decode an XML element with a "value" integer attribute.
@@ -1104,6 +1139,15 @@ private:
     //! "value" attribute not found, not a valid boolean.
     //!
     static bool getBoolAttribute(QXmlStreamReader& xml, const QString& name, bool& value);
+
+    //!
+    //! Decode an XML element with geometry attributes.
+    //! @param [in,out] xml XML stream.
+    //! @param [in] name Element name.
+    //! @param [in,out] valueMap String map. Unchanged on error.
+    //! @return True on success, false on error: not the expected element, "type" or "value" attribute not found.
+    //!
+    static bool getGeometryAttribute(QXmlStreamReader& xml, const QString& name, QMap<QString,QRect>& valueMap);
 
     //!
     //! "Normalize" a string list: lower case, sorted.

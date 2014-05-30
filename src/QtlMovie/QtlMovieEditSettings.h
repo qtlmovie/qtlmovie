@@ -61,6 +61,13 @@ public:
     //!
     void applySettings();
 
+protected:
+    //!
+    //! Event handler to handle window close.
+    //! @param event Notified event.
+    //!
+    virtual void closeEvent(QCloseEvent* event);
+
 private slots:
     //!
     //! Reset the dialog box values from the settings object.

@@ -50,12 +50,21 @@ public:
     //!
     //! Constructor.
     //! @param [in] inputFile Input file to view.
+    //! @param [in] settings Application settings.
     //! @param [in] parent Optional parent object.
     //!
-    explicit QtlMovieInputFilePropertiesDialog(const QtlMovieInputFile* inputFile, QWidget *parent = 0);
+    explicit QtlMovieInputFilePropertiesDialog(const QtlMovieInputFile* inputFile, QtlMovieSettings* settings, QWidget *parent = 0);
+
+protected:
+    //!
+    //! Event handler to handle window close.
+    //! @param event Notified event.
+    //!
+    virtual void closeEvent(QCloseEvent* event);
 
 private:
-    Ui::QtlMovieInputFilePropertiesDialog _ui; //!< UI from Qt Designer.
+    Ui::QtlMovieInputFilePropertiesDialog _ui;        //!< UI from Qt Designer.
+    QtlMovieSettings*                     _settings;  //!< Application settings.
 };
 
 #endif // QTLMOVIEINPUTFILEPROPERTIESDIALOG_H
