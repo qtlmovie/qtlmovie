@@ -75,7 +75,7 @@
 
 [CmdletBinding()]
 param(
-    $QtSrcUrl = "http://download.qt-project.org/official_releases/qt/5.2/5.2.1/single/qt-everywhere-opensource-src-5.2.1.7z",
+    $QtSrcUrl = "http://download.qt-project.org/official_releases/qt/5.3/5.3.0/single/qt-everywhere-opensource-src-5.3.0.7z",
     $QtStaticDir = "C:\Qt\Static",
     $QtVersion = "",
     $MingwDir = "",
