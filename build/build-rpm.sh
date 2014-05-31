@@ -39,7 +39,7 @@ error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
 ROOTDIR=$(dirname $SCRIPTDIR)
 SRCDIR=$ROOTDIR/src
-BUILDDIR=$ROOTDIR/build-QtlMovie-Desktop-Release
+INSTDIR=$ROOTDIR/installers
 
 # QtlMovie version is extracted from QtlMovieVersion.h
 QTLMOVIE_VERSION=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
@@ -68,16 +68,17 @@ fi
 QTLMOVIE_SRC=QtlMovie-${QTLMOVIE_VERSION}-src.zip
 TMPDIR=/tmp/qtlmovie-rpmbuild-$$
 TMPROOT=$TMPDIR/QtlMovie-${QTLMOVIE_VERSION}
-mkdir -p $TMPROOT $BUILDDIR || exit 1
+mkdir -p $TMPROOT || exit 1
 tar -C $ROOTDIR -cpf - --exclude=.git --exclude="*.exe" --exclude="*.zip" --exclude="*.rpm" . | tar -C $TMPROOT -xpf -
 $TMPROOT/build/cleanup.sh --deep >/dev/null
-rm -f $BUILDDIR/$QTLMOVIE_SRC
-(cd $TMPDIR; zip -r -9 -q $BUILDDIR/$QTLMOVIE_SRC QtlMovie-${QTLMOVIE_VERSION})
+rm -f $INSTDIR/$QTLMOVIE_SRC
+(cd $TMPDIR; zip -r -9 -q $INSTDIR/$QTLMOVIE_SRC QtlMovie-${QTLMOVIE_VERSION})
 
 # Build QtlMovie rpm
-cp -f $BUILDDIR/$QTLMOVIE_SRC $RPMBUILD/SOURCES/$QTLMOVIE_SRC
+cp -f $INSTDIR/$QTLMOVIE_SRC $RPMBUILD/SOURCES/$QTLMOVIE_SRC
 rpmbuild -ba -D "version ${QTLMOVIE_VERSION}" -D "release ${QTLMOVIE_RELEASE}${DISTRO}" $SCRIPTDIR/QtlMovie.spec
 cp -f \
     $RPMBUILD/RPMS/*/qtlmovie-${QTLMOVIE_VERSION}-${QTLMOVIE_RELEASE}${DISTRO}.*.rpm \
     $RPMBUILD/SRPMS/qtlmovie-${QTLMOVIE_VERSION}-${QTLMOVIE_RELEASE}${DISTRO}.src.rpm \
-    $ROOTDIR/installers
+    $INSTDIR
+rm -rf $TMPDIR
