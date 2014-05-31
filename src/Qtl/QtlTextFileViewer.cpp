@@ -26,7 +26,8 @@
 //
 //----------------------------------------------------------------------------
 //
-//
+// Qtl, Qt utility library.
+// Define the class QtlTextFileViewer.
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ QtlTextFileViewer::QtlTextFileViewer(QWidget* parent,
                                      const QString& fileName,
                                      const QString& title,
                                      const QString& icon) :
-    QDialog(parent),
+    QtlDialog(parent),
     _ui(new Ui::QtlTextFileViewer)
 {
     // Build the UI as defined in Qt Designer.

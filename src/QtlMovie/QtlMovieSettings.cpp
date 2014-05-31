@@ -700,16 +700,14 @@ void QtlMovieSettings::setGeometry(const QString& widgetName, const QRect& geome
     }
 }
 
-bool QtlMovieSettings::saveGeometry(const QWidget* widget, bool forceSave, const QString& fileName)
+void QtlMovieSettings::saveGeometry(const QWidget* widget)
 {
-    if (widget == 0) {
-        return true;
-    }
-    else {
-        // Save the new geometry.
-        setGeometry(widget->objectName(), widget->geometry());
-        // Save the file if required.
-        return !_isModified || !forceSave || save(fileName);
+    // Save the new geometry into this object.
+    setGeometry(widget->objectName(), widget->geometry());
+
+    // Save the file if required.
+    if (_isModified) {
+        save();
     }
 }
 
@@ -718,15 +716,13 @@ bool QtlMovieSettings::saveGeometry(const QWidget* widget, bool forceSave, const
 // Restore the geometry of a widget from the settings.
 //----------------------------------------------------------------------------
 
-void QtlMovieSettings::restoreGeometry(QWidget* widget) const
+void QtlMovieSettings::restoreGeometry(QWidget* widget)
 {
-    if (widget != 0) {
-        // Get the previous geometry for a widget with the same name.
-        const QMap<QString,QRect>::ConstIterator it = _widgetsGeometry.find(widget->objectName());
-        if (it != _widgetsGeometry.end()) {
-            // Found one, apply the geometry.
-            widget->setGeometry(it.value());
-        }
+    // Get the previous geometry for a widget with the same name.
+    const QMap<QString,QRect>::ConstIterator it = _widgetsGeometry.find(widget->objectName());
+    if (it != _widgetsGeometry.end()) {
+        // Found one, apply the geometry.
+        widget->setGeometry(it.value());
     }
 }
 

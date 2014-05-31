@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QtlMovieInputFilePropertiesDialog</class>
- <widget class="QDialog" name="QtlMovieInputFilePropertiesDialog">
+ <widget class="QtlDialog" name="QtlMovieInputFilePropertiesDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -57,6 +57,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtlDialog</class>
+   <extends>QWidget</extends>
+   <header>QtlDialog.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="QtlMovie.qrc"/>
  </resources>

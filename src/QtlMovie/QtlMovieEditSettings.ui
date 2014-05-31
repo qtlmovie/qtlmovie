@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QtlMovieEditSettings</class>
- <widget class="QDialog" name="QtlMovieEditSettings">
+ <widget class="QtlDialog" name="QtlMovieEditSettings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -1229,6 +1229,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QtlDialog</class>
+   <extends>QWidget</extends>
+   <header>QtlDialog.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>QtlLineEdit</class>
    <extends>QLineEdit</extends>

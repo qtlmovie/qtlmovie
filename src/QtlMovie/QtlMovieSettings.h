@@ -39,13 +39,14 @@
 #include <QtCore>
 #include <QWidget>
 #include "QtlMovieExecFile.h"
+#include "QtlGeometrySettingsInterface.h"
 #include "QtlLogger.h"
 #include "QtlMovie.h"
 
 //!
 //! Description of the global settings of the application.
 //!
-class QtlMovieSettings : public QObject
+class QtlMovieSettings : public QObject, public QtlGeometrySettingsInterface
 {
     Q_OBJECT
 
@@ -999,21 +1000,18 @@ public:
     void setGeometry(const QString& widgetName, const QRect& geometry);
 
     //!
-    //! Save the geometry of a widget into the settings.
-    //! @param [in] widget The widget to save the geometry.
-    //! @param [in] forceSave If true, force the save of the settings file if there
-    //! was a geometry change for @a widget.
-    //! @param fileName Name of file to create if @a forceSave is true. Use default name if empty.
-    //! @return True on success, false on save error.
+    //! Save the geometry of a widget.
+    //! Implementation of QtlGeometrySettingsInterface.
+    //! @param [in] widget The widget to save the geometry of.
     //!
-    bool saveGeometry(const QWidget* widget, bool forceSave = false, const QString& fileName = "");
+    virtual void saveGeometry(const QWidget* widget);
 
     //!
-    //! Restore the geometry of a widget from the settings.
-    //! If not geometry was saved for a widget of that name, do not modify @a widget.
+    //! Restore the geometry of a widget.
+    //! Implementation of QtlGeometrySettingsInterface.
     //! @param [in,out] widget The widget to restore the geometry.
     //!
-    void restoreGeometry(QWidget* widget) const;
+    virtual void restoreGeometry(QWidget* widget);
 
 private:
     bool                  _isModified;             //!< Object has unsaved changes.

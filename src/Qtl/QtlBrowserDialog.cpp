@@ -42,7 +42,7 @@
 //----------------------------------------------------------------------------
 
 QtlBrowserDialog::QtlBrowserDialog(QWidget *parent, const QString& url, const QString& title, const QString& icon) :
-    QDialog(parent),
+    QtlDialog(parent),
     _ui(new Ui::QtlBrowserDialog)
 {
     // Build the UI as defined in Qt Designer.

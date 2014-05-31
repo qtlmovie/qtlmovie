@@ -63,7 +63,8 @@ SOURCES += \
     QtlErrorBase.cpp \
     QtlPlainTextEdit.cpp \
     QtlPasswordDialog.cpp \
-    QtlTlvTableWidget.cpp
+    QtlTlvTableWidget.cpp \
+    QtlDialog.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -109,7 +110,9 @@ HEADERS += \
     QtlTlvTemplate.h \
     QtlPasswordDialog.h \
     QtlTlvTableWidgetTemplate.h \
-    QtlTlvTableWidget.h
+    QtlTlvTableWidget.h \
+    QtlDialog.h \
+    QtlGeometrySettingsInterface.h
 
 FORMS += \
     QtlBrowserDialog.ui \

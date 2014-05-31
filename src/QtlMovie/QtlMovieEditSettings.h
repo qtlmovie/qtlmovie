@@ -41,10 +41,10 @@
 #include "QtlMovieOutputFile.h"
 
 //!
-//! A subclass of QDialog which implements the UI for the "Edit Settings" action.
+//! A subclass of QtlDialog which implements the UI for the "Edit Settings" action.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieEditSettings : public QDialog
+class QtlMovieEditSettings : public QtlDialog
 {
     Q_OBJECT
 
@@ -60,13 +60,6 @@ public:
     //! Apply the settings values from the dialog box to the QtlTestSettings instance.
     //!
     void applySettings();
-
-protected:
-    //!
-    //! Event handler to handle window close.
-    //! @param event Notified event.
-    //!
-    virtual void closeEvent(QCloseEvent* event);
 
 private slots:
     //!

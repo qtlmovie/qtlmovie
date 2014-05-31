@@ -36,7 +36,7 @@
 #define QTLBROWSERDIALOG_H
 
 #include <QtCore>
-#include <QDialog>
+#include "QtlDialog.h"
 
 // UI from Qt Designer.
 namespace Ui {
@@ -44,10 +44,10 @@ namespace Ui {
 }
 
 //!
-//! A subclass of QDialog which implements a browser.
+//! A subclass of QtlDialog which implements a browser.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlBrowserDialog : public QDialog
+class QtlBrowserDialog : public QtlDialog
 {
     Q_OBJECT
 
@@ -76,7 +76,7 @@ public:
     void setUrl(const QString& url);
 
 private:
-    Ui::QtlBrowserDialog* _ui;   //!< UI from Qt Designer.
+    Ui::QtlBrowserDialog* _ui; //!< UI from Qt Designer.
 
     // Unaccessible operations.
     QtlBrowserDialog() Q_DECL_EQ_DELETE;

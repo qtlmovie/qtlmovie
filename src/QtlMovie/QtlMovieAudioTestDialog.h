@@ -44,10 +44,10 @@
 #include <QAudioOutput>
 
 //!
-//! A subclass of QDialog which implements the UI for the "Audio Test" action.
+//! A subclass of QtlDialog which implements the UI for the "Audio Test" action.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieAudioTestDialog : public QDialog
+class QtlMovieAudioTestDialog : public QtlDialog
 {
     Q_OBJECT
 

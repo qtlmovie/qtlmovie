@@ -2171,6 +2171,58 @@ L&apos;application va s&apos;arrêter</translation>
     </message>
 </context>
 <context>
+    <name>QtlPasswordDialog</name>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="48"/>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="67"/>
+        <source>Create a new password for
+%1
+</source>
+        <translation>Créer un nouveau mot de passe pour
+%1
+</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="70"/>
+        <source>Enter password for
+%1
+</source>
+        <translation>Entrer le mot de passe pour
+%1
+</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="75"/>
+        <source>Password :</source>
+        <translation>Mot de passe :</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="83"/>
+        <source>Verify :</source>
+        <translation>Vérification :</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="142"/>
+        <location filename="../QtlPasswordDialog.cpp" line="148"/>
+        <source>Password error</source>
+        <translation>Erreur de mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="142"/>
+        <source>Please enter a password</source>
+        <translation>Prière d&apos;entrer un mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../QtlPasswordDialog.cpp" line="148"/>
+        <source>Verified password does not match</source>
+        <translation>Le mot de passe et sa vérification sont différents</translation>
+    </message>
+</context>
+<context>
     <name>QtlPlainTextLogger</name>
     <message>
         <location filename="../QtlPlainTextLogger.cpp" line="165"/>
@@ -2225,6 +2277,44 @@ L&apos;application va s&apos;arrêter</translation>
         <location filename="../QtlProcess.cpp" line="175"/>
         <source>Process exceeds execution time limit</source>
         <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
+    </message>
+</context>
+<context>
+    <name>QtlTlvTableWidget</name>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="217"/>
+        <source>Tag</source>
+        <translation>Tag</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="221"/>
+        <source>Value (hexadecimal)</source>
+        <translation>Valeur (héxadécimal)</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="230"/>
+        <source>Insert before this one</source>
+        <translation>Insérer au dessus</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="234"/>
+        <source>Insert after this one</source>
+        <translation>Insérer au dessous</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="238"/>
+        <source>Move up</source>
+        <translation>Déplacer vers le haut</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="242"/>
+        <source>Move down</source>
+        <translation>Déplacer vers le bas</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="246"/>
+        <source>Delete</source>
+        <translation>Supprimer</translation>
     </message>
 </context>
 </TS>

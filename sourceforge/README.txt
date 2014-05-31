@@ -21,10 +21,12 @@ The various steps in the release process of a new version of QtlMovie are:
   On a Windows system, execute build\QtLinguist.ps1 to edit the translations.
 - Check that any new feature is properly documented in help/qtlmovie-user.html
   and any translation in help/qtlmovie-user_*.html files.
+- Execute either build\build-doc.ps1 (Windows) or build/build-doc.sh (Linux).
+  It builds the Doxygen documentation for the source code. Check that no error
+  is detected in the documentation.
+- Commit and push all code to the git repository on SourceForge.
 - On a Windows system, execute build\build-installer.ps1. It builds the Win32
   and Win64 installers and the source and wintools archives.
-- Execute either build\build-doc.ps1 (Windows) or build/build-doc.sh (Linux).
-  It builds the Doxygen documentation for the source code.
 - On a Fedora Linux system, execute build/build-rpm.sh. It builds the RPM
   package for Fedora.
 - On an Ubuntu Linux system, execute build/build-deb.sh. It builds the DEB
@@ -43,6 +45,19 @@ The various steps in the release process of a new version of QtlMovie are:
 - Synchronize the content of:
     - QtlMovie\sourceforge\project with http://sourceforge.net/projects/qtlmovie/
     - QtlMovie\sourceforge\web     with http://qtlmovie.sourceforge.net/
+- Log in to SourceForge, go to the QtlMovie project.
+    - Go to the Files/win64 directory, mark the latest QtlMovie-Win64-*.exe as
+      default download for Windows.
+    - Go to the Files/src directory, mark the latest QtlMovie-*-src.zip as
+      default download for all platforms, except Windows. Note that the
+      "default download" system of SourceForge does not allow specific
+      files for Ubuntu and Fedora.
+    - Go to the "General Discussion" forum and create a topic announcing the
+      new release and a copy of the extract of CHANGELOG.txt for this release.
+- Log in the VideoHelp.com forums, go to the thread discussing QtlMovie (see
+  URL below), create a reply announcing the new release and a copy of the
+  extract of CHANGELOG.txt for this release. Thread URL:
+  http://forum.videohelp.com/threads/359441-Announcing-QtlMovie-a-specialized-graphical-front-end-to-FFmpeg
 
 
 QtlMovie Home Page

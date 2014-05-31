@@ -43,7 +43,7 @@
 //! A subclass of QDialog which implements the UI for the "About Media Tools" action.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieAboutMediaTools : public QDialog
+class QtlMovieAboutMediaTools : public QtlDialog
 {
     Q_OBJECT
 
@@ -54,13 +54,6 @@ public:
     //! @param [in] parent Optional parent widget.
     //!
     explicit QtlMovieAboutMediaTools(QtlMovieSettings* settings, QWidget* parent = 0);
-
-protected:
-    //!
-    //! Event handler to handle window close.
-    //! @param event Notified event.
-    //!
-    virtual void closeEvent(QCloseEvent* event);
 
 private:
     Ui::QtlMovieAboutMediaTools _ui;        //!< UI from Qt Designer.

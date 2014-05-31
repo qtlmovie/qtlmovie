@@ -786,7 +786,7 @@ void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
 
     // If the event is accepted, save the geometry of the window.
     if (event->isAccepted()) {
-        _settings->saveGeometry(this, true);
+        _settings->saveGeometry(this);
     }
 }
 
@@ -907,6 +907,8 @@ void QtlMovieMainWindow::showHelp()
                          "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
                          tr("QtlMovie Help"),
                          ":/images/qtlmovie-logo.png");
+    box.setObjectName("QtlMovieHelpViewer");
+    box.setGeometrySettings(_settings, true);
     box.exec();
 }
 
@@ -921,6 +923,8 @@ void QtlMovieMainWindow::showReleaseNotes()
                           QtlTranslator::searchLocaleFile(":/changelog.txt"),
                           tr("QtlMovie Release Notes"),
                           ":/images/qtlmovie-logo.png");
+    box.setObjectName("QtlMovieReleaseNotesViewer");
+    box.setGeometrySettings(_settings, true);
     box.exec();
 }
 

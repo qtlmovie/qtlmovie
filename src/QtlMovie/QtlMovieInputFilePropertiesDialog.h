@@ -39,10 +39,10 @@
 #include "QtlMovieInputFile.h"
 
 //!
-//! A subclass of QDialog which implements the UI for the "View Input File Properties" action.
+//! A subclass of QtlDialog which implements the UI for the "View Input File Properties" action.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieInputFilePropertiesDialog : public QDialog
+class QtlMovieInputFilePropertiesDialog : public QtlDialog
 {
     Q_OBJECT
 
@@ -54,13 +54,6 @@ public:
     //! @param [in] parent Optional parent object.
     //!
     explicit QtlMovieInputFilePropertiesDialog(const QtlMovieInputFile* inputFile, QtlMovieSettings* settings, QWidget *parent = 0);
-
-protected:
-    //!
-    //! Event handler to handle window close.
-    //! @param event Notified event.
-    //!
-    virtual void closeEvent(QCloseEvent* event);
 
 private:
     Ui::QtlMovieInputFilePropertiesDialog _ui;        //!< UI from Qt Designer.

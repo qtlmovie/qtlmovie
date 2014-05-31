@@ -26,72 +26,39 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlTextFileViewer.h
+//! @file QtlGeometrySettingsInterface.h
 //!
-//! Declare the class QtlTextFileViewer.
+//! Declare the class QtlGeometrySettingsInterface.
+//! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLTEXTFILEVIEWER_H
-#define QTLTEXTFILEVIEWER_H
+#ifndef QTLGEOMETRYSETTINGSINTERFACE_H
+#define QTLGEOMETRYSETTINGSINTERFACE_H
 
-#include <QtCore>
-#include "QtlDialog.h"
-
-// UI from Qt Designer.
-namespace Ui {
-    class QtlTextFileViewer;
-}
+#include <QWidget>
 
 //!
-//! A subclass of QtlDialog which displays the content of a text file.
-//! The design of the UI is done using Qt Designer.
+//! An interface class used to save and restore the geometry of widgets.
 //!
-class QtlTextFileViewer : public QtlDialog
+class QtlGeometrySettingsInterface
 {
-    Q_OBJECT
-
 public:
     //!
-    //! Constructor.
-    //! @param [in] parent Optional parent widget.
-    //! @param [in] fileName Optional text file name.
-    //! @param [in] title Optional dialog window title.
-    //! @param [in] icon Optional icon file name.
+    //! Save the geometry of a widget.
+    //! A typical implementation would use the object name of @a widget
+    //! as a key to index the geometry of the widget.
+    //! @param [in] widget The widget to save the geometry of.
     //!
-    explicit QtlTextFileViewer(QWidget *parent = 0,
-                               const QString& fileName = QString(),
-                               const QString& title = QString(),
-                               const QString& icon = QString());
-
+    virtual void saveGeometry(const QWidget* widget) = 0;
     //!
-    //! Destructor.
+    //! Restore the geometry of a widget.
+    //! A typical implementation would use the object name of @a widget
+    //! as a key to retrieve the geometry of the widget.
+    //! If no geometry was saved for a widget of that name, do not modify @a widget.
+    //! @param [in,out] widget The widget to restore the geometry.
     //!
-    virtual ~QtlTextFileViewer();
-
-    //!
-    //! Load a new text file to display in the box.
-    //! @param [in] fileName Text file name.
-    //!
-    void setTextFile(const QString& fileName);
-
-    //!
-    //! Get the text content of the viewer.
-    //! @return The text content of the viewer.
-    //!
-    QString text() const;
-
-    //!
-    //! Clear the text content.
-    //!
-    void clear();
-
-private:
-    Ui::QtlTextFileViewer* _ui; //!< UI from Qt Designer.
-
-    // Unaccessible operations.
-    QtlTextFileViewer() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlTextFileViewer)
+    virtual void restoreGeometry(QWidget* widget) = 0;
 };
 
-#endif // QTLTEXTFILEVIEWER_H
+#endif // QTLGEOMETRYSETTINGSINTERFACE_H

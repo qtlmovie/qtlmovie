@@ -70,7 +70,7 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
                                                  QtlMovieSettings* settings,
                                                  QtlLogger* log,
                                                  QWidget* parent) :
-    QDialog(parent),
+    QtlDialog(parent),
     _file(inputFile),
     _settings(settings),
     _log(log),
@@ -88,7 +88,7 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
     _ui.setupUi(this);
 
     // Restore the window geometry from the saved settings.
-    _settings->restoreGeometry(this);
+    setGeometrySettings(_settings, true);
 
     // Loop on all audio streams in input files and display thems.
     const int streamCount = _file->streamCount();
@@ -355,7 +355,5 @@ void QtlMovieAudioTestDialog::closeEvent(QCloseEvent* event)
     else {
         // Accept to close the window.
         event->accept();
-        // Save the geometry of the window.
-        _settings->saveGeometry(this, true);
     }
 }
