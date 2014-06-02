@@ -11,7 +11,7 @@ available in this directory. All other media tools will be installed from the
 standard Fedora repositories.
 
 RPMfusion repositories are enabled after installing the following packages.
-These specific links apply to Fedora 19, update the version according to your setup.
+These specific links apply to Fedora 20, update the version according to your setup.
 
-- [rpmfusion-free-release-19.noarch.rpm](http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm)
-- [rpmfusion-nonfree-release-19.noarch.rpm](http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm)
+- [rpmfusion-free-release-20.noarch.rpm](http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm)
+- [rpmfusion-nonfree-release-20.noarch.rpm](http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm)
