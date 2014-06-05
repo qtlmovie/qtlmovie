@@ -104,7 +104,6 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 
     // Create and load settings. Ignore errors (typically default settings file not yet created).
     _settings = new QtlMovieSettings(_ui.log, this);
-    _settings->load();
     applyUiSettings();
 
     // Restore the window geometry from the saved settings.
@@ -787,6 +786,7 @@ void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
     // If the event is accepted, save the geometry of the window.
     if (event->isAccepted()) {
         _settings->saveGeometry(this);
+        _settings->sync();
     }
 }
 
@@ -846,14 +846,6 @@ void QtlMovieMainWindow::editSettings()
     if (edit.exec() == QDialog::Accepted) {
         // Button "OK" has been selected, update settings from the values in the dialog box.
         edit.applySettings();
-        if (_settings->isModified()) {
-            // Apply the settings which affect the UI.
-            applyUiSettings();
-            // Save settings.
-            if (!_settings->save()) {
-                QMessageBox::warning(this, tr("Save Error"), _settings->lastFileError());
-            }
-        }
     }
 }
 

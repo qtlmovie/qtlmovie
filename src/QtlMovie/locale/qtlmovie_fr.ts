@@ -174,6 +174,60 @@
         <source>DAR %1</source>
         <translation>DAR %1</translation>
     </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="54"/>
+        <source>Migrating the QtlMovie settings to the new format</source>
+        <translation>Migation des options QtlMovie dans le nouveau format</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="59"/>
+        <source>Error opening %1, migration not done, old settings are ignored</source>
+        <translation>Erreur à l&apos;ouverture de %1, migration incomplète, les anciennes options sont ignorées</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="68"/>
+        <source>The file is not a valid QtlMovie settings file</source>
+        <translation>Le fichier n&apos;est pas un fichier d&apos;options QtlMovie valide</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="127"/>
+        <source>Error loading %1
+%2
+Line %3, column %4</source>
+        <translation>Erreur dans %1
+%2
+Ligne %3, colonne %4</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="139"/>
+        <source>Old settings file was saved as %1 but you may remove it</source>
+        <translation>Ancien fichier d&apos;options sauvegardé dans %1, vous pouvez l&apos;effacer au besoin</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="142"/>
+        <source>Error renaming the old settings file %1 but you may remove it</source>
+        <translation>Impossible de renommer l&apos;ancien fichier d&apos;options %1, vous pouvez l&apos;effacer au besoin</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="173"/>
+        <source>No attribute &quot;%1&quot; in element &lt;%2&gt;</source>
+        <translation>Pas d&apos;attribut &quot;%1&quot; dans l&apos;élement &lt;%2&gt;</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="212"/>
+        <source>Invalid boolean value %1 in element &lt;%2&gt;</source>
+        <translation>Valeur booléenne %1 invalide dans l&apos;élément &lt;%2&gt;</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.cpp" line="234"/>
+        <source>Invalid geometry syntax in element &lt;%1&gt;</source>
+        <translation>Syntaxe de géométrie invalide dans l&apos;élément &lt;%1&gt;</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieSettingsMigration.h" line="120"/>
+        <source>Invalid integer value %1 in element &lt;%2&gt;</source>
+        <translation>Valeur entière %1 invalide dans l&apos;élément &lt;%2&gt;</translation>
+    </message>
 </context>
 <context>
     <name>QtlMovieAboutMediaTools</name>
@@ -724,12 +778,12 @@
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="350"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="353"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="363"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="366"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -1157,7 +1211,7 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="312"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="889"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="890"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
@@ -1336,42 +1390,42 @@ Le remplacer?</translation>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="816"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="817"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="830"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="831"/>
         <source>DVD Decrypter not found, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="854"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="855"/>
         <source>Save Error</source>
         <translation>Erreur de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="894"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="895"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="895"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="896"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="896"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="897"/>
         <source>Built</source>
         <translation>Généré le </translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="908"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="909"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="924"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="925"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>
@@ -1446,88 +1500,42 @@ Le remplacer?</translation>
 <context>
     <name>QtlMovieSettings</name>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="244"/>
-        <location filename="../QtlMovieSettings.cpp" line="292"/>
-        <location filename="../QtlMovieSettings.cpp" line="319"/>
-        <source>No attribute &quot;%1&quot; in element &lt;%2&gt;</source>
-        <translation>Pas d&apos;attribut &quot;%1&quot; dans l&apos;élement &lt;%2&gt;</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="250"/>
-        <source>Invalid integer value: %1</source>
-        <translation>Valeur numérique incorrecte: %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="331"/>
-        <source>Invalid boolean value: %1</source>
-        <translation>Valeur booléenne incorrecte: %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="358"/>
-        <source>Invalid geometry syntax in element &lt;%1&gt;</source>
-        <translation>Syntaxe de géométrie invalide dans l&apos;élément &lt;%1&gt;</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="381"/>
-        <source>Error creating file %1</source>
-        <translation>Impossible de créer le fichier %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="463"/>
-        <source>Error opening file %1</source>
-        <translation>Impossible d&apos;ouvrir le fichier %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="513"/>
-        <source>The file is not a valid QtlMovie settings file</source>
-        <translation>Le fichier n&apos;est pas un fichier d&apos;options QtlMovie valide</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="618"/>
-        <source>Error loading %1
-%2
-Line %3, column %4</source>
-        <translation>Erreur dans %1
-%2
-Ligne %3, colonne %4</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieSettings.cpp" line="648"/>
+        <location filename="../QtlMovieSettings.cpp" line="290"/>
         <source>Error searching for FFmpeg, install FFmpeg or set explicit path in settings.</source>
         <translation>FFmpeg introuvable, installerl FFmpeg ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="651"/>
+        <location filename="../QtlMovieSettings.cpp" line="293"/>
         <source>Error searching for FFprobe, install FFmpeg or set explicit path in settings.</source>
         <translation>FFprobe introuvable, installerl FFprobe ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="654"/>
+        <location filename="../QtlMovieSettings.cpp" line="296"/>
         <source>Error searching for DvdAuthor, install it or set explicit path in settings.</source>
         <translation>DVD Author introuvable, installerl DVD Author ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="657"/>
+        <location filename="../QtlMovieSettings.cpp" line="299"/>
         <source>Error searching for mkisofs, install it or set explicit path in settings.</source>
         <translation>Mkisofs introuvable, installerl mkisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="660"/>
+        <location filename="../QtlMovieSettings.cpp" line="302"/>
         <source>Error searching for growisofs, install it or set explicit path in settings.</source>
         <translation>Growisofs introuvable, installerl growisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="663"/>
+        <location filename="../QtlMovieSettings.cpp" line="305"/>
         <source>Error searching for telxcc, install it or set explicit path in settings.</source>
         <translation>Telxcc introuvable, installerl telxcc ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="666"/>
+        <location filename="../QtlMovieSettings.cpp" line="308"/>
         <source>Error searching for CCExtractor, install it or set explicit path in settings.</source>
         <translation>CCExtractor introuvable, installerl CCExtractor ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="669"/>
+        <location filename="../QtlMovieSettings.cpp" line="314"/>
         <source>Error searching for DVD Decrypter, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, installerl DVD Decrypter ou définir son emplacement dans les options.</translation>
     </message>

@@ -228,7 +228,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setMkisofsExplicitExecutable(_ui.editMkisofs->text());
     _settings->setGrowisofsExplicitExecutable(_ui.editGrowisofs->text());
     _settings->setTelxccExplicitExecutable(_ui.editTelxcc->text());
-    _settings->setCcextractorExplicitExecutable(_ui.editCcextractor->text());
+    _settings->setCCextractorExplicitExecutable(_ui.editCcextractor->text());
     _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());
     _settings->setDefaultOutputDirIsInput(_ui.checkBoxSameAsInput->isChecked());
@@ -279,6 +279,9 @@ void QtlMovieEditSettings::applySettings()
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
         _settings->setDefaultOutputDir(QtlMovieOutputFile::outputIdName(it.key()), it.value().lineEdit->text());
     }
+
+    // Make sure the settings are saved.
+    _settings->sync();
 }
 
 

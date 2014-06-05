@@ -38,19 +38,40 @@
 #include <QtGlobal>
 
 //
+// Default values for general options.
+//
+#define QTL_MAX_LOG_LINE                    1000  //!< Maximum lines in the log window.
+#define QTL_DEFAULT_OUTDIR_INPUT            true  //!< Default output directory is input directory.
+#define QTL_TRANSCODE_COMPLETE              true  //!< Transcode complete video.
+#define QTL_TRANSCODE_SECONDS                  0  //!< Number of seconds to transcode if not complete video.
+#define QTL_KEEP_INTERMEDIATE_FILES        false  //!< Keep intermediate transcoding files.
+#define QTL_FFMPEG_PROBE_SECONDS             200  //!< Initial probe size in media playout seconds for ffprobe / ffmpeg.
+#define QTL_SRT_USE_VIDEO_SIZE_HINT         true  //!< Check if the insertion of SRT/SSA/ASS subtitles shall use the original video size as a hint.
+#define QTL_CHAPTER_MINUTES                    5  //!< Duration of chapters to create.
+#define QTL_DVD_REMUX_AFTER_TRANSCODE       true  //!< If audio/video must be remuxed after transcode for DVD output.
+#define QTL_CREATE_PAL_DVD                  true  //!< If the format of created DVD is PAL or NTSC.
+#define QTL_IPAD_SCREEN_SIZE          Ipad12Size  //!< Default iPad screen size.
+#define QTL_IPHONE_SCREEN_SIZE       Iphone4Size  //!< Default iPhone screen size.
+#define QTL_FORCE_DVD_TRANSCODE            false  //!< Force transcoding even if input file is already DVD-compliant.
+#define QTL_NEW_VERSION_CHECK               true  //!< Check for a new version of QtlMovie on startup.
+#define QTL_AUTO_ROTATE_VIDEO               true  //!< If automatic rotation of video shall be applied.
+#define QTL_PLAY_SOUND_ON_COMPLETION       false  //!< If a sound shall be played on transcoding completion.
+#define QTL_DEFAULT_LANGUAGES "fr,fre,fra,french" //!< Default audience is French-speaking.
+
+//
 // Transcoding presets.
 //
-#define QTL_DVD_AUDIO_BITRATE            192000  //!< MPEG-1 Level 2 audio bitrate (bits per second) for DVD.
-#define QTL_DVD_AUDIO_SAMPLING            48000  //!< MPEG-1 Level 2 audio sampling rate (Hz) for DVD.
-#define QTL_DVD_DEFAULT_VIDEO_BITRATE   4000000  //!< MPEG-2 video default bitrate for DVD.
-#define QTL_DVD_PAL_VIDEO_WIDTH             720  //!< Video width (pixels) for PAL DVD.
-#define QTL_DVD_PAL_VIDEO_HEIGHT            576  //!< Video height (pixels) for PAL DVD.
-#define QTL_DVD_PAL_FRAME_RATE               25  //!< Frames per second for PAL DVD.
-#define QTL_DVD_NTSC_VIDEO_WIDTH            720  //!< Video width (pixels) for NTSC DVD.
-#define QTL_DVD_NTSC_VIDEO_HEIGHT           480  //!< Video height (pixels) for NTSC DVD.
-#define QTL_DVD_NTSC_FRAME_RATE              30  //!< Frames per second for NTSC DVD.
-#define QTL_DVD_DAR                  (16.0/9.0)  //!< Display aspect ratio for DVD.
-#define QTL_DVD_DAR_FFMPEG               "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
+#define QTL_DVD_AUDIO_BITRATE             192000  //!< MPEG-1 Level 2 audio bitrate (bits per second) for DVD.
+#define QTL_DVD_AUDIO_SAMPLING             48000  //!< MPEG-1 Level 2 audio sampling rate (Hz) for DVD.
+#define QTL_DVD_DEFAULT_VIDEO_BITRATE    4000000  //!< MPEG-2 video default bitrate for DVD.
+#define QTL_DVD_PAL_VIDEO_WIDTH              720  //!< Video width (pixels) for PAL DVD.
+#define QTL_DVD_PAL_VIDEO_HEIGHT             576  //!< Video height (pixels) for PAL DVD.
+#define QTL_DVD_PAL_FRAME_RATE                25  //!< Frames per second for PAL DVD.
+#define QTL_DVD_NTSC_VIDEO_WIDTH             720  //!< Video width (pixels) for NTSC DVD.
+#define QTL_DVD_NTSC_VIDEO_HEIGHT            480  //!< Video height (pixels) for NTSC DVD.
+#define QTL_DVD_NTSC_FRAME_RATE               30  //!< Frames per second for NTSC DVD.
+#define QTL_DVD_DAR                   (16.0/9.0)  //!< Display aspect ratio for DVD.
+#define QTL_DVD_DAR_FFMPEG                "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 
 #define QTL_IPAD_AUDIO_BITRATE            160000  //!< AAC audio bitrate (bits per second) for iPad.
 #define QTL_IPAD_AUDIO_SAMPLING            48000  //!< AAC audio sampling rate (Hz) for iPad.
@@ -79,10 +100,11 @@
 #define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT     352  //!< Default max video height (pixels) for AVI.
 #define QTL_AVI_FRAME_RATE                    24  //!< Frames per second for AVI.
 
-#define QTL_DEFAULT_AUDIO_NORMALIZE       false  //!< Do not normalize audio level by default.
-#define QTL_DEFAULT_AUDIO_MEAN_LEVEL        -20  //!< Normalized mean audio level, in dBFS.
-#define QTL_DEFAULT_AUDIO_PEAK_LEVEL         -1  //!< Normalized peak audio level, in dBFS.
-#define QTL_AUDIO_NORMALIZATION_TOLERANCE   1.0  //!< Do not normalize audio if mean level is that close to target level.
+#define QTL_AUDIO_NORMALIZE_MODE        Compress  //!< How to normalize audio when the input dynamic range is too large.
+#define QTL_DEFAULT_AUDIO_NORMALIZE        false  //!< Do not normalize audio level by default.
+#define QTL_DEFAULT_AUDIO_MEAN_LEVEL       (-20)  //!< Normalized mean audio level, in dBFS.
+#define QTL_DEFAULT_AUDIO_PEAK_LEVEL        (-1)  //!< Normalized peak audio level, in dBFS.
+#define QTL_AUDIO_NORMALIZATION_TOLERANCE    1.0  //!< Do not normalize audio if mean level is that close to target level.
 
 //!
 //! Percentage of DVD ISO image overhead.
