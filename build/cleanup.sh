@@ -43,10 +43,10 @@ ROOT=$(cd $(dirname $0)/..; pwd)
 
 # Delete spurious generated files.
 find $ROOT \
-    -type d -iname 'wintools*' -prune , \
-    -type d -iname installers -prune , \
-    -type d -iname sourceforge -prune , \
-    -type d \( -iname debug -o -iname release -o -iname 'build-*' \) -print -prune , \
+    -iname 'wintools*' -prune , \
+    -iname installers -prune , \
+    -iname sourceforge -prune , \
+    \( -iname debug -o -iname release -o -iname 'build-*' \) -type d -print -prune , \
     \( -iname 'Makefile*' -o \
        -iname 'moc_*' -o \
        -iname '*.obj' -o \
@@ -65,12 +65,12 @@ find $ROOT \
        -iname '*.autosave' -o \
        -iname '.directory' -o \
        -iname 'object_script.*.release' -o \
-       -iname 'object_script.*.debug' \) \
+       -iname 'object_script.*.debug' \) -print \
     | xargs rm -rvf
 
 # Remove executable right from source files.
-find $ROOT -type d -iname 'build-*' -prune , ! -type d ! -iname '*.sh' | xargs chmod 640
-find $ROOT -iname '*.sh' -o -iname '*.postinst' | xargs chmod 750
+find $ROOT -iname 'build-*' -prune , -iname '.git' -prune , ! -type d ! -iname '*.sh' | xargs chmod 640
+find $ROOT -type d -o -iname '*.sh' -o -iname '*.postinst' | xargs chmod 750
 
 # In deep mode, delete git repository, installers and non-original files in SourceForge mirror.
 if $DEEP; then
