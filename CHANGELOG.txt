@@ -8,6 +8,9 @@ Version 1.3
   - Automatically save the log panel at the transcoding completion.
   - FFprobe execution timeout in seconds. Setting a larger value may be
     useful when the input file is on a slow DVD drive.
+- Bug fix: In the specific combination where the input was a DVD with
+  multiple VOB's and the output was a DVD MPEG file, only one VOB was
+  processed. This is fixed.
 - The format of the saved settings has changed and now uses a more native
   format. On Windows, the settings are saved in the registry. On Unix and
   Linux, they are saved in $HOME/.config/QtlMovie/QtlMovie.conf. Settings

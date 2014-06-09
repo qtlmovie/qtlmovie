@@ -824,7 +824,7 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
     }
 
     // Input file for remux operation.
-    const QString remuxInput(dvdCompliant ? inputFile->fileName() : transcodeOutput);
+    const QString remuxInput(dvdCompliant ? inputFile->ffmpegInputFileSpecification() : transcodeOutput);
 
     // Remux audio and video in a dvdauthor-compatible way.
     // At that point, we know that there are one audio and one video stream.
