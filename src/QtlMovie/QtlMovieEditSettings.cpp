@@ -154,6 +154,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.spinIphoneBitrate->setValue(_settings->iphoneVideoBitRate() / 1000); // input is kb/s
     _ui.checkBoxKeepIntermediateFiles->setChecked(_settings->keepIntermediateFiles());
     _ui.spinFFmpegProbeSeconds->setValue(_settings->ffmpegProbeSeconds());
+    _ui.spinFFprobeExecutionTimeout->setValue(_settings->ffprobeExecutionTimeout());
     _ui.checkBoxSrtUseVideoSize->setChecked(_settings->srtUseVideoSizeHint());
     _ui.checkCreateChapters->setChecked(_settings->chapterMinutes() > 0);
     _ui.spinChapterMinutes->setValue(_settings->chapterMinutes() > 0 ? _settings->chapterMinutes() : 5);
@@ -243,6 +244,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setIphoneVideoBitRate(_ui.spinIphoneBitrate->value() * 1000); // input is kb/s
     _settings->setKeepIntermediateFiles(_ui.checkBoxKeepIntermediateFiles->isChecked());
     _settings->setFFmpegProbeSeconds(_ui.spinFFmpegProbeSeconds->value());
+    _settings->setFFprobeExecutionTimeout(_ui.spinFFprobeExecutionTimeout->value());
     _settings->setSrtUseVideoSizeHint(_ui.checkBoxSrtUseVideoSize->isChecked());
     _settings->setChapterMinutes(_ui.checkCreateChapters->isChecked() ? _ui.spinChapterMinutes->value() : 0);
     _settings->setDvdRemuxAfterTranscode(_ui.checkDvdRemuxAfterTranscode->isChecked());

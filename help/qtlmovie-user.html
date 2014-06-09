@@ -416,16 +416,17 @@
         extension <code>.qtlmovie.temp</code>.
         This option is usually reserved for debug purpose.</p>
       <p>The "FFmpeg options" specify additional options which are specific to FFmpeg.
-        Currently, the only option is the "Probe size".
-        This is the amount of seconds which are analyzed at the beginning of the input file to determine
-        the number and type of audio, video and subtitle streams.
-        The FFmpeg default value is 5 seconds.
-        This is usually enough for most files.
+        The "initial probe size" is the amount of seconds which are analyzed at the beginning of
+        the input file to determine the number and type of audio, video and subtitle streams.
+        The FFmpeg default value is 5 seconds. This is usually enough for most files.
         However, some MPEG files do not list all their streams at the beginning of the file and
         some streams which appear late in the file (subtitles for instance) may not be detected.
         As a consequence, the default probe size for QtlMovie is 200 seconds.
         It is recommended to not reduce this size.
         It can be increased if you suspect that some streams are not detected.</p>
+      <p>The "FFprobe timeout" is the maximum duration of the execution of FFprobe.
+        FFprobe is used when an input file is selected to determine the number and types of streams.
+        This option may need to be inscreased when the input file is on a slow DVD drive.</p>
       <p>The "Play sound on completion" option indicates that a sound will be played
         each time a transcoding process completes.</p>
 

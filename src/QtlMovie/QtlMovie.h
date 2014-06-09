@@ -60,6 +60,7 @@
 #define QTL_CLEAR_LOG_BEFORE_TRANSCODE     false  //!< Clear the log panel before starting a transcode operation.
 #define QTL_SAVE_LOG_AFTER_TRANSCODE       false  //!< Automatically save the log after transcoding completion.
 #define QTL_LOG_FILE_EXTENSION            ".log"  //!< Default extension for log files.
+#define QTL_FFPROBE_EXECUTION_TIMEOUT         40  //!< FFprobe execution timeout in seconds.
 
 //
 // Transcoding presets.

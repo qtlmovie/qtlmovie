@@ -443,11 +443,9 @@
         à la fin de l'opération. Ces fichiers sont créés dans un répertoire temporaire
         avec le même nom que le fichier de sortie et l'extension <code>.qtlmovie.temp</code>.
         Cette option est normalement réservée à des fins de debug.</p>
-      <p>Les "Options FFmpeg" spécifient quelques options supplémentaires
-        spécifiques à FFmpeg.
-        Pour l'instant, la seule option est le "Temps de détection".
-        C'est le nombre de secondes qui sont analysées en début de fichier d'entrée
-        pour déterminer le nombre et le type des flux vidéo, audio et sous-titres.
+      <p>Les "Options FFmpeg" spécifient quelques options supplémentaires spécifiques à FFmpeg.
+        L'option "temps de détection initial" est le nombre de secondes qui sont analysées en
+        début de fichier d'entrée pour déterminer le nombre et le type des flux vidéo, audio et sous-titres.
         La valeur par défaut de FFmpeg est de 5 secondes.
         C'est en général suffisant pour la plupart des fichiers.
         Toutefois, certains fichiers MPEG ne disposent pas d'une liste explicite
@@ -457,6 +455,9 @@
         Par conséquent, le temps de détection par défaut de QtlMovie est 200 secondes.
         Il n'est pas recommandé de réduire cette taille.
         Elle peut être augmentée si vous suspectez certains flux de ne pas être détectés.</p>
+      <p>L'option "durée max pour FFprobe" est le temps d'exécution maximal pour FFprobe.
+        FFprobe est utilisé quand un fichier d'entrée est sélectionné pour déterminer
+        le nombre et le type des flux qu'il contient.</p>
       <p>L'option "Alerte sonore en fin de transcodage" indique que la fin de chaque
         session de transcodage sera signalée par une alerte sonore.</p>
 

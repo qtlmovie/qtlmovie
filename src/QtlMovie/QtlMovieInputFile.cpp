@@ -168,7 +168,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     _log->debug(ffprobe + " " + args.join(' '));
     QtlProcess* process = QtlProcess::newInstance(ffprobe, // command
                                                   args,    // command line arguments
-                                                  10000,   // execution timeout: 10 seconds
+                                                  1000 * _settings->ffprobeExecutionTimeout(),
                                                   40000,   // max output size: 40 kB
                                                   this);   // parent object
 

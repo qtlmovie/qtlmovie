@@ -3,10 +3,11 @@ QtlMovie Change Log
 ===================
 
 Version 1.3
-- Added an option to automatically clear the log panel before starting a
-  transcoding operation.
-- Added an option to automatically save the log panel at the completion of a
-  transcoding operation.
+- New options for:
+  - Automatically clear the log panel before starting transcoding.
+  - Automatically save the log panel at the transcoding completion.
+  - FFprobe execution timeout in seconds. Setting a larger value may be
+    useful when the input file is on a slow DVD drive.
 - The format of the saved settings has changed and now uses a more native
   format. On Windows, the settings are saved in the registry. On Unix and
   Linux, they are saved in $HOME/.config/QtlMovie/QtlMovie.conf. Settings

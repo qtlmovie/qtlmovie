@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>604</width>
-    <height>490</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -439,7 +439,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Probe size :</string>
+             <string>Initial probe size :</string>
             </property>
            </widget>
           </item>
@@ -462,6 +462,35 @@
             </property>
             <property name="value">
              <number>200</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelFFprobeExecutionTimeout">
+            <property name="text">
+             <string>FFprobe timeout :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinFFprobeExecutionTimeout">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100000</number>
+            </property>
+            <property name="value">
+             <number>40</number>
             </property>
            </widget>
           </item>
