@@ -613,7 +613,12 @@ void QtlMovieMainWindow::cancelTranscoding()
 
 void QtlMovieMainWindow::transcodingStarted()
 {
-    // Update UI.
+    // Clear the log if required.
+    if (_settings->clearLogBeforeTranscode()) {
+        _ui.log->clear();
+    }
+
+    // Update user interface.
     transcodingUpdateUi(true);
 }
 
@@ -691,6 +696,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
 {
     // Check if a transcoding job was actually in progress.
     if (_job != 0) {
+
         // Play notification sound if required.
         if (_settings->playSoundOnCompletion()) {
             // Stop current play (if any).
@@ -700,6 +706,13 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
             // Play the sound.
             _sound.setVolume(1.0);
             _sound.play();
+        }
+
+        // Save log file if required.
+        if (_settings->saveLogAfterTranscode()) {
+            const QString logFile(_outFile->fileName() + _settings->logFileExtension());
+            _ui.log->saveToFile(logFile);
+            _ui.log->line(tr("Saved log to %1").arg(logFile));
         }
 
         // Delete transcoding job.

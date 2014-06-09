@@ -57,6 +57,9 @@
 #define QTL_AUTO_ROTATE_VIDEO               true  //!< If automatic rotation of video shall be applied.
 #define QTL_PLAY_SOUND_ON_COMPLETION       false  //!< If a sound shall be played on transcoding completion.
 #define QTL_DEFAULT_LANGUAGES "fr,fre,fra,french" //!< Default audience is French-speaking.
+#define QTL_CLEAR_LOG_BEFORE_TRANSCODE     false  //!< Clear the log panel before starting a transcode operation.
+#define QTL_SAVE_LOG_AFTER_TRANSCODE       false  //!< Automatically save the log after transcoding completion.
+#define QTL_LOG_FILE_EXTENSION            ".log"  //!< Default extension for log files.
 
 //
 // Transcoding presets.

@@ -242,6 +242,9 @@ public:
     QTLMOVIE_SETTINGS_ENUM(audioNormalizeMode, setAudioNormalizeMode, AudioNormalizeMode, QTL_AUDIO_NORMALIZE_MODE)
     QTLMOVIE_SETTINGS_BOOL(autoRotateVideo, setAutoRotateVideo, QTL_AUTO_ROTATE_VIDEO)
     QTLMOVIE_SETTINGS_BOOL(playSoundOnCompletion, setPlaySoundOnCompletion, QTL_PLAY_SOUND_ON_COMPLETION)
+    QTLMOVIE_SETTINGS_BOOL(clearLogBeforeTranscode, setClearLogBeforeTranscode, QTL_CLEAR_LOG_BEFORE_TRANSCODE)
+    QTLMOVIE_SETTINGS_BOOL(saveLogAfterTranscode, setSaveLogAfterTranscode, QTL_SAVE_LOG_AFTER_TRANSCODE)
+    QTLMOVIE_SETTINGS_STRING(logFileExtension, setLogFileExtension, QTL_LOG_FILE_EXTENSION)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

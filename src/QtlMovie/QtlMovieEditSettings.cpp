@@ -178,6 +178,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioAudioClip->setChecked(_settings->audioNormalizeMode() == QtlMovieSettings::Clip);
     _ui.checkBoxAutoRotateVideo->setChecked(_settings->autoRotateVideo());
     _ui.checkBoxPlaySound->setChecked(_settings->playSoundOnCompletion());
+    _ui.checkClearLog->setChecked(_settings->clearLogBeforeTranscode());
+    _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -274,6 +276,8 @@ void QtlMovieEditSettings::applySettings()
     }
     _settings->setAutoRotateVideo(_ui.checkBoxAutoRotateVideo->isChecked());
     _settings->setPlaySoundOnCompletion(_ui.checkBoxPlaySound->isChecked());
+    _settings->setClearLogBeforeTranscode(_ui.checkClearLog->isChecked());
+    _settings->setSaveLogAfterTranscode(_ui.checkSaveLog->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
