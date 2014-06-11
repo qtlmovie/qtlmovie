@@ -26,15 +26,21 @@
 # 
 #-----------------------------------------------------------------------------
 # 
-#  Set up environment for the latest Qt installed on /usr/local.
+#  Set up environment for the latest Qt installed on /opt or /usr/local.
 # 
 #  To be included ("source") from bash shell scripts.
 # 
 #-----------------------------------------------------------------------------
 
-# Locate latest versions on /usr/local
-QMAKE=$(ls /usr/local/[Qq]*/bin/qmake 2>/dev/null | sort | tail -1)
-QTCREATOR=$(ls /usr/local/[Qq]*/bin/qtcreator 2>/dev/null | sort | tail -1)
+# Locate latest versions on /opt
+QMAKE=$(find /opt/[Qq]* -type f -executable -name qmake 2>/dev/null | sort | tail -1)
+QTCREATOR=$(find /opt/[Qq]* -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
+
+# Locate latest versions on /usr/local if not found in /opt
+if [[ -z ${QMAKE} ]]; then
+   QMAKE=$(ls /usr/local/[Qq]*/bin/qmake 2>/dev/null | sort | tail -1)
+   QTCREATOR=$(ls /usr/local/[Qq]*/bin/qtcreator 2>/dev/null | sort | tail -1)
+fi
 
 # Portions to add to PATH and LD_LIBRARY_PATH.
 BIN=
