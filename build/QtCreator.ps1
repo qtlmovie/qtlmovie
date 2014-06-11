@@ -83,10 +83,10 @@ if (-not $ProjectFile) {
 # Start Qt Creator.
 $env:MAKEFLAGS = "-j4 -k"
 if (-not $ProjectFile) {
-    QtCreator
+    & $env:QtCreator
 }
 else {
     Push-Location (Split-Path -Parent $ProjectFile)
-    QtCreator $ProjectFile
+    & $env:QtCreator $ProjectFile
     Pop-Location
 }

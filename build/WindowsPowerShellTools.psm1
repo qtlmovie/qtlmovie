@@ -525,6 +525,15 @@ function Search-File
   Path which could interfere with the Qt build process (UnxUtils is known
   for that) are removed.
 
+  The environment variable QtCreator is defined with the path to Qt Creator
+  executable, if one is found.
+
+  Note that QtCreator is not in the path. With the Qt / MinGW environment,
+  QtCreator is built with MSVC, not MinGW, and brings some DLL's which are
+  also built with MSVC. Having them in the path can interfere with the MinGW
+  applications. This is especially the case with OpenSSL libraries, starting
+  with Qt 5.3.0.
+
  .PARAMETER QtRoot
 
   Root directory where Qt installations are dropped (default: C:\Qt).
@@ -587,11 +596,10 @@ function Set-QtPath
     Get-QtBinDir $QtRoot ([REF]$QtBinMap)
     Get-QtBinDir C:\OpenSSL ([REF]$QtBinMap)
 
-    # When using static Qt, only keep gcc, then seach again in $QtRoot\Static
+    # When using static Qt, only keep gcc, then search again in $QtRoot\Static
 
     if ($Static) {
         $QtBinMap["qmake"] = ""
-        $QtBinMap["qtcreator"] = ""
         Get-QtBinDir $QtRoot\Static ([REF]$QtBinMap)
     }
 
@@ -600,7 +608,7 @@ function Set-QtPath
     $env:Path = (Join-Path $env:SystemRoot System32) + ";" + $env:SystemRoot
 
     # Prepend the various Qt binary directories in the system path.
-    # The order is significant. QtCreator must be last in path (first prepended).
+    # The order is significant.
 
     function Prepend-QtBinDir ($exe)
     {
@@ -611,9 +619,14 @@ function Set-QtPath
     }
 
     Prepend-QtBinDir "openssl"
-    Prepend-QtBinDir "qtcreator"
     Prepend-QtBinDir "gcc"
     Prepend-QtBinDir "qmake"
+
+    # Specific environment variable for Qt Creator.
+    $bindir = $QtBinMap["qtcreator"]
+    if ($bindir) {
+        $env:QtCreator = (Join-Path $QtBinMap["qtcreator"] QtCreator.exe)
+    }
 }
 
 #-----------------------------------------------------------------------------
