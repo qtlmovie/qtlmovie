@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QtlTextFileViewer</class>
- <widget class="QDialog" name="QtlTextFileViewer">
+ <widget class="QtlDialog" name="QtlTextFileViewer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -42,6 +42,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtlDialog</class>
+   <extends>QDialog</extends>
+   <header>QtlDialog.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

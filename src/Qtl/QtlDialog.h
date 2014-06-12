@@ -37,7 +37,7 @@
 #define QTLDIALOG_H
 
 #include <QDialog>
-#include <QtlGeometrySettingsInterface.h>
+#include "QtlGeometrySettingsInterface.h"
 
 //!
 //! A subclass of QDialog with additional features.

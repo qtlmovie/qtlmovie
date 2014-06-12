@@ -86,3 +86,18 @@ qtl {
     INCLUDEPATH += ../Qtl
     DEPENDPATH += ../Qtl
 }
+
+# Applications using OpenSSL shall use "CONFIG += openssl".
+# On Windows, assume default location used by binary installers from
+# http://slproweb.com/products/Win32OpenSSL.html.
+
+openssl {
+    mingw {
+        OPENSSLDIR = C:/OpenSSL-Win32
+        LIBS += $$OPENSSLDIR/lib/MinGW/ssleay32.a $$OPENSSLDIR/lib/MinGW/libeay32.a
+        INCLUDEPATH += $$OPENSSLDIR/include
+    }
+    else {
+        LIBS += -lssl -lcrypto
+    }
+}

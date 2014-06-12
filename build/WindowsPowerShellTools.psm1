@@ -594,7 +594,11 @@ function Set-QtPath
     # Get Qt bin directories.
 
     Get-QtBinDir $QtRoot ([REF]$QtBinMap)
-    Get-QtBinDir C:\OpenSSL ([REF]$QtBinMap)
+
+    # Get OpenSSL bin directories (assume installation of OpenSSL binaries from
+    # http://slproweb.com/products/Win32OpenSSL.html)
+
+    Get-QtBinDir C:\OpenSSL-Win32 ([REF]$QtBinMap)
 
     # When using static Qt, only keep gcc, then search again in $QtRoot\Static
 
