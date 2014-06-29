@@ -60,7 +60,7 @@
  <customwidgets>
   <customwidget>
    <class>QtlDialog</class>
-   <extends>QWidget</extends>
+   <extends>QDialog</extends>
    <header>QtlDialog.h</header>
    <container>1</container>
   </customwidget>

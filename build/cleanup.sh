@@ -79,7 +79,7 @@ if $DEEP; then
 fi
 
 # Windowsify or unixify the end of lines on text files depending on their type.
-find $ROOT -iname '*.ps1' -o -iname '*.psm1' | xargs unix2dos -q
+find $ROOT -iname '*.ps1' -o -iname '*.psm1'  -o -iname '*.reg' | xargs unix2dos -q
 find $ROOT \
     -iname '*.cpp' -o \
     -iname '*.h' -o \
@@ -89,5 +89,6 @@ find $ROOT \
     -iname '*.js' -o \
     -iname '*.sh' -o \
     -iname '*.html' -o \
-    -iname '*.ui' \
+    -iname '*.ui' -o \
+    -iname '*.ts' \
     | xargs dos2unix -q
