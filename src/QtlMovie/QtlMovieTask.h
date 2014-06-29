@@ -7,10 +7,10 @@
 // modification, are permitted provided that the following conditions are met:
 //
 // 1. Redistributions of source code must retain the above copyright notice,
-//    this list of conditions and the following disclaimer. 
+//    this list of conditions and the following disclaimer.
 // 2. Redistributions in binary form must reproduce the above copyright
 //    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution. 
+//    documentation and/or other materials provided with the distribution.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -25,7 +25,38 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//
-//
-//
+//!
+//! @file QtlMovieTask.h
+//!
+//! Declare the class QtlMovieTask, an instance of a transcoding task.
+//!
 //----------------------------------------------------------------------------
+
+#ifndef QTLMOVIETASK_H
+#define QTLMOVIETASK_H
+
+#include "QtlMovieSettings.h"
+
+//!
+//! A class implementing one transcoding task.
+//!
+class QtlMovieTask : public QObject
+{
+    Q_OBJECT
+
+public:
+    //!
+    //! Constructor.
+    //! @param [in] settings Application settings.
+    //! @param [in] log Message logger.
+    //! @param [in] parent Optional parent object.
+    //!
+    QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QObject* parent = 0);
+
+private:
+    // Unaccessible operations.
+    QtlMovieTask() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlMovieTask)
+};
+
+#endif // QTLMOVIETASK_H

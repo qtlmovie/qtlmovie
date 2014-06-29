@@ -69,7 +69,9 @@ SOURCES += main.cpp \
     QtlMovieClosedCaptionsSearch.cpp \
     QtlMovieCcExtractorProcess.cpp \
     QtlMovieFFmpegVolumeDetect.cpp \
-    QtlMovieSettingsMigration.cpp
+    QtlMovieSettingsMigration.cpp \
+    QtlMovieEditTask.cpp \
+    QtlMovieTask.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -100,13 +102,16 @@ HEADERS += \
     QtlMovieClosedCaptionsSearch.h \
     QtlMovieCcExtractorProcess.h \
     QtlMovieFFmpegVolumeDetect.h \
-    QtlMovieSettingsMigration.h
+    QtlMovieSettingsMigration.h \
+    QtlMovieEditTask.h \
+    QtlMovieTask.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \
     QtlMovieInputFilePropertiesDialog.ui \
     QtlMovieAudioTestDialog.ui \
-    QtlMovieAboutMediaTools.ui
+    QtlMovieAboutMediaTools.ui \
+    QtlMovieEditTask.ui
 
 RESOURCES += QtlMovie.qrc
 

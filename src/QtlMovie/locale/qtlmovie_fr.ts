@@ -845,6 +845,63 @@ Ligne %3, colonne %4</translation>
     </message>
 </context>
 <context>
+    <name>QtlMovieEditTask</name>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="14"/>
+        <source>QtlMovie - Edit Trancoding Task</source>
+        <translation>QtlMovie - Edition de tâche de transcodage</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="24"/>
+        <source>Input file</source>
+        <translation>Fichier d&apos;entrée</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="30"/>
+        <location filename="../QtlMovieEditTask.ui" line="107"/>
+        <location filename="../QtlMovieEditTask.ui" line="126"/>
+        <source>Browse ...</source>
+        <translation>Parcourir ...</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="40"/>
+        <location filename="../QtlMovieEditTask.ui" line="97"/>
+        <location filename="../QtlMovieEditTask.ui" line="133"/>
+        <source>File :</source>
+        <translation>Fichier :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="50"/>
+        <source>Video</source>
+        <translation>Vidéo</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="62"/>
+        <source>Audio</source>
+        <translation>Audio</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="74"/>
+        <source>Subtitles</source>
+        <translation>Sous-titres</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="89"/>
+        <source>None</source>
+        <translation>Aucun</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="117"/>
+        <source>Output file</source>
+        <translation>Fichier de sortie</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditTask.ui" line="165"/>
+        <source>Force Display Aspect Ratio :</source>
+        <translation>Forcer le format d&apos;affichage :</translation>
+    </message>
+</context>
+<context>
     <name>QtlMovieExecFile</name>
     <message>
         <location filename="../QtlMovieExecFile.cpp" line="196"/>
