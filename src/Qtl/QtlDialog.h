@@ -36,7 +36,7 @@
 #ifndef QTLDIALOG_H
 #define QTLDIALOG_H
 
-#include <QDialog>
+#include "QtlCore.h"
 #include "QtlGeometrySettingsInterface.h"
 
 //!

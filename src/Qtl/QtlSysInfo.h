@@ -36,7 +36,7 @@
 #ifndef QTLSYSINFO_H
 #define QTLSYSINFO_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! An extension of QSysInfo.

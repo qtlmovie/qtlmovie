@@ -31,10 +31,9 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieEditSettings.h"
-#include "QtlUtils.h"
 #include "QtlLineEdit.h"
-#include <QFileDialog>
-#include <QDir>
+#include "QtlMessageBoxUtils.h"
+#include "QtlListWidgetUtils.h"
 
 
 //-----------------------------------------------------------------------------

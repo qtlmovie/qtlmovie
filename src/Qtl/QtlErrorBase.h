@@ -36,8 +36,8 @@
 #ifndef QTLERRORBASE_H
 #define QTLERRORBASE_H
 
+#include "QtlCore.h"
 #include "QtlNullLogger.h"
-#include <QtCore>
 
 //!
 //! Base class for objet reporting errors.

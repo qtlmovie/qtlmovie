@@ -36,7 +36,7 @@
 #ifndef QTLISOLANGUAGES_H
 #define QTLISOLANGUAGES_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! Using ISO language and country codes.

@@ -35,7 +35,7 @@
 #ifndef QTLINCREMENT_H
 #define QTLINCREMENT_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! A class which safely increment and equivalently decrement a counter.

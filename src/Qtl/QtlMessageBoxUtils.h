@@ -26,41 +26,42 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlNullLogger.h
+//! @file QtlMessageBoxUtils.h
 //!
-//! Declare the class QtlNullLogger.
+//! Declare some utilities functions for QMessageBox.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLNULLLOGGER_H
-#define QTLNULLLOGGER_H
+#ifndef QTLMESSAGEBOXUTILS_H
+#define QTLMESSAGEBOXUTILS_H
 
-#include "QtlLogger.h"
+#include "QtlCore.h"
 
 //!
-//! An implementation of QtlLogger which drops all messages.
+//! Ask a question with Yes/No buttons (default to No).
+//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
+//! @param [in] question The question to display.
+//! @param [in] title Dialog box title. Default to the application name.
+//! @return True if answer is Yes, false otherwise.
 //!
-class QtlNullLogger: public QtlLogger
-{
-public:
-    //!
-    //! Log text.
-    //! @param [in] text Text to log.
-    //!
-    virtual void text(const QString& text) {}
-    //!
-    //! Log a line of text.
-    //! @param [in] line Line to log. No need to contain a trailing new-line character.
-    //! @param [in] color When a valid color is passed, try to display the text in this color.
-    //!
-    virtual void line(const QString& line, const QColor& color = QColor()) {}
-    //!
-    //! Log a line of debug text.
-    //! @param [in] line Line to log. No need to contain a trailing new-line character.
-    //! @param [in] color When a valid color is passed, try to display the text in this color.
-    //!
-    virtual void debug(const QString& line, const QColor& color = QColor()) {}
-};
+bool qtlConfirm(QObject* parent, const QString& question, const QString& title = qtlApplicationName());
 
-#endif // QTLNULLLOGGER_H
+//!
+//! Report an error message.
+//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
+//! @param [in] message The message to display.
+//! @param [in] title Dialog box title. Default to the application name.
+//!
+void qtlError(QObject* parent, const QString& message, const QString& title = qtlApplicationName());
+
+//!
+//! Display a simple "about" box similar to QMessageBox::about() but add a specific icon.
+//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
+//! @param [in] title Window title.
+//! @param [in] iconPath Path to icon file, for instance ":/images/logo.png".
+//! @param [in] text Description text. Can be HTML.
+//!
+void qtlAbout(QObject* parent, const QString& title, const QString& iconPath, const QString& text);
+
+#endif // QTLMESSAGEBOXUTILS_H

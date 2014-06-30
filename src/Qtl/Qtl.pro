@@ -46,7 +46,6 @@ SOURCES += \
     QtlProcess.cpp \
     QtlProcessResult.cpp \
     QtlStringList.cpp \
-    QtlUtils.cpp \
     QtlFixedSizeTableWidget.cpp \
     QtlHexa.cpp \
     QtlButtonGrid.cpp \
@@ -64,7 +63,12 @@ SOURCES += \
     QtlPlainTextEdit.cpp \
     QtlPasswordDialog.cpp \
     QtlTlvTableWidget.cpp \
-    QtlDialog.cpp
+    QtlDialog.cpp \
+    QtlCore.cpp \
+    QtlStringUtils.cpp \
+    QtlFontUtils.cpp \
+    QtlListWidgetUtils.cpp \
+    QtlMessageBoxUtils.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -79,7 +83,6 @@ HEADERS += \
     QtlSmartPointer.h \
     QtlSmartPointerTemplate.h \
     QtlStringList.h \
-    QtlUtils.h \
     QtlVariableTemplate.h \
     QtlVariable.h \
     QtlUninitializedException.h \
@@ -112,7 +115,12 @@ HEADERS += \
     QtlTlvTableWidgetTemplate.h \
     QtlTlvTableWidget.h \
     QtlDialog.h \
-    QtlGeometrySettingsInterface.h
+    QtlGeometrySettingsInterface.h \
+    QtlCore.h \
+    QtlStringUtils.h \
+    QtlFontUtils.h \
+    QtlListWidgetUtils.h \
+    QtlMessageBoxUtils.h
 
 FORMS += \
     QtlBrowserDialog.ui \

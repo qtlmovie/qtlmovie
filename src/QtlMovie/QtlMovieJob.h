@@ -39,7 +39,7 @@
 #include "QtlMovieAction.h"
 #include "QtlMovieInputFile.h"
 #include "QtlMovieOutputFile.h"
-#include "QtlUtils.h"
+#include "QtlMessageBoxUtils.h"
 
 //!
 //! A complete transcoding job.

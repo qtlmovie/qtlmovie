@@ -25,42 +25,22 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//!
-//! @file QtlNullLogger.h
-//!
-//! Declare the class QtlNullLogger.
-//! Qtl, Qt utility library.
-//!
+//
+// Qtl, Qt utility library.
+// Definition of utilities for QFont.
+//
 //----------------------------------------------------------------------------
 
-#ifndef QTLNULLLOGGER_H
-#define QTLNULLLOGGER_H
+#include "QtlFontUtils.h"
 
-#include "QtlLogger.h"
 
-//!
-//! An implementation of QtlLogger which drops all messages.
-//!
-class QtlNullLogger: public QtlLogger
+//----------------------------------------------------------------------------
+// Get a portable monospace font.
+//----------------------------------------------------------------------------
+
+QFont qtlMonospaceFont()
 {
-public:
-    //!
-    //! Log text.
-    //! @param [in] text Text to log.
-    //!
-    virtual void text(const QString& text) {}
-    //!
-    //! Log a line of text.
-    //! @param [in] line Line to log. No need to contain a trailing new-line character.
-    //! @param [in] color When a valid color is passed, try to display the text in this color.
-    //!
-    virtual void line(const QString& line, const QColor& color = QColor()) {}
-    //!
-    //! Log a line of debug text.
-    //! @param [in] line Line to log. No need to contain a trailing new-line character.
-    //! @param [in] color When a valid color is passed, try to display the text in this color.
-    //!
-    virtual void debug(const QString& line, const QColor& color = QColor()) {}
-};
-
-#endif // QTLNULLLOGGER_H
+    QFont font("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    return font;
+}

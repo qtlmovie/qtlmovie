@@ -43,9 +43,9 @@
 #include "QtlTranslator.h"
 #include "QtlIncrement.h"
 #include "QtlProcess.h"
-#include "QtlUtils.h"
 #include "QtlSysInfo.h"
-#include <QtWidgets>
+#include "QtlStringUtils.h"
+#include "QtlMessageBoxUtils.h"
 
 
 //-----------------------------------------------------------------------------

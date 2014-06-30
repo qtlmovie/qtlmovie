@@ -36,7 +36,7 @@
 #ifndef QTLAUTOGRID_H
 #define QTLAUTOGRID_H
 
-#include <QtWidgets>
+#include "QtlCore.h"
 
 //!
 //! A simple grid container which rearrange the children based on its size.

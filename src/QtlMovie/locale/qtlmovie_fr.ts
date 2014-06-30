@@ -4,62 +4,62 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="99"/>
+        <location filename="../QtlMovieDvd.cpp" line="98"/>
         <source>Invalid DVD structure, the .IFO name %1 does not end in _0</source>
         <translation>Structure de DVD invalide, le nom du fichier .IFO %1 ne se termine pas en _0</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="109"/>
+        <location filename="../QtlMovieDvd.cpp" line="108"/>
         <source>Invalid DVD structure, the .VOB name %1 does not end in _n</source>
         <translation>Structure de DVD invalide, le nom du fichier .VOB %1 ne se termine pas en _n</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="124"/>
+        <location filename="../QtlMovieDvd.cpp" line="123"/>
         <source>No VOB file for %1</source>
         <translation>Pas de fichier VOB pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="132"/>
+        <location filename="../QtlMovieDvd.cpp" line="131"/>
         <source>DVD IFO file not found, audio and subtitle languages are unknown</source>
         <translation>Pas de fichier DVD IFO trouvé, les langues des flux audio et sous-titre sont inconnues</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="153"/>
+        <location filename="../QtlMovieDvd.cpp" line="152"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="164"/>
+        <location filename="../QtlMovieDvd.cpp" line="163"/>
         <source>%1 is not a valid VTS IFO</source>
         <translation>%1 n&apos;est pas un fichier VTS IFO valide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="225"/>
+        <location filename="../QtlMovieDvd.cpp" line="224"/>
         <source>Unknown video standard value %1</source>
         <translation>Valeur de standard vidéo %1 inconnue</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="245"/>
+        <location filename="../QtlMovieDvd.cpp" line="244"/>
         <source>IFO: %1 audio streams</source>
         <translation>IFO: %1 flux audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="298"/>
+        <location filename="../QtlMovieDvd.cpp" line="297"/>
         <source>IFO: %1 subtitle streams</source>
         <translation>IFO: %1 flux de sous-titre</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="355"/>
+        <location filename="../QtlMovieDvd.cpp" line="354"/>
         <source>Error reading palette from %1</source>
         <translation>Impossible de lire la palette de couleurs dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="400"/>
+        <location filename="../QtlMovieDvd.cpp" line="399"/>
         <source>Palette conversion: palette size is %1 bytes, not a multiple of 4</source>
         <translation>Conversion de la palette de couleurs: la taille de la palette est %1 octets et n&apos;est pas un multiple de 4</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvd.cpp" line="424"/>
+        <location filename="../QtlMovieDvd.cpp" line="423"/>
         <source>Palette conversion: unexpected value 0x%1, should be 0</source>
         <translation>Conversion de la palette de couleurs: valeur 0x%1 inattendue, devrait être 0</translation>
     </message>
@@ -399,7 +399,7 @@ Ligne %3, colonne %4</translation>
         <location filename="../QtlMovieEditSettings.ui" line="259"/>
         <location filename="../QtlMovieEditSettings.ui" line="266"/>
         <location filename="../QtlMovieEditSettings.ui" line="290"/>
-        <location filename="../QtlMovieEditSettings.cpp" line="84"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="83"/>
         <source>Browse ...</source>
         <translation>Parcourir ...</translation>
     </message>
@@ -779,27 +779,27 @@ Ligne %3, colonne %4</translation>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="101"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="100"/>
         <source>No default %1 found</source>
         <translation>Pas trouvé de %1 par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="104"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="103"/>
         <source>Default: %1</source>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="221"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="220"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="359"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="358"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="372"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="371"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -1544,28 +1544,28 @@ Le remplacer?</translation>
 <context>
     <name>QtlMovieProcess</name>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="86"/>
+        <location filename="../QtlMovieProcess.cpp" line="85"/>
         <source>%1 not found, install it or set explicit path in settings.</source>
         <translation>%1 introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="170"/>
+        <location filename="../QtlMovieProcess.cpp" line="169"/>
         <source>%1 completed with status %2</source>
         <translation>%1 terminé avec le code %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="173"/>
-        <location filename="../QtlMovieProcess.cpp" line="189"/>
+        <location filename="../QtlMovieProcess.cpp" line="172"/>
+        <location filename="../QtlMovieProcess.cpp" line="188"/>
         <source>%1 process crashed</source>
         <translation>Le processus %1 a été interrompu</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="186"/>
+        <location filename="../QtlMovieProcess.cpp" line="185"/>
         <source>Failed to start %1 process</source>
         <translation>Impossible de démarrer le processus %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="192"/>
+        <location filename="../QtlMovieProcess.cpp" line="191"/>
         <source>%1 failed, unknown process error</source>
         <translation>%1 a échoué, erreur de processus inconnue</translation>
     </message>
@@ -1573,42 +1573,42 @@ Le remplacer?</translation>
 <context>
     <name>QtlMovieSettings</name>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="297"/>
+        <location filename="../QtlMovieSettings.cpp" line="296"/>
         <source>Error searching for FFmpeg, install FFmpeg or set explicit path in settings.</source>
         <translation>FFmpeg introuvable, installerl FFmpeg ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="300"/>
+        <location filename="../QtlMovieSettings.cpp" line="299"/>
         <source>Error searching for FFprobe, install FFmpeg or set explicit path in settings.</source>
         <translation>FFprobe introuvable, installerl FFprobe ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="303"/>
+        <location filename="../QtlMovieSettings.cpp" line="302"/>
         <source>Error searching for DvdAuthor, install it or set explicit path in settings.</source>
         <translation>DVD Author introuvable, installerl DVD Author ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="306"/>
+        <location filename="../QtlMovieSettings.cpp" line="305"/>
         <source>Error searching for mkisofs, install it or set explicit path in settings.</source>
         <translation>Mkisofs introuvable, installerl mkisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="309"/>
+        <location filename="../QtlMovieSettings.cpp" line="308"/>
         <source>Error searching for growisofs, install it or set explicit path in settings.</source>
         <translation>Growisofs introuvable, installerl growisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="312"/>
+        <location filename="../QtlMovieSettings.cpp" line="311"/>
         <source>Error searching for telxcc, install it or set explicit path in settings.</source>
         <translation>Telxcc introuvable, installerl telxcc ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="315"/>
+        <location filename="../QtlMovieSettings.cpp" line="314"/>
         <source>Error searching for CCExtractor, install it or set explicit path in settings.</source>
         <translation>CCExtractor introuvable, installerl CCExtractor ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="321"/>
+        <location filename="../QtlMovieSettings.cpp" line="320"/>
         <source>Error searching for DVD Decrypter, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, installerl DVD Decrypter ou définir son emplacement dans les options.</translation>
     </message>

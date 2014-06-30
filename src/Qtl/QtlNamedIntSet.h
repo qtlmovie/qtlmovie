@@ -36,8 +36,8 @@
 #ifndef QTLNAMEDINTSET_H
 #define QTLNAMEDINTSET_H
 
+#include "QtlCore.h"
 #include "QtlLogger.h"
-#include <QtCore>
 
 //!
 //! A class containing a set of integer values with names.

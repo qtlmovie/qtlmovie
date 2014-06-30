@@ -36,7 +36,7 @@
 #ifndef QTLTRANSLATOR_H
 #define QTLTRANSLATOR_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! A subclass of QTranslator with extended file search capabilities.

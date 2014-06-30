@@ -32,7 +32,7 @@
 
 #include "QtlMovieCcExtractorProcess.h"
 #include "QtlStringList.h"
-#include "QtlUtils.h"
+#include "QtlStringUtils.h"
 
 
 //----------------------------------------------------------------------------

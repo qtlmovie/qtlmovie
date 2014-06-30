@@ -36,11 +36,8 @@
 #ifndef QTLPROCESS_H
 #define QTLPROCESS_H
 
+#include "QtlCore.h"
 #include "QtlProcessResult.h"
-#include <QString>
-#include <QStringList>
-#include <QProcess>
-#include <QTimer>
 
 //!
 //! An encapsulation of QProcess which reports only the final state.

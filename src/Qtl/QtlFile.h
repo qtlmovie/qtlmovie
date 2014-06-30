@@ -36,7 +36,7 @@
 #ifndef QTLFILE_H
 #define QTLFILE_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include "QtlFilePathFilterInterface.h"
 #include "QtlByteBlock.h"
 

@@ -36,7 +36,7 @@
 #ifndef QTLTLVTABLEWIDGET_H
 #define QTLTLVTABLEWIDGET_H
 
-#include <QTableWidget>
+#include "QtlCore.h"
 #include "QtlNamedIntSet.h"
 #include "QtlTlvList.h"
 

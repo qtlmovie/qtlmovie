@@ -36,8 +36,7 @@
 #ifndef QTLPLAINTEXTEDIT_H
 #define QTLPLAINTEXTEDIT_H
 
-#include <QPlainTextEdit>
-#include <QFont>
+#include "QtlCore.h"
 
 //!
 //! A subclass of QPlainTextEdit with additional features.

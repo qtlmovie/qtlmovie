@@ -32,7 +32,6 @@
 
 #include "QtlMovieProcess.h"
 #include "QtlMovieJob.h"
-#include "QtlUtils.h"
 
 
 //----------------------------------------------------------------------------

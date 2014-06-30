@@ -37,7 +37,7 @@
 
 #include <QtCore>
 #include "QtlMovieStreamInfo.h"
-#include "QtlUtils.h"
+#include "QtlStringUtils.h"
 
 //!
 //! Define a map of tags/values from ffprobe output.

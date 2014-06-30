@@ -36,8 +36,7 @@
 #ifndef QTLPLAINTEXTLOGGER_H
 #define QTLPLAINTEXTLOGGER_H
 
-#include <QPlainTextEdit>
-#include <QColor>
+#include "QtlCore.h"
 #include "QtlLogger.h"
 
 //!

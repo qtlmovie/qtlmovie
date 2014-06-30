@@ -36,8 +36,7 @@
 #ifndef QTLLINEEDIT_H
 #define QTLLINEEDIT_H
 
-#include <QLineEdit>
-#include <QUrl>
+#include "QtlCore.h"
 
 //!
 //! A subclass of QLineEdit with enhancements.

@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieFFmpegProcess.h"
-#include "QtlUtils.h"
+#include "QtlStringUtils.h"
 
 //
 // We build a dedicated fontconfig for subtitling.

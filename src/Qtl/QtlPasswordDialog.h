@@ -36,7 +36,7 @@
 #ifndef QTLPASSWORDDIALOG_H
 #define QTLPASSWORDDIALOG_H
 
-#include <QtWidgets>
+#include "QtlCore.h"
 
 //!
 //! A subclass of QDialog which implements the UI for entering a password.

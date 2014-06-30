@@ -32,7 +32,6 @@
 
 #include "QtlMovieDvd.h"
 #include "QtlFile.h"
-#include "QtlUtils.h"
 
 //
 // Layout of IFO file.

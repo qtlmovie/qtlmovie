@@ -36,7 +36,7 @@
 #ifndef QTLPROCESSRESULT_H
 #define QTLPROCESSRESULT_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! Result of a process execution.

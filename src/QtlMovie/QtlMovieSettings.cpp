@@ -36,7 +36,6 @@
 #include "QtlMovieSettingsMigration.h"
 #include "QtlStringList.h"
 #include "QtlMovie.h"
-#include "QtlUtils.h"
 
 
 //----------------------------------------------------------------------------

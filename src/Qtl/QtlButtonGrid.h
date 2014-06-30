@@ -36,7 +36,7 @@
 #ifndef QTLBUTTONGRID_H
 #define QTLBUTTONGRID_H
 
-#include <QtWidgets>
+#include "QtlCore.h"
 #include "QtlAutoGrid.h"
 
 //!

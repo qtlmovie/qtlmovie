@@ -36,7 +36,7 @@
 #ifndef QTLSMARTPOINTER_H
 #define QTLSMARTPOINTER_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! The QtlMutexLocker class is a direct subclass of QMutexLocker.

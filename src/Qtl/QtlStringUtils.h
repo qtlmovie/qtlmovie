@@ -26,34 +26,17 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlUtils.h
+//! @file QtlStringUtils.h
 //!
-//! Declare some utilities functions.
+//! Declare some utilities functions for QString.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLUTILS_H
-#define QTLUTILS_H
+#ifndef QTLSTRINGUTILS_H
+#define QTLSTRINGUTILS_H
 
-#include <QtCore>
-#include <QtWidgets>
-#include <numeric>
-
-//!
-//! The symbol is defined when the Qt module winextras is available.
-//! This means on Windows with Qt version >= 5.2.0.
-//!
-#if defined(DOXYGEN) || (defined(Q_OS_WIN) && QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-#define QTL_WINEXTRAS 1
-#endif
-
-//!
-//! Return the runtime version of Qt as an integer, 0xMMNNPP (MM = major, NN = minor, PP = patch).
-//! Similar to the macro QT_VERSION but applies to the runtime version, not to the compile-time version.
-//! @return Qt version as an integer, 0xMMNNPP.
-//!
-int qtlQtVersion();
+#include "QtlCore.h"
 
 //!
 //! Construct a QString from a raw memory area containing UTF-8 characters.
@@ -167,78 +150,4 @@ QString qtlSecondsToString(int seconds);
 //!
 QString qtlHtmlLink(const QString& link, const QString& text = QString());
 
-//!
-//! Get the first QWidget in the line of ancestors, starting at (and including) @a object.
-//! @param [in] object Starting object. Can be null.
-//! @return Return the first QWidget in @a object hierarchy.
-//! Return @a object it is a QWidget.
-//! Return zero is @a object is zero or no QWidget is found in its hierarchy.
-//!
-QWidget* qtlWidgetAncestor(QObject* object);
-
-//!
-//! Get a suitable value for application name.
-//! @return Application name.
-//!
-QString qtlApplicationName();
-
-//!
-//! Get a portable monospace font.
-//! @return Font.
-//!
-QFont qtlMonospaceFont();
-
-//!
-//! Get all items in a QListWidget as a list of strings.
-//! @param [in] list The QListWidget.
-//! @return A list of all items in the QListWidget, in the same order.
-//!
-QStringList qtlListItems(const QListWidget* list);
-
-//!
-//! Ask a question with Yes/No buttons (default to No).
-//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
-//! @param [in] question The question to display.
-//! @param [in] title Dialog box title. Default to the application name.
-//! @return True if answer is Yes, false otherwise.
-//!
-bool qtlConfirm(QObject* parent, const QString& question, const QString& title = qtlApplicationName());
-
-//!
-//! Report an error message.
-//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
-//! @param [in] message The message to display.
-//! @param [in] title Dialog box title. Default to the application name.
-//!
-void qtlError(QObject* parent, const QString& message, const QString& title = qtlApplicationName());
-
-//!
-//! Display a simple "about" box similar to QMessageBox::about() but add a specific icon.
-//! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
-//! @param [in] title Window title.
-//! @param [in] iconPath Path to icon file, for instance ":/images/logo.png".
-//! @param [in] text Description text. Can be HTML.
-//!
-void qtlAbout(QObject* parent, const QString& title, const QString& iconPath, const QString& text);
-
-//!
-//! Dump an object hierarchy.
-//! Multiple lines are separated by new lines.
-//! The last line is not terminated by a new line.
-//! @param [in,out] output Output text stream.
-//! @param [in] object Root object of the hierarchy to dump.
-//! @param [in] prefix Optional prefix to add at beginning of each line, except the first line.
-//! @param [in] maxDepth Maximum depth of children to explore. A negative number means unlimited.
-//!
-void qtlDumpObjectHierarchy(QTextStream& output, QObject* object, const QString& prefix = QString(), int maxDepth = -1);
-
-//!
-//! Dump an object hierarchy in a string.
-//! @param [in] object Root object of the hierarchy to dump.
-//! @param [in] prefix Optional prefix to add at beginning of each line, except the first line.
-//! @param [in] maxDepth Maximum depth of children to explore. A negative number means unlimited.
-//! @return Object hierarchy.
-//!
-QString qtlObjectHierarchy(QObject* object, const QString& prefix = QString(), int maxDepth = -1);
-
-#endif // QTLUTILS_H
+#endif // QTLSTRINGUTILS_H

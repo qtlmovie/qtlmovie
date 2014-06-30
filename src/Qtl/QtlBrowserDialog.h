@@ -35,7 +35,7 @@
 #ifndef QTLBROWSERDIALOG_H
 #define QTLBROWSERDIALOG_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include "QtlDialog.h"
 
 // UI from Qt Designer.

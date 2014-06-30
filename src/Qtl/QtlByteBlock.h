@@ -36,7 +36,7 @@
 #ifndef QTLBYTEBLOCK_H
 #define QTLBYTEBLOCK_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! Definitions of a generic block of bytes.

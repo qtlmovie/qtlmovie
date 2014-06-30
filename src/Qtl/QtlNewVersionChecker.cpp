@@ -32,7 +32,9 @@
 //----------------------------------------------------------------------------
 
 #include "QtlNewVersionChecker.h"
-#include "QtlUtils.h"
+#include "QtlMessageBoxUtils.h"
+#include "QtlStringUtils.h"
+
 
 //!
 //! Maximum number of HTTP redirects (to avoid infinite loops).

@@ -33,7 +33,6 @@
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovie.h"
 #include "QtlStringList.h"
-#include "QtlUtils.h"
 
 
 //----------------------------------------------------------------------------

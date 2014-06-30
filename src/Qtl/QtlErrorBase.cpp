@@ -131,7 +131,7 @@ void QtlErrorBase::reportError(const QString& message, bool fatal) const
     // Get the application main window, if there is one.
     QWidget* mainWindow = 0;
     if (qApp != 0) {
-        const QWidgetList topWidgets(qApp->topLevelWidgets());
+        const QWidgetList topWidgets(QApplication::topLevelWidgets());
         foreach (QWidget* w, topWidgets) {
             if (w != 0 && w->isVisible()) {
                 mainWindow = w;

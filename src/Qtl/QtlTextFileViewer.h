@@ -35,7 +35,7 @@
 #ifndef QTLTEXTFILEVIEWER_H
 #define QTLTEXTFILEVIEWER_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include "QtlDialog.h"
 
 // UI from Qt Designer.

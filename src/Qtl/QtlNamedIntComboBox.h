@@ -36,7 +36,7 @@
 #ifndef QTLNAMEDINTCOMBOBOX_H
 #define QTLNAMEDINTCOMBOBOX_H
 
-#include <QComboBox>
+#include "QtlCore.h"
 #include "QtlNamedIntSet.h"
 #include "QtlIntValidator.h"
 

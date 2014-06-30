@@ -36,9 +36,9 @@
 #ifndef QTLHEXA_H
 #define QTLHEXA_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include "QtlByteBlock.h"
-#include "QtlUtils.h"
+#include "QtlStringUtils.h"
 
 //!
 //! Interpret a string as a sequence of hexadecimal digits.

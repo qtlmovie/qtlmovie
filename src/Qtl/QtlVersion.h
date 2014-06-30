@@ -36,7 +36,7 @@
 #ifndef QTLVERSION_H
 #define QTLVERSION_H
 
-#include <QtCore>
+#include "QtlCore.h"
 
 //!
 //! Description of an application version.

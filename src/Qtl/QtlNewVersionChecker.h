@@ -36,7 +36,7 @@
 #ifndef QTLNEWVERSIONCHECKER_H
 #define QTLNEWVERSIONCHECKER_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include <QtNetwork>
 #include "QtlNullLogger.h"
 #include "QtlVersion.h"

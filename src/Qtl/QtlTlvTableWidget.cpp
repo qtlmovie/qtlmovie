@@ -33,8 +33,8 @@
 
 #include "QtlTlvTableWidget.h"
 #include "QtlNamedIntComboBox.h"
+#include "QtlFontUtils.h"
 #include "QtlHexa.h"
-#include "QtlUtils.h"
 
 
 //-----------------------------------------------------------------------------
