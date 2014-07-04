@@ -110,6 +110,26 @@ public:
     void setDefaultFileName(const QString& inputFileName);
 
     //!
+    //! Get the forced display aspect ratio.
+    //! @return The forced display aspect ratio (different from the input file)
+    //! or 0.O to keep the same display aspect ratio as the input file.
+    //!
+    float forcedDisplayAspectRatio() const
+    {
+        return _forcedDar;
+    }
+
+    //!
+    //! Set the forced display aspect ratio.
+    //! @param [in] forcedDisplayAspectRatio The forced display aspect ratio (different from the input file)
+    //! or 0.O to keep the same display aspect ratio as the input file.
+    //!
+    void setForcedDisplayAspectRatio(float forcedDisplayAspectRatio)
+    {
+        _forcedDar = forcedDisplayAspectRatio < 0.001 ? 0.0 : forcedDisplayAspectRatio;
+    }
+
+    //!
     //! Get a list of all output types, in GUI presentation order.
     //! @return A list of all output types, in GUI presentation order.
     //!
@@ -140,6 +160,7 @@ private:
     QtlLogger*              _log;         //!< Where to log errors.
     const QtlMovieSettings* _settings;    //!< Application settings.
     OutputType              _outputType;  //!< Output format.
+    float                   _forcedDar;   //!< Forced output DAR (different from input one).
 
     // Unaccessible operations.
     QtlMovieOutputFile() Q_DECL_EQ_DELETE;

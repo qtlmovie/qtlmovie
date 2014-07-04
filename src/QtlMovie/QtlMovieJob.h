@@ -97,6 +97,19 @@ public:
     }
 
     //!
+    //! Get an indication of the total progress within the job.
+    //! Given an estimation of the progress within the current action, we return
+    //! an estimation of the progress in the entire job. We assume that all actions
+    //! have the same duration, which is of course wrong.
+    //! @param [in] currentActionProgress Current progress in the current action.
+    //! Shall be in the range 0 to @a currentActionMaximum.
+    //! @param [in] currentActionMaximum Value for completion of the current action.
+    //! @param [in] jobMaximum Value for completion of the entire job.
+    //! @return A value between 0 and @a jobMaximum indicating the progression in the entire job.
+    //!
+    int currentProgress(int currentActionProgress, int currentActionMaximum = 100, int jobMaximum = 100) const;
+
+    //!
     //! Store a variable in the job.
     //! @param [in] name Variable name.
     //! @param [in] value Variable value as a list of strings.

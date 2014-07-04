@@ -82,10 +82,10 @@ void QtlProcess::start()
     _started = true;
 
     // Get notifications from the QProcess object.
-    connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputData()));
-    connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readOutputData()));
-    connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
-    connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(processError(QProcess::ProcessError)));
+    connect(_process, &QProcess::readyReadStandardOutput, this, &QtlProcess::readOutputData);
+    connect(_process, &QProcess::readyReadStandardError, this, &QtlProcess::readOutputData);
+    connect(_process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &QtlProcess::processFinished);
+    connect(_process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &QtlProcess::processError);
 
     // Start the process.
     _process->start(_result.program(), _result.arguments());
@@ -96,7 +96,7 @@ void QtlProcess::start()
 
     // Set a sigle-shot timer to kill process on timeout.
     if (_msRunTestTimeout > 0) {
-        connect(_timer, SIGNAL(timeout()), this, SLOT(processTimeout()));
+        connect(_timer, &QTimer::timeout, this, &QtlProcess::processTimeout);
         _timer->setSingleShot(true);
         _timer->start(_msRunTestTimeout);
     }

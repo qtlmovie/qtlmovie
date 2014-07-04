@@ -36,15 +36,14 @@
 #ifndef QTLMOVIEMAINWINDOW_H
 #define QTLMOVIEMAINWINDOW_H
 
-#include <QtCore>
-#include <QtWidgets>
-#include <QSoundEffect>
 #include "ui_QtlMovieMainWindow.h"
 #include "QtlLogger.h"
 #include "QtlMovieJob.h"
 #include "QtlMovieInputFile.h"
 #include "QtlMovieOutputFile.h"
 #include "QtlMovieSettings.h"
+#include "QtlMovieEditTask.h"
+#include <QSoundEffect>
 
 #if defined(QTL_WINEXTRAS)
 #include <QtWinExtras>
@@ -68,18 +67,6 @@ public:
 
 private slots:
     //!
-    //! Invoked by the "Open ..." button.
-    //!
-    void openFile();
-    //!
-    //! Invoked to select output file.
-    //!
-    void selectOutputFile();
-    //!
-    //! Invoked to select subtitle file.
-    //!
-    void selectSubtitleFile();
-    //!
     //! Invoked by the "Transcode ..." buttons.
     //!
     void startTranscoding();
@@ -87,14 +74,6 @@ private slots:
     //! Invoked by the "Cancel ..." buttons.
     //!
     void cancelTranscoding();
-    //!
-    //! Invoked by the "Show Input File Properties..." button.
-    //!
-    void showInputFileProperties();
-    //!
-    //! Invoked by the "Audio Test..." button.
-    //!
-    void showAudioTest();
     //!
     //! Invoked by the "DVD Decrypter..." button.
     //!
@@ -125,47 +104,6 @@ private slots:
     //!
     void searchNewVersion(bool silent = false);
     //!
-    //! Invoked when the edition of the input file name changed in the edit box.
-    //!
-    void inputFileNameEdited();
-    //!
-    //! Invoked when the input file name has changed.
-    //! @param [in] fileName Absolute file path.
-    //!
-    void inputFileNameChanged(const QString& fileName);
-    //!
-    //! Invoked when new media information is available on the input file.
-    //!
-    void inputFileFormatChanged();
-    //!
-    //! Clear input file stream information.
-    //!
-    void clearInputStreamInfo();
-    //!
-    //! Invoked when the selections of input streams have changed.
-    //! Update the selected streams in the input file object.
-    //! Enable/disable output types according to what is possible or not.
-    //!
-    void inputStreamSelectionUpdated();
-    //!
-    //! Enable or disable the various output types based on the input file.
-    //!
-    void enableOutputTypes();
-    //!
-    //! Reset the content of the "forced display aspect ratio" with the
-    //! actual DAR of the selected video stream.
-    //!
-    void resetForcedDisplayAspectRatio();
-    //!
-    //! Invoked when the edition of the output file name changed in the edit box.
-    //!
-    void outputFileNameEdited();
-    //!
-    //! Invoked when the output file name has changed.
-    //! @param [in] fileName Absolute file path.
-    //!
-    void outputFileNameChanged(const QString& fileName);
-    //!
     //! Invoked when transcoding starts.
     //!
     void transcodingStarted();
@@ -185,10 +123,6 @@ private slots:
     //! Negative if the remaining time cannot be estimated.
     //!
     void transcodingProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
-    //!
-    //! Set the output file type based on selected radio button.
-    //!
-    void setOutputFileType();
 
 protected:
     //!
@@ -204,17 +138,10 @@ private:
     QWinTaskbarButton*     _taskbarButton;      //!< The application button in the Windows task bar.
     QWinTaskbarProgress*   _taskbarProgress;    //!< The progress indicator in the Windows task bar.
 #endif
-    QtlMovieInputFile*     _inFile;             //!< Input file description.
-    QtlMovieOutputFile*    _outFile;            //!< Output file description.
+    QtlMovieEditTask*      _singleTask;         //!< Edited task, when in single file mode (no batch).
     QtlMovieJob*           _job;                //!< Current transcoding job.
     QSoundEffect           _sound;              //!< Sound player for notification.
     bool                   _closePending;       //!< Close the application as soon as possible.
-    int                    _updatingSelections; //!< A counter to protect inputStreamSelectionUpdated().
-
-    //!
-    //! Setup the radio buttons to select the output type.
-    //!
-    void setupOutputTypes();
 
     //!
     //! Start the first transcoding in the list.

@@ -36,6 +36,8 @@
 #define QTLMOVIETASK_H
 
 #include "QtlMovieSettings.h"
+#include "QtlMovieInputFile.h"
+#include "QtlMovieOutputFile.h"
 
 //!
 //! A class implementing one transcoding task.
@@ -53,7 +55,29 @@ public:
     //!
     QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QObject* parent = 0);
 
+    //!
+    //! Get the input file for the task.
+    //! @return A pointer to the input file for the task.
+    //!
+    QtlMovieInputFile* inputFile() const
+    {
+        return _inFile;
+    }
+
+    //!
+    //! Get the output file for the task.
+    //! @return A pointer to the output file for the task.
+    //!
+    QtlMovieOutputFile* outputFile() const
+    {
+        return _outFile;
+    }
+
 private:
+    const QtlMovieSettings* _settings;  //!< Global settings.
+    QtlMovieInputFile*      _inFile;    //!< Input file description.
+    QtlMovieOutputFile*     _outFile;   //!< Output file description.
+
     // Unaccessible operations.
     QtlMovieTask() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlMovieTask)

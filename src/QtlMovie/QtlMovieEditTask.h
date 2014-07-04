@@ -38,12 +38,16 @@
 #include "ui_QtlMovieEditTask.h"
 #include "QtlMovieTask.h"
 #include "QtlMovieSettings.h"
+#include "QtlMovieInputFile.h"
+#include "QtlMovieOutputFile.h"
 
 //!
-//! A subclass of QtlDialog which implements the UI for the editing a task.
+//! A subclass of QWidget which implements the UI for the editing a task.
+//! This form is typically inserted either in the QtlMovieMainWindow
+//! (single file mode) or in a QtlMovieEditTaskDialog (batch mode).
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieEditTask : public QtlDialog
+class QtlMovieEditTask : public QWidget
 {
     Q_OBJECT
 
@@ -52,14 +56,109 @@ public:
     //! Constructor.
     //! @param [in] task The task to edit.
     //! @param [in] settings Application settings.
+    //! @param [in] log Where to log errors.
     //! @param [in] parent Optional parent widget.
     //!
-    explicit QtlMovieEditTask(QtlMovieTask* task, QtlMovieSettings* settings, QWidget* parent = 0);
+    QtlMovieEditTask(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
+
+    //!
+    //! Get the task to edit.
+    //! @return A pointer to the task to edit.
+    //!
+    QtlMovieTask* task() const
+    {
+        return _task;
+    }
+
+public slots:
+    //!
+    //! Update the UI when transcoding starts or stops.
+    //! @param [in] started True if transcoding starts, false if transcoding stops.
+    //!
+    void transcodingUpdateUi(bool started);
+    //!
+    //! Invoked by the "Show Input File Properties..." button.
+    //!
+    void showInputFileProperties();
+    //!
+    //! Invoked by the "Audio Test..." button.
+    //!
+    void showAudioTest();
+    //!
+    //! Invoked to select input file.
+    //!
+    void selectInputFile();
+    //!
+    //! Invoked to select output file.
+    //!
+    void selectOutputFile();
+    //!
+    //! Invoked to select subtitle file.
+    //!
+    void selectSubtitleFile();
+
+private slots:
+    //!
+    //! Set the output file type based on selected radio button.
+    //!
+    void setOutputFileType();
+    //!
+    //! Invoked when the edition of the input file name changed in the edit box.
+    //!
+    void inputFileNameEdited();
+    //!
+    //! Invoked when the input file name has changed.
+    //! @param [in] fileName Absolute file path.
+    //!
+    void inputFileNameChanged(const QString& fileName);
+    //!
+    //! Invoked when new media information is available on the input file.
+    //!
+    void inputFileFormatChanged();
+    //!
+    //! Invoked when the edition of the output file name changed in the edit box.
+    //!
+    void outputFileNameEdited();
+    //!
+    //! Invoked when the output file name has changed.
+    //! @param [in] fileName Absolute file path.
+    //!
+    void outputFileNameChanged(const QString& fileName);
+    //!
+    //! Enable or disable the various output types based on the input file.
+    //!
+    void enableOutputTypes();
+    //!
+    //! Clear input file stream information.
+    //!
+    void clearInputStreamInfo();
+    //!
+    //! Invoked when the selections of input streams have changed.
+    //! Update the selected streams in the input file object.
+    //! Enable/disable output types according to what is possible or not.
+    //!
+    void inputStreamSelectionUpdated();
+    //!
+    //! Reset the content of the "forced display aspect ratio" with the
+    //! actual DAR of the selected video stream.
+    //!
+    void resetForcedDisplayAspectRatio();
+    //!
+    //! Invoked when the "forced display aspect ratio" has been changed.
+    //!
+    void forcedDarChanged();
 
 private:
-    Ui::QtlMovieEditTask _ui;        //!< UI from Qt Designer.
-    QtlMovieSettings*    _settings;  //!< Application settings.
-    QtlMovieTask*        _task;      //!< The task to edit.
+    Ui::QtlMovieEditTask _ui;                 //!< UI from Qt Designer.
+    QtlMovieSettings*    _settings;           //!< Application settings.
+    QtlLogger*           _log;                //!< Where to log errors.
+    QtlMovieTask*        _task;               //!< The task to edit.
+    int                  _updatingSelections; //!< A counter to protect inputStreamSelectionUpdated().
+
+    //!
+    //! Setup the radio buttons to select the output type.
+    //!
+    void setupOutputTypes();
 
     // Unaccessible operations.
     QtlMovieEditTask() Q_DECL_EQ_DELETE;

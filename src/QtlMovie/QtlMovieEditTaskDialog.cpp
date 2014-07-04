@@ -26,21 +26,51 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlMovieTask.
+// Define the class QtlMovieEditTaskDialog.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieTask.h"
+#include "QtlMovieEditTaskDialog.h"
 
 
 //----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieTask::QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QObject* parent) :
-    QObject(parent),
-    _settings(settings),
-    _inFile(new QtlMovieInputFile("", settings, log, this)),
-    _outFile(new QtlMovieOutputFile("", settings, log, this))
+QtlMovieEditTaskDialog::QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent) :
+    QtlDialog(parent)
 {
+    // Title and icon for this dialog.
+    setWindowTitle(tr("QtlMovie - Edit Trancoding Task"));
+    setWindowIcon(QIcon(":/images/qtlmovie-logo.png"));
+
+    // Grid layout: 3 lines, 4 columns.
+    QGridLayout* layout = new QGridLayout(this);
+
+    // Line 1: edit task widget.
+    QtlMovieEditTask* editTask = new QtlMovieEditTask(task, settings, log, this);
+    layout->addWidget(editTask, 0, 0, 1, 4);
+
+    // Line 2: vertical spacer.
+    QSpacerItem* vSpacer = new QSpacerItem(10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    layout->addItem(vSpacer, 1, 0, 1, 1);
+
+    // Line 3: buttons.
+    QPushButton* propertiesButton = new QPushButton(tr("Properties"), this);
+    QPushButton* audioButton = new QPushButton(tr("Test Audio"), this);
+    QSpacerItem* hSpacer = new QSpacerItem(40, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QPushButton* okButton = new QPushButton(tr("OK"), this);
+
+    layout->addWidget(propertiesButton, 2, 0, 1, 1);
+    layout->addWidget(audioButton, 2, 1, 1, 1);
+    layout->addItem(hSpacer, 2, 2, 1, 1);
+    layout->addWidget(okButton, 2, 3, 1, 1);
+
+    connect(propertiesButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showInputFileProperties);
+    connect(audioButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showAudioTest);
+    connect(okButton, &QPushButton::clicked, this, &QtlMovieEditTaskDialog::accept);
+
+    // Restore the window geometry from the saved settings.
+    setObjectName(QStringLiteral("QtlMovieEditTaskDialog"));
+    setGeometrySettings(settings, true);
 }

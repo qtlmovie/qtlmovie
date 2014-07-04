@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2014, Thierry Lelegard
+// Copyright (c) 201, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,22 +25,41 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//
-// Define the class QtlMovieTask.
-//
+//!
+//! @file QtlMovieEditTaskDialog.h
+//!
+//! Declare the class QtlMovieEditTaskDialog, an instance of the UI for editing a task.
+//!
 //----------------------------------------------------------------------------
 
-#include "QtlMovieTask.h"
+#ifndef QTLMOVIEEDITTASKDIALOG_H
+#define QTLMOVIEEDITTASKDIALOG_H
 
+#include "QtlDialog.h"
+#include "QtlMovieEditTask.h"
 
-//----------------------------------------------------------------------------
-// Constructor.
-//----------------------------------------------------------------------------
-
-QtlMovieTask::QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QObject* parent) :
-    QObject(parent),
-    _settings(settings),
-    _inFile(new QtlMovieInputFile("", settings, log, this)),
-    _outFile(new QtlMovieOutputFile("", settings, log, this))
+//!
+//! A subclass of QtlDialog which implements the UI for the editing a task.
+//! It is mainly a QtlDialog containing a QtlMovieEditTask.
+//!
+class QtlMovieEditTaskDialog : public QtlDialog
 {
-}
+    Q_OBJECT
+
+public:
+    //!
+    //! Constructor.
+    //! @param [in] task The task to edit.
+    //! @param [in] settings Application settings.
+    //! @param [in] log Where to log errors.
+    //! @param [in] parent Optional parent widget.
+    //!
+    QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
+
+private:
+    // Unaccessible operations.
+    QtlMovieEditTaskDialog() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlMovieEditTaskDialog)
+};
+
+#endif // QTLMOVIEEDITTASKDIALOG_H

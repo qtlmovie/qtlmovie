@@ -61,6 +61,7 @@
 #define QTL_SAVE_LOG_AFTER_TRANSCODE       false  //!< Automatically save the log after transcoding completion.
 #define QTL_LOG_FILE_EXTENSION            ".log"  //!< Default extension for log files.
 #define QTL_FFPROBE_EXECUTION_TIMEOUT         40  //!< FFprobe execution timeout in seconds.
+#define QTL_USE_BATCH_MODE                 false  //!< Do not use batch mose, use single-file mode.
 
 //
 // Transcoding presets.

@@ -246,6 +246,7 @@ public:
     QTLMOVIE_SETTINGS_BOOL(saveLogAfterTranscode, setSaveLogAfterTranscode, QTL_SAVE_LOG_AFTER_TRANSCODE)
     QTLMOVIE_SETTINGS_STRING(logFileExtension, setLogFileExtension, QTL_LOG_FILE_EXTENSION)
     QTLMOVIE_SETTINGS_INT(ffprobeExecutionTimeout, setFFprobeExecutionTimeout, QTL_FFPROBE_EXECUTION_TIMEOUT)
+    QTLMOVIE_SETTINGS_BOOL(useBatchMode, setUseBatchMode, QTL_USE_BATCH_MODE)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

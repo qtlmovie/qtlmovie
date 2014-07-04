@@ -82,7 +82,7 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         // Right element is the corresponding "Browse ..." button.
         outDir.pushButton = new QPushButton(tr("Browse ..."), _ui.groupBoxOutputDir);
         _ui.layoutDefaultOutputDir->addWidget(outDir.pushButton, row, 2, 1, 1);
-        connect(outDir.pushButton, SIGNAL(clicked()), this, SLOT(browseOutputDir()));
+        connect(outDir.pushButton, &QPushButton::clicked, this, &QtlMovieEditSettings::browseOutputDir);
     }
 
     // Load the initial values from the settings object.

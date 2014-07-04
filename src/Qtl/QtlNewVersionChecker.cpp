@@ -144,8 +144,8 @@ void QtlNewVersionChecker::startRequest(const QUrl& url)
     }
     else {
         // Get notifications from the reply.
-        connect(_reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
-        connect(_reply, SIGNAL(finished()), this, SLOT(httpFinished()));
+        connect(_reply, &QNetworkReply::readyRead, this, &QtlNewVersionChecker::httpReadyRead);
+        connect(_reply, &QNetworkReply::finished,  this, &QtlNewVersionChecker::httpFinished);
     }
 }
 

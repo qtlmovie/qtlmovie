@@ -62,8 +62,8 @@ void QtlFixedSizeTableWidget::init()
     setSizePolicy(pol);
 
     // Get notified when the size of a header changes.
-    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), this, SLOT(sectionResized()));
-    connect(verticalHeader(), SIGNAL(sectionResized(int,int,int)), this, SLOT(sectionResized()));
+    connect(horizontalHeader(), &QHeaderView::sectionResized, this, &QtlFixedSizeTableWidget::sectionResized);
+    connect(verticalHeader(),   &QHeaderView::sectionResized, this, &QtlFixedSizeTableWidget::sectionResized);
 }
 
 

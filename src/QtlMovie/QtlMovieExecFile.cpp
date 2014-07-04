@@ -168,7 +168,7 @@ void QtlMovieExecFile::startGetVersion()
                                 this);            // parent object
 
     // Get notification at process termination.
-    connect(process, SIGNAL(terminated(QtlProcessResult)), this, SLOT(getVersionTerminated(QtlProcessResult)));
+    connect(process, &QtlProcess::terminated, this, &QtlMovieExecFile::getVersionTerminated);
 
     // Start the process.
     process->start();

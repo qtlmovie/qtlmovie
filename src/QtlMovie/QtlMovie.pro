@@ -71,7 +71,8 @@ SOURCES += main.cpp \
     QtlMovieFFmpegVolumeDetect.cpp \
     QtlMovieSettingsMigration.cpp \
     QtlMovieEditTask.cpp \
-    QtlMovieTask.cpp
+    QtlMovieTask.cpp \
+    QtlMovieEditTaskDialog.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -104,7 +105,8 @@ HEADERS += \
     QtlMovieFFmpegVolumeDetect.h \
     QtlMovieSettingsMigration.h \
     QtlMovieEditTask.h \
-    QtlMovieTask.h
+    QtlMovieTask.h \
+    QtlMovieEditTaskDialog.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

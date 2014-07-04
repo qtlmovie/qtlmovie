@@ -128,14 +128,14 @@ bool QtlMovieProcess::start()
     _process->setReadChannel(QProcess::StandardOutput);
 
     // Get notifications from the QProcess object.
-    connect(_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
-    connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(processError(QProcess::ProcessError)));
-    connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(readData()));
+    connect(_process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &QtlMovieProcess::processFinished);
+    connect(_process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &QtlMovieProcess::processError);
+    connect(_process, &QProcess::readyReadStandardError, this, &QtlMovieProcess::readData);
     if (_hasBinaryOutput) {
-        connect(_process, SIGNAL(readyReadStandardOutput()), this, SIGNAL(readyReadOutputData()));
+        connect(_process, &QProcess::readyReadStandardOutput, this, &QtlMovieProcess::readyReadOutputData);
     }
     else {
-        connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readData()));
+        connect(_process, &QProcess::readyReadStandardOutput, this, &QtlMovieProcess::readData);
     }
 
     // Start the process.

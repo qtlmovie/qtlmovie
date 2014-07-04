@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QtlMovieEditTask</class>
- <widget class="QtlDialog" name="QtlMovieEditTask">
+ <widget class="QWidget" name="QtlMovieEditTask">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>508</height>
+    <width>647</width>
+    <height>411</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>QtlMovie - Edit Trancoding Task</string>
-  </property>
-  <property name="windowIcon">
-   <iconset resource="QtlMovie.qrc">
-    <normaloff>:/images/qtlmovie-logo.png</normaloff>:/images/qtlmovie-logo.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -167,7 +160,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="editForceDAR">
+          <widget class="QtlLineEdit" name="editForceDAR">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -228,21 +221,11 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>0</width>
+       <height>0</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
@@ -258,46 +241,195 @@
    <header>QtlButtonGrid.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>QtlDialog</class>
-   <extends>QDialog</extends>
-   <header>QtlDialog.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>editInputFile</sender>
+   <signal>textChanged(QString)</signal>
    <receiver>QtlMovieEditTask</receiver>
-   <slot>accept()</slot>
+   <slot>inputFileNameEdited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>284</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>310</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>editOutputFile</sender>
+   <signal>textChanged(QString)</signal>
    <receiver>QtlMovieEditTask</receiver>
-   <slot>reject()</slot>
+   <slot>outputFileNameEdited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>332</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonInputFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>selectInputFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonOutputFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>selectOutputFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSubtitleFile</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>selectSubtitleFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonNoSubtitle</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonSubtitleFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editSubtitleFile</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>inputStreamSelectionUpdated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>324</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkForceDAR</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editForceDAR</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkForceDAR</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>forcedDarChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>323</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editForceDAR</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>QtlMovieEditTask</receiver>
+   <slot>forcedDarChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>323</x>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>selectInputFile()</slot>
+  <slot>selectOutputFile()</slot>
+  <slot>selectSubtitleFile()</slot>
+  <slot>inputFileNameEdited()</slot>
+  <slot>inputStreamSelectionUpdated()</slot>
+  <slot>outputFileNameEdited()</slot>
+  <slot>showInputFileProperties()</slot>
+  <slot>showAudioTest()</slot>
+  <slot>forcedDarChanged()</slot>
+ </slots>
 </ui>

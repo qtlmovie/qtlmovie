@@ -114,8 +114,8 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
 
     // Get notifications from the audio output.
     _audio.setNotifyInterval(500); // milliseconds
-    connect(&_audio, SIGNAL(notify()), this, SLOT(updatePlaySlider()));
-    connect(&_audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(audioStateChanged(QAudio::State)));
+    connect(&_audio, &QAudioOutput::notify, this, &QtlMovieAudioTestDialog::updatePlaySlider);
+    connect(&_audio, &QAudioOutput::stateChanged, this, &QtlMovieAudioTestDialog::audioStateChanged);
 }
 
 
@@ -192,10 +192,10 @@ void QtlMovieAudioTestDialog::start()
     _process = new QtlMovieFFmpegProcess(args, _file->durationInSeconds(), QString(), _settings, _log, this);
 
     // Attempt cleanup as soon as the process completes.
-    connect(_process, SIGNAL(completed(bool)), this, SLOT(cleanup()));
+    connect(_process, &QtlMovieFFmpegProcess::completed, this, &QtlMovieAudioTestDialog::cleanup);
 
     // Start/restart the audio device when audio data are available on ffmpeg output.
-    connect(_process->outputDevice(), SIGNAL(readyRead()), this, SLOT(ffmpegDataReady()));
+    connect(_process->outputDevice(), &QIODevice::readyRead, this, &QtlMovieAudioTestDialog::ffmpegDataReady);
 
     // Start the process.
     _process->start();

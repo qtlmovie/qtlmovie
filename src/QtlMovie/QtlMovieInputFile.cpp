@@ -69,7 +69,7 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     Q_ASSERT(settings != 0);
 
     // Update media info when the file name is changed.
-    connect(this, SIGNAL(fileNameChanged(QString)), this, SLOT(updateMediaInfo(QString)));
+    connect(this, &QtlMovieInputFile::fileNameChanged, this, &QtlMovieInputFile::updateMediaInfo);
 
     // Initial update of the media info.
     updateMediaInfo(this->fileName());
@@ -95,7 +95,7 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _isM2ts(other._isM2ts)
 {
     // Update media info when the file name is changed.
-    connect(this, SIGNAL(fileNameChanged(QString)), this, SLOT(updateMediaInfo(QString)));
+    connect(this, &QtlMovieInputFile::fileNameChanged, this, &QtlMovieInputFile::updateMediaInfo);
 }
 
 
@@ -173,7 +173,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
                                                   this);   // parent object
 
     // Get notified of process termination and starts the process.
-    connect(process, SIGNAL(terminated(QtlProcessResult)), this, SLOT(ffprobeTerminated(QtlProcessResult)));
+    connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
     _ffprobeInProgress = true;
     process->start();
 
@@ -191,8 +191,8 @@ void QtlMovieInputFile::startClosedCaptionsSearch(int ccChannel)
 {
     // Create a new instance of CC search.
     QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName(), ccChannel, _settings, _log, this);
-    connect(cc, SIGNAL(foundClosedCaptions(QtlMovieStreamInfoPtr)), this, SLOT(foundClosedCaptions(QtlMovieStreamInfoPtr)));
-    connect(cc, SIGNAL(completed(bool)), this, SLOT(closedCaptionsSearchTerminated(bool)));
+    connect(cc, &QtlMovieClosedCaptionsSearch::foundClosedCaptions, this, &QtlMovieInputFile::foundClosedCaptions);
+    connect(cc, &QtlMovieClosedCaptionsSearch::completed, this, &QtlMovieInputFile::closedCaptionsSearchTerminated);
 
     // Start it.
     if (cc->start()) {
@@ -267,8 +267,8 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
         _teletextSearch = new QtlMovieTeletextSearch(fileName(), _settings, _log, this);
 
         // Get notifications from the Teletext searcher.
-        connect(_teletextSearch, SIGNAL(foundTeletextSubtitles(QtlMovieStreamInfoPtr)), this, SLOT(foundTeletextSubtitles(QtlMovieStreamInfoPtr)));
-        connect(_teletextSearch, SIGNAL(completed(bool)), this, SLOT(teletextSearchTerminated(bool)));
+        connect(_teletextSearch, &QtlMovieTeletextSearch::foundTeletextSubtitles, this, &QtlMovieInputFile::foundTeletextSubtitles);
+        connect(_teletextSearch, &QtlMovieTeletextSearch::completed, this, &QtlMovieInputFile::teletextSearchTerminated);
 
         // Start the search.
         if (!_teletextSearch->start()) {

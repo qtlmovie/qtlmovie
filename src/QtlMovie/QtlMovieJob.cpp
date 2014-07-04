@@ -143,6 +143,12 @@ bool QtlMovieJob::start()
     // ie. the old DOS 8.3 name. The operation is transparent on non-Windows systems.
     _tempDir = QtlFile::shortPath(_tempDir, true);
 
+    // Force the display aspect ratio of the video stream if required.
+    const QtlMovieStreamInfoPtr video(_inputFile->selectedVideoStreamInfo());
+    if (!video.isNull()) {
+        video->setForcedDisplayAspectRatio(_outputFile->forcedDisplayAspectRatio());
+    }
+
     // Build the list of actions to execute.
     if (!buildScenario()) {
         cleanup();
@@ -191,6 +197,30 @@ void QtlMovieJob::abort()
         _actionList.first()->abort();
         // The completion of the aborted process will trigger the completion of the job.
     }
+}
+
+
+//----------------------------------------------------------------------------
+// Get an indication of the total progress within the job.
+//----------------------------------------------------------------------------
+
+int QtlMovieJob::currentProgress(int currentActionProgress, int currentActionMaximum, int jobMaximum) const
+{
+    int progressValue = 0;
+    if (isStarted() && jobMaximum > 0) {
+        // First, compute duration of one action. This assumes that all actions
+        // have the same duration, which is of course wrong. But never mind.
+        const int actionDuration = _actionCount == 0 ? jobMaximum : jobMaximum / _actionCount;
+
+        // Then, compute initial progress of current action.
+        progressValue = actionDuration * (_actionCount - _actionList.size());
+
+        // Finally, add progress within current action, if available.
+        if (currentActionMaximum > 0) {
+            progressValue += (actionDuration * currentActionProgress) / currentActionMaximum;
+        }
+    }
+    return progressValue;
 }
 
 
@@ -244,8 +274,8 @@ bool QtlMovieJob::startNextAction()
 
     // Get notifications from next process.
     QtlMovieAction* next = _actionList.first();
-    connect(next, SIGNAL(progress(QString,int,int,int,int)), this, SIGNAL(progress(QString,int,int,int,int)));
-    connect(next, SIGNAL(completed(bool)), this, SLOT(actionCompleted(bool)));
+    connect(next, &QtlMovieAction::progress,  this, &QtlMovieJob::progress);
+    connect(next, &QtlMovieAction::completed, this, &QtlMovieJob::actionCompleted);
 
     // Start the next process.
     if (!next->start()) {
