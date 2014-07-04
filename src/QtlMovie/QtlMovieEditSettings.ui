@@ -1127,6 +1127,32 @@
       </attribute>
       <layout class="QVBoxLayout" name="layoutMisc">
        <item>
+        <widget class="QGroupBox" name="groupBoxFileProcessing">
+         <property name="title">
+          <string>File processing mode (restart required)</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QRadioButton" name="radioSingleFile">
+            <property name="text">
+             <string>Single file mode</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioMultiFile">
+            <property name="text">
+             <string>Multi-file batch mode</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBoxLanguages">
          <property name="title">
           <string>Target audience language codes</string>
@@ -1273,15 +1299,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QtlLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>QtlLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>QtlDialog</class>
    <extends>QDialog</extends>
    <header>QtlDialog.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QtlLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>QtlLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

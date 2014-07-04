@@ -180,6 +180,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkBoxPlaySound->setChecked(_settings->playSoundOnCompletion());
     _ui.checkClearLog->setChecked(_settings->clearLogBeforeTranscode());
     _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
+    (_settings->useBatchMode() ? _ui.radioMultiFile : _ui.radioSingleFile)->setChecked(true);
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -279,6 +280,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setPlaySoundOnCompletion(_ui.checkBoxPlaySound->isChecked());
     _settings->setClearLogBeforeTranscode(_ui.checkClearLog->isChecked());
     _settings->setSaveLogAfterTranscode(_ui.checkSaveLog->isChecked());
+    _settings->setUseBatchMode(_ui.radioMultiFile->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

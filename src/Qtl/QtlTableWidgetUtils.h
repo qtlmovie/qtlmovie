@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2014, Thierry Lelegard
+// Copyright (c) 2013, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,40 +26,26 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieEditTaskDialog.h
+//! @file QtlTableWidgetUtils.h
 //!
-//! Declare the class QtlMovieEditTaskDialog, an instance of the UI for editing a task.
+//! Declare some utilities functions for QTableWidget.
+//! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEEDITTASKDIALOG_H
-#define QTLMOVIEEDITTASKDIALOG_H
+#ifndef QTLTABLEWIDGETUTILS_H
+#define QTLTABLEWIDGETUTILS_H
 
-#include "QtlDialog.h"
-#include "QtlMovieEditTask.h"
+#include "QtlCore.h"
 
 //!
-//! A subclass of QtlDialog which implements the UI for the editing a task.
-//! It is mainly a QtlDialog containing a QtlMovieEditTask.
+//! Set a header in a QTableWidget.
+//! @param [in,out] table The table to modify.
+//! @param [in] column Header column, starting at zero.
+//! @param [in] text Header text.
+//! @param [in] alignment Header alignment.
+//! @return The created item.
 //!
-class QtlMovieEditTaskDialog : public QtlDialog
-{
-    Q_OBJECT
+QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment = Qt::AlignLeft);
 
-public:
-    //!
-    //! Constructor.
-    //! @param [in] task The task to edit.
-    //! @param [in] settings Application settings.
-    //! @param [in] log Where to log errors.
-    //! @param [in] parent Optional parent widget.
-    //!
-    QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
-
-private:
-    // Unaccessible operations.
-    QtlMovieEditTaskDialog() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlMovieEditTaskDialog)
-};
-
-#endif // QTLMOVIEEDITTASKDIALOG_H
+#endif // QTLTABLEWIDGETUTILS_H

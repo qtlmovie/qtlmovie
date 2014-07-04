@@ -8,3 +8,5 @@ QtlMovie "to do" list
 
 - Add a "batch" mechanism. Several jobs are edited separately. The main window
   contains a list of jobs. "Start" means starting the queue.
+
+- Describe batch mode in user guide.

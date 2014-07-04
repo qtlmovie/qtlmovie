@@ -72,7 +72,8 @@ SOURCES += main.cpp \
     QtlMovieSettingsMigration.cpp \
     QtlMovieEditTask.cpp \
     QtlMovieTask.cpp \
-    QtlMovieEditTaskDialog.cpp
+    QtlMovieEditTaskDialog.cpp \
+    QtlMovieTaskList.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -106,7 +107,8 @@ HEADERS += \
     QtlMovieSettingsMigration.h \
     QtlMovieEditTask.h \
     QtlMovieTask.h \
-    QtlMovieEditTaskDialog.h
+    QtlMovieEditTaskDialog.h \
+    QtlMovieTaskList.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

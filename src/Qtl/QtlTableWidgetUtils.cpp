@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2014, Thierry Lelegard
+// Copyright (c) 2013, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,41 +25,23 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//!
-//! @file QtlMovieEditTaskDialog.h
-//!
-//! Declare the class QtlMovieEditTaskDialog, an instance of the UI for editing a task.
-//!
+//
+// Qtl, Qt utility library.
+// Definition of utilities for QTableWidget.
+//
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEEDITTASKDIALOG_H
-#define QTLMOVIEEDITTASKDIALOG_H
+#include "QtlTableWidgetUtils.h"
 
-#include "QtlDialog.h"
-#include "QtlMovieEditTask.h"
 
-//!
-//! A subclass of QtlDialog which implements the UI for the editing a task.
-//! It is mainly a QtlDialog containing a QtlMovieEditTask.
-//!
-class QtlMovieEditTaskDialog : public QtlDialog
+//-----------------------------------------------------------------------------
+// Set a header in a QTableWidget.
+//-----------------------------------------------------------------------------
+
+QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment)
 {
-    Q_OBJECT
-
-public:
-    //!
-    //! Constructor.
-    //! @param [in] task The task to edit.
-    //! @param [in] settings Application settings.
-    //! @param [in] log Where to log errors.
-    //! @param [in] parent Optional parent widget.
-    //!
-    QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
-
-private:
-    // Unaccessible operations.
-    QtlMovieEditTaskDialog() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlMovieEditTaskDialog)
-};
-
-#endif // QTLMOVIEEDITTASKDIALOG_H
+    QTableWidgetItem* item = new QTableWidgetItem(text);
+    item->setTextAlignment(alignment);
+    table->setHorizontalHeaderItem(column, item);
+    return item;
+}

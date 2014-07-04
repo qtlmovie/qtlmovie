@@ -19,21 +19,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="layoutCentral">
-    <item row="0" column="0" colspan="2">
-     <widget class="QTableWidget" name="taskList">
-      <property name="columnCount">
-       <number>2</number>
-      </property>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <column/>
-      <column/>
-     </widget>
-    </item>
     <item row="2" column="1">
      <widget class="QLabel" name="labelRemainingTime">
       <property name="text">
@@ -42,6 +27,106 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QWidget" name="taskBox" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QtlMovieTaskList" name="taskList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="buttonBox" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <spacer name="taskButtonsSpacer1">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonNewTask">
+            <property name="text">
+             <string>New ...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonTaskUp">
+            <property name="text">
+             <string>Up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonTaskDown">
+            <property name="text">
+             <string>Down</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonRemoveTask">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="taskButtonsSpacer2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item row="1" column="1">
@@ -84,6 +169,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionNewTask"/>
     <addaction name="actionTranscode"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -217,6 +303,11 @@
     <string>Release Notes ...</string>
    </property>
   </action>
+  <action name="actionNewTask">
+   <property name="text">
+    <string>New Task ...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -228,6 +319,18 @@
     <slot>saveToFile()</slot>
     <slot>setDebugMode(bool)</slot>
     <slot>save()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>QtlMovieTaskList</class>
+   <extends>QTableWidget</extends>
+   <header>QtlMovieTaskList.h</header>
+   <slots>
+    <slot>addAndEditTask()</slot>
+    <slot>deletedSelectedTasks()</slot>
+    <slot>editSelectedTask()</slot>
+    <slot>moveUpSelectedTasks()</slot>
+    <slot>moveDownSelectedTasks()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -408,6 +511,86 @@
     <hint type="destinationlabel">
      <x>339</x>
      <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNewTask</sender>
+   <signal>triggered()</signal>
+   <receiver>taskList</receiver>
+   <slot>addAndEditTask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonNewTask</sender>
+   <signal>clicked()</signal>
+   <receiver>taskList</receiver>
+   <slot>addAndEditTask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>632</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonTaskUp</sender>
+   <signal>clicked()</signal>
+   <receiver>taskList</receiver>
+   <slot>moveUpSelectedTasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>632</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonTaskDown</sender>
+   <signal>clicked()</signal>
+   <receiver>taskList</receiver>
+   <slot>moveDownSelectedTasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>632</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonRemoveTask</sender>
+   <signal>clicked()</signal>
+   <receiver>taskList</receiver>
+   <slot>deletedSelectedTasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>632</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>158</y>
     </hint>
    </hints>
   </connection>

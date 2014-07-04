@@ -26,40 +26,58 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieEditTaskDialog.h
+//! @file QtlMovieTaskList.h
 //!
-//! Declare the class QtlMovieEditTaskDialog, an instance of the UI for editing a task.
+//! Declare the class QtlMovieTaskList, a list of a transcoding tasks.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEEDITTASKDIALOG_H
-#define QTLMOVIEEDITTASKDIALOG_H
+#ifndef QTLMOVIETASKLIST_H
+#define QTLMOVIETASKLIST_H
 
-#include "QtlDialog.h"
-#include "QtlMovieEditTask.h"
+#include "QtlCore.h"
 
 //!
-//! A subclass of QtlDialog which implements the UI for the editing a task.
-//! It is mainly a QtlDialog containing a QtlMovieEditTask.
+//! A list of transcoding tasks.
+//! This is both a widget for editing the tasks list and a reference model for the task list.
 //!
-class QtlMovieEditTaskDialog : public QtlDialog
+class QtlMovieTaskList : public QTableWidget
 {
     Q_OBJECT
 
 public:
     //!
     //! Constructor.
-    //! @param [in] task The task to edit.
-    //! @param [in] settings Application settings.
-    //! @param [in] log Where to log errors.
-    //! @param [in] parent Optional parent widget.
+    //! @param [in] parent Optional parent object.
     //!
-    QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
+    explicit QtlMovieTaskList(QWidget* parent = 0);
+
+public slots:
+    //!
+    //! Add a new task in the list and start editing it.
+    //!
+    void addAndEditTask();
+    //!
+    //! Start editing the first selected task.
+    //!
+    void editSelectedTask();
+    //!
+    //! Move the selected tasks up.
+    //!
+    void moveUpSelectedTasks();
+    //!
+    //! Move the selected tasks down.
+    //!
+    void moveDownSelectedTasks();
+    //!
+    //! Delete the selected tasks (need to confirm first).
+    //!
+    void deletedSelectedTasks();
 
 private:
     // Unaccessible operations.
-    QtlMovieEditTaskDialog() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlMovieEditTaskDialog)
+    QtlMovieTaskList() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlMovieTaskList)
 };
 
-#endif // QTLMOVIEEDITTASKDIALOG_H
+#endif // QTLMOVIETASKLIST_H

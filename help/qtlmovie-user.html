@@ -506,6 +506,18 @@
       <h3><a id="miscsettings">"Miscellaneous" tab</a></h3>
 
       <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
+      <p>The "File processing mode" options describe how QtlMovie processes multiple input
+        files. Since these options significantly modifies the way QtlMovie works, they are
+        actually applied only when QtlMovie is restarted.<p>
+      <ul>
+        <li>The "single file mode" is the legacy mode which was found in the original version
+          of QtlMovie. Only one file can be processed at a time. This is a simple operation
+          mode. The input and output file descriptions directly appear in the main window.</li>
+        <li>The "multi-file batch mode" allows the processing of multiple files in sequence.
+          The main window shows a list of files to be processed. The transcoding operation
+          processes all files in the list. Adding other files to process is allowed during
+          the transcoding of the previous files.</li>
+      </ul>
       <p>The "Target audience language codes" lists the codes which are used to identify the
         language of the "target audience".
         This needs some explanation.
@@ -640,7 +652,7 @@ apt-get install ffmpeg
       <h3><a id="otherpf">Other platforms</a></h3>
 
       <p>QtlMovie should compile and properly function on any other platform which is supported by
-        the Qt framework. However, QtlMovie is useless without ffmpeg. You have to check the availability
+        the Qt 5 framework. However, QtlMovie is useless without ffmpeg. You have to check the availability
         of ffmpeg on a platform before attempting to use QtlMovie.</p>
 
       <hr/>

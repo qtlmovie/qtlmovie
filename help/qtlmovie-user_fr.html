@@ -543,6 +543,21 @@
       <h3><a id="miscsettings">Onglet "Divers"</a></h3>
 
       <p>Comme son nom l'indique, cet onglet regroupe les options qui n'ont pas trouvé leur place ailleurs.</p>
+      <p>Les options de "mode de traitement des fichiers" décrivent la manière dont
+        QtlMovie traite des fichiers d'entrée multiples. Comme ces options modifient
+        significativement le mode de fonctionnement de QtlMovie, elles ne sont prises en
+        compte qu'après un redémarrage de QtlMovie.</p>
+      <ul>
+        <li>Le mode "fichier unique" est le mode traditionnel tel que présenté dans
+          les premières versions de QtlMovie. Un seul fichier peut être traité à la
+          fois. C'est un mode très simple. Les descriptions des fichiers d'entrée et
+          de sortie apparaissent directement dans la fenêtre principale.</li>
+        <li>Le mode "multiples fichiers en séquence" permet le traitement de
+          plusieurs fichiers les uns à la suite des autres. La fenêtre principale
+          montre une liste des fichiers à traiter. L'opération de transcodage
+          traite tous les fichiers de la liste. Il est possible d'ajouter des
+          fichiers supplémentaires pendant le transcodage des fichiers précédents.</li>
+      </ul>
       <p>La liste des "codes de langues de l'audience ciblée" contient les codes
         utilisés par les différents standards pour identifier la ou les langues
         de "l'audience ciblée".
@@ -695,7 +710,7 @@ apt-get install ffmpeg
       <h3><a id="otherpf">Autres plates-formes</a></h3>
 
       <p>QtlMovie devrait pouvoir être compilé et fonctionner correctement sur toute
-        plate-forme supportée par Qt. Toutefois, QtlMovie n'est rien sans ffmpeg.
+        plate-forme supportée par Qt 5. Toutefois, QtlMovie n'est rien sans ffmpeg.
         Vous devez d'abord vérifier la disponibilité de ffmpeg sur une plate-forme
         avant d'envisager d'utiliser QtlMovie.</p>
 

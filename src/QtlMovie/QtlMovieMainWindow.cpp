@@ -101,21 +101,25 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
         delete _ui.actionInputFileProperties;
         delete _ui.actionTestAudio;
 
-        //@@@@@
+        // Adjust task table.
+        _ui.taskList->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+        // Select by row (one row = one file).
+        _ui.taskList->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
     else {
         // Single file mode: Delete unused widgets.
-        //@@@@@
+        delete _ui.actionNewTask;
 
         // Create a task editor.
         QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
         _singleTask = new QtlMovieEditTask(task, _settings, _ui.log, this);
 
         // Replace table of tasks with the single task in the layout.
-        QLayoutItem* old = _ui.layoutCentral->replaceWidget(_ui.taskList, _singleTask);
+        QLayoutItem* old = _ui.layoutCentral->replaceWidget(_ui.taskBox, _singleTask);
 
         // Delete the task list.
-        delete _ui.taskList;
+        delete _ui.taskBox;
         delete old;
 
         // Connect actions from menu.
@@ -159,7 +163,9 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 {
     // Enable / disable widgets which must be inactive during transcoding.
-    _ui.actionOpen->setEnabled(!started);
+    if (_singleTask != 0) {
+        _ui.actionOpen->setEnabled(!started);
+    }
 
     // Toggle transcode/cancel labels in buttons.
     // Change their target slot to start/cancel transcoding.

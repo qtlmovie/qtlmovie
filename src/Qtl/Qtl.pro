@@ -68,7 +68,8 @@ SOURCES += \
     QtlStringUtils.cpp \
     QtlFontUtils.cpp \
     QtlListWidgetUtils.cpp \
-    QtlMessageBoxUtils.cpp
+    QtlMessageBoxUtils.cpp \
+    QtlTableWidgetUtils.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -120,7 +121,8 @@ HEADERS += \
     QtlStringUtils.h \
     QtlFontUtils.h \
     QtlListWidgetUtils.h \
-    QtlMessageBoxUtils.h
+    QtlMessageBoxUtils.h \
+    QtlTableWidgetUtils.h
 
 FORMS += \
     QtlBrowserDialog.ui \
