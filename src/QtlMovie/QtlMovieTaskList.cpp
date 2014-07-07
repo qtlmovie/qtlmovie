@@ -31,7 +31,10 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieTaskList.h"
+#include "QtlMovieEditTaskDialog.h"
 #include "QtlTableWidgetUtils.h"
+#include "QtlMessageBoxUtils.h"
+#include "QtlStringList.h"
 
 
 //----------------------------------------------------------------------------
@@ -39,7 +42,9 @@
 //----------------------------------------------------------------------------
 
 QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
-    QTableWidget(parent)
+    QTableWidget(parent),
+    _settings(0),
+    _log(0)
 {
     // The table is read-only.
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -79,10 +84,144 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
 
     action = new QAction(tr("Delete"), this);
     action->setShortcut(QKeySequence(QKeySequence::Delete));
-    connect(action, &QAction::triggered, this, &QtlMovieTaskList::deletedSelectedTasks);
+    connect(action, &QAction::triggered, this, &QtlMovieTaskList::deleteSelectedTasks);
     addAction(action);
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
+}
+
+
+//----------------------------------------------------------------------------
+// Initialize the task list.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::initialize(QtlMovieSettings* settings, QtlLogger* log)
+{
+    // Can be called only once.
+    Q_ASSERT(_settings == 0);
+    Q_ASSERT(_log == 0);
+
+    Q_ASSERT(settings != 0);
+    Q_ASSERT(log != 0);
+
+    _settings = settings;
+    _log = log;
+}
+
+
+//-----------------------------------------------------------------------------
+// Add a task at the end of the list.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::addTask(QtlMovieTask* task, bool editNow)
+{
+    if (task != 0 && task->inputFile() != 0 && task->outputFile() != 0) {
+
+        // Create the row with empty items on each column.
+        setRowCount(rowCount() + 1);
+        for (int column = 0; column < columnCount(); ++column) {
+            // Create the item.
+            QTableWidgetItem* item = new QTableWidgetItem();
+            setItem(rowCount() - 1, column, item);
+            // Associate the task to the item.
+            setTask(item, task);
+        }
+
+        // Update the items text.
+        updateRow(rowCount() - 1);
+
+        // Get notified when the task changes.
+        connect(task, &QtlMovieTask::taskChanged, this, &QtlMovieTaskList::taskChanged);
+
+        // Edit the task if required.
+        if (editNow) {
+            editTask(task);
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Associate a table item with a task.
+// We store a qulonglong value of the task pointer value as associated data
+// with "user role" in the item. This is valid only since we use this value
+// in the current process only.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::setTask(QTableWidgetItem* item, QtlMovieTask* task)
+{
+    item->setData(Qt::UserRole, qulonglong(reinterpret_cast<uintptr_t>(task)));
+}
+
+QtlMovieTask* QtlMovieTaskList::taskOfRow(int row) const
+{
+    QTableWidgetItem* item = row < 0 || row >= rowCount() ? 0 : this->item(row, 0);
+    return item == 0 ? 0 : reinterpret_cast<QtlMovieTask*>(uintptr_t(item->data(Qt::UserRole).toULongLong()));
+}
+
+
+//-----------------------------------------------------------------------------
+// Update the content of a row from the associated task content.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::updateRow(int row)
+{
+    QtlMovieTask* task = taskOfRow(row);
+    if (task != 0 && task->inputFile() != 0 && task->outputFile() != 0) {
+
+        // The columns contain the output type, input file name, input file directory.
+        const QString inFile(task->inputFile()->fileName());
+        const QtlStringList texts(QtlMovieOutputFile::outputTypeName(task->outputFile()->outputType()),
+                                  inFile.isEmpty() ? "" : QFileInfo(inFile).fileName(),
+                                  inFile.isEmpty() ? "" : QtlFile::parentPath(inFile));
+
+        // Update the items.
+        for (int column = 0; column < texts.size(); ++column) {
+            QTableWidgetItem* item = this->item(row, column);
+            if (item != 0) {
+                item->setText(texts[column]);
+            }
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Edit a task.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::editTask(QtlMovieTask* task)
+{
+    if (task != 0 && _settings != 0 && _log != 0) {
+        QtlMovieEditTaskDialog dialog(task, _settings, _log, this);
+        dialog.exec();
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Triggered when a task changes.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::taskChanged(QtlMovieTask* task)
+{
+    // Look for a row describing this task.
+    for (int row = 0; row < rowCount(); ++ row) {
+        if (task != 0 && task == taskOfRow(row)) {
+            updateRow(row);
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Clear the table content. Reimplemented from QTableWidget.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::clear()
+{
+    // Delete all rows but keep the headers.
+    setRowCount(0);
 }
 
 
@@ -92,7 +231,7 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
 
 void QtlMovieTaskList::addAndEditTask()
 {
-
+    addTask(new QtlMovieTask(_settings, _log, this), true);
 }
 
 
@@ -102,7 +241,8 @@ void QtlMovieTaskList::addAndEditTask()
 
 void QtlMovieTaskList::editSelectedTask()
 {
-
+    const QList<QTableWidgetItem*> selected(selectedItems());
+    editTask(taskOfRow(selected.isEmpty() ? -1 : selected.first()->row()));
 }
 
 
@@ -112,7 +252,32 @@ void QtlMovieTaskList::editSelectedTask()
 
 void QtlMovieTaskList::moveUpSelectedTasks()
 {
+    // Get all contiguous ranges of selections.
+    const QList<QTableWidgetSelectionRange> selected(selectedRanges());
+    if (!selected.empty()) {
 
+        // Get first contiguous range of selections.
+        const QTableWidgetSelectionRange range(selected.first());
+
+        // If the top row is included in the selection, we can't move the whole things up.
+        if (range.rowCount() > 0 && range.topRow() > 0) {
+
+            // Move each row up.
+            for (int row = range.topRow(); row <= range.bottomRow(); ++row) {
+                // Get content of line up.
+                const QList<QTableWidgetItem*> up(qtlTakeTableRow(this, row - 1));
+                // Get content of current line.
+                const QList<QTableWidgetItem*> current(qtlTakeTableRow(this, row));
+                // Swap the content of the line.
+                qtlSetTableRow(this, row - 1, current);
+                qtlSetTableRow(this, row, up);
+            }
+
+            // Keep selection on the moved rows.
+            clearSelection();
+            setRangeSelected(QTableWidgetSelectionRange(range.topRow() - 1, 0, range.bottomRow() - 1, columnCount() - 1), true);
+        }
+    }
 }
 
 
@@ -122,7 +287,32 @@ void QtlMovieTaskList::moveUpSelectedTasks()
 
 void QtlMovieTaskList::moveDownSelectedTasks()
 {
+    // Get all contiguous ranges of selections.
+    const QList<QTableWidgetSelectionRange> selected(selectedRanges());
+    if (!selected.empty()) {
 
+        // Get first contiguous range of selections.
+        const QTableWidgetSelectionRange range(selected.first());
+
+        // If the bottom row is included in the selection, we can't move the whole things down.
+        if (range.rowCount() > 0 && range.topRow() >= 0 && range.bottomRow() < rowCount() - 1) {
+
+            // Move each row down.
+            for (int row = range.bottomRow(); row >= range.topRow(); --row) {
+                // Get content of line down.
+                const QList<QTableWidgetItem*> down(qtlTakeTableRow(this, row + 1));
+                // Get content of current line.
+                const QList<QTableWidgetItem*> current(qtlTakeTableRow(this, row));
+                // Swap the content of the line.
+                qtlSetTableRow(this, row + 1, current);
+                qtlSetTableRow(this, row, down);
+            }
+
+            // Keep selection on the moved rows.
+            clearSelection();
+            setRangeSelected(QTableWidgetSelectionRange(range.topRow() + 1, 0, range.bottomRow() + 1, colorCount() - 1), true);
+        }
+    }
 }
 
 
@@ -130,7 +320,31 @@ void QtlMovieTaskList::moveDownSelectedTasks()
 // Delete the selected tasks (need to confirm first).
 //----------------------------------------------------------------------------
 
-void QtlMovieTaskList::deletedSelectedTasks()
+void QtlMovieTaskList::deleteSelectedTasks()
 {
-
+    // Get all contiguous ranges of selections.
+    const QList<QTableWidgetSelectionRange> selected(selectedRanges());
+    if (!selected.empty()) {
+        const int start = selected.first().topRow();
+        const int count = selected.first().rowCount();
+        if (start >= 0 && count > 0) {
+            // Require confirmation.
+            QString text(tr("Delete these %1 tasks?").arg(count));
+            if (count == 1) {
+                QtlMovieTask* task = taskOfRow(start);
+                if (task != 0 && task->inputFile() != 0) {
+                    text = tr("Delete task %1?").arg(QFileInfo(task->inputFile()->fileName()).fileName());
+                }
+            }
+            if (qtlConfirm(this, text)) {
+                // Delete tasks.
+                for (int row = start + count - 1; row >= start; --row) {
+                    //@@@@ check if transcoding task in progress.
+                    QtlMovieTask* task = taskOfRow(start);
+                    removeRow(row);
+                    delete task;
+                }
+            }
+        }
+    }
 }

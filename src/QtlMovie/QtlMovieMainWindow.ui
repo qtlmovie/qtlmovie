@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>607</height>
+    <width>680</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,17 +19,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="layoutCentral">
-    <item row="2" column="1">
-     <widget class="QLabel" name="labelRemainingTime">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
+    <item row="1" column="0" colspan="2">
      <widget class="QWidget" name="taskBox" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="leftMargin">
@@ -129,7 +119,17 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="3" column="1">
+     <widget class="QLabel" name="labelRemainingTime">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
      <widget class="QProgressBar" name="progressBarEncode">
       <property name="value">
        <number>0</number>
@@ -139,19 +139,22 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
+    <item row="4" column="0" colspan="2">
      <widget class="QtlPlainTextLogger" name="log">
       <property name="textInteractionFlags">
        <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QPushButton" name="buttonStart">
       <property name="text">
        <string>Start ...</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QtlMovieEditTask" name="singleTask" native="true"/>
     </item>
    </layout>
   </widget>
@@ -160,7 +163,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>679</width>
+     <width>680</width>
      <height>21</height>
     </rect>
    </property>
@@ -327,10 +330,23 @@
    <header>QtlMovieTaskList.h</header>
    <slots>
     <slot>addAndEditTask()</slot>
-    <slot>deletedSelectedTasks()</slot>
+    <slot>deleteSelectedTasks()</slot>
     <slot>editSelectedTask()</slot>
     <slot>moveUpSelectedTasks()</slot>
     <slot>moveDownSelectedTasks()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>QtlMovieEditTask</class>
+   <extends>QWidget</extends>
+   <header>QtlMovieEditTask.h</header>
+   <container>1</container>
+   <slots>
+    <slot>showInputFileProperties()</slot>
+    <slot>showAudioTest()</slot>
+    <slot>selectInputFile()</slot>
+    <slot>selectOutputFile()</slot>
+    <slot>selectSubtitleFile()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -582,7 +598,7 @@
    <sender>buttonRemoveTask</sender>
    <signal>clicked()</signal>
    <receiver>taskList</receiver>
-   <slot>deletedSelectedTasks()</slot>
+   <slot>deleteSelectedTasks()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>632</x>
@@ -591,6 +607,54 @@
     <hint type="destinationlabel">
      <x>298</x>
      <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>singleTask</receiver>
+   <slot>selectInputFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInputFileProperties</sender>
+   <signal>triggered()</signal>
+   <receiver>singleTask</receiver>
+   <slot>showInputFileProperties()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTestAudio</sender>
+   <signal>triggered()</signal>
+   <receiver>singleTask</receiver>
+   <slot>showAudioTest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>29</y>
     </hint>
    </hints>
   </connection>

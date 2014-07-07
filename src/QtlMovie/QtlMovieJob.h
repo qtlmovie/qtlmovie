@@ -37,8 +37,7 @@
 
 #include <QtCore>
 #include "QtlMovieAction.h"
-#include "QtlMovieInputFile.h"
-#include "QtlMovieOutputFile.h"
+#include "QtlMovieTask.h"
 #include "QtlMessageBoxUtils.h"
 
 //!
@@ -52,17 +51,12 @@ class QtlMovieJob : public QtlMovieAction
 public:
     //!
     //! Constructor.
-    //! @param [in] inputFile The input file.
-    //! @param [in] outputFile The output file.
+    //! @param [in] task The task to process.
     //! @param [in] settings Application settings.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
     //!
-    QtlMovieJob(const QtlMovieInputFile* inputFile,
-                const QtlMovieOutputFile* outputFile,
-                const QtlMovieSettings* settings,
-                QtlLogger* log,
-                QObject *parent = 0);
+    QtlMovieJob(QtlMovieTask* task, const QtlMovieSettings* settings, QtlLogger* log, QObject *parent = 0);
 
     //!
     //! Start the transcoding job.
@@ -75,6 +69,15 @@ public:
     //! If the job was started, the signal completed() will be emitted when all actions actually terminate.
     //!
     virtual void abort();
+
+    //!
+    //! Get the task to process.
+    //! @return The task to process.
+    //!
+    QtlMovieTask* task() const
+    {
+        return _task;
+    }
 
     //!
     //! Get the total number of actions in this job.
@@ -154,8 +157,7 @@ private slots:
     void actionCompleted(bool success);
 
 private:
-    const QtlMovieInputFile*  _inputFile;      //!< Input file.
-    const QtlMovieOutputFile* _outputFile;     //!< Output file.
+    QtlMovieTask*             _task;           //!< Task to process.
     int                       _outSeconds;     //!< Output file duration in seconds.
     int                       _actionCount;    //!< Number of actions to execute on start.
     QString                   _tempDir;        //!< Directory of temporary files, to delete after completion.

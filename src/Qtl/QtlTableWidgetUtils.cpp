@@ -40,8 +40,48 @@
 
 QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment)
 {
-    QTableWidgetItem* item = new QTableWidgetItem(text);
-    item->setTextAlignment(alignment);
-    table->setHorizontalHeaderItem(column, item);
-    return item;
+    if (table == 0) {
+        return 0;
+    }
+    else {
+        QTableWidgetItem* item = new QTableWidgetItem(text);
+        item->setTextAlignment(alignment);
+        table->setHorizontalHeaderItem(column, item);
+        return item;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Remove all items in a row of a QTableWidget and return them.
+//-----------------------------------------------------------------------------
+
+QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row)
+{
+    QList<QTableWidgetItem*> items;
+    if (table != 0 && row >= 0 && row < table->rowCount()) {
+        for (int column = 0; column < table->columnCount(); ++column) {
+            items << table->takeItem(row, column);
+        }
+    }
+    return items;
+}
+
+
+//-----------------------------------------------------------------------------
+// Set all items in a row of a QTableWidget.
+//-----------------------------------------------------------------------------
+
+void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items)
+{
+    if (table != 0 && !items.isEmpty() && row >= 0) {
+        for (int column = 0; column < items.size(); ++column) {
+            QTableWidgetItem* const item = items[column];
+            if (item != 0) {
+                table->setItem(row, column, item);
+                // The row may have changed if automatic sorting was enabled.
+                row = item->row();
+            }
+        }
+    }
 }

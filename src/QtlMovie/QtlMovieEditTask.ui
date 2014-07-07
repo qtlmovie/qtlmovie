@@ -11,6 +11,18 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="groupInputFile">
      <property name="title">
@@ -128,14 +140,7 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="3">
-       <widget class="QtlButtonGrid" name="boxOutputTypes" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="QtlButtonGrid" name="boxOutputTypes" native="true"/>
       </item>
       <item row="2" column="0" colspan="3">
        <widget class="QWidget" name="boxAspectRatio" native="true">

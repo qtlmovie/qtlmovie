@@ -56,7 +56,6 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _taskbarButton(0),
     _taskbarProgress(0),
 #endif
-    _singleTask(0),
     _job(0),
     _sound(),
     _closePending(false)
@@ -100,32 +99,20 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
         delete _ui.actionOpen;
         delete _ui.actionInputFileProperties;
         delete _ui.actionTestAudio;
+        delete _ui.singleTask;
+        _ui.singleTask = 0;
 
-        // Adjust task table.
-        _ui.taskList->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-        // Select by row (one row = one file).
-        _ui.taskList->setSelectionBehavior(QAbstractItemView::SelectRows);
+        // Initialize task list.
+        _ui.taskList->initialize(_settings, _ui.log);
     }
     else {
         // Single file mode: Delete unused widgets.
         delete _ui.actionNewTask;
-
-        // Create a task editor.
-        QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
-        _singleTask = new QtlMovieEditTask(task, _settings, _ui.log, this);
-
-        // Replace table of tasks with the single task in the layout.
-        QLayoutItem* old = _ui.layoutCentral->replaceWidget(_ui.taskBox, _singleTask);
-
-        // Delete the task list.
         delete _ui.taskBox;
-        delete old;
+        _ui.taskBox = _ui.taskList = 0;
 
-        // Connect actions from menu.
-        connect(_ui.actionOpen, &QAction::triggered, _singleTask, &QtlMovieEditTask::selectInputFile);
-        connect(_ui.actionTestAudio, &QAction::triggered, _singleTask, &QtlMovieEditTask::showAudioTest);
-        connect(_ui.actionInputFileProperties, &QAction::triggered, _singleTask, &QtlMovieEditTask::showInputFileProperties);
+        // Initialize the task editor.
+        _ui.singleTask->initialize(new QtlMovieTask(_settings, _ui.log, this), _settings, _ui.log);
     }
 
     // Restore the window geometry from the saved settings.
@@ -139,13 +126,15 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 
     // If a command line argument is provided, use it as input file.
     if (!initialFileName.isEmpty()) {
-        if (_singleTask != 0) {
+        if (_ui.singleTask != 0) {
             // Single file mode, simply set the input file name.
-            _singleTask->task()->inputFile()->setFileName(initialFileName);
+            _ui.singleTask->task()->inputFile()->setFileName(initialFileName);
         }
         else {
             // Batch mode, create a new task.
-            //@@@@@
+            QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
+            task->inputFile()->setFileName(initialFileName);
+            _ui.taskList->addTask(task, true);
         }
     }
 
@@ -163,7 +152,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 {
     // Enable / disable widgets which must be inactive during transcoding.
-    if (_singleTask != 0) {
+    if (_ui.singleTask != 0) {
         _ui.actionOpen->setEnabled(!started);
     }
 
@@ -219,12 +208,12 @@ void QtlMovieMainWindow::startTranscoding()
 
     //@@@@@@@@@@ TO BE REFACTORED TO SUPPORT BATCH MODE.
 
-    if (_singleTask == 0) {
+    if (_ui.singleTask == 0) {
         return;
     }
 
     // Setup the transcoding job.
-    _job = new QtlMovieJob(_singleTask->task()->inputFile(), _singleTask->task()->outputFile(), _settings, _ui.log, this);
+    _job = new QtlMovieJob(_ui.singleTask->task(), _settings, _ui.log, this);
     connect(_job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
     connect(_job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
     connect(_job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
@@ -338,9 +327,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
 
         // Save log file if required.
         if (_settings->saveLogAfterTranscode()) {
-            //@@@@ TO BE REFACTORED
-            QtlMovieOutputFile* outFile = _singleTask->task()->outputFile();
-            const QString logFile(outFile->fileName() + _settings->logFileExtension());
+            const QString logFile(_job->task()->outputFile()->fileName() + _settings->logFileExtension());
             _ui.log->saveToFile(logFile);
             _ui.log->line(tr("Saved log to %1").arg(logFile));
         }
@@ -462,6 +449,7 @@ void QtlMovieMainWindow::editSettings()
     if (edit.exec() == QDialog::Accepted) {
         // Button "OK" has been selected, update settings from the values in the dialog box.
         edit.applySettings();
+        applyUiSettings();
     }
 }
 

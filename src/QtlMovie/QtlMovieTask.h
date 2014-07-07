@@ -73,6 +73,19 @@ public:
         return _outFile;
     }
 
+signals:
+    //!
+    //! Emitted when the input file name, output file name or output type changes.
+    //! @param [in] task The changed task (ie. signal emitter).
+    //!
+    void taskChanged(QtlMovieTask* task);
+
+private slots:
+    //!
+    //! Used as relay to emit the signal taskChanged().
+    //!
+    void emitTaskChanged();
+
 private:
     const QtlMovieSettings* _settings;  //!< Global settings.
     QtlMovieInputFile*      _inFile;    //!< Input file description.

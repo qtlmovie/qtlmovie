@@ -62,6 +62,8 @@
 #define QTL_LOG_FILE_EXTENSION            ".log"  //!< Default extension for log files.
 #define QTL_FFPROBE_EXECUTION_TIMEOUT         40  //!< FFprobe execution timeout in seconds.
 #define QTL_USE_BATCH_MODE                 false  //!< Do not use batch mose, use single-file mode.
+#define QTL_EDIT_TASK_WIDTH                  680  //!< Width (in pixels) of QtlMovieEditTaskDialog
+#define QTL_EDIT_TASK_HEIGHT                 500  //!< Height (in pixels) of QtlMovieEditTaskDialog
 
 //
 // Transcoding presets.

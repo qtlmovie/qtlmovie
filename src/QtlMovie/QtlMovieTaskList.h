@@ -35,7 +35,8 @@
 #ifndef QTLMOVIETASKLIST_H
 #define QTLMOVIETASKLIST_H
 
-#include "QtlCore.h"
+#include "QtlMovieTask.h"
+#include "QtlMovieSettings.h"
 
 //!
 //! A list of transcoding tasks.
@@ -52,7 +53,28 @@ public:
     //!
     explicit QtlMovieTaskList(QWidget* parent = 0);
 
+    //!
+    //! Initialize the task list.
+    //! Must be invoked before using the task list.
+    //! May be used only once.
+    //! @param [in] settings Application settings.
+    //! @param [in] log Where to log errors.
+    //!
+    void initialize(QtlMovieSettings* settings, QtlLogger* log);
+
+    //!
+    //! Add a task at the end of the list.
+    //! @param [in] task The task to add.
+    //! @param [in] editNow If true, immediately opens an editor on it.
+    //!
+    void addTask(QtlMovieTask* task, bool editNow);
+
 public slots:
+    //!
+    //! Clear the table content.
+    //! Reimplemented from QTableWidget.
+    //!
+    void clear();
     //!
     //! Add a new task in the list and start editing it.
     //!
@@ -72,9 +94,45 @@ public slots:
     //!
     //! Delete the selected tasks (need to confirm first).
     //!
-    void deletedSelectedTasks();
+    void deleteSelectedTasks();
+
+private slots:
+    //!
+    //! Triggered when the input file name, output file name or output type of a task changes.
+    //! @param [in] task The changed task (ie. signal emitter).
+    //!
+    void taskChanged(QtlMovieTask* task);
 
 private:
+    QtlMovieSettings* _settings;  //!< Application settings.
+    QtlLogger*        _log;       //!< Where to log errors.
+
+    //!
+    //! Associate a table item with a task.
+    //! @param [in,out] item The table item to set.
+    //! @param [in] task The task.
+    //!
+    static void setTask(QTableWidgetItem* item, QtlMovieTask* task);
+
+    //!
+    //! Get the task associated to a row.
+    //! @param [in] row The row in the table.
+    //! @return The associated task or a null pointer if none found or the rwo does not exist.
+    //!
+    QtlMovieTask* taskOfRow(int row) const;
+
+    //!
+    //! Update the content of a row from the associated task content.
+    //! @param [in] row The row to update.
+    //!
+    void updateRow(int row);
+
+    //!
+    //! Edit a task.
+    //! @param [in,out] task The task to edit.
+    //!
+    void editTask(QtlMovieTask* task);
+
     // Unaccessible operations.
     QtlMovieTaskList() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlMovieTaskList)

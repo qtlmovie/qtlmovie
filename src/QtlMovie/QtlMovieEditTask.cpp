@@ -42,31 +42,102 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieEditTask::QtlMovieEditTask(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent) :
+QtlMovieEditTask::QtlMovieEditTask(QWidget* parent) :
     QWidget(parent),
-    _settings(settings),
-    _log(log),
-    _task(task),
+    _settings(0),
+    _log(0),
+    _task(0),
     _updatingSelections(0)
 {
-    Q_ASSERT(task != 0);
-    Q_ASSERT(settings != 0);
-    Q_ASSERT(log != 0);
-
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
 
-    // Create one radio button per output type (output file type selection).
-    setupOutputTypes();
+    // Setup the radio buttons to select the output type.
+    const QList<QtlMovieOutputFile::OutputType> outputTypes(QtlMovieOutputFile::outputTypes());
+    foreach (QtlMovieOutputFile::OutputType type, outputTypes) {
 
-    // Create the various connections around file modifications.
-    connect(_task->inputFile(),  &QtlMovieInputFile::fileNameChanged,  this, &QtlMovieEditTask::inputFileNameChanged);
-    connect(_task->inputFile(),  &QtlMovieInputFile::mediaInfoChanged, this, &QtlMovieEditTask::inputFileFormatChanged);
-    connect(_task->outputFile(), &QtlMovieOutputFile::fileNameChanged, this, &QtlMovieEditTask::outputFileNameChanged);
+        // Create the button.
+        QRadioButton* button(new QRadioButton(_ui.boxOutputTypes));
+        button->setText(QtlMovieOutputFile::outputTypeName(type));
+        connect(button, &QRadioButton::toggled, this, &QtlMovieEditTask::setOutputFileType);
+
+        // Associate the integer value of the output type to the radio button.
+        _ui.boxOutputTypes->setButtonId(button, int(type));
+    }
 
     // Clear input file stream info.
     _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonSubtitleFile);
     clearInputStreamInfo();
+
+    // Say to the layout we need a minimum vertical size. Depending on the input
+    // file characteristics, we may need more or less vertical space.
+    QSizePolicy pol(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    pol.setHeightForWidth(true);
+    setSizePolicy(pol);
+}
+
+
+//-----------------------------------------------------------------------------
+// Clear input file stream information.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditTask::clearInputStreamInfo()
+{
+    // List of group boxes to clean up.
+    QList<QtlButtonGrid*> boxes;
+    boxes << _ui.boxVideoStreams<< _ui.boxAudioStreams << _ui.boxSubtitleStreams;
+
+    // Cleanup all group boxes.
+    foreach (QtlButtonGrid* box, boxes) {
+        // Delete all children radio buttons with an id in the box.
+        const QList<QRadioButton*> buttons(box->findChildren<QRadioButton*>());
+        foreach (QRadioButton* button, buttons) {
+            if (box->buttonId(button) >= 0) {
+                delete button;
+            }
+        }
+    }
+
+    // No subtitle stream is selected, pre-select "no subtitle".
+    _ui.radioButtonNoSubtitle->setChecked(true);
+    _ui.buttonSubtitleFile->setEnabled(false);
+    _ui.editSubtitleFile->setEnabled(false);
+
+    // Make sure the "None" and "Subtitle File" are in the same radio group as subtitle streams.
+    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonNoSubtitle);
+    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonSubtitleFile);
+}
+
+
+//----------------------------------------------------------------------------
+// Initialize the editor.
+//----------------------------------------------------------------------------
+
+void QtlMovieEditTask::initialize(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log)
+{
+    // Can be called only once.
+    Q_ASSERT(_task == 0);
+    Q_ASSERT(_settings == 0);
+    Q_ASSERT(_log == 0);
+
+    Q_ASSERT(task != 0);
+    Q_ASSERT(settings != 0);
+    Q_ASSERT(log != 0);
+
+    // Store the settings for this task editor.
+    _task = task;
+    _settings = settings;
+    _log = log;
+
+    // Initialize the UI.
+    inputFileNameChanged(_task->inputFile()->fileName());
+    inputFileFormatChanged();
+    outputFileNameChanged(_task->outputFile()->fileName());
+
+    // Get notified of file modifications.
+    connect(_task->inputFile(),  &QtlMovieInputFile::fileNameChanged,  this, &QtlMovieEditTask::inputFileNameChanged);
+    connect(_task->inputFile(),  &QtlMovieInputFile::mediaInfoChanged, this, &QtlMovieEditTask::inputFileFormatChanged);
+    connect(_task->outputFile(), &QtlMovieOutputFile::fileNameChanged, this, &QtlMovieEditTask::outputFileNameChanged);
 }
 
 
@@ -83,41 +154,20 @@ void QtlMovieEditTask::transcodingUpdateUi(bool started)
 
 
 //-----------------------------------------------------------------------------
-// Setup the radio buttons to select the output type.
-//-----------------------------------------------------------------------------
-
-void QtlMovieEditTask::setupOutputTypes()
-{
-    // List of output types in the "display order".
-    const QList<QtlMovieOutputFile::OutputType> outputTypes(QtlMovieOutputFile::outputTypes());
-
-    // Add all buttons.
-    foreach (QtlMovieOutputFile::OutputType type, outputTypes) {
-
-        // Create the button.
-        QRadioButton* button(new QRadioButton(_ui.boxOutputTypes));
-        button->setText(QtlMovieOutputFile::outputTypeName(type));
-        connect(button, &QRadioButton::toggled, this, &QtlMovieEditTask::setOutputFileType);
-
-        // Associate the integer value of the output type to the radio button.
-        _ui.boxOutputTypes->setButtonId(button, int(type));
-    }
-}
-
-
-//-----------------------------------------------------------------------------
 // Invoked to select input file.
 //-----------------------------------------------------------------------------
 
 void QtlMovieEditTask::selectInputFile()
 {
-    // Ask the user to select an input file.
-    const QString previous(_task->inputFile()->isSet() ? _task->inputFile()->fileName() : _settings->initialInputDir());
-    const QString name(QFileDialog::getOpenFileName(this, tr("Open Movie File"), previous));
+    if (_task != 0) {
+        // Ask the user to select an input file.
+        const QString previous(_task->inputFile()->isSet() ? _task->inputFile()->fileName() : _settings->initialInputDir());
+        const QString name(QFileDialog::getOpenFileName(this, tr("Open Movie File"), previous));
 
-    // Set the new file name.
-    if (!name.isEmpty()) {
-        _task->inputFile()->setFileName(name);
+        // Set the new file name.
+        if (!name.isEmpty()) {
+            _task->inputFile()->setFileName(name);
+        }
     }
 }
 
@@ -128,13 +178,15 @@ void QtlMovieEditTask::selectInputFile()
 
 void QtlMovieEditTask::selectOutputFile()
 {
-    // Ask the user to select an output file.
-    const QString previous(_task->outputFile()->isSet() ? _task->outputFile()->fileName() : _task->outputFile()->defaultOutputDirectory(_task->inputFile()->fileName()));
-    const QString name(QFileDialog::getSaveFileName(this, tr("Output Movie File"), previous));
+    if (_task != 0) {
+        // Ask the user to select an output file.
+        const QString previous(_task->outputFile()->isSet() ? _task->outputFile()->fileName() : _task->outputFile()->defaultOutputDirectory(_task->inputFile()->fileName()));
+        const QString name(QFileDialog::getSaveFileName(this, tr("Output Movie File"), previous));
 
-    // Set the new file name.
-    if (!name.isEmpty()) {
-        _task->outputFile()->setFileName(name);
+        // Set the new file name.
+        if (!name.isEmpty()) {
+            _task->outputFile()->setFileName(name);
+        }
     }
 }
 
@@ -150,7 +202,7 @@ void QtlMovieEditTask::selectSubtitleFile()
 
     // If no previous content, use the input file directory.
     if (previous.isEmpty()) {
-        previous = _task->inputFile()->isSet() ? QFileInfo(_task->inputFile()->fileName()).absolutePath() : _settings->initialInputDir();
+        previous = _task != 0 && _task->inputFile()->isSet() ? QFileInfo(_task->inputFile()->fileName()).absolutePath() : _settings->initialInputDir();
     }
 
     // Select the subtitle file.
@@ -168,8 +220,10 @@ void QtlMovieEditTask::selectSubtitleFile()
 
 void QtlMovieEditTask::showInputFileProperties()
 {
-    QtlMovieInputFilePropertiesDialog dialog(_task->inputFile(), _settings, this);
-    dialog.exec();
+    if (_task != 0) {
+        QtlMovieInputFilePropertiesDialog dialog(_task->inputFile(), _settings, this);
+        dialog.exec();
+    }
 }
 
 
@@ -179,7 +233,7 @@ void QtlMovieEditTask::showInputFileProperties()
 
 void QtlMovieEditTask::showAudioTest()
 {
-    if (_task->inputFile()->streamCount(QtlMovieStreamInfo::Audio) > 0) {
+    if (_task != 0 && _task->inputFile()->streamCount(QtlMovieStreamInfo::Audio) > 0) {
         QtlMovieAudioTestDialog dialog(_task->inputFile(), _ui.boxAudioStreams->checkedId(), _settings, _log, this);
         dialog.exec();
     }
@@ -200,7 +254,7 @@ void QtlMovieEditTask::setOutputFileType()
     if (id < 0) {
         _log->line(tr("Internal error, cannot get output file type"));
     }
-    else if (_task->outputFile() != 0) {
+    else if (_task != 0 && _task->outputFile() != 0) {
         // Get the output file type.
         QtlMovieOutputFile::OutputType type = QtlMovieOutputFile::OutputType(id);
         // Cannot select "Burn DVD" if the DVD burner device is undefined
@@ -230,17 +284,19 @@ void QtlMovieEditTask::inputStreamSelectionUpdated()
     }
     QtlIncrement<int> updating(&_updatingSelections);
 
-    // Select the streams to transcode.
-    _task->inputFile()->setSelectedVideoStreamIndex(_ui.boxVideoStreams->checkedId());
-    _task->inputFile()->setSelectedAudioStreamIndex(_ui.boxAudioStreams->checkedId());
-    _task->inputFile()->setSelectedSubtitleStreamIndex(_ui.boxSubtitleStreams->checkedId());
-
     // Check if the external subtitle file is selected.
     const bool subtitleFileSelected = _ui.radioButtonSubtitleFile->isChecked();
 
     // Enable subtitle file edits only when the subtitle file is active.
     _ui.editSubtitleFile->setEnabled(subtitleFileSelected);
     _ui.buttonSubtitleFile->setEnabled(subtitleFileSelected);
+
+    // Select the streams to transcode.
+    if (_task != 0) {
+        _task->inputFile()->setSelectedVideoStreamIndex(_ui.boxVideoStreams->checkedId());
+        _task->inputFile()->setSelectedAudioStreamIndex(_ui.boxAudioStreams->checkedId());
+        _task->inputFile()->setSelectedSubtitleStreamIndex(_ui.boxSubtitleStreams->checkedId());
+    }
 
     // Associate the subtitle file to the input file.
     if (subtitleFileSelected) {
@@ -253,7 +309,7 @@ void QtlMovieEditTask::inputStreamSelectionUpdated()
             _ui.editSubtitleFile->clear();
             selectSubtitleFile();
         }
-        else {
+        else if (_task != 0) {
             _task->inputFile()->setExternalSubtitleFileName(subtitleFile);
         }
     }
@@ -276,7 +332,7 @@ void QtlMovieEditTask::inputFileFormatChanged()
     clearInputStreamInfo();
 
     // Loop on all input streams.
-    const int streamCount = _task->inputFile()->streamCount();
+    const int streamCount = _task == 0 ? 0 : _task->inputFile()->streamCount();
     for (int si = 0; si < streamCount; ++si) {
 
         const QtlMovieStreamInfoPtr stream(_task->inputFile()->streamInfo(si));
@@ -334,8 +390,10 @@ void QtlMovieEditTask::inputFileFormatChanged()
 
 void QtlMovieEditTask::outputFileNameEdited()
 {
-    // Set output file name from its edit box.
-    _task->outputFile()->setFileName(_ui.editOutputFile->text());
+    if (_task != 0) {
+        // Set output file name from its edit box.
+        _task->outputFile()->setFileName(_ui.editOutputFile->text());
+    }
 }
 
 
@@ -358,8 +416,10 @@ void QtlMovieEditTask::outputFileNameChanged(const QString& fileName)
 
 void QtlMovieEditTask::inputFileNameEdited()
 {
-    // Set input file name from its edit box.
-    _task->inputFile()->setFileName(_ui.editInputFile->text());
+    if (_task != 0) {
+        // Set input file name from its edit box.
+        _task->inputFile()->setFileName(_ui.editInputFile->text());
+    }
 }
 
 
@@ -379,12 +439,16 @@ void QtlMovieEditTask::inputFileNameChanged(const QString& fileName)
 
     // Select default output file name and window title.
     if (fileName.isEmpty()) {
-        _task->outputFile()->setFileName("");
         setWindowTitle("QtlMovie");
+        if (_task != 0) {
+            _task->outputFile()->setFileName("");
+        }
     }
     else {
-        _task->outputFile()->setDefaultFileName(fileName);
         setWindowTitle(QFileInfo(fileName).fileName() + " - QtlMovie");
+        if (_task != 0) {
+            _task->outputFile()->setDefaultFileName(fileName);
+        }
     }
 
     // Clear subtitle file name.
@@ -410,7 +474,7 @@ void QtlMovieEditTask::enableOutputTypes()
         QAbstractButton* button = _ui.boxOutputTypes->buttonOf(int(type));
         if (button != 0) {
             // Is this output type allowed for the input file?
-            const bool allowed = QtlMovieJob::canTranscode(_task->inputFile(), type);
+            const bool allowed = _task != 0 && QtlMovieJob::canTranscode(_task->inputFile(), type);
             // Keep track of currently checked button.
             if (button->isChecked()) {
                 current = button;
@@ -432,53 +496,24 @@ void QtlMovieEditTask::enableOutputTypes()
 
 
 //-----------------------------------------------------------------------------
-// Clear input file stream information.
-//-----------------------------------------------------------------------------
-
-void QtlMovieEditTask::clearInputStreamInfo()
-{
-    // List of group boxes to clean up.
-    QList<QtlButtonGrid*> boxes;
-    boxes << _ui.boxVideoStreams<< _ui.boxAudioStreams << _ui.boxSubtitleStreams;
-
-    // Cleanup all group boxes.
-    foreach (QtlButtonGrid* box, boxes) {
-        // Delete all children radio buttons with an id in the box.
-        const QList<QRadioButton*> buttons(box->findChildren<QRadioButton*>());
-        foreach (QRadioButton* button, buttons) {
-            if (box->buttonId(button) >= 0) {
-                delete button;
-            }
-        }
-    }
-
-    // No subtitle stream is selected, pre-select "no subtitle".
-    _ui.radioButtonNoSubtitle->setChecked(true);
-    _ui.buttonSubtitleFile->setEnabled(false);
-    _ui.editSubtitleFile->setEnabled(false);
-
-    // Make sure the "None" and "Subtitle File" are in the same radio group as subtitle streams.
-    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonNoSubtitle);
-    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonSubtitleFile);
-}
-
-
-//-----------------------------------------------------------------------------
 // Reset the content of the "forced display aspect ratio" with the
 // actual DAR of the selected video stream.
 //-----------------------------------------------------------------------------
 
 void QtlMovieEditTask::resetForcedDisplayAspectRatio()
 {
-    // Update the "Forced DAR" editable value with actual video DAR.
     _ui.editForceDAR->clear();
-    const QtlMovieStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
-    if (!video.isNull()) {
-        _ui.editForceDAR->setText(video->displayAspectRatioString(true, true));
-    }
 
-    // Do not change video DAR in output file.
-    _task->outputFile()->setForcedDisplayAspectRatio(0.0);
+    if (_task != 0) {
+        // Update the "Forced DAR" editable value with actual video DAR.
+        const QtlMovieStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
+        if (!video.isNull()) {
+            _ui.editForceDAR->setText(video->displayAspectRatioString(true, true));
+        }
+
+        // Do not change video DAR in output file.
+        _task->outputFile()->setForcedDisplayAspectRatio(0.0);
+    }
 }
 
 
@@ -488,5 +523,7 @@ void QtlMovieEditTask::resetForcedDisplayAspectRatio()
 
 void QtlMovieEditTask::forcedDarChanged()
 {
-    _task->outputFile()->setForcedDisplayAspectRatio(_ui.checkForceDAR->isChecked() ? qtlToFloat(_ui.editForceDAR->text()) : 0.0);
+    if (_task != 0) {
+        _task->outputFile()->setForcedDisplayAspectRatio(_ui.checkForceDAR->isChecked() ? qtlToFloat(_ui.editForceDAR->text()) : 0.0);
+    }
 }

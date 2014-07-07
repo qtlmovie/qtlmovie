@@ -43,4 +43,18 @@ QtlMovieTask::QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QOb
     _inFile(new QtlMovieInputFile("", settings, log, this)),
     _outFile(new QtlMovieOutputFile("", settings, log, this))
 {
+    // Emit taskChanged when required.
+    connect(_inFile,  &QtlMovieInputFile::fileNameChanged,    this, &QtlMovieTask::emitTaskChanged);
+    connect(_outFile, &QtlMovieOutputFile::fileNameChanged,   this, &QtlMovieTask::emitTaskChanged);
+    connect(_outFile, &QtlMovieOutputFile::outputTypeChanged, this, &QtlMovieTask::emitTaskChanged);
+}
+
+
+//----------------------------------------------------------------------------
+// This slot is used as relay to emit the signal taskChanged().
+//----------------------------------------------------------------------------
+
+void QtlMovieTask::emitTaskChanged()
+{
+    emit taskChanged(this);
 }

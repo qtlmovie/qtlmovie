@@ -42,7 +42,6 @@
 #include "QtlMovieInputFile.h"
 #include "QtlMovieOutputFile.h"
 #include "QtlMovieSettings.h"
-#include "QtlMovieEditTask.h"
 #include <QSoundEffect>
 
 #if defined(QTL_WINEXTRAS)
@@ -138,7 +137,6 @@ private:
     QWinTaskbarButton*     _taskbarButton;      //!< The application button in the Windows task bar.
     QWinTaskbarProgress*   _taskbarProgress;    //!< The progress indicator in the Windows task bar.
 #endif
-    QtlMovieEditTask*      _singleTask;         //!< Edited task, when in single file mode (no batch).
     QtlMovieJob*           _job;                //!< Current transcoding job.
     QSoundEffect           _sound;              //!< Sound player for notification.
     bool                   _closePending;       //!< Close the application as soon as possible.

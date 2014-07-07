@@ -53,9 +53,7 @@ QtlAutoGrid::QtlAutoGrid(QWidget* parent) :
     // resulting in a one-column grid. But expanding the grid is useful (more columns).
     // Once the width is given, the number of columns is computed and there is no advantage
     // of being taller than the minimum. In all cases, the minimum height depends on the width.
-    QSizePolicy pol;
-    pol.setHorizontalPolicy(QSizePolicy::Expanding);
-    pol.setVerticalPolicy(QSizePolicy::Minimum);
+    QSizePolicy pol(QSizePolicy::Expanding, QSizePolicy::Minimum);
     pol.setHeightForWidth(true);
     setSizePolicy(pol);
 }

@@ -48,4 +48,20 @@
 //!
 QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment = Qt::AlignLeft);
 
+//!
+//! Remove all items in a row of a QTableWidget and return them.
+//! @param [in,out] table The table to modify.
+//! @param [in] row The row to remove.
+//! @return A list of removed items.
+//!
+QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row);
+
+//!
+//! Set all items in a row of a QTableWidget.
+//! @param [in,out] table The table to modify.
+//! @param [in] row The row to set.
+//! @param [in] items A list of items to set. The QTableWidget takes ownership of the items.
+//!
+void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items);
+
 #endif // QTLTABLEWIDGETUTILS_H

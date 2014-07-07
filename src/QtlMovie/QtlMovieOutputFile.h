@@ -92,10 +92,7 @@ public:
     //! Set the output file type.
     //! @param [in] type Output file type.
     //!
-    void setOutputType(OutputType type)
-    {
-        _outputType = type;
-    }
+    void setOutputType(OutputType type);
 
     //!
     //! Get the default output directory for an input file name, based on the output type.
@@ -155,6 +152,13 @@ public:
     //! @return The output file extension.
     //!
     static QString fileExtension(OutputType outputType);
+
+signals:
+    //!
+    //! Emitted when the output type changes.
+    //! @param [in] type The new type.
+    //!
+    void outputTypeChanged(OutputType type);
 
 private:
     QtlLogger*              _log;         //!< Where to log errors.

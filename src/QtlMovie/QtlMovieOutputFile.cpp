@@ -62,6 +62,19 @@ QtlMovieOutputFile::QtlMovieOutputFile(const QtlMovieOutputFile& other, QObject*
 
 
 //----------------------------------------------------------------------------
+// Set the output file type.
+//----------------------------------------------------------------------------
+
+void QtlMovieOutputFile::setOutputType(OutputType type)
+{
+    if (_outputType != type) {
+        _outputType = type;
+        emit outputTypeChanged(type);
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Get the default output directory for an input file name, based on the output type.
 //----------------------------------------------------------------------------
 

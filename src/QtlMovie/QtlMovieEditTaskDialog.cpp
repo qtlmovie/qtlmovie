@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieEditTaskDialog.h"
+#include "QtlMovie.h"
 
 
 //----------------------------------------------------------------------------
@@ -43,12 +44,18 @@ QtlMovieEditTaskDialog::QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSetti
     // Title and icon for this dialog.
     setWindowTitle(tr("QtlMovie - Edit Trancoding Task"));
     setWindowIcon(QIcon(":/images/qtlmovie-logo.png"));
+    resize(QTL_EDIT_TASK_WIDTH, QTL_EDIT_TASK_HEIGHT);
+
+    // Restore the window geometry from the saved settings.
+    setObjectName(QStringLiteral("QtlMovieEditTaskDialog"));
+    setGeometrySettings(settings, true);
 
     // Grid layout: 3 lines, 4 columns.
     QGridLayout* layout = new QGridLayout(this);
 
     // Line 1: edit task widget.
-    QtlMovieEditTask* editTask = new QtlMovieEditTask(task, settings, log, this);
+    QtlMovieEditTask* editTask = new QtlMovieEditTask(this);
+    editTask->initialize(task, settings, log);
     layout->addWidget(editTask, 0, 0, 1, 4);
 
     // Line 2: vertical spacer.
@@ -69,8 +76,4 @@ QtlMovieEditTaskDialog::QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSetti
     connect(propertiesButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showInputFileProperties);
     connect(audioButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showAudioTest);
     connect(okButton, &QPushButton::clicked, this, &QtlMovieEditTaskDialog::accept);
-
-    // Restore the window geometry from the saved settings.
-    setObjectName(QStringLiteral("QtlMovieEditTaskDialog"));
-    setGeometrySettings(settings, true);
 }

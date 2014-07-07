@@ -54,12 +54,19 @@ class QtlMovieEditTask : public QWidget
 public:
     //!
     //! Constructor.
+    //! @param [in] parent Optional parent widget.
+    //!
+    explicit QtlMovieEditTask(QWidget* parent = 0);
+
+    //!
+    //! Initialize the editor.
+    //! Must be invoked before using the editor.
+    //! May be used only once.
     //! @param [in] task The task to edit.
     //! @param [in] settings Application settings.
     //! @param [in] log Where to log errors.
-    //! @param [in] parent Optional parent widget.
     //!
-    QtlMovieEditTask(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log, QWidget* parent = 0);
+    void initialize(QtlMovieTask* task, QtlMovieSettings* settings, QtlLogger* log);
 
     //!
     //! Get the task to edit.
@@ -154,11 +161,6 @@ private:
     QtlLogger*           _log;                //!< Where to log errors.
     QtlMovieTask*        _task;               //!< The task to edit.
     int                  _updatingSelections; //!< A counter to protect inputStreamSelectionUpdated().
-
-    //!
-    //! Setup the radio buttons to select the output type.
-    //!
-    void setupOutputTypes();
 
     // Unaccessible operations.
     QtlMovieEditTask() Q_DECL_EQ_DELETE;

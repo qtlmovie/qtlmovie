@@ -48,22 +48,18 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieJob::QtlMovieJob(const QtlMovieInputFile* inputFile,
-                         const QtlMovieOutputFile* outputFile,
-                         const QtlMovieSettings* settings,
-                         QtlLogger* log,
-                         QObject *parent) :
+QtlMovieJob::QtlMovieJob(QtlMovieTask* task, const QtlMovieSettings* settings, QtlLogger* log, QObject *parent) :
     QtlMovieAction(settings, log, parent),
-    _inputFile(inputFile),
-    _outputFile(outputFile),
+    _task(task),
     _outSeconds(0),
     _actionCount(0),
     _tempDir(),
     _actionList(),
     _variables()
 {
-    Q_ASSERT(inputFile != 0);
-    Q_ASSERT(outputFile != 0);
+    Q_ASSERT(task != 0);
+    Q_ASSERT(task->inputFile() != 0);
+    Q_ASSERT(task->outputFile() != 0);
 }
 
 
@@ -99,31 +95,31 @@ bool QtlMovieJob::start()
     }
 
     // Check that input/output files are specified.
-    if (_inputFile == 0 || !_inputFile->isSet()) {
+    if (_task == 0 || _task->inputFile() == 0 || !_task->inputFile()->isSet()) {
         return errorFalse(tr("No input file selected."));
     }
-    if (_outputFile == 0 || !_outputFile->isSet()) {
+    if (_task->outputFile() == 0 || !_task->outputFile()->isSet()) {
         return errorFalse(tr("No output file selected."));
     }
 
     // If the output file already exists...
-    QFile out(_outputFile->fileName());
+    QFile out(_task->outputFile()->fileName());
     if (out.exists()) {
         // Ask for confirmation to overwrite it.
-        if (!qtlConfirm(this, tr("File %1 already exists.\nOverwrite it?").arg(_outputFile->fileName()))) {
+        if (!qtlConfirm(this, tr("File %1 already exists.\nOverwrite it?").arg(_task->outputFile()->fileName()))) {
             // Don't overwrite, give up.
             return false;
         }
         // Delete the previous output file to avoid using it by mistake if the conversion fails.
         if (!out.remove()) {
             // Failed to delete it. Continue anyway, will be overwritten by converter.
-            line(tr("Failed to delete %1").arg(_outputFile->fileName()));
+            line(tr("Failed to delete %1").arg(_task->outputFile()->fileName()));
         }
     }
 
     // If intermediate files needs to be created, we will use a temporary directory
     // in the same directory as the output file.
-    _tempDir = QtlFile::absoluteNativeFilePath(_outputFile->fileName() + ".qtlmovie.temp");
+    _tempDir = QtlFile::absoluteNativeFilePath(_task->outputFile()->fileName() + ".qtlmovie.temp");
 
     // Create the temporary directory.
     QDir dir;
@@ -144,9 +140,9 @@ bool QtlMovieJob::start()
     _tempDir = QtlFile::shortPath(_tempDir, true);
 
     // Force the display aspect ratio of the video stream if required.
-    const QtlMovieStreamInfoPtr video(_inputFile->selectedVideoStreamInfo());
+    const QtlMovieStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
     if (!video.isNull()) {
-        video->setForcedDisplayAspectRatio(_outputFile->forcedDisplayAspectRatio());
+        video->setForcedDisplayAspectRatio(_task->outputFile()->forcedDisplayAspectRatio());
     }
 
     // Build the list of actions to execute.
@@ -397,24 +393,24 @@ bool QtlMovieJob::buildScenario()
 {
     // Duration of the input file in seconds.
     const int maxSeconds = settings()->transcodeComplete() ? 0 : settings()->transcodeSeconds();
-    const int totalSeconds = qRound(_inputFile->durationInSeconds());
+    const int totalSeconds = qRound(_task->inputFile()->durationInSeconds());
     _outSeconds = maxSeconds > 0 && maxSeconds < totalSeconds ? maxSeconds : totalSeconds;
 
     // Main output file type.
-    const QtlMovieOutputFile::OutputType outputType = _outputFile->outputType();
+    const QtlMovieOutputFile::OutputType outputType = _task->outputFile()->outputType();
 
     // If the operation is simply a DVD burning, there is nothing to transcode.
-    if (_inputFile->isIsoImage() && outputType == QtlMovieOutputFile::DvdBurn) {
-        return addBurnDvd(_inputFile->fileName(), settings()->dvdBurner());
+    if (_task->inputFile()->isIsoImage() && outputType == QtlMovieOutputFile::DvdBurn) {
+        return addBurnDvd(_task->inputFile()->fileName(), settings()->dvdBurner());
     }
 
     // The input file which will be used for media transcoding.
     // Initially, this is the input file but we may insert intermediate steps later.
-    const QtlMovieInputFile* inputForTranscoding = _inputFile;
+    const QtlMovieInputFile* inputForTranscoding = _task->inputFile();
 
     // External subtitle file.
-    if (!_inputFile->externalSubtitleFileName().isEmpty()) {
-        switch (QtlMovieStreamInfo::subtitleType(_inputFile->externalSubtitleFileName(), true)) {
+    if (!_task->inputFile()->externalSubtitleFileName().isEmpty()) {
+        switch (QtlMovieStreamInfo::subtitleType(_task->inputFile()->externalSubtitleFileName(), true)) {
         case QtlMovieStreamInfo::SubAss:
         case QtlMovieStreamInfo::SubSsa:
         case QtlMovieStreamInfo::SubRip:
@@ -426,7 +422,7 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Subtitle stream in input file.
-    const QtlMovieStreamInfoPtr subtitleStream(_inputFile->selectedSubtitleStreamInfo());
+    const QtlMovieStreamInfoPtr subtitleStream(_task->inputFile()->selectedSubtitleStreamInfo());
 
     // Do we need to add an initial pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
@@ -443,14 +439,14 @@ bool QtlMovieJob::buildScenario()
         QString subtitleFile(_tempDir + QDir::separator() + "subtitles");
 
         // Create a process for subtitle extraction.
-        if (!addExtractSubtitle(_inputFile, subtitleFile)) {
+        if (!addExtractSubtitle(_task->inputFile(), subtitleFile)) {
             return false;
         }
 
         // The input file for transcoding has different subtitle characteristics
         // (external subtitle file instead of internal subtitle stream).
         // The new input file object will be deleted with the job instance.
-        QtlMovieInputFile* next = new QtlMovieInputFile(*_inputFile, this);
+        QtlMovieInputFile* next = new QtlMovieInputFile(*_task->inputFile(), this);
         next->setExternalSubtitleFileName(subtitleFile);
         inputForTranscoding = next;
     }
@@ -464,7 +460,7 @@ bool QtlMovieJob::buildScenario()
 
         // Add an initial pass to evaluate the audio volume.
         QtlMovieFFmpegVolumeDetect* process =
-                new QtlMovieFFmpegVolumeDetect(_inputFile->ffmpegInputFileSpecification(),
+                new QtlMovieFFmpegVolumeDetect(_task->inputFile()->ffmpegInputFileSpecification(),
                                                audioStream->ffSpecifier(),
                                                _outSeconds,
                                                _tempDir,
@@ -479,29 +475,29 @@ bool QtlMovieJob::buildScenario()
     bool success = false;
     switch (outputType) {
     case QtlMovieOutputFile::DvdFile: {
-        success = addTranscodeToDvdFile(inputForTranscoding, _outputFile->fileName());
+        success = addTranscodeToDvdFile(inputForTranscoding, _task->outputFile()->fileName());
         break;
     }
     case QtlMovieOutputFile::DvdImage: {
-        success = addTranscodeToDvdIsoImage(inputForTranscoding, _outputFile->fileName());
+        success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName());
         break;
     }
     case QtlMovieOutputFile::DvdBurn: {
-        success = addTranscodeToDvdIsoImage(inputForTranscoding, _outputFile->fileName()) &&
-                addBurnDvd(_outputFile->fileName(), settings()->dvdBurner());
+        success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName()) &&
+                addBurnDvd(_task->outputFile()->fileName(), settings()->dvdBurner());
         break;
     }
     case QtlMovieOutputFile::Ipad:
     case QtlMovieOutputFile::Iphone: {
-        success = addTranscodeToMp4(inputForTranscoding, _outputFile->fileName(), outputType);
+        success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(), outputType);
         break;
     }
     case QtlMovieOutputFile::Avi: {
-        success = addTranscodeToAvi(inputForTranscoding, _outputFile->fileName());
+        success = addTranscodeToAvi(inputForTranscoding, _task->outputFile()->fileName());
         break;
     }
     case QtlMovieOutputFile::SubRip: {
-        QString subtitleFile(_outputFile->fileName());
+        QString subtitleFile(_task->outputFile()->fileName());
         success = addExtractSubtitle(inputForTranscoding, subtitleFile);
         break;
     }
