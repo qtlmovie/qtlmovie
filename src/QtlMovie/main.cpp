@@ -68,8 +68,13 @@ int main(int argc, char *argv[])
     // Various sanity checks.
     QtsTsPacket::sanityCheck();
 
-    // Run the application GUI.
-    QtlMovieMainWindow win(0, inputFile);
-    win.show();
-    return app.exec();
+    // Run the application GUI. When a restart is requested, create a new main window.
+    for (;;) {
+        QtlMovieMainWindow win(0, inputFile);
+        win.show();
+        const int status = QCoreApplication::exec();
+        if (!win.restartRequested()) {
+            return status;
+        }
+    }
 }

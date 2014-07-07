@@ -58,7 +58,8 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 #endif
     _job(0),
     _sound(),
-    _closePending(false)
+    _closePending(false),
+    _restartRequested(false)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
@@ -447,9 +448,18 @@ void QtlMovieMainWindow::editSettings()
     // Open an edition dialog with the current settings.
     QtlMovieEditSettings edit(_settings, this);
     if (edit.exec() == QDialog::Accepted) {
+
         // Button "OK" has been selected, update settings from the values in the dialog box.
         edit.applySettings();
         applyUiSettings();
+
+        // Check if the application needs a restart.
+        // Currently, the single file vs. batch mode option is the only cause for a restart.
+        _restartRequested = int(_ui.singleTask == 0) ^ int(_settings->useBatchMode());
+
+        if (_restartRequested && qtlConfirm(this, tr("These settings will be applied when the application restarts.\nRestart now?"))) {
+            close();
+        }
     }
 }
 

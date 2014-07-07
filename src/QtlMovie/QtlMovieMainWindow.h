@@ -64,6 +64,15 @@ public:
     //!
     explicit QtlMovieMainWindow(QWidget *parent = 0, const QString& initialFileName = QString());
 
+    //!
+    //! Check if a restart of the application was requested by the user.
+    //! @return True if the application shall be restarted.
+    //!
+    bool restartRequested() const
+    {
+        return _restartRequested;
+    }
+
 private slots:
     //!
     //! Invoked by the "Transcode ..." buttons.
@@ -140,6 +149,7 @@ private:
     QtlMovieJob*           _job;                //!< Current transcoding job.
     QSoundEffect           _sound;              //!< Sound player for notification.
     bool                   _closePending;       //!< Close the application as soon as possible.
+    bool                   _restartRequested;   //!< A restart of the application is requested.
 
     //!
     //! Start the first transcoding in the list.
