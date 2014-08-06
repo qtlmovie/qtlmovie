@@ -64,6 +64,7 @@ public:
 
     //!
     //! Add a task at the end of the list.
+    //! The QtlMovieTaskList intance takes ownership of the @a task object.
     //! @param [in] task The task to add.
     //! @param [in] editNow If true, immediately opens an editor on it.
     //!
@@ -75,6 +76,18 @@ public slots:
     //! Reimplemented from QTableWidget.
     //!
     void clear();
+    //!
+    //! Remove a row from the table.
+    //! Reimplemented from QTableWidget.
+    //! @param [in] row The row to remove.
+    //!
+    void removeRow(int row);
+    //!
+    //! Remove rows from the table.
+    //! @param [in] firstRow The first row to remove.
+    //! @param [in] lastRow The last row to remove.
+    //!
+    void removeRows(int firstRow, int lastRow);
     //!
     //! Add a new task in the list and start editing it.
     //!

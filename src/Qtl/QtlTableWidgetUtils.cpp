@@ -74,14 +74,35 @@ QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row)
 
 void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items)
 {
-    if (table != 0 && !items.isEmpty() && row >= 0) {
-        for (int column = 0; column < items.size(); ++column) {
+    if (table != 0 && !items.isEmpty() && row >= 0 && row < table->rowCount()) {
+        for (int column = 0; column < items.size() && column < table->columnCount(); ++column) {
             QTableWidgetItem* const item = items[column];
             if (item != 0) {
                 table->setItem(row, column, item);
                 // The row may have changed if automatic sorting was enabled.
                 row = item->row();
             }
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Set the texts of all items in a row of a QTableWidget.
+//-----------------------------------------------------------------------------
+
+void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts)
+{
+    if (table != 0 && !texts.isEmpty() && row >= 0 && row < table->rowCount()) {
+        for (int column = 0; column < texts.size() && column < table->columnCount(); ++column) {
+            // Get the item, create it if necessary.
+            QTableWidgetItem* item = table->item(row, column);
+            if (item == 0) {
+                item = new QTableWidgetItem();
+                table->setItem(row, column, item);
+            }
+            // Update the text in the item.
+            item->setText(texts[column]);
         }
     }
 }

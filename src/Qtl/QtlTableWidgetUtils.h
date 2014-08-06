@@ -64,4 +64,12 @@ QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row);
 //!
 void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items);
 
+//!
+//! Set the texts of all items in a row of a QTableWidget.
+//! @param [in,out] table The table to modify.
+//! @param [in] row The row to set.
+//! @param [in] texts The texts to set in the various columns of the row.
+//!
+void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts);
+
 #endif // QTLTABLEWIDGETUTILS_H

@@ -54,6 +54,7 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
 
     // Setup headers.
     verticalHeader()->setVisible(false);
+    verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     horizontalHeader()->setVisible(true);
     horizontalHeader()->setCascadingSectionResizes(true);
     horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -80,6 +81,16 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
 
     action = new QAction(tr("New ..."), this);
     connect(action, &QAction::triggered, this, &QtlMovieTaskList::addAndEditTask);
+    addAction(action);
+
+    action = new QAction(tr("Move up"), this);
+    action->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_Up));
+    connect(action, &QAction::triggered, this, &QtlMovieTaskList::moveUpSelectedTasks);
+    addAction(action);
+
+    action = new QAction(tr("Move down"), this);
+    action->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_Down));
+    connect(action, &QAction::triggered, this, &QtlMovieTaskList::moveDownSelectedTasks);
     addAction(action);
 
     action = new QAction(tr("Delete"), this);
@@ -116,6 +127,9 @@ void QtlMovieTaskList::initialize(QtlMovieSettings* settings, QtlLogger* log)
 void QtlMovieTaskList::addTask(QtlMovieTask* task, bool editNow)
 {
     if (task != 0 && task->inputFile() != 0 && task->outputFile() != 0) {
+
+        // Take ownership of the object.
+        task->setParent(this);
 
         // Create the row with empty items on each column.
         setRowCount(rowCount() + 1);
@@ -168,20 +182,11 @@ void QtlMovieTaskList::updateRow(int row)
 {
     QtlMovieTask* task = taskOfRow(row);
     if (task != 0 && task->inputFile() != 0 && task->outputFile() != 0) {
-
         // The columns contain the output type, input file name, input file directory.
         const QString inFile(task->inputFile()->fileName());
-        const QtlStringList texts(QtlMovieOutputFile::outputTypeName(task->outputFile()->outputType()),
-                                  inFile.isEmpty() ? "" : QFileInfo(inFile).fileName(),
-                                  inFile.isEmpty() ? "" : QtlFile::parentPath(inFile));
-
-        // Update the items.
-        for (int column = 0; column < texts.size(); ++column) {
-            QTableWidgetItem* item = this->item(row, column);
-            if (item != 0) {
-                item->setText(texts[column]);
-            }
-        }
+        qtlSetTableRow(this, row, QtlStringList(QtlMovieOutputFile::outputTypeName(task->outputFile()->outputType()),
+                                                inFile.isEmpty() ? "" : QFileInfo(inFile).fileName(),
+                                                inFile.isEmpty() ? "" : QtlFile::parentPath(inFile)));
     }
 }
 
@@ -221,7 +226,37 @@ void QtlMovieTaskList::taskChanged(QtlMovieTask* task)
 void QtlMovieTaskList::clear()
 {
     // Delete all rows but keep the headers.
-    setRowCount(0);
+    removeRows(0, rowCount() - 1);
+}
+
+
+//----------------------------------------------------------------------------
+// Remove a row from the table. Reimplemented from QTableWidget.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::removeRow(int row)
+{
+    // Get the associated transcoding task.
+    QtlMovieTask* task = taskOfRow(row);
+
+    //@@@@ check if transcoding task in progress.
+
+    // Delete the row and the task.
+    QTableWidget::removeRow(row);
+    delete task;
+}
+
+
+//----------------------------------------------------------------------------
+// Remove rows from the table.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::removeRows(int firstRow, int lastRow)
+{
+    // Remove rows in sequence, from last to first.
+    for (int row = lastRow; row >= firstRow; --row) {
+        removeRow(row);
+    }
 }
 
 
@@ -310,7 +345,7 @@ void QtlMovieTaskList::moveDownSelectedTasks()
 
             // Keep selection on the moved rows.
             clearSelection();
-            setRangeSelected(QTableWidgetSelectionRange(range.topRow() + 1, 0, range.bottomRow() + 1, colorCount() - 1), true);
+            setRangeSelected(QTableWidgetSelectionRange(range.topRow() + 1, 0, range.bottomRow() + 1, columnCount() - 1), true);
         }
     }
 }
@@ -337,13 +372,7 @@ void QtlMovieTaskList::deleteSelectedTasks()
                 }
             }
             if (qtlConfirm(this, text)) {
-                // Delete tasks.
-                for (int row = start + count - 1; row >= start; --row) {
-                    //@@@@ check if transcoding task in progress.
-                    QtlMovieTask* task = taskOfRow(start);
-                    removeRow(row);
-                    delete task;
-                }
+                removeRows(start, start + count - 1);
             }
         }
     }
