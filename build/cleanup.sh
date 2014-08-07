@@ -61,7 +61,7 @@ find $ROOT \
        -iname '*.log' -o \
        -iname '*.tmp' -o \
        -iname '*~' -o \
-       -iname '*.pro.user*' -o \
+       -iname '*.pro.*' -o \
        -iname '*.autosave' -o \
        -iname '.directory' -o \
        -iname 'object_script.*.release' -o \

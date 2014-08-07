@@ -31,7 +31,6 @@
 //
 //----------------------------------------------------------------------------
 
-#define QTLMOVIESETTINGS_CPP
 #include "QtlMovieSettings.h"
 #include "QtlMovieSettingsMigration.h"
 #include "QtlStringList.h"
@@ -43,9 +42,8 @@
 //----------------------------------------------------------------------------
 
 QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
-    QObject(parent),
+    QtlSettings("QtlMovie", "QtlMovie", parent),
     _log(log),
-    _settings("QtlMovie", "QtlMovie"),
     _ffmpegDefault(new QtlMovieExecFile("FFmpeg",
                                         "http://ffmpeg.org/",
                                         "http://ffmpeg.zeranoe.com/builds/",
@@ -135,25 +133,6 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
 
 
 //----------------------------------------------------------------------------
-// Get a value from the settings.
-//----------------------------------------------------------------------------
-
-int QtlMovieSettings::intValue(const QString& key, int defaultValue) const
-{
-    const QVariant var(_settings.value(key));
-    bool ok = false;
-    const int value = var.toInt(&ok);
-    return ok ? value : defaultValue;
-}
-
-bool QtlMovieSettings::boolValue(const QString& key, bool defaultValue) const
-{
-    const QVariant var(_settings.value(key));
-    return var.isValid() ? var.toBool() : defaultValue;
-}
-
-
-//----------------------------------------------------------------------------
 // "Normalize" a string list: lower case, sorted.
 //----------------------------------------------------------------------------
 
@@ -215,21 +194,6 @@ QString QtlMovieSettings::defaultOutputDir(const QString& outputType, bool force
 void QtlMovieSettings::setDefaultOutputDir(const QString& outputType, const QString& defaultOutDir)
 {
     _settings.setValue("defaultOutputDir/" + outputType, defaultOutDir);
-}
-
-
-//----------------------------------------------------------------------------
-// Save / restore the geometry of a widget into / from the settings.
-//----------------------------------------------------------------------------
-
-void QtlMovieSettings::saveGeometry(const QWidget* widget)
-{
-    _settings.setValue(widget->objectName() + "/geometry", widget->saveGeometry());
-}
-
-void QtlMovieSettings::restoreGeometry(QWidget* widget)
-{
-    widget->restoreGeometry(_settings.value(widget->objectName() + "/geometry").toByteArray());
 }
 
 
@@ -327,7 +291,7 @@ void QtlMovieSettings::reportMissingTools() const
 // Media tools executables.
 //----------------------------------------------------------------------------
 
-#define QTL_SETTINGS_EXEC_DEFINITIONS(getName,setName) \
+#define QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(getName,setName) \
     QString QtlMovieSettings::getName##ExplicitExecutable() const \
     { \
         _##getName##Explicit->setFileName(_settings.value("tools/" #getName).toString()); \
@@ -339,11 +303,11 @@ void QtlMovieSettings::reportMissingTools() const
         } \
     }
 
-QTL_SETTINGS_EXEC_DEFINITIONS(ffmpeg, FFmpeg)
-QTL_SETTINGS_EXEC_DEFINITIONS(ffprobe, FFprobe)
-QTL_SETTINGS_EXEC_DEFINITIONS(dvdauthor, DvdAuthor)
-QTL_SETTINGS_EXEC_DEFINITIONS(mkisofs, Mkisofs)
-QTL_SETTINGS_EXEC_DEFINITIONS(growisofs, Growisofs)
-QTL_SETTINGS_EXEC_DEFINITIONS(telxcc, Telxcc)
-QTL_SETTINGS_EXEC_DEFINITIONS(ccextractor, CCextractor)
-QTL_SETTINGS_EXEC_DEFINITIONS(dvddecrypter, DvdDecrypter)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ffmpeg, FFmpeg)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ffprobe, FFprobe)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvdauthor, DvdAuthor)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(mkisofs, Mkisofs)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(growisofs, Growisofs)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(telxcc, Telxcc)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ccextractor, CCextractor)
+QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvddecrypter, DvdDecrypter)

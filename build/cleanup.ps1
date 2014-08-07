@@ -85,8 +85,7 @@ $files = @(Get-ChildItem -Recurse $RootDir | Where-Object {
     $_.Name -like "debug" -or
     $_.Name -like "release" -or
     $_.Name -like "*~" -or
-    $_.Name -like "*.pro.user" -or
-    $_.Name -like "*.pro.user.*" -or
+    $_.Name -like "*.pro.*" -or
     $_.Name -like "*.exe" -or
     $_.Name -like "makefile*" -or
     $_.Name -like "moc_*" -or

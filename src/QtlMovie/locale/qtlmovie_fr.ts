@@ -1589,42 +1589,42 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieSettings</name>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="296"/>
+        <location filename="../QtlMovieSettings.cpp" line="260"/>
         <source>Error searching for FFmpeg, install FFmpeg or set explicit path in settings.</source>
         <translation>FFmpeg introuvable, installerl FFmpeg ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="299"/>
+        <location filename="../QtlMovieSettings.cpp" line="263"/>
         <source>Error searching for FFprobe, install FFmpeg or set explicit path in settings.</source>
         <translation>FFprobe introuvable, installerl FFprobe ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="302"/>
+        <location filename="../QtlMovieSettings.cpp" line="266"/>
         <source>Error searching for DvdAuthor, install it or set explicit path in settings.</source>
         <translation>DVD Author introuvable, installerl DVD Author ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="305"/>
+        <location filename="../QtlMovieSettings.cpp" line="269"/>
         <source>Error searching for mkisofs, install it or set explicit path in settings.</source>
         <translation>Mkisofs introuvable, installerl mkisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="308"/>
+        <location filename="../QtlMovieSettings.cpp" line="272"/>
         <source>Error searching for growisofs, install it or set explicit path in settings.</source>
         <translation>Growisofs introuvable, installerl growisofs ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="311"/>
+        <location filename="../QtlMovieSettings.cpp" line="275"/>
         <source>Error searching for telxcc, install it or set explicit path in settings.</source>
         <translation>Telxcc introuvable, installerl telxcc ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="314"/>
+        <location filename="../QtlMovieSettings.cpp" line="278"/>
         <source>Error searching for CCExtractor, install it or set explicit path in settings.</source>
         <translation>CCExtractor introuvable, installerl CCExtractor ou définir son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieSettings.cpp" line="320"/>
+        <location filename="../QtlMovieSettings.cpp" line="284"/>
         <source>Error searching for DVD Decrypter, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, installerl DVD Decrypter ou définir son emplacement dans les options.</translation>
     </message>
@@ -1632,42 +1632,52 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieTaskList</name>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="62"/>
+        <location filename="../QtlMovieTaskList.cpp" line="63"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="63"/>
+        <location filename="../QtlMovieTaskList.cpp" line="64"/>
         <source>Input file</source>
         <translation>Fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="64"/>
+        <location filename="../QtlMovieTaskList.cpp" line="65"/>
         <source>Input directory</source>
         <translation>Répertoire d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="76"/>
+        <location filename="../QtlMovieTaskList.cpp" line="77"/>
         <source>Edit ...</source>
         <translation>Editer ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="81"/>
+        <location filename="../QtlMovieTaskList.cpp" line="82"/>
         <source>New ...</source>
         <translation>Nouveau ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="85"/>
+        <location filename="../QtlMovieTaskList.cpp" line="86"/>
+        <source>Move up</source>
+        <translation>Déplacer vers le haut</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieTaskList.cpp" line="91"/>
+        <source>Move down</source>
+        <translation>Déplacer vers le bas</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieTaskList.cpp" line="96"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="332"/>
+        <location filename="../QtlMovieTaskList.cpp" line="367"/>
         <source>Delete these %1 tasks?</source>
         <translation>Supprimer ces %1 tâches?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="336"/>
+        <location filename="../QtlMovieTaskList.cpp" line="371"/>
         <source>Delete task %1?</source>
         <translation>Supprimer la tâche %1?</translation>
     </message>

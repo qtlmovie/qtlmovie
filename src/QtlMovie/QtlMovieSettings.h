@@ -36,18 +36,16 @@
 #ifndef QTLMOVIESETTINGS_H
 #define QTLMOVIESETTINGS_H
 
-#include <QtCore>
-#include <QWidget>
+#include "QtlSettings.h"
 #include "QtlMovieExecFile.h"
-#include "QtlGeometrySettingsInterface.h"
 #include "QtlLogger.h"
 #include "QtlMovie.h"
 
 //!
 //! Description of the global settings of the application.
-//! Refer the QtlMovie user guide for the definition of each setting.
+//! Refer to the QtlMovie user guide for the definition of each setting.
 //!
-class QtlMovieSettings : public QObject, public QtlGeometrySettingsInterface
+class QtlMovieSettings : public QtlSettings
 {
     Q_OBJECT
 
@@ -58,15 +56,6 @@ public:
     //! @param [in] parent Optional parent widget.
     //!
     explicit QtlMovieSettings(QtlLogger* log, QObject* parent = 0);
-
-    //!
-    //! Make sure that all settings are properly saved on disk immediately.
-    //! This is automatically done by Qt from time to time anyway.
-    //!
-    void sync()
-    {
-        _settings.sync();
-    }
 
     //!
     //! Report missing media tools in the log.
@@ -180,97 +169,64 @@ public:
     //!
     int iphoneVideoHeight() const;
 
-    //!
-    //! Save the geometry of a widget.
-    //! Implementation of QtlGeometrySettingsInterface.
-    //! @param [in] widget The widget to save the geometry of.
-    //!
-    virtual void saveGeometry(const QWidget* widget);
-
-    //!
-    //! Restore the geometry of a widget.
-    //! Implementation of QtlGeometrySettingsInterface.
-    //! @param [in,out] widget The widget to restore the geometry.
-    //!
-    virtual void restoreGeometry(QWidget* widget);
-
     //
     // Inlined definitions of the basic getters and setters.
-    // These accessors simply load and store the option without further processing.
-    // There is one macro per option. The macro defines the getter and the setter.
     //
-#define QTLMOVIE_SETTINGS_INT(getter, setter, defaultValue) \
-    int getter() const {return intValue(#getter, defaultValue);} \
-    void setter(int x) {_settings.setValue(#getter, x);}
-
-#define QTLMOVIE_SETTINGS_ENUM(getter, setter, enumType, defaultValue) \
-    enumType getter() const {return static_cast<enumType>(intValue(#getter, static_cast<int>(defaultValue)));} \
-    void setter(enumType x) {_settings.setValue(#getter, static_cast<int>(x));}
-
-#define QTLMOVIE_SETTINGS_BOOL(getter, setter, defaultValue) \
-    bool getter() const {return boolValue(#getter, defaultValue);} \
-    void setter(bool x) {_settings.setValue(#getter, x);}
-
-#define QTLMOVIE_SETTINGS_STRING(getter, setter, defaultValue)      \
-    QString getter() const {return _settings.value(#getter, defaultValue).toString();} \
-    void setter(const QString& x) {_settings.setValue(#getter, x);}
-
-    QTLMOVIE_SETTINGS_INT(maxLogLines, setMaxLogLines, QTL_MAX_LOG_LINE)
-    QTLMOVIE_SETTINGS_BOOL(defaultOutputDirIsInput, setDefaultOutputDirIsInput, QTL_DEFAULT_OUTDIR_INPUT)
-    QTLMOVIE_SETTINGS_BOOL(transcodeComplete, setTranscodeComplete, QTL_TRANSCODE_COMPLETE)
-    QTLMOVIE_SETTINGS_INT(transcodeSeconds, setTranscodeSeconds, QTL_TRANSCODE_SECONDS)
-    QTLMOVIE_SETTINGS_INT(dvdVideoBitRate, setDvdVideoBitRate, QTL_DVD_DEFAULT_VIDEO_BITRATE)
-    QTLMOVIE_SETTINGS_INT(ipadVideoBitRate, setIpadVideoBitRate, QTL_IPAD_DEFAULT_VIDEO_BITRATE)
-    QTLMOVIE_SETTINGS_INT(iphoneVideoBitRate, setIphoneVideoBitRate, QTL_IPHONE_DEFAULT_VIDEO_BITRATE)
-    QTLMOVIE_SETTINGS_BOOL(keepIntermediateFiles, setKeepIntermediateFiles, QTL_KEEP_INTERMEDIATE_FILES)
-    QTLMOVIE_SETTINGS_INT(ffmpegProbeSeconds, setFFmpegProbeSeconds, QTL_FFMPEG_PROBE_SECONDS)
-    QTLMOVIE_SETTINGS_BOOL(srtUseVideoSizeHint, setSrtUseVideoSizeHint, QTL_SRT_USE_VIDEO_SIZE_HINT)
-    QTLMOVIE_SETTINGS_INT(chapterMinutes, setChapterMinutes, QTL_CHAPTER_MINUTES)
-    QTLMOVIE_SETTINGS_BOOL(dvdRemuxAfterTranscode, setDvdRemuxAfterTranscode, QTL_DVD_REMUX_AFTER_TRANSCODE)
-    QTLMOVIE_SETTINGS_STRING(dvdBurner, setDvdBurner, "")
-    QTLMOVIE_SETTINGS_BOOL(createPalDvd, setCreatePalDvd, QTL_CREATE_PAL_DVD)
-    QTLMOVIE_SETTINGS_ENUM(ipadScreenSize, setIpadScreenSize, IpadScreenSize, QTL_IPAD_SCREEN_SIZE)
-    QTLMOVIE_SETTINGS_ENUM(iphoneScreenSize, setIphoneScreenSize, IphoneScreenSize, QTL_IPHONE_SCREEN_SIZE)
-    QTLMOVIE_SETTINGS_BOOL(forceDvdTranscode, setForceDvdTranscode, QTL_FORCE_DVD_TRANSCODE)
-    QTLMOVIE_SETTINGS_BOOL(newVersionCheck, setNewVersionCheck, QTL_NEW_VERSION_CHECK)
-    QTLMOVIE_SETTINGS_INT(aviVideoBitRate, setAviVideoBitRate, QTL_AVI_DEFAULT_VIDEO_BITRATE)
-    QTLMOVIE_SETTINGS_INT(aviMaxVideoWidth, setAviMaxVideoWidth, QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH)
-    QTLMOVIE_SETTINGS_INT(aviMaxVideoHeight, setAviMaxVideoHeight, QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT)
-    QTLMOVIE_SETTINGS_BOOL(audioNormalize, setAudioNormalize, QTL_DEFAULT_AUDIO_NORMALIZE)
-    QTLMOVIE_SETTINGS_INT(audioNormalizeMean, setAudioNormalizeMean, QTL_DEFAULT_AUDIO_MEAN_LEVEL)
-    QTLMOVIE_SETTINGS_INT(audioNormalizePeak, setAudioNormalizePeak, QTL_DEFAULT_AUDIO_PEAK_LEVEL)
-    QTLMOVIE_SETTINGS_ENUM(audioNormalizeMode, setAudioNormalizeMode, AudioNormalizeMode, QTL_AUDIO_NORMALIZE_MODE)
-    QTLMOVIE_SETTINGS_BOOL(autoRotateVideo, setAutoRotateVideo, QTL_AUTO_ROTATE_VIDEO)
-    QTLMOVIE_SETTINGS_BOOL(playSoundOnCompletion, setPlaySoundOnCompletion, QTL_PLAY_SOUND_ON_COMPLETION)
-    QTLMOVIE_SETTINGS_BOOL(clearLogBeforeTranscode, setClearLogBeforeTranscode, QTL_CLEAR_LOG_BEFORE_TRANSCODE)
-    QTLMOVIE_SETTINGS_BOOL(saveLogAfterTranscode, setSaveLogAfterTranscode, QTL_SAVE_LOG_AFTER_TRANSCODE)
-    QTLMOVIE_SETTINGS_STRING(logFileExtension, setLogFileExtension, QTL_LOG_FILE_EXTENSION)
-    QTLMOVIE_SETTINGS_INT(ffprobeExecutionTimeout, setFFprobeExecutionTimeout, QTL_FFPROBE_EXECUTION_TIMEOUT)
-    QTLMOVIE_SETTINGS_BOOL(useBatchMode, setUseBatchMode, QTL_USE_BATCH_MODE)
+    QTL_SETTINGS_INT(maxLogLines, setMaxLogLines, QTL_MAX_LOG_LINE)
+    QTL_SETTINGS_BOOL(defaultOutputDirIsInput, setDefaultOutputDirIsInput, QTL_DEFAULT_OUTDIR_INPUT)
+    QTL_SETTINGS_BOOL(transcodeComplete, setTranscodeComplete, QTL_TRANSCODE_COMPLETE)
+    QTL_SETTINGS_INT(transcodeSeconds, setTranscodeSeconds, QTL_TRANSCODE_SECONDS)
+    QTL_SETTINGS_INT(dvdVideoBitRate, setDvdVideoBitRate, QTL_DVD_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_INT(ipadVideoBitRate, setIpadVideoBitRate, QTL_IPAD_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_INT(iphoneVideoBitRate, setIphoneVideoBitRate, QTL_IPHONE_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_BOOL(keepIntermediateFiles, setKeepIntermediateFiles, QTL_KEEP_INTERMEDIATE_FILES)
+    QTL_SETTINGS_INT(ffmpegProbeSeconds, setFFmpegProbeSeconds, QTL_FFMPEG_PROBE_SECONDS)
+    QTL_SETTINGS_BOOL(srtUseVideoSizeHint, setSrtUseVideoSizeHint, QTL_SRT_USE_VIDEO_SIZE_HINT)
+    QTL_SETTINGS_INT(chapterMinutes, setChapterMinutes, QTL_CHAPTER_MINUTES)
+    QTL_SETTINGS_BOOL(dvdRemuxAfterTranscode, setDvdRemuxAfterTranscode, QTL_DVD_REMUX_AFTER_TRANSCODE)
+    QTL_SETTINGS_STRING(dvdBurner, setDvdBurner, "")
+    QTL_SETTINGS_BOOL(createPalDvd, setCreatePalDvd, QTL_CREATE_PAL_DVD)
+    QTL_SETTINGS_ENUM(ipadScreenSize, setIpadScreenSize, IpadScreenSize, QTL_IPAD_SCREEN_SIZE)
+    QTL_SETTINGS_ENUM(iphoneScreenSize, setIphoneScreenSize, IphoneScreenSize, QTL_IPHONE_SCREEN_SIZE)
+    QTL_SETTINGS_BOOL(forceDvdTranscode, setForceDvdTranscode, QTL_FORCE_DVD_TRANSCODE)
+    QTL_SETTINGS_BOOL(newVersionCheck, setNewVersionCheck, QTL_NEW_VERSION_CHECK)
+    QTL_SETTINGS_INT(aviVideoBitRate, setAviVideoBitRate, QTL_AVI_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_INT(aviMaxVideoWidth, setAviMaxVideoWidth, QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH)
+    QTL_SETTINGS_INT(aviMaxVideoHeight, setAviMaxVideoHeight, QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT)
+    QTL_SETTINGS_BOOL(audioNormalize, setAudioNormalize, QTL_DEFAULT_AUDIO_NORMALIZE)
+    QTL_SETTINGS_INT(audioNormalizeMean, setAudioNormalizeMean, QTL_DEFAULT_AUDIO_MEAN_LEVEL)
+    QTL_SETTINGS_INT(audioNormalizePeak, setAudioNormalizePeak, QTL_DEFAULT_AUDIO_PEAK_LEVEL)
+    QTL_SETTINGS_ENUM(audioNormalizeMode, setAudioNormalizeMode, AudioNormalizeMode, QTL_AUDIO_NORMALIZE_MODE)
+    QTL_SETTINGS_BOOL(autoRotateVideo, setAutoRotateVideo, QTL_AUTO_ROTATE_VIDEO)
+    QTL_SETTINGS_BOOL(playSoundOnCompletion, setPlaySoundOnCompletion, QTL_PLAY_SOUND_ON_COMPLETION)
+    QTL_SETTINGS_BOOL(clearLogBeforeTranscode, setClearLogBeforeTranscode, QTL_CLEAR_LOG_BEFORE_TRANSCODE)
+    QTL_SETTINGS_BOOL(saveLogAfterTranscode, setSaveLogAfterTranscode, QTL_SAVE_LOG_AFTER_TRANSCODE)
+    QTL_SETTINGS_STRING(logFileExtension, setLogFileExtension, QTL_LOG_FILE_EXTENSION)
+    QTL_SETTINGS_INT(ffprobeExecutionTimeout, setFFprobeExecutionTimeout, QTL_FFPROBE_EXECUTION_TIMEOUT)
+    QTL_SETTINGS_BOOL(useBatchMode, setUseBatchMode, QTL_USE_BATCH_MODE)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.
     // For each tool, there are three getters: default executable, explicitly set executable
     // and actual executable from the previous two. There is only one setter, for the explicitly set executable.
     //
-#define QTL_SETTINGS_EXEC(getName,setName) \
+#define QTLMOVIE_SETTINGS_EXEC(getName,setName) \
     QString getName##ExplicitExecutable() const; \
     void set##setName##ExplicitExecutable(const QString& getName##Executable); \
     QString getName##DefaultExecutable() const {return _##getName##Default->fileName();} \
     const QtlMovieExecFile* getName() const {getName##ExplicitExecutable(); return _##getName##Explicit->isSet() ? _##getName##Explicit : _##getName##Default;}
 
-    QTL_SETTINGS_EXEC(ffmpeg, FFmpeg)
-    QTL_SETTINGS_EXEC(ffprobe, FFprobe)
-    QTL_SETTINGS_EXEC(dvdauthor, DvdAuthor)
-    QTL_SETTINGS_EXEC(mkisofs, Mkisofs)
-    QTL_SETTINGS_EXEC(growisofs, Growisofs)
-    QTL_SETTINGS_EXEC(telxcc, Telxcc)
-    QTL_SETTINGS_EXEC(ccextractor, CCextractor)
-    QTL_SETTINGS_EXEC(dvddecrypter, DvdDecrypter)
+    QTLMOVIE_SETTINGS_EXEC(ffmpeg, FFmpeg)
+    QTLMOVIE_SETTINGS_EXEC(ffprobe, FFprobe)
+    QTLMOVIE_SETTINGS_EXEC(dvdauthor, DvdAuthor)
+    QTLMOVIE_SETTINGS_EXEC(mkisofs, Mkisofs)
+    QTLMOVIE_SETTINGS_EXEC(growisofs, Growisofs)
+    QTLMOVIE_SETTINGS_EXEC(telxcc, Telxcc)
+    QTLMOVIE_SETTINGS_EXEC(ccextractor, CCextractor)
+    QTLMOVIE_SETTINGS_EXEC(dvddecrypter, DvdDecrypter)
 
 private:
     QtlLogger*        _log;                   //!< Where to log errors.
-    QSettings         _settings;              //!< Settings in Qt format.
     QtlMovieExecFile* _ffmpegDefault;         //!< FFmpeg default executable description.
     QtlMovieExecFile* _ffmpegExplicit;        //!< FFmpeg explicit executable description.
     QtlMovieExecFile* _ffprobeDefault;        //!< FFprobe default executable description.
@@ -287,22 +243,6 @@ private:
     QtlMovieExecFile* _ccextractorExplicit;   //!< CCExtractor explicit executable description.
     QtlMovieExecFile* _dvddecrypterDefault;   //!< DvdDecrypter default executable description.
     QtlMovieExecFile* _dvddecrypterExplicit;  //!< DvdDecrypter explicit executable description.
-
-    //!
-    //! Get an integer value from the settings.
-    //! @param [in] key Key in the QSettings
-    //! @param [in] defaultValue Default value if undefined or incorrectly defined.
-    //! @return The final value.
-    //!
-    int intValue(const QString& key, int defaultValue) const;
-
-    //!
-    //! Get a boolean value from the settings.
-    //! @param [in] key Key in the QSettings
-    //! @param [in] defaultValue Default value if undefined or incorrectly defined.
-    //! @return The final value.
-    //!
-    bool boolValue(const QString& key, bool defaultValue) const;
 
     //!
     //! "Normalize" a string list: lower case, sorted.

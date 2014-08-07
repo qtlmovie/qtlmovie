@@ -91,6 +91,26 @@ public:
     }
 
     //!
+    //! Set the number of hex digits per group as displayed in value.
+    //! @param [in] valueHexDigitGroupSize The number of hex digits per group as displayed in value.
+    //! When negative or zero, there is no digit grouping and all hex digits are contiguous.
+    //!
+    void setValueHexDigitGroupSize(int valueHexDigitGroupSize)
+    {
+        _valueHexDigitGroupSize = valueHexDigitGroupSize < 0 ? 0 : valueHexDigitGroupSize;
+    }
+
+    //!
+    //! Get the number of hex digits per group as displayed in value.
+    //! @return The number of hex digits per group as displayed in value.
+    //! When zero, there is no digit grouping and all hex digits are contiguous.
+    //!
+    int valueHexDigitGroupSize() const
+    {
+        return _valueHexDigitGroupSize;
+    }
+
+    //!
     //! Get the content of the table widget as a list of TLV.
     //! @tparam TAG An integer type representing tag fields.
     //! @tparam LENGTH An integer type representing length fields.
@@ -192,16 +212,9 @@ private slots:
     //!
     void tlvDeleteSelected();
 
-protected:
-    //!
-    //! Invoked when a key is pressed.
-    //! Reimplemented from superclass.
-    //! @param [in] event The key event.
-    //!
-    virtual void keyPressEvent(QKeyEvent* event);
-
 private:
-    QtlNamedIntSet _tagNames; //!< List of known tags.
+    QtlNamedIntSet _tagNames;                //!< List of known tags.
+    int            _valueHexDigitGroupSize;  //!< Number of hex digits per group as displayed in value.
 
     //!
     //! Set the content of a row in the TLV editor.

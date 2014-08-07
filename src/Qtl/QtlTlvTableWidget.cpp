@@ -33,6 +33,10 @@
 
 #include "QtlTlvTableWidget.h"
 #include "QtlNamedIntComboBox.h"
+#include "QtlPlainTextEdit.h"
+#include "QtlTableWidgetUtils.h"
+#include "QtlMessageBoxUtils.h"
+#include "QtlStringUtils.h"
 #include "QtlFontUtils.h"
 #include "QtlHexa.h"
 
@@ -147,11 +151,8 @@ namespace {
         //!
         virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex &index) const
         {
-            // Create a QLineEdit for hexadecimal content.
-            QLineEdit* lineEdit = new QLineEdit(parent);
-            lineEdit->setValidator(new QRegExpValidator(QRegExp("[\\s0-9A-Fa-f]*"), parent));
-            lineEdit->setFont(qtlMonospaceFont());
-            return lineEdit;
+            // Create an editor for hexadecimal content.
+            return new QtlPlainTextEdit(parent, QtlPlainTextEdit::Monospace | QtlPlainTextEdit::ToUpper | QtlPlainTextEdit::Spaces | QtlPlainTextEdit::Hexa);
         }
         //!
         //! Transfer data from the model to the editor widget.
@@ -161,14 +162,14 @@ namespace {
         //!
         virtual void setEditorData(QWidget* editor, const QModelIndex& index) const
         {
-            QLineEdit* lineEdit = qobject_cast<QLineEdit*>(editor);
-            if (lineEdit == 0) {
+            QtlPlainTextEdit* edit = qobject_cast<QtlPlainTextEdit*>(editor);
+            if (edit == 0) {
                 // Not an editor we created, pass to superclass.
                 QStyledItemDelegate::setEditorData(editor, index);
             }
             else {
                 // Get the current text of the item.
-                lineEdit->setText(index.data(Qt::EditRole).toString());
+                edit->setPlainText(index.data(Qt::EditRole).toString());
             }
         }
         //!
@@ -180,14 +181,14 @@ namespace {
         //!
         virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
         {
-            QLineEdit* lineEdit = qobject_cast<QLineEdit*>(editor);
-            if (lineEdit == 0) {
+            QtlPlainTextEdit* edit = qobject_cast<QtlPlainTextEdit*>(editor);
+            if (edit == 0) {
                 // Not an editor we created, pass to superclass.
                 QStyledItemDelegate::setModelData(editor, model, index);
             }
             else {
                 // Set the model data to the editor content.
-                model->setData(index, lineEdit->text(), Qt::EditRole);
+                model->setData(index, edit->toPlainText(), Qt::EditRole);
             }
         }
     private:
@@ -204,23 +205,21 @@ namespace {
 
 QtlTlvTableWidget::QtlTlvTableWidget(QWidget *parent) :
     QTableWidget(parent),
-    _tagNames()
+    _tagNames(),
+    _valueHexDigitGroupSize(0)
 {
     // There are two colums: tag and value.
     setColumnCount(2);
 
     // Setup the headers.
+    verticalHeader()->setVisible(false);
+    verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    horizontalHeader()->setVisible(true);
     horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     horizontalHeader()->setStretchLastSection(true);
-    verticalHeader()->setVisible(false);
 
-    QTableWidgetItem* item = new QTableWidgetItem(tr("Tag"));
-    item->setTextAlignment(Qt::AlignLeft);
-    setHorizontalHeaderItem(0, item);
-
-    item = new QTableWidgetItem(tr("Value (hexadecimal)"));
-    item->setTextAlignment(Qt::AlignLeft);
-    setHorizontalHeaderItem(1, item);
+    qtlSetTableHorizontalHeader(this, 0, tr("Tag"));
+    qtlSetTableHorizontalHeader(this, 1, tr("Value (hexadecimal)"));
 
     // Setup the delegated editors for the TLV editor.
     setItemDelegateForColumn(0, new TagItemDelegate(_tagNames, this));
@@ -236,14 +235,17 @@ QtlTlvTableWidget::QtlTlvTableWidget(QWidget *parent) :
     addAction(action);
 
     action = new QAction(tr("Move up"), this);
+    action->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_Up));
     connect(action, &QAction::triggered, this, &QtlTlvTableWidget::tlvMoveSelectedUp);
     addAction(action);
 
     action = new QAction(tr("Move down"), this);
+    action->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_Down));
     connect(action, &QAction::triggered, this, &QtlTlvTableWidget::tlvMoveSelectedDown);
     addAction(action);
 
     action = new QAction(tr("Delete"), this);
+    action->setShortcut(QKeySequence(QKeySequence::Delete));
     connect(action, &QAction::triggered, this, &QtlTlvTableWidget::tlvDeleteSelected);
     addAction(action);
 
@@ -283,6 +285,7 @@ void QtlTlvTableWidget::setTlvRowData(int row, quint32 tag, const QtlByteBlock& 
     QTableWidgetItem* item = this->item(row, 0);
     if (item == 0) {
         item = new QTableWidgetItem();
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
         setItem(row, 0, item);
     }
 
@@ -294,11 +297,12 @@ void QtlTlvTableWidget::setTlvRowData(int row, quint32 tag, const QtlByteBlock& 
     if (item == 0) {
         item = new QTableWidgetItem();
         item->setFont(qtlMonospaceFont());
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
         setItem(row, 1, item);
     }
 
     // Set the TLV value in the item.
-    item->setText(qtlHexa(value, Qtl::HexCompact));
+    item->setText(qtlStringSpace(qtlHexa(value, Qtl::HexCompact), _valueHexDigitGroupSize));
 }
 
 
@@ -333,16 +337,12 @@ void QtlTlvTableWidget::tlvMoveSelectedUp()
     const int row = getSelectedTlvRow();
     if (row > 0) {
         // Get content of line up.
-        QTableWidgetItem* up0 = takeItem(row - 1, 0);
-        QTableWidgetItem* up1 = takeItem(row - 1, 1);
+        const QList<QTableWidgetItem*> up(qtlTakeTableRow(this, row - 1));
         // Get content of current line.
-        QTableWidgetItem* current0 = takeItem(row, 0);
-        QTableWidgetItem* current1 = takeItem(row, 1);
+        const QList<QTableWidgetItem*> current(qtlTakeTableRow(this, row));
         // Swap the content of the line.
-        setItem(row - 1, 0, current0);
-        setItem(row - 1, 1, current1);
-        setItem(row, 0, up0);
-        setItem(row, 1, up1);
+        qtlSetTableRow(this, row - 1, current);
+        qtlSetTableRow(this, row, up);
         // Keep selection on the moved row.
         clearSelection();
         selectRow(row - 1);
@@ -354,16 +354,12 @@ void QtlTlvTableWidget::tlvMoveSelectedDown()
     const int row = getSelectedTlvRow();
     if (row >= 0 && row < rowCount() - 1) {
         // Get content of line down.
-        QTableWidgetItem* down0 = takeItem(row + 1, 0);
-        QTableWidgetItem* down1 = takeItem(row + 1, 1);
+        const QList<QTableWidgetItem*> down(qtlTakeTableRow(this, row + 1));
         // Get content of current line.
-        QTableWidgetItem* current0 = takeItem(row, 0);
-        QTableWidgetItem* current1 = takeItem(row, 1);
+        const QList<QTableWidgetItem*> current(qtlTakeTableRow(this, row));
         // Swap the content of the line.
-        setItem(row + 1, 0, current0);
-        setItem(row + 1, 1, current1);
-        setItem(row, 0, down0);
-        setItem(row, 1, down1);
+        qtlSetTableRow(this, row + 1, current);
+        qtlSetTableRow(this, row, down);
         // Keep selection on the moved row.
         clearSelection();
         selectRow(row + 1);
@@ -374,27 +370,9 @@ void QtlTlvTableWidget::tlvDeleteSelected()
 {
     const int row = getSelectedTlvRow();
     if (row >= 0) {
-        removeRow(row);
-    }
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked when a key is pressed.
-//-----------------------------------------------------------------------------
-
-void QtlTlvTableWidget::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key () == Qt::Key_Up && event->modifiers() == Qt::ControlModifier) {
-        // Ctrl-Up : Move selected row up.
-        tlvMoveSelectedUp();
-    }
-    else if (event->key () == Qt::Key_Down && event->modifiers() == Qt::ControlModifier) {
-        // Ctrl-Down : Move selected row down.
-        tlvMoveSelectedDown();
-    }
-    else {
-        // Invoke the superclass for normal event processing.
-        QTableWidget::keyPressEvent(event);
+        QTableWidgetItem* item = this->item(row, 0);
+        if (qtlConfirm(this, tr("Delete tag %1?").arg(item == 0 ? "" : item->text()))) {
+            removeRow(row);
+        }
     }
 }

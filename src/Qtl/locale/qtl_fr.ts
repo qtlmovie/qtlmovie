@@ -2282,27 +2282,27 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlTlvTableWidget</name>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="217"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="221"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="221"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="222"/>
         <source>Value (hexadecimal)</source>
         <translation>Valeur (héxadécimal)</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="230"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="229"/>
         <source>Insert before this one</source>
         <translation>Insérer au dessus</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="234"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="233"/>
         <source>Insert after this one</source>
         <translation>Insérer au dessous</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="238"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="237"/>
         <source>Move up</source>
         <translation>Déplacer vers le haut</translation>
     </message>
@@ -2312,9 +2312,14 @@ L&apos;application va s&apos;arrêter</translation>
         <translation>Déplacer vers le bas</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="246"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="247"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="../QtlTlvTableWidget.cpp" line="374"/>
+        <source>Delete tag %1?</source>
+        <translation>Supprimer le tag %1?</translation>
     </message>
 </context>
 </TS>
