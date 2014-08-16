@@ -494,10 +494,16 @@ bool QtlMovieInputFile::selectedVideoStreamIsDvdCompliant() const
 {
     const QtlMovieStreamInfoPtr videoStream(selectedVideoStreamInfo());
 
+    // Compliant if:
+    // - Selected video stream exists.
+    // - Forced display aspect ratio not specified or equal to original one.
+    // - Same display aspect ratio, video size and video format as DVD.
+
     return  !videoStream.isNull() &&
+            qAbs(videoStream->displayAspectRatio(true) - videoStream->displayAspectRatio(false)) < 0.001 &&
+            qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
             videoStream->width() == _settings->dvdVideoWidth() &&
             videoStream->height() == _settings->dvdVideoHeight() &&
-            qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
             _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video";
 }
 

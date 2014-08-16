@@ -346,6 +346,11 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
         parOut = 1.0;
     }
 
+    // Initially, assume no need to resize.
+    widthOut = widthIn;
+    heightOut = heightIn;
+    float darOut = darIn;
+
     // We can resize only of the video size is known.
     if (widthIn <= 0 || heightIn <= 0 || maxWidthOut <= 0 || maxHeightOut <= 0 || parOut <= 0.001) {
         // Cannot resize => no option.
@@ -363,36 +368,34 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
     }
 
     // We need to resize if the input size is larger than max output size or input and output pixel ratios are not identical.
-    if (widthIn <= maxWidthOut && heightIn <= maxHeightOut && qAbs(parIn - parOut) < 0.01) {
-        // Smaller than max output size, same pixel aspect ratio => no need to resize => no option.
-        return;
-    }
+    if (widthIn > maxWidthOut || heightIn > maxHeightOut || qAbs(parIn - parOut) > 0.01) {
 
-    // Compute input and max output sample aspect ratios.
-    const float sarIn = float(widthIn) / float(heightIn);
-    const float sarOut = float(maxWidthOut) / float(maxHeightOut);
+        // Compute input and max output sample aspect ratios.
+        const float sarIn = float(widthIn) / float(heightIn);
+        const float sarOut = float(maxWidthOut) / float(maxHeightOut);
 
-    // Compute output size in pixels. Round to lower even value.
-    if (sarIn > sarOut) {
-        // Input is "wider" than max output => bind width to max output width.
-        widthOut = ~1 & qMin(maxWidthOut, widthIn);
-        heightOut = ~1 & qRound(widthOut / sarIn);
-    }
-    else {
-        // Input is "taller" than max output => bind height to max output height.
-        heightOut = ~1 & qMin(maxHeightOut, heightIn);
-        widthOut = ~1 & qRound(heightOut * sarIn);
-    }
+        // Compute output size in pixels. Round to lower even value using "~1 & ...".
+        if (sarIn > sarOut) {
+            // Input is "wider" than max output => bind width to max output width.
+            widthOut = ~1 & qMin(maxWidthOut, widthIn);
+            heightOut = ~1 & qRound(widthOut / sarIn);
+        }
+        else {
+            // Input is "taller" than max output => bind height to max output height.
+            heightOut = ~1 & qMin(maxHeightOut, heightIn);
+            widthOut = ~1 & qRound(heightOut * sarIn);
+        }
 
-    // Compute the output display aspect ratio.
-    Q_ASSERT(heightOut != 0);
-    const float darOut = (parOut * widthOut) / heightOut;
+        // Compute the output display aspect ratio.
+        Q_ASSERT(heightOut != 0);
+        darOut = (parOut * widthOut) / heightOut;
 
-    // Add a video filter to resize.
-    if (!videoFilters.isEmpty()) {
-        videoFilters.append(",");
+        // Add a video filter to resize.
+        if (!videoFilters.isEmpty()) {
+            videoFilters.append(",");
+        }
+        videoFilters.append(QStringLiteral("scale=width=%1:height=%2").arg(widthOut).arg(heightOut));
     }
-    videoFilters.append(QStringLiteral("scale=width=%1:height=%2").arg(widthOut).arg(heightOut));
 
     // Add a command line option to set aspect ratio.
     ffmpegArguments << "-aspect" << QString::number(darOut, 'f', 3);
