@@ -33,6 +33,7 @@
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovie.h"
 #include "QtlStringList.h"
+#include "QtlNumUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -278,15 +279,15 @@ void QtlMovieFFmpeg::addResizeVideoFilter(QString& videoFilters,
                                           float darOut)
 {
     // When display aspect ratios are unspecified, assume spare pixels.
-    if (darIn < 0.001 && heightIn > 0) {
+    if (qtlFloatZero(darIn) && heightIn > 0) {
         darIn = float(widthIn) / float(heightIn);
     }
-    if (darOut < 0.001 && heightOut > 0) {
+    if (qtlFloatZero(darOut) && heightOut > 0) {
         darOut = float(widthOut) / float(heightOut);
     }
 
     // If the input or output size is not known, cannot resize.
-    if (widthIn == 0 || heightIn == 0 || darIn < 0.001 || widthOut == 0 || heightOut == 0 || darOut < 0.001) {
+    if (widthIn == 0 || heightIn == 0 || qtlFloatZero(darIn) || widthOut == 0 || heightOut == 0 || qtlFloatZero(darOut)) {
         return;
     }
 
@@ -339,10 +340,10 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
                                            int& heightOut)
 {
     // When display aspect ratios are unspecified, assume spare pixels.
-    if (darIn < 0.001 && heightIn > 0) {
+    if (qtlFloatZero(darIn) && heightIn > 0) {
         darIn = float(widthIn) / float(heightIn);
     }
-    if (parOut < 0.001) {
+    if (qtlFloatZero(parOut)) {
         parOut = 1.0;
     }
 
@@ -352,7 +353,7 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
     float darOut = darIn;
 
     // We can resize only of the video size is known.
-    if (widthIn <= 0 || heightIn <= 0 || maxWidthOut <= 0 || maxHeightOut <= 0 || parOut <= 0.001) {
+    if (widthIn <= 0 || heightIn <= 0 || maxWidthOut <= 0 || maxHeightOut <= 0 || qtlFloatZero(parOut)) {
         // Cannot resize => no option.
         return;
     }

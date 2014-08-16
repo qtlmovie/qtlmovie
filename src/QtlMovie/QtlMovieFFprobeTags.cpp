@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieFFprobeTags.h"
+#include "QtlNumUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -117,7 +118,7 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
 
         // If display aspect ratio is not specified, assume pixel aspect ratio = 1
         // (square pixels), hence DAR = width / height.
-        info->setDisplayAspectRatio(dar < 0.001 && height > 0 ? float(width) / float(height) : dar);
+        info->setDisplayAspectRatio(qtlFloatZero(dar) && height > 0 ? float(width) / float(height) : dar);
 
         // Various simple stream attributes.
         info->setTitle(valueOfStream(index, "tags.title"));

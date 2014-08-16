@@ -37,6 +37,7 @@
 #include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovie.h"
 #include "QtlProcess.h"
+#include "QtlNumUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -455,7 +456,7 @@ float QtlMovieInputFile::durationInSeconds() const
 
     // If not found, try all streams duration until one is found.
     const int count = _ffInfo.intValue("format.nb_streams");
-    for (int si = 0; duration < 0.001 && si < count; ++si) {
+    for (int si = 0; qtlFloatZero(duration) && si < count; ++si) {
         duration = _ffInfo.floatValueOfStream(si, "duration");
     }
 
@@ -500,8 +501,8 @@ bool QtlMovieInputFile::selectedVideoStreamIsDvdCompliant() const
     // - Same display aspect ratio, video size and video format as DVD.
 
     return  !videoStream.isNull() &&
-            qAbs(videoStream->displayAspectRatio(true) - videoStream->displayAspectRatio(false)) < 0.001 &&
-            qAbs(videoStream->displayAspectRatio() - QTL_DVD_DAR) < 0.001 &&
+            qtlFloatEqual(videoStream->displayAspectRatio(true), videoStream->displayAspectRatio(false)) &&
+            qtlFloatEqual(videoStream->displayAspectRatio(), QTL_DVD_DAR) &&
             videoStream->width() == _settings->dvdVideoWidth() &&
             videoStream->height() == _settings->dvdVideoHeight() &&
             _ffInfo.valueOfStream(videoStream->ffIndex(), "codec_name") == "mpeg2video";

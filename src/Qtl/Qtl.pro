@@ -124,7 +124,8 @@ HEADERS += \
     QtlListWidgetUtils.h \
     QtlMessageBoxUtils.h \
     QtlTableWidgetUtils.h \
-    QtlSettings.h
+    QtlSettings.h \
+    QtlNumUtils.h
 
 FORMS += \
     QtlBrowserDialog.ui \

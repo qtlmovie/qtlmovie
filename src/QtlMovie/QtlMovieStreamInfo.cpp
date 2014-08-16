@@ -31,7 +31,9 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieStreamInfo.h"
+#include "QtlMovie.h"
 #include "QtlIsoLanguages.h"
+#include "QtlNumUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -192,7 +194,7 @@ void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const Q
         if (dest->_height <= 0) {
             dest->_height = src->_height;
         }
-        if (qAbs(dest->_dar - 1.0) < 0.001) {
+        if (qtlFloatEqual(dest->_dar, float(1.0))) {
             dest->_dar = src->_dar;
         }
         if (dest->_rotation == 0) {
@@ -207,7 +209,7 @@ void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const Q
         if (dest->_bitRate <= 0) {
             dest->_bitRate = src->_bitRate;
         }
-        if (dest->_frameRate < 0.001) {
+        if (qtlFloatZero(dest->_frameRate)) {
             dest->_frameRate = src->_frameRate;
         }
         if (!dest->_originalAudio) {
@@ -280,7 +282,7 @@ QString QtlMovieStreamInfo::description(bool compact) const
             add(result, QObject::tr("%1 b/s").arg(_bitRate));
         }
         // Frame rate.
-        if (!compact && _frameRate > 0.001) {
+        if (!compact && !qtlFloatZero(_frameRate)) {
             add(result, QObject::tr("%1 f/s").arg(_frameRate, 0, 'f', 1));
         }
     }
@@ -406,21 +408,21 @@ void QtlMovieStreamInfo::setHeight(int height)
 
 float QtlMovieStreamInfo::displayAspectRatio(bool original) const
 {
-    return original || _forcedDar < 0.001 ? _dar : _forcedDar;
+    return original || qtlFloatZero(_forcedDar) ? _dar : _forcedDar;
 }
 
 QString QtlMovieStreamInfo::displayAspectRatioString(bool original, bool validFloat) const
 {
     const float dar = displayAspectRatio(original);
-    if (dar < 0.001) {
+    if (qtlFloatZero(dar)) {
         // Undefined DAR.
         return validFloat ? QStringLiteral("0") : QString();
     }
     // Translate common display aspect ratios.
-    else if (qAbs(dar - (float(4) / float(3))) < 0.001) {
+    else if (qtlFloatEqual(dar, QTL_DAR_4_3)) {
         return QObject::tr("4:3");
     }
-    else if (qAbs(dar - (float(16) / float(9))) < 0.001) {
+    else if (qtlFloatEqual(dar, QTL_DAR_16_9)) {
         return QObject::tr("16:9");
     }
     else if (validFloat) {
@@ -433,12 +435,12 @@ QString QtlMovieStreamInfo::displayAspectRatioString(bool original, bool validFl
 
 void QtlMovieStreamInfo::setDisplayAspectRatio(float dar)
 {
-    _dar = dar < 0.001 ? 0.0 : dar;
+    _dar = qtlFloatZero(dar) ? 0.0 : dar;
 }
 
 void QtlMovieStreamInfo::setForcedDisplayAspectRatio(float dar)
 {
-    _forcedDar = dar < 0.001 ? 0.0 : dar;
+    _forcedDar = qtlFloatZero(dar) ? 0.0 : dar;
 }
 
 void QtlMovieStreamInfo::setRotation(int rotation)
@@ -453,7 +455,7 @@ void QtlMovieStreamInfo::setBitRate(int bitRate)
 
 void QtlMovieStreamInfo::setFrameRate(float frameRate)
 {
-    _frameRate = frameRate < 0.001 ? 0.0 : frameRate;
+    _frameRate = qtlFloatZero(frameRate) ? 0.0 : frameRate;
 }
 
 void QtlMovieStreamInfo::setAudioChannels(int audioChannels)

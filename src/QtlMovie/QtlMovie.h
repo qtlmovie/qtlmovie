@@ -65,6 +65,9 @@
 #define QTL_EDIT_TASK_WIDTH                  680  //!< Width (in pixels) of QtlMovieEditTaskDialog
 #define QTL_EDIT_TASK_HEIGHT                 500  //!< Height (in pixels) of QtlMovieEditTaskDialog
 
+#define QTL_DAR_4_3      (float(4.0)/float(3.0))  //!< Display aspect ratio value for 4:3.
+#define QTL_DAR_16_9    (float(16.0)/float(9.0))  //!< Display aspect ratio value for 16:9.
+
 //
 // Transcoding presets.
 //
@@ -77,7 +80,7 @@
 #define QTL_DVD_NTSC_VIDEO_WIDTH             720  //!< Video width (pixels) for NTSC DVD.
 #define QTL_DVD_NTSC_VIDEO_HEIGHT            480  //!< Video height (pixels) for NTSC DVD.
 #define QTL_DVD_NTSC_FRAME_RATE               30  //!< Frames per second for NTSC DVD.
-#define QTL_DVD_DAR                   (16.0/9.0)  //!< Display aspect ratio for DVD.
+#define QTL_DVD_DAR                 QTL_DAR_16_9  //!< Display aspect ratio for DVD.
 #define QTL_DVD_DAR_FFMPEG                "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 
 #define QTL_IPAD_AUDIO_BITRATE            160000  //!< AAC audio bitrate (bits per second) for iPad.

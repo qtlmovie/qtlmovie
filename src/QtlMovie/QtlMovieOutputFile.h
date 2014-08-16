@@ -37,6 +37,7 @@
 
 #include "QtlFile.h"
 #include "QtlMovieSettings.h"
+#include "QtlNumUtils.h"
 
 //!
 //! Describes an output video file.
@@ -123,7 +124,7 @@ public:
     //!
     void setForcedDisplayAspectRatio(float forcedDisplayAspectRatio)
     {
-        _forcedDar = forcedDisplayAspectRatio < 0.001 ? 0.0 : forcedDisplayAspectRatio;
+        _forcedDar = qtlFloatZero(forcedDisplayAspectRatio) ? 0.0 : forcedDisplayAspectRatio;
     }
 
     //!
