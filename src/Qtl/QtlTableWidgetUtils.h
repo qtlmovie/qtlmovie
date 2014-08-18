@@ -72,4 +72,38 @@ void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>
 //!
 void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts);
 
+//!
+//! Set the text style of a region of a QTableWidget.
+//! @param [in,out] table The table to modify.
+//! @param [in] firstRow First row in @a table to modify.
+//! @param [in] lastRow Last row in @a table to modify.
+//! @param [in] firstColumn First column in @a table to modify.
+//! @param [in] lastColumn Last column in @a table to modify.
+//! @param [in] background Background color. Ignored if omitted.
+//! @param [in] foreground Foreground color. Ignored if omitted.
+//! @param [in] style Background color style.
+//!
+void qtlSetTableStyle(QTableWidget* table,
+                      int firstRow,
+                      int lastRow,
+                      int firstColumn,
+                      int lastColumn,
+                      const QColor& background = QColor(),
+                      const QColor& foreground = QColor(),
+                      Qt::BrushStyle style = Qt::SolidPattern);
+
+//!
+//! Set the text style of a row of a QTableWidget.
+//! @param [in,out] table The table to modify.
+//! @param [in] row Row in @a table to modify.
+//! @param [in] background Background color. Ignored if omitted.
+//! @param [in] foreground Foreground color. Ignored if omitted.
+//! @param [in] style Background color style.
+//!
+void qtlSetTableRowStyle(QTableWidget* table,
+                         int row,
+                         const QColor& background = QColor(),
+                         const QColor& foreground = QColor(),
+                         Qt::BrushStyle style = Qt::SolidPattern);
+
 #endif // QTLTABLEWIDGETUTILS_H

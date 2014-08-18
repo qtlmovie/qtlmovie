@@ -73,12 +73,47 @@ public:
         return _outFile;
     }
 
+    //!
+    //! Define the state of the task.
+    //!
+    enum State {
+        Queued,   //!< Waiting to start.
+        Running,  //!< Transcoding in progress.
+        Success,  //!< Completed successfully.
+        Failed    //!< Completed with failure.
+    };
+
+    //!
+    //! Get the current state of the task (queued, running, etc).
+    //! @return The current state of the task.
+    //!
+    State state() const
+    {
+        return _state;
+    }
+
 signals:
     //!
     //! Emitted when the input file name, output file name or output type changes.
     //! @param [in] task The changed task (ie. signal emitter).
     //!
     void taskChanged(QtlMovieTask* task);
+    //!
+    //! Emitted when the state of the task changes.
+    //! @param [in] task The changed task (ie. signal emitter).
+    //!
+    void stateChanged(QtlMovieTask* task);
+
+public slots:
+    //!
+    //! Invoked when the task starts.
+    //!
+   void setStarted();
+    //!
+    //! Invoked when the task completes.
+    //! @param [in] success True when the task completed successfully, false otherwise.
+    //!
+    void setCompleted(bool success);
 
 private slots:
     //!
@@ -90,6 +125,13 @@ private:
     const QtlMovieSettings* _settings;  //!< Global settings.
     QtlMovieInputFile*      _inFile;    //!< Input file description.
     QtlMovieOutputFile*     _outFile;   //!< Output file description.
+    State                   _state;     //!< State of the task (queued, running, etc.)
+
+    //!
+    //! Set the current state of the task (queued, running, etc).
+    //! @param [in] state The current state of the task.
+    //!
+    void setState(State state);
 
     // Unaccessible operations.
     QtlMovieTask() Q_DECL_EQ_DELETE;

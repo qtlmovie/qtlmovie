@@ -115,6 +115,11 @@ private slots:
     //! @param [in] task The changed task (ie. signal emitter).
     //!
     void taskChanged(QtlMovieTask* task);
+    //!
+    //! Triggered when the state of the task changes.
+    //! @param [in] task The changed task (ie. signal emitter).
+    //!
+    void taskStateChanged(QtlMovieTask* task);
 
 private:
     QtlMovieSettings* _settings;  //!< Application settings.
@@ -133,6 +138,13 @@ private:
     //! @return The associated task or a null pointer if none found or the rwo does not exist.
     //!
     QtlMovieTask* taskOfRow(int row) const;
+
+    //!
+    //! Get the row of a task.
+    //! @param [in] task The task to seach.
+    //! @return The associated row or -1 if the task is unknown.
+    //!
+    int rowOfTask(QtlMovieTask* task) const;
 
     //!
     //! Update the content of a row from the associated task content.

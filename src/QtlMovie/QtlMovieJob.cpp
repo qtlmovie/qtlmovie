@@ -60,6 +60,10 @@ QtlMovieJob::QtlMovieJob(QtlMovieTask* task, const QtlMovieSettings* settings, Q
     Q_ASSERT(task != 0);
     Q_ASSERT(task->inputFile() != 0);
     Q_ASSERT(task->outputFile() != 0);
+
+    // Notify the task when the state changes.
+    connect(this, &QtlMovieJob::started, task, &QtlMovieTask::setStarted);
+    connect(this, &QtlMovieJob::completed, task, &QtlMovieTask::setCompleted);
 }
 
 

@@ -207,7 +207,7 @@ void QtlMovieMainWindow::startTranscoding()
         return;
     }
 
-    //@@@@@@@@@@ TO BE REFACTORED TO SUPPORT BATCH MODE.
+    //@@ TO BE REFACTORED TO SUPPORT BATCH MODE.
 
     if (_ui.singleTask == 0) {
         return;
@@ -219,7 +219,7 @@ void QtlMovieMainWindow::startTranscoding()
     connect(_job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
     connect(_job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
 
-    //@@@@@@@@@@
+    //@@
 
     // Start the job.
     if (!_job->start()) {

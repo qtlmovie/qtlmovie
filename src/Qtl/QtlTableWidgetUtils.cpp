@@ -106,3 +106,46 @@ void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts)
         }
     }
 }
+
+
+//-----------------------------------------------------------------------------
+// Set the text style of a region of a QTableWidget.
+//-----------------------------------------------------------------------------
+
+void qtlSetTableStyle(QTableWidget* table,
+                      int firstRow,
+                      int lastRow,
+                      int firstColumn,
+                      int lastColumn,
+                      const QColor& background,
+                      const QColor& foreground,
+                      Qt::BrushStyle style)
+{
+    if (table != 0) {
+        for (int row = qMax(0, firstRow); row <= qMin(lastRow, table->rowCount()); ++row) {
+            for (int column = qMax(0, firstColumn); column <= qMin(lastColumn, table->columnCount()); ++column) {
+                QTableWidgetItem* item = table->item(row, column);
+                if (item != 0) {
+                    if (background.isValid()) {
+                        item->setBackground(QBrush(background, style));
+                    }
+                    if (foreground.isValid()) {
+                        item->setForeground(QBrush(foreground));
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Set the text style of a row of a QTableWidget.
+//-----------------------------------------------------------------------------
+
+void qtlSetTableRowStyle(QTableWidget* table, int row, const QColor& background, const QColor& foreground, Qt::BrushStyle style)
+{
+    if (table != 0 && row >= 0 && row < table->rowCount()) {
+        qtlSetTableStyle(table, row, row, 0, table->columnCount() - 1, background, foreground, style);
+    }
+}

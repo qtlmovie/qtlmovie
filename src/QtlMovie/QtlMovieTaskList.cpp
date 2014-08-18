@@ -144,8 +144,12 @@ void QtlMovieTaskList::addTask(QtlMovieTask* task, bool editNow)
         // Update the items text.
         updateRow(rowCount() - 1);
 
+        // Update the items appearance based on the task state.
+        taskStateChanged(task);
+
         // Get notified when the task changes.
         connect(task, &QtlMovieTask::taskChanged, this, &QtlMovieTaskList::taskChanged);
+        connect(task, &QtlMovieTask::stateChanged, this, &QtlMovieTaskList::taskStateChanged);
 
         // Edit the task if required.
         if (editNow) {
@@ -171,6 +175,26 @@ QtlMovieTask* QtlMovieTaskList::taskOfRow(int row) const
 {
     QTableWidgetItem* item = row < 0 || row >= rowCount() ? 0 : this->item(row, 0);
     return item == 0 ? 0 : reinterpret_cast<QtlMovieTask*>(uintptr_t(item->data(Qt::UserRole).toULongLong()));
+}
+
+
+//-----------------------------------------------------------------------------
+// Get the row of a task.
+//-----------------------------------------------------------------------------
+
+int QtlMovieTaskList::rowOfTask(QtlMovieTask* task) const
+{
+    // Look for a row describing this task.
+    if (task != 0) {
+        for (int row = 0; row < rowCount(); ++row) {
+            if (task == taskOfRow(row)) {
+                return row;
+            }
+        }
+    }
+
+    // Task not found.
+    return -1;
 }
 
 
@@ -210,10 +234,33 @@ void QtlMovieTaskList::editTask(QtlMovieTask* task)
 
 void QtlMovieTaskList::taskChanged(QtlMovieTask* task)
 {
-    // Look for a row describing this task.
-    for (int row = 0; row < rowCount(); ++ row) {
-        if (task != 0 && task == taskOfRow(row)) {
-            updateRow(row);
+    updateRow(rowOfTask(task));
+}
+
+
+//-----------------------------------------------------------------------------
+// Triggered when the state of the task changes.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::taskStateChanged(QtlMovieTask* task)
+{
+    const int row = rowOfTask(task);
+    if (row >= 0) {
+        // Update the appearance of the row depending on the task state.
+        // For color names, see http://www.w3.org/TR/SVG/types.html#ColorKeywords
+        switch (task->state()) {
+        case QtlMovieTask::Queued:
+            qtlSetTableRowStyle(this, row, QColor("lightgrey"), QColor("black"));
+            break;
+        case QtlMovieTask::Running:
+            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), QColor("black"), Qt::BDiagPattern);
+            break;
+        case QtlMovieTask::Success:
+            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), QColor("black"));
+            break;
+        case QtlMovieTask::Failed:
+            qtlSetTableRowStyle(this, row, QColor("orange"), QColor("black"));
+            break;
         }
     }
 }
@@ -239,11 +286,11 @@ void QtlMovieTaskList::removeRow(int row)
     // Get the associated transcoding task.
     QtlMovieTask* task = taskOfRow(row);
 
-    //@@@@ check if transcoding task in progress.
-
-    // Delete the row and the task.
-    QTableWidget::removeRow(row);
-    delete task;
+    // Delete the row and the task only if the task is not currently running.
+    if (task != 0 && task->state() != QtlMovieTask::Running) {
+        QTableWidget::removeRow(row);
+        delete task;
+    }
 }
 
 

@@ -41,12 +41,36 @@ QtlMovieTask::QtlMovieTask(const QtlMovieSettings* settings, QtlLogger* log, QOb
     QObject(parent),
     _settings(settings),
     _inFile(new QtlMovieInputFile("", settings, log, this)),
-    _outFile(new QtlMovieOutputFile("", settings, log, this))
+    _outFile(new QtlMovieOutputFile("", settings, log, this)),
+    _state(Queued)
 {
     // Emit taskChanged when required.
     connect(_inFile,  &QtlMovieInputFile::fileNameChanged,    this, &QtlMovieTask::emitTaskChanged);
     connect(_outFile, &QtlMovieOutputFile::fileNameChanged,   this, &QtlMovieTask::emitTaskChanged);
     connect(_outFile, &QtlMovieOutputFile::outputTypeChanged, this, &QtlMovieTask::emitTaskChanged);
+}
+
+
+//----------------------------------------------------------------------------
+// Slots invoked when the state changes.
+//----------------------------------------------------------------------------
+
+void QtlMovieTask::setStarted()
+{
+    setState(Running);
+}
+
+void QtlMovieTask::setCompleted(bool success)
+{
+    setState(success ? Success : Failed);
+}
+
+void QtlMovieTask::setState(State state)
+{
+    if (_state != state) {
+        _state = state;
+        emit stateChanged(this);
+    }
 }
 
 

@@ -103,7 +103,7 @@ void QtlMovieTsDemux::emitCompleted(bool success, const QString& message)
     // Cleanup the demux.
     demux()->reset();
 
-    // Notify the completion vie super-class.
+    // Notify the completion via super-class.
     QtlMovieAction::emitCompleted(success, message);
 }
 
