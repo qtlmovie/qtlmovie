@@ -70,6 +70,22 @@ public:
     //!
     void addTask(QtlMovieTask* task, bool editNow);
 
+    //!
+    //! Get the first task in "queued" state.
+    //! The returned task becomes the "currently executing task".
+    //! @return The next task to execute or zero if there is none.
+    //!
+    QtlMovieTask* nextTask();
+
+    //!
+    //! Get the currently executing task.
+    //! @return The currently executing task or zero if none is defined.
+    //!
+    QtlMovieTask* currentTask() const
+    {
+        return _currentTask;
+    }
+
 public slots:
     //!
     //! Clear the table content.
@@ -122,8 +138,9 @@ private slots:
     void taskStateChanged(QtlMovieTask* task);
 
 private:
-    QtlMovieSettings* _settings;  //!< Application settings.
-    QtlLogger*        _log;       //!< Where to log errors.
+    QtlMovieSettings* _settings;    //!< Application settings.
+    QtlLogger*        _log;         //!< Where to log errors.
+    QtlMovieTask*     _currentTask; //!< Currently executing task.
 
     //!
     //! Associate a table item with a task.

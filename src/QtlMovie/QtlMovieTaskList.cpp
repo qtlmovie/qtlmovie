@@ -44,7 +44,8 @@
 QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
     QTableWidget(parent),
     _settings(0),
-    _log(0)
+    _log(0),
+    _currentTask(0)
 {
     // The table is read-only.
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -175,6 +176,28 @@ QtlMovieTask* QtlMovieTaskList::taskOfRow(int row) const
 {
     QTableWidgetItem* item = row < 0 || row >= rowCount() ? 0 : this->item(row, 0);
     return item == 0 ? 0 : reinterpret_cast<QtlMovieTask*>(uintptr_t(item->data(Qt::UserRole).toULongLong()));
+}
+
+
+//-----------------------------------------------------------------------------
+// Get the first task in "queued" state.
+//-----------------------------------------------------------------------------
+
+QtlMovieTask* QtlMovieTaskList::nextTask()
+{
+    // Reset current state.
+    _currentTask = 0;
+
+    // Look for the first task in "queued" state.
+    for (int row = 0; _currentTask == 0 && row < rowCount(); ++row) {
+        QtlMovieTask* task = taskOfRow(row);
+        if (task != 0 && task->state() == QtlMovieTask::Queued) {
+            _currentTask = task;
+        }
+    }
+
+    // Return the new current task.
+    return _currentTask;
 }
 
 
