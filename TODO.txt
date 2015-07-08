@@ -9,8 +9,4 @@ QtlMovie "to do" list
 
 - Describe batch mode in user guide.
 
-- Make sure that video is not enlarged on iPad, iPhone
-
-- Add latest iPhone sizes
-
 - Build transcoded file name, avoiding same as input file => must be cas-insensitive on Windows.

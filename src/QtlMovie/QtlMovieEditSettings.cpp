@@ -166,6 +166,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioIphone3->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone3Size);
     _ui.radioIphone4->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone4Size);
     _ui.radioIphone5->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone5Size);
+    _ui.radioIphone6->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6Size);
+    _ui.radioIphone6Plus->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6PlusSize);
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
     _ui.spinAviBitrate->setValue(_settings->aviVideoBitRate() / 1000); // input is kb/s
@@ -259,6 +261,12 @@ void QtlMovieEditSettings::applySettings()
     }
     else if (_ui.radioIphone5->isChecked()) {
         _settings->setIphoneScreenSize(QtlMovieSettings::Iphone5Size);
+    }
+    else if (_ui.radioIphone6->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone6Size);
+    }
+    else if (_ui.radioIphone6Plus->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone6PlusSize);
     }
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());

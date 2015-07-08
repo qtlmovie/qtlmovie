@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
+    <width>624</width>
     <height>504</height>
    </rect>
   </property>
@@ -781,7 +781,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="4">
+       <item row="1" column="1" colspan="6">
         <widget class="QSpinBox" name="spinIphoneBitrate">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -833,7 +833,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="4">
+       <item row="0" column="6">
         <spacer name="spacerIphoneSize">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -865,6 +865,22 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="4">
+        <widget class="QRadioButton" name="radioIphone6">
+         <property name="text">
+          <string>iPhone 6
+(1334x750)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QRadioButton" name="radioIphone6Plus">
+         <property name="text">
+          <string>iPhone 6 Plus
+(2208x1242)</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

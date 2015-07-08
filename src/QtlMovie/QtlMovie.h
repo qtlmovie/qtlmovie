@@ -95,12 +95,16 @@
 #define QTL_IPHONE_AUDIO_BITRATE          160000  //!< AAC audio bitrate (bits per second) for iPhone.
 #define QTL_IPHONE_AUDIO_SAMPLING          48000  //!< AAC audio sampling rate (Hz) for iPhone.
 #define QTL_IPHONE_DEFAULT_VIDEO_BITRATE 2000000  //!< H.264 video default bitrate for iPhone.
-#define QTL_IPHONE3_VIDEO_WIDTH              480  //!< Video width (pixels) for iPhone 1/3G/3GS.
-#define QTL_IPHONE3_VIDEO_HEIGHT             320  //!< Video height (pixels) for iPhone 1/3G/3GS.
+#define QTL_IPHONE3_VIDEO_WIDTH              480  //!< Video width (pixels) for iPhone 1/2G/3G/3GS.
+#define QTL_IPHONE3_VIDEO_HEIGHT             320  //!< Video height (pixels) for iPhone 1/2G/3G/3GS.
 #define QTL_IPHONE4_VIDEO_WIDTH              960  //!< Video width (pixels) for iPhone 4/4S.
 #define QTL_IPHONE4_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 4/4S.
 #define QTL_IPHONE5_VIDEO_WIDTH             1136  //!< Video width (pixels) for iPhone 5C/5S.
 #define QTL_IPHONE5_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 5C/5S.
+#define QTL_IPHONE6_VIDEO_WIDTH             1334  //!< Video width (pixels) for iPhone 6.
+#define QTL_IPHONE6_VIDEO_HEIGHT             750  //!< Video height (pixels) for iPhone 6.
+#define QTL_IPHONE6P_VIDEO_WIDTH            2208  //!< Video width (pixels) for iPhone 6 Plus.
+#define QTL_IPHONE6P_VIDEO_HEIGHT           1242  //!< Video height (pixels) for iPhone 6 Plus.
 #define QTL_IPHONE_FRAME_RATE                 30  //!< Frames per second for iPhone.
 
 #define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.

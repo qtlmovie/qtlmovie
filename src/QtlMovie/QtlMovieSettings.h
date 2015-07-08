@@ -74,9 +74,11 @@ public:
     //! Define the screen size of an iPhone.
     //!
     enum IphoneScreenSize {
-        Iphone3Size,  //!< iPhone 1/3G/3GS (480x320)
-        Iphone4Size,  //!< iPhone 4/4S (960x640)
-        Iphone5Size   //!< iPhone 5/5S (1136x640)
+        Iphone3Size,     //!< iPhone 1/2G/3G/3GS (480x320)
+        Iphone4Size,     //!< iPhone 4/4S (960x640)
+        Iphone5Size,     //!< iPhone 5/5S (1136x640)
+        Iphone6Size,     //!< iPhone 6 (1334x750)
+        Iphone6PlusSize  //!< iPhone 6 Plus (2208x1242)
     };
 
     //!

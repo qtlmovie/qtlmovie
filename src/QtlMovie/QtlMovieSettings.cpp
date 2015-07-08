@@ -235,6 +235,8 @@ int QtlMovieSettings::iphoneVideoWidth() const
         case Iphone3Size: return QTL_IPHONE3_VIDEO_WIDTH;
         case Iphone4Size: return QTL_IPHONE4_VIDEO_WIDTH;
         case Iphone5Size: return QTL_IPHONE5_VIDEO_WIDTH;
+        case Iphone6Size: return QTL_IPHONE6_VIDEO_WIDTH;
+        case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_WIDTH;
         default: return -1;
     }
 }
@@ -245,6 +247,8 @@ int QtlMovieSettings::iphoneVideoHeight() const
         case Iphone3Size: return QTL_IPHONE3_VIDEO_HEIGHT;
         case Iphone4Size: return QTL_IPHONE4_VIDEO_HEIGHT;
         case Iphone5Size: return QTL_IPHONE5_VIDEO_HEIGHT;
+        case Iphone6Size: return QTL_IPHONE6_VIDEO_HEIGHT;
+        case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_HEIGHT;
         default: return -1;
     }
 }
