@@ -8,5 +8,3 @@ QtlMovie "to do" list
   contains a list of jobs. "Start" means starting the queue.
 
 - Describe batch mode in user guide.
-
-- Build transcoded file name, avoiding same as input file => must be cas-insensitive on Windows.

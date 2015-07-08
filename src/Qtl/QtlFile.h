@@ -59,6 +59,15 @@
 #endif
 
 //!
+//! Case sensitivity of the file system, as a Qt::CaseSensitivity value.
+//!
+#if defined(Q_OS_WIN)
+#define QTL_FILE_NAMES_CASE_SENSITIVE Qt::CaseInsensitive
+#else
+#define QTL_FILE_NAMES_CASE_SENSITIVE Qt::CaseSensitive
+#endif
+
+//!
 //! Base class of a file description.
 //!
 class QtlFile : public QObject

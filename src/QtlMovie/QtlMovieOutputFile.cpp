@@ -119,8 +119,10 @@ void QtlMovieOutputFile::setDefaultFileName(const QString& inputFileName)
     const QString outExt(fileExtension(_outputType));
     const QString outFull(outBase + outExt);
 
-    // Set the output file name. If clashes with input file, add an .transcoded.
-    setFileName(outFull != inputFileName ? outFull : outBase + ".transcoded" + outExt);
+    // Set the output file name. If clashes with input file, add a .transcoded suffix.
+    // Take care of case sensitivity of the file system.
+    const bool same = QString::compare(outFull, inputFileName, QTL_FILE_NAMES_CASE_SENSITIVE) == 0;
+    setFileName(same ? outBase + ".transcoded" + outExt : outFull);
 }
 
 
