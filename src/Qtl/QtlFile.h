@@ -59,14 +59,6 @@
 #endif
 
 //!
-//! CLSID for "My Computer" on Windows.
-//! Can be used in a QFileDialog for instance.
-//!
-#if defined(Q_OS_WIN) || defined(DOXYGEN)
-#define QTL_WIN_MYCOMPUTER "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
-#endif
-
-//!
 //! Base class of a file description.
 //!
 class QtlFile : public QObject

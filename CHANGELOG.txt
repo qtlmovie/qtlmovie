@@ -20,6 +20,8 @@ Version 1.3
   processed. This is fixed.
 - Bug fix: The "forced display aspect ratio" was not always enforced.
   This is fixed.
+- When editing DVD Burner settings on Windows, now browse directly to the
+  "Computer" virtual folder. This is now possible thanks to Qt 5.5.
 - Precompiled Windows binary uses Qt 5.5.0.
 - Windows installer includes FFmpeg 2.5.2.
 

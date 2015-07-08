@@ -34,6 +34,7 @@
 #include "QtlLineEdit.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
+#include "QtlWinUtils.h"
 
 
 //-----------------------------------------------------------------------------
@@ -374,7 +375,8 @@ void QtlMovieEditSettings::browseDvdBurner()
 
 #if defined(Q_OS_WIN)
     // On Windows, select a device letter.
-    QString selected(QFileDialog::getExistingDirectory(this, title, QTL_WIN_MYCOMPUTER));
+    const QUrl computer(QTL_CLSID_URL(QTL_FOLDERID_COMPUTER));
+    QString selected(QFileDialog::getExistingDirectoryUrl(this, title, computer).toLocalFile());
     if (!selected.isEmpty()) {
         const int colon = selected.indexOf(':');
         if (colon >= 0) {
