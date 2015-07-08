@@ -20,8 +20,8 @@ Version 1.3
   processed. This is fixed.
 - Bug fix: The "forced display aspect ratio" was not always enforced.
   This is fixed.
-- Precompiled Windows binary uses Qt 5.3.1.
-- Windows installer includes FFmpeg 2.2.3.
+- Precompiled Windows binary uses Qt 5.5.0.
+- Windows installer includes FFmpeg 2.5.2.
 
 Version 1.2.16
 - Save the size and position of all windows. Useful for screens with a size or

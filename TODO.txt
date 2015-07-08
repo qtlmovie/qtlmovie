@@ -5,8 +5,19 @@ QtlMovie "to do" list
 - Settings / DVD Burner / Browse on Windows -> make sure to select "My Computer"
   as initial directory. Seems due to a Qt bug (or missing feature). For more
   details, see https://bugreports.qt-project.org/browse/QTBUG-33962
+  Fixed in Qt 5.5.0:
+  QString dir = QFileDialog::getExistingDirectoryUrl(0, "Test", QUrl("clsid:0AC0837C-BBF8-452A-850D-79D08E667CA7")).toLocalFile();
+  See https://msdn.microsoft.com/en-us/library/windows/desktop/dd378457.aspx
+
+- Double try for deleting temp directory. Sometimes, deletion fails, maybe a race condition.
 
 - Add a "batch" mechanism. Several jobs are edited separately. The main window
   contains a list of jobs. "Start" means starting the queue.
 
 - Describe batch mode in user guide.
+
+- Make sure that video is not enlarged on iPad, iPhone
+
+- Add latest iPhone sizes
+
+- Build transcoded file name, avoiding same as input file => must be cas-insensitive on Windows.
