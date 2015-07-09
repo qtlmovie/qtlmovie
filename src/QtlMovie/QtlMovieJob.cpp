@@ -254,8 +254,22 @@ void QtlMovieJob::cleanup()
     QDir dir(_tempDir);
     const bool exists = dir.exists();
     const bool empty = !exists || dir.entryList().isEmpty();
-    if (exists && (empty || !settings()->keepIntermediateFiles()) && !dir.removeRecursively()) {
-        line(tr("Error deleting %1").arg(_tempDir));
+    if (exists && (empty || !settings()->keepIntermediateFiles())) {
+        // We must delete the temporary directory. In some cases, it appears that the
+        // deletion fails, probably due to some race condition like a child process not
+        // completely terminated, holding an open file inside the temporary directory.
+        // As a plausible solution, we retry the deletion every 500 ms during 2 seconds
+        // until the directory is actually deleted. If the problem persist, well, we
+        // will need to characterize it more closely and find a real solution.
+        int remaingMillisec = 2000;
+        while (remaingMillisec >= 0 && dir.exists() && !dir.removeRecursively()) {
+            // Failed to delete the directory, wait 500 ms.
+            QThread::msleep(500);
+            remaingMillisec -= 500;
+        }
+        if (dir.exists()) {
+            line(tr("Error deleting %1").arg(_tempDir));
+        }
     }
 }
 
