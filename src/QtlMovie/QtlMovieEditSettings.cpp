@@ -49,6 +49,9 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
 
+    //@@ TEMPORARY FOR V1.3: Disable batch mode setting, keep latent support for next version.
+    _ui.groupBoxFileProcessing->setVisible(false);
+
     // Restore the window geometry from the saved settings.
     setGeometrySettings(_settings, true);
 

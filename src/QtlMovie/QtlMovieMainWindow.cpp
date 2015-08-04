@@ -94,6 +94,9 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _settings = new QtlMovieSettings(_ui.log, this);
     applyUiSettings();
 
+    //@@ TEMPORARY FOR V1.3: Disable batch mode, keep latent support for next version.
+    _settings->setUseBatchMode(false);
+
     // Adjust UI for single file mode or batch mode.
     if (_settings->useBatchMode()) {
         // Batch mode: Delete unused widgets.
@@ -496,7 +499,7 @@ void QtlMovieMainWindow::about()
                        QStringLiteral("<p><b>QtlMovie</b>: %1</p>"
                           "<p>%2 " QTLMOVIE_VERSION "</p>"
                           "<p>%3 " __DATE__ "</p>"
-                          "<p>Copyright (c) 2013-2014, Thierry Lel&eacute;gard</p>")
+                          "<p>Copyright (c) 2013-2015, Thierry Lel&eacute;gard</p>")
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
                        .arg(tr("Built")));
