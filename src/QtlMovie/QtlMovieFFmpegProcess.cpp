@@ -144,6 +144,13 @@ bool QtlMovieFFmpegProcess::createFontConfig(const QString& templateFile, const 
 
 void QtlMovieFFmpegProcess::processOutputLine(QProcess::ProcessChannel channel, const QString& line)
 {
+    // Ignore output lines in the form "Past duration nn.nnnnn too large".
+    // In some version between 2.2 and 2.7, FFmpeg started to generate thousands of
+    // these useless lines which fill the log.
+    if (QRegExp("Past duration [\\d\\.]* too large").exactMatch(line)) {
+        return;
+    }
+
     // From a progress line, we can extract a time in seconds.
     int timeInSeconds = -1;
 
