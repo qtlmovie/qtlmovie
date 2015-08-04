@@ -15,6 +15,7 @@ TELXCC_URL=https://github.com/forers/telxcc/archive/master.zip
 SCRIPT=$(basename $BASH_SOURCE)
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
 ROOTDIR=$(dirname $SCRIPTDIR)
+INSTDIR=$ROOTDIR/installers
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
 # User's rpmbuild environment:

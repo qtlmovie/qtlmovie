@@ -16,6 +16,7 @@ CCEXTRACTOR_PATCH=ccextractor.${CCEXTRACTOR_VERSION}-linux.patch
 SCRIPT=$(basename $BASH_SOURCE)
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
 ROOTDIR=$(dirname $SCRIPTDIR)
+INSTDIR=$ROOTDIR/installers
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
 # User's rpmbuild environment:
