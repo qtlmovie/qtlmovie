@@ -202,6 +202,22 @@ QtlMovieTask* QtlMovieTaskList::nextTask()
 
 
 //-----------------------------------------------------------------------------
+// Check if some queued tasks are present.
+//-----------------------------------------------------------------------------
+
+bool QtlMovieTaskList::hasQueuedTasks() const
+{
+    for (int row = 0; row < rowCount(); ++row) {
+        QtlMovieTask* const task = taskOfRow(row);
+        if (task != 0 && task->state() == QtlMovieTask::Queued) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+//-----------------------------------------------------------------------------
 // Get the row of a task.
 //-----------------------------------------------------------------------------
 
@@ -245,8 +261,14 @@ void QtlMovieTaskList::updateRow(int row)
 void QtlMovieTaskList::editTask(QtlMovieTask* task)
 {
     if (task != 0 && _settings != 0 && _log != 0) {
-        QtlMovieEditTaskDialog dialog(task, _settings, _log, this);
-        dialog.exec();
+        // After editing the task, we check if the output file already exists.
+        // If it exists, we ask the user if it should be overwritten. If not,
+        // immediately re-edit the task until the user choose another output file
+        // name or accept to overwrite it.
+        do {
+            QtlMovieEditTaskDialog dialog(task, _settings, _log, this);
+            dialog.exec();
+        } while (!task->askOverwriteOutput());
     }
 }
 
@@ -300,6 +322,23 @@ void QtlMovieTaskList::clear()
 }
 
 
+//-----------------------------------------------------------------------------
+// Remove all completed tasks.
+//-----------------------------------------------------------------------------
+
+void QtlMovieTaskList::removeCompletedTasks()
+{
+    // Start from the end to avoid shuffling the rows.
+    for (int row = rowCount() - 1; row >= 0; --row) {
+        QtlMovieTask* const task = taskOfRow(row);
+        if (task != 0 && (task->state() == QtlMovieTask::Success || task->state() == QtlMovieTask::Failed)) {
+            QTableWidget::removeRow(row);
+            delete task;
+        }
+    }
+}
+
+
 //----------------------------------------------------------------------------
 // Remove a row from the table. Reimplemented from QTableWidget.
 //----------------------------------------------------------------------------
@@ -307,7 +346,7 @@ void QtlMovieTaskList::clear()
 void QtlMovieTaskList::removeRow(int row)
 {
     // Get the associated transcoding task.
-    QtlMovieTask* task = taskOfRow(row);
+    QtlMovieTask* const task = taskOfRow(row);
 
     // Delete the row and the task only if the task is not currently running.
     if (task != 0 && task->state() != QtlMovieTask::Running) {

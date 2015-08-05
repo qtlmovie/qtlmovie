@@ -72,6 +72,15 @@ public:
     explicit QtlMovieInputFile(const QtlMovieInputFile& other, QObject *parent = 0);
 
     //!
+    //! Get the associated error logger.
+    //! @return The associated error logger.
+    //!
+    QtlLogger* log() const
+    {
+        return _log;
+    }
+
+    //!
     //! Get the name to specify as input to ffmpeg when this object is used as input to ffmpeg.
     //! This may differ from the file name when the input file is a DVD IFO or VOB.
     //! @return A string to specify as input to ffmpeg. This may not be a valid file name.

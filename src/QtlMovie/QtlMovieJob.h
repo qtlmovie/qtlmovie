@@ -171,31 +171,18 @@ private:
 
     //!
     //! Build the list of actions to execute to perform the job.
-    //! @return True on success, false on error (not started).
+    //! @return True on success, false on error (job aborted).
     //!
     bool buildScenario();
 
     //!
-    //! Report an error and return false.
+    //! Report an error during @a start() and abort the job.
+    //! The error message is reported both in a message box and in the log.
     //! @param [in] message Message to display.
-    //! @return Always false.
+    //! @param [in] result The value to return, false by default.
+    //! @return The specified result, false by default.
     //!
-    bool errorFalse(const QString& message)
-    {
-        qtlError(this, message);
-        return false;
-    }
-
-    //!
-    //! Report an error and return an empty string list.
-    //! @param [in] message The error message.
-    //! @return An empty QStringList.
-    //!
-    QStringList errorEmpty(const QString& message)
-    {
-        qtlError(this, message);
-        return QStringList();
-    }
+    bool abortStart(const QString& message, bool result = false);
 
     //!
     //! Start the next action in the list.

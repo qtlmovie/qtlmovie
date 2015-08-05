@@ -94,9 +94,6 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     _settings = new QtlMovieSettings(_ui.log, this);
     applyUiSettings();
 
-    //@@ TEMPORARY FOR V1.3: Disable batch mode, keep latent support for next version.
-    _settings->setUseBatchMode(false);
-
     // Adjust UI for single file mode or batch mode.
     if (_settings->useBatchMode()) {
         // Batch mode: Delete unused widgets.
@@ -112,6 +109,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     else {
         // Single file mode: Delete unused widgets.
         delete _ui.actionNewTask;
+        delete _ui.actionPurgeCompleted;
         delete _ui.taskBox;
         _ui.taskBox = _ui.taskList = 0;
 
@@ -199,6 +197,31 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 
 
 //-----------------------------------------------------------------------------
+// Create and start a new job.
+//-----------------------------------------------------------------------------
+
+QtlMovieJob* QtlMovieMainWindow::newJob(QtlMovieTask* task)
+{
+    QtlMovieJob* job = new QtlMovieJob(task, _settings, _ui.log, this);
+
+    // Connect the job's signals to the UI.
+    connect(job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
+    connect(job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
+    connect(job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
+
+    // Start the job.
+    if (job->start()) {
+        return job;
+    }
+    else {
+       // Error starting the job, delete it now.
+        delete job;
+        return 0;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
 // Invoked by the "Transcode ..." buttons.
 //-----------------------------------------------------------------------------
 
@@ -210,25 +233,31 @@ void QtlMovieMainWindow::startTranscoding()
         return;
     }
 
-    //@@ TO BE REFACTORED TO SUPPORT BATCH MODE.
-
-    if (_ui.singleTask == 0) {
-        return;
+    // The start processing depends on the single task vs. batch mode.
+    if (_ui.singleTask != 0) {
+        // Single task mode. Get the task to execute.
+        QtlMovieTask* const task = _ui.singleTask->task();
+        if (task != 0) {
+            // If the output file already exists...
+            if (!task->askOverwriteOutput()) {
+                // Don't overwrite, give up.
+                _ui.log->line(tr("Overwritting output file denied"));
+                task->setCompleted(false);
+            }
+            else {
+                // Setup the transcoding job.
+                _job = newJob(task);
+            }
+        }
     }
-
-    // Setup the transcoding job.
-    _job = new QtlMovieJob(_ui.singleTask->task(), _settings, _ui.log, this);
-    connect(_job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
-    connect(_job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
-    connect(_job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
-
-    //@@
-
-    // Start the job.
-    if (!_job->start()) {
-        // Error starting the job, delete it now.
-        delete _job;
-        _job = 0;
+    else {
+        // Batch mode. Loop until a job is successfully started.
+        // We exit the loop either when there is no more job to start (task == 0)
+        // or a job was successfully started (_job != 0).
+        QtlMovieTask* task = 0;
+        do {
+            task = _ui.taskList->nextTask();
+        } while (task != 0 && (_job = newJob(task)) == 0);
     }
 }
 
@@ -318,15 +347,9 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     // Check if a transcoding job was actually in progress.
     if (_job != 0) {
 
-        // Play notification sound if required.
-        if (_settings->playSoundOnCompletion()) {
-            // Stop current play (if any).
-            _sound.stop();
-            // Set now sound source.
-            _sound.setSource(QUrl("qrc:/sounds/completion.wav"));
-            // Play the sound.
-            _sound.setVolume(1.0);
-            _sound.play();
+        // Play notification sound at complete end of all jobs.
+        if (_settings->playSoundOnCompletion() && (_ui.taskList == 0 || !_ui.taskList->hasQueuedTasks())) {
+            playNotificationSound();
         }
 
         // Save log file if required.
@@ -347,6 +370,10 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     // If the application needs to be closed, close it now.
     if (_closePending) {
         close();
+    }
+    else if (_ui.taskList != 0) {
+        // In batch mode, start the next task, if any.
+        startTranscoding();
     }
 }
 
@@ -474,6 +501,24 @@ void QtlMovieMainWindow::editSettings()
 void QtlMovieMainWindow::applyUiSettings()
 {
     _ui.log->setMaximumBlockCount(_settings->maxLogLines());
+}
+
+
+//-----------------------------------------------------------------------------
+// Start to play the notification sound.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::playNotificationSound()
+{
+    // Stop current play (if any).
+    _sound.stop();
+
+    // Set new sound source.
+    _sound.setSource(QUrl("qrc:/sounds/completion.wav"));
+
+    // Play the sound.
+    _sound.setVolume(1.0);
+    _sound.play();
 }
 
 

@@ -74,6 +74,15 @@ public:
     }
 
     //!
+    //! Ask the user if the output file may be overwritten.
+    //! If the output file does not already exist, ask nothing.
+    //! If the output file already exists and the user is OK to overwrite it,
+    //! the previous output file is deleted.
+    //! @return True if the output file does not exist or can be overwritten, false otherwise.
+    //!
+    bool askOverwriteOutput();
+
+    //!
     //! Define the state of the task.
     //!
     enum State {

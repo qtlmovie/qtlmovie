@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieTask.h"
+#include "QtlMessageBoxUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -81,4 +82,32 @@ void QtlMovieTask::setState(State state)
 void QtlMovieTask::emitTaskChanged()
 {
     emit taskChanged(this);
+}
+
+
+//----------------------------------------------------------------------------
+// Ask the user if the output file may be overwritten.
+//----------------------------------------------------------------------------
+
+bool QtlMovieTask::askOverwriteOutput()
+{
+    // If the output file already exists...
+    QFile out(_outFile->fileName());
+    if (out.exists()) {
+
+        // Ask for confirmation to overwrite it.
+        if (!qtlConfirm(this, tr("File %1 already exists.\nOverwrite it?").arg(_outFile->fileName()))) {
+            // Don't overwrite, give up.
+            return false;
+        }
+
+        // Delete the previous output file to avoid using it by mistake if the conversion fails.
+        if (!out.remove()) {
+            // Failed to delete it. Continue anyway, will be overwritten by converter.
+            _outFile->log()->line(tr("Failed to delete %1").arg(_outFile->fileName()));
+        }
+    }
+
+    // Yes, we can overwrite the output file (non existent or just deleted in fact).
+    return true;
 }

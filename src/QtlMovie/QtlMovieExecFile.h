@@ -89,6 +89,15 @@ public:
                      QObject *parent = 0);
 
     //!
+    //! Get the associated error logger.
+    //! @return The associated error logger.
+    //!
+    QtlLogger* log() const
+    {
+        return _log;
+    }
+
+    //!
     //! Get the commn name (for display).
     //! @return Common name.
     //!

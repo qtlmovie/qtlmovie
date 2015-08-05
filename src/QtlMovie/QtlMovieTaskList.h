@@ -78,6 +78,12 @@ public:
     QtlMovieTask* nextTask();
 
     //!
+    //! Check if some queued tasks are present.
+    //! @return True if some queued tasks are present, false otherwise.
+    //!
+    bool hasQueuedTasks() const;
+
+    //!
     //! Get the currently executing task.
     //! @return The currently executing task or zero if none is defined.
     //!
@@ -104,6 +110,10 @@ public slots:
     //! @param [in] lastRow The last row to remove.
     //!
     void removeRows(int firstRow, int lastRow);
+    //!
+    //! Remove all completed tasks.
+    //!
+    void removeCompletedTasks();
     //!
     //! Add a new task in the list and start editing it.
     //!

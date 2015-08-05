@@ -83,13 +83,25 @@ QStringList QtlMovieJob::getVariable(const QString& name) const
 
 
 //----------------------------------------------------------------------------
+// Report an error during start() and abort the job.
+//----------------------------------------------------------------------------
+
+bool QtlMovieJob::abortStart(const QString& message, bool result)
+{
+    qtlError(this, message);
+    emitCompleted(false, message);
+    return result;
+}
+
+
+//----------------------------------------------------------------------------
 // Start the transcoding job.
 //----------------------------------------------------------------------------
 
 bool QtlMovieJob::start()
 {
     // Do not start twice.
-    if (isStarted()) {
+    if (!QtlMovieAction::start()) {
         return false;
     }
 
@@ -100,25 +112,10 @@ bool QtlMovieJob::start()
 
     // Check that input/output files are specified.
     if (_task == 0 || _task->inputFile() == 0 || !_task->inputFile()->isSet()) {
-        return errorFalse(tr("No input file selected."));
+        return abortStart(tr("No input file selected."), true);
     }
     if (_task->outputFile() == 0 || !_task->outputFile()->isSet()) {
-        return errorFalse(tr("No output file selected."));
-    }
-
-    // If the output file already exists...
-    QFile out(_task->outputFile()->fileName());
-    if (out.exists()) {
-        // Ask for confirmation to overwrite it.
-        if (!qtlConfirm(this, tr("File %1 already exists.\nOverwrite it?").arg(_task->outputFile()->fileName()))) {
-            // Don't overwrite, give up.
-            return false;
-        }
-        // Delete the previous output file to avoid using it by mistake if the conversion fails.
-        if (!out.remove()) {
-            // Failed to delete it. Continue anyway, will be overwritten by converter.
-            line(tr("Failed to delete %1").arg(_task->outputFile()->fileName()));
-        }
+        return abortStart(tr("No output file selected."), true);
     }
 
     // If intermediate files needs to be created, we will use a temporary directory
@@ -128,7 +125,7 @@ bool QtlMovieJob::start()
     // Create the temporary directory.
     QDir dir;
     if (!dir.mkpath(_tempDir)) {
-        return errorFalse(tr("Cannot create temporary directory %1").arg(_tempDir));
+        return abortStart(tr("Cannot create temporary directory %1").arg(_tempDir), true);
     }
 
     // Being based on the output file name, the temporary directory may contain
@@ -151,21 +148,13 @@ bool QtlMovieJob::start()
 
     // Build the list of actions to execute.
     if (!buildScenario()) {
-        cleanup();
-        return false;
+        return true;
     }
     _actionCount = _actionList.size();
-
-    // Notify of the job start.
-    if (!QtlMovieAction::start()) {
-        cleanup();
-        return false;
-    }
 
     // Start the first action.
     if (!startNextAction()) {
         emitCompleted(false, tr("Error starting process"));
-        return false;
     }
 
     return true;
@@ -252,7 +241,7 @@ void QtlMovieJob::cleanup()
     // Delete temporary directory and its content.
     // If the option "keep intermediate files" is present, we delete it only if empty.
     QDir dir(_tempDir);
-    const bool exists = dir.exists();
+    const bool exists = !_tempDir.isEmpty() && dir.exists();
     const bool empty = !exists || dir.entryList().isEmpty();
     if (exists && (empty || !settings()->keepIntermediateFiles())) {
         // We must delete the temporary directory. In some cases, it appears that the
@@ -435,7 +424,7 @@ bool QtlMovieJob::buildScenario()
             // Supported external subtitle file type.
             break;
         default:
-            return errorFalse(tr("Non-existent or unsupported external subtitle file."));
+            return abortStart(tr("Non-existent or unsupported external subtitle file."));
         }
     }
 
@@ -520,7 +509,7 @@ bool QtlMovieJob::buildScenario()
         break;
     }
     default:
-        return errorFalse(tr("Unexpected output type %1").arg(outputType));
+        return abortStart(tr("Unexpected output type %1").arg(outputType));
     }
 
     // If more than one process is defined, give them a number.
@@ -545,7 +534,7 @@ bool QtlMovieJob::addFFmpeg(const QString& description, const QStringList ffmpeg
 {
     if (ffmpegArguments.isEmpty()) {
         // Error building argument list.
-        return false;
+        return abortStart(tr("Internal error, no FFmpeg option"));
     }
     else {
         QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments, _outSeconds, _tempDir, settings(), this, this);
@@ -586,7 +575,7 @@ bool QtlMovieJob::addSubtitleFileVideoFilter(QString& videoFilters, int widthIn,
     case QtlMovieStreamInfo::SubOther:
     case QtlMovieStreamInfo::SubNone:
     default:
-        return errorFalse(tr("Unsupported subtitle type"));
+        return abortStart(tr("Unsupported subtitle type"));
     }
 }
 
@@ -693,7 +682,7 @@ bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlM
     case QtlMovieStreamInfo::SubOther:
     case QtlMovieStreamInfo::SubNone:
     default:
-        return errorFalse(tr("Unsupported subtitle type"));
+        return abortStart(tr("Unsupported subtitle type"));
     }
 }
 
@@ -738,7 +727,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
     const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
 
     if (videoStream.isNull()) {
-        return errorFalse(tr("No selected video stream"));
+        return abortStart(tr("No selected video stream"));
     }
     else if (!settings()->forceDvdTranscode() && inputFile->selectedVideoStreamIsDvdCompliant()) {
         // Video is DVD compliant, simply copy the video stream.
@@ -777,7 +766,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
 
         // We always adjust the size of the video. We must know the input video size.
         if (width <= 0 || height <= 0) {
-            return errorFalse(tr("Unknown video size or aspect ratio, cannot create suitable video for DVD"));
+            return abortStart(tr("Unknown video size or aspect ratio, cannot create suitable video for DVD"));
         }
 
         // Video filter: DVD output is always 720x576, 16:9.
@@ -1036,7 +1025,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
         audioSamplingRate = QTL_IPHONE_AUDIO_SAMPLING;
         break;
     default:
-        return errorFalse(tr("Unsupported output type for MP4"));
+        return abortStart(tr("Unsupported output type for MP4"));
     }
 
     // Start FFmpeg argument list.
@@ -1119,7 +1108,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
     if (videoStream.isNull()) {
-        return errorFalse(tr("No selected video stream"));
+        return abortStart(tr("No selected video stream"));
     }
 
     // Start FFmpeg argument list.
@@ -1202,7 +1191,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
     // There must be one selected subtitle track.
     const QtlMovieStreamInfoPtr stream(inputFile->selectedSubtitleStreamInfo());
     if (stream.isNull()) {
-        return errorFalse(tr("No subtitle stream was selected"));
+        return abortStart(tr("No subtitle stream was selected"));
     }
 
     // Input subtitle type.
@@ -1237,7 +1226,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
     if (inputFile->isTsFile() && inType == QtlMovieStreamInfo::SubTeletext) {
         // Teletext subtitles are extracted from TS files using telxcc, not ffmpeg.
         if (outType != QtlMovieStreamInfo::SubRip) {
-            return errorFalse(tr("Teletext subtitles can be extracted as SRT only"));
+            return abortStart(tr("Teletext subtitles can be extracted as SRT only"));
         }
 
         // Build telxcc options to extract one subtitle track to SRT.
@@ -1260,7 +1249,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
     else if (inType == QtlMovieStreamInfo::SubCc) {
         // Closed Caption subtitles are extracted using CCextractor, not ffmpeg.
         if (outType != QtlMovieStreamInfo::SubRip) {
-            return errorFalse(tr("Closed Captions subtitles can be extracted as SRT only"));
+            return abortStart(tr("Closed Captions subtitles can be extracted as SRT only"));
         }
 
         // Closed Captions channel and field.
@@ -1300,7 +1289,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
             fileFormat = "ass";
             break;
         default:
-            return errorFalse(tr("This type of subtitles cannot be extracted by ffmpeg"));
+            return abortStart(tr("This type of subtitles cannot be extracted by ffmpeg"));
         }
 
         // Build FFmpeg options to extract one subtitle track to SRT.

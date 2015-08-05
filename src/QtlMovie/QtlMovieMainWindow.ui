@@ -101,6 +101,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="buttonPurge">
+            <property name="text">
+             <string>Purge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="taskButtonsSpacer2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -173,6 +180,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionNewTask"/>
+    <addaction name="actionPurgeCompleted"/>
     <addaction name="actionTranscode"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -311,6 +319,11 @@
     <string>New Task ...</string>
    </property>
   </action>
+  <action name="actionPurgeCompleted">
+   <property name="text">
+    <string>Purge Completed Tasks</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -334,6 +347,7 @@
     <slot>editSelectedTask()</slot>
     <slot>moveUpSelectedTasks()</slot>
     <slot>moveDownSelectedTasks()</slot>
+    <slot>removeCompletedTasks()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -655,6 +669,38 @@
     <hint type="destinationlabel">
      <x>339</x>
      <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPurgeCompleted</sender>
+   <signal>triggered()</signal>
+   <receiver>taskList</receiver>
+   <slot>removeCompletedTasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPurge</sender>
+   <signal>clicked()</signal>
+   <receiver>taskList</receiver>
+   <slot>removeCompletedTasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>168</y>
     </hint>
    </hints>
   </connection>

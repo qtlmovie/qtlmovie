@@ -67,6 +67,15 @@ public:
     explicit QtlMovieOutputFile(const QtlMovieOutputFile& other, QObject *parent = 0);
 
     //!
+    //! Get the associated error logger.
+    //! @return The associated error logger.
+    //!
+    QtlLogger* log() const
+    {
+        return _log;
+    }
+
+    //!
     //! Type of output file.
     //!
     enum OutputType {

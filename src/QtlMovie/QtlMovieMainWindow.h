@@ -186,6 +186,18 @@ private:
     //!
     void transcodingUpdateUi(bool started);
 
+    //!
+    //! Create and start a new job.
+    //! @param [in] task The task to execute in the job.
+    //! @return The new job or zero on error.
+    //!
+    QtlMovieJob* newJob(QtlMovieTask* task);
+
+    //!
+    //! Start to play the notification sound.
+    //!
+    void playNotificationSound();
+
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlMovieMainWindow)
 };
