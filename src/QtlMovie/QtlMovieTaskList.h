@@ -134,6 +134,10 @@ public slots:
     //! Delete the selected tasks (need to confirm first).
     //!
     void deleteSelectedTasks();
+    //!
+    //! Requeue the selected tasks (if completed).
+    //!
+    void requeueSelectedTasks();
 
 private slots:
     //!

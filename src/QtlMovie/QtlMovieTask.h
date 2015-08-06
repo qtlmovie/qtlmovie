@@ -123,6 +123,10 @@ public slots:
     //! @param [in] success True when the task completed successfully, false otherwise.
     //!
     void setCompleted(bool success);
+    //!
+    //! Invoked to requeue a completed task.
+    //!
+    void setRequeue();
 
 private slots:
     //!

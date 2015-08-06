@@ -94,6 +94,11 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
     connect(action, &QAction::triggered, this, &QtlMovieTaskList::moveDownSelectedTasks);
     addAction(action);
 
+    action = new QAction(tr("Requeue"), this);
+    action->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_R));
+    connect(action, &QAction::triggered, this, &QtlMovieTaskList::requeueSelectedTasks);
+    addAction(action);
+
     action = new QAction(tr("Delete"), this);
     action->setShortcut(QKeySequence(QKeySequence::Delete));
     connect(action, &QAction::triggered, this, &QtlMovieTaskList::deleteSelectedTasks);
@@ -482,6 +487,27 @@ void QtlMovieTaskList::deleteSelectedTasks()
             }
             if (qtlConfirm(this, text)) {
                 removeRows(start, start + count - 1);
+            }
+        }
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Requeue the selected tasks (if completed).
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::requeueSelectedTasks()
+{
+    // Get all contiguous ranges of selections.
+    const QList<QTableWidgetSelectionRange> selected(selectedRanges());
+    foreach (const QTableWidgetSelectionRange range, selected) {
+        const int start = range.topRow();
+        const int count = range.rowCount();
+        for (int row = start; row < start + count; ++row) {
+            QtlMovieTask* task = taskOfRow(row);
+            if (task != 0) {
+                task->setRequeue();
             }
         }
     }

@@ -66,6 +66,13 @@ void QtlMovieTask::setCompleted(bool success)
     setState(success ? Success : Failed);
 }
 
+void QtlMovieTask::setRequeue()
+{
+    if (_state != Running) {
+        setState(Queued);
+    }
+}
+
 void QtlMovieTask::setState(State state)
 {
     if (_state != state) {

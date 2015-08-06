@@ -1681,14 +1681,14 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieTask</name>
     <message>
-        <location filename="../QtlMovieTask.cpp" line="99"/>
+        <location filename="../QtlMovieTask.cpp" line="106"/>
         <source>File %1 already exists.
 Overwrite it?</source>
         <translation>Le fichier %1 existe déjà.
 Le remplacer?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTask.cpp" line="107"/>
+        <location filename="../QtlMovieTask.cpp" line="114"/>
         <source>Failed to delete %1</source>
         <translation>Impossible de supprimer %1</translation>
     </message>
@@ -1732,16 +1732,21 @@ Le remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieTaskList.cpp" line="97"/>
+        <source>Requeue</source>
+        <translation>Recommencer</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieTaskList.cpp" line="102"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="476"/>
+        <location filename="../QtlMovieTaskList.cpp" line="481"/>
         <source>Delete these %1 tasks?</source>
         <translation>Supprimer ces %1 tâches?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="480"/>
+        <location filename="../QtlMovieTaskList.cpp" line="485"/>
         <source>Delete task %1?</source>
         <translation>Supprimer la tâche %1?</translation>
     </message>
