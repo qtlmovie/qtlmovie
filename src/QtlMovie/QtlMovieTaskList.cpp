@@ -34,6 +34,7 @@
 #include "QtlMovieEditTaskDialog.h"
 #include "QtlTableWidgetUtils.h"
 #include "QtlMessageBoxUtils.h"
+#include "QtlSelectionRectDelegate.h"
 #include "QtlStringList.h"
 
 
@@ -49,6 +50,20 @@ QtlMovieTaskList::QtlMovieTaskList(QWidget *parent) :
 {
     // The table is read-only.
     setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    // The rows have a background color which depends on the task state
+    // (queued, running, success, failure). See method taskStateChanged().
+    // But, by default, selected cells receive a unique background color.
+    // It is consequently difficult to guess a task state when it is selected.
+    // We change the selection behavior. First, we set a delegate which draws
+    // a rectangle around selected cells. This is useful to clearly identify
+    // selected cells.
+    setItemDelegate(new QtlSelectionRectDelegate(this, 1));
+
+    // Then, we set the selection color with a "mid color" (all 128) and 50% transparency.
+    // This slightly alters the state-dependent background color.
+    // There is no direct method to do that, so we use a style sheet.
+    setStyleSheet("selection-background-color: rgba(128, 128, 128, 50);");
 
     // There are 3 columns: output type, input file name, input file name directory.
     setColumnCount(3);
@@ -300,16 +315,16 @@ void QtlMovieTaskList::taskStateChanged(QtlMovieTask* task)
         // For color names, see http://www.w3.org/TR/SVG/types.html#ColorKeywords
         switch (task->state()) {
         case QtlMovieTask::Queued:
-            qtlSetTableRowStyle(this, row, QColor("lightgrey"), QColor("black"));
+            qtlSetTableRowStyle(this, row, Qt::lightGray, Qt::black);
             break;
         case QtlMovieTask::Running:
-            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), QColor("black"), Qt::BDiagPattern);
+            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), Qt::black, Qt::Dense4Pattern);
             break;
         case QtlMovieTask::Success:
-            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), QColor("black"));
+            qtlSetTableRowStyle(this, row, QColor("yellowgreen"), Qt::black);
             break;
         case QtlMovieTask::Failed:
-            qtlSetTableRowStyle(this, row, QColor("orange"), QColor("black"));
+            qtlSetTableRowStyle(this, row, QColor("orange"), Qt::black);
             break;
         }
     }

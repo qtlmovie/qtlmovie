@@ -122,8 +122,8 @@ void qtlSetTableStyle(QTableWidget* table,
                       Qt::BrushStyle style)
 {
     if (table != 0) {
-        for (int row = qMax(0, firstRow); row <= qMin(lastRow, table->rowCount()); ++row) {
-            for (int column = qMax(0, firstColumn); column <= qMin(lastColumn, table->columnCount()); ++column) {
+        for (int row = qMax(0, firstRow); row <= qMin(lastRow, table->rowCount() - 1); ++row) {
+            for (int column = qMax(0, firstColumn); column <= qMin(lastColumn, table->columnCount() - 1); ++column) {
                 QTableWidgetItem* item = table->item(row, column);
                 if (item != 0) {
                     if (background.isValid()) {

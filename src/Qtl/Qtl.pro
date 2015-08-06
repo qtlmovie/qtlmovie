@@ -70,7 +70,8 @@ SOURCES += \
     QtlListWidgetUtils.cpp \
     QtlMessageBoxUtils.cpp \
     QtlTableWidgetUtils.cpp \
-    QtlSettings.cpp
+    QtlSettings.cpp \
+    QtlSelectionRectDelegate.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -126,7 +127,8 @@ HEADERS += \
     QtlTableWidgetUtils.h \
     QtlSettings.h \
     QtlNumUtils.h \
-    QtlWinUtils.h
+    QtlWinUtils.h \
+    QtlSelectionRectDelegate.h
 
 FORMS += \
     QtlBrowserDialog.ui \

@@ -1696,57 +1696,57 @@ Le remplacer?</translation>
 <context>
     <name>QtlMovieTaskList</name>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="64"/>
+        <location filename="../QtlMovieTaskList.cpp" line="79"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="65"/>
+        <location filename="../QtlMovieTaskList.cpp" line="80"/>
         <source>Input file</source>
         <translation>Fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="66"/>
+        <location filename="../QtlMovieTaskList.cpp" line="81"/>
         <source>Input directory</source>
         <translation>Répertoire d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="78"/>
+        <location filename="../QtlMovieTaskList.cpp" line="93"/>
         <source>Edit ...</source>
         <translation>Editer ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="83"/>
+        <location filename="../QtlMovieTaskList.cpp" line="98"/>
         <source>New ...</source>
         <translation>Nouveau ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="87"/>
+        <location filename="../QtlMovieTaskList.cpp" line="102"/>
         <source>Move up</source>
         <translation>Déplacer vers le haut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="92"/>
+        <location filename="../QtlMovieTaskList.cpp" line="107"/>
         <source>Move down</source>
         <translation>Déplacer vers le bas</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="97"/>
+        <location filename="../QtlMovieTaskList.cpp" line="112"/>
         <source>Requeue</source>
         <translation>Recommencer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="102"/>
+        <location filename="../QtlMovieTaskList.cpp" line="117"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="481"/>
+        <location filename="../QtlMovieTaskList.cpp" line="496"/>
         <source>Delete these %1 tasks?</source>
         <translation>Supprimer ces %1 tâches?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="485"/>
+        <location filename="../QtlMovieTaskList.cpp" line="500"/>
         <source>Delete task %1?</source>
         <translation>Supprimer la tâche %1?</translation>
     </message>
