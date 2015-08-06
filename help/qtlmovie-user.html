@@ -34,6 +34,7 @@
             <li><a href="#forcedar">Forcing the display aspect ratio</a></li>
           </ul>
         </li>
+        <li><a href="#batchmode">Single-file mode vs. multi-file batch mode</a></li>
         <li><a href="#miscfeat">Miscellaneous features</a>
           <ul>
             <li><a href="#logwin">The log window</a></li>
@@ -310,6 +311,10 @@
         the manually entered aspect ratio is used instead of the one from the input file.</p>
 
       <hr/>
+      <h2><a id="batchmode">Single-file mode vs. multi-file batch mode</a></h2>
+@@@
+
+      <hr/>
       <h2><a id="miscfeat">Miscellaneous features</a></h2>
 
       <h3><a id="logwin">The log window</a></h3>
@@ -329,6 +334,9 @@
         the input file as reported by <i>ffprobe</i>.
         This provides a more precise view of the file and its streams but requires some
         knownledge about FFmpeg.</p>
+      <p>In <a href="#batchmode">multi-file batch mode</a>, the "Input File Properties"
+        option is not in the "Tools" menu since there are possibly more than one input
+        file. Instead, use the "Properties" button in the task editor.</p>
 
       <h3><a id="audiotest">Audio test</a></h3>
 
@@ -337,6 +345,9 @@
         tracks are not correctly identified in the input file. Using this dialog box,
         the user can select and play the various audio tracks in order to recognize the
         language of each track.</p>
+      <p>In <a href="#batchmode">multi-file batch mode</a>, the "Test Audio" option is
+        not in the "Tools" menu since there are possibly more than one input file.
+        Instead, use the "Test Audio" button in the task editor.</p>
       <hr/>
 
       <h2><a id="settings">Settings and options</a></h2>
@@ -513,10 +524,10 @@
         <li>The "single file mode" is the legacy mode which was found in the original version
           of QtlMovie. Only one file can be processed at a time. This is a simple operation
           mode. The input and output file descriptions directly appear in the main window.</li>
-        <li>The "multi-file batch mode" allows the processing of multiple files in sequence.
-          The main window shows a list of files to be processed. The transcoding operation
-          processes all files in the list. Adding other files to process is allowed during
-          the transcoding of the previous files.</li>
+        <li>The "<a href="#batchmode">multi-file batch mode</a>" allows the processing of
+          multiple files in sequence. The main window shows a list of files to be processed.
+          The transcoding operation processes all files in the list. Adding other files to
+          process is allowed during the transcoding of the previous files.</li>
       </ul>
       <p>The "Target audience language codes" lists the codes which are used to identify the
         language of the "target audience".

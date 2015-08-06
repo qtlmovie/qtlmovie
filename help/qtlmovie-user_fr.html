@@ -34,6 +34,7 @@
             <li><a href="#forcedar">Forcer le format d'affichage</a></li>
           </ul>
         </li>
+        <li><a href="#batchmode">Mode fichier unique et mode multi-fichiers (batch)</a></li>
         <li><a href="#miscfeat">Autres fonctionnalités</a>
           <ul>
             <li><a href="#logwin">La fenêtre de journal (log)</a></li>
@@ -332,6 +333,10 @@
         le fichier d'entrée.</p>
 
       <hr/>
+      <h2><a id="batchmode">Mode fichier unique et mode multi-fichiers (batch)</a></h2>
+@@@
+
+      <hr/>
       <h2><a id="miscfeat">Autres fonctionnalités</a></h2>
 
       <h3><a id="logwin">La fenêtre de journal (log)</a></h3>
@@ -347,19 +352,28 @@
 
       <h3><a id="fileprop">Propriétés du fichier d'entrée</a></h3>
 
-      <p>L'option "Propriétés du fichier d'entrée" affiche toutes les propriétés du
-        fichier d'entrée telles que détectées par <i>ffprobe</i>.
+      <p>L'option "Propriétés du fichier d'entrée" du menu "Outils" affiche toutes les
+        propriétés du fichier d'entrée telles que détectées par <i>ffprobe</i>.
         Cela donne une vue plus précise de la structure du fichier et de ses flux
         mais requiert une certaine connaissance de FFmpeg.</p>
+      <p>En <a href="#batchmode">mode multi-fichiers (batch)</a>, l'option
+        "Propriétés du fichier d'entrée" n'est pas dans le menu "Outils" car il peut
+        y avoir plusieurs fichiers d'entrée. Elle est accessible par le bouton
+        "Propriétés" dans l'éditeur de tâche.</p>
 
       <h3><a id="audiotest">Test audio</a></h3>
 
-      <p>L'option "Tester les pistes audio" ouvre une fenêtre pour tester le son des pistes audio du fichier.
-        Cela peut être utile quand les langues des pistes audio ne sont pas correctement identifiées dans
-        le fichier d'entrée. Avec cette option, vous pouvez sélectionner et écouter les différentes pistes
+      <p>L'option "Tester les pistes audio" du menu "Outils" ouvre une fenêtre pour
+        tester le son des pistes audio du fichier. Cela peut être utile quand les langues
+        des pistes audio ne sont pas correctement identifiées dans le fichier d'entrée.
+        Avec cette option, vous pouvez sélectionner et écouter les différentes pistes
         audio et ainsi reconnaitre la langue.</p>
-
+      <p>En <a href="#batchmode">mode multi-fichiers (batch)</a>, l'option
+        "Tester les pistes audio" n'est pas dans le menu "Outils" car il peut
+        y avoir plusieurs fichiers d'entrée. Elle est accessible par le bouton
+        "Test Audio" dans l'éditeur de tâche.</p>
       <hr/>
+
       <h2><a id="settings">Options</a></h2>
 
       <p>Le paramétrage des options de QtlMovie est accessible par le menu "Outils".</p>
@@ -552,8 +566,8 @@
           les premières versions de QtlMovie. Un seul fichier peut être traité à la
           fois. C'est un mode très simple. Les descriptions des fichiers d'entrée et
           de sortie apparaissent directement dans la fenêtre principale.</li>
-        <li>Le mode "multiples fichiers en séquence" permet le traitement de
-          plusieurs fichiers les uns à la suite des autres. La fenêtre principale
+        <li>Le mode "<a href="#batchmode">multiples fichiers en séquence</a>" permet le
+          traitement de plusieurs fichiers les uns à la suite des autres. La fenêtre principale
           montre une liste des fichiers à traiter. L'opération de transcodage
           traite tous les fichiers de la liste. Il est possible d'ajouter des
           fichiers supplémentaires pendant le transcodage des fichiers précédents.</li>
