@@ -3,6 +3,17 @@ QtlMovie Change Log
 ===================
 
 Version 1.3
+- Added a "multi-file batch mode" which allows the processing of multiple
+  files in sequence. The main window shows a list of files to be processed.
+  The transcoding operation processes all files in the list. Adding other
+  files to process is allowed during the transcoding of the previous files.
+  By default, QtlMovie uses its classical "single file mode", where all
+  transcoding options are directly accessible in one-click in the main
+  window. It is possible to switch between the two modes using the "Tools"
+  menu or the settings. Using the classical single file mode remains the
+  easiest solution but the batch mode is uselful when many files need to
+  be transcoded. The user can define all the planned conversions and then
+  let all the conversions work for hours.
 - New options for:
   - Automatically clear the log panel before starting transcoding.
   - Automatically save the log panel at the transcoding completion.

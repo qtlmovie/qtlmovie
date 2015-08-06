@@ -312,7 +312,21 @@
 
       <hr/>
       <h2><a id="batchmode">Single-file mode vs. multi-file batch mode</a></h2>
-@@@
+
+      <p>By default, QtlMovie transcodes one file at a time. The main window contains all
+        information for one transcoding in an easy one-click way. This is the default
+        "single-file mode". To transcode a second movie, the user has to wait for the
+        completion of the first one.</p>
+      <p>When a batch of several files need to be transcoded, the total conversion process
+        may take hours and it is not convenient for the user to wait for the completion
+        of each transcoding. For this kind of situation, QtlMovie has a "multi-file batch mode"
+        which allows the processing of multiple files in sequence. The main window shows
+        a list of files to be processed. The transcoding operation processes all files in
+        the list automatically. Adding other files to process is allowed during the transcoding
+        of the previous files.</p>
+      <p>To switch between "single-file mode" and "multi-file batch mode", use the switch
+        option in the "Tools" menu. Note that switching mode requires the application to
+        restart. You may also set the preferred mode in the <a href="#miscsettings">settings</a>.</p>
 
       <hr/>
       <h2><a id="miscfeat">Miscellaneous features</a></h2>
