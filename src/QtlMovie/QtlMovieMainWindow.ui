@@ -210,6 +210,8 @@
     <addaction name="actionLogDebug"/>
     <addaction name="actionSaveLog"/>
     <addaction name="separator"/>
+    <addaction name="actionSwitchMode"/>
+    <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
@@ -318,10 +320,18 @@
    <property name="text">
     <string>New Task ...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionPurgeCompleted">
    <property name="text">
     <string>Purge Completed Tasks</string>
+   </property>
+  </action>
+  <action name="actionSwitchMode">
+   <property name="text">
+    <string>Switch Mode</string>
    </property>
   </action>
  </widget>
@@ -704,6 +714,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSwitchMode</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>switchMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>startDvdDecrypter()</slot>
@@ -716,5 +742,6 @@
   <slot>transcodingProgress(QString,int,int,int,int)</slot>
   <slot>searchNewVersion()</slot>
   <slot>showReleaseNotes()</slot>
+  <slot>switchMode()</slot>
  </slots>
 </ui>

@@ -91,6 +91,10 @@ private slots:
     //!
     void editSettings();
     //!
+    //! Invoked by the "Switch to {Single File|Batch} Mode" button.
+    //!
+    void switchMode();
+    //!
     //! Invoked by the "About Media Tools" button.
     //!
     void aboutMediaTools();
@@ -148,6 +152,7 @@ private:
 #endif
     QtlMovieJob*           _job;                //!< Current transcoding job.
     QSoundEffect           _sound;              //!< Sound player for notification.
+    bool                   _batchMode;          //!< The UI is currently in batch mode (ie not single file mode).
     bool                   _closePending;       //!< Close the application as soon as possible.
     bool                   _restartRequested;   //!< A restart of the application is requested.
 

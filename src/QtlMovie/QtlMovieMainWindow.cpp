@@ -58,6 +58,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 #endif
     _job(0),
     _sound(),
+    _batchMode(false),
     _closePending(false),
     _restartRequested(false)
 {
@@ -95,23 +96,28 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     applyUiSettings();
 
     // Adjust UI for single file mode or batch mode.
-    if (_settings->useBatchMode()) {
-        // Batch mode: Delete unused widgets.
-        delete _ui.actionOpen;
-        delete _ui.actionInputFileProperties;
-        delete _ui.actionTestAudio;
-        delete _ui.singleTask;
-        _ui.singleTask = 0;
+    _batchMode = _settings->useBatchMode();
+    if (_batchMode) {
+        // Batch mode: Hide unused widgets.
+        _ui.actionOpen->setVisible(false);
+        _ui.actionInputFileProperties->setVisible(false);
+        _ui.actionTestAudio->setVisible(false);
+        _ui.singleTask->setVisible(false);
+
+        // Update the "switch mode" button.
+        _ui.actionSwitchMode->setText(tr("Switch to Single File Mode"));
 
         // Initialize task list.
         _ui.taskList->initialize(_settings, _ui.log);
     }
     else {
-        // Single file mode: Delete unused widgets.
-        delete _ui.actionNewTask;
-        delete _ui.actionPurgeCompleted;
-        delete _ui.taskBox;
-        _ui.taskBox = _ui.taskList = 0;
+        // Single file mode: Hide unused widgets.
+        _ui.actionNewTask->setVisible(false);
+        _ui.actionPurgeCompleted->setVisible(false);
+        _ui.taskBox->setVisible(false);
+
+        // Update the "switch mode" button.
+        _ui.actionSwitchMode->setText(tr("Switch to Batch Mode"));
 
         // Initialize the task editor.
         _ui.singleTask->initialize(new QtlMovieTask(_settings, _ui.log, this), _settings, _ui.log);
@@ -128,15 +134,15 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 
     // If a command line argument is provided, use it as input file.
     if (!initialFileName.isEmpty()) {
-        if (_ui.singleTask != 0) {
-            // Single file mode, simply set the input file name.
-            _ui.singleTask->task()->inputFile()->setFileName(initialFileName);
-        }
-        else {
+        if (_batchMode) {
             // Batch mode, create a new task.
             QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
             task->inputFile()->setFileName(initialFileName);
             _ui.taskList->addTask(task, true);
+        }
+        else {
+            // Single file mode, simply set the input file name.
+            _ui.singleTask->task()->inputFile()->setFileName(initialFileName);
         }
     }
 
@@ -154,9 +160,8 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 {
     // Enable / disable widgets which must be inactive during transcoding.
-    if (_ui.singleTask != 0) {
-        _ui.actionOpen->setEnabled(!started);
-    }
+    _ui.actionSwitchMode->setEnabled(!started);
+    _ui.actionOpen->setEnabled(!started);
 
     // Toggle transcode/cancel labels in buttons.
     // Change their target slot to start/cancel transcoding.
@@ -234,7 +239,16 @@ void QtlMovieMainWindow::startTranscoding()
     }
 
     // The start processing depends on the single task vs. batch mode.
-    if (_ui.singleTask != 0) {
+    if (_batchMode) {
+        // Batch mode. Loop until a job is successfully started.
+        // We exit the loop either when there is no more job to start (task == 0)
+        // or a job was successfully started (_job != 0).
+        QtlMovieTask* task = 0;
+        do {
+            task = _ui.taskList->nextTask();
+        } while (task != 0 && (_job = newJob(task)) == 0);
+    }
+    else {
         // Single task mode. Get the task to execute.
         QtlMovieTask* const task = _ui.singleTask->task();
         if (task != 0) {
@@ -249,15 +263,6 @@ void QtlMovieMainWindow::startTranscoding()
                 _job = newJob(task);
             }
         }
-    }
-    else {
-        // Batch mode. Loop until a job is successfully started.
-        // We exit the loop either when there is no more job to start (task == 0)
-        // or a job was successfully started (_job != 0).
-        QtlMovieTask* task = 0;
-        do {
-            task = _ui.taskList->nextTask();
-        } while (task != 0 && (_job = newJob(task)) == 0);
     }
 }
 
@@ -348,7 +353,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     if (_job != 0) {
 
         // Play notification sound at complete end of all jobs.
-        if (_settings->playSoundOnCompletion() && (_ui.taskList == 0 || !_ui.taskList->hasQueuedTasks())) {
+        if (_settings->playSoundOnCompletion() && (!_batchMode || !_ui.taskList->hasQueuedTasks())) {
             playNotificationSound();
         }
 
@@ -371,7 +376,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     if (_closePending) {
         close();
     }
-    else if (_ui.taskList != 0) {
+    else if (_batchMode) {
         // In batch mode, start the next task, if any.
         startTranscoding();
     }
@@ -485,11 +490,28 @@ void QtlMovieMainWindow::editSettings()
 
         // Check if the application needs a restart.
         // Currently, the single file vs. batch mode option is the only cause for a restart.
-        _restartRequested = int(_ui.singleTask == 0) ^ int(_settings->useBatchMode());
+        _restartRequested = int(_batchMode) ^ int(_settings->useBatchMode());
 
         if (_restartRequested && qtlConfirm(this, tr("These settings will be applied when the application restarts.\nRestart now?"))) {
             close();
         }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked by the "Switch to {Single File|Batch} Mode" button.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::switchMode()
+{
+    // We need to restart the application to change the UI. Ask the user.
+    if (qtlConfirm(this, tr("Switching mode needs the application to restart.\nRestart now?"))) {
+        // Update the settings with the reverse of the current mode (single file vs. batch).
+        _settings->setUseBatchMode(!_batchMode);
+        // Close the main window and let main() restart a new instance.
+        _restartRequested = true;
+        close();
     }
 }
 
