@@ -25,6 +25,7 @@ The various steps in the release process of a new version of QtlMovie are:
   It builds the Doxygen documentation for the source code. Check that no error
   is detected in the documentation.
 - Commit and push all code to the git repository on SourceForge.
+- Add a tag into the repository with the version name, push repository.
 - On a Windows system, execute build\build-installer.ps1. It builds the Win32
   and Win64 installers and the source and wintools archives.
 - On a Fedora Linux system, execute build/build-rpm.sh. It builds the RPM

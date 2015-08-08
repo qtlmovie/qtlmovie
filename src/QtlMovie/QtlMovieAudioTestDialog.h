@@ -67,22 +67,11 @@ public:
                             QWidget* parent = 0);
 
     //!
-    //! Check if the audio test is currently playing.
-    //! @return True if the audio test is currently playing.
+    //! Destructor.
     //!
-    bool playing() const;
+    virtual ~QtlMovieAudioTestDialog();
 
 public slots:
-    //!
-    //! Start the audio play.
-    //!
-    void start();
-    //!
-    //! Stop the audio play.
-    //!
-    void stop();
-
-private slots:
     //!
     //! Invoked by the Start/Stop button.
     //!
@@ -91,6 +80,8 @@ private slots:
     //! Invoked by the volume slider when it is changed.
     //!
     void updateVolume(int value);
+
+private slots:
     //!
     //! Periodically invoked by the audio output engine to update the play slider.
     //!
@@ -105,34 +96,51 @@ private slots:
     //!
     void ffmpegDataReady();
     //!
-    //! Perform termination operations if the process and the audio output engine are completed.
+    //! Invoked when the FFmpeg process terminates.
     //!
-    void cleanup();
-
-protected:
+    void processCompleted();
     //!
-    //! Event handler to handle window close.
-    //! @param event Notified event.
+    //! Periodically invoked after the process completion to check if the audio
+    //! processing is complete.
     //!
-    virtual void closeEvent(QCloseEvent* event);
+    void audioCompletionCheck();
 
 private:
-    Ui::QtlMovieAudioTestDialog _ui;           //!< UI from Qt Designer.
-    const QtlMovieInputFile*    _file;         //!< Input file containing audio streams to test.
-    QtlMovieSettings*           _settings;     //!< Application settings.
-    QtlLogger*                  _log;          //!< Message logger.
-    QtlMovieFFmpegProcess*      _process;      //!< FFmpeg process.
-    QAudioOutput                _audio;        //!< Audio output device.
-    int                         _startSecond;  //!< Starting time of current audio play.
-    bool                        _started;      //!< Audio playout explicitely started.
-    bool                        _closePending; //!< When true, close the dialog asap.
+    //!
+    //! Define the three states of the audio play.
+    //!
+    enum AudioTestState {
+        Started,   //!< Audio play in progress.
+        Stopping,  //!< Audio stop requested ("Stop" button), waiting for processing completion.
+        Stopped    //!< Audio fully stopped.
+    };
+
+    Ui::QtlMovieAudioTestDialog _ui;             //!< UI from Qt Designer.
+    const QtlMovieInputFile*    _file;           //!< Input file containing audio streams to test.
+    QtlMovieSettings*           _settings;       //!< Application settings.
+    QtlLogger*                  _log;            //!< Message logger.
+    QtlMovieFFmpegProcess*      _process;        //!< FFmpeg process.
+    QAudioFormat                _audioFormat;    //!< Audio format used in the test.
+    QAudioOutput*               _audio;          //!< Audio output device.
+    QTimer                      _endTimer;       //!< A timer used after FFmpeg process completion.
+    AudioTestState              _state;          //!< The state of the audio play.
+    int                         _startSecond;    //!< Starting time of current audio play.
+    qint64                      _processedUSecs; //!< Processed audio time at last timer.
 
     //!
-    //! Return the audio format used in the test.
-    //! Format: PCM, 16-bit, signed, little endian, mono, sampled at 44.1 kHz.
-    //! @return The audio format used in the test.
+    //! Start the audio play.
     //!
-    static QAudioFormat audioFormat();
+    void start();
+
+    //!
+    //! Stop the audio play.
+    //!
+    void stop();
+
+    //!
+    //! Perform termination operations when the process and the audio output engine are completed.
+    //!
+    void cleanup();
 
     // Unaccessible operations.
     QtlMovieAudioTestDialog() Q_DECL_EQ_DELETE;

@@ -37,31 +37,6 @@
 
 
 //----------------------------------------------------------------------------
-// Return the audio format used in the test.
-// Format: PCM, 16-bit, signed, little endian, mono, sampled at 44.1 kHz.
-//----------------------------------------------------------------------------
-
-QAudioFormat QtlMovieAudioTestDialog::audioFormat()
-{
-    QAudioFormat format;
-    format.setSampleRate(44100);    // Sampled at 44.1 kHz.
-    format.setChannelCount(1);      // Mono.
-    format.setCodec("audio/pcm");   // PCM samples.
-    format.setSampleSize(16);       // 16-bit samples.
-    format.setByteOrder(QAudioFormat::LittleEndian);  // Little endian samples.
-    format.setSampleType(QAudioFormat::SignedInt);    // Signed int samples.
-
-    // Check that the audio format is supported by the output device.
-    QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
-    if (!deviceInfo.isFormatSupported(format)) {
-        format = deviceInfo.nearestFormat(format);
-    }
-
-    return format;
-}
-
-
-//----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
@@ -75,10 +50,12 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
     _settings(settings),
     _log(log),
     _process(0),
-    _audio(audioFormat()),
+    _audioFormat(),
+    _audio(0),
+    _endTimer(),
+    _state(Stopped),
     _startSecond(0),
-    _started(false),
-    _closePending(false)
+    _processedUSecs(-1)
 {
     Q_ASSERT(inputFile != 0);
     Q_ASSERT(log != 0);
@@ -112,20 +89,60 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
     _ui.playSlider->setMinimum(0);
     _ui.playSlider->setMaximum(int(_file->durationInSeconds()));
 
-    // Get notifications from the audio output.
-    _audio.setNotifyInterval(500); // milliseconds
-    connect(&_audio, &QAudioOutput::notify, this, &QtlMovieAudioTestDialog::updatePlaySlider);
-    connect(&_audio, &QAudioOutput::stateChanged, this, &QtlMovieAudioTestDialog::audioStateChanged);
+    // Build the audio format used in the test.
+    // Format: PCM, 16-bit, signed, little endian, mono, sampled at 44.1 kHz.
+    _audioFormat.setSampleRate(44100);    // Sampled at 44.1 kHz.
+    _audioFormat.setChannelCount(1);      // Mono.
+    _audioFormat.setCodec("audio/pcm");   // PCM samples.
+    _audioFormat.setSampleSize(16);       // 16-bit samples.
+    _audioFormat.setByteOrder(QAudioFormat::LittleEndian); // Little endian samples.
+    _audioFormat.setSampleType(QAudioFormat::SignedInt);   // Signed int samples.
+
+    // Check that the audio format is supported by the output device.
+    QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+    if (!deviceInfo.isFormatSupported(_audioFormat)) {
+        _audioFormat = deviceInfo.nearestFormat(_audioFormat);
+    }
+
+    // Initialize the "end timer". This is a trick to cope with what seems to
+    // be a bug in Qt audio. The problem : The QAudioOutput object is supposed
+    // to switch to IdleState when its buffer is empty. This is true when
+    // its input QIODevice is a plain file. But, when its input is a QProcess,
+    // the IdleState is never notified. So, at the end of the FFmpeg output,
+    // we are never notified. To cope with that, when the FFmpeg process
+    // terminates, we start a periodic timer, this "end timer". Each time
+    // the timer is triggered, we check if more audio was processed. When
+    // no more audio is processed, we know that we can stop the audio processing.
+    _endTimer.setSingleShot(false);
+    connect(&_endTimer, &QTimer::timeout, this, &QtlMovieAudioTestDialog::audioCompletionCheck);
 }
 
 
 //-----------------------------------------------------------------------------
-// Check if the audio test is currently playing.
+// Destructor.
 //-----------------------------------------------------------------------------
 
-bool QtlMovieAudioTestDialog::playing() const
+QtlMovieAudioTestDialog::~QtlMovieAudioTestDialog()
 {
-    return _process != 0 || _audio.state() == QAudio::ActiveState;
+    // Early disconnect from all children to avoid being notified when the
+    // children terminate. The potential problem is the following:
+    // - This object is destroyed, the steps are:
+    //   -- Destroy QtlMovieAudioTestDialog layer.
+    //   -- Destroy intermediate subclasses.
+    //   -- Destroy QObject layer, which includes:
+    //      --- Destroy children objects.
+    //      --- The destructions of these children emit signals.
+    //      --- This object is notified by these signals but the
+    //          QtlMovieAudioTestDialog layer is destroyed => crash.
+    // So, we must not be notified by existing children objects.
+
+    if (_audio != 0) {
+        disconnect(_audio, 0, this, 0);
+    }
+    if (_process != 0) {
+        disconnect(_process, 0, this, 0);
+        disconnect(_process->outputDevice(), 0, this, 0);
+    }
 }
 
 
@@ -135,11 +152,16 @@ bool QtlMovieAudioTestDialog::playing() const
 
 void QtlMovieAudioTestDialog::startStop()
 {
-    if (playing()) {
-        stop();
-    }
-    else {
-        start();
+    switch (_state) {
+        case Stopped:
+            start();
+            break;
+        case Started:
+            stop();
+            break;
+        case Stopping:
+            // Can't do anything during this short period.
+            break;
     }
 }
 
@@ -150,11 +172,8 @@ void QtlMovieAudioTestDialog::startStop()
 
 void QtlMovieAudioTestDialog::start()
 {
-    // Skip spurious invocation.
-    if (_started || playing()) {
-        _log->line(tr("Internal error: test audio decoding already started"));
-        return;
-    }
+    Q_ASSERT(_process == 0);
+    Q_ASSERT(_audio == 0);
 
     // Get selected audio stream.
     const QtlMovieStreamInfoPtr stream(_file->streamInfo(_ui.audioStreamsBox->checkedId()));
@@ -164,13 +183,23 @@ void QtlMovieAudioTestDialog::start()
     }
 
     // Remember we started.
-    _started = true;
+    _state = Started;
 
     // The starting point in seconds is the slider value.
     _startSecond = _ui.playSlider->value();
 
+    // Allocate the audio output object.
+    _audio = new QAudioOutput(_audioFormat, this);
+
+    // Get notifications from the audio output every 500 ms of audio content.
+    _audio->setNotifyInterval(500); // milliseconds
+    connect(_audio, &QAudioOutput::notify, this, &QtlMovieAudioTestDialog::updatePlaySlider);
+
+    // Get notified when the state of the audio output changes.
+    connect(_audio, &QAudioOutput::stateChanged, this, &QtlMovieAudioTestDialog::audioStateChanged);
+
     // Set the audio volume from the volume slider.
-    _audio.setVolume(qreal(_ui.volumeSlider->value()) / qreal(_ui.volumeSlider->maximum()));
+    _audio->setVolume(qreal(_ui.volumeSlider->value()) / qreal(_ui.volumeSlider->maximum()));
 
     // Build the FFmpeg command line arguments to extract the selected audio channel
     // and convert it to the above format.
@@ -188,11 +217,10 @@ void QtlMovieAudioTestDialog::start()
          << "-";                        // Output file is standard output.
 
     // Create the process object.
-    Q_ASSERT(_process == 0);
     _process = new QtlMovieFFmpegProcess(args, _file->durationInSeconds(), QString(), _settings, _log, this);
 
     // Attempt cleanup as soon as the process completes.
-    connect(_process, &QtlMovieFFmpegProcess::completed, this, &QtlMovieAudioTestDialog::cleanup);
+    connect(_process, &QtlMovieFFmpegProcess::completed, this, &QtlMovieAudioTestDialog::processCompleted);
 
     // Start/restart the audio device when audio data are available on ffmpeg output.
     connect(_process->outputDevice(), &QIODevice::readyRead, this, &QtlMovieAudioTestDialog::ffmpegDataReady);
@@ -215,40 +243,51 @@ void QtlMovieAudioTestDialog::start()
 
 void QtlMovieAudioTestDialog::stop()
 {
+    Q_ASSERT(_process != 0);
+    Q_ASSERT(_audio != 0);
+
     // Remember we wanted to stop.
-    _started = false;
+    _state = Stopping;
 
     // Stop the FFmpeg process.
-    if (_process != 0) {
-        _process->abort();
-    }
+    _process->abort();
 
     // Stop the audio engine.
-    _audio.stop();
+    _audio->stop();
 
-    // Cleanup when possible. If cleanup is not possible now, it will be
-    // when both the process and the audio output signal their completion.
-    cleanup();
+    // Cleanup will be triggered when audio processing is complete.
 }
 
 
 //-----------------------------------------------------------------------------
 // Perform termination operations if the process and the audio output engine
-// are completed.
+// have both completed.
 //-----------------------------------------------------------------------------
 
 void QtlMovieAudioTestDialog::cleanup()
 {
-    // If not plying or the process or the audio engine are active, cannot cleanup now.
-    if (_process == 0 || !_process->isCompleted() || _audio.state() == QAudio::ActiveState) {
+    // Filter recursive invocation.
+    if (_state == Stopped) {
+        _log->debug(tr("cleanup, recursive call, skipped"));
         return;
     }
 
-    // Deallocate the process upon return to event loop.
-    if (_process != 0) {
-        _process->deleteLater();
-        _process = 0;
-    }
+    Q_ASSERT(_process != 0);
+    Q_ASSERT(_audio != 0);
+
+    // Now effectively stopped.
+    _log->debug(tr("cleanup, now stopped"));
+    _state = Stopped;
+
+    // Free process and audio engine.
+    _process->deleteLater();
+    _process = 0;
+    _audio->deleteLater();
+    _audio = 0;
+
+    // Terminate timer, if enabled.
+    _endTimer.stop();
+    _processedUSecs = -1;
 
     // The Stop button becomes a Play one again.
     _ui.playStopButton->setText(tr("Play"));
@@ -256,10 +295,104 @@ void QtlMovieAudioTestDialog::cleanup()
     // Re-enable user action on the audio stream selection and the play slider.
     _ui.audioStreamsBox->setEnabled(true);
     _ui.playSlider->setEnabled(true);
+}
 
-    // If a close request is pending, close this dialog.
-    if (_closePending) {
-        accept();
+
+
+//-----------------------------------------------------------------------------
+// Invoked when audio data is available from ffmpeg output.
+//-----------------------------------------------------------------------------
+
+void QtlMovieAudioTestDialog::ffmpegDataReady()
+{
+    // We can only process a chunk of audio when data is available.
+    if (_state == Started &&
+        _process != 0 &&
+        _audio != 0 &&
+        (!_process->isCompleted() || _process->outputDevice()->bytesAvailable() > 0) &&
+        _audio->state() != QAudio::ActiveState) {
+
+        // Start the audio processing using the standard output of the process as source.
+        _audio->start(_process->outputDevice());
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when the FFmpeg process terminates.
+//-----------------------------------------------------------------------------
+
+void QtlMovieAudioTestDialog::processCompleted()
+{
+    _log->debug(tr("QtlMovieAudioTestDialog::processCompleted"));
+    if (_audio != 0) {
+        // Start a periodic timer to detect the end of audio rendering.
+        // See comments at end of method start().
+        _processedUSecs = _audio->processedUSecs();
+        _endTimer.start(500); // milliseconds
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Periodically invoked after the process completion to check if the audio
+// processing is complete.
+//-----------------------------------------------------------------------------
+
+void QtlMovieAudioTestDialog::audioCompletionCheck()
+{
+    // Get total amount of processed audio microseconds.
+    const qint64 currentUSecs = _audio != 0 ? _audio->processedUSecs() : _processedUSecs;
+    _log->debug(tr("_processedUSecs = %1, _audio->processedUSecs() = %2").arg(_processedUSecs).arg(currentUSecs));
+
+    // Check if there is more than during last timer interrupt.
+    if (currentUSecs <= _processedUSecs) {
+        // No audio progression since last timer, assume audio completed.
+        _endTimer.stop();
+        if (_audio != 0) {
+            _audio->stop();
+        }
+        cleanup();
+    }
+
+    // Keep current amount of processed audio for next interrupt.
+    _processedUSecs = currentUSecs;
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked by the audio output engine when it changes its state.
+//-----------------------------------------------------------------------------
+
+void QtlMovieAudioTestDialog::audioStateChanged(QAudio::State audioState)
+{
+    _log->debug(tr("Audio state changed to %1").arg(audioState));
+
+    switch (audioState) {
+        case QAudio::ActiveState: {
+            // Audio starts playing. nothing to do.
+            break;
+        }
+        case QAudio::IdleState:
+        case QAudio::SuspendedState: {
+            // If the process is completed, stop now.
+            if (_process == 0 || _process->isCompleted()) {
+                _audio->stop();
+            }
+            break;
+        }
+        case QAudio::StoppedState: {
+            // Report decoding error and cleanup (if not already done).
+            if (_audio != 0 && _audio->error() != QAudio::NoError) {
+                _log->line(tr("Audio decoding error %1").arg(_audio->error()));
+            }
+            cleanup();
+            break;
+        }
+        default: {
+            _log->line(tr("Invalid audio output state: %1").arg(audioState));
+            break;
+        }
     }
 }
 
@@ -270,90 +403,24 @@ void QtlMovieAudioTestDialog::cleanup()
 
 void QtlMovieAudioTestDialog::updateVolume(int value)
 {
-    _audio.setVolume(qreal(value) / qreal(_ui.volumeSlider->maximum()));
+    // Update the audio volume accordingly.
+    if (_audio != 0) {
+        _audio->setVolume(qreal(value) / qreal(_ui.volumeSlider->maximum()));
+    }
 }
 
 
 //-----------------------------------------------------------------------------
-// Periodically invoked to update the play slider.
+// Periodically invoked by the audio engine to update the play slider.
 //-----------------------------------------------------------------------------
 
 void QtlMovieAudioTestDialog::updatePlaySlider()
 {
-    // Get the number of seconds from the start of audio processing.
-    const int seconds = int(_audio.processedUSecs() / 1000000);
+    if (_audio != 0) {
+        // Get the number of seconds from the start of audio processing.
+        const int seconds = int(_audio->processedUSecs() / 1000000);
 
-    // Update the slider.
-    _ui.playSlider->setValue(_startSecond + seconds);
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the audio output engine when it changes its state.
-//-----------------------------------------------------------------------------
-
-void QtlMovieAudioTestDialog::audioStateChanged(QAudio::State audioState)
-{
-    switch (audioState) {
-
-    case QAudio::ActiveState:
-        // Audio starts playing. nothing to do.
-        break;
-
-    case QAudio::IdleState:
-    case QAudio::SuspendedState:
-        // If the process is completed, stop now.
-        if (_process == 0 || _process->isCompleted()) {
-            _audio.stop();
-        }
-        break;
-
-    case QAudio::StoppedState:
-        // Report decoding error.
-        if (_audio.error() != QAudio::NoError) {
-            _log->line(tr("Audio decoding error %1").arg(_audio.error()));
-        }
-        // Cleanup if necessary.
-        cleanup();
-        break;
-
-    default:
-        _log->line(tr("Invalid audio output state: %1").arg(audioState));
-        break;
-    }
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked when audio data is available from ffmpeg output.
-//-----------------------------------------------------------------------------
-
-void QtlMovieAudioTestDialog::ffmpegDataReady()
-{
-    // Start the audio processing using the standard output of the process as source.
-    if (_started && _process != 0 && _audio.state() != QAudio::ActiveState) {
-        _audio.start(_process->outputDevice());
-    }
-}
-
-
-//-----------------------------------------------------------------------------
-// Event handler to handle window close.
-//-----------------------------------------------------------------------------
-
-void QtlMovieAudioTestDialog::closeEvent(QCloseEvent* event)
-{
-    // Request to terminate the audio processing.
-    stop();
-
-    // If still playing, wait for play termination.
-    // It this is the second time we try to close (_closePending is true), force a close anyway.
-    if (playing() && !_closePending) {
-        _closePending = true;  // Will close asap.
-        event->ignore();       // Refuse to close now.
-    }
-    else {
-        // Accept to close the window.
-        event->accept();
+        // Update the slider.
+        _ui.playSlider->setValue(_startSecond + seconds);
     }
 }

@@ -309,32 +309,52 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieAudioTestDialog.ui" line="106"/>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="254"/>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="293"/>
         <source>Play</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="155"/>
-        <source>Internal error: test audio decoding already started</source>
-        <translation>Erreur interne: le test audio est déjà démarré</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="162"/>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="181"/>
         <source>No audio stream in input file.</source>
         <translation>Pas de flux audio dans le fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="204"/>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="232"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="314"/>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="271"/>
+        <source>cleanup, recursive call, skipped</source>
+        <translation>Fin d&apos;audio, appel récursif ignoré</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="279"/>
+        <source>cleanup, now stopped</source>
+        <translation>Fin d&apos;audio, terminé</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="327"/>
+        <source>QtlMovieAudioTestDialog::processCompleted</source>
+        <translation>QtlMovieAudioTestDialog::processCompleted</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="346"/>
+        <source>_processedUSecs = %1, _audio-&gt;processedUSecs() = %2</source>
+        <translation>_processedUSecs = %1, _audio-&gt;processedUSecs() = %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="369"/>
+        <source>Audio state changed to %1</source>
+        <translation>Etat de l&apos;audio passé à %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="387"/>
         <source>Audio decoding error %1</source>
         <translation>Erreur %1 de décodage audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieAudioTestDialog.cpp" line="321"/>
+        <location filename="../QtlMovieAudioTestDialog.cpp" line="393"/>
         <source>Invalid audio output state: %1</source>
         <translation>Etat %1 de sortie audio invalide</translation>
     </message>
