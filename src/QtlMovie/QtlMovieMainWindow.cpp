@@ -142,6 +142,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
             foreach (const QString& fileName, initialFileNames) {
                 QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
                 task->inputFile()->setFileName(fileName);
+                task->outputFile()->setDefaultFileName(fileName);
                 _ui.taskList->addTask(task, false);
             }
         }
