@@ -49,7 +49,7 @@
 // Constructor.
 //-----------------------------------------------------------------------------
 
-QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFileName, bool logDebug) :
+QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initialFileNames, bool logDebug) :
     QMainWindow(parent),
     _settings(0),
 #if defined(QTL_WINEXTRAS)
@@ -135,17 +135,19 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
     // Transcoding is initially stopped.
     transcodingUpdateUi(false);
 
-    // If a command line argument is provided, use it as input file.
-    if (!initialFileName.isEmpty()) {
+    // Use input files from command line arguments.
+    if (!initialFileNames.isEmpty()) {
         if (_batchMode) {
-            // Batch mode, create a new task.
-            QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
-            task->inputFile()->setFileName(initialFileName);
-            _ui.taskList->addTask(task, true);
+            // Batch mode, create a new task for each file.
+            foreach (const QString& fileName, initialFileNames) {
+                QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
+                task->inputFile()->setFileName(fileName);
+                _ui.taskList->addTask(task, false);
+            }
         }
         else {
             // Single file mode, simply set the input file name.
-            _ui.singleTask->task()->inputFile()->setFileName(initialFileName);
+            _ui.singleTask->task()->inputFile()->setFileName(initialFileNames.first());
         }
     }
 

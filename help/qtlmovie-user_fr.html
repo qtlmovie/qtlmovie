@@ -656,14 +656,15 @@
       <p>Toutefois, quelques options sont acceptées sur la ligne de commande.
         La syntaxe est la suivante:</p>
       <div class="sample">
-        <p>QtlMovie [-l <i>locale</i>] [-d] [<i>inputfile</i>]</p>
+        <p>QtlMovie [-l <i>locale</i>] [-d] [<i>inputfile ...</i>]</p>
       </div>
       <p>Le paramètre <i>locale</i> spécifie une autre langue pour l'interface graphique, comme "en" ou "fr_FR".
         Par défaut, la langue du système est utilisée.</p>
       <p>L'option "-d" active les messages de debug dans la fenêtre de journal. C'est équivalent
         au menu "Outils" => "Activer le debug".</p>
-      <p>Le paramètre <i>inputfile</i> spécifie un fichier vidéo à ouvrir automatiquement
-        au lancement.</p>
+      <p>Les paramètres <i>inputfile ...</i> spécifient des fichiers vidéo à ouvrir automatiquement
+        au lancement. Spécifier plus d'un fichier n'est utile qu'en
+        <a href="#batchmode">mode multi-fichiers (batch)</a>.</p>
       <p>Exemple: Si la langue de votre système est supportée par QtlMovie mais vous
         n'êtes pas satisfait par les traductions, vous pouvez forcer le démarrage de
         QtlMovie en anglais en éditant la ligne de commande dans les menus du système comme suit:</p>

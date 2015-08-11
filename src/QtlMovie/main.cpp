@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     // Decode command line arguments.
     const QStringList args(QCoreApplication::arguments());
     QString locale;
-    QString inputFile;
+    QStringList inputFiles;
     bool logDebug = false;
 
     for (int i = 1; i < args.size(); ++i) {
@@ -57,8 +57,10 @@ int main(int argc, char *argv[])
             logDebug = true;
         }
         else if (!args[i].startsWith("-")) {
-            // Not an option, this is the input file.
-            inputFile = args[i];
+            // Not an option, this is an input file.
+            if (!args[i].isEmpty()) {
+                inputFiles << args[i];
+            }
         }
         else {
             qWarning() << "Unknow option:" << args[i];
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
 
     // Run the application GUI. When a restart is requested, create a new main window.
     for (;;) {
-        QtlMovieMainWindow win(0, inputFile, logDebug);
+        QtlMovieMainWindow win(0, inputFiles, logDebug);
         win.show();
         const int status = QCoreApplication::exec();
         if (!win.restartRequested()) {
