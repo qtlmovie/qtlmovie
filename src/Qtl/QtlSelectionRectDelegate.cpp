@@ -58,9 +58,17 @@ QtlSelectionRectDelegate::QtlSelectionRectDelegate(QObject* parent,
 
 void QtlSelectionRectDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // Fill the background color first.
+    // Check if the item is selected (highlighted, whatever).
+    const bool selected = (option.state & QStyle::State_Selected) != 0;
+
+    // For some reason (?), the background shall be explicitly painted here if and
+    // only if the item is selected. Experience shows that:
+    // - If the background is not painted for selected items, the background color
+    //   is ignored and a uniform color is applied for all selected items.
+    // - If the background is explicitly painted on non-selected items, the correct
+    //   color is used but the brush style is sometimes ignored (but not always!).
     const QVariant background(index.data(Qt::BackgroundRole));
-    if (background.canConvert<QBrush>()) {
+    if (selected && background.canConvert<QBrush>()) {
         painter->fillRect(option.rect, background.value<QBrush>());
     }
 
@@ -68,7 +76,7 @@ void QtlSelectionRectDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     QStyledItemDelegate::paint(painter, option, index);
 
     // Draw a rectangle around selected items.
-    if ((option.state & QStyle::State_Selected) != 0) {
+    if (selected) {
 
         // Save the painter state since we will modify it.
         painter->save();
