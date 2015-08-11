@@ -284,11 +284,13 @@ void QtlMovieTaskList::editTask(QtlMovieTask* task)
         // After editing the task, we check if the output file already exists.
         // If it exists, we ask the user if it should be overwritten. If not,
         // immediately re-edit the task until the user choose another output file
-        // name or accept to overwrite it.
+        // name or accept to overwrite it. We do this only if the task is in
+        // queued state. Otherwise, we assume that we just review the state
+        // of a terminated task.
         do {
             QtlMovieEditTaskDialog dialog(task, _settings, _log, this);
             dialog.exec();
-        } while (!task->askOverwriteOutput());
+        } while (task->state() == QtlMovieTask::Queued && !task->askOverwriteOutput());
     }
 }
 
