@@ -205,23 +205,25 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 // Create and start a new job.
 //-----------------------------------------------------------------------------
 
-QtlMovieJob* QtlMovieMainWindow::newJob(QtlMovieTask* task)
+bool QtlMovieMainWindow::startNewJob(QtlMovieTask* task)
 {
-    QtlMovieJob* job = new QtlMovieJob(task, _settings, _ui.log, this);
+    _job = new QtlMovieJob(task, _settings, _ui.log, this);
 
     // Connect the job's signals to the UI.
-    connect(job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
-    connect(job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
-    connect(job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
+    connect(_job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
+    connect(_job, &QtlMovieJob::progress,  this, &QtlMovieMainWindow::transcodingProgress);
+    connect(_job, &QtlMovieJob::completed, this, &QtlMovieMainWindow::transcodingStopped);
 
     // Start the job.
-    if (job->start()) {
-        return job;
+    if (_job->start()) {
+        // Note that the job may fail in the meantime and _job is now back to zero.
+        return true;
     }
     else {
        // Error starting the job, delete it now.
-        delete job;
-        return 0;
+        delete _job;
+        _job = 0;
+        return false;
     }
 }
 
@@ -242,11 +244,11 @@ void QtlMovieMainWindow::startTranscoding()
     if (_batchMode) {
         // Batch mode. Loop until a job is successfully started.
         // We exit the loop either when there is no more job to start (task == 0)
-        // or a job was successfully started (_job != 0).
+        // or a job was successfully started.
         QtlMovieTask* task = 0;
         do {
             task = _ui.taskList->nextTask();
-        } while (task != 0 && (_job = newJob(task)) == 0);
+        } while (task != 0 && !startNewJob(task));
     }
     else {
         // Single task mode. Get the task to execute.
@@ -260,7 +262,7 @@ void QtlMovieMainWindow::startTranscoding()
             }
             else {
                 // Setup the transcoding job.
-                _job = newJob(task);
+                startNewJob(task);
             }
         }
     }

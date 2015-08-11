@@ -194,9 +194,9 @@ private:
     //!
     //! Create and start a new job.
     //! @param [in] task The task to execute in the job.
-    //! @return The new job or zero on error.
+    //! @return True on success, false on error.
     //!
-    QtlMovieJob* newJob(QtlMovieTask* task);
+    bool startNewJob(QtlMovieTask* task);
 
     //!
     //! Start to play the notification sound.
