@@ -45,10 +45,16 @@ int main(int argc, char *argv[])
     const QStringList args(QCoreApplication::arguments());
     QString locale;
     QString inputFile;
+    bool logDebug = false;
+
     for (int i = 1; i < args.size(); ++i) {
         if (args[i] == "-l" && i+1 < args.size()) {
             // Option "-l" means locale name
             locale = args[++i];
+        }
+        else if (args[i] == "-d") {
+            // Option "-d" means activate log debug.
+            logDebug = true;
         }
         else if (!args[i].startsWith("-")) {
             // Not an option, this is the input file.
@@ -70,7 +76,7 @@ int main(int argc, char *argv[])
 
     // Run the application GUI. When a restart is requested, create a new main window.
     for (;;) {
-        QtlMovieMainWindow win(0, inputFile);
+        QtlMovieMainWindow win(0, inputFile, logDebug);
         win.show();
         const int status = QCoreApplication::exec();
         if (!win.restartRequested()) {

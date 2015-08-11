@@ -49,7 +49,7 @@
 // Constructor.
 //-----------------------------------------------------------------------------
 
-QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFileName) :
+QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFileName, bool logDebug) :
     QMainWindow(parent),
     _settings(0),
 #if defined(QTL_WINEXTRAS)
@@ -90,6 +90,9 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QString& initialFi
 
     // Connect the "About Qt" action.
     connect(_ui.actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
+
+    // Set log debug mode.
+    _ui.log->setDebugMode(logDebug);
 
     // Create and load settings. Ignore errors (typically default settings file not yet created).
     _settings = new QtlMovieSettings(_ui.log, this);

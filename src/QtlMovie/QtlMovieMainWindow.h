@@ -61,8 +61,9 @@ public:
     //! Constructor.
     //! @param [in] parent Optional parent widget.
     //! @param [in] initialFileName Optional initial input file, typically from the command line.
+    //! @param [in] logDebug If true, set initial log mode to debug.
     //!
-    explicit QtlMovieMainWindow(QWidget *parent = 0, const QString& initialFileName = QString());
+    explicit QtlMovieMainWindow(QWidget *parent = 0, const QString& initialFileName = QString(), bool logDebug = false);
 
     //!
     //! Check if a restart of the application was requested by the user.

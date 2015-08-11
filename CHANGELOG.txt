@@ -3,6 +3,7 @@ QtlMovie Change Log
 ===================
 
 Version 1.3.1
+- Added command line option "-d" to initially activate the debug messages.
 - Bug fix: When an error occured during the start of a transcoding job
   (for instance if the output file was not specified), subsequent jobs
   always failed with "Internal error, transcoding job already created".
