@@ -405,8 +405,14 @@ void QtlMovieTaskList::addAndEditTask()
 
 void QtlMovieTaskList::editSelectedTask()
 {
+    // Get the first selected task.
     const QList<QTableWidgetItem*> selected(selectedItems());
-    editTask(taskOfRow(selected.isEmpty() ? -1 : selected.first()->row()));
+    QtlMovieTask* const task = taskOfRow(selected.isEmpty() ? -1 : selected.first()->row());
+
+    // Edit the task only if it is not running.
+    if (task != 0 && task->state() != QtlMovieTask::Running) {
+        editTask(task);
+    }
 }
 
 

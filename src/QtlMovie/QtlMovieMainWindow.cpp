@@ -168,6 +168,7 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
     // Enable / disable widgets which must be inactive during transcoding.
     _ui.actionSwitchMode->setEnabled(!started);
     _ui.actionOpen->setEnabled(!started);
+    _ui.singleTask->setEnabled(!started);
 
     // Toggle transcode/cancel labels in buttons.
     // Change their target slot to start/cancel transcoding.

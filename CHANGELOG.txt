@@ -5,6 +5,7 @@ QtlMovie Change Log
 Version 1.3.1
 - Accept more than one input file in the command line (for batch mode).
 - Added command line option "-d" to initially activate the debug messages.
+- Prevent editing a task while it is running.
 - Bug fix: In batch mode, the background color of the running job was
   sometimes dashed, sometimes not. This is fixed.
 - Bug fix: When an error occured during the start of a transcoding job
