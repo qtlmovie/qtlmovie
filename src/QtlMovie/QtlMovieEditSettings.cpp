@@ -34,6 +34,7 @@
 #include "QtlLineEdit.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
+#include "QtlOpticalDrive.h"
 #include "QtlWinUtils.h"
 
 
@@ -44,7 +45,8 @@
 QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* parent) :
     QtlDialog(parent),
     _settings(settings),
-    _outDirs()
+    _outDirs(),
+    _comboDvdBurner(0)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
@@ -84,6 +86,53 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         outDir.pushButton = new QPushButton(tr("Browse ..."), _ui.groupBoxOutputDir);
         _ui.layoutDefaultOutputDir->addWidget(outDir.pushButton, row, 2, 1, 1);
         connect(outDir.pushButton, &QPushButton::clicked, this, &QtlMovieEditSettings::browseOutputDir);
+    }
+
+    // Get the list of all optical drives in the system.
+    const QStringList burnerIds(QtlOpticalDrive::getAllDriveUids());
+
+    // Extract list of DVD burner drive names.
+    QStringList burnerDriveNames;
+    foreach (const QString& id, burnerIds) {
+        const QtlOpticalDrive drive(id);
+        if (drive.canWriteDvd()) {
+            burnerDriveNames << drive.driveName();
+        }
+    }
+    burnerDriveNames.sort(Qt::CaseInsensitive);
+
+    // If we could extract a list of DVD burners, replace the text edit box
+    // with a combo box with only the list of possible drives. If we could not
+    // get the list of DVD burners, this does not mean that there is none.
+    // It means that the implementation of QtlOpticalDrive could not find
+    // them. In that case, keep the free edit box.
+    if (!burnerDriveNames.isEmpty()) {
+
+        // Search position of the burner free edit box in the layout.
+        const int index = _ui.layoutDvdBurning->indexOf(_ui.editDvdBurner);
+        if (index >= 0) {
+
+            // Get its position in the layout.
+            int row = 0;
+            int column = 0;
+            int rowSpan = 0;
+            int columnSpan = 0;
+            _ui.layoutDvdBurning->getItemPosition(index, &row, &column, &rowSpan, &columnSpan);
+
+            // Create the combo box for selecting the DVD burners.
+            _comboDvdBurner = new QComboBox(this);
+            _comboDvdBurner->addItems(burnerDriveNames);
+            _comboDvdBurner->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+            // Remove the burner free edit from display.
+            _ui.layoutDvdBurning->removeWidget(_ui.editDvdBurner);
+            _ui.layoutDvdBurning->removeWidget(_ui.buttonBrowseDvdBurner);
+            _ui.editDvdBurner->setVisible(false);
+            _ui.buttonBrowseDvdBurner->setVisible(false);
+
+            // Display the combo at the previous position of the free edit.
+            _ui.layoutDvdBurning->addWidget(_comboDvdBurner, row, column, rowSpan, columnSpan);
+        }
     }
 
     // Load the initial values from the settings object.
@@ -185,6 +234,24 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
     (_settings->useBatchMode() ? _ui.radioMultiFile : _ui.radioSingleFile)->setChecked(true);
 
+    // If a combo box is present for DVD burner.
+    if (_comboDvdBurner != 0) {
+
+        // Check if the current setting is in the list of known burners.
+        const QString current(_settings->dvdBurner());
+        int index = _comboDvdBurner->findText(current);
+
+        if (index < 0) {
+            // Current value from settings is not present. Must not be a valid
+            // burner device but add it anyway at end of list.
+            _comboDvdBurner->addItem(current);
+            index = _comboDvdBurner->count() - 1;
+        }
+
+        // Set current setting as selected value.
+        _comboDvdBurner->setCurrentIndex(index);
+    }
+
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
         it.value().lineEdit->setText(_settings->defaultOutputDir(QtlMovieOutputFile::outputIdName(it.key()), true));
@@ -238,7 +305,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());
     _settings->setDefaultOutputDirIsInput(_ui.checkBoxSameAsInput->isChecked());
-    _settings->setDvdBurner(_ui.editDvdBurner->text());
+    _settings->setDvdBurner(_comboDvdBurner != 0 ? _comboDvdBurner->currentText() : _ui.editDvdBurner->text());
     _settings->setAudienceLanguages(qtlListItems(_ui.listLanguages));
     _settings->setTranscodeComplete(_ui.radioButtonComplete->isChecked());
     _settings->setTranscodeSeconds(_ui.spinMaxTranscode->value());

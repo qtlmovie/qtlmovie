@@ -75,7 +75,7 @@
          <property name="title">
           <string>DVD burning</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="layoutDvdBurning">
           <item row="0" column="0">
            <widget class="QLabel" name="labelDvdDevice">
             <property name="text">

@@ -202,9 +202,10 @@ private:
     typedef QMap<QtlMovieOutputFile::OutputType,OutputDirectory> OutputDirectoryMap;
 
     // Private fields.
-    Ui::QtlMovieEditSettings _ui;       //!< UI from Qt Designer.
-    QtlMovieSettings*        _settings; //!< Associated QtlMovieSettings object.
-    OutputDirectoryMap       _outDirs;  //!< Output directories settings.
+    Ui::QtlMovieEditSettings _ui;             //!< UI from Qt Designer.
+    QtlMovieSettings*        _settings;       //!< Associated QtlMovieSettings object.
+    OutputDirectoryMap       _outDirs;        //!< Output directories settings.
+    QComboBox*               _comboDvdBurner; //!< Alternate combo box for DVD burner selection.
 
     //!
     //! Set the default executable path of a media tool.
