@@ -1,0 +1,315 @@
+<h1 align=center>Microsoft IMAPI v2, Disc Master Reference</h1>
+<p>The Microsoft IMAPI v2, Disc Master COM object is a QAxObject with the CLSID {2735412e-7f64-5b0f-8f00-5d77afbe261e}.</p>
+<h3>Interfaces</h3>
+<ul>
+<li>IDiscMaster2
+</ul>
+<h3>Event Interfaces</h3>
+<ul>
+<li>DDiscMaster2Events
+</ul>
+<h2>Public Slots:</h2>
+<ul>
+<li>QString <a href="#Item"><b>Item</b></a>(int index);</li>
+</ul>
+<h2>Signals:</h2>
+<ul>
+<li>void <a href="#exception"><b>exception</b></a>(int code, QString source, QString disc, QString help);</li>
+<li>void <a href="#propertyChanged"><b>propertyChanged</b></a>(QString name);</li>
+<li>void <a href="#signal"><b>signal</b></a>(QString name, int argc, void* argv);</li>
+</ul>
+<h2>Properties:</h2>
+<ul>
+<li>QString <a href="#objectName"><b>objectName</b></a>;</li>
+<li>int <a href="#Count"><b>Count</b></a>;</li>
+<li>bool <a href="#IsSupportedEnvironment"><b>IsSupportedEnvironment</b></a>;</li>
+<li>stdole::IEnumVARIANT* <a href="#_NewEnum"><b>_NewEnum</b></a>;</li>
+<li>QString <a href="#control"><b>control</b></a>;</li>
+</ul>
+<hr><h2>Member Type Documentation</h2>
+<h3><a name=_IMAPI_BURN_VERIFICATION_LEVEL></a>_IMAPI_BURN_VERIFICATION_LEVEL</h3>
+<ul>
+<li>IMAPI_BURN_VERIFICATION_NONE	=0</li>
+<li>IMAPI_BURN_VERIFICATION_QUICK	=1</li>
+<li>IMAPI_BURN_VERIFICATION_FULL	=2</li>
+</ul>
+<h3><a name=_IMAPI_CD_SECTOR_TYPE></a>_IMAPI_CD_SECTOR_TYPE</h3>
+<ul>
+<li>IMAPI_CD_SECTOR_AUDIO	=0</li>
+<li>IMAPI_CD_SECTOR_MODE_ZERO	=1</li>
+<li>IMAPI_CD_SECTOR_MODE1	=2</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM0	=3</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM1	=4</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM2	=5</li>
+<li>IMAPI_CD_SECTOR_MODE1RAW	=6</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM0RAW	=7</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM1RAW	=8</li>
+<li>IMAPI_CD_SECTOR_MODE2FORM2RAW	=9</li>
+</ul>
+<h3><a name=_IMAPI_CD_TRACK_DIGITAL_COPY_SETTING></a>_IMAPI_CD_TRACK_DIGITAL_COPY_SETTING</h3>
+<ul>
+<li>IMAPI_CD_TRACK_DIGITAL_COPY_PERMITTED	=0</li>
+<li>IMAPI_CD_TRACK_DIGITAL_COPY_PROHIBITED	=1</li>
+<li>IMAPI_CD_TRACK_DIGITAL_COPY_SCMS	=2</li>
+</ul>
+<h3><a name=_IMAPI_FEATURE_PAGE_TYPE></a>_IMAPI_FEATURE_PAGE_TYPE</h3>
+<ul>
+<li>IMAPI_FEATURE_PAGE_TYPE_PROFILE_LIST	=0</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CORE	=1</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_MORPHING	=2</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_REMOVABLE_MEDIUM	=3</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_WRITE_PROTECT	=4</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_RANDOMLY_READABLE	=16</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_MULTIREAD	=29</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_READ	=30</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_READ	=31</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_RANDOMLY_WRITABLE	=32</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_INCREMENTAL_STREAMING_WRITABLE	=33</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_SECTOR_ERASABLE	=34</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_FORMATTABLE	=35</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_HARDWARE_DEFECT_MANAGEMENT	=36</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_WRITE_ONCE	=37</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_RESTRICTED_OVERWRITE	=38</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CDRW_CAV_WRITE	=39</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_MRW	=40</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_ENHANCED_DEFECT_REPORTING	=41</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_PLUS_RW	=42</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_PLUS_R	=43</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_RIGID_RESTRICTED_OVERWRITE	=44</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_TRACK_AT_ONCE	=45</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_MASTERING	=46</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_DASH_WRITE	=47</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DOUBLE_DENSITY_CD_READ	=48</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DOUBLE_DENSITY_CD_R_WRITE	=49</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DOUBLE_DENSITY_CD_RW_WRITE	=50</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_LAYER_JUMP_RECORDING	=51</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_RW_MEDIA_WRITE_SUPPORT	=55</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_BD_PSEUDO_OVERWRITE	=56</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_PLUS_R_DUAL_LAYER	=59</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_BD_READ	=64</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_BD_WRITE	=65</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_HD_DVD_READ	=80</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_HD_DVD_WRITE	=81</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_POWER_MANAGEMENT	=256</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_SMART	=257</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_EMBEDDED_CHANGER	=258</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_CD_ANALOG_PLAY	=259</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_MICROCODE_UPDATE	=260</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_TIMEOUT	=261</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_CSS	=262</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_REAL_TIME_STREAMING	=263</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_LOGICAL_UNIT_SERIAL_NUMBER	=264</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_MEDIA_SERIAL_NUMBER	=265</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DISC_CONTROL_BLOCKS	=266</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_DVD_CPRM	=267</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_FIRMWARE_INFORMATION	=268</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_AACS	=269</li>
+<li>IMAPI_FEATURE_PAGE_TYPE_VCPS	=272</li>
+</ul>
+<h3><a name=_IMAPI_FORMAT2_DATA_MEDIA_STATE></a>_IMAPI_FORMAT2_DATA_MEDIA_STATE</h3>
+<ul>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_UNKNOWN	=0</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_INFORMATIONAL_MASK	=15</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_UNSUPPORTED_MASK	=64512</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_OVERWRITE_ONLY	=1</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_RANDOMLY_WRITABLE	=1</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_BLANK	=2</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_APPENDABLE	=4</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_FINAL_SESSION	=8</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_DAMAGED	=1024</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_ERASE_REQUIRED	=2048</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_NON_EMPTY_SESSION	=4096</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_WRITE_PROTECTED	=8192</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_FINALIZED	=16384</li>
+<li>IMAPI_FORMAT2_DATA_MEDIA_STATE_UNSUPPORTED_MEDIA	=32768</li>
+</ul>
+<h3><a name=_IMAPI_FORMAT2_DATA_WRITE_ACTION></a>_IMAPI_FORMAT2_DATA_WRITE_ACTION</h3>
+<ul>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_VALIDATING_MEDIA	=0</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_FORMATTING_MEDIA	=1</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_INITIALIZING_HARDWARE	=2</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_CALIBRATING_POWER	=3</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_WRITING_DATA	=4</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_FINALIZATION	=5</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_COMPLETED	=6</li>
+<li>IMAPI_FORMAT2_DATA_WRITE_ACTION_VERIFYING	=7</li>
+</ul>
+<h3><a name=_IMAPI_FORMAT2_RAW_CD_DATA_SECTOR_TYPE></a>_IMAPI_FORMAT2_RAW_CD_DATA_SECTOR_TYPE</h3>
+<ul>
+<li>IMAPI_FORMAT2_RAW_CD_SUBCODE_PQ_ONLY	=1</li>
+<li>IMAPI_FORMAT2_RAW_CD_SUBCODE_IS_COOKED	=2</li>
+<li>IMAPI_FORMAT2_RAW_CD_SUBCODE_IS_RAW	=3</li>
+</ul>
+<h3><a name=_IMAPI_FORMAT2_RAW_CD_WRITE_ACTION></a>_IMAPI_FORMAT2_RAW_CD_WRITE_ACTION</h3>
+<ul>
+<li>IMAPI_FORMAT2_RAW_CD_WRITE_ACTION_UNKNOWN	=0</li>
+<li>IMAPI_FORMAT2_RAW_CD_WRITE_ACTION_PREPARING	=1</li>
+<li>IMAPI_FORMAT2_RAW_CD_WRITE_ACTION_WRITING	=2</li>
+<li>IMAPI_FORMAT2_RAW_CD_WRITE_ACTION_FINISHING	=3</li>
+</ul>
+<h3><a name=_IMAPI_FORMAT2_TAO_WRITE_ACTION></a>_IMAPI_FORMAT2_TAO_WRITE_ACTION</h3>
+<ul>
+<li>IMAPI_FORMAT2_TAO_WRITE_ACTION_UNKNOWN	=0</li>
+<li>IMAPI_FORMAT2_TAO_WRITE_ACTION_PREPARING	=1</li>
+<li>IMAPI_FORMAT2_TAO_WRITE_ACTION_WRITING	=2</li>
+<li>IMAPI_FORMAT2_TAO_WRITE_ACTION_FINISHING	=3</li>
+<li>IMAPI_FORMAT2_TAO_WRITE_ACTION_VERIFYING	=4</li>
+</ul>
+<h3><a name=_IMAPI_MEDIA_PHYSICAL_TYPE></a>_IMAPI_MEDIA_PHYSICAL_TYPE</h3>
+<ul>
+<li>IMAPI_MEDIA_TYPE_UNKNOWN	=0</li>
+<li>IMAPI_MEDIA_TYPE_CDROM	=1</li>
+<li>IMAPI_MEDIA_TYPE_CDR	=2</li>
+<li>IMAPI_MEDIA_TYPE_CDRW	=3</li>
+<li>IMAPI_MEDIA_TYPE_DVDROM	=4</li>
+<li>IMAPI_MEDIA_TYPE_DVDRAM	=5</li>
+<li>IMAPI_MEDIA_TYPE_DVDPLUSR	=6</li>
+<li>IMAPI_MEDIA_TYPE_DVDPLUSRW	=7</li>
+<li>IMAPI_MEDIA_TYPE_DVDPLUSR_DUALLAYER	=8</li>
+<li>IMAPI_MEDIA_TYPE_DVDDASHR	=9</li>
+<li>IMAPI_MEDIA_TYPE_DVDDASHRW	=10</li>
+<li>IMAPI_MEDIA_TYPE_DVDDASHR_DUALLAYER	=11</li>
+<li>IMAPI_MEDIA_TYPE_DISK	=12</li>
+<li>IMAPI_MEDIA_TYPE_DVDPLUSRW_DUALLAYER	=13</li>
+<li>IMAPI_MEDIA_TYPE_HDDVDROM	=14</li>
+<li>IMAPI_MEDIA_TYPE_HDDVDR	=15</li>
+<li>IMAPI_MEDIA_TYPE_HDDVDRAM	=16</li>
+<li>IMAPI_MEDIA_TYPE_BDROM	=17</li>
+<li>IMAPI_MEDIA_TYPE_BDR	=18</li>
+<li>IMAPI_MEDIA_TYPE_BDRE	=19</li>
+<li>IMAPI_MEDIA_TYPE_MAX	=19</li>
+</ul>
+<h3><a name=_IMAPI_MEDIA_WRITE_PROTECT_STATE></a>_IMAPI_MEDIA_WRITE_PROTECT_STATE</h3>
+<ul>
+<li>IMAPI_WRITEPROTECTED_UNTIL_POWERDOWN	=1</li>
+<li>IMAPI_WRITEPROTECTED_BY_CARTRIDGE	=2</li>
+<li>IMAPI_WRITEPROTECTED_BY_MEDIA_SPECIFIC_REASON	=4</li>
+<li>IMAPI_WRITEPROTECTED_BY_SOFTWARE_WRITE_PROTECT	=8</li>
+<li>IMAPI_WRITEPROTECTED_BY_DISC_CONTROL_BLOCK	=16</li>
+<li>IMAPI_WRITEPROTECTED_READ_ONLY_MEDIA	=16384</li>
+</ul>
+<h3><a name=_IMAPI_MODE_PAGE_REQUEST_TYPE></a>_IMAPI_MODE_PAGE_REQUEST_TYPE</h3>
+<ul>
+<li>IMAPI_MODE_PAGE_REQUEST_TYPE_CURRENT_VALUES	=0</li>
+<li>IMAPI_MODE_PAGE_REQUEST_TYPE_CHANGEABLE_VALUES	=1</li>
+<li>IMAPI_MODE_PAGE_REQUEST_TYPE_DEFAULT_VALUES	=2</li>
+<li>IMAPI_MODE_PAGE_REQUEST_TYPE_SAVED_VALUES	=3</li>
+</ul>
+<h3><a name=_IMAPI_MODE_PAGE_TYPE></a>_IMAPI_MODE_PAGE_TYPE</h3>
+<ul>
+<li>IMAPI_MODE_PAGE_TYPE_READ_WRITE_ERROR_RECOVERY	=1</li>
+<li>IMAPI_MODE_PAGE_TYPE_MRW	=3</li>
+<li>IMAPI_MODE_PAGE_TYPE_WRITE_PARAMETERS	=5</li>
+<li>IMAPI_MODE_PAGE_TYPE_CACHING	=8</li>
+<li>IMAPI_MODE_PAGE_TYPE_INFORMATIONAL_EXCEPTIONS	=28</li>
+<li>IMAPI_MODE_PAGE_TYPE_TIMEOUT_AND_PROTECT	=29</li>
+<li>IMAPI_MODE_PAGE_TYPE_POWER_CONDITION	=26</li>
+<li>IMAPI_MODE_PAGE_TYPE_LEGACY_CAPABILITIES	=42</li>
+</ul>
+<h3><a name=_IMAPI_PROFILE_TYPE></a>_IMAPI_PROFILE_TYPE</h3>
+<ul>
+<li>IMAPI_PROFILE_TYPE_INVALID	=0</li>
+<li>IMAPI_PROFILE_TYPE_NON_REMOVABLE_DISK	=1</li>
+<li>IMAPI_PROFILE_TYPE_REMOVABLE_DISK	=2</li>
+<li>IMAPI_PROFILE_TYPE_MO_ERASABLE	=3</li>
+<li>IMAPI_PROFILE_TYPE_MO_WRITE_ONCE	=4</li>
+<li>IMAPI_PROFILE_TYPE_AS_MO	=5</li>
+<li>IMAPI_PROFILE_TYPE_CDROM	=8</li>
+<li>IMAPI_PROFILE_TYPE_CD_RECORDABLE	=9</li>
+<li>IMAPI_PROFILE_TYPE_CD_REWRITABLE	=10</li>
+<li>IMAPI_PROFILE_TYPE_DVDROM	=16</li>
+<li>IMAPI_PROFILE_TYPE_DVD_DASH_RECORDABLE	=17</li>
+<li>IMAPI_PROFILE_TYPE_DVD_RAM	=18</li>
+<li>IMAPI_PROFILE_TYPE_DVD_DASH_REWRITABLE	=19</li>
+<li>IMAPI_PROFILE_TYPE_DVD_DASH_RW_SEQUENTIAL	=20</li>
+<li>IMAPI_PROFILE_TYPE_DVD_DASH_R_DUAL_SEQUENTIAL	=21</li>
+<li>IMAPI_PROFILE_TYPE_DVD_DASH_R_DUAL_LAYER_JUMP	=22</li>
+<li>IMAPI_PROFILE_TYPE_DVD_PLUS_RW	=26</li>
+<li>IMAPI_PROFILE_TYPE_DVD_PLUS_R	=27</li>
+<li>IMAPI_PROFILE_TYPE_DDCDROM	=32</li>
+<li>IMAPI_PROFILE_TYPE_DDCD_RECORDABLE	=33</li>
+<li>IMAPI_PROFILE_TYPE_DDCD_REWRITABLE	=34</li>
+<li>IMAPI_PROFILE_TYPE_DVD_PLUS_RW_DUAL	=42</li>
+<li>IMAPI_PROFILE_TYPE_DVD_PLUS_R_DUAL	=43</li>
+<li>IMAPI_PROFILE_TYPE_BD_ROM	=64</li>
+<li>IMAPI_PROFILE_TYPE_BD_R_SEQUENTIAL	=65</li>
+<li>IMAPI_PROFILE_TYPE_BD_R_RANDOM_RECORDING	=66</li>
+<li>IMAPI_PROFILE_TYPE_BD_REWRITABLE	=67</li>
+<li>IMAPI_PROFILE_TYPE_HD_DVD_ROM	=80</li>
+<li>IMAPI_PROFILE_TYPE_HD_DVD_RECORDABLE	=81</li>
+<li>IMAPI_PROFILE_TYPE_HD_DVD_RAM	=82</li>
+<li>IMAPI_PROFILE_TYPE_NON_STANDARD	=65535</li>
+</ul>
+<h3><a name=_IMAPI_READ_TRACK_ADDRESS_TYPE></a>_IMAPI_READ_TRACK_ADDRESS_TYPE</h3>
+<ul>
+<li>IMAPI_READ_TRACK_ADDRESS_TYPE_LBA	=0</li>
+<li>IMAPI_READ_TRACK_ADDRESS_TYPE_TRACK	=1</li>
+<li>IMAPI_READ_TRACK_ADDRESS_TYPE_SESSION	=2</li>
+</ul>
+<hr><h2>Member Function Documentation</h2>
+<h3><a name=Item></a>QString Item (int index)<tt> [slot]</tt></h3>
+<p>Gets a single recorder's ID (ZERO BASED INDEX)
+
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(Item(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	QString result = object->dynamicCall("Item(int)", params).toString();</pre>
+
+<h3><a name=exception></a>void exception (int code, QString source, QString disc, QString help)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(exception(int, QString, QString, QString)), receiver, SLOT(someSlot(int, QString, QString, QString)));</pre>
+
+<h3><a name=propertyChanged></a>void propertyChanged (QString name)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(propertyChanged(QString)), receiver, SLOT(someSlot(QString)));</pre>
+
+<h3><a name=signal></a>void signal (QString name, int argc, void* argv)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(signal(QString, int, void*)), receiver, SLOT(someSlot(QString, int, void*)));</pre>
+
+<hr><h2>Property Documentation</h2>
+<h3><a name=objectName></a>QString objectName</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("objectName").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("objectName", newValue);
+</pre>
+Or using the <a href="#setObjectName">setObjectName</a> slot.
+
+<h3><a name=Count></a>int Count</h3>
+<p>The current number of recorders in the system.
+
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("Count").toInt();
+</pre>
+
+<h3><a name=IsSupportedEnvironment></a>bool IsSupportedEnvironment</h3>
+<p>Whether IMAPI is running in an environment with optical devices and permission to access them.
+
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("IsSupportedEnvironment").toBool();
+</pre>
+
+<h3><a name=_NewEnum></a>stdole::IEnumVARIANT* _NewEnum</h3>
+<p>Enumerates the list of CD/DVD devices on the system (VT_BSTR)
+
+<p>This property is of an unsupported type.
+
+<h3><a name=control></a>QString control</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("control").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("control", newValue);
+</pre>
+Or using the <a href="#setControl">setControl</a> slot.
+

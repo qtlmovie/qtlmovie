@@ -34,6 +34,7 @@
 #include "QtlMovieSettings.h"
 #include "QtlMovieSettingsMigration.h"
 #include "QtlStringList.h"
+#include "QtlOpticalDrive.h"
 #include "QtlMovie.h"
 
 
@@ -129,6 +130,11 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
 
     // Convert old-style XML file configuration if one exists.
     QtlMovieSettingsMigration(this, log);
+
+    // If no DVD burner is defined, use the first one in the system by default.
+    if (dvdBurner().isEmpty()) {
+        setDvdBurner(QtlOpticalDrive::firstDvdWriter().driveName());
+    }
 }
 
 

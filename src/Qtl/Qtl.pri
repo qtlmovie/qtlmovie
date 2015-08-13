@@ -42,6 +42,7 @@ QT *= core
 QT *= gui
 QT *= widgets
 QT *= network
+win32: QT *= axcontainer
 
 # Define the symbol DEBUG in debug mode.
 

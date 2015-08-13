@@ -169,13 +169,7 @@ QString QtlFile::search(const QString& baseName,
     // Check if the file ends with the specified extension.
     // On Windows, use non-case-sensitive search.
     QString fileName(baseName);
-    const Qt::CaseSensitivity caseSensitivity =
-#if defined(Q_OS_WIN)
-        Qt::CaseInsensitive;
-#else
-        Qt::CaseSensitive;
-#endif
-    if (!baseName.endsWith(extension, caseSensitivity)) {
+    if (!baseName.endsWith(extension, QTL_FILE_NAMES_CASE_SENSITIVE)) {
         // Specified extension not present, add it.
         fileName.append(extension);
     }
