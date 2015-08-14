@@ -41,6 +41,8 @@
 //!
 //! A class which describes an optical disc drive in the system.
 //!
+//! Limitation: Implemented on Windows and Linux only.
+//!
 class QtlOpticalDrive
 {
 public:
@@ -220,12 +222,23 @@ private:
     bool    _canWriteBluRay;  //!< The drive can write Blu-Ray media.
 
     //!
-    //! Locate the first drive in the system matching a check function member.
-    //! @param [in] check Pointer to member function returning bool.
-    //!                   Typically one of canReadBluRay(), canWriteDvd(), etc.
+    //! Locate the first drive in the system matching a boolean member.
+    //! @param [in] check Pointer to bool member to check. Typically one of _canReadBluRay(), _canWriteDvd, etc.
     //! @return The specified value in the located drive or an empty string if none is found.
     //!
     static QtlOpticalDrive firstDriveWithCheck(bool QtlOpticalDrive::*check);
+
+#if defined(Q_OS_LINUX) || defined(DOXYGEN)
+    //!
+    //! Update a boolean field in all elements in an array of QtlOpticalDrive.
+    //! @param [in,out] drives Array of QtlOpticalDrive to update.
+    //! @param [in] fields Array of strings, one for each element in @arg drives.
+    //! When a string is not empty and not "0", the capability is set.
+    //! Otherwise, it is left unchanged.
+    //! @param [in] capability Pointer to bool member to update. Typically one of _canReadBluRay(), _canWriteDvd, etc.
+    //!
+    static void updateCapability(QList<QtlOpticalDrive>& drives, const QStringList& fields, bool QtlOpticalDrive::*capability);
+#endif
 };
 
 #endif // QTLOPTICALDRIVE_H

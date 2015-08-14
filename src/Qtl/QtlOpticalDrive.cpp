@@ -35,6 +35,8 @@
 
 #if defined(Q_OS_WIN)
 #include <QAxObject>
+#elif defined(Q_OS_LINUX)
+#include "QtlFile.h"
 #endif
 
 
@@ -58,7 +60,7 @@ QtlOpticalDrive::QtlOpticalDrive() :
 
 
 //----------------------------------------------------------------------------
-// Locate the first drive in the system matching a check function member.
+// Locate the first drive in the system matching a boolean member.
 //----------------------------------------------------------------------------
 
 QtlOpticalDrive QtlOpticalDrive::firstDriveWithCheck(bool QtlOpticalDrive::*check)
@@ -66,7 +68,7 @@ QtlOpticalDrive QtlOpticalDrive::firstDriveWithCheck(bool QtlOpticalDrive::*chec
     // Get all optical drives in the system.
     const QList<QtlOpticalDrive> drives(getAllDrives());
 
-    // List their characteristics and return first drive matching check function.
+    // List their characteristics and return first drive matching bool member.
     foreach (const QtlOpticalDrive& drive, drives) {
         if (drive.*check) {
             return drive;
@@ -76,6 +78,29 @@ QtlOpticalDrive QtlOpticalDrive::firstDriveWithCheck(bool QtlOpticalDrive::*chec
     // None found, return an empty string.
     return QtlOpticalDrive();
 }
+
+
+//----------------------------------------------------------------------------
+// Update a boolean field in all elements in an array of QtlOpticalDrive.
+//----------------------------------------------------------------------------
+
+#if defined(Q_OS_LINUX)
+
+void QtlOpticalDrive::updateCapability(QList<QtlOpticalDrive>& drives, const QStringList& fields, bool QtlOpticalDrive::*capability)
+{
+    QList<QtlOpticalDrive>::Iterator itDrives(drives.begin());
+    QStringList::ConstIterator itFields(fields.begin());
+
+    while (itDrives != drives.end() && itFields != fields.end()) {
+        if (!itFields->isEmpty() && *itFields != "0") {
+            (*itDrives).*capability = true;
+        }
+        ++itDrives;
+        ++itFields;
+    }
+}
+
+#endif
 
 
 //----------------------------------------------------------------------------
@@ -246,6 +271,102 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
             drives << discDrive;
         }
     }
+
+#elif defined(Q_OS_LINUX)
+
+    // Linux implementation, based on the content of the /proc filesystem.
+    // Read the content of /proc/sys/dev/cdrom/info (foolproof check: max 50000 bytes).
+    const QStringList lines(QtlFile::readTextLinesFile("/proc/sys/dev/cdrom/info", 50000));
+
+    // The content of /proc/sys/dev/cdrom/info is something like:
+    // ---------------- cut here ---------------------
+    // CD-ROM information, Id: cdrom.c 3.20 2003/12/17
+    // 
+    // drive name:             sr0
+    // drive speed:            40
+    // drive # of slots:       1
+    // Can close tray:         1
+    // Can open tray:          1
+    // Can lock tray:          1
+    // Can change speed:       1
+    // Can select disk:        0
+    // Can read multisession:  1
+    // Can read MCN:           1
+    // Reports media changed:  1
+    // Can play audio:         1
+    // Can write CD-R:         0
+    // Can write CD-RW:        0
+    // Can read DVD:           1
+    // Can write DVD-R:        0
+    // Can write DVD-RAM:      0
+    // Can read MRW:           1
+    // Can write MRW:          1
+    // Can write RAM:          1
+    // ---------------- cut here ---------------------
+    // If there are several drives, there is one column per drive.
+
+    // Loop on all lines from /proc/sys/dev/cdrom/info
+    foreach (const QString& line, lines) {
+
+        // Drop lines not containing ':'
+        const int colon = line.indexOf(QChar(':'));
+        if (colon < 0) {
+            continue;
+        }
+
+        // Get the left-hand side of the ':', remove spaces, make it lowercase.
+        // We will use it as a tag, more robust to slight modifications.
+        QString tag(line.mid(0, colon).toLower());
+        tag.remove(QRegExp("\\s+"));
+
+        // Get the right-hand side of the ':', split into individual fields.
+        const QStringList fields(line.mid(colon + 1).split(QRegExp("\\s+"), QString::SkipEmptyParts));
+
+        if (tag == "drivename" && drives.isEmpty()) {
+            // "drivename" is the initial tag, giving device names.
+            foreach (const QString& name, fields) {
+
+                // Initialize a drive object with the complete device name.
+                QtlOpticalDrive drive;
+                drive._driveName = QStringLiteral("/dev/%1").arg(name);
+
+                // The "commercial" informations are available elsewhere:
+                // $ cat /sys/block/sr0/device/vendor
+                // hp
+                // $ cat /sys/block/sr0/device/model
+                // DVDROM DH40N
+                // $ cat /sys/block/sr0/device/rev
+                // DD01
+                drive._vendorId = QtlFile::readTextFile(QStringLiteral("/sys/block/%1/device/vendor").arg(name)).trimmed();
+                drive._productId = QtlFile::readTextFile(QStringLiteral("/sys/block/%1/device/model").arg(name)).trimmed();
+                drive._productRevision= QtlFile::readTextFile(QStringLiteral("/sys/block/%1/device/rev").arg(name)).trimmed();
+
+                // No way to check that the drive can read CD's. Assume always true.
+                drive._canReadCd = true;
+
+                // Add the drive in the list.
+                drives << drive;
+            }
+        }
+        else if (tag.startsWith("canwritecd")) {
+            updateCapability(drives, fields, &QtlOpticalDrive::_canWriteCd);
+        }
+        else if (tag.startsWith("canreaddvd")) {
+            updateCapability(drives, fields, &QtlOpticalDrive::_canReadDvd);
+        }
+        else if (tag.startsWith("canwritedvd")) {
+            updateCapability(drives, fields, &QtlOpticalDrive::_canWriteDvd);
+        }
+        else if (tag.startsWith("canreadblu") || tag.startsWith("canreadbd")) {
+            // No real known tag, just guessing future extension...
+            updateCapability(drives, fields, &QtlOpticalDrive::_canReadBluRay);
+        }
+        else if (tag.startsWith("canwriteblu") || tag.startsWith("canwritebd")) {
+            // No real known tag, just guessing future extension...
+            updateCapability(drives, fields, &QtlOpticalDrive::_canWriteBluRay);
+        }
+    }
+
 #endif
 
     return drives;
