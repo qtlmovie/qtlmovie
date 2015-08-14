@@ -89,12 +89,11 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     }
 
     // Get the list of all optical drives in the system.
-    const QStringList burnerIds(QtlOpticalDrive::getAllDriveUids());
+    const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
 
     // Extract list of DVD burner drive names.
     QStringList burnerDriveNames;
-    foreach (const QString& id, burnerIds) {
-        const QtlOpticalDrive drive(id);
+    foreach (const QtlOpticalDrive& drive, drives) {
         if (drive.canWriteDvd()) {
             burnerDriveNames << drive.driveName();
         }

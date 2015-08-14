@@ -73,7 +73,11 @@ bool QtlTest::TestEntry::operator <(const TestEntry& other) const
 
 int QtlTest::mainProgram(int argc, char** argv)
 {
-    // If no test is recorder, success.
+    // Do not remove the QApplication instance. On Windows, it ensures that
+    // CoInitialize is invoked and this is required for some classes in Qtl.
+    QApplication app(argc, argv);
+
+    // If no test is recorded, success.
     if (_allTests == 0) {
         qWarning("No unit test defined");
         return 1;

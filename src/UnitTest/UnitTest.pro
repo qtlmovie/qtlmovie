@@ -55,9 +55,12 @@ SOURCES += \
     QtsProgramMapTableTest.cpp \
     QtlHexaTest.cpp \
     QtlVersionTest.cpp \
-    QtlIsoLanguagesTest.cpp
+    QtlIsoLanguagesTest.cpp \
+    QtlOpticalDriveTest.cpp
 
 HEADERS += \
+    QtlTest.h \
+    QtsData.h \
     QtsData/psi_tot_tnt_sections.h \
     QtsData/psi_tot_tnt_packets.h \
     QtsData/psi_tdt_tnt_sections.h \
@@ -76,7 +79,5 @@ HEADERS += \
     QtsData/psi_bat_tvnum_packets.h \
     QtsData/psi_bat_cplus_sections.h \
     QtsData/psi_bat_cplus_packets.h \
-    QtsData.h \
-    QtlTest.h \
     QtsData/psi_sdt_r6_packets.h \
     QtsData/psi_sdt_r6_sections.h
