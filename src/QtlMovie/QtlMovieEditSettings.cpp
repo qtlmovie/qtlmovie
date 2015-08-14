@@ -46,7 +46,7 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     QtlDialog(parent),
     _settings(settings),
     _outDirs(),
-    _comboDvdBurner(0)
+    _useDvdBurnerCombo(false)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
@@ -105,33 +105,17 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     // get the list of DVD burners, this does not mean that there is none.
     // It means that the implementation of QtlOpticalDrive could not find
     // them. In that case, keep the free edit box.
-    if (!burnerDriveNames.isEmpty()) {
+    _useDvdBurnerCombo = !burnerDriveNames.isEmpty();
 
-        // Search position of the burner free edit box in the layout.
-        const int index = _ui.layoutDvdBurning->indexOf(_ui.editDvdBurner);
-        if (index >= 0) {
-
-            // Get its position in the layout.
-            int row = 0;
-            int column = 0;
-            int rowSpan = 0;
-            int columnSpan = 0;
-            _ui.layoutDvdBurning->getItemPosition(index, &row, &column, &rowSpan, &columnSpan);
-
-            // Create the combo box for selecting the DVD burners.
-            _comboDvdBurner = new QComboBox(this);
-            _comboDvdBurner->addItems(burnerDriveNames);
-            _comboDvdBurner->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-            // Remove the burner free edit from display.
-            _ui.layoutDvdBurning->removeWidget(_ui.editDvdBurner);
-            _ui.layoutDvdBurning->removeWidget(_ui.buttonBrowseDvdBurner);
-            _ui.editDvdBurner->setVisible(false);
-            _ui.buttonBrowseDvdBurner->setVisible(false);
-
-            // Display the combo at the previous position of the free edit.
-            _ui.layoutDvdBurning->addWidget(_comboDvdBurner, row, column, rowSpan, columnSpan);
-        }
+    if (_useDvdBurnerCombo) {
+        // Hide the free edit version.
+        _ui.groupBoxDvdBurningEdit->setVisible(false);
+        // Preset the list of known DVD burners in the combo
+        _ui.comboDvdBurner->addItems(burnerDriveNames);
+    }
+    else {
+        // Hide the combo version.
+        _ui.groupBoxDvdBurningCombo->setVisible(false);
     }
 
     // Load the initial values from the settings object.
@@ -193,7 +177,6 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.editCcextractor->setText(_settings->ccextractorExplicitExecutable());
     _ui.editDvdDecrypter->setText(_settings->dvddecrypterExplicitExecutable());
     _ui.editInputDir->setText(_settings->initialInputDir());
-    _ui.editDvdBurner->setText(_settings->dvdBurner());
     _ui.checkBoxSameAsInput->setChecked(_settings->defaultOutputDirIsInput());
     (_settings->transcodeComplete() ? _ui.radioButtonComplete : _ui.radioButtonPartial)->setChecked(true);
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
@@ -233,22 +216,26 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
     (_settings->useBatchMode() ? _ui.radioMultiFile : _ui.radioSingleFile)->setChecked(true);
 
-    // If a combo box is present for DVD burner.
-    if (_comboDvdBurner != 0) {
+    // DVD burner can be edited in two ways.
+    if (_useDvdBurnerCombo) {
 
         // Check if the current setting is in the list of known burners.
         const QString current(_settings->dvdBurner());
-        int index = _comboDvdBurner->findText(current);
+        int index = _ui.comboDvdBurner->findText(current);
 
         if (index < 0) {
-            // Current value from settings is not present. Must not be a valid
+            // Current value from settings is not present. Could not be a valid
             // burner device but add it anyway at end of list.
-            _comboDvdBurner->addItem(current);
-            index = _comboDvdBurner->count() - 1;
+            _ui.comboDvdBurner->addItem(current);
+            index = _ui.comboDvdBurner->count() - 1;
         }
 
         // Set current setting as selected value.
-        _comboDvdBurner->setCurrentIndex(index);
+        _ui.comboDvdBurner->setCurrentIndex(index);
+    }
+    else {
+        // Use free edit for burner.
+        _ui.editDvdBurner->setText(_settings->dvdBurner());
     }
 
     // Load default output directories by output type.
@@ -277,18 +264,21 @@ void QtlMovieEditSettings::applySettings()
 {
     Q_ASSERT(_settings != 0);
 
-    // On Windows, ensures that the DVD burner is only a device letter followed by a colon.
+    // On Windows, ensures that the DVD burner is only a device letter followed
+    // by a colon, when manually entered.
 #if defined(Q_OS_WIN)
-    QString dvd(_ui.editDvdBurner->text());
-    if (dvd.length() >= 2 && dvd[1] == ':') {
-        // Truncate after ':'
-        dvd.truncate(2);
-        _ui.editDvdBurner->setText(dvd.toUpper());
-    }
-    else if (!dvd.isEmpty()) {
-        // Incorrect device name.
-        qtlError(this, tr("Ignore incorrect DVD burner device %1, must be a drive name").arg(dvd));
-        _ui.editDvdBurner->setText("");
+    if (!_useDvdBurnerCombo) {
+        QString dvd(_ui.editDvdBurner->text());
+        if (dvd.length() >= 2 && dvd[1] == ':') {
+            // Truncate after ':'
+            dvd.truncate(2);
+            _ui.editDvdBurner->setText(dvd.toUpper());
+        }
+        else if (!dvd.isEmpty()) {
+            // Incorrect device name.
+            qtlError(this, tr("Ignore incorrect DVD burner device %1, must be a drive name").arg(dvd));
+            _ui.editDvdBurner->setText("");
+        }
     }
 #endif
 
@@ -304,7 +294,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());
     _settings->setDefaultOutputDirIsInput(_ui.checkBoxSameAsInput->isChecked());
-    _settings->setDvdBurner(_comboDvdBurner != 0 ? _comboDvdBurner->currentText() : _ui.editDvdBurner->text());
+    _settings->setDvdBurner(_useDvdBurnerCombo ? _ui.comboDvdBurner->currentText() : _ui.editDvdBurner->text());
     _settings->setAudienceLanguages(qtlListItems(_ui.listLanguages));
     _settings->setTranscodeComplete(_ui.radioButtonComplete->isChecked());
     _settings->setTranscodeSeconds(_ui.spinMaxTranscode->value());

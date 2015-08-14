@@ -71,13 +71,13 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBoxDvdBurning">
+        <widget class="QGroupBox" name="groupBoxDvdBurningEdit">
          <property name="title">
           <string>DVD burning</string>
          </property>
          <layout class="QGridLayout" name="layoutDvdBurning">
           <item row="0" column="0">
-           <widget class="QLabel" name="labelDvdDevice">
+           <widget class="QLabel" name="labelDvdDeviceEdit">
             <property name="text">
              <string>Device :</string>
             </property>
@@ -92,6 +92,38 @@
              <string>Browse ...</string>
             </property>
            </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxDvdBurningCombo">
+         <property name="title">
+          <string>DVD Burning</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelDvdDeviceCombo">
+            <property name="text">
+             <string>Device :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboDvdBurner"/>
+          </item>
+          <item row="0" column="2">
+           <spacer name="spacerDvdBurnerCombo">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
