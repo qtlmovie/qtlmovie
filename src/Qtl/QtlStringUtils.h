@@ -143,11 +143,36 @@ QString qtlStringSpace(const QString& str,
 QString qtlSecondsToString(int seconds);
 
 //!
+//! Format a size into a human-friendly string.
+//! The resulting string is approximated into the closest "big unit" such as "kB", MB", etc.
+//! The default unit is "B" for bytes but it is replaceable.
+//! @param [in] value The size value to format.
+//! @param [in] maxDecimalDigits Maximum number of decimal digits. Valid values are 0 to 3.
+//! @param [in] useBinaryUnits If true, use "binary" units, meaning chunks of 1024 units instead of 1000.
+//! The abbreviations are updated accordingly. For instance, "1 MB" for "MegaByte" becomes "0.954 MiB"
+//! for "MibiByte". The default is false, meaning use standard decimal units or chunks of 1000 units.
+//! @param [in] unitName Name of the size unit to display. The default is "B" for "byte".
+//! @return The formatted string.
+//!
+QString qtlSizeToString(qlonglong value,
+                        int maxDecimalDigits = 3,
+                        bool useBinaryUnits = false,
+                        const QString& unitName = "B");
+
+//!
 //! Build an HTML string containing a link to a URL.
 //! @param [in] link Target URL.
 //! @param [in] text Text of the link. If empty (the default), @a link is also used as text.
 //! @return An HTML fragment.
 //!
 QString qtlHtmlLink(const QString& link, const QString& text = QString());
+
+//!
+//! Convert a QString into a null-terminated vector of wchar_t.
+//! Can be useful to call native C functions using wide characters.
+//! @param [in] str Qt string to convert.
+//! @return Corresponding null-terminated vector of wchar_t.
+//!
+QVector<wchar_t> qtlToWCharVector(const QString& str);
 
 #endif // QTLSTRINGUTILS_H

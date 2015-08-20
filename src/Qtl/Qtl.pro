@@ -72,7 +72,8 @@ SOURCES += \
     QtlTableWidgetUtils.cpp \
     QtlSettings.cpp \
     QtlSelectionRectDelegate.cpp \
-    QtlOpticalDrive.cpp
+    QtlOpticalDrive.cpp \
+    QtlFileSystemInfo.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -130,7 +131,8 @@ HEADERS += \
     QtlNumUtils.h \
     QtlWinUtils.h \
     QtlSelectionRectDelegate.h \
-    QtlOpticalDrive.h
+    QtlOpticalDrive.h \
+    QtlFileSystemInfo.h
 
 FORMS += \
     QtlBrowserDialog.ui \

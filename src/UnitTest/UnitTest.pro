@@ -56,7 +56,9 @@ SOURCES += \
     QtlHexaTest.cpp \
     QtlVersionTest.cpp \
     QtlIsoLanguagesTest.cpp \
-    QtlOpticalDriveTest.cpp
+    QtlOpticalDriveTest.cpp \
+    QtlStringUtilsTest.cpp \
+    QtlFileSystemInfoTest.cpp
 
 HEADERS += \
     QtlTest.h \

@@ -179,3 +179,70 @@ QString qtlHtmlLink(const QString& link, const QString& text)
 {
     return QStringLiteral("<a href=\"%1\">%2</a>").arg(link).arg((text.isEmpty() ? link : text).toHtmlEscaped());
 }
+
+
+//-----------------------------------------------------------------------------
+// Format a size into a human-friendly string.
+//-----------------------------------------------------------------------------
+
+QString qtlSizeToString(qlonglong value, int maxDecimalDigits, bool useBinaryUnits, const QString& unitName)
+{
+    // Treat sign separately.
+    QString sign;
+    if (value < 0) {
+        sign = "-";
+        value = -value;
+    }
+
+    // Binary units means using chunks of 1024 units instead of 1000.
+    const qlonglong chunk = useBinaryUnits ? 1024 : 1000;
+
+    // List of big units, in increasing order.
+    // Note: kilo, mega, giga, tera, peta, exa, zeta, yotta.
+    static const char* const prefixes[] = {"", "k", "M", "G", "T", "P", "E", "Z", "Y", 0};
+
+    // Actual value for useBinaryUnits. Initially, do not use binary units for values less than chunk.
+    bool actualBinary = false;
+
+    // Loop on all big units in increasing order.
+    qlonglong divider = 1;
+    for (const char* const* pref = prefixes; *pref != 0; ++pref) {
+
+        // Stop loop when we find a number of
+        const qlonglong units = value / divider;
+        if (units < chunk || pref[1] == 0) {
+
+            // Format the number, remove useless trailing zeroes.
+            QString number(QStringLiteral("%1").arg(double(value) / double(divider), 0, 'f', qMax(0, maxDecimalDigits)));
+            number.remove(QRegExp("0*$"));
+            number.remove(QRegExp("\\.$"));
+
+            // Now we have everything we need, return the full string.
+            return QStringLiteral("%1%2 %3%4%5").arg(sign).arg(number).arg(*pref).arg(actualBinary ? "i" : "").arg(unitName);
+        }
+
+        // Now try next larger unit.
+        divider *= chunk;
+
+        // After the initial unit, always use the requested decimal/binary unit mode.
+        actualBinary = useBinaryUnits;
+    }
+
+    // Should not get there, the loop should have returned from inside.
+    Q_ASSERT(false);
+    return QString();
+}
+
+
+//-----------------------------------------------------------------------------
+// Convert a QString into a null-terminated vector of wchar_t.
+//-----------------------------------------------------------------------------
+
+QVector<wchar_t> qtlToWCharVector(const QString& str)
+{
+    const int size = str.size();
+    QVector<wchar_t> wstr(size + 1);
+    const int returnedSize = str.toWCharArray(&wstr[0]);
+    wstr[qMax(0, qMin(returnedSize, size))] = L'\0';
+    return wstr;
+}
