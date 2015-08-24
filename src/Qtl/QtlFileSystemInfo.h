@@ -73,26 +73,31 @@ public:
 
     //!
     //! Get the total size in bytes of the file system.
-    //! @return The total size in bytes of the file system.
+    //! @return The total size in bytes of the file system or -1 on error.
     //!
     qlonglong totalBytes() const
     {
-        return _totalBytes;
+        return byteSize(true);
     }
 
     //!
     //! Get the free size in bytes of the file system.
-    //! @return The free size in bytes of the file system.
+    //! @return The free size in bytes of the file system or -1 on error.
     //!
     qlonglong freeBytes() const
     {
-        return _freeBytes;
+        return byteSize(false);
     }
 
 private:
-    QString   _rootName;    //!< Path name of the root.
-    qlonglong _totalBytes;  //!< Total bytes in the file system.
-    qlonglong _freeBytes;   //!< Free bytes in the file system.
+    QString _rootName; //!< Path name of the root.
+
+    //!
+    //! Get either the total size or free size in bytes of the file system.
+    //! @param [in] total If true, return the total size. If false, return the free size.
+    //! @return The requested size in bytes.
+    //!
+    qlonglong byteSize(bool total) const;
 };
 
 #endif // QTLFILESYSTEMINFO_H

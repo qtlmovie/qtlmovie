@@ -47,56 +47,67 @@
 //----------------------------------------------------------------------------
 
 QtlFileSystemInfo::QtlFileSystemInfo(const QString& fileName) :
-    _rootName(),
-    _totalBytes(-1),
-    _freeBytes(-1)
+    _rootName()
 {
-    // With default values, do not do anything.
-    if (fileName.isEmpty()) {
-        return;
+    if (!fileName.isEmpty()) {
+
+        // Get full path name in native format.
+        const QString pathName(QtlFile::absoluteNativeFilePath(fileName));
+
+        // Now get the actual root of the file system.
+#if defined(Q_OS_WIN)
+        // On Windows, just keep the drive letter.
+        if (pathName.length() >= 2 && pathName[1] == QLatin1Char(':')) {
+            _rootName = pathName.mid(0, 2).toUpper();
+        }
+#else
+        // On Linux, get the longest mount point in the path of the file.
+        const QStringList roots(getAllRoots());
+        foreach (const QString& root, roots) {
+            if (pathName.startsWith(root) && root.length() > _rootName.length()) {
+                _rootName = root;
+            }
+        }
+#endif
     }
+}
 
-    // Get full path name in native format.
-    const QString pathName(QtlFile::absoluteNativeFilePath(fileName));
 
+//----------------------------------------------------------------------------
+// Get either the total size or free size in bytes of the file system.
+//----------------------------------------------------------------------------
+
+qlonglong QtlFileSystemInfo::byteSize(bool total) const
+{
 #if defined(Q_OS_WIN)
 
-    // On Windows, just keep the drive letter.
-    if (pathName.length() >= 2 && pathName[1] == QLatin1Char(':')) {
-        _rootName = pathName.mid(0, 2).toUpper();
-    }
-    else {
-        return;
-    }
-
-    // Get file system sizes.
+    // Windows version.
     const QVector<wchar_t> wstr(qtlToWCharVector(_rootName));
     ::ULARGE_INTEGER totalUser, freeDisk;
     totalUser.QuadPart = freeDisk.QuadPart = 0;
-    if (::GetDiskFreeSpaceEx(&wstr[0], NULL, &totalUser, &freeDisk) != 0) {
-        _totalBytes = totalUser.QuadPart;
-        _freeBytes = freeDisk.QuadPart;
+    if (::GetDiskFreeSpaceEx(&wstr[0], NULL, &totalUser, &freeDisk) == 0) {
+        return -1;
+    }
+    else if (total) {
+        return totalUser.QuadPart;
+    }
+    else {
+        return freeDisk.QuadPart;
     }
 
 #else
 
-    // On Linux, get the longest mount point in the path of the file.
-    const QStringList roots(getAllRoots());
-    foreach (const QString& root, roots) {
-        if (pathName.startsWith(root) && root.length() > _rootName.length()) {
-            _rootName = root;
-        }
-    }
-    if (_rootName.isEmpty()) {
-        return;
-    }
-
-    // Get file system sizes.
+    // Linux version.
     const QByteArray name(_rootName.toUtf8());
     struct statvfs vfs;
-    if (::statvfs(name.constData(), &vfs) == 0) {
-        _totalBytes = qlonglong(vfs.f_blocks) * qlonglong(vfs.f_frsize);
-        _freeBytes = qlonglong(vfs.f_bfree) * qlonglong(vfs.f_frsize);
+    if (::statvfs(name.constData(), &vfs) < 0) {
+        return -1;
+    }
+    else if (total) {
+        return qlonglong(vfs.f_blocks) * qlonglong(vfs.f_frsize);
+    }
+    else {
+        return qlonglong(vfs.f_bfree) * qlonglong(vfs.f_frsize);
     }
 
 #endif
