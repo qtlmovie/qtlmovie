@@ -62,8 +62,7 @@ QtlFileSystemInfo::QtlFileSystemInfo(const QString& fileName) :
         }
 #else
         // On Linux, get the longest mount point in the path of the file.
-        const QStringList roots(getAllRoots());
-        foreach (const QString& root, roots) {
+        foreach (const QString& root, getAllRoots()) {
             if (pathName.startsWith(root) && root.length() > _rootName.length()) {
                 _rootName = root;
             }
@@ -135,8 +134,7 @@ QStringList QtlFileSystemInfo::getAllRoots()
 #else
 
     // On Linux, read the content of /proc/mounts.
-    const QStringList lines(QtlFile::readTextLinesFile("/proc/mounts", 50000));
-    foreach (const QString& line, lines) {
+    foreach (const QString& line, QtlFile::readTextLinesFile("/proc/mounts", 50000)) {
         // Split lines in space-separated fields.
         const QStringList fields(line.split(QRegExp("\\s+"), QString::SkipEmptyParts));
         // Field 0: device path, ignore "auto.*"
@@ -162,8 +160,7 @@ QStringList QtlFileSystemInfo::getAllRoots()
 QList<QtlFileSystemInfo> QtlFileSystemInfo::getAllFileSystems()
 {
     QList<QtlFileSystemInfo> fs;
-    const QStringList roots(getAllRoots());
-    foreach (const QString& root, roots) {
+    foreach (const QString& root, getAllRoots()) {
         fs << QtlFileSystemInfo(root);
     }
     return fs;

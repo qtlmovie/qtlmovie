@@ -43,11 +43,8 @@ void QtlMovieFFprobeTags::loadFFprobeOutput(const QString& ffprobeOutput)
     // Clear the returned container.
     clear();
 
-    // Split the output lines.
-    QStringList lines(ffprobeOutput.split(QRegExp("\\r*\\n+"), QString::SkipEmptyParts));
-
-    // Analyze each line.
-    foreach (const QString& line, lines) {
+    // Split the output lines and analyze each line.
+    foreach (const QString& line, ffprobeOutput.split(QRegExp("\\r*\\n+"), QString::SkipEmptyParts)) {
 
         // Locate the first '=' in the line.
         const int eq = line.indexOf(QChar('='));

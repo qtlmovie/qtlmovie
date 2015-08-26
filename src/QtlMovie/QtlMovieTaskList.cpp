@@ -523,8 +523,7 @@ void QtlMovieTaskList::deleteSelectedTasks()
 void QtlMovieTaskList::requeueSelectedTasks()
 {
     // Get all contiguous ranges of selections.
-    const QList<QTableWidgetSelectionRange> selected(selectedRanges());
-    foreach (const QTableWidgetSelectionRange range, selected) {
+    foreach (const QTableWidgetSelectionRange range, selectedRanges()) {
         const int start = range.topRow();
         const int count = range.rowCount();
         for (int row = start; row < start + count; ++row) {

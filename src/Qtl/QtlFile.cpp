@@ -258,11 +258,10 @@ namespace {
         }
 
         // Load files and directories in the base directories using localPart as name filter.
-        QDir dir(baseDir, localPart, QDir::Name | QDir::IgnoreCase | QDir::DirsLast, filterOptions);
-        QFileInfoList files(dir.entryInfoList());
+        const QDir dir(baseDir, localPart, QDir::Name | QDir::IgnoreCase | QDir::DirsLast, filterOptions);
 
         // Loop on all entries in the directory.
-        foreach (QFileInfo info, files) {
+        foreach (const QFileInfo& info, dir.entryInfoList()) {
 
             // Build full path.
             const QString fileName(info.fileName());

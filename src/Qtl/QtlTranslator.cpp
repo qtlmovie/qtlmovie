@@ -113,11 +113,8 @@ QString QtlTranslator::searchLocaleFile(const QString& fileName)
     const QString baseName(hasSuffix ? fileName.left(index) : fileName);
     const QString suffix(hasSuffix ? fileName.mid(index) : QString());
 
-    // Get all locales, do not lock the list during the file search.
-    const QStringList locales(loadedLocales());
-
     // Loop on all locales starting at most recent.
-    foreach (const QString& locale, locales) {
+    foreach (const QString& locale, loadedLocales()) {
         QString loc(locale);
         // Seach all reduced forms of locale.
         for (int len = loc.length(); len > 0; len = loc.lastIndexOf('_')) {

@@ -65,11 +65,8 @@ QtlOpticalDrive::QtlOpticalDrive() :
 
 QtlOpticalDrive QtlOpticalDrive::firstDriveWithCheck(bool QtlOpticalDrive::*check)
 {
-    // Get all optical drives in the system.
-    const QList<QtlOpticalDrive> drives(getAllDrives());
-
-    // List their characteristics and return first drive matching bool member.
-    foreach (const QtlOpticalDrive& drive, drives) {
+    // Get all optical drives in the system and return first drive matching bool member.
+    foreach (const QtlOpticalDrive& drive, getAllDrives()) {
         if (drive.*check) {
             return drive;
         }
@@ -275,13 +272,11 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
 #elif defined(Q_OS_LINUX)
 
     // Linux implementation, based on the content of the /proc filesystem.
-    // Read the content of /proc/sys/dev/cdrom/info (foolproof check: max 50000 bytes).
-    const QStringList lines(QtlFile::readTextLinesFile("/proc/sys/dev/cdrom/info", 50000));
-
+    //
     // The content of /proc/sys/dev/cdrom/info is something like:
     // ---------------- cut here ---------------------
     // CD-ROM information, Id: cdrom.c 3.20 2003/12/17
-    // 
+    //
     // drive name:             sr0
     // drive speed:            40
     // drive # of slots:       1
@@ -306,7 +301,7 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
     // If there are several drives, there is one column per drive.
 
     // Loop on all lines from /proc/sys/dev/cdrom/info
-    foreach (const QString& line, lines) {
+    foreach (const QString& line, QtlFile::readTextLinesFile("/proc/sys/dev/cdrom/info", 50000)) {
 
         // Drop lines not containing ':'
         const int colon = line.indexOf(QChar(':'));

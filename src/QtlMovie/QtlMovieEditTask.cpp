@@ -53,8 +53,7 @@ QtlMovieEditTask::QtlMovieEditTask(QWidget* parent) :
     _ui.setupUi(this);
 
     // Setup the radio buttons to select the output type.
-    const QList<QtlMovieOutputFile::OutputType> outputTypes(QtlMovieOutputFile::outputTypes());
-    foreach (QtlMovieOutputFile::OutputType type, outputTypes) {
+    foreach (QtlMovieOutputFile::OutputType type, QtlMovieOutputFile::outputTypes()) {
 
         // Create the button.
         QRadioButton* button(new QRadioButton(_ui.boxOutputTypes));
@@ -90,8 +89,7 @@ void QtlMovieEditTask::clearInputStreamInfo()
     // Cleanup all group boxes.
     foreach (QtlButtonGrid* box, boxes) {
         // Delete all children radio buttons with an id in the box.
-        const QList<QRadioButton*> buttons(box->findChildren<QRadioButton*>());
-        foreach (QRadioButton* button, buttons) {
+        foreach (QRadioButton* button, box->findChildren<QRadioButton*>()) {
             if (box->buttonId(button) >= 0) {
                 delete button;
             }
@@ -467,9 +465,7 @@ void QtlMovieEditTask::enableOutputTypes()
     QAbstractButton* current = 0;
 
     // List of output types in the "display order".
-    const QList<QtlMovieOutputFile::OutputType> outputTypes(QtlMovieOutputFile::outputTypes());
-
-    foreach (QtlMovieOutputFile::OutputType type, outputTypes) {
+    foreach (QtlMovieOutputFile::OutputType type, QtlMovieOutputFile::outputTypes()) {
         // Get the corresponding button.
         QAbstractButton* button = _ui.boxOutputTypes->buttonOf(int(type));
         if (button != 0) {

@@ -65,8 +65,7 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setDefaultExecutable("DVD Decrypter", _ui.defaultDvdDecrypter, _settings->dvddecrypterDefaultExecutable());
 
     // Create one line per output type for default output directory selection.
-    const QList<QtlMovieOutputFile::OutputType> outputTypes(QtlMovieOutputFile::outputTypes());
-    foreach (QtlMovieOutputFile::OutputType type, outputTypes) {
+    foreach (QtlMovieOutputFile::OutputType type, QtlMovieOutputFile::outputTypes()) {
 
         // Description of the output directory for this type.
         OutputDirectory& outDir(_outDirs[type]);
@@ -88,12 +87,9 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         connect(outDir.pushButton, &QPushButton::clicked, this, &QtlMovieEditSettings::browseOutputDir);
     }
 
-    // Get the list of all optical drives in the system.
-    const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
-
-    // Extract list of DVD burner drive names.
+    // Extract list of DVD burner drive names from the list of all optical drives in the system.
     QStringList burnerDriveNames;
-    foreach (const QtlOpticalDrive& drive, drives) {
+    foreach (const QtlOpticalDrive& drive, QtlOpticalDrive::getAllDrives()) {
         if (drive.canWriteDvd()) {
             burnerDriveNames << drive.driveName();
         }
@@ -486,8 +482,7 @@ void QtlMovieEditSettings::newAudienceLanguage()
 void QtlMovieEditSettings::deleteAudienceLanguage()
 {
     // Delete all selected items.
-    const QList<QListWidgetItem*> selected(_ui.listLanguages->selectedItems());
-    foreach (QListWidgetItem* item, selected) {
+    foreach (QListWidgetItem* item, _ui.listLanguages->selectedItems()) {
         delete item;
     }
 }
@@ -521,8 +516,7 @@ void QtlMovieEditSettings::createChapterToggled(bool createChapters)
 void QtlMovieEditSettings::setNormalizeAudioSelectable(bool normalize)
 {
     // Enable / disable all widget within the "audio normalization" group box.
-    const QList<QWidget*> children(_ui.groupBoxNormalizeAudio->findChildren<QWidget*>());
-    foreach (QWidget* child, children) {
+    foreach (QWidget* child, _ui.groupBoxNormalizeAudio->findChildren<QWidget*>()) {
         // Do not disable the "normalize audio", this is the one which triggers this event.
         if (child != _ui.checkBoxNormalizeAudio) {
             child->setEnabled(normalize);
