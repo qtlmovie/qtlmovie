@@ -656,18 +656,20 @@
       <p>Binary DEB packages for Ubuntu on amd64 architecture are available on the 
         <a href="https://sourceforge.net/projects/qtlmovie/files/ubuntu/">QtlMovie distribution size for Ubuntu on SourceForge</a>
         for QtlMovie, Telxcc and CCExtractor.</p>
-      <p>For various reasons, Ubuntu decided some time ago to drop FFmpeg from their
-        repositories. Instead, Ubuntu provides <i>avconv</i> (package <i>libav-tools</i>),
+      <p>On Ubuntu version 15 and higher, the package <i>ffmpeg</i> is available from the standard Ubuntu repositories.</p>
+      <p>On older versions of Ubuntu, FFmpeg is not directly available.
+        At some point, for various reasons, Ubuntu decided to drop FFmpeg from their
+        repositories. Instead, Ubuntu provided <i>avconv</i> (package <i>libav-tools</i>),
         a fork from FFmpeg. However, the commands <i>avconv</i> and <i>avprobe</i>
         are only partially compatible with <i>ffmpeg</i> and <i>ffprobe</i>.
         Since QtlMovie generates complex <i>ffmpeg</i> and <i>ffprobe</i> commands,
         they almost never work with <i>avconv</i> and <i>avprobe</i>.</p>
-      <p>The only solution to use QtlMovie on Ubuntu is to install a plain real version
+      <p>The only solution to use QtlMovie on Ubuntu prior to version 15 is to install a plain real version
         of FFmpeg. The first way is to recompile FFmpeg from the sources on Ubuntu.
         This is complex and not recommended. The second way is to use a precompiled
         version of FFmpeg for Ubuntu as described below.</p>
-      <p>Non-official Ubuntu packages can be installed from a <i>Personal Package Archive</i> (PPA).
-        FFmpeg is available from the
+      <p>Non-official Ubuntu packages can be installed from a
+        <i>Personal Package Archive</i> (PPA). On Ubuntu prior to version 15, FFmpeg is available from the
         <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's PPA</a>.
         The following commands demonstrate how to declare this PPA on a Ubuntu 14.04 LTS (Trusty)
         system and install FFmpeg. You must be <i>root</i> to execute these commands.</p>
