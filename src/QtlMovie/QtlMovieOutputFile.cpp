@@ -56,7 +56,8 @@ QtlMovieOutputFile::QtlMovieOutputFile(const QtlMovieOutputFile& other, QObject*
     QtlFile(other, parent),
     _log(other._log),
     _settings(other._settings),
-    _outputType(other._outputType)
+    _outputType(other._outputType),
+    _forcedDar(other._forcedDar)
 {
 }
 

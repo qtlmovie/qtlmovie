@@ -320,6 +320,7 @@ void QtlAutoGrid::reorganizeLayout(bool needUpdateGeometry)
     // Compute the width of all columns.
     QVector<int> cWidth(columns);
     for (int col = 0; col < columns; ++col) {
+        // Note that Coverity detects a false positive here (COPY_PASTE_ERROR)
         cWidth[col] = columnWidth(col, rows);
     }
 
