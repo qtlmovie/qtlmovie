@@ -1,6 +1,6 @@
 ﻿#-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013, Thierry Lelegard
+#  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -536,7 +536,8 @@ function Search-File
 
  .PARAMETER QtRoot
 
-  Root directory where Qt installations are dropped (default: C:\Qt).
+  Root directory where Qt installations are dropped (default: search all Qt
+  directories at the root of all local drives).
 
  .PARAMETER Static
 
@@ -545,7 +546,7 @@ function Search-File
 function Set-QtPath
 {
     param(
-        [String] $QtRoot = "C:\Qt",
+        [String] $QtRoot = "",
         [switch] $Static = $false
     )
 
@@ -591,9 +592,21 @@ function Set-QtPath
         }
     }
 
+    # Get the array of root directories to search.
+    if ($QtRoot) {
+        $QtRootList = @($QtRoot)
+    }
+    else {
+        # Get all local drives, with Qt root directory
+        $QtRootList = @((Get-PSDrive -PSProvider FileSystem | Where DisplayRoot -NotMatch "\\\\.*").Root |
+            ForEach-Object { Join-Path $_ "Qt" } | Where { Test-Path $_ -PathType Container })
+    }
+
     # Get Qt bin directories.
 
-    Get-QtBinDir $QtRoot ([REF]$QtBinMap)
+    foreach ($root in $QtRootList) {
+        Get-QtBinDir $root ([REF]$QtBinMap)
+    }
 
     # Get OpenSSL bin directories (assume installation of OpenSSL binaries from
     # http://slproweb.com/products/Win32OpenSSL.html)
