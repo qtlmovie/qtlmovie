@@ -1,6 +1,6 @@
 ﻿#-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013, Thierry Lelegard
+#  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
 Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 
 # Build a safe environment for the latest Qt version.
-Set-QtPath
+Set-QtPath -NoWindows
 
 # Leave the user with a command line.
 Set-Location (Split-Path -Parent $PSScriptRoot)

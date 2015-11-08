@@ -1,6 +1,6 @@
 ﻿#-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013, Thierry Lelegard
+#  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -73,7 +73,7 @@ if (-not $NoHide) {
 }
 
 # Build a safe environment for the latest Qt version.
-Set-QtPath
+Set-QtPath -NoWindows
 
 # Determine project file.
 if (-not $ProjectFile) {

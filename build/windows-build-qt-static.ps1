@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013, Thierry Lelegard
+#  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -75,7 +75,7 @@
 
 [CmdletBinding()]
 param(
-    $QtSrcUrl = "http://download.qt.io/official_releases/qt/5.5/5.5.0/single/qt-everywhere-opensource-src-5.5.0.7z",
+    $QtSrcUrl = "http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.7z",
     $QtStaticDir = "C:\Qt\Static",
     $QtVersion = "",
     $MingwDir = "",
@@ -151,7 +151,7 @@ DEFINES += QT_STATIC_BUILD
     }
 
     # Set a clean path including MinGW.
-    $env:Path = "$MingwDir\bin;$MingwDir\opt\bin;$env:SystemRoot\system32;$env:SystemRoot"
+    $env:Path = "$MingwDir\bin;$MingwDir\opt\bin"
 
     # Force English locale to avoid weird effects of tools localization.
     $env:LANG = "en"
@@ -163,7 +163,7 @@ DEFINES += QT_STATIC_BUILD
 
     # Configure, compile and install Qt.
     Push-Location $QtSrcDir
-    cmd /c "configure.bat -static -debug-and-release -platform win32-g++ -prefix $QtDir `        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -qt-freetype -opengl desktop -qt-sql-sqlite -no-openssl `        -opensource -confirm-license `        -make libs -nomake tools -nomake examples -nomake tests"
+    & $env:SystemRoot\System32\cmd.exe /c "configure.bat -static -debug-and-release -platform win32-g++ -prefix $QtDir `        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -qt-freetype -opengl desktop -qt-sql-sqlite -no-openssl `        -opensource -confirm-license `        -make libs -nomake tools -nomake examples -nomake tests"
     mingw32-make -k -j4
     mingw32-make -k install
     Pop-Location

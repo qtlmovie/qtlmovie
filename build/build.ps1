@@ -1,6 +1,6 @@
 ﻿#-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013, Thierry Lelegard
+#  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -84,11 +84,11 @@ Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 
 # Build a safe environment for the latest Qt version.
 if ($Static) {
-    Set-QtPath -Static
+    Set-QtPath -NoWindows -Static
     $DirSuffix = "-Static"
 }
 else {
-    Set-QtPath
+    Set-QtPath -NoWindows
     $DirSuffix = ""
 }
 

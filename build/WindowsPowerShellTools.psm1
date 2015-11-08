@@ -539,6 +539,10 @@ function Search-File
   Root directory where Qt installations are dropped (default: search all Qt
   directories at the root of all local drives).
 
+ .PARAMETER NoWindows
+
+  Do not include any Windows directory in the path, only Qt and related tools.
+
  .PARAMETER Static
 
   Use the static version of Qt which is under the $QtRoot\Static.
@@ -547,7 +551,8 @@ function Set-QtPath
 {
     param(
         [String] $QtRoot = "",
-        [switch] $Static = $false
+        [switch] $Static = $false,
+        [switch] $NoWindows = $false
     )
 
     # Hash table of Qt bin directories. Indexed by names of a few standard commands.
@@ -561,7 +566,7 @@ function Set-QtPath
     # one single "Get-ChildItem -Recurse" instead of the manual exploration in
     # function Get-QtBinDir. This was much simpler but also 10 times slower.
 
-    $QtSkipDirectories = @("doc", "examples", "imports", "include", "lib", "libexec", "opt", "plugins", "qml", "share", "src", "static")
+    $QtSkipDirectories = @("doc", "docs", "examples", "imports", "include", "lib", "libexec", "licenses", "mkspecs", "opt", "plugins", "qml", "share", "src", "static")
 
     # This function explores a tree of directories and updates $QtBinMap.
     # Always sort subdirectories exploration in order to use the latest Qt installation
@@ -617,12 +622,19 @@ function Set-QtPath
 
     if ($Static) {
         $QtBinMap["qmake"] = ""
-        Get-QtBinDir $QtRoot\Static ([REF]$QtBinMap)
+        foreach ($root in $QtRootList) {
+            Get-QtBinDir $root\Static ([REF]$QtBinMap)
+        }
     }
 
     # Initial system path, without interfering commands.
 
-    $env:Path = (Join-Path $env:SystemRoot System32) + ";" + $env:SystemRoot
+    if ($NoWindows) {
+        $env:Path = ""
+    }
+    else {
+        $env:Path = (Join-Path $env:SystemRoot System32) + ";" + $env:SystemRoot
+    }
 
     # Prepend the various Qt binary directories in the system path.
     # The order is significant.
@@ -631,7 +643,10 @@ function Set-QtPath
     {
         $bindir = $QtBinMap[$exe]
         if ($bindir) {
-            $env:Path = $bindir + ";" + $env:Path
+            if ($env:Path) {
+                $env:Path = ";" + $env:Path
+            }
+            $env:Path = $bindir + $env:Path
         }
     }
 

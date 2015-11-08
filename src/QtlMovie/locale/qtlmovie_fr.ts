@@ -419,7 +419,7 @@ Ligne %3, colonne %4</translation>
         <location filename="../QtlMovieEditSettings.ui" line="291"/>
         <location filename="../QtlMovieEditSettings.ui" line="298"/>
         <location filename="../QtlMovieEditSettings.ui" line="322"/>
-        <location filename="../QtlMovieEditSettings.cpp" line="86"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="85"/>
         <source>Browse ...</source>
         <translation>Parcourir ...</translation>
     </message>
@@ -834,27 +834,27 @@ Ligne %3, colonne %4</translation>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="133"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="129"/>
         <source>No default %1 found</source>
         <translation>Pas trouvé de %1 par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="136"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="132"/>
         <source>Default: %1</source>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="279"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="275"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="425"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="421"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="438"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="434"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -951,54 +951,54 @@ Ligne %3, colonne %4</translation>
         <translation>Forcer le format d&apos;affichage :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="165"/>
+        <location filename="../QtlMovieEditTask.cpp" line="163"/>
         <source>Open Movie File</source>
         <translation>Ouverture d&apos;un fichier vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="184"/>
+        <location filename="../QtlMovieEditTask.cpp" line="182"/>
         <source>Output Movie File</source>
         <translation>Fichier vidéo de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="209"/>
+        <location filename="../QtlMovieEditTask.cpp" line="207"/>
         <source>Subtitle files (*.srt *.ssa *.ass)</source>
         <translation>Fichiers de sous-titres (*.srt *.ssa *.ass)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="210"/>
+        <location filename="../QtlMovieEditTask.cpp" line="208"/>
         <source>Select Subtitle File</source>
         <translation>Sélection d&apos;un fichier de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="241"/>
+        <location filename="../QtlMovieEditTask.cpp" line="239"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="255"/>
+        <location filename="../QtlMovieEditTask.cpp" line="253"/>
         <source>Internal error, cannot get output file type</source>
         <translation>Erreur interne, impossible de déterminer le type de fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="262"/>
+        <location filename="../QtlMovieEditTask.cpp" line="260"/>
         <source>Cannot burn DVD, specify the burning device in settings</source>
         <translation>Impossible de graver un DVD, spécifier d&apos;abord le nom du graveur dans les options</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="308"/>
+        <location filename="../QtlMovieEditTask.cpp" line="306"/>
         <source>File not found or invalid subtitle file:
 %1</source>
         <translation>Fichier de sous-titres introuvable ou incorrect:
 %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="340"/>
+        <location filename="../QtlMovieEditTask.cpp" line="338"/>
         <source>Found stream: %1</source>
         <translation>Flux détecté: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="363"/>
+        <location filename="../QtlMovieEditTask.cpp" line="361"/>
         <source>Internal error, invalid stream type</source>
         <translation>Erreur interne, type de flux invalide</translation>
     </message>
@@ -1597,37 +1597,37 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieOutputFile</name>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="148"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="149"/>
         <source>DVD MPEG File</source>
         <translation>Fichier MPEG DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="149"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="150"/>
         <source>DVD ISO Image</source>
         <translation>Image ISO DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="150"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="151"/>
         <source>Burn DVD</source>
         <translation>Graver un DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="151"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="152"/>
         <source>iPad</source>
         <translation>iPad</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="152"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="153"/>
         <source>iPhone</source>
         <translation>iPhone</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="153"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="154"/>
         <source>AVI</source>
         <translation>AVI</translation>
     </message>
     <message>
-        <location filename="../QtlMovieOutputFile.cpp" line="154"/>
+        <location filename="../QtlMovieOutputFile.cpp" line="155"/>
         <source>SRT Subtitles</source>
         <translation>Sous-titres SRT</translation>
     </message>
