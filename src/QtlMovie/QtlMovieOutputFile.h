@@ -36,8 +36,11 @@
 #define QTLMOVIEOUTPUTFILE_H
 
 #include "QtlFile.h"
-#include "QtlMovieSettings.h"
+#include "QtlLogger.h"
 #include "QtlNumUtils.h"
+
+// Forward declarations.
+class QtlMovieSettings;
 
 //!
 //! Describes an output video file.

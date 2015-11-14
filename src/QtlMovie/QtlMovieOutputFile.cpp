@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieOutputFile.h"
+#include "QtlMovieSettings.h"
 #include "QtlMovie.h"
 
 
@@ -45,7 +46,7 @@ QtlMovieOutputFile::QtlMovieOutputFile(const QString& fileName,
     QtlFile(fileName, parent),
     _log(log),
     _settings(settings),
-    _outputType(DvdFile),
+    _outputType(settings->defaultOutputType()),
     _forcedDar(0.0)
 {
     Q_ASSERT(log != 0);

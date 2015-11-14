@@ -114,6 +114,13 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         _ui.groupBoxDvdBurningCombo->setVisible(false);
     }
 
+    // Setup the radio buttons to select the output type.
+    foreach (QtlMovieOutputFile::OutputType type, QtlMovieOutputFile::outputTypes()) {
+        QRadioButton* button(new QRadioButton(_ui.boxOutputType));
+        button->setText(QtlMovieOutputFile::outputTypeName(type));
+        _ui.boxOutputType->setButtonId(button, int(type));
+    }
+
     // Load the initial values from the settings object.
     resetValues();
 }
@@ -211,6 +218,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkClearLog->setChecked(_settings->clearLogBeforeTranscode());
     _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
     (_settings->useBatchMode() ? _ui.radioMultiFile : _ui.radioSingleFile)->setChecked(true);
+    _ui.boxOutputType->checkId(int (_settings->defaultOutputType()));
 
     // DVD burner can be edited in two ways.
     if (_useDvdBurnerCombo) {
@@ -342,6 +350,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setClearLogBeforeTranscode(_ui.checkClearLog->isChecked());
     _settings->setSaveLogAfterTranscode(_ui.checkSaveLog->isChecked());
     _settings->setUseBatchMode(_ui.radioMultiFile->isChecked());
+    _settings->setDefaultOutputType(QtlMovieOutputFile::OutputType(_ui.boxOutputType->checkedId()));
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

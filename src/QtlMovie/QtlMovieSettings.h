@@ -38,6 +38,7 @@
 
 #include "QtlSettings.h"
 #include "QtlMovieExecFile.h"
+#include "QtlMovieOutputFile.h"
 #include "QtlLogger.h"
 #include "QtlMovie.h"
 
@@ -206,6 +207,7 @@ public:
     QTL_SETTINGS_STRING(logFileExtension, setLogFileExtension, QTL_LOG_FILE_EXTENSION)
     QTL_SETTINGS_INT(ffprobeExecutionTimeout, setFFprobeExecutionTimeout, QTL_FFPROBE_EXECUTION_TIMEOUT)
     QTL_SETTINGS_BOOL(useBatchMode, setUseBatchMode, QTL_USE_BATCH_MODE)
+    QTL_SETTINGS_ENUM(defaultOutputType, setDefaultOutputType, QtlMovieOutputFile::OutputType, QtlMovieOutputFile::DvdFile)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

@@ -2,7 +2,8 @@
 QtlMovie Change Log
 ===================
 
-Version [next]
+Version 1.4
+- Added an option to specify the default output type (DVD, iPad, etc.)
 - Precompiled Windows binary uses Qt 5.5.1.
 - Windows installer includes FFmpeg 2.8.1.
 

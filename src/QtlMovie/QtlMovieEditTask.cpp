@@ -130,6 +130,7 @@ void QtlMovieEditTask::initialize(QtlMovieTask* task, QtlMovieSettings* settings
     // Initialize the UI.
     inputFileNameChanged(_task->inputFile()->fileName());
     inputFileFormatChanged();
+    _ui.boxOutputTypes->checkId(int(_task->outputFile()->outputType()));
     outputFileNameChanged(_task->outputFile()->fileName());
 
     // Get notified of file modifications.

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>624</width>
-    <height>504</height>
+    <height>574</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -401,6 +401,18 @@
              <string>Stop transcoding after :</string>
             </property>
            </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxOutputType">
+         <property name="title">
+          <string>Default output type</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QtlButtonGrid" name="boxOutputType" native="true"/>
           </item>
          </layout>
         </widget>
@@ -1350,6 +1362,12 @@
    <class>QtlLineEdit</class>
    <extends>QLineEdit</extends>
    <header>QtlLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QtlButtonGrid</class>
+   <extends>QWidget</extends>
+   <header>QtlButtonGrid.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QtlDialog</class>
