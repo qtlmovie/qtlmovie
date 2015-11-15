@@ -208,6 +208,8 @@ public:
     QTL_SETTINGS_INT(ffprobeExecutionTimeout, setFFprobeExecutionTimeout, QTL_FFPROBE_EXECUTION_TIMEOUT)
     QTL_SETTINGS_BOOL(useBatchMode, setUseBatchMode, QTL_USE_BATCH_MODE)
     QTL_SETTINGS_ENUM(defaultOutputType, setDefaultOutputType, QtlMovieOutputFile::OutputType, QtlMovieOutputFile::DvdFile)
+    QTL_SETTINGS_BOOL(selectOriginalAudio, setSelectOriginalAudio, QTL_SELECT_ORIGINAL_AUDIO)
+    QTL_SETTINGS_BOOL(selectTargetSubtitles, setSelectTargetSubtitles, QTL_SELECT_TARGET_SUBTITLES)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

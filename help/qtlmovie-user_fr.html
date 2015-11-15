@@ -595,10 +595,10 @@
         Ce terme mérite une explication.
         Quand un fichier d'entrée est ouvert, QtlMovie affiche la liste des pistes audio
         et sous-titres présentes dans le fichier.
-        Mais QtlMovie pré-sélectionne également les pistes qui lui semblent les plus
+        Mais, par défaut, QtlMovie pré-sélectionne également les pistes qui lui semblent les plus
         appropriées pour l'utilisateur (ou "audience ciblée").
         QtlMovie fait l'hypothèse que l'utilisateur préfère regarder les films
-        en version originale sous-titrée.
+        en version originale sous-titrée mais ce comportement peut être désactivé.
         La sélection initiale des pistes s'effectue de la manière suivante:</p>
       <ul>
         <li>Sélection de la piste audio par défaut:
@@ -609,7 +609,9 @@
               (et donc supposée être la version originale, considérant que les langues
               de l'audience ciblée sont du doublage).</li>
             <li>Si aucune piste ne répond à ces critéres, sélection de la première piste
-              audio sans indication "description audio pour malvoyants"..</li>
+              audio sans indication "description audio pour malvoyants".</li>
+            <li>Ce comportement peut être désactivé en déselectionnant l'option
+              "Sélectionne automatiquement l'audio en version originale".</li>
           </ul>
         </li>
         <li>Sélection de la piste de sous-titre par défaut:
@@ -632,6 +634,8 @@
                 <li>autres</li>
               </ul>
             </li>
+            <li>Ce comportement peut être désactivé en déselectionnant l'option
+              "Sélectionne automatiquement les sous-titres pour les langues de l'audience ciblée".</li>
           </ul>
         </li>
       </ul>

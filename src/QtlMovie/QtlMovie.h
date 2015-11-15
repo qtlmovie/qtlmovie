@@ -64,6 +64,8 @@
 #define QTL_USE_BATCH_MODE                 false  //!< Do not use batch mode, use single-file mode.
 #define QTL_EDIT_TASK_WIDTH                  680  //!< Width (in pixels) of QtlMovieEditTaskDialog
 #define QTL_EDIT_TASK_HEIGHT                 500  //!< Height (in pixels) of QtlMovieEditTaskDialog
+#define QTL_SELECT_ORIGINAL_AUDIO           true  //!< Automatically select original audio track.
+#define QTL_SELECT_TARGET_SUBTITLES         true  //!< Automatically select subtitles for the target language.
 
 #define QTL_DAR_4_3      (float(4.0)/float(3.0))  //!< Display aspect ratio value for 4:3.
 #define QTL_DAR_16_9    (float(16.0)/float(9.0))  //!< Display aspect ratio value for 16:9.

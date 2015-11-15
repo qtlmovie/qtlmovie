@@ -219,6 +219,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkSaveLog->setChecked(_settings->saveLogAfterTranscode());
     (_settings->useBatchMode() ? _ui.radioMultiFile : _ui.radioSingleFile)->setChecked(true);
     _ui.boxOutputType->checkId(int (_settings->defaultOutputType()));
+    _ui.checkOriginalAudio->setChecked(_settings->selectOriginalAudio());
+    _ui.checkTargetSubtitles->setChecked(_settings->selectTargetSubtitles());
 
     // DVD burner can be edited in two ways.
     if (_useDvdBurnerCombo) {
@@ -351,6 +353,8 @@ void QtlMovieEditSettings::applySettings()
     _settings->setSaveLogAfterTranscode(_ui.checkSaveLog->isChecked());
     _settings->setUseBatchMode(_ui.radioMultiFile->isChecked());
     _settings->setDefaultOutputType(QtlMovieOutputFile::OutputType(_ui.boxOutputType->checkedId()));
+    _settings->setSelectOriginalAudio(_ui.checkOriginalAudio->isChecked());
+    _settings->setSelectTargetSubtitles(_ui.checkTargetSubtitles->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

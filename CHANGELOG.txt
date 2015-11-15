@@ -4,6 +4,8 @@ QtlMovie Change Log
 
 Version 1.4
 - Added an option to specify the default output type (DVD, iPad, etc.)
+- Added options to disable the automatic selection of original audio
+  track with subtitles.
 - Precompiled Windows binary uses Qt 5.5.1.
 - Windows installer includes FFmpeg 2.8.1.
 

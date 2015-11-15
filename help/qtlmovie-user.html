@@ -550,10 +550,10 @@
         This needs some explanation.
         When an input file is opened, QtlMovie displays all audio and subtitle tracks
         which are available in the file.
-        But it also pre-selects the tracks which should be most likely adequate for the user
+        But, by default, it also pre-selects the tracks which should be most likely adequate for the user
         (or "target audience").
         QtlMovie makes the assumption that the user prefers to watch the film in original version
-        with subtitles in his own language.
+        with subtitles in his own language but this behavior can be disabled.
         The initial default stream selection is performed as follow:</p>
       <ul>
         <li>Default audio stream selection:
@@ -563,6 +563,8 @@
               intended audience language codes (supposed to be the original audio, considering
               any audience language as dubbing).</li>
             <li>Otherwise, keep first audio without visual impaired indicator.</li>
+            <li>This behavior can be disabled by unchecking the option
+              "Automatically select the original audio track".</li>
           </ul>
         </li>
         <li>Default subtitle stream selection:
@@ -581,6 +583,8 @@
                 <li>other</li>
               </ul>
             </li>
+            <li>This behavior can be disabled by unchecking the option
+              "Automatically select the subtitles for the target audience language".</li>
           </ul>
         </li>
       </ul>

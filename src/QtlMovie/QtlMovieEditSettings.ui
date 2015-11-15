@@ -1218,6 +1218,16 @@
           <string>Target audience language codes</string>
          </property>
          <layout class="QGridLayout" name="layoutLanguages">
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="checkOriginalAudio">
+            <property name="text">
+             <string>Automatically select the original audio track</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="buttonNewLanguage">
             <property name="text">
@@ -1242,6 +1252,16 @@
             </property>
             <property name="sortingEnabled">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="checkTargetSubtitles">
+            <property name="text">
+             <string>Automatically select the subtitles for the target audience language</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

@@ -740,11 +740,16 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1224"/>
+        <source>Automatically select the original audio track</source>
+        <translation type="unfinished">Sélectionne automatiquement l&apos;audio en version originale</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="1234"/>
         <source>Add ...</source>
         <translation>Ajouter ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1231"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1241"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -804,37 +809,42 @@ Ligne %3, colonne %4</translation>
         <translation>Niveau de pic max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1254"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1261"/>
+        <source>Automatically select the subtitles for the target audience language</source>
+        <translation type="unfinished">Sélectionne automatiquement les sous-titres pour les langues de l&apos;audience ciblée</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="1274"/>
         <source>Log panel</source>
         <translation>Fenêtre de journal (log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1266"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1286"/>
         <source>Max log :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1279"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1299"/>
         <source> lines</source>
         <translation> lignes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1298"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1318"/>
         <source>Clear log before transcoding</source>
         <translation>Effacer le journal avant de transcoder</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1305"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1325"/>
         <source>Save log after transcoding (same name as output file with extension .log)</source>
         <translation>Sauvegarder le journal après le transcodage (même nom que le fichier de sortie avec l&apos;extension .log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1315"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1335"/>
         <source>Version check</source>
         <translation>Recherche de version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1321"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1341"/>
         <source>Automatically search for a new version on startup</source>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
@@ -849,17 +859,17 @@ Ligne %3, colonne %4</translation>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="283"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="285"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="430"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="434"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="443"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="447"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
@@ -1118,7 +1128,7 @@ Ligne %3, colonne %4</translation>
         <translation>Recherche de sous-titres Teletext terminée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="659"/>
+        <location filename="../QtlMovieInputFile.cpp" line="667"/>
         <source>Default streams: video: %1, audio: %2, subtitles: %3</source>
         <translation>Flux par défaul: vidéo: %1, audio: %2, sous-titres: %3</translation>
     </message>

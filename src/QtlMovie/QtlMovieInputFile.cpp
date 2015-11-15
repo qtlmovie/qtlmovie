@@ -614,7 +614,11 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     }
 
     // Select the default audio stream.
-    if (originalAudio >= 0) {
+    if (!_settings->selectOriginalAudio()) {
+        // Do not look for original audio track, just use first audio stream.
+        _selectedAudioStreamIndex = firstAudio;
+    }
+    else if (originalAudio >= 0) {
         // Use original audio stream.
         _selectedAudioStreamIndex = originalAudio;
     }
@@ -641,6 +645,10 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     if (audioInAudienceLanguages) {
         // Use only "forced" subtitles (if any) when audio is for the intended audience.
         _selectedSubtitleStreamIndex = forcedSubtitle;
+    }
+    else if (!_settings->selectTargetSubtitles()) {
+        // Do not look for subtitles.
+        _selectedSubtitleStreamIndex = -1;
     }
     else if (completeSubtitle >= 0) {
         // Use complete subtitles.
