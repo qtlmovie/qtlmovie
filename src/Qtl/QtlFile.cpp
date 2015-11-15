@@ -383,6 +383,30 @@ QString QtlFile::enforceSuffix(const QString& path, const QString& suffix, Qt::C
 
 
 //-----------------------------------------------------------------------------
+// Format the content of an URL into a file path if the URL scheme is file:
+//-----------------------------------------------------------------------------
+
+QString QtlFile::toFileName(const QUrl& url)
+{
+    // For non-file URL, return the full URL.
+    if (url.scheme() != "file") {
+        return url.url();
+    }
+
+    // Get the local file path.
+    QString path(url.url(QUrl::PreferLocalFile));
+
+    // On Windows, remove any leading slash.
+#if defined(Q_OS_WIN)
+    path.replace(QRegExp("^/*"), "");
+#endif
+
+    // Try to make the file path native.
+    return QDir::toNativeSeparators(path);
+}
+
+
+//-----------------------------------------------------------------------------
 // Write the content of a binary file.
 //-----------------------------------------------------------------------------
 

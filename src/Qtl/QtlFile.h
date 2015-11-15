@@ -217,6 +217,13 @@ public:
     static QString enforceSuffix(const QString& path, const QString& suffix, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
 
     //!
+    //! Format the content of an URL into a file path if the URL scheme is file:
+    //! @param [in] url The URL.
+    //! @return A file path if the URL scheme is file:, the URL string otherwise.
+    //!
+    static QString toFileName(const QUrl& url);
+
+    //!
     //! Write the content of a binary file.
     //! Error reporting is minimal.
     //! @param [in] fileName Name of file to write.

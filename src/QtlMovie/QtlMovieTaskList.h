@@ -151,6 +151,23 @@ private slots:
     //!
     void taskStateChanged(QtlMovieTask* task);
 
+protected:
+    //!
+    //! Invoked when a drag operation enters the widget.
+    //! @param [in,out] event The notified event.
+    //!
+    virtual void dragEnterEvent(QDragEnterEvent* event);
+    //!
+    //! Invoked when a drag operation is in progress and the cursor moves.
+    //! @param [in,out] event The notified event.
+    //!
+    virtual void dragMoveEvent(QDragMoveEvent* event);
+    //!
+    //! Invoked when a drop operation is performed.
+    //! @param [in,out] event The notified event.
+    //!
+    virtual void dropEvent(QDropEvent* event);
+
 private:
     QtlMovieSettings* _settings;    //!< Application settings.
     QtlLogger*        _log;         //!< Where to log errors.

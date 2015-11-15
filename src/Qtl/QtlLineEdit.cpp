@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlLineEdit.h"
+#include "QtlFile.h"
 #include <QMimeData>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -95,7 +96,7 @@ void QtlLineEdit::dropEvent(QDropEvent* event)
         }
         else {
             // Keep only the first URL.
-            setText(toText(urlList.first()));
+            setText(QtlFile::toFileName(urlList.first()));
             // Accept the drop action.
             event->acceptProposedAction();
         }
@@ -104,28 +105,4 @@ void QtlLineEdit::dropEvent(QDropEvent* event)
         // For all other types of object, delegate to the super class.
         QLineEdit::dropEvent(event);
     }
-}
-
-
-//----------------------------------------------------------------------------
-// Format the content of an URL into something to drop in the line edit.
-//----------------------------------------------------------------------------
-
-QString QtlLineEdit::toText(const QUrl& url)
-{
-    // For non-file URL, return the full URL.
-    if (url.scheme() != "file") {
-        return url.url();
-    }
-
-    // Get the local file path.
-    QString path(url.url(QUrl::PreferLocalFile));
-
-    // On Windows, remove any leading slash.
-#if defined(Q_OS_WIN)
-    path.replace(QRegExp("^/*"), "");
-#endif
-
-    // Try to make the file path native.
-    return QDir::toNativeSeparators(path);
 }

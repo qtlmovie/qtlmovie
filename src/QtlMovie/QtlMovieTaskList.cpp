@@ -534,3 +534,73 @@ void QtlMovieTaskList::requeueSelectedTasks()
         }
     }
 }
+
+
+//----------------------------------------------------------------------------
+// Invoked when a drag operation enters the widget.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::dragEnterEvent(QDragEnterEvent* event)
+{
+    // Get the MIME data from the event.
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData != 0 && mimeData->hasUrls()) {
+        // The dragged object contains URL's, accept it.
+        event->acceptProposedAction();
+    }
+
+    // Note: Never invoke the super-class in other cases. Otherwise, the specific
+    // drag/drop behavior of QTableWidget interferes with our own strategy.
+}
+
+
+//----------------------------------------------------------------------------
+// Invoked when a drag operation is in progress and the cursor moves.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::dragMoveEvent(QDragMoveEvent* event)
+{
+    // Do nothing. Here, we overrides dragMoveHandler just to prevent the
+    // superclass QTableWidget to handle it. Otherwise, the specific
+    // drag/drop behavior of QTableWidget interferes with our own strategy.
+}
+
+
+//----------------------------------------------------------------------------
+// Invoked when a drop operation is performed.
+//----------------------------------------------------------------------------
+
+void QtlMovieTaskList::dropEvent(QDropEvent* event)
+{
+    // Get the MIME data from the event.
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData != 0 && mimeData->hasUrls()) {
+        // The dropped object contains URL's, treat it at this level.
+        int fileCount = 0;
+        foreach (const QUrl& url, mimeData->urls()) {
+            if (url.scheme() == "file") {
+                // This is a real file URL
+                const QString fileName(QtlFile::toFileName(url));
+                fileCount++;
+
+                // Add a task for this file. Use all defaults.
+                _log->debug(tr("Adding file %1").arg(fileName));
+                QtlMovieTask* task = new QtlMovieTask(_settings, _log, this);
+                task->inputFile()->setFileName(fileName);
+                addTask(task, false);
+            }
+        }
+        // Accept the drop action is at least one file was found.
+        if (fileCount == 0) {
+            event->ignore();
+        }
+        else {
+            event->acceptProposedAction();
+        }
+    }
+
+    // Note: Never invoke the super-class in other cases. Otherwise, the specific
+    // drag/drop behavior of QTableWidget interferes with our own strategy.
+}

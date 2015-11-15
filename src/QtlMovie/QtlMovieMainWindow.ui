@@ -42,6 +42,15 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::DropOnly</enum>
+         </property>
+         <property name="defaultDropAction">
+          <enum>Qt::CopyAction</enum>
+         </property>
         </widget>
        </item>
        <item>

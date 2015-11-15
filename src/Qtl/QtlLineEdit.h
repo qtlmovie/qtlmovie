@@ -71,14 +71,6 @@ protected:
     //! @param [in,out] event The notified event.
     //!
     virtual void dropEvent(QDropEvent* event);
-
-private:
-    //!
-    //! Format the content of an URL into something to drop in the line edit.
-    //! @param [in] url The URL.
-    //! @return A string to drop in the line edit.
-    //!
-    static QString toText(const QUrl& url);
 };
 
 #endif // QTLLINEEDIT_H
