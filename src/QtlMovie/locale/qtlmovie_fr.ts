@@ -966,51 +966,46 @@ Ligne %3, colonne %4</translation>
         <translation>Forcer le format d&apos;affichage :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="164"/>
+        <location filename="../QtlMovieEditTask.cpp" line="165"/>
         <source>Open Movie File</source>
         <translation>Ouverture d&apos;un fichier vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="183"/>
+        <location filename="../QtlMovieEditTask.cpp" line="184"/>
         <source>Output Movie File</source>
         <translation>Fichier vidéo de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="208"/>
+        <location filename="../QtlMovieEditTask.cpp" line="209"/>
         <source>Subtitle files (*.srt *.ssa *.ass)</source>
         <translation>Fichiers de sous-titres (*.srt *.ssa *.ass)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="209"/>
+        <location filename="../QtlMovieEditTask.cpp" line="210"/>
         <source>Select Subtitle File</source>
         <translation>Sélection d&apos;un fichier de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="240"/>
+        <location filename="../QtlMovieEditTask.cpp" line="241"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="254"/>
+        <location filename="../QtlMovieEditTask.cpp" line="255"/>
         <source>Internal error, cannot get output file type</source>
         <translation>Erreur interne, impossible de déterminer le type de fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="261"/>
+        <location filename="../QtlMovieEditTask.cpp" line="262"/>
         <source>Cannot burn DVD, specify the burning device in settings</source>
         <translation>Impossible de graver un DVD, spécifier d&apos;abord le nom du graveur dans les options</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="307"/>
+        <location filename="../QtlMovieEditTask.cpp" line="308"/>
         <source>File not found or invalid subtitle file:
 %1</source>
         <translation>Fichier de sous-titres introuvable ou incorrect:
 %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieEditTask.cpp" line="339"/>
-        <source>Found stream: %1</source>
-        <translation>Flux détecté: %1</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditTask.cpp" line="362"/>
@@ -1126,11 +1121,6 @@ Ligne %3, colonne %4</translation>
         <location filename="../QtlMovieInputFile.cpp" line="346"/>
         <source>Search for Teletext subtitles completed</source>
         <translation>Recherche de sous-titres Teletext terminée</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieInputFile.cpp" line="667"/>
-        <source>Default streams: video: %1, audio: %2, subtitles: %3</source>
-        <translation>Flux par défaul: vidéo: %1, audio: %2, sous-titres: %3</translation>
     </message>
 </context>
 <context>
