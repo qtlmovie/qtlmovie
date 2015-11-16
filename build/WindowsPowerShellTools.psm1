@@ -43,6 +43,7 @@
 #    New-TempDirectory
 #    New-ZipFile
 #    Search-File
+#    Search-Registry
 #    Set-QtPath
 #    Show-PowerShellWindow
 #    Split-DeepString
@@ -516,6 +517,115 @@ function Search-File
 <#
  .SYNOPSIS
 
+  Search a string in the registry.
+
+ .DESCRIPTION
+
+  Search a string in the registry. The search is performed against a regular
+  expression. The search can be used on any combination of key name, value
+  names and values. By default, if neither -Key nor -Name nor -Value is
+  specified, the search is performed on all of them.
+
+ .PARAMETER RegRoot
+
+  Name of the root in the registry to explore. Can be anything like
+  HKCU:\Software\Microsoft for instance.
+
+ .PARAMETER Pattern
+
+  The pattern to search in the registry. Must be a regular expression or, more
+  generally, anything that can be used with the -match operator.
+
+ .PARAMETER Key
+
+  Search only names.
+
+ .PARAMETER Name
+
+  Search only value names.
+
+ .PARAMETER Value
+
+  Search only values.
+
+ .OUTPUTS
+
+  One composite object per match in the registry. Each object has the following
+  fields. The field 'Type' indicates where the match applied; its value can be one
+  'Key', 'Name', 'Value'. The fields 'Key', 'Name', 'Value' respectively contain
+  the key name, value name and value where the match applied.
+
+ .EXAMPLE
+
+  Search the string "defaultchannel" in the Windows set for current user:
+
+  PS > Search-Registry HKCU:\Software\Microsoft\Windows defaultchannel | Format-List
+
+  Key   : HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Media Center\Settings\VideoSettings
+  Name  : DefaultChannel
+  Value : 2
+  Type  : Name
+
+ .EXAMPLE
+
+  Search the same string inside the entire registry (very slow) :
+
+  foreach ($root in (Get-ChildItem "Registry::")) {
+      Search-Registry $root.PSPath defaultchannel
+  }
+
+ .NOTES
+
+  Warning: This operation is relatively slow. Searching on large portions of
+  the registry or on the entire registry is awfully long.
+#>
+function Search-Registry
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory= $true,Position=1)] [String] $RegRoot,
+        [Parameter(Mandatory= $true,Position=2)] [String] $Pattern,
+        [Switch] $Key = $false,
+        [Switch] $Name = $false,
+        [Switch] $Value = $false
+    )
+
+    # Create a new object that represents one of the returned values.
+    function New-RegistryMatch($matchType, $keyName, $propertyName, $value) {
+        New-Object PsObject -Property @{ Type = $matchType; Key = $keyName; Name = $propertyName; Value = $value }
+    }
+
+    # By default, use -Key -Name -Value
+    if (-not ($Key -or $Name -or $Value)) {
+        $Key = $Name = $Value = $true
+    }
+
+    # Go through each item in the registry. Ignore errors (typically access denied).
+    foreach ($item in Get-ChildItem $RegRoot -Recurse -ErrorAction SilentlyContinue) {
+        # Check if the key name matches
+        if ($Key -and ($item.PSChildName -match $Pattern)) {
+            New-RegistryMatch "Key" $item.Name $null $null
+        }
+        # Check if a key value matches
+        if ($Name -or $Value) {
+            foreach ($propertyName in $item.GetValueNames()) {
+                $propertyValue = $item.GetValue($propertyName)
+                if ($Name -and ($propertyName -match $Pattern)) {
+                    New-RegistryMatch "Name" $item.Name $propertyName $propertyValue
+                }
+                if ($Value -and ($propertyValue -match $Pattern)) {
+                    New-RegistryMatch "Value" $item.Name $propertyName $propertyValue
+                }
+            }
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+<#
+ .SYNOPSIS
+
   Define a clean environment Path for Qt applications and tools.
 
  .DESCRIPTION
@@ -866,6 +976,7 @@ Export-ModuleMember -Function Get-QtProjectFile
 Export-ModuleMember -Function New-TempDirectory
 Export-ModuleMember -Function New-ZipFile
 Export-ModuleMember -Function Search-File
+Export-ModuleMember -Function Search-Registry
 Export-ModuleMember -Function Set-QtPath
 Export-ModuleMember -Function Show-PowerShellWindow
 Export-ModuleMember -Function Split-DeepString
