@@ -92,7 +92,6 @@ void QtlButtonGrid::setButtonId(QAbstractButton* button, int id)
 }
 
 
-
 //----------------------------------------------------------------------------
 // Check ("select") the button with the specified id.
 //----------------------------------------------------------------------------

@@ -664,10 +664,6 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     }
 
     // Debug display.
-    _log->debug(tr("Default streams: video: %1, audio: %2, subtitles: %3")
-                .arg(_selectedVideoStreamIndex)
-                .arg(_selectedAudioStreamIndex)
-                .arg(_selectedSubtitleStreamIndex));
 }
 
 
@@ -680,9 +676,14 @@ int QtlMovieInputFile::selectedVideoStreamIndex() const
     return _selectedVideoStreamIndex < streamCount() ? _selectedVideoStreamIndex : -1;
 }
 
-void QtlMovieInputFile::setSelectedVideoStreamIndex(int selectedVideoStreamIndex)
+void QtlMovieInputFile::setSelectedVideoStreamIndex(int index)
 {
-    _selectedVideoStreamIndex = selectedVideoStreamIndex;
+    _selectedVideoStreamIndex =
+            (index >= 0 &&
+             index < streamCount() &&
+             !_streams[index].isNull() &&
+             _streams[index]->streamType() == QtlMovieStreamInfo::Video) ?
+            index : -1;
 }
 
 int QtlMovieInputFile::selectedAudioStreamIndex() const
@@ -690,9 +691,14 @@ int QtlMovieInputFile::selectedAudioStreamIndex() const
     return _selectedAudioStreamIndex < streamCount() ? _selectedAudioStreamIndex : -1;
 }
 
-void QtlMovieInputFile::setSelectedAudioStreamIndex(int selectedAudioStreamIndex)
+void QtlMovieInputFile::setSelectedAudioStreamIndex(int index)
 {
-    _selectedAudioStreamIndex = selectedAudioStreamIndex;
+    _selectedAudioStreamIndex =
+            (index >= 0 &&
+             index < streamCount() &&
+             !_streams[index].isNull() &&
+             _streams[index]->streamType() == QtlMovieStreamInfo::Audio) ?
+            index : -1;
 }
 
 int QtlMovieInputFile::selectedSubtitleStreamIndex() const
@@ -700,9 +706,14 @@ int QtlMovieInputFile::selectedSubtitleStreamIndex() const
     return _selectedSubtitleStreamIndex < streamCount() ? _selectedSubtitleStreamIndex : -1;
 }
 
-void QtlMovieInputFile::setSelectedSubtitleStreamIndex(int selectedSubtitleStreamIndex)
+void QtlMovieInputFile::setSelectedSubtitleStreamIndex(int index)
 {
-    _selectedSubtitleStreamIndex = selectedSubtitleStreamIndex;
+    _selectedSubtitleStreamIndex =
+            (index >= 0 &&
+             index < streamCount() &&
+             !_streams[index].isNull() &&
+             _streams[index]->streamType() == QtlMovieStreamInfo::Subtitle) ?
+            index : -1;
 }
 
 QString QtlMovieInputFile::externalSubtitleFileName() const

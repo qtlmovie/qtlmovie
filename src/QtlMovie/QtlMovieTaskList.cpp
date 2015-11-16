@@ -588,8 +588,8 @@ void QtlMovieTaskList::dropEvent(QDropEvent* event)
                 // Add a task for this file. Use all defaults.
                 _log->debug(tr("Adding file %1").arg(fileName));
                 QtlMovieTask* task = new QtlMovieTask(_settings, _log, this);
-                task->inputFile()->setFileName(fileName);
                 addTask(task, false);
+                task->inputFile()->setFileName(fileName);
             }
         }
         // Accept the drop action is at least one file was found.

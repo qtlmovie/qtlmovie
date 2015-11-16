@@ -65,7 +65,6 @@ QtlMovieEditTask::QtlMovieEditTask(QWidget* parent) :
     }
 
     // Clear input file stream info.
-    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonSubtitleFile);
     clearInputStreamInfo();
 
     // Say to the layout we need a minimum vertical size. Depending on the input
@@ -102,7 +101,9 @@ void QtlMovieEditTask::clearInputStreamInfo()
     _ui.editSubtitleFile->setEnabled(false);
 
     // Make sure the "None" and "Subtitle File" are in the same radio group as subtitle streams.
-    _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonNoSubtitle);
+    // The NoSubtitle button is a direct child of the button grid, so setButtonId must be called.
+    // The SubtitleFile button is not a direct child, so addExternalButton must be called.
+    _ui.boxSubtitleStreams->setButtonId(_ui.radioButtonNoSubtitle);
     _ui.boxSubtitleStreams->addExternalButton(_ui.radioButtonSubtitleFile);
 }
 
@@ -336,7 +337,6 @@ void QtlMovieEditTask::inputFileFormatChanged()
 
         const QtlMovieStreamInfoPtr stream(_task->inputFile()->streamInfo(si));
         Q_ASSERT(!stream.isNull());
-        _log->debug(tr("Found stream: %1").arg(stream->description(false)));
 
         QtlButtonGrid* box = 0;
         bool selected = false;
