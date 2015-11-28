@@ -63,9 +63,6 @@ Windows Registry Editor Version 5.00
 "QuickEdit"=dword:00000001
 "HistoryBufferSize"=dword:00000064
 "HistoryNoDup"=dword:00000001
-"ColorTable00"=dword:00562401
-"ColorTable05"=dword:00808000
-"ColorTable07"=dword:00f0edee
 "ScreenBufferSize"=dword:0bb80078
 "WindowSize"=dword:00320078
 "FontSize"=dword:000c0000
