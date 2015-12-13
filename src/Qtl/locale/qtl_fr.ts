@@ -2110,62 +2110,37 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlNewVersionChecker</name>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="122"/>
-        <source>Found %1 proxies, using proxy %2:%3</source>
-        <translation>%1 proxies détectés, utilisation du proxy %2:%3</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="139"/>
-        <source>Searching new versions in %1</source>
-        <translation>Recherche de nouvelle version dans %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="143"/>
-        <source>Error browsing %1</source>
-        <translation>Erreur de recherche sur %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="237"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="137"/>
         <source>Found version %1 at %2</source>
         <translation>Version %1 trouvée dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="266"/>
-        <source>Download failed: %1</source>
-        <translation>Erreur de téléchargement: %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="272"/>
-        <source>Too many redirections on %1</source>
-        <translation>Trop de redirections sur %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="281"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="148"/>
         <source>End of search in %1</source>
         <translation>Fin de recherche dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="288"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="155"/>
         <source>A new version of %1 is available&lt;br/&gt;Your version is %2&lt;br/&gt;Version %3 is available online at:&lt;br/&gt;%4</source>
         <translation>Une nouvelle version de %1 est disponible&lt;br/&gt;Votre version est la %2&lt;br/&gt;La version %3 est disponible en ligne sur:&lt;br/&gt;%4</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="299"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="166"/>
         <source>Unable to find any version of %1 online</source>
         <translation>Impossible de trouver une quelconque version de %1 en ligne</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="302"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="169"/>
         <source>You are using the latest version of %1</source>
         <translation>Vous utilisez la version la plus à jour de %1</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="307"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="174"/>
         <source>Your version of %1 is %2&lt;br/&gt;More recent than %3, the latest available online</source>
         <translation>Votre version de %1 est la %2&lt;br/&gt;Plus récente que la %3, la plus récente en ligne</translation>
     </message>
     <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="296"/>
+        <location filename="../QtlNewVersionChecker.cpp" line="163"/>
         <source>No new version found, this: %1, latest: %2</source>
         <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
     </message>
@@ -2277,6 +2252,44 @@ L&apos;application va s&apos;arrêter</translation>
         <location filename="../QtlProcess.cpp" line="175"/>
         <source>Process exceeds execution time limit</source>
         <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
+    </message>
+</context>
+<context>
+    <name>QtlSimpleWebRequest</name>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="104"/>
+        <source>Found %1 proxies, using proxy %2:%3</source>
+        <translation>%1 proxies détectés, utilisation du proxy %2:%3</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="122"/>
+        <source>Fetching %1</source>
+        <translation>Téléchargement de %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="126"/>
+        <source>Error browsing %1</source>
+        <translation>Erreur de recherche sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="173"/>
+        <source>Maximum response size exceeded from %1</source>
+        <translation>Taille maximum de réponse dépassée pour %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="196"/>
+        <source>Download failed: %1</source>
+        <translation>Erreur de téléchargement: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="202"/>
+        <source>Too many redirections on %1</source>
+        <translation>Trop de redirections sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlSimpleWebRequest.cpp" line="211"/>
+        <source>End of download of %1</source>
+        <translation>Fin de téléchargement de %1</translation>
     </message>
 </context>
 <context>

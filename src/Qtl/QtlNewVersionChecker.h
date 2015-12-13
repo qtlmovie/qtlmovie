@@ -39,6 +39,7 @@
 #include "QtlCore.h"
 #include <QtNetwork>
 #include "QtlNullLogger.h"
+#include "QtlSimpleWebRequest.h"
 #include "QtlVersion.h"
 
 //!
@@ -71,11 +72,6 @@ public:
                                              QtlLogger* log = 0,
                                              QObject *parent = 0);
 
-    //!
-    //! Destructor.
-    //!
-    virtual ~QtlNewVersionChecker();
-
 signals:
     //!
     //! Emitted when the search is completed.
@@ -87,31 +83,25 @@ signals:
 
 private slots:
     //!
-    //! Invoked when data is available from HTTP.
+    //! Invoked when the Web request is completed.
+    //! @param [in] success True on success, false on error (network error for instance).
+    //! @param [in] url URL of the returned content. May not be the same as the original
+    //! URL is some redirection occured.
+    //! @param [in] response If @a success is true, contains the text of the response.
+    //! If @a status is false, contains an error message.
     //!
-    void httpReadyRead();
-    //!
-    //! Invoked when HTTP request completes.
-    //!
-    void httpFinished();
+    void httpCompleted(bool success, const QUrl& url, const QString& response);
 
 private:
     bool                  _silent;         //!< Do not report the errors or absence of new version.
     QtlNullLogger         _nullLog;        //!< Null logger.
     QtlLogger*            _log;            //!< Message logger.
-    bool                  _completed;      //!< Signal completed() was emitted.
     QtlVersion            _currentVersion; //!< Current version of the application.
     QString               _directoryUrl;   //!< URL of directory containing update packages.
     QString               _filePrefix;     //!< Package file name prefix.
     QString               _fileSuffix;     //!< Package file name suffix.
     QString               _urlSuffix;      //!< Suffix to add to package files URL.
-    QNetworkAccessManager _netwManager;    //!< Network manager for all requests.
-    QUrl                  _currentUrl;     //!< Current URL.
-    QNetworkReply*        _reply;          //!< HTTP reply.
-    QString               _text;           //!< Returned text.
-    int                   _redirected;     //!< Number of redirections.
-    QtlVersion            _latestVersion;  //!< Latest version found.
-    QUrl                  _latestUrl;      //!< URL of latest version.
+    QtlSimpleWebRequest   _request;        //!< Web request.
 
     //!
     //! Private constructor.
@@ -134,19 +124,6 @@ private:
                          bool silent = false,
                          QtlLogger* log = 0,
                          QObject *parent = 0);
-
-    //!
-    //! Start an HTTP request.
-    //! Used in original request and all redirections.
-    //! @param [in] url URL to get.
-    //!
-    void startRequest(const QUrl& url);
-
-    //!
-    //! Emit the completed() signal and delete this instance.
-    //! @param [in] error Error message, empty on success.
-    //!
-    void emitCompleted(const QString& error);
 
     // Unaccessible operations.
     QtlNewVersionChecker() Q_DECL_EQ_DELETE;

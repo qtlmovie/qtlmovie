@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2015, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@ SOURCES += \
     QtlTranslator.cpp \
     QtlVersion.cpp \
     QtlNewVersionChecker.cpp \
+    QtlSimpleWebRequest.cpp \
     QtlTextFileViewer.cpp \
     QtlSysInfo.cpp \
     QtlIsoLanguages.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
     QtlTranslator.h \
     QtlVersion.h \
     QtlNewVersionChecker.h \
+    QtlSimpleWebRequest.h \
     QtlTextFileViewer.h \
     QtlSysInfo.h \
     QtlIsoLanguages.h \

@@ -524,7 +524,7 @@ Ligne %3, colonne %4</translation>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="411"/>
         <source>Default output type</source>
-        <translation type="unfinished">Format de sortie par défaut</translation>
+        <translation>Format de sortie par défaut</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="423"/>
@@ -741,7 +741,7 @@ Ligne %3, colonne %4</translation>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1224"/>
         <source>Automatically select the original audio track</source>
-        <translation type="unfinished">Sélectionne automatiquement l&apos;audio en version originale</translation>
+        <translation>Sélectionne automatiquement l&apos;audio en version originale</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1234"/>
@@ -811,7 +811,7 @@ Ligne %3, colonne %4</translation>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1261"/>
         <source>Automatically select the subtitles for the target audience language</source>
-        <translation type="unfinished">Sélectionne automatiquement les sous-titres pour les langues de l&apos;audience ciblée</translation>
+        <translation>Sélectionne automatiquement les sous-titres pour les langues de l&apos;audience ciblée</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1274"/>
@@ -1784,7 +1784,7 @@ Le remplacer?</translation>
     <message>
         <location filename="../QtlMovieTaskList.cpp" line="589"/>
         <source>Adding file %1</source>
-        <translation type="unfinished">Ajout du fichier %1</translation>
+        <translation>Ajout du fichier %1</translation>
     </message>
 </context>
 <context>
