@@ -53,6 +53,7 @@ SOURCES += \
     QtlTranslator.cpp \
     QtlVersion.cpp \
     QtlNewVersionChecker.cpp \
+    QtlNewVersionCheckerJson.cpp \
     QtlSimpleWebRequest.cpp \
     QtlTextFileViewer.cpp \
     QtlSysInfo.cpp \
@@ -104,6 +105,7 @@ HEADERS += \
     QtlTranslator.h \
     QtlVersion.h \
     QtlNewVersionChecker.h \
+    QtlNewVersionCheckerJson.h \
     QtlSimpleWebRequest.h \
     QtlTextFileViewer.h \
     QtlSysInfo.h \

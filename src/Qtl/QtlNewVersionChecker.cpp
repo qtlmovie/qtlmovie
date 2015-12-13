@@ -36,12 +36,6 @@
 #include "QtlStringUtils.h"
 
 
-//!
-//! Maximum number of HTTP redirects (to avoid infinite loops).
-//!
-#define QTL_MAX_REDIRECT 10
-
-
 //----------------------------------------------------------------------------
 // Create and start a new instance. Enforce object creation on the heap.
 //----------------------------------------------------------------------------
@@ -53,7 +47,7 @@ QtlNewVersionChecker* QtlNewVersionChecker::newInstance(const QtlVersion& curren
                                                         const QString& urlSuffix,
                                                         bool silent,
                                                         QtlLogger* log,
-                                                        QObject *parent)
+                                                        QObject* parent)
 {
     return new QtlNewVersionChecker(currentVersion, directoryUrl, filePrefix, fileSuffix, urlSuffix, silent, log, parent);
 }

@@ -54,13 +54,13 @@ public:
     //!
     //! Constructor.
     //!
-    //! @param [in] url URL to get.
+    //! @param [in] url URL to get. If unspecified, you must call setUrl() before start().
     //! @param [in] parent Optional parent object.
     //! @param [in] log Optional message logger.
     //! @param [in] maxResponseSize Maximum size in bytes of response
     //! (to avoid memory saturation). Default: 1 MB.
     //!
-    QtlSimpleWebRequest(const QString& url, QObject* parent = 0, QtlLogger* log = 0, int maxResponseSize = 1000000);
+    QtlSimpleWebRequest(const QString& url = QString(), QObject* parent = 0, QtlLogger* log = 0, int maxResponseSize = 1000000);
 
     //!
     //! Destructor.
@@ -68,11 +68,44 @@ public:
     virtual ~QtlSimpleWebRequest();
 
     //!
+    //! Set the URL of the request.
+    //! Must be called before start(). Ignored otherwise.
+    //! @param url URL of the request.
+    //!
+    void setUrl(const QString& url);
+
+    //!
+    //! Add a cookie for the request.
+    //! Must be called before start(). Ignored otherwise.
+    //! @param name Cookie name.
+    //! @param value Cookie value.
+    //!
+    void addCookie(const QString& name, const QString& value);
+
+    //!
     //! Start the Web request.
     //! The completion will be notified later using the completed() signal.
-    //! Can be called only once.
+    //! Can be called only once. Subsequent calls are ignored.
     //!
     void start();
+
+    //!
+    //! Check if the request was already started.
+    //! @return True if the request was already started, false otherwise.
+    //!
+    bool isStarted() const
+    {
+        return _started;
+    }
+
+    //!
+    //! Check if the request is completed.
+    //! @return True if the request is completed, false otherwise.
+    //!
+    bool isCompleted() const
+    {
+        return _completed;
+    }
 
 signals:
     //!
@@ -101,6 +134,7 @@ private:
     bool                  _started;         //!< The request is started.
     bool                  _completed;       //!< Signal completed() was emitted.
     QUrl                  _url;             //!< URL to get.
+    QList<QNetworkCookie> _cookies;         //!< List of cookies to get.
     const int             _maxResponseSize; //!< Maximum size in bytes of response.
     QNetworkAccessManager _netwManager;     //!< Network manager for all requests.
     QNetworkReply*        _reply;           //!< HTTP reply.

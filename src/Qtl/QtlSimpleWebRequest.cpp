@@ -52,6 +52,7 @@ QtlSimpleWebRequest::QtlSimpleWebRequest(const QString& url, QObject* parent, Qt
     _started(false),
     _completed(false),
     _url(url),
+    _cookies(),
     _maxResponseSize(maxResponseSize),
     _netwManager(),
     _reply(0),
@@ -71,6 +72,30 @@ QtlSimpleWebRequest::~QtlSimpleWebRequest()
     if (_reply != 0) {
         delete _reply;
         _reply = 0;
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Set the URL of the request.
+//----------------------------------------------------------------------------
+
+void QtlSimpleWebRequest::setUrl(const QString& url)
+{
+    if (!_started) {
+        _url = QUrl(url);
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Add a cookie for the request.
+//----------------------------------------------------------------------------
+
+void QtlSimpleWebRequest::addCookie(const QString& name, const QString& value)
+{
+    if (!_started) {
+        _cookies << QNetworkCookie(name.toUtf8(), value.toUtf8());
     }
 }
 
@@ -117,6 +142,15 @@ void QtlSimpleWebRequest::startRequest(const QUrl& url)
     // Simply setting any other User-Agent fixes the problem.
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::UserAgentHeader, "Qtl");
+
+    // Add the list of cookies. First modify the domain name of the cookie to
+    // match the current URL, then add the cookies.
+    if (!_cookies.empty()) {
+        for (QList<QNetworkCookie>::iterator it = _cookies.begin(); it != _cookies.end(); ++it) {
+            it->setDomain(url.host());
+        }
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(_cookies));
+    }
 
     // Send the HTTP request, read the headers.
     _log->debug(tr("Fetching %1").arg(url.toString()));

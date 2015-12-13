@@ -1,3 +1,7 @@
 =====================
 QtlMovie "to do" list
 =====================
+
+- Adaptive bitrate for AVI, iPhone, iPad.
+
+- Bug: Subtitles not dislayed in "Epic of Everest" bonus.

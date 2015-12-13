@@ -2,6 +2,10 @@
 QtlMovie Change Log
 ===================
 
+Version 1.5
+- More reliable checking of new version online.
+- Windows installer includes FFmpeg 2.8.3.
+
 Version 1.4
 - Added the ability to drag and drop several files in the main window
   in batch mode. This automatically creates one task per file.

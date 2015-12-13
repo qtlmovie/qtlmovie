@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2015, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,15 +26,15 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file: QtlNewVersionChecker.h
+//! @file: QtlNewVersionCheckerJson.h
 //!
-//! Declare the class QtlNewVersionChecker.
+//! Declare the class QtlNewVersionCheckerJson.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLNEWVERSIONCHECKER_H
-#define QTLNEWVERSIONCHECKER_H
+#ifndef QTLNEWVERSIONCHECKERJSON_H
+#define QTLNEWVERSIONCHECKERJSON_H
 
 #include "QtlCore.h"
 #include "QtlNullLogger.h"
@@ -44,10 +44,13 @@
 //!
 //! A class to check the existence of a new version of the application on the network.
 //!
-//! An instance of this class get the content of a Web page and parses the returned
-//! HTML content, searching for a link to a file matching a new version of the application.
+//! This version is more robust than QtlNewVersionChecker but requires the cooperation
+//! of a server. An instance of this class sends a Web request to a server using a
+//! cookie describing the current platform (a Base64-encoded JSON structure). The
+//! server is responsible for finding a new version for this platform, if available,
+//! and returns the response as a JSON structure.
 //!
-class QtlNewVersionChecker : public QObject
+class QtlNewVersionCheckerJson : public QObject
 {
     Q_OBJECT
 
@@ -58,22 +61,16 @@ public:
     //! The object deletes itself upon processing completion.
     //!
     //! @param [in] currentVersion Current version of the application.
-    //! @param [in] directoryUrl URL of directory containing update packages.
-    //! @param [in] filePrefix Package file name prefix.
-    //! @param [in] fileSuffix Package file name suffix.
-    //! @param [in] urlSuffix Suffix to add to package files URL.
+    //! @param [in] url URL of the server to query.
     //! @param [in] silent If true, do not report the errors or absence of new version.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
     //!
-    static QtlNewVersionChecker* newInstance(const QtlVersion& currentVersion,
-                                             const QString& directoryUrl,
-                                             const QString& filePrefix,
-                                             const QString& fileSuffix,
-                                             const QString& urlSuffix = "",
-                                             bool silent = false,
-                                             QtlLogger* log = 0,
-                                             QObject* parent = 0);
+    static QtlNewVersionCheckerJson* newInstance(const QtlVersion& currentVersion,
+                                                 const QString& url,
+                                                 bool silent = false,
+                                                 QtlLogger* log = 0,
+                                                 QObject* parent = 0);
 
 signals:
     //!
@@ -96,41 +93,32 @@ private slots:
     void httpCompleted(bool success, const QUrl& url, const QString& response);
 
 private:
-    bool                  _silent;         //!< Do not report the errors or absence of new version.
-    QtlNullLogger         _nullLog;        //!< Null logger.
-    QtlLogger*            _log;            //!< Message logger.
-    QtlVersion            _currentVersion; //!< Current version of the application.
-    QString               _directoryUrl;   //!< URL of directory containing update packages.
-    QString               _filePrefix;     //!< Package file name prefix.
-    QString               _fileSuffix;     //!< Package file name suffix.
-    QString               _urlSuffix;      //!< Suffix to add to package files URL.
-    QtlSimpleWebRequest   _request;        //!< Web request.
+    bool                _silent;         //!< Do not report the errors or absence of new version.
+    QtlNullLogger       _nullLog;        //!< Null logger.
+    QtlLogger*          _log;            //!< Message logger.
+    QtlVersion          _currentVersion; //!< Current version of the application.
+    QtlSimpleWebRequest _request;        //!< Web request.
 
     //!
     //! Private constructor.
     //! Avoid the creator of static or local instances.
     //! The object deletes itself upon processing completion.
+    //!
     //! @param [in] currentVersion Current version of the application.
-    //! @param [in] directoryUrl URL of directory containing update packages.
-    //! @param [in] filePrefix Package file name prefix.
-    //! @param [in] fileSuffix Package file name suffix.
-    //! @param [in] urlSuffix Suffix to add to package files URL.
+    //! @param [in] url URL of the server to query.
     //! @param [in] silent If true, do not report the errors or absence of new version.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
     //!
-    QtlNewVersionChecker(const QtlVersion& currentVersion,
-                         const QString& directoryUrl,
-                         const QString& filePrefix,
-                         const QString& fileSuffix,
-                         const QString& urlSuffix = "",
-                         bool silent = false,
-                         QtlLogger* log = 0,
-                         QObject *parent = 0);
+    QtlNewVersionCheckerJson(const QtlVersion& currentVersion,
+                             const QString& url,
+                             bool silent = false,
+                             QtlLogger* log = 0,
+                             QObject* parent = 0);
 
     // Unaccessible operations.
-    QtlNewVersionChecker() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlNewVersionChecker)
+    QtlNewVersionCheckerJson() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlNewVersionCheckerJson)
 };
 
-#endif // QTLNEWVERSIONCHECKER_H
+#endif // QTLNEWVERSIONCHECKERJSON_H

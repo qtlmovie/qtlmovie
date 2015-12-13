@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2015, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
 #include "QtlMovie.h"
 #include "QtlMovieEditSettings.h"
 #include "QtlMovieAboutMediaTools.h"
-#include "QtlNewVersionChecker.h"
+#include "QtlNewVersionCheckerJson.h"
 #include "QtlBrowserDialog.h"
 #include "QtlTextFileViewer.h"
 #include "QtlTranslator.h"
@@ -620,37 +620,10 @@ void QtlMovieMainWindow::showReleaseNotes()
 
 void QtlMovieMainWindow::searchNewVersion(bool silent)
 {
-    // Build URL and file name template.
-    QString directoryUrl("http://sourceforge.net/projects/qtlmovie/files/");
-    QString filePrefix;
-    QString fileSuffix;
-
-#if defined (Q_OS_WIN)
-    // On Windows, fetch the binary installer.
-    if (QtlSysInfo::runningOnWin64()) {
-        directoryUrl.append("win64/");
-        filePrefix = "QtlMovie-Win64-";
-        fileSuffix = ".exe";
-    }
-    else {
-        directoryUrl.append("win32/");
-        filePrefix = "QtlMovie-Win32-";
-        fileSuffix = ".exe";
-    }
-#else
-    // On other OS, fetch the source archive.
-    directoryUrl.append("src/");
-    filePrefix = "QtlMovie-";
-    fileSuffix = "-src.zip";
-#endif
-
     // Start searching for new versions.
-    QtlNewVersionChecker::newInstance(QtlVersion(QTLMOVIE_VERSION),
-                                      directoryUrl,
-                                      filePrefix,
-                                      fileSuffix,
-                                      "/download", // The download suffix for SourceForge URL's.
-                                      silent,
-                                      _ui.log,
-                                      this);
+    QtlNewVersionCheckerJson::newInstance(QtlVersion(QTLMOVIE_VERSION),
+                                          "http://qtlmovie.sourceforge.net/newversion/",
+                                          silent,
+                                          _ui.log,
+                                          this);
 }
