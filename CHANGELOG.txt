@@ -3,6 +3,9 @@ QtlMovie Change Log
 ===================
 
 Version 1.5
+- Bug fix: In the very specific case when a DVD was converted into a DVD-MPEG
+  file and a subtitle track was selected and the original size of the video was
+  exactly 720x576, then the subtitles were not inserted. This is fixed.
 - More reliable checking of new version online.
 - Windows installer includes FFmpeg 2.8.3.
 
