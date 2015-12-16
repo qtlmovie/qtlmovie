@@ -183,7 +183,40 @@ public:
     //! @param [in] frameRate Number of frames per seconds.
     //! @return The computed bitrate in bits per second.
     //!
-    static int videoBitrate(int qualityIndicator, int width, int height, int frameRate);
+    static int videoBitRate(int qualityIndicator, int width, int height, int frameRate);
+
+    //!
+    //! Compute the video bitrate for iPad.
+    //! @param [in] width Actual video width in pixels.
+    //! @param [in] height Actual video height in pixels.
+    //! @return The computed bitrate in bits per second.
+    //!
+    int ipadVideoBitrate(int width, int height) const
+    {
+        return videoBitRate(ipadVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
+    }
+
+    //!
+    //! Compute the video bitrate for iPhone.
+    //! @param [in] width Actual video width in pixels.
+    //! @param [in] height Actual video height in pixels.
+    //! @return The computed bitrate in bits per second.
+    //!
+    int iphoneVideoBitrate(int width, int height) const
+    {
+        return videoBitRate(iphoneVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
+    }
+
+    //!
+    //! Compute the video bitrate for AVI.
+    //! @param [in] width Actual video width in pixels.
+    //! @param [in] height Actual video height in pixels.
+    //! @return The computed bitrate in bits per second.
+    //!
+    int aviVideoBitrate(int width, int height) const
+    {
+        return videoBitRate(aviVideoQuality(), width, height, QTL_AVI_FRAME_RATE);
+    }
 
     //
     // Inlined definitions of the basic getters and setters.
@@ -193,8 +226,8 @@ public:
     QTL_SETTINGS_BOOL(transcodeComplete, setTranscodeComplete, QTL_TRANSCODE_COMPLETE)
     QTL_SETTINGS_INT(transcodeSeconds, setTranscodeSeconds, QTL_TRANSCODE_SECONDS)
     QTL_SETTINGS_INT(dvdVideoBitRate, setDvdVideoBitRate, QTL_DVD_DEFAULT_VIDEO_BITRATE)
-    QTL_SETTINGS_INT(ipadVideoBitRate, setIpadVideoBitRate, QTL_IPAD_DEFAULT_VIDEO_BITRATE)
-    QTL_SETTINGS_INT(iphoneVideoBitRate, setIphoneVideoBitRate, QTL_IPHONE_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_INT(ipadVideoQuality, setIpadVideoQuality, QTL_IPAD_DEFAULT_VIDEO_QUALITY)
+    QTL_SETTINGS_INT(iphoneVideoQuality, setIphoneVideoQuality, QTL_IPHONE_DEFAULT_VIDEO_QUALITY)
     QTL_SETTINGS_BOOL(keepIntermediateFiles, setKeepIntermediateFiles, QTL_KEEP_INTERMEDIATE_FILES)
     QTL_SETTINGS_INT(ffmpegProbeSeconds, setFFmpegProbeSeconds, QTL_FFMPEG_PROBE_SECONDS)
     QTL_SETTINGS_BOOL(srtUseVideoSizeHint, setSrtUseVideoSizeHint, QTL_SRT_USE_VIDEO_SIZE_HINT)
@@ -206,7 +239,7 @@ public:
     QTL_SETTINGS_ENUM(iphoneScreenSize, setIphoneScreenSize, IphoneScreenSize, QTL_IPHONE_SCREEN_SIZE)
     QTL_SETTINGS_BOOL(forceDvdTranscode, setForceDvdTranscode, QTL_FORCE_DVD_TRANSCODE)
     QTL_SETTINGS_BOOL(newVersionCheck, setNewVersionCheck, QTL_NEW_VERSION_CHECK)
-    QTL_SETTINGS_INT(aviVideoBitRate, setAviVideoBitRate, QTL_AVI_DEFAULT_VIDEO_BITRATE)
+    QTL_SETTINGS_INT(aviVideoQuality, setAviVideoQuality, QTL_AVI_DEFAULT_VIDEO_QUALITY)
     QTL_SETTINGS_INT(aviMaxVideoWidth, setAviMaxVideoWidth, QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH)
     QTL_SETTINGS_INT(aviMaxVideoHeight, setAviMaxVideoHeight, QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT)
     QTL_SETTINGS_BOOL(audioNormalize, setAudioNormalize, QTL_DEFAULT_AUDIO_NORMALIZE)

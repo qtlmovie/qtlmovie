@@ -998,7 +998,7 @@ bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
 
 
 //----------------------------------------------------------------------------
-// Add a process for transcoding to iPad.
+// Add a process for transcoding to iPad/iPhone.
 //----------------------------------------------------------------------------
 
 bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
@@ -1037,7 +1037,6 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
              << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
              << QtlMovieFFmpeg::frameRateOptions(settings(), outputType)
-             << "-b:v" << QString::number(settings()->ipadVideoBitRate())
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
              << "-preset" << "slow"
@@ -1051,7 +1050,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
         QtlMovieFFmpeg::addRotateOptions(settings(), videoStream, args, videoFilters, width, height, dar);
 
         // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
-        // resize the video. The maximum output size depends on the iPad screen size in the settings.
+        // resize the video. The maximum output size depends on the iPad/iPhone screen size in the settings.
         int widthOut = 0;
         int heightOut = 0;
         QtlMovieFFmpeg::addBoundedSizeOptions(args,
@@ -1064,6 +1063,18 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                                               1.0,
                                               widthOut,
                                               heightOut);
+
+        // Set video bitrate based on actual output video size.
+        switch (outputType) {
+            case QtlMovieOutputFile::Ipad:
+                args << "-b:v" << QString::number(settings()->ipadVideoBitrate(widthOut, heightOut));
+                break;
+            case QtlMovieOutputFile::Iphone:
+                args << "-b:v" << QString::number(settings()->iphoneVideoBitrate(widthOut, heightOut));
+                break;
+            default:
+                return abortStart(tr("Unsupported output type for MP4"));
+        }
 
         // Add subtitles processing.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
@@ -1127,8 +1138,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     // Common video options.
     args << "-map" << videoStream->ffSpecifier()
          << "-codec:v" << "mpeg4"      // H.263 (MPEG-4 part 2)
-         << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Avi)
-         << "-b:v" << QString::number(settings()->aviVideoBitRate());
+         << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Avi);
 
     // Add video rotation options if required.
     int width = 0;
@@ -1137,7 +1147,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     QtlMovieFFmpeg::addRotateOptions(settings(), videoStream, args, videoFilters, width, height, dar);
 
     // If the input video is too large or if the pixel aspect ratio is not 1 ("square" pixels),
-    // resize the video. The maximum output size depends on the iPad screen size in the settings.
+    // resize the video. The maximum output size depends on the screen size in the settings.
     int widthOut = 0;
     int heightOut = 0;
     QtlMovieFFmpeg::addBoundedSizeOptions(args,
@@ -1150,6 +1160,9 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
                                           1.0,
                                           widthOut,
                                           heightOut);
+
+    // Set video bitrate based on actual output video size.
+    args << "-b:v" << QString::number(settings()->aviVideoBitrate(widthOut, heightOut));
 
     // Add subtitles processing.
     if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||

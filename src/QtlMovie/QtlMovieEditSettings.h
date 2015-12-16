@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2015, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -183,6 +183,11 @@ private slots:
     //!
     void setNormalizeAudioSelectable(bool normalize);
 
+    //!
+    //! Invoked when iPhone/iPad/AVI video quality is updated, update the corresponding max bitrate.
+    //!
+    void updateMaxBitRates();
+
 private:
     //!
     //! Description of an output directory settings.
@@ -228,6 +233,16 @@ private:
     //! @param [in] title Browse window title.
     //!
     void browseDirectory(QLineEdit* edit, const QString& title);
+
+    //!
+    //! Update a label containing the maximum video bitrate for an output type.
+    //! @param [in,out] labelMaxBitRate Label to update.
+    //! @param [in] spinBoxQuality Sin box containing the video quality.
+    //! @param [in] width Reference video width.
+    //! @param [in] height Reference video height.
+    //! @param [in] frameRate Reference video frame rate.
+    //!
+    static void updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, int frameRate);
 
     // Unaccessible operations.
     QtlMovieEditSettings() Q_DECL_EQ_DELETE;

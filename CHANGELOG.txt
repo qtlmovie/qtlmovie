@@ -3,6 +3,18 @@ QtlMovie Change Log
 ===================
 
 Version 1.5
+- Adaptive bitrate computation for AVI, iPhone, iPad. Previously, one bitrate
+  value was defined for iPhone, one for iPad and one for AVI. But, when the
+  screen size was changed (change iPad model for instance), the same bitrate
+  was used, which is not appropriate and needed manual adjustment. Moreover,
+  on iPad, iPhone and AVI, the screen size is a maximum bounding box, not an
+  actual output size. When the original video is smaller than the screen size,
+  the image is not resized and the bandwidth was too high for the size. Now
+  the settings no longer specify a "bit rate" but a "video quality" which is
+  is a number of bits per pixel per 100 frames. The actual bitrate is computed
+  from the actual output image size and this video quality indicator.
+- Bug fix: On iPhone, the iPad video bitrate was used instead of the iPhone
+  one. This is fixed with adaptive bitrate.
 - Bug fix: In the very specific case when a DVD was converted into a DVD-MPEG
   file and a subtitle track was selected and the original size of the video was
   exactly 720x576, then the subtitles were not inserted. This is fixed.

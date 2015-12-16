@@ -277,13 +277,19 @@
       <ul>
         <li>Format de fichier MP4.</li>
         <li>Vidéo MPEG-4 partie 10 / AVC / H.264, profil de base, niveau 3.0.
-          Le débit binaire moyen est de 2.5 Mb/s (ajustable dans les options).
+          Le nombre d'images par seconde est de 30.
           Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
           La taille d'image est inchangée, sauf si la taille de l'entrée excède la résolution
           native de l'iPad, auquel cas la taille est réduite pour tenir à l'intérieur
           de cette résolution tout en préservant les proportions d'origine.</li>
         <li>Audio AAC, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 160 kb/s.</li>
       </ul>
+      <p>Le débit vidéo est basé sur un <i>indicateur de qualité vidéo</i> qui est défini
+        dans les options pour iPad. Cet indicateur de qualité est donné en bits par pixel
+        pour 100 images. Le débit vidéo réel est calculé en fonction de la taille d'image
+        finale et de cet indicateur de qualité. La qualité vidéo par défaut pour iPad est
+        de 11 bits / pixel / 100 images, ce qui donne un débit de 2,6 Mb/s pour une vidéo
+        plein écran sur iPad 2 (1024x768).</p>
 
       <h3><a id="iphoneout">Création d'une vidéo pour iPhone</a></h3>
 
@@ -291,13 +297,17 @@
       <ul>
         <li>Format de fichier MP4.</li>
         <li>Vidéo MPEG-4 partie 10 / AVC / H.264, profil de base, niveau 3.0.
-          Le débit binaire moyen est de 2 Mb/s (ajustable dans les options).
+          Le nombre d'images par seconde est de 30.
           Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
           La taille d'image est inchangée, sauf si la taille de l'entrée excède la résolution
           native de l'iPhone, auquel cas la taille est réduite pour tenir à l'intérieur
           de cette résolution tout en préservant les proportions d'origine.</li>
         <li>Audio AAC, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 160 kb/s.</li>
       </ul>
+      <p>Le débit vidéo est calculé de la même manière que pour <a href="#ipadout">iPad</a>.
+        Un <i>indicateur de qualité vidéo</i> spécifique pour iPhone est défini dans les options.
+        La qualité vidéo par défaut pour iPhone est de 11 bits / pixel / 100 images, ce qui donne
+        un débit de 2,4 Mb/s pour une vidéo plein écran sur iPhone 5 (1136x640).</p>
 
       <h3><a id="aviout">Création d'un fichier AVI</a></h3>
 
@@ -305,13 +315,17 @@
       <ul>
         <li>Format de fichier AVI.</li>
         <li>Vidéo MPEG-4 partie 2 / DivX / Xvid / H.263.
-          Le débit binaire moyen est de 1.2 Mb/s (ajustable dans les options).
+          Le nombre d'images par seconde est de 24.
           Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
           La taille d'image est inchangée, sauf si la taille de l'entrée excède une résolution
           prédéfinie (880x352, ajustable dans les options), auquel cas la taille est réduite pour
           tenir à l'intérieur de cette résolution tout en préservant les proportions d'origine.</li>
         <li>Audio MP3, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 128 kb/s.</li>
       </ul>
+      <p>Le débit vidéo est calculé de la même manière que pour <a href="#ipadout">iPad</a>.
+        Un <i>indicateur de qualité vidéo</i> spécifique pour AVI est défini dans les options.
+        La qualité vidéo par défaut pour AVI est de 18 bits / pixel / 100 images, ce qui donne
+        un débit de 1,3 Mb/s pour la résolution maximum par défaut (880x352).</p>
 
       <h3><a id="subout">Extraction de sous-titres</a></h3>
 
@@ -520,7 +534,10 @@
       <p>L'option "Taille d'écran" spécifie le type d'iPad cible.
         La résolution d'écran sera utilisée en tant que taille vidéo maximum.
         Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
-      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+      <p>L'option "Qualité vidéo", en bits par pixel pour 100 images, est expliquée dans
+        la section <a href="#ipadout">création d'une vidéo pour iPad</a>. Pour information,
+        le débit binaire vidéo maximum correspondant au modèle d'iPad sélectionné est
+        également affiché.</p>
 
       <h3><a id="iphonesettings">Onglet "iPhone"</a></h3>
 
@@ -528,14 +545,20 @@
       <p>L'option "Taille d'écran" spécifie le type d'iPhone cible.
         La résolution d'écran sera utilisée en tant que taille vidéo maximum.
         Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
-      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+      <p>L'option "Qualité vidéo", en bits par pixel pour 100 images, est expliquée dans
+        la section <a href="#ipadout">création d'une vidéo pour iPad</a>. Pour information,
+        le débit binaire vidéo maximum correspondant au modèle d'iPhone sélectionné est
+        également affiché.</p>
 
       <h3><a id="avisettings">Onglet "AVI"</a></h3>
 
       <p>Cet onglet regroupe les options qui affectent la création de fichiers AVI.</p>
       <p>L'option "Taille max" spécifie la résolution vidéo maximum.
         Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
-      <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.</p>
+      <p>L'option "Qualité vidéo", en bits par pixel pour 100 images, est expliquée dans
+        la section <a href="#ipadout">création d'une vidéo pour iPad</a>. Pour information,
+        le débit binaire vidéo maximum correspondant à la résolution sélectionnée est
+        également affiché.</p>
 
       <h3><a id="audiosettings">Onglet "Audio"</a></h3>
 

@@ -259,12 +259,17 @@
       <ul>
         <li>MP4 file format.</li>
         <li>MPEG-4 part 10 / AVC / H.264 video, baseline profile, level 3.0.
-          The average bitrate is 2.5 Mb/s (adjustable in the settings).
+          The frame rate is 30 frames per second.
           The display aspect ratio is unchanged (no black border is added).
           The frame size is unchanged, unless the input size exceeds the iPad native screen resolution in
           which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
         <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
       </ul>
+      <p>The video bitrate is based on a <i>video quality indicator</i> which is defined in
+        the settings for iPad. This quality indicator is set in bits per pixel per 100 frames.
+        The actual bitrate is computed according to the actual output frame size and this
+        video quality indicator. The default video quality for iPad is 11 bits / pixel / 100 frames,
+        giving a bitrate of 2.6 Mb/s for a full-size iPad 2 video (1024x768).</p>
 
       <h3><a id="iphoneout">iPhone output</a></h3>
 
@@ -272,12 +277,16 @@
       <ul>
         <li>MP4 file format.</li>
         <li>MPEG-4 part 10 / AVC / H.264 video, baseline profile, level 3.0.
-          The average bitrate is 2 Mb/s (adjustable in the settings).
+          The frame rate is 30 frames per second.
           The display aspect ratio is unchanged (no black border is added).
           The frame size is unchanged, unless the input size exceeds the iPhone native screen resolution in
           which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
         <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 160 kb/s.</li>
       </ul>
+      <p>The video bitrate is computed the same way as for <a href="#ipadout">iPad</a>.
+        The settings define a specific <i>video quality indicator</i> for iPhone.
+        The default quality for iPhone is 11 bits / pixel / 100 frames,
+        giving a bitrate of 2.4 Mb/s for a full-size iPhone 5 video (1136x640).</p>
 
       <h3><a id="aviout">AVI output</a></h3>
 
@@ -285,13 +294,17 @@
       <ul>
         <li>AVI file format.</li>
         <li>MPEG-4 part 2 / DivX / Xvid / H.263 video.
-          The average bitrate is 1.2 Mb/s (adjustable in the settings).
+          The frame rate is 24 frames per second.
           The display aspect ratio is unchanged (no black border is added).
           The frame size is unchanged, unless the input size exceeds a predefined maximum size
           (880x352, adjustable in the settings) in which case the size is reduced to fit within
           this resolution, preserving the input aspect ratio.</li>
         <li>MP3 audio, stereo, sampled at 48 kHz. The audio bitrate is 128 kb/s.</li>
       </ul>
+      <p>The video bitrate is computed the same way as for <a href="#ipadout">iPad</a>.
+        The settings define a specific <i>video quality indicator</i> for AVI.
+        The default quality for AVI is 18 bits / pixel / 100 frames,
+        giving a bitrate of 1.3 Mb/s for the default resolution (880x352).</p>
 
       <h3><a id="subout">Subtitle extraction</a></h3>
 
@@ -484,7 +497,9 @@
       <p>The "Screen size" options specify the type of iPad to target.
         The corresponding screen resolution will be used as maximum video size.
         Larger videos will be resized to fit within the selected iPad resolution.</p>
-      <p>The specified video bitrate is used by default as "average bitrate".</p>
+      <p>The "Video quality" option, in bits per pixel per 100 frames, is explained in
+        the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
+        maximum video bitrate for the selected iPad model is also displayed.</p>
 
       <h3><a id="iphonesettings">"iPhone" tab</a></h3>
 
@@ -492,14 +507,18 @@
       <p>The "Screen size" options specify the type of iPhone to target.
         The corresponding screen resolution will be used as maximum video size.
         Larger videos will be resized to fit within the selected iPhone resolution.</p>
-      <p>The specified video bitrate is used by default as "average bitrate".</p>
+      <p>The "Video quality" option, in bits per pixel per 100 frames, is explained in
+        the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
+        maximum video bitrate for the selected iPhone model is also displayed.</p>
 
       <h3><a id="avisettings">"AVI" tab</a></h3>
 
       <p>This tab groups all the settings which affect the generation of AVI files.</p>
       <p>The "Max size" options specify the maximum resolution of the output video.
         Larger videos will be resized to fit within this resolution.</p>
-      <p>The specified video bitrate is used by default as "average bitrate".</p>
+      <p>The "Video quality" option, in bits per pixel per 100 frames, is explained in
+        the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
+        maximum video bitrate for the selected maximum resolution is also displayed.</p>
 
       <h3><a id="audiosettings">"Audio" tab</a></h3>
 

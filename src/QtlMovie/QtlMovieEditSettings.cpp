@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2015, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
 #include "QtlOpticalDrive.h"
+#include "QtlStringUtils.h"
 #include "QtlWinUtils.h"
 
 
@@ -184,8 +185,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     (_settings->transcodeComplete() ? _ui.radioButtonComplete : _ui.radioButtonPartial)->setChecked(true);
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
     _ui.spinDvdBitrate->setValue(_settings->dvdVideoBitRate() / 1000);   // input is kb/s
-    _ui.spinIpadBitrate->setValue(_settings->ipadVideoBitRate() / 1000); // input is kb/s
-    _ui.spinIphoneBitrate->setValue(_settings->iphoneVideoBitRate() / 1000); // input is kb/s
+    _ui.spinIpadQuality->setValue(_settings->ipadVideoQuality());
+    _ui.spinIphoneQuality->setValue(_settings->iphoneVideoQuality());
     _ui.checkBoxKeepIntermediateFiles->setChecked(_settings->keepIntermediateFiles());
     _ui.spinFFmpegProbeSeconds->setValue(_settings->ffmpegProbeSeconds());
     _ui.spinFFprobeExecutionTimeout->setValue(_settings->ffprobeExecutionTimeout());
@@ -204,7 +205,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioIphone6Plus->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6PlusSize);
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
-    _ui.spinAviBitrate->setValue(_settings->aviVideoBitRate() / 1000); // input is kb/s
+    _ui.spinAviQuality->setValue(_settings->aviVideoQuality());
     _ui.spinAviWidth->setValue(_settings->aviMaxVideoWidth());
     _ui.spinAviHeight->setValue(_settings->aviMaxVideoHeight());
     _ui.checkBoxNormalizeAudio->setChecked(_settings->audioNormalize());
@@ -221,6 +222,9 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.boxOutputType->checkId(int (_settings->defaultOutputType()));
     _ui.checkOriginalAudio->setChecked(_settings->selectOriginalAudio());
     _ui.checkTargetSubtitles->setChecked(_settings->selectTargetSubtitles());
+
+    // Update max bit rates according to video qualities.
+    updateMaxBitRates();
 
     // DVD burner can be edited in two ways.
     if (_useDvdBurnerCombo) {
@@ -305,8 +309,8 @@ void QtlMovieEditSettings::applySettings()
     _settings->setTranscodeComplete(_ui.radioButtonComplete->isChecked());
     _settings->setTranscodeSeconds(_ui.spinMaxTranscode->value());
     _settings->setDvdVideoBitRate(_ui.spinDvdBitrate->value() * 1000);   // input is kb/s
-    _settings->setIpadVideoBitRate(_ui.spinIpadBitrate->value() * 1000); // input is kb/s
-    _settings->setIphoneVideoBitRate(_ui.spinIphoneBitrate->value() * 1000); // input is kb/s
+    _settings->setIpadVideoQuality(_ui.spinIpadQuality->value());
+    _settings->setIphoneVideoQuality(_ui.spinIphoneQuality->value());
     _settings->setKeepIntermediateFiles(_ui.checkBoxKeepIntermediateFiles->isChecked());
     _settings->setFFmpegProbeSeconds(_ui.spinFFmpegProbeSeconds->value());
     _settings->setFFprobeExecutionTimeout(_ui.spinFFprobeExecutionTimeout->value());
@@ -332,7 +336,7 @@ void QtlMovieEditSettings::applySettings()
     }
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());
-    _settings->setAviVideoBitRate(_ui.spinAviBitrate->value() * 1000);  // input is kb/s
+    _settings->setAviVideoQuality(_ui.spinAviQuality->value());
     _settings->setAviMaxVideoWidth(_ui.spinAviWidth->value());
     _settings->setAviMaxVideoHeight(_ui.spinAviHeight->value());
     _settings->setAudioNormalize(_ui.checkBoxNormalizeAudio->isChecked());
@@ -535,4 +539,59 @@ void QtlMovieEditSettings::setNormalizeAudioSelectable(bool normalize)
             child->setEnabled(normalize);
         }
     }
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when iPhone/iPad/AVI video quality is updated,
+// update the corresponding max bitrate.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::updateMaxBitRates()
+{
+    // iPad max bit rate.
+    if (_ui.radioIpad12->isChecked()) {
+        updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, QTL_IPAD12_VIDEO_WIDTH, QTL_IPAD12_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIpad34->isChecked()) {
+        updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, QTL_IPAD34_VIDEO_WIDTH, QTL_IPAD34_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else {
+        _ui.labelIpadMaxBitRate->clear();
+    }
+
+    // iPhone max bit rate.
+    if (_ui.radioIphone3->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE3_VIDEO_WIDTH, QTL_IPHONE3_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIphone4->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE4_VIDEO_WIDTH, QTL_IPHONE4_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIphone5->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE5_VIDEO_WIDTH, QTL_IPHONE5_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIphone6->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE6_VIDEO_WIDTH, QTL_IPHONE6_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIphone6Plus->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE6P_VIDEO_WIDTH, QTL_IPHONE6P_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else {
+        _ui.labelIphoneMaxBitRate->clear();
+    }
+
+    // AVI max bit rate.
+    updateMaxBitRate(_ui.labelAviMaxBitRate, _ui.spinAviQuality, _ui.spinAviWidth->value(), _ui.spinAviHeight->value(), QTL_AVI_FRAME_RATE);
+}
+
+
+//-----------------------------------------------------------------------------
+// Update a label containing the maximum video bitrate for an output type.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, int frameRate)
+{
+    const int bitRate = QtlMovieSettings::videoBitRate(spinBoxQuality->value(), width, height, frameRate);
+    const QString bitRateString(qtlStringSpace(QString::number(bitRate), 3, Qt::RightToLeft, " "));
+    labelMaxBitRate->setText(tr("%1 bit / second for %2x%3 @%4").arg(bitRateString).arg(width).arg(height).arg(frameRate));
 }

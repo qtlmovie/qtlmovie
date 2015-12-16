@@ -87,8 +87,6 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
                     !getBool    ("transcodeComplete",      &QtlMovieSettings::setTranscodeComplete) &&
                     !getInt     ("transcodeSeconds",       &QtlMovieSettings::setTranscodeSeconds) &&
                     !getInt     ("dvdVideoBitRate",        &QtlMovieSettings::setDvdVideoBitRate) &&
-                    !getInt     ("ipadVideoBitRate",       &QtlMovieSettings::setIpadVideoBitRate) &&
-                    !getInt     ("iphoneVideoBitRate",     &QtlMovieSettings::setIphoneVideoBitRate) &&
                     !getBool    ("keepIntermediateFiles",  &QtlMovieSettings::setKeepIntermediateFiles) &&
                     !getInt     ("ffmpegProbeSeconds",     &QtlMovieSettings::setFFmpegProbeSeconds) &&
                     !getBool    ("srtUseVideoSizeHint",    &QtlMovieSettings::setSrtUseVideoSizeHint) &&
@@ -99,7 +97,6 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
                     !getInt     ("iphoneScreenSize",       &QtlMovieSettings::setIphoneScreenSize) &&
                     !getBool    ("forceDvdTranscode",      &QtlMovieSettings::setForceDvdTranscode) &&
                     !getBool    ("newVersionCheck",        &QtlMovieSettings::setNewVersionCheck) &&
-                    !getInt     ("aviVideoBitRate",        &QtlMovieSettings::setAviVideoBitRate) &&
                     !getInt     ("aviMaxVideoWidth",       &QtlMovieSettings::setAviMaxVideoWidth) &&
                     !getInt     ("aviMaxVideoHeight",      &QtlMovieSettings::setAviMaxVideoHeight) &&
                     !getBool    ("audioNormalize",         &QtlMovieSettings::setAudioNormalize) &&

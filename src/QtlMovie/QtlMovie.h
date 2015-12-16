@@ -89,13 +89,13 @@
 #define QTL_IOS_AUDIO_SAMPLING             48000  //!< Common AAC audio sampling rate (Hz) for iPad/iPhone.
 #define QTL_IOS_FRAME_RATE                    30  //!< Common frames per second for iPad/iPhone.
 
-#define QTL_IPAD_DEFAULT_VIDEO_BITRATE   2500000  //!< H.264 video default bitrate for iPad.
+#define QTL_IPAD_DEFAULT_VIDEO_QUALITY        11  //!< H.264 video default quality indicator for iPad.
 #define QTL_IPAD12_VIDEO_WIDTH              1024  //!< Video width (pixels) for iPad 1, 2 & mini.
 #define QTL_IPAD12_VIDEO_HEIGHT              768  //!< Video height (pixels) for iPad 1, 2 & mini.
 #define QTL_IPAD34_VIDEO_WIDTH              2048  //!< Video width (pixels) for iPad 3 & 4.
 #define QTL_IPAD34_VIDEO_HEIGHT             1536  //!< Video height (pixels) for iPad 3 & 4.
 
-#define QTL_IPHONE_DEFAULT_VIDEO_BITRATE 2000000  //!< H.264 video default bitrate for iPhone.
+#define QTL_IPHONE_DEFAULT_VIDEO_QUALITY      11  //!< H.264 video default quality indicator for iPhone.
 #define QTL_IPHONE3_VIDEO_WIDTH              480  //!< Video width (pixels) for iPhone 1/2G/3G/3GS.
 #define QTL_IPHONE3_VIDEO_HEIGHT             320  //!< Video height (pixels) for iPhone 1/2G/3G/3GS.
 #define QTL_IPHONE4_VIDEO_WIDTH              960  //!< Video width (pixels) for iPhone 4/4S.
@@ -109,7 +109,7 @@
 
 #define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.
 #define QTL_AVI_AUDIO_SAMPLING             48000  //!< MP3 audio sampling rate (Hz) for AVI.
-#define QTL_AVI_DEFAULT_VIDEO_BITRATE    1200000  //!< H.263/Xvid/DivX video default bitrate for AVI.
+#define QTL_AVI_DEFAULT_VIDEO_QUALITY         18  //!< H.263/Xvid/DivX video default quality indicator for AVI.
 #define QTL_AVI_DEFAULT_MAX_VIDEO_WIDTH      880  //!< Default max video width (pixels) for AVI.
 #define QTL_AVI_DEFAULT_MAX_VIDEO_HEIGHT     352  //!< Default max video height (pixels) for AVI.
 #define QTL_AVI_FRAME_RATE                    24  //!< Frames per second for AVI.
