@@ -43,6 +43,9 @@ video file or DVD. The unique feature of QtlMovie is the ability to correctly
 handle most types of subtitles: DVD, DVB, SRT, SSA/ASS, Teletext, Closed
 Captions and burn them into the output video in one click.
 
+# Disable debuginfo package. Required on Fedora 23.
+%global debug_package %{nil}
+
 %prep
 %setup -q -n QtlMovie-%{version}
 
