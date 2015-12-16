@@ -1012,23 +1012,17 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
     // Output-specific parameters.
     int maxWidth = 0;
     int maxHeight = 0;
-    int audioBitrate = 0;
-    int audioSamplingRate = 0;
     switch (outputType) {
-    case QtlMovieOutputFile::Ipad:
-        maxWidth = settings()->ipadVideoWidth();
-        maxHeight = settings()->ipadVideoHeight();
-        audioBitrate = QTL_IPAD_AUDIO_BITRATE;
-        audioSamplingRate = QTL_IPAD_AUDIO_SAMPLING;
-        break;
-    case QtlMovieOutputFile::Iphone:
-        maxWidth = settings()->iphoneVideoWidth();
-        maxHeight = settings()->iphoneVideoHeight();
-        audioBitrate = QTL_IPHONE_AUDIO_BITRATE;
-        audioSamplingRate = QTL_IPHONE_AUDIO_SAMPLING;
-        break;
-    default:
-        return abortStart(tr("Unsupported output type for MP4"));
+        case QtlMovieOutputFile::Ipad:
+            maxWidth = settings()->ipadVideoWidth();
+            maxHeight = settings()->ipadVideoHeight();
+            break;
+        case QtlMovieOutputFile::Iphone:
+            maxWidth = settings()->iphoneVideoWidth();
+            maxHeight = settings()->iphoneVideoHeight();
+            break;
+        default:
+            return abortStart(tr("Unsupported output type for MP4"));
     }
 
     // Start FFmpeg argument list.
@@ -1088,8 +1082,8 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
              << "-codec:a" << "aac"         // AAC (Advanced Audio Coding, MPEG-4 part 3)
              << "-strict" << "experimental" // Allow experimental features, aac codec is one.
              << "-ac" << "2"                // Remix to 2 channels (stereo)
-             << "-ar" << QString::number(audioSamplingRate)
-             << "-b:a" << QString::number(audioBitrate);
+             << "-ar" << QString::number(QTL_IOS_AUDIO_SAMPLING)
+             << "-b:a" << QString::number(QTL_IOS_AUDIO_BITRATE);
     }
 
     // The FFmpeg argument list ends with the output file name.

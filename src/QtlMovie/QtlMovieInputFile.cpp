@@ -480,6 +480,7 @@ bool QtlMovieInputFile::isDvdCompliant() const
     return  streamCount(QtlMovieStreamInfo::Video) == 1 &&
             streamCount(QtlMovieStreamInfo::Audio) == 1 &&
             streamCount(QtlMovieStreamInfo::Subtitle) == 0 &&
+            externalSubtitleFileName().isEmpty() &&
             selectedVideoStreamIsDvdCompliant() &&
             !audioStream.isNull() &&
             _ffInfo.value("format.format_name") == "mpeg" &&

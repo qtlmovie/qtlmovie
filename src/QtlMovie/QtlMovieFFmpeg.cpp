@@ -171,25 +171,23 @@ QStringList QtlMovieFFmpeg::frameRateOptions(const QtlMovieSettings* settings, Q
     int frameRate = 0;
 
     switch (outputType) {
-    case QtlMovieOutputFile::DvdFile:
-    case QtlMovieOutputFile::DvdImage:
-    case QtlMovieOutputFile::DvdBurn:
-        frameRate = settings->createPalDvd() ? QTL_DVD_PAL_FRAME_RATE : QTL_DVD_NTSC_FRAME_RATE;
-        break;
-    case QtlMovieOutputFile::Ipad:
-        frameRate = QTL_IPAD_FRAME_RATE;
-        break;
-    case QtlMovieOutputFile::Iphone:
-        frameRate = QTL_IPHONE_FRAME_RATE;
-        break;
-    case QtlMovieOutputFile::Avi:
-        frameRate = QTL_AVI_FRAME_RATE;
-        break;
-    case QtlMovieOutputFile::SubRip:
-    case QtlMovieOutputFile::None:
-    default:
-        frameRate = 0;
-        break;
+        case QtlMovieOutputFile::DvdFile:
+        case QtlMovieOutputFile::DvdImage:
+        case QtlMovieOutputFile::DvdBurn:
+            frameRate = settings->createPalDvd() ? QTL_DVD_PAL_FRAME_RATE : QTL_DVD_NTSC_FRAME_RATE;
+            break;
+        case QtlMovieOutputFile::Ipad:
+        case QtlMovieOutputFile::Iphone:
+            frameRate = QTL_IOS_FRAME_RATE;
+            break;
+        case QtlMovieOutputFile::Avi:
+            frameRate = QTL_AVI_FRAME_RATE;
+            break;
+        case QtlMovieOutputFile::SubRip:
+        case QtlMovieOutputFile::None:
+        default:
+            frameRate = 0;
+            break;
     }
 
     // Build the argument list.
@@ -369,7 +367,7 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
     }
 
     // We need to resize if the input size is larger than max output size or input and output pixel ratios are not identical.
-    if (widthIn > maxWidthOut || heightIn > maxHeightOut || qAbs(parIn - parOut) > 0.01) {
+    if (widthIn > maxWidthOut || heightIn > maxHeightOut || !qtlFloatEqual(parIn, parOut)) {
 
         // Compute input and max output sample aspect ratios.
         const float sarIn = float(widthIn) / float(heightIn);

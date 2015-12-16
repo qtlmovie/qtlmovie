@@ -204,6 +204,17 @@ void QtlMovieSettings::setDefaultOutputDir(const QString& outputType, const QStr
 
 
 //----------------------------------------------------------------------------
+// Compute a video bitrate from quality indicator and video size.
+//----------------------------------------------------------------------------
+
+int QtlMovieSettings::videoBitrate(int qualityIndicator, int width, int height, int frameRate)
+{
+    // Use 64-bit int intermediate value to avoid overflow.
+    return int((qint64(qualityIndicator) * qint64(width) * qint64(height) * qint64(frameRate)) / 100);
+}
+
+
+//----------------------------------------------------------------------------
 // Synthetic getters for video width and height.
 //----------------------------------------------------------------------------
 

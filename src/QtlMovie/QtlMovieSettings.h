@@ -172,6 +172,19 @@ public:
     //!
     int iphoneVideoHeight() const;
 
+    //!
+    //! Compute a video bitrate from quality indicator and video size.
+    //! A <em>quality indicator</em> is a way to represent the video quality
+    //! independently from the actual video size and frame rate.
+    //! @param [in] qualityIndicator Specified video quality. This is the number
+    //! of bits per pixel per 100 frames.
+    //! @param [in] width Video width in pixels.
+    //! @param [in] height Video height in pixels.
+    //! @param [in] frameRate Number of frames per seconds.
+    //! @return The computed bitrate in bits per second.
+    //!
+    static int videoBitrate(int qualityIndicator, int width, int height, int frameRate);
+
     //
     // Inlined definitions of the basic getters and setters.
     //
