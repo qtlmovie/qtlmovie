@@ -140,10 +140,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
         if (_batchMode) {
             // Batch mode, create a new task for each file.
             foreach (const QString& fileName, initialFileNames) {
-                QtlMovieTask* task = new QtlMovieTask(_settings, _ui.log, this);
-                task->inputFile()->setFileName(fileName);
-                task->outputFile()->setDefaultFileName(fileName);
-                _ui.taskList->addTask(task, false);
+                _ui.taskList->addTask(fileName, false);
             }
         }
         else {

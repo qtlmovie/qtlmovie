@@ -1379,7 +1379,7 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="168"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="189"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="186"/>
         <source>Start ...</source>
         <translation>Démarrer ...</translation>
     </message>
@@ -1400,7 +1400,7 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="232"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="574"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="571"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
@@ -1431,7 +1431,7 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieMainWindow.ui" line="258"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="185"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="182"/>
         <source>Transcode ...</source>
         <translation>Transcoder ...</translation>
     </message>
@@ -1536,82 +1536,82 @@ Ligne %3, colonne %4</translation>
         <translation>Passer en mode batch</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="176"/>
-        <location filename="../QtlMovieMainWindow.cpp" line="180"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="173"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="177"/>
         <source>Cancel ...</source>
         <translation>Annuler ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="246"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="243"/>
         <source>Internal error, transcoding job already created.</source>
         <translation>Erreur interne, transcodage déjà créé</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="267"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="264"/>
         <source>Overwritting output file denied</source>
         <translation>Le remplacement du fichier de sortie a été refusé</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="332"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="329"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="373"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="370"/>
         <source>Saved log to %1</source>
         <translation>Journal sauvegardé dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="407"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="404"/>
         <source>Do you want to abort the current transcoding ?</source>
         <translation>Voulez-vous annuler le transcodage en cours ?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="455"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="452"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="478"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="475"/>
         <source>DVD Decrypter not found, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="504"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="501"/>
         <source>These settings will be applied when the application restarts.
 Restart now?</source>
         <translation>Ces options seront appliquées au redémarrage de l&apos;application.
 Redémarrer maintenant?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="518"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="515"/>
         <source>Switching mode needs the application to restart.
 Restart now?</source>
         <translation>Changer de mode nécessite un redémarrage de l&apos;application.
 Redémarrer maintenant?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="579"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="576"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="580"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="577"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="581"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="578"/>
         <source>Built</source>
         <translation>Généré le </translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="593"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="590"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="609"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="606"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>
@@ -1789,17 +1789,17 @@ Le remplacer?</translation>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="504"/>
+        <location filename="../QtlMovieTaskList.cpp" line="519"/>
         <source>Delete these %1 tasks?</source>
         <translation>Supprimer ces %1 tâches?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="508"/>
+        <location filename="../QtlMovieTaskList.cpp" line="523"/>
         <source>Delete task %1?</source>
         <translation>Supprimer la tâche %1?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieTaskList.cpp" line="589"/>
+        <location filename="../QtlMovieTaskList.cpp" line="189"/>
         <source>Adding file %1</source>
         <translation>Ajout du fichier %1</translation>
     </message>

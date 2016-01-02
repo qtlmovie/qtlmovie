@@ -71,6 +71,14 @@ public:
     void addTask(QtlMovieTask* task, bool editNow);
 
     //!
+    //! Add a task at the end of the list.
+    //! @param [in] inputFileName Input file name. All defaults apply.
+    //! @param [in] editNow If true, immediately opens an editor on it.
+    //! @return The created task.
+    //!
+    QtlMovieTask* addTask(const QString& inputFileName, bool editNow);
+
+    //!
     //! Get the first task in "queued" state.
     //! The returned task becomes the "currently executing task".
     //! @return The next task to execute or zero if there is none.

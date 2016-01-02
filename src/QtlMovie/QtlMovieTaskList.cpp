@@ -181,6 +181,21 @@ void QtlMovieTaskList::addTask(QtlMovieTask* task, bool editNow)
 
 
 //-----------------------------------------------------------------------------
+// Add a task (by file name) at the end of the list.
+//-----------------------------------------------------------------------------
+
+QtlMovieTask*QtlMovieTaskList::addTask(const QString& inputFileName, bool editNow)
+{
+    _log->debug(tr("Adding file %1").arg(inputFileName));
+    QtlMovieTask* task = new QtlMovieTask(_settings, _log, this);
+    task->inputFile()->setFileName(inputFileName);
+    task->outputFile()->setDefaultFileName(inputFileName);
+    addTask(task, editNow);
+    return task;
+}
+
+
+//-----------------------------------------------------------------------------
 // Associate a table item with a task.
 // We store a qulonglong value of the task pointer value as associated data
 // with "user role" in the item. This is valid only since we use this value
@@ -581,15 +596,9 @@ void QtlMovieTaskList::dropEvent(QDropEvent* event)
         int fileCount = 0;
         foreach (const QUrl& url, mimeData->urls()) {
             if (url.scheme() == "file") {
-                // This is a real file URL
-                const QString fileName(QtlFile::toFileName(url));
+                // This is a real file URL. Add a task for this file. Use all defaults.
                 fileCount++;
-
-                // Add a task for this file. Use all defaults.
-                _log->debug(tr("Adding file %1").arg(fileName));
-                QtlMovieTask* task = new QtlMovieTask(_settings, _log, this);
-                addTask(task, false);
-                task->inputFile()->setFileName(fileName);
+                addTask(QtlFile::toFileName(url), false);
             }
         }
         // Accept the drop action is at least one file was found.

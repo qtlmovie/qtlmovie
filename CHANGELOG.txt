@@ -2,6 +2,11 @@
 QtlMovie Change Log
 ===================
 
+Version 1.5.1
+- Bug fix: When using drag & drop of input files in batch mode, the error
+  "no output file selected" was reported if the tasks were not edited first.
+  This is fixed.
+
 Version 1.5
 - Adaptive bitrate computation for AVI, iPhone, iPad. Previously, one bitrate
   value was defined for iPhone, one for iPad and one for AVI. But, when the
