@@ -1,46 +1,6 @@
 <?php
 // PHP script for http://qtlmovie.sourceforge.net/newversion/
 
-define("DEBUG", FALSE);
-
-//----------------------------------------------------------------------------
-// Error handler: Display message and abort on error, continue otherwise.
-//----------------------------------------------------------------------------
-
-function errorHandler($errno, $errstr, $errfile, $errline)
-{
-    if (!(error_reporting() & $errno)) {
-        // This error code is not included in error_reporting
-        return FALSE;
-    }
-
-    switch ($errno) {
-    case E_USER_ERROR:
-        echo "<b>ERROR</b> [$errno] $errstr<br/>\n";
-        echo "  Fatal error on line $errline in file $errfile";
-        echo ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br/>\n";
-        echo "Aborting...<br/>\n";
-        exit(1);
-        break;
-
-    case E_USER_WARNING:
-        echo "<b>WARNING</b> [$errno] $errstr<br/>\n";
-        break;
-
-    case E_USER_NOTICE:
-        echo "<b>NOTICE</b> [$errno] $errstr<br/>\n";
-        break;
-
-    default:
-        echo "Unknown error type: [$errno] $errstr<br/>\n";
-        break;
-    }
-
-    // Don't execute PHP internal error handlers.
-    return TRUE;
-}
-
-
 //----------------------------------------------------------------------------
 // Compare two version strings.
 // Return -1, 0, 1 if $v1 is lower than, equal to, greater than $v2.
@@ -71,7 +31,7 @@ function compareVersions($v1, $v2)
 
 
 //----------------------------------------------------------------------------
-// Get the latest version of an hreaf link in a Web page.
+// Get the latest version of an href link in a Web page.
 // Return an array containing 'version' and 'url' indexes, empty if not found.
 // The pattern "#" in $prefix or $suffix means any number.
 //----------------------------------------------------------------------------
@@ -176,6 +136,8 @@ function generateOutput($appVersion, $osName, $cpuArch)
         }
     }
     
+    // Result is always a JSON structure.
+    header('Content-type: application/json; charset=utf-8');
     echo json_encode($result);
 }
 
@@ -183,17 +145,6 @@ function generateOutput($appVersion, $osName, $cpuArch)
 //----------------------------------------------------------------------------
 // Main code
 //----------------------------------------------------------------------------
-
-// Enable error reporting in debug environment.
-if (DEBUG) {
-    error_reporting(E_ALL & ~E_STRICT);
-    set_error_handler('errorHandler');
-}
-
-// Result is always a JSON structure.
-if (!DEBUG) {
-    header('Content-type: application/json; charset=utf-8');
-}
 
 // When invoked from QtlMovie, the cookie "target" contains a
 // Base64-encoded JSON structure describing the target system.
