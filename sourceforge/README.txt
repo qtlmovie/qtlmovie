@@ -32,17 +32,18 @@ The various steps in the release process of a new version of QtlMovie are:
   package for Fedora.
 - On an Ubuntu Linux system, execute build/build-deb.sh. It builds the DEB
   package for Ubuntu.
-- Copy the content of QtlMovie\help into QtlMovie\sourceforge\web\doc.
-- Copy the content of QtlMovie\build-doxygen\html into QtlMovie\sourceforge\web\doxy.
-- Copy QtlMovie\installers\qtlmovie-*-0.fc*.x86_64.rpm into
-  QtlMovie\sourceforge\project\fedora.
-- Copy QtlMovie\installers\qtlmovie_*_amd64.deb into
-  QtlMovie\sourceforge\project\ubuntu.
+- Copy the content of
+    - QtlMovie\help               into QtlMovie\sourceforge\web\doc.
+    - QtlMovie\build-doxygen\html into QtlMovie\sourceforge\web\doxy
 - From QtlMovie\installers, copy
-    - QtlMovie-*-src.zip      into QtlMovie\sourceforge\project\src
-    - QtlMovie-*-wintools.zip into QtlMovie\sourceforge\project\src
-    - QtlMovie-Win32-*.exe    into QtlMovie\sourceforge\project\win32
-    - QtlMovie-Win64-*.exe    into QtlMovie\sourceforge\project\win64
+    - QtlMovie-*-src.zip              into QtlMovie\sourceforge\project\src
+    - QtlMovie-*-wintools.zip         into QtlMovie\sourceforge\project\src
+    - QtlMovie-Win32-*.exe            into QtlMovie\sourceforge\project\win32
+    - QtlMovie-Win32-Standalone-*.zip into QtlMovie\sourceforge\project\win32
+    - QtlMovie-Win64-*.exe            into QtlMovie\sourceforge\project\win64
+    - QtlMovie-Win64-Standalone-*.zip into QtlMovie\sourceforge\project\win32
+    - qtlmovie-*-0.fc*.x86_64.rpm     into QtlMovie\sourceforge\project\fedora
+    - qtlmovie_*_amd64.deb            into QtlMovie\sourceforge\project\ubuntu
 - Synchronize the content of:
     - QtlMovie\sourceforge\project with http://sourceforge.net/projects/qtlmovie/
     - QtlMovie\sourceforge\web     with http://qtlmovie.sourceforge.net/
