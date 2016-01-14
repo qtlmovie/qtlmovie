@@ -40,6 +40,8 @@
 #    ConvertTo-String
 #    Get-DotNetVersion
 #    Get-QtProjectFile
+#    Join-MultiPath
+#    New-Directory
 #    New-TempDirectory
 #    New-ZipFile
 #    Search-File
@@ -333,6 +335,88 @@ function Get-QtProjectFile
     return $null
 }
 
+
+#-----------------------------------------------------------------------------
+
+<#
+ .SYNOPSIS
+
+  Join multiple segments of a file path.
+
+ .DESCRIPTION
+
+  Join multiple segments of a file path, just like Join-Path, but not limited
+  to two parts.
+
+ .PARAMETER Segments
+
+  An array of strings containing the parts of the path to join.
+
+ .OUTPUTS
+
+  The full path as a string.
+
+ .EXAMPLE
+
+  PS > Join-MultiPath @("C:\Foo\bar", "a", "b", "c.txt")
+  C:\Foo\bar\a\b\c.txt
+
+#>
+function Join-MultiPath
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true,Position=1)][String[]] $Segments
+    )
+
+    $path = ""
+    foreach ($seg in $Segments) {
+        if ($path) {
+            $path = Join-Path $path $seg
+        }
+        else {
+            $path = $seg
+        }
+    }
+    return $path
+}
+
+#-----------------------------------------------------------------------------
+
+<#
+ .SYNOPSIS
+
+  Create a directory.
+
+ .DESCRIPTION
+
+  Create a directory and return its name.
+
+ .PARAMETER Path
+
+  The path of the directory to create. Can be either a string (the path itself)
+  or an array of strings (joined to form a full path).
+
+ .OUTPUTS
+
+  The full path of the directory as a string.
+#>
+function New-Directory
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true,Position=1)] $Path
+    )
+
+    # Get the path of the directory to create.
+    if ($Path.GetType().IsArray) {
+        $Path = Join-MultiPath $Path
+    }
+
+    # Create the directory and return full name.
+    (New-Item -Path $Path -ItemType Directory -Force).FullName
+}
+
 #-----------------------------------------------------------------------------
 
 <#
@@ -411,7 +495,7 @@ function New-ZipFile
     param(
         [Parameter(Mandatory=$true,Position=1)][String] $Path,
         [Parameter(Mandatory=$false,Position=2)][String] $Root = $null,
-        [Parameter(ValueFromPipeline=$true)] $input,
+        [Parameter(ValueFromPipeline=$true)] $Input,
         [Switch] $Force
     )
 
@@ -443,7 +527,7 @@ function New-ZipFile
         $archive = [System.IO.Compression.ZipFile]::Open($ZipName, "Create")
 
         # Go through each file in the input, adding it to the Zip file specified
-        foreach ($file in $input) {
+        foreach ($file in $Input) {
             $item = $file | Get-Item
             # Skip the current file if it is the zip file itself
             if ($item.FullName -eq $ZipName) {
@@ -973,6 +1057,8 @@ Export-ModuleMember -Function ConvertTo-HtmlString
 Export-ModuleMember -Function ConvertTo-String
 Export-ModuleMember -Function Get-DotNetVersion
 Export-ModuleMember -Function Get-QtProjectFile
+Export-ModuleMember -Function Join-MultiPath
+Export-ModuleMember -Function New-Directory
 Export-ModuleMember -Function New-TempDirectory
 Export-ModuleMember -Function New-ZipFile
 Export-ModuleMember -Function Search-File

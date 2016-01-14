@@ -34,12 +34,16 @@
 <#
  .SYNOPSIS
 
-  Build the binary installer for Windows.
+  Build the binary installers for Windows.
 
  .DESCRIPTION
 
-  Build the binary installer for Windows. The release version of the project is
-  automatically rebuilt before building the installer.
+  Build the binary installers for Windows. The release version of the project
+  is automatically rebuilt before building the installer.
+
+  By default, installers are built for 32-bit and 64-bit systems, full
+  executable binary installers, standalone binaries (without admin rights),
+  source code and wintools archives.
 
  .PARAMETER ProductName
 
@@ -63,11 +67,15 @@
 
  .PARAMETER NoInstaller
 
-  Do not build the binary installer. Still build the source archive.
+  Do not build the binary installer.
+
+ .PARAMETER NoStandalone
+
+  Do not build the standalone binaries.
 
  .PARAMETER NoSource
 
-  Do not build the source archive. Still build the binary installer.
+  Do not build the source archive.
 #>
 [CmdletBinding()]
 param(
@@ -76,6 +84,7 @@ param(
     [switch]$NoPause = $false,
     [switch]$NoBuild = $false,
     [switch]$NoInstaller = $false,
+    [switch]$NoStandalone = $false,
     [switch]$NoSource = $false
 )
 
@@ -154,12 +163,11 @@ else {
 # Strip all executables.
 Get-ChildItem -Recurse $BuildDir -Include *.exe | ForEach-Object { strip $_.FullName }
 
-# Build the installer.
+# Locate Qt installation directory.
+$QtDir = Split-Path -Parent (Split-Path -Parent (Get-FileInPath qmake.exe $env:Path))
+
+# Build the installers.
 if (-not $NoInstaller) {
-
-    # Locate Qt installation directory.
-    $QtDir = Split-Path -Parent (Split-Path -Parent (Get-FileInPath qmake.exe $env:Path))
-
     # Locate NSIS, the Nullsoft Scriptable Installation System.
     $NsisExe = Get-FileInPath makensis.exe "$env:Path;C:\Program Files\NSIS;C:\Program Files (x86)\NSIS"
     $NsisScript = Get-FileInPath "${ProductName}.nsi" $PSScriptRoot
@@ -184,7 +192,69 @@ if (-not $NoInstaller) {
         "$NsisScript"
 }
 
-# Build the source archive.
+# Build the standalone binaries.
+if (-not $NoStandalone) {
+    # Create a temporary directory.
+    $TempDir = New-TempDirectory
+
+    Push-Location $TempDir
+    try {
+        # Copy product files in standalone tree.
+        $TempRoot = New-Directory @($TempDir, $ProductName)
+        Copy-Item (Join-MultiPath @($BuildDir, "QtlMovie", "QtlMovie.exe")) $TempRoot
+        Copy-Item (Join-MultiPath @($RootDir, "build", "qt.conf")) $TempRoot
+        Copy-Item (Join-MultiPath @($RootDir, "LICENSE.txt")) $TempRoot
+        Copy-Item (Join-MultiPath @($RootDir, "CHANGELOG.txt")) $TempRoot
+
+        $TempTranslations = New-Directory @($TempRoot, "translations")
+        Get-ChildItem (Join-Path $QtDir "translations") -Filter "qt*_fr.qm" | ForEach-Object { Copy-Item $_.FullName $TempTranslations }
+        Copy-Item (Join-MultiPath @($BuildDir, "Qtl", "locale", "qtl_fr.qm")) $TempTranslations
+        Copy-Item (Join-MultiPath @($BuildDir, "Qts", "locale", "qts_fr.qm")) $TempTranslations
+        Copy-Item (Join-MultiPath @($BuildDir, "QtlMovie", "locale", "qtlmovie_fr.qm")) $TempTranslations
+
+        $TempFonts = New-Directory @($TempRoot, "fonts")
+        Copy-Item (Join-MultiPath @($RootDir, "fonts", "fonts.conf.template")) $TempFonts
+        Copy-Item (Join-MultiPath @($RootDir, "fonts", "subfont.ttf")) $TempFonts
+
+        # Copy 32-bit Windows tools.
+        $TempWintools = New-Directory @($TempRoot, "wintools")
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "ffprobe.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "ffmpeg.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "ffmpeg.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvdauthor.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvdauthor.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "mkisofs.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "mkisofs.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "growisofs.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "growisofs.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "telxcc.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "telxcc.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvddecrypter.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvddecrypter.txt")) $TempWintools
+
+        # Create the 32-bit standalone zip file.
+        Get-ChildItem -Recurse $TempDir | New-ZipFile (Join-Path $InstallerDir "${ProductName}-Win32-Standalone-${Version}.zip") -Force -Root $TempDir
+
+        # Overwrite 64-bits tools.
+        Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffprobe.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffmpeg.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffmpeg.txt")) $TempWintools
+
+        # Create the 64-bit standalone zip file.
+        Get-ChildItem -Recurse $TempDir | New-ZipFile (Join-Path $InstallerDir "${ProductName}-Win64-Standalone-${Version}.zip") -Force -Root $TempDir
+    }
+    finally {
+        # Delete the temporary directory.
+        Pop-Location
+        if (Test-Path $TempDir) {
+            Remove-Item $TempDir -Recurse -Force
+        }
+    }
+}
+
+# Build the source archives.
 if (-not $NoSource) {
     # Source archive name.
     $SrcArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-src.zip")
@@ -197,14 +267,13 @@ if (-not $NoSource) {
     try {
         # Copy project tree into temporary directory.
         $TempRoot = (Join-Path $TempDir "${ProductName}-${Version}")
-        [void] (New-Item -ItemType Directory -Force $TempDir)
         Copy-Item $RootDir $TempRoot -Recurse
 
         # Create the wintools zip file.
         Get-ChildItem -Recurse (Join-Path $TempRoot wintools*) | New-ZipFile $WintoolsArchive -Force -Root $TempRoot
 
         # Cleanup the temporary tree.
-        & (Join-Path (Join-Path $TempRoot build) cleanup.ps1) -Deep -NoPause -Silent
+        & (Join-MultiPath @($TempRoot, "build", "cleanup.ps1")) -Deep -NoPause -Silent
 
         # Create the source zip file.
         Get-ChildItem -Recurse (Split-Path $TempRoot) | New-ZipFile $SrcArchive -Force -Root $TempDir
