@@ -1,0 +1,40 @@
+http://forum.doom9.org/archive/index.php/t-73953.html
+
+The SRT format has no header, and no footer. Each subtitle has four parts:
+
+Line 1 is a sequential count of subtitles, starting with 1.
+
+Line 2 is the start timecode, followed by the string " --> ", followed by the
+end timecode. Timecodes are in the format HH:MM:SS,MIL (hours, minutes,
+seconds, milliseconds). The end timecode can optionally be followed by display
+coordinates (example " X1:100 X2:600 Y1:050 Y2:100"). Without coordinates
+displayed, each line of the subtitle will be centered and the block will
+appear at the bottom of the screen.
+
+Lines 3 onward are the text of the subtitle. New lines are indicated by new
+lines (i.e. there's no "\n" code). The only formatting accepted are the
+following:
+
+<b>text</b>: put text in boldface
+<i>text</i>: put text in italics
+<u>text</u>: underline text
+<font color="#00ff00">text</font>: apply green color formatting to the text
+(you can use the font tag only to change color)
+
+Tags can be combined (and should be nested properly). Note that the SubRip
+code appears to prefer whole-line formatting (no underlining just one word
+in the middle of a line).
+
+Finally, successive subtitles are separated from each other by blank lines.
+
+Here is an example of an SRT file:
+
+1
+00:02:26,407 --> 00:02:31,356 X1:100 X2:100 Y1:100 Y2:100
+<font color="#00ff00">Detta handlar om min storebrors</font>
+<b><i><u>kriminella beteende och foersvinnade.</u></i></b>
+
+2
+00:02:31,567 --> 00:02:37,164
+Vi talar inte laengre om Wade. Det aer
+som om han aldrig hade existerat.

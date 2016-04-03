@@ -1,0 +1,4 @@
+Home page: http://www.videolan.org/developers/libdvdcss.html
+Documentation: http://www.videolan.org/developers/libdvdcss/doc/html/
+Download: http://download.videolan.org/pub/libdvdcss/
+Latest version: http://download.videolan.org/pub/libdvdcss/1.4.0/libdvdcss-1.4.0.tar.bz2
