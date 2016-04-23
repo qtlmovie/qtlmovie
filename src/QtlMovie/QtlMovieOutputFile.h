@@ -116,8 +116,9 @@ public:
     //!
     //! Set the default output file name from an input file name, based on the output type.
     //! @param [in] inputFileName Input file name. Can be empty.
+    //! @param [in] keepPreviousBase If true, only change suffix according to output type.
     //!
-    void setDefaultFileName(const QString& inputFileName);
+    void setDefaultFileName(const QString& inputFileName, bool keepPreviousBase);
 
     //!
     //! Get the forced display aspect ratio.

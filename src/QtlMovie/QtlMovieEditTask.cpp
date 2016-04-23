@@ -129,7 +129,7 @@ void QtlMovieEditTask::initialize(QtlMovieTask* task, QtlMovieSettings* settings
     _log = log;
 
     // Initialize the UI.
-    inputFileNameChanged(_task->inputFile()->fileName());
+    setInputFileName(_task->inputFile()->fileName());
     inputFileFormatChanged();
     _ui.boxOutputTypes->checkId(int(_task->outputFile()->outputType()));
     outputFileNameChanged(_task->outputFile()->fileName());
@@ -266,7 +266,7 @@ void QtlMovieEditTask::setOutputFileType()
         else {
             // Apply the output file type.
             _task->outputFile()->setOutputType(type);
-            _task->outputFile()->setDefaultFileName(_task->inputFile()->fileName());
+            _task->outputFile()->setDefaultFileName(_task->inputFile()->fileName(), true);
         }
     }
 }
@@ -423,30 +423,45 @@ void QtlMovieEditTask::inputFileNameEdited()
 
 
 //-----------------------------------------------------------------------------
-// Invoked when the input file name has changed.
+// Set the input file name in the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieEditTask::inputFileNameChanged(const QString& fileName)
+void QtlMovieEditTask::setInputFileName(const QString& fileName)
 {
     // Set the input file name in the edit box.
     if (_ui.editInputFile->text() != fileName) {
         _ui.editInputFile->setText(fileName);
     }
 
-    // Clear stream information in input file.
-    clearInputStreamInfo();
-
-    // Select default output file name and window title.
+    // Set window title.
     if (fileName.isEmpty()) {
         setWindowTitle("QtlMovie");
-        if (_task != 0) {
-            _task->outputFile()->setFileName("");
-        }
     }
     else {
         setWindowTitle(QFileInfo(fileName).fileName() + " - QtlMovie");
-        if (_task != 0) {
-            _task->outputFile()->setDefaultFileName(fileName);
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when the input file name has changed.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditTask::inputFileNameChanged(const QString& fileName)
+{
+    // Set the input file name in the UI.
+    setInputFileName(fileName);
+
+    // Clear stream information in input file.
+    clearInputStreamInfo();
+
+    // Select default output file name .
+    if (_task != 0) {
+        if (fileName.isEmpty()) {
+            _task->outputFile()->setFileName("");
+        }
+        else {
+            _task->outputFile()->setDefaultFileName(fileName, false);
         }
     }
 

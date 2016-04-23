@@ -38,6 +38,7 @@
 
 #include <QtCore>
 #include <QtWidgets>
+#include <QDebug>
 
 //!
 //! The symbol QTL_WINEXTRAS is defined when the Qt module winextras is available.

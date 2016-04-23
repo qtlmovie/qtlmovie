@@ -162,6 +162,12 @@ private:
     QtlMovieTask*        _task;               //!< The task to edit.
     int                  _updatingSelections; //!< A counter to protect inputStreamSelectionUpdated().
 
+    //!
+    //! Set the input file name in the UI.
+    //! @param [in] fileName Absolute file path.
+    //!
+    void setInputFileName(const QString& fileName);
+
     // Unaccessible operations.
     QtlMovieEditTask() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlMovieEditTask)

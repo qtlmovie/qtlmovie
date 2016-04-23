@@ -189,7 +189,7 @@ QtlMovieTask*QtlMovieTaskList::addTask(const QString& inputFileName, bool editNo
     _log->debug(tr("Adding file %1").arg(inputFileName));
     QtlMovieTask* task = new QtlMovieTask(_settings, _log, this);
     task->inputFile()->setFileName(inputFileName);
-    task->outputFile()->setDefaultFileName(inputFileName);
+    task->outputFile()->setDefaultFileName(inputFileName, false);
     addTask(task, editNow);
     return task;
 }
