@@ -3,6 +3,9 @@ QtlMovie Change Log
 ===================
 
 Version 1.5.2
+- Bug fix: Converting to H.264 (iPad, iPhone) failed when the input video
+  had chroma format 4:2:2 (as found in MJPEG files from some photo cameras).
+  This is fixed (output format now forced to 4:2:0).
 - Removed new spurious messages from FFmpeg 3.0.x.
 - Precompiled Windows binary uses Qt 5.6.0.
 - Windows installer includes FFmpeg 3.0.1.

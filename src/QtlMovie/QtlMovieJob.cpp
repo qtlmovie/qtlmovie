@@ -1076,6 +1076,12 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                 return abortStart(tr("Unsupported output type for MP4"));
         }
 
+        // In case of 4:2:2 input chroma format, force a downgrade to 4:2:0
+        // since the x264 codec does not support 4:2:2.
+        if (inputFile->ffProbeInfo().valueOfStream(videoStream->ffIndex(), "pix_fmt").contains("422")) {
+            args << "-pix_fmt" << "yuv420p";
+        }
+
         // Add subtitles processing.
         if (!addSubtitleFileVideoFilter(videoFilters, width, height, inputFile->externalSubtitleFileName()) ||
             !addSubtitleStreamVideoFilter(videoFilters, inputFile, widthOut, heightOut)) {
