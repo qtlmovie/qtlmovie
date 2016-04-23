@@ -2,4 +2,3 @@
 QtlMovie "to do" list
 =====================
 
-- Remove DVD decrypter button when the executable is not available.

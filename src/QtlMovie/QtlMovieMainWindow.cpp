@@ -98,6 +98,13 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
     _settings = new QtlMovieSettings(_ui.log, this);
     applyUiSettings();
 
+    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
+#if !defined(Q_OS_WIN)
+    if (!_settings->dvddecrypter()->isSet()) {
+        _ui.actionDvdDecrypter->setVisible(false);
+    }
+#endif
+
     // Adjust UI for single file mode or batch mode.
     _batchMode = _settings->useBatchMode();
     if (_batchMode) {
