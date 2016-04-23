@@ -57,6 +57,23 @@ QtlLineEdit::QtlLineEdit(const QString& contents, QWidget* parent) :
 
 
 //----------------------------------------------------------------------------
+// Set the line edit's text. Override superclass.
+//----------------------------------------------------------------------------
+
+void QtlLineEdit::setText(const QString& s)
+{
+    // Get current cursor position.
+    const int pos = cursorPosition();
+
+    // Set text in superclass.
+    QLineEdit::setText(s);
+
+    // Restore the cursor position when possible.
+    setCursorPosition(qMin(pos, displayText().length()));
+}
+
+
+//----------------------------------------------------------------------------
 // Invoked when a drag operation enters the widget.
 //----------------------------------------------------------------------------
 

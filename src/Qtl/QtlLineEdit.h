@@ -60,6 +60,13 @@ public:
     //!
     explicit QtlLineEdit(const QString& contents, QWidget *parent = 0);
 
+    //!
+    //! Set the line edit's text.
+    //! Override superclass. Maintain the cursor position when possible.
+    //! @param [in] s Text to set.
+    //!
+    void setText(const QString& s);
+
 protected:
     //!
     //! Invoked when a drag operation enters the widget.

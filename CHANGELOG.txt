@@ -9,6 +9,9 @@ Version 1.5.2
 - Bug fix: In batch mode, when the output file was modified to a non-default
   value, it was reset to the default value when the file was edited again.
   This is fixed.
+- Bug fix: In file name edit boxes, when the file name was edited and the
+  cursor arrived to 2 adjacent backslashes, the cursor jumped to the end
+  of line. This is fixed.
 - Removed new spurious messages from FFmpeg 3.0.x.
 - Precompiled Windows binary uses Qt 5.6.0.
 - Windows installer includes FFmpeg 3.0.1.
