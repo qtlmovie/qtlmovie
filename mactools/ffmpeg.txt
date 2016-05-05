@@ -1,0 +1,7 @@
+Download FFmpeg binaries for Mac OS X:
+  http://www.ffmpegmac.net/
+  http://www.ffmpegmac.net/resources/SnowLeopard_Lion_Mountain_Lion_Mavericks_Yosemite_El-Captain_25.02.2016.zip
+
+Extract the following files here:
+  ffmpeg
+  ffprobe

@@ -1,0 +1,10 @@
+A binary for dvdauthor is included in HomeBrew package dvdauthor.
+
+Install HomeBrew:
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+Install dvdrtools:
+  brew install dvdauthor
+
+Binary for dvdauthor is at:
+  /usr/local/Cellar/dvdauthor/<version>/bin/dvdauthor

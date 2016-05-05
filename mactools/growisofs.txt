@@ -1,0 +1,5 @@
+A MacOS binary for growisofs is found in the bundle for OSx360 at:
+  http://osx360.tla.su/osx360/download_files/osx360_v1.0b3.zip
+
+Download it and growisofs is at:
+  ~/Downloads/OSx360.app/Contents/MacOS/growisofs

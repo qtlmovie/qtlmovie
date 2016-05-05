@@ -1,0 +1,9 @@
+Download ccextractor source code at:
+  https://sourceforge.net/projects/ccextractor/files/ccextractor/0.79/ccextractor.src.0.79.zip
+
+Unzip, then:
+  cd ccextractor.0.79/mac
+
+Edit file build.command, add "-L/usr/lib" at the end of line. Then execute build.command.
+Many warnings are reported and a final error about "-L/usr/lib" (but do not remove it).
+Anyway, ccextractor is built.

@@ -1,0 +1,10 @@
+A binary for mkisofs is included in HomeBrew package dvdrtools.
+
+Install HomeBrew:
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+Install dvdrtools:
+  brew install dvdrtools
+
+Binary for mkisofs is at:
+  /usr/local/Cellar/dvdrtools/<version>/bin/mkisofs

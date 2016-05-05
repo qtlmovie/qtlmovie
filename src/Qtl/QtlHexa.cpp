@@ -248,7 +248,7 @@ QString qtlHexa(const void* data, int size, Qtl::HexaFlags flags, int indent, in
         // ASCII dump
         if (flags.testFlag(Qtl::HexAscii)) {
             for (int byte = 0; byte < lineSize; byte++) {
-                const QChar c(char(raw[line + byte]));
+                const QChar c = char(raw[line + byte]);
                 str.append(c.isPrint() ? c : QChar('.'));
             }
         }
