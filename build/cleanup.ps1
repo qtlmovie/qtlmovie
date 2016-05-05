@@ -78,6 +78,7 @@ $RootDir = Split-Path -Parent $PSScriptRoot
 # directories to remove and then we delete them, if not yet deleted by a previous recursion.
 
 $files = @(Get-ChildItem -Recurse $RootDir | Where-Object {
+    ($_.FullName -notlike '*\mactools\*') -and
     ($_.FullName -notlike '*\wintools*\*') -and
     ($_.FullName -notlike '*\installers\*') -and
     ($_.FullName -notlike '*\sourceforge\*') -and
@@ -122,6 +123,9 @@ if ($Deep) {
     Delete "$RootDir\sourceforge\web\doxy"
     Get-ChildItem -Recurse $RootDir | Where-Object {
         ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.deb" -or $_.Name -like "*.zip")
+    } | ForEach-Object { Delete $_.FullName }
+    Get-ChildItem -Recurse (Join-Path $RootDir "mactools") | Where-Object {
+        ($_.Name -notlike "*.txt" -and $_.Name -notlike ".gitignore")
     } | ForEach-Object { Delete $_.FullName }
 }
 

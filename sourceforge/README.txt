@@ -27,7 +27,7 @@ The various steps in the release process of a new version of QtlMovie are:
 - Commit and push all code to the git repository on SourceForge.
 - Add a tag into the repository with the version name, push repository.
 - On a Windows system, execute build\build-installer.ps1. It builds the Win32
-  and Win64 installers and the source and wintools archives.
+  and Win64 installers and the source, wintools and mactools archives.
 - On a Fedora Linux system, execute build/build-rpm.sh. It builds the RPM
   package for Fedora.
 - On an Ubuntu Linux system, execute build/build-deb.sh. It builds the DEB
@@ -38,6 +38,7 @@ The various steps in the release process of a new version of QtlMovie are:
 - From QtlMovie\installers, copy
     - QtlMovie-*-src.zip              into QtlMovie\sourceforge\project\src
     - QtlMovie-*-wintools.zip         into QtlMovie\sourceforge\project\src
+    - QtlMovie-*-mactools.zip         into QtlMovie\sourceforge\project\src
     - QtlMovie-Win32-*.exe            into QtlMovie\sourceforge\project\win32
     - QtlMovie-Win32-Standalone-*.zip into QtlMovie\sourceforge\project\win32
     - QtlMovie-Win64-*.exe            into QtlMovie\sourceforge\project\win64

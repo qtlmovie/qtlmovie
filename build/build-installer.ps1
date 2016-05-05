@@ -43,7 +43,7 @@
 
   By default, installers are built for 32-bit and 64-bit systems, full
   executable binary installers, standalone binaries (without admin rights),
-  source code and wintools archives.
+  source code, wintools and mactools archives.
 
  .PARAMETER ProductName
 
@@ -259,6 +259,7 @@ if (-not $NoSource) {
     # Source archive name.
     $SrcArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-src.zip")
     $WintoolsArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-wintools.zip")
+    $MactoolsArchive = (Join-Path $InstallerDir "${ProductName}-${Version}-mactools.zip")
 
     # Create a temporary directory.
     $TempDir = New-TempDirectory
@@ -269,8 +270,9 @@ if (-not $NoSource) {
         $TempRoot = (Join-Path $TempDir "${ProductName}-${Version}")
         Copy-Item $RootDir $TempRoot -Recurse
 
-        # Create the wintools zip file.
+        # Create the wintools and mactools zip files.
         Get-ChildItem -Recurse (Join-Path $TempRoot wintools*) | New-ZipFile $WintoolsArchive -Force -Root $TempRoot
+        Get-ChildItem -Recurse (Join-Path $TempRoot mactools) -Exclude .gitignore | New-ZipFile $MactoolsArchive -Force -Root $TempRoot
 
         # Cleanup the temporary tree.
         & (Join-MultiPath @($TempRoot, "build", "cleanup.ps1")) -Deep -NoPause -Silent

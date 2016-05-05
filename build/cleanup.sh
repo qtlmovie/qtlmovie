@@ -44,6 +44,7 @@ ROOT=$(cd $(dirname $0)/..; pwd)
 # Delete spurious generated files.
 find $ROOT \
     -iname 'wintools*' -prune , \
+    -iname mactools -prune , \
     -iname installers -prune , \
     -iname sourceforge -prune , \
     \( -iname debug -o -iname release -o -iname 'build-*' \) -type d -print -prune , \
@@ -76,6 +77,7 @@ find $ROOT -type d -o -iname '*.sh' -o -iname '*.postinst' | xargs chmod 750
 if $DEEP; then
     rm -rf $ROOT/.git $ROOT/sourceforge/web/doc $ROOT/sourceforge/web/doxy
     find $ROOT -iname '*.exe' -o -iname '*.rpm' -o -iname '*.deb' -o -iname '*.zip' | xargs rm -vf
+    (cd $ROOT/mactools; rm -vf $(cat .gitignore))
 fi
 
 # Windowsify or unixify the end of lines on text files depending on their type.
