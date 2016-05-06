@@ -56,6 +56,7 @@ CONFIG *= warn_on
 # GCC specific options.
 # Unfortunately, there is no reliable way of checking that we use gcc.
 # Here, we assume that all flavors of Unix use GCC (far from perfect).
+# On Mac OS X, clang uses gcc-compatible command line options.
 
 unix|mingw|gcc {
     # Specific paranoid warnings setup with GCC.

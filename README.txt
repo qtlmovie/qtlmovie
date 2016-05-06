@@ -6,7 +6,7 @@ Documentation:
   See help/qtlmovie.html
 
 Build requirements:
-  QtlMovie can be built on Linux or Windows platforms. It requires Qt version 5.
+  QtlMovie can be built on Linux, Mac or Windows platforms. It requires Qt version 5.
   See help/qtlmovie-build.html for platform-specific build instructions.
 
 License:

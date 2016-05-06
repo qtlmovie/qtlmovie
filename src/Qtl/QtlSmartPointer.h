@@ -396,7 +396,7 @@ public:
     template <typename ST>
     QtlSmartPointer<ST,MUTEXLOCKER> upcast()
     {
-        return _shared->upcast<ST>();
+        return _shared->template upcast<ST>();
     }
 
     //!
@@ -431,7 +431,7 @@ public:
     template <typename ST>
     QtlSmartPointer<ST,MUTEXLOCKER> downcast()
     {
-        return _shared->downcast<ST>();
+        return _shared->template downcast<ST>();
     }
 
     //!
@@ -453,7 +453,7 @@ public:
     template <typename NEWMUTEXLOCKER>
     QtlSmartPointer<T,NEWMUTEXLOCKER> changeMutex()
     {
-        return _shared->changeMutex<NEWMUTEXLOCKER>();
+        return _shared->template changeMutex<NEWMUTEXLOCKER>();
     }
 
     //!

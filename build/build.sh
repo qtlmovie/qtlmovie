@@ -67,14 +67,18 @@ PROJECT_FILE=
 [[ -z "$PROJECT_FILE" ]] && error "unique project file not found in $SRCDIR"
 PROJECT_NAME=$(basename $PROJECT_FILE .pro)
 
-# Use same build directory naming as Qt Creator "shadow build" mode.
+# Use parallel processes up to half the number of logical processors.
+if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
+    NCPU=$(sysctl -n hw.ncpu 2>/dev/null)
+else
+    NCPU=$(nproc 2>/dev/null)
+fi
+NPROCESS=$(( (${NCPU:-1} + 1) / 2))
+
+# Use similar build directory naming as Qt Creator "shadow build" mode.
 BUILDDIR_BASE=$ROOTDIR/build-${PROJECT_NAME}-Desktop
 BUILDDIR_RELEASE=${BUILDDIR_BASE}-Release
 BUILDDIR_DEBUG=${BUILDDIR_BASE}-Debug
-
-# Use parallel processes up to half the number of logical processors.
-NCPU=$(nproc 2>/dev/null)
-NPROCESS=$(( (${NCPU:-1} + 1) / 2))
 
 # Search for Qt installations out of system directories.
 source ${SCRIPTDIR}/QtSetEnvironment.rc

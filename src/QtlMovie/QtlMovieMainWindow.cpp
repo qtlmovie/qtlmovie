@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2015, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -579,7 +579,7 @@ void QtlMovieMainWindow::about()
                        QStringLiteral("<p><b>QtlMovie</b>: %1</p>"
                           "<p>%2 " QTLMOVIE_VERSION "</p>"
                           "<p>%3 " __DATE__ "</p>"
-                          "<p>Copyright (c) 2013-2015, Thierry Lel&eacute;gard</p>")
+                          "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>")
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
                        .arg(tr("Built")));

@@ -90,7 +90,6 @@ QtlMovieExecFile::QtlMovieExecFile(const QtlMovieExecFile& other, const QString&
 QStringList QtlMovieExecFile::movieExecSearchPath()
 {
     QStringList dirs;
-    const QChar sep(QDir::separator());
 
     // Start with the application directory.
     const QString appDir(absoluteNativeFilePath(QCoreApplication::applicationDirPath()));
@@ -102,13 +101,17 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
     // - When running the application from the build tree, also add "../../wintools"
     //   from the application executable. This is a sort of hack which should not be
     //   too dangerous when run into a real installation.
+    // On Mac OS X, we use the same kind of trick.
 #if defined(Q_OS_WIN)
-    dirs << (appDir + sep + "wintools")
+    dirs << (appDir + "\\wintools")
          << "C:\\Program Files\\FFmpeg\\bin"
          << "C:\\Program Files (x86)\\FFmpeg\\bin"
          << "C:\\Program Files\\DVD Decrypter"
          << "C:\\Program Files (x86)\\DVD Decrypter"
-         << (QtlFile::parentPath(appDir, 2) + sep + "wintools");
+         << (QtlFile::parentPath(appDir, 2) + "\\wintools");
+#elif defined(Q_OS_DARWIN)
+    dirs << (appDir + "/mactools")
+         << (QtlFile::parentPath(appDir, 2) + "/mactools");
 #endif
 
     // End up with the standard executable search path.

@@ -32,12 +32,26 @@
 # 
 #-----------------------------------------------------------------------------
 
-# Locate latest versions on /opt
-QMAKE=$(find /opt/[Qq]* -type f -executable -name qmake 2>/dev/null | sort | tail -1)
-QTCREATOR=$(find /opt/[Qq]* -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
+# Locate qmake and qtcreator.
+QMAKE=
+QTCREATOR=
+
+# Locate latest versions on installation default root.
+if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
+    # On MacOS, Qt is installed in user's account.
+    if [[ -d "$HOME/Qt" ]]; then
+        QMAKE=$(find "$HOME/Qt" -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
+        QTCREATOR=$(find "$HOME/Qt" -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
+    fi
+else
+    if [[ -d "$HOME/Qt" ]]; then
+        QMAKE=$(find /opt/[Qq]* -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
+        QTCREATOR=$(find /opt/[Qq]* -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
+    fi
+fi
 
 # Locate latest versions on /usr/local if not found in /opt
-if [[ -z ${QMAKE} ]]; then
+if [[ -z "$QMAKE" ]]; then
    QMAKE=$(ls /usr/local/[Qq]*/bin/qmake 2>/dev/null | sort | tail -1)
    QTCREATOR=$(ls /usr/local/[Qq]*/bin/qtcreator 2>/dev/null | sort | tail -1)
 fi
@@ -47,21 +61,21 @@ BIN=
 LIB=
 
 # Compute Qt and Qt Creator root.
-if [[ -n ${QMAKE} ]]; then
-    export QTDIR=$(dirname $(dirname ${QMAKE}))
-    BIN=${QTDIR}/bin:
-    LIB=${QTDIR}/lib:
+if [[ -n "$QMAKE" ]]; then
+    export QTDIR=$(dirname $(dirname "$QMAKE"))
+    BIN="$QTDIR/bin:"
+    LIB="$QTDIR/lib:"
 fi
-if [[ -n ${QTCREATOR} ]]; then
-    export QTCREATORDIR=$(dirname $(dirname ${QTCREATOR}))
-    if [[ ${QTCREATORDIR} != ${QTDIR} ]]; then
-        BIN=${BIN}${QTCREATORDIR}/bin:
-        LIB=${LIB}${QTCREATORDIR}/lib:
+if [[ -n "$QTCREATOR" ]]; then
+    export QTCREATORDIR=$(dirname $(dirname "$QTCREATOR"))
+    if [[ "$QTCREATORDIR" != "$QTDIR" ]]; then
+        BIN="$BIN$QTCREATORDIR/bin:"
+        LIB="$LIB$QTCREATORDIR/lib:"
     fi
 fi
 
 # Update PATH and LD_LIBRARY_PATH.
-[[ -n ${BIN} && ${PATH} != ${BIN}* ]] && export PATH=${BIN}${PATH}
-[[ -n ${LIB} && ${LD_LIBRARY_PATH} != ${LIB}* ]] && export LD_LIBRARY_PATH=${LIB}${LD_LIBRARY_PATH}
+[[ -n "$BIN" && "$PATH" != "$BIN*" ]] && export PATH="$BIN$PATH"
+[[ -n "$LIB" && "$LD_LIBRARY_PATH" != "$LIB*" ]] && export LD_LIBRARY_PATH="$LIB$LD_LIBRARY_PATH"
 
 unset QMAKE QTCREATOR BIN LIB

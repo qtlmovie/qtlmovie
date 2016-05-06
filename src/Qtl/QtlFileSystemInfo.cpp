@@ -36,9 +36,12 @@
 #include "QtlStringUtils.h"
 
 #if defined(Q_OS_WIN)
-#include <windows.h>
+    #include <windows.h>
+#elif defined(Q_OS_DARWIN)
+    #include <sys/param.h>
+    #include <sys/mount.h>
 #elif defined(Q_OS_LINUX)
-#include <sys/statvfs.h>
+    #include <sys/statvfs.h>
 #endif
 
 
@@ -61,7 +64,7 @@ QtlFileSystemInfo::QtlFileSystemInfo(const QString& fileName) :
             _rootName = pathName.mid(0, 2).toUpper();
         }
 #else
-        // On Linux, get the longest mount point in the path of the file.
+        // On Unix, get the longest mount point in the path of the file.
         foreach (const QString& root, getAllRoots()) {
             if (pathName.startsWith(root) && root.length() > _rootName.length()) {
                 _rootName = root;
@@ -94,7 +97,22 @@ qlonglong QtlFileSystemInfo::byteSize(bool total) const
         return freeDisk.QuadPart;
     }
 
-#else
+#elif defined(Q_OS_DARWIN)
+
+    // MacOS version.
+    const QByteArray name(_rootName.toUtf8());
+    struct statfs fs;
+    if (::statfs(name.constData(), &fs) < 0) {
+        return -1;
+    }
+    else if (total) {
+        return qlonglong(fs.f_blocks) * qlonglong(fs.f_bsize);
+    }
+    else {
+        return qlonglong(fs.f_bfree) * qlonglong(fs.f_bsize);
+    }
+
+#elif defined(Q_OS_LINUX)
 
     // Linux version.
     const QByteArray name(_rootName.toUtf8());
@@ -108,6 +126,11 @@ qlonglong QtlFileSystemInfo::byteSize(bool total) const
     else {
         return qlonglong(vfs.f_bfree) * qlonglong(vfs.f_frsize);
     }
+
+#else
+
+    // Unsupported OS
+    return 0;
 
 #endif
 }
@@ -131,7 +154,7 @@ QStringList QtlFileSystemInfo::getAllRoots()
         }
     }
 
-#else
+#elif defined(Q_OS_LINUX)
 
     // On Linux, read the content of /proc/mounts.
     foreach (const QString& line, QtlFile::readTextLinesFile("/proc/mounts", 50000)) {
@@ -145,6 +168,19 @@ QStringList QtlFileSystemInfo::getAllRoots()
         }
     }
 
+#elif defined(Q_OS_DARWIN)
+
+    // On Mac OS X, all mounted volumes are listed in /Volumes.
+    // But some of them are symbolic links (such as "/" of course).
+    // The method canonicalFilePath resolves all symbolic links.
+    //
+    const QDir volumes("/Volumes");
+    foreach (const QFileInfo& vol, volumes.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+        const QString root(vol.canonicalFilePath());
+        if (!root.isEmpty()) {
+            roots << root;
+        }
+    }
 #endif
 
     roots.sort(Qt::CaseInsensitive);
