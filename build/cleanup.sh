@@ -77,7 +77,14 @@ find $ROOT \( -iname .git -prune \) -o -type d -o -iname '*.sh' -o -iname '*.pos
 # In deep mode, delete git repository, installers and non-original files in SourceForge mirror.
 if $DEEP; then
     rm -rf $ROOT/.git $ROOT/sourceforge/web/doc $ROOT/sourceforge/web/doxy
-    find $ROOT -iname '*.exe' -o -iname '*.rpm' -o -iname '*.deb' -o -iname '*.zip' | xargs rm -vf
+    find $ROOT \
+         -iname '*.exe' -o \
+         -iname '*.rpm' -o \
+         -iname '*.deb' -o \
+         -iname '*.dmg' -o \
+         -iname '*.zip' -o \
+         -iname .DS_Store \
+        | xargs rm -vf
     (cd $ROOT/mactools; rm -vf $(cat .gitignore))
 fi
 
