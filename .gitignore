@@ -23,3 +23,4 @@ build-*-[Dd]ebug-[Ss]tatic
 *.out
 *.log
 *.tmp
+.DS_Store

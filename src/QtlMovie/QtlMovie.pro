@@ -120,6 +120,7 @@ FORMS += QtlMovieMainWindow.ui \
 RESOURCES += QtlMovie.qrc
 
 win32:RC_FILE += QtlMovie.rc
+mac:ICON = images/qtlmovie-shadow.icns
 
 OTHER_FILES += \
     help/qtlmovie.html \

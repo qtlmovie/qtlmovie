@@ -122,6 +122,16 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         _ui.boxOutputType->setButtonId(button, int(type));
     }
 
+    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
+#if !defined(Q_OS_WIN)
+    if (!_settings->dvddecrypter()->isSet()) {
+        _ui.labelDvdDecrypter->setVisible(false);
+        _ui.defaultDvdDecrypter->setVisible(false);
+        _ui.editDvdDecrypter->setVisible(false);
+        _ui.buttonBrowseDvdDecrypter->setVisible(false);
+    }
+#endif
+
     // Load the initial values from the settings object.
     resetValues();
 }

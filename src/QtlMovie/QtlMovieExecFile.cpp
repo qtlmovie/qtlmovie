@@ -95,23 +95,39 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
     const QString appDir(absoluteNativeFilePath(QCoreApplication::applicationDirPath()));
     dirs << appDir;
 
-    // On Windows,
-    // - Add the wintools subdirectory.
-    // - Add various standard locations for media tools.
-    // - When running the application from the build tree, also add "../../wintools"
-    //   from the application executable. This is a sort of hack which should not be
-    //   too dangerous when run into a real installation.
-    // On Mac OS X, we use the same kind of trick.
+    // On Windows and Mac, the media tools are in a local subdirectory.
 #if defined(Q_OS_WIN)
-    dirs << (appDir + "\\wintools")
-         << "C:\\Program Files\\FFmpeg\\bin"
+    const QString tooldir(QStringLiteral("wintools"));
+#else
+    const QString tooldir(QStringLiteral("mactools"));
+#endif
+
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
+    // On Windows and Mac, add the local tools subdirectory.
+    dirs << (appDir + QDir::separator() + tooldir);
+
+    // When running the application from the build tree, also add the tools
+    // sudirectory from some level upward from the application executable.
+    QFileInfo info;
+    QString dir(appDir);
+    int foolProof = 10;
+    do {
+        info.setFile(QtlFile::parentPath(dir));
+        dir = info.absoluteFilePath();
+        const QString subdir(dir + QDir::separator() + tooldir);
+        if (QDir(subdir).exists()) {
+            dirs << subdir;
+            break;
+        }
+    } while (--foolProof > 0 && !dir.isEmpty() && !info.isRoot());
+#endif
+
+#if defined(Q_OS_WIN)
+    // On Windows, add various standard locations for media tools.
+    dirs << "C:\\Program Files\\FFmpeg\\bin"
          << "C:\\Program Files (x86)\\FFmpeg\\bin"
          << "C:\\Program Files\\DVD Decrypter"
-         << "C:\\Program Files (x86)\\DVD Decrypter"
-         << (QtlFile::parentPath(appDir, 2) + "\\wintools");
-#elif defined(Q_OS_DARWIN)
-    dirs << (appDir + "/mactools")
-         << (QtlFile::parentPath(appDir, 2) + "/mactools");
+         << "C:\\Program Files (x86)\\DVD Decrypter";
 #endif
 
     // End up with the standard executable search path.

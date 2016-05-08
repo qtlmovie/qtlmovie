@@ -31,4 +31,11 @@
 #
 #-----------------------------------------------------------------------------
 
-rm -rf $HOME/.config/QtlMovie/
+if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
+    # Mac OS:
+    rm -rf $HOME/Library/Preferences/com.qtlmovie.QtlMovie.plist
+    killall -u $USER cfprefsd 2>/dev/null
+else
+    # Linux and other Unix:
+    rm -rf $HOME/.config/QtlMovie
+fi
