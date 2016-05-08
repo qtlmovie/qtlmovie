@@ -89,6 +89,15 @@ public:
     virtual void abort();
 
     //!
+    //! Get the command executable file.
+    //! @return The command executable file.
+    //!
+    const QtlMovieExecFile* execFile() const
+    {
+        return _execFile;
+    }
+
+    //!
     //! Get the command line arguments.
     //! @return The command line arguments.
     //!

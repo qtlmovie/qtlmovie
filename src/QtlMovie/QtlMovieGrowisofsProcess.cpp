@@ -77,3 +77,17 @@ void QtlMovieGrowisofsProcess::processOutputLine(QProcess::ProcessChannel channe
         emitProgress(int(current / 1000), int(maximum / 1000));
     }
 }
+
+
+//----------------------------------------------------------------------------
+// Update a QProcessEnvironment for the target DVD Author process.
+//----------------------------------------------------------------------------
+
+void QtlMovieGrowisofsProcess::updateEnvironment(QProcessEnvironment& env)
+{
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
+    // On Windows and Mac, set the command search path to include growisofs directory first.
+    // This will make sure that growisofs will find mkisofs.
+    env.insert(QTL_PATH_VARIABLE_NAME, execFile()->directoryName() + QTL_SEARCH_PATH_SEPARATOR + env.value(QTL_PATH_VARIABLE_NAME));
+#endif
+}

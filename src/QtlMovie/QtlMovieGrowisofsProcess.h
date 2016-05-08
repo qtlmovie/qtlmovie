@@ -67,6 +67,12 @@ protected:
     //!
     virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line);
 
+    //!
+    //! Update the QProcessEnvironment for the target process before it starts.
+    //! @param [in] env A set of environment variables to update.
+    //!
+    virtual void updateEnvironment(QProcessEnvironment& env);
+
 private:
     // Unaccessible operations.
     QtlMovieGrowisofsProcess() Q_DECL_EQ_DELETE;

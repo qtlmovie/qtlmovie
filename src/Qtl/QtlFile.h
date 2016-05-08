@@ -68,6 +68,24 @@
 #endif
 
 //!
+//! Name of environment variable holding the command seach path.
+//!
+#if defined(Q_OS_WIN)
+#define QTL_PATH_VARIABLE_NAME "Path"
+#else
+#define QTL_PATH_VARIABLE_NAME "PATH"
+#endif
+
+//!
+//! Separator string for search paths.
+//!
+#if defined(Q_OS_WIN)
+#define QTL_SEARCH_PATH_SEPARATOR ";"
+#else
+#define QTL_SEARCH_PATH_SEPARATOR ":"
+#endif
+
+//!
 //! Base class of a file description.
 //!
 class QtlFile : public QObject

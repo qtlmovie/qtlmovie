@@ -178,13 +178,18 @@ void QtlMovieExecFile::startGetVersion()
         return;
     }
 
+    // Set the command search path to include executable's directory first.
+    QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+    env.insert(QTL_PATH_VARIABLE_NAME, directoryName() + QTL_SEARCH_PATH_SEPARATOR + env.value(QTL_PATH_VARIABLE_NAME));
+
     // Start a process which requests the executable versions.
     QtlProcess* process =
         QtlProcess::newInstance(fileName(),       // command
                                 _versionOptions,  // arguments
                                 5000,             // timeout after 5 seconds.
                                 32768,            // max output size in bytes
-                                this);            // parent object
+                                this,             // parent object
+                                env);
 
     // Get notification at process termination.
     connect(process, &QtlProcess::terminated, this, &QtlMovieExecFile::getVersionTerminated);

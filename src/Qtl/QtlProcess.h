@@ -61,13 +61,15 @@ public:
     //! @param [in] msRunTestTimeout Timeout of process execution in milliseconds. Ignored if negative or zero.
     //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
     //! @param [in] parent Optional parent object.
+    //! @param [in] env Environment for the process. Current environment by default.
     //! @return The new QtlProcess instance.
     //!
     static QtlProcess* newInstance(const QString& program,
                                    const QStringList& arguments = QStringList(),
                                    int msRunTestTimeout = 0,
                                    int maxProcessOutputSize = 0,
-                                   QObject* parent = 0);
+                                   QObject* parent = 0,
+                                   const QProcessEnvironment& env = QProcessEnvironment());
 
     //!
     //! Start the process.
@@ -130,7 +132,8 @@ private:
                const QStringList& arguments,
                int msRunTestTimeout,
                int maxProcessOutputSize,
-               QObject* parent);
+               QObject* parent,
+               const QProcessEnvironment& env = QProcessEnvironment());
 
     //!
     //! Send the terminated() signal.

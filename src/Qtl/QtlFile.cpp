@@ -136,20 +136,11 @@ QString QtlFile::absoluteNativeFilePath(const QString& path)
 
 QStringList QtlFile::commandSearchPath()
 {
-    // Environment variable names.
-#if defined(Q_OS_WIN)
-    const QString varName("Path");
-    const QString pathSeparator(";");
-#else
-    const QString varName("PATH");
-    const QString pathSeparator(":");
-#endif
-
     // Get the process environment.
     const QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
 
     // Get and split the search path.
-    return env.value(varName).split(pathSeparator, QString::SkipEmptyParts);
+    return env.value(QTL_PATH_VARIABLE_NAME).split(QTL_SEARCH_PATH_SEPARATOR, QString::SkipEmptyParts);
 }
 
 

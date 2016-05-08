@@ -42,9 +42,10 @@ QtlProcess* QtlProcess::newInstance(const QString& program,
                                     const QStringList& arguments,
                                     int msRunTestTimeout,
                                     int maxProcessOutputSize,
-                                    QObject* parent)
+                                    QObject* parent,
+                                    const QProcessEnvironment& env)
 {
-    return new QtlProcess(program, arguments, msRunTestTimeout, maxProcessOutputSize, parent);
+    return new QtlProcess(program, arguments, msRunTestTimeout, maxProcessOutputSize, parent, env);
 }
 
 
@@ -56,7 +57,8 @@ QtlProcess::QtlProcess(const QString& program,
                        const QStringList& arguments,
                        int msRunTestTimeout,
                        int maxProcessOutputSize,
-                       QObject* parent) :
+                       QObject* parent,
+                       const QProcessEnvironment& env) :
     QObject(parent),
     _msRunTestTimeout(msRunTestTimeout),
     _maxProcessOutputSize(maxProcessOutputSize),
@@ -66,6 +68,9 @@ QtlProcess::QtlProcess(const QString& program,
     _process(new QProcess(this)),
     _timer(new QTimer(this))
 {
+    if (!env.isEmpty()) {
+        _process->setProcessEnvironment(env);
+    }
 }
 
 
