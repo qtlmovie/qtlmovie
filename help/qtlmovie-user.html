@@ -59,6 +59,7 @@
         <li><a href="#platforms">Platforms notes</a>
           <ul>
             <li><a href="#windows">Windows</a></li>
+            <li><a href="#macosx">Mac OS X</a></li>
             <li><a href="#linux">Linux</a>
               <ul>
                 <li><a href="#fedora">Fedora and Red Hat Entreprise Linux</a></li>
@@ -95,12 +96,12 @@
         <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
           but does not keep subtitles as a separate stream.</li>
       </ul>
-      <p>QtlMovie is based on the Qt framework. It works on Windows, Linux and should
+      <p>QtlMovie is based on the Qt framework. It works on Windows, Mac, Linux and should
         work on any platform which is supported by Qt version 5. QtlMovie uses external free software
-        such as ffmpeg, DVD Author, telxcc, CCExtractor or mkisofs which are available on Windows and Linux.</p>
-      <p>QtlMovie is available either as source code or binary installer for Windows, Fedora and Ubuntu.
-        The binary installer for Windows comes prepackaged with Qt5 libraries and all required media tools.
-        It is self-sufficient and does not depend on any prior installation.
+        such as ffmpeg, DVD Author, telxcc, CCExtractor or mkisofs which are available on Windows, Mac and Linux.</p>
+      <p>QtlMovie is available either as source code or binary installer for Windows, Mac, Fedora and Ubuntu.
+        The binary installers for Windows and Mac come prepackaged with Qt5 libraries and all required media tools.
+        They are self-sufficient and do not depend on any prior installation.
         The binary packages for Fedora and Ubuntu rely on the system package dependency management
         to install the required Qt environment and media tools.
         Some very specific media tools such as telxcc and CCExtractor have no standard binary packages
@@ -419,10 +420,11 @@
       </ul>
       <p>For each tool, the "Default" value is the location where QtlMovie has found the corresponding executable.
         The way QtlMovie locates the media tools depends on the operating system.
-        On Windows, they are searched first in the <code>wintools</code> subdirectory inside the QtlMovie
+        On Windows and Mac, they are searched first in the <code>wintools</code> or <code>mactools</code>
+        subdirectories inside the QtlMovie
         installation area, then in various predefined locations for each tool (typically within
-        <code>C:\Program Files</code>) and finally in the <code>Path</code> environment variable.
-        On Unix systems, the media tools are searched in the <code>PATH</code> environment variable.</p>
+        <code>C:\Program Files</code> on Windows) and finally in the <code>PATH</code> environment variable.
+        On other Unix systems, the media tools are searched in the <code>PATH</code> environment variable.</p>
       <p>For each tool, a specific alternate executable can be selected in the corresponding edit box
         or using the corresponding "Browse" button.</p>
 
@@ -661,6 +663,18 @@
       <p>The binary installers require administration privileges to install QtlMovie
         on the system. For users without such privileges, use the "standalone"
         archive. Unzip it anywhere at simply run QtlMovie.exe.</p>
+
+      <h3><a id="macosx">Mac OS X</a></h3>
+
+      <p>QtlMovie has been tested on Mac OS X 10.11 ("El Capitan") and proved to work correctly.</p>
+      <p>The package QtlMovie-<i>version</i>.dmg is installed the same way as most Mac
+        applications. Double-click on the .dmg file to open the disk image. In
+        the Finder window which is opened, drag and drop "QtlMovie" into
+        "Applications". Then, close the Finder windows, right-click on the
+        desktop icon for "QtlMovie" and select "Eject". Now QtlMovie can be
+        started from the Launcher and optionally locked on the Dock.</i>
+      <p>The media tools are installed in the same directory tree as QtlMovie but you may
+        select alternate versions of these tools in the settings menu.</p>
 
       <h3><a id="linux">Linux</a></h3>
 

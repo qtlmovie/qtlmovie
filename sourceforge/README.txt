@@ -28,6 +28,8 @@ The various steps in the release process of a new version of QtlMovie are:
 - Add a tag into the repository with the version name, push repository.
 - On a Windows system, execute build\build-installer.ps1. It builds the Win32
   and Win64 installers and the source, wintools and mactools archives.
+- On a Mac OS X system, execute build/build-mac.sh. It builds the DMG
+  package for Mac OS X.
 - On a Fedora Linux system, execute build/build-rpm.sh. It builds the RPM
   package for Fedora.
 - On an Ubuntu Linux system, execute build/build-deb.sh. It builds the DEB
@@ -42,7 +44,8 @@ The various steps in the release process of a new version of QtlMovie are:
     - QtlMovie-Win32-*.exe            into QtlMovie\sourceforge\project\win32
     - QtlMovie-Win32-Standalone-*.zip into QtlMovie\sourceforge\project\win32
     - QtlMovie-Win64-*.exe            into QtlMovie\sourceforge\project\win64
-    - QtlMovie-Win64-Standalone-*.zip into QtlMovie\sourceforge\project\win32
+    - QtlMovie-Win64-Standalone-*.zip into QtlMovie\sourceforge\project\win64
+    - QtlMovie-*.dmg                  into QtlMovie\sourceforge\project\mac
     - qtlmovie-*-0.fc*.x86_64.rpm     into QtlMovie\sourceforge\project\fedora
     - qtlmovie_*_amd64.deb            into QtlMovie\sourceforge\project\ubuntu
 - Synchronize the content of:
@@ -51,7 +54,9 @@ The various steps in the release process of a new version of QtlMovie are:
 - Log in to SourceForge, go to the QtlMovie project.
     - Go to the Files/win64 directory, mark the latest QtlMovie-Win64-*.exe as
       default download for Windows.
-    - Go to the Files/src directory, mark the latest QtlMovie-*-src.zip as
+    - Go to the Files/mac directory, mark the latest QtlMovie-*.dmg as
+      default download for Mac.
+   - Go to the Files/src directory, mark the latest QtlMovie-*-src.zip as
       default download for all platforms, except Windows. Note that the
       "default download" system of SourceForge does not allow specific
       files for Ubuntu and Fedora.
