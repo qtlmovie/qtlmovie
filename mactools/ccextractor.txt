@@ -1,9 +1,13 @@
 Download ccextractor source code at:
-  https://sourceforge.net/projects/ccextractor/files/ccextractor/0.79/ccextractor.src.0.79.zip
+  https://sourceforge.net/projects/ccextractor/files/ccextractor/0.69/ccextractor.src.0.69.zip
 
 Unzip, then:
-  cd ccextractor.0.79/mac
+  cd ccextractor.0.69/mac
+  ./build.command
 
-Edit file build.command, add "-L/usr/lib" at the end of line. Then execute build.command.
-Many warnings are reported and a final error about "-L/usr/lib" (but do not remove it).
-Anyway, ccextractor is built.
+Notes:
+- Version 0.69 is not the latest one but more recent versions broke the command line
+  syntax. Modifications of QtlMovie are required to adapt to more recent versions.
+- With version 0.79, build.command is broken. Add "-L/usr/lib" at the end of line.
+  Then execute build.command. Many warnings are reported and a final error about
+  "-L/usr/lib" (but do not remove it). Anyway, ccextractor is built.

@@ -328,6 +328,28 @@ QString QtlFile::parentPath(const QString& path, int upLevels)
 
 
 //-----------------------------------------------------------------------------
+// Search a subdirectory in the parent path.
+//-----------------------------------------------------------------------------
+
+QString QtlFile::searchParentSubdirectory(const QString &dirName, const QString &subdirName, int maxLevels)
+{
+    if (!dirName.isEmpty() && !subdirName.isEmpty()) {
+        QString dir(absoluteNativeFilePath(dirName));
+        QFileInfo info(dir);
+        do {
+            const QString subdir(dir + QDir::separator() + subdirName);
+            if (QDir(subdir).exists()) {
+                return subdir;
+            }
+            info.setFile(parentPath(dir));
+            dir = info.absoluteFilePath();
+        } while (maxLevels-- > 0 && !dir.isEmpty() && !info.isRoot());
+    }
+    return "";
+}
+
+
+//-----------------------------------------------------------------------------
 // Get the "short path name" of a file path.
 //-----------------------------------------------------------------------------
 

@@ -97,29 +97,19 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
 
     // On Windows and Mac, the media tools are in a local subdirectory.
 #if defined(Q_OS_WIN)
-    const QString tooldir(QStringLiteral("wintools"));
+    const QString toolDir(QStringLiteral("wintools"));
 #else
-    const QString tooldir(QStringLiteral("mactools"));
+    const QString toolDir(QStringLiteral("mactools"));
 #endif
 
 #if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
     // On Windows and Mac, add the local tools subdirectory.
-    dirs << (appDir + QDir::separator() + tooldir);
-
     // When running the application from the build tree, also add the tools
     // sudirectory from some level upward from the application executable.
-    QFileInfo info;
-    QString dir(appDir);
-    int foolProof = 10;
-    do {
-        info.setFile(QtlFile::parentPath(dir));
-        dir = info.absoluteFilePath();
-        const QString subdir(dir + QDir::separator() + tooldir);
-        if (QDir(subdir).exists()) {
-            dirs << subdir;
-            break;
-        }
-    } while (--foolProof > 0 && !dir.isEmpty() && !info.isRoot());
+    const QString toolPath(QtlFile::searchParentSubdirectory(appDir, toolDir));
+    if (!toolPath.isEmpty()) {
+        dirs << toolPath;
+    }
 #endif
 
 #if defined(Q_OS_WIN)

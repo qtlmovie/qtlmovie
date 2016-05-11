@@ -41,13 +41,16 @@ ROOTDIR=$(dirname $SCRIPTDIR)
 SRCDIR=$ROOTDIR/src
 BUILDDIR=$ROOTDIR/build-QtlMovie-Desktop-Release
 
+# Search for Qt installations out of system directories.
+source ${SCRIPTDIR}/QtSetEnvironment.rc
+
 # QtlMovie version is extracted from QtlMovieVersion.h
 QTLMOVIE_VERSION=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
 
 # Rebuilt the QtlMovie executable.
 $SCRIPTDIR/build.sh || exit 1
 
-# Build the binary package
+# Build the binary package.
 echo "Creating QtlMovie-$QTLMOVIE_VERSION.dmg"
 APPDIR=$BUILDDIR/QtlMovie/QtlMovie.app
 DMGTMP=$BUILDDIR/QtlMovie/QtlMovie.dmg
@@ -55,10 +58,17 @@ DMGFILE=$ROOTDIR/installers/QtlMovie-$QTLMOVIE_VERSION.dmg
 VOLUME="QtlMovie $QTLMOVIE_VERSION"
 rm -f "$DMGTMP" "$DMGFILE"
 
-# Populate Mac tools in the bundle
+# Populate Mac tools in the bundle.
 rm -rf $APPDIR/Contents/MacOS/mactools
 tar -C $ROOTDIR --exclude .gitignore --exclude '*.txt' -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
 strip $APPDIR/Contents/MacOS/QtlMovie $APPDIR/Contents/MacOS/mactools/*
+chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPDIR/Contents/MacOS/mactools $APPDIR/Contents/MacOS/mactools/*
+
+# Copy fonts in the bundle.
+mkdir $APPDIR/Contents/MacOS/fonts
+cp $ROOTDIR/fonts/fonts.conf.template $ROOTDIR/fonts/subfont.ttf $APPDIR/Contents/MacOS/fonts
+chmod 755 $APPDIR/Contents/MacOS/fonts
+chmod 644 $APPDIR/Contents/MacOS/fonts/*
 
 # Deploy Qt requirements in the bundle.
 macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -no-plugins -always-overwrite || exit 1
