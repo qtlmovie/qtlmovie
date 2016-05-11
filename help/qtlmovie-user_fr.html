@@ -59,6 +59,7 @@
         <li><a href="#platforms">Notes sur les systèmes d'exploitation</a>
           <ul>
             <li><a href="#windows">Windows</a></li>
+            <li><a href="#macosx">Mac OS X</a></li>
             <li><a href="#linux">Linux</a>
               <ul>
                 <li><a href="#fedora">Fedora et Red Hat Entreprise Linux</a></li>
@@ -95,13 +96,13 @@
         <li>En option, incruster une piste de sous-titrage dans la vidéo mais
           sans conserver de flux de sous-titrage indépendant dans le fichier..</li>
       </ul>
-      <p>QtlMovie est construit au dessus de Qt. Il fonctionne sur Windows, Linux et
+      <p>QtlMovie est construit au dessus de Qt. Il fonctionne sur Windows, Mac, Linux et
         devrait fonctionner sur n'importe quelle plate-forme supportée par la version 5 de Qt.
         QtlMovie utilise des logiciels libres externes comme ffmpeg, DVD Author, telxcc,
-        CCExtractor ou mkisofs qui sont disponibles sur Windows et Linux.</p>
-      <p>QtlMovie est disponible sous forme source ou de binaire Windows, Fedora et Ubuntu.
-        Le binaire Windows contient un packaging des librairies Qt et de tous les logiciels media nécessaires.
-        Il est auto-suffisant et ne dépend d'aucune autre installation préalable.
+        CCExtractor ou mkisofs qui sont disponibles sur Windows, Mac et Linux.</p>
+      <p>QtlMovie est disponible sous forme source ou de binaire Windows, Mac, Fedora et Ubuntu.
+        Les binaires Windows et Mac contiennent un packaging des librairies Qt et de tous les logiciels media nécessaires.
+        Ils sont auto-suffisants et ne dépendent d'aucune autre installation préalable.
         Les packages binaires pour Fedora et Ubuntu se reposent sur la gestion des dépendances entre
         packages par le système pour installer l'environnement Qt et tous les logiciels media nécessaires.
         Quelques logiciels media très spécifiques comme telxcc et CCExtractor n'ont pas de packages
@@ -449,11 +450,11 @@
       <p>Pour chaque outil, le nom par défaut est l'emplacement où QtlMovie a trouvé l'exécutable
         correspondant. La manière dont QtlMovie recherche ces exécutables
         dépend du système d'exploitation.
-        Sur Windows, ils sont recherchés d'abord dans le sous-répertoire <code>wintools</code>,
+        Sur Windows et Mac, ils sont recherchés d'abord dans les sous-répertoire <code>wintools</code> et <code>mactools</code>,
         sous le répertoire d'installation de QtlMovie, puis dans différents emplacements prédéfinis
-        propres à chaque outil (typiquement dans <code>C:\Program Files</code>) et finalement
-        en utilisant la variable d'environnement <code>Path</code>.
-        Sur les systèmes Unix, les outils sont recherchés exclusivement en utilisant la
+        propres à chaque outil (typiquement dans <code>C:\Program Files</code> sur Windows) et finalement
+        en utilisant la variable d'environnement <code>PATH</code>.
+        Sur les autres systèmes Unix, les outils sont recherchés exclusivement en utilisant la
         variable d'environnement <code>PATH</code>.</p>
       <p>Pour chaque outil, un exécutable spécifique peut être sélectionné dans la 
         zone d'édition ou en utilisant le bouton "Chercher" correspondant.</p>
@@ -723,6 +724,20 @@
         QtlMovie sur le système. Pour les utilisateurs sans privilège, utiliser l'archive
         "standalone". Il suffit de décompresser l'archive n'importe où et exécuter le
         programme QtlMovie.exe.</p>
+
+      <h3><a id="macosx">Mac OS X</a></h3>
+
+      <p>QtlMovie a été testé sur Mac OS X 10.11 ("El Capitan") et a montré
+        qu'il fonctionnait correctement.</p>
+      <p>Le package QtlMovie-<i>version</i>.dmg s'installe de la même manière que
+        la plupart des applications Mac. Double-cliquer sur le fichier .dmg pour
+        ouvrir l'image disque. Dans la fenêtre Finder qui s'ouvre, faire glisser
+        l'icône "QtlMovie" vers l'icône "Applications". Puis, fermer la fenêtre
+        Finder, cliquer (à droite) sur l'icône "QtlMovie" qui est sur le bureau
+        et sélectionner "Ejecter". QtlMovie peut alors être lancé depuis le
+        Launcher et être éventuellement verrouillé sur le Dock.</i>
+      <p>Les outils media sont installés sous le répertoire d'installation de QtlMovie
+        mais vous pouvez sélectionner d'autres versions de ces outils dans le menu d'options.</p>
 
       <h3><a id="linux">Linux</a></h3>
 

@@ -42,6 +42,15 @@
             <li><a href="#wininstaller">Building the QtlMovie binary installer for Windows</a></li>
           </ul>
         </li>
+        <li><a href="#macosx">Building QtlMovie on Mac OS X</a>
+          <ul>
+            <li><a href="#macreq">Pre-requisites</a></li>
+            <li><a href="#macmanbuild">Building QtlMovie manually</a></li>
+            <li><a href="#macqtcreator">Building QtlMovie using Qt Creator</a></li>
+            <li><a href="#macdoxy">Building the Doxygen documentation</a></li>
+            <li><a href="#macinstaller">Building the QtlMovie binary installer for Mac OS X</a></li>
+          </ul>
+        </li>
       </ul>
     </div>
     <div class="content">
@@ -82,8 +91,8 @@
 
       <p>Run the script <code>build/build-rpm.sh</code>.
         The RPM package is built in the directory <code>installers</code>.
-        The RPM package is named <code>qtlmovie-1.2.10-0.fc19.x86_64.rpm</code> for instance,
-        where "1.2.10" is the QtlMovie version, "19" is the Fedora version and "x86_64" is the platform.</p>
+        The RPM package is named <code>qtlmovie-1.6-0.fc19.x86_64.rpm</code> for instance,
+        where "1.6" is the QtlMovie version, "19" is the Fedora version and "x86_64" is the platform.</p>
       <p>Following the package management rules, the RPM package contains only QtlMovie.
         It contains dependencies on the various media tools packages which must be separately installed.
         Note the following points on non-standard packages:</p>
@@ -108,7 +117,7 @@
         Note the following points on non-standard packages:</p>
       <ul>
         <li>On Ubuntu version 15 and higher, the package <i>ffmpeg</i> is available through the
-          standard Ubuntu repositories.</i>
+          standard Ubuntu repositories.</li>
         <li>Prior to Ubuntu version 15, the package <i>ffmpeg</i> was available through the
           <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's PPA</a>,
           not the standard Ubuntu repositories.
@@ -327,6 +336,40 @@ Major  Minor  Build  Revision
         Be sure to have <a href="#winqt">built and installed</a> this static version first.</p>
       <p>This script also builds the "standalone" archive, an alternative for
         users without administration privileges who cannot execute the standard installer.</p>
+      <hr/>
+
+      <h2><a id="macosx">Building QtlMovie on Mac OS X</a></h2>
+      
+      <h3><a id="macreq">Pre-requisites</a></h3>
+
+      <p>QtlMovie can be built on any Mac OS X platform supporting Qt 5.
+        All development packages for Qt 5 shall be installed, including QtMultimedia.</p>
+      <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
+        is required. Qt Creator is recommended to edit and modify the project.
+        Simply building the product without modification does not require Qt Creator.</p>
+      <p>Before installing Qt, Xcode shall be installed first from the Apple AppStore (it is a free application).
+        Xcode is required because it installs the C++ compiler and other development tools.</p>
+
+      <h3><a id="macmanbuild">Building QtlMovie manually</a></h3>
+
+      <p>Run the script <code>build/build.sh</code>.</p>
+
+      <h3><a id="macqtcreator">Building QtlMovie using Qt Creator</a></h3>
+
+      <p>Qt Creator shall be launched from the Mac OS X Launcher.
+        The first time Qt Creator is launched, accept all defaults for the project
+        configuration, especially the <i>shadow build</i> configuration.</p>
+      
+      <h3><a id="macdoxy">Building the Doxygen documentation</a></h3>
+
+      <p>Run the script <code>build/build-doc.sh</code>.</p>
+
+      <h3><a id="macinstaller">Building the QtlMovie binary installer for Mac OS X</a></h3>
+
+      <p>Run the script <code>build/build-mac.sh</code>.
+        The DMG package is built in the directory <code>installers</code>.
+        The DMG package is named <code>QtlMovie-1.6.dmg</code> for instance,
+        where "1.6" is the QtlMovie version.</p>
 
       <hr/>
       <p>[<i><a href="#top">Back to top</a></i>]</p>

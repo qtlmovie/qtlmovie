@@ -103,6 +103,14 @@ function generateOutput($appVersion, $osName, $cpuArch)
         $suffix = '.exe';
         break;
 
+    case 'osx|x86_64':
+    case 'mac|x86_64':
+    case 'macosx|x86_64':
+        $dir = 'mac';
+        $prefix = 'QtlMovie-';
+        $suffix = '.dmg';
+        break;
+
     case 'ubuntu|x86_64':
         $dir = 'ubuntu';
         $prefix = 'qtlmovie_';

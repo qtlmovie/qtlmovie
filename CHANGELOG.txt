@@ -3,6 +3,10 @@ QtlMovie Change Log
 ===================
 
 Version 1.6
+- QtlMovie is available on Mac OS X. The .dmg package contains precompiled
+  versions of all media tools and is self-sufficient, like its Windows
+  counter-part. QtlMovie 1.6 has been tested on Mac OS X 10.11 "El Capitan".
+  Feedbacks on older versions are welcome.
 - Bug fix: Converting to H.264 (iPad, iPhone) failed when the input video
   had chroma format 4:2:2 (as found in MJPEG files from some photo cameras).
   This is fixed (output format now forced to 4:2:0).

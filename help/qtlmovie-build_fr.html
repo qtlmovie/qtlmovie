@@ -42,6 +42,15 @@
             <li><a href="#wininstaller">Construire l'installeur binaire de QtlMovie pour Windows</a></li>
           </ul>
         </li>
+        <li><a href="#macosx">Construire QtlMovie sur Mac OS X</a>
+          <ul>
+            <li><a href="#macreq">Pré-requis</a></li>
+            <li><a href="#macmanbuild">Construire QtlMovie manuellement</a></li>
+            <li><a href="#macqtcreator">Construire QtlMovie avec Qt Creator</a></li>
+            <li><a href="#macdoxy">Construire la documentation Doxygen</a></li>
+            <li><a href="#macinstaller">Construire le package DMG de QtlMovie pour Mac OS X</a></li>
+          </ul>
+        </li>
       </ul>
     </div>
     <div class="content">
@@ -84,8 +93,8 @@
 
       <p>Exécuter le script <code>build/build-rpm.sh</code>.
         Le package RPM est construit dans le répertoire <code>installers</code>.
-        Le package RPM se nomme <code>qtlmovie-1.2.10-0.fc19.x86_64.rpm</code> par exemple,
-        où "1.2.10" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
+        Le package RPM se nomme <code>qtlmovie-1.6-0.fc19.x86_64.rpm</code> par exemple,
+        où "1.6" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
       <p>Suivant les règles habituelles de gestion de package, le package RPM ne contient que QtlMovie.
         Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
         Noter les points suivants sur les packages non-standards:</p>
@@ -337,7 +346,40 @@ Major  Minor  Build  Revision
       <p>Ce script construit également l'archive "standalone", une alternative pour
         les utilisateurs sans privilège administrateur qui ne peuvent pas exécuter
         l'installeur standard.</p>
+      <hr/>
 
+      <h2><a id="macosx">Construire QtlMovie sur Mac OS X</a></h2>
+
+      <h3><a id="macreq">Pré-requis</a></h3>
+
+      <p>QtlMovie peut être construit sur n'importe quelle plate-forme Mac OS X supportant Qt 5.
+        Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
+      <p>L'utilisation de Qt Creator n'est pas obligatoire.
+        S'il est utilisé, Qt Creator version 2.7 ou plus requis.
+        Qt Creator est recommandé pour éditer ou modifier le projet.
+        Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
+
+      <h3><a id="macmanbuild">Construire QtlMovie manuellement</a></h3>
+
+      <p>Exécuter le script <code>build/build.sh</code>.</p>
+
+      <h3><a id="macqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
+
+      <p>Qt Creator doit être lancé via le Launcher de Mac OS X.
+        La première fois que Qt Creator est lancé, accepter toutes les options
+        par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
+
+      <h3><a id="macdoxy">Construire la documentation Doxygen</a></h3>
+
+      <p>Exécuter le script <code>build/build-doc.sh</code>.</p>
+
+      <h3><a id="macinstaller">Construire le package DMG de QtlMovie pour Mac OS X</a></h3>
+
+      <p>Exécuter le script <code>build/build-mac.sh</code>.
+        Le package DMG est construit dans le répertoire <code>installers</code>.
+        Le package DMG se nomme <code>QtlMovie-1.6.dmg</code> par exemple,
+        où "1.6" est la version de QtlMovie.</p>
+      
       <hr/>
       <p>[<i><a href="#top">Retour en haut de page</a></i>]</p>
     </div>
