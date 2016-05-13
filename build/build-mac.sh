@@ -43,6 +43,7 @@ BUILDDIR=$ROOTDIR/build-QtlMovie-Desktop-Release
 
 # Search for Qt installations out of system directories.
 source ${SCRIPTDIR}/QtSetEnvironment.rc
+QTDIR=$(dirname $(dirname $(which qmake)))
 
 # QtlMovie version is extracted from QtlMovieVersion.h
 QTLMOVIE_VERSION=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
@@ -59,19 +60,28 @@ VOLUME="QtlMovie $QTLMOVIE_VERSION"
 rm -f "$DMGTMP" "$DMGFILE"
 
 # Populate Mac tools in the bundle.
-rm -rf $APPDIR/Contents/MacOS/mactools
+APPTOOLS=$APPDIR/Contents/MacOS/mactools
+rm -rf $APPTOOLS
 tar -C $ROOTDIR --exclude .gitignore --exclude '*.txt' -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
-strip $APPDIR/Contents/MacOS/QtlMovie $APPDIR/Contents/MacOS/mactools/*
-chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPDIR/Contents/MacOS/mactools $APPDIR/Contents/MacOS/mactools/*
+strip $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS/*
+chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS $APPTOOLS/*
 
 # Copy fonts in the bundle.
-mkdir $APPDIR/Contents/MacOS/fonts
-cp $ROOTDIR/fonts/fonts.conf.template $ROOTDIR/fonts/subfont.ttf $APPDIR/Contents/MacOS/fonts
-chmod 755 $APPDIR/Contents/MacOS/fonts
-chmod 644 $APPDIR/Contents/MacOS/fonts/*
+APPFONTS=$APPDIR/Contents/MacOS/fonts
+mkdir -p $APPFONTS
+cp $ROOTDIR/fonts/fonts.conf.template $ROOTDIR/fonts/subfont.ttf $APPFONTS
+chmod 755 $APPFONTS
+chmod 644 $APPFONTS/*
 
 # Deploy Qt requirements in the bundle.
 macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -no-plugins -always-overwrite || exit 1
+
+# Install translations in the bundle.
+APPTRANS=$APPDIR/Contents/MacOS/translations
+mkdir -p $APPTRANS
+cp $BUILDDIR/*/locale/*_fr.qm $(find $QTDIR -name 'qt*_fr.qm') $APPTRANS
+chmod 755 $APPTRANS
+chmod 644 $APPTRANS/*
 
 # Create an initial disk image (96 MB)
 hdiutil create -size 96m -fs HFS+ -volname "$VOLUME" "$DMGTMP"
@@ -85,7 +95,7 @@ DEV=$(echo $DEVS | cut -f 1 -d ' ')
 tar -C $(dirname "$APPDIR") -c -p -f - $(basename "$APPDIR") | tar -C "/Volumes/$VOLUME" -x -p -f -
 
 # Format the appearance of the DMG in Finder when opened.
-mkdir "/Volumes/$VOLUME/.background"
+mkdir -p "/Volumes/$VOLUME/.background"
 cp $ROOTDIR/build/dmg-background.png "/Volumes/$VOLUME/.background/background.png"
 echo '
    tell application "Finder"

@@ -1,7 +1,18 @@
 Download FFmpeg binaries for Mac OS X:
-  http://www.ffmpegmac.net/
-  http://www.ffmpegmac.net/resources/SnowLeopard_Lion_Mountain_Lion_Mavericks_Yosemite_El-Captain_25.02.2016.zip
+  http://evermeet.cx/ffmpeg/
+
+Sample download links:
+  http://evermeet.cx/ffmpeg/ffmpeg-3.0.2.7z
+  http://evermeet.cx/ffmpeg/ffprobe-3.0.2.7z
+
+Decompression commands:
+  brew install p7zip
+  7z e ffmpeg-3.0.2.7z 
+  7z e ffprobe-3.0.2.7z
 
 Extract the following files here:
   ffmpeg
   ffprobe
+
+Pay attention to other FFmpeg ports to Mac. Some of them do not include
+the "subtitles" filter, which make them unusable with QtlMovie.
