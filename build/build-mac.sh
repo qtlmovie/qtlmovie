@@ -62,6 +62,7 @@ rm -f "$DMGTMP" "$DMGFILE"
 # Populate Mac tools in the bundle.
 APPTOOLS=$APPDIR/Contents/MacOS/mactools
 rm -rf $APPTOOLS
+find $ROOTDIR/mactools -type f ! -name '.*' ! -name '*.txt' | xargs chmod 755
 tar -C $ROOTDIR --exclude .gitignore --exclude '*.txt' -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
 strip $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS/*
 chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS $APPTOOLS/*

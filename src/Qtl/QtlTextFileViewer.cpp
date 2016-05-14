@@ -51,12 +51,6 @@ QtlTextFileViewer::QtlTextFileViewer(QWidget* parent,
     _ui->setupUi(this);
 
     // The defaut font for the text window is console-like.
-    // Select "Monospace" family. When not found (Windows), use a typewriter style font.
-    // This double specification is necessary since 1) "Monospace" is known on X11 but
-    // not on Windows, 2) QFont::setStyleHint() is ineffective on X11.
-    //@@@  QFont font("Monospace");
-    //@@@ font.setStyleHint(QFont::TypeWriter);
-    //@@@ _ui->text->setFont(font);
     _ui->text->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     // Set the user-defined properties.
