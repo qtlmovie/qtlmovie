@@ -54,7 +54,7 @@ void QtlOpticalDriveTest::testInvalid()
 {
     QtlOpticalDrive drive;
     QVERIFY(!drive.isValid());
-    QVERIFY(drive.driveName().isEmpty());
+    QVERIFY(drive.deviceName().isEmpty());
     QVERIFY(drive.productId().isEmpty());
     QVERIFY(drive.productRevision().isEmpty());
     QVERIFY(drive.vendorId().isEmpty());
@@ -88,10 +88,10 @@ void QtlOpticalDriveTest::testSystem()
     // Get the list of all optical drives in the system.
     const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
 
-    // Check that all drives have device names.
+    // Check that all drives have names.
     foreach (const QtlOpticalDrive& drive, drives) {
         QVERIFY(drive.isValid());
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
     }
 
     // Check that default drives have the right capability.
@@ -99,37 +99,37 @@ void QtlOpticalDriveTest::testSystem()
 
     drive = QtlOpticalDrive::firstCdReader();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canReadCd());
     }
 
     drive = QtlOpticalDrive::firstCdWriter();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canWriteCd());
     }
 
     drive = QtlOpticalDrive::firstDvdReader();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canReadDvd());
     }
 
     drive = QtlOpticalDrive::firstDvdWriter();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canWriteDvd());
     }
 
     drive = QtlOpticalDrive::firstBluRayReader();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canReadBluRay());
     }
 
     drive = QtlOpticalDrive::firstBluRayWriter();
     if (drive.isValid()) {
-        QVERIFY(!drive.driveName().isEmpty());
+        QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canWriteBluRay());
     }
 
@@ -137,7 +137,9 @@ void QtlOpticalDriveTest::testSystem()
     if (verbose) {
         qDebug() << "Found" << drives.size() << "optical drives";
         foreach (const QtlOpticalDrive& drive, drives) {
-            qDebug() << "====== Drive:" << drive.driveName();
+            qDebug() << "====== Drive:" << drive.name();
+            qDebug() << "Device name:" << drive.deviceName();
+            qDebug() << "Burner device name:" << drive.burnerDeviceName();
             qDebug() << "Vendor id:" << drive.vendorId();
             qDebug() << "Product id:" << drive.productId();
             qDebug() << "Product revision:" << drive.productRevision();
@@ -149,11 +151,11 @@ void QtlOpticalDriveTest::testSystem()
             qDebug() << "Can write Blu-Ray:" << drive.canWriteBluRay();
         }
         qDebug() << "====== Default drives:";
-        qDebug() << "First CD reader:" << QtlOpticalDrive::firstCdReader().driveName();
-        qDebug() << "First CD writer:" << QtlOpticalDrive::firstCdWriter().driveName();
-        qDebug() << "First DVD reader:" << QtlOpticalDrive::firstDvdReader().driveName();
-        qDebug() << "First DVD writer:" << QtlOpticalDrive::firstDvdWriter().driveName();
-        qDebug() << "First Blu-Ray reader:" << QtlOpticalDrive::firstBluRayReader().driveName();
-        qDebug() << "First Blu-Ray writer:" << QtlOpticalDrive::firstBluRayWriter().driveName();
+        qDebug() << "First CD reader:" << QtlOpticalDrive::firstCdReader().name();
+        qDebug() << "First CD writer:" << QtlOpticalDrive::firstCdWriter().name();
+        qDebug() << "First DVD reader:" << QtlOpticalDrive::firstDvdReader().name();
+        qDebug() << "First DVD writer:" << QtlOpticalDrive::firstDvdWriter().name();
+        qDebug() << "First Blu-Ray reader:" << QtlOpticalDrive::firstBluRayReader().name();
+        qDebug() << "First Blu-Ray writer:" << QtlOpticalDrive::firstBluRayWriter().name();
     }
 }

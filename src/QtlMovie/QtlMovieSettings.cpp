@@ -133,7 +133,7 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
 
     // If no DVD burner is defined, use the first one in the system by default.
     if (dvdBurner().isEmpty()) {
-        setDvdBurner(QtlOpticalDrive::firstDvdWriter().driveName());
+        setDvdBurner(QtlOpticalDrive::firstDvdWriter().name());
     }
 }
 

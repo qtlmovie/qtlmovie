@@ -41,7 +41,7 @@
 //!
 //! A class which describes an optical disc drive in the system.
 //!
-//! Limitation: Implemented on Windows and Linux only.
+//! Limitation: Implemented on Windows, Mac and Linux only.
 //!
 class QtlOpticalDrive
 {
@@ -58,20 +58,54 @@ public:
     static QList<QtlOpticalDrive> getAllDrives();
 
     //!
+    //! Get the description of a drive.
+    //! @param [in] name A drive name as returned by name().
+    //! @return The description of the corresponding drive.
+    //! If the drive is not found, isValid() will return false.
+    //!
+    static QtlOpticalDrive getDrive(const QString& name);
+
+    //!
     //! Check if a drive is valid, ie. contains the description of a real existing drive.
     //!
     bool isValid() const
     {
-        return !_driveName.isEmpty();
+        return !_name.isEmpty();
+    }
+
+    //!
+    //! Get the drive name.
+    //! All existing drives have a name. But, on Mac, a drive has no device name if the drive
+    //! is empty. On Mac, a drive has a device name only when a media is inserted and when
+    //! the media is ejected and another one inserted later, the device name may have changed.
+    //! @return The drive name.
+    //!
+    QString name() const
+    {
+        return _name;
     }
 
     //!
     //! Get the drive device name.
     //! @return The drive device name.
+    //! @see burnerDeviceName()
     //!
-    QString driveName() const
+    QString deviceName() const
     {
-        return _driveName;
+        return _deviceName;
+    }
+
+    //!
+    //! Get the drive device name for burning media.
+    //! On some systems like Mac OS X, the general device name of the drive to mount
+    //! a device deviceName() and the device name to burn a media in the drive is not
+    //! the same.
+    //! @return The drive device name.
+    //! @see deviceName()
+    //!
+    QString burnerDeviceName() const
+    {
+        return _burnerDeviceName;
     }
 
     //!
@@ -210,16 +244,21 @@ public:
     }
 
 private:
-    QString _driveName;       //!< Drive device name.
-    QString _vendorId;        //!< Device vendor id.
-    QString _productId;       //!< Device product id.
-    QString _productRevision; //!< Device product revision.
-    bool    _canReadCd;       //!< The drive can read CD media.
-    bool    _canWriteCd;      //!< The drive can write CD media.
-    bool    _canReadDvd;      //!< The drive can read DVD media.
-    bool    _canWriteDvd;     //!< The drive can write DVD media.
-    bool    _canReadBluRay;   //!< The drive can read Blu-Ray media.
-    bool    _canWriteBluRay;  //!< The drive can write Blu-Ray media.
+    QString _name;              //!< Drive name.
+    QString _deviceName;        //!< Drive device name.
+    QString _burnerDeviceName;  //!< Drive device name for burning operations.
+    QString _vendorId;          //!< Device vendor id.
+    QString _productId;         //!< Device product id.
+    QString _productRevision;   //!< Device product revision.
+    bool    _canReadCd;         //!< The drive can read CD media.
+    bool    _canWriteCd;        //!< The drive can write CD media.
+    bool    _canReadDvd;        //!< The drive can read DVD media.
+    bool    _canWriteDvd;       //!< The drive can write DVD media.
+    bool    _canReadBluRay;     //!< The drive can read Blu-Ray media.
+    bool    _canWriteBluRay;    //!< The drive can write Blu-Ray media.
+#if defined(Q_OS_OSX)
+    int     _driveNumber;       //!< Drive number (Mac OS X)
+#endif
 
     //!
     //! Locate the first drive in the system matching a boolean member.

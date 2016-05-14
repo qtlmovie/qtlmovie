@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,48 +26,47 @@
 //
 //----------------------------------------------------------------------------
 //
-// Qtl, Qt utility library.
-// Define the class QtlProcessResult.
+//  Define the QtlSynchronousProcess class.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlProcessResult.h"
+#include "QtlSynchronousProcess.h"
 
 
 //----------------------------------------------------------------------------
-// Constructors and assignment.
+// Constructor.
 //----------------------------------------------------------------------------
 
-QtlProcessResult::QtlProcessResult(const QString& program, const QStringList& arguments) :
-    _program(program),
-    _arguments(arguments),
-    _stdOutput(),
-    _stdError(),
-    _errorMessage(),
-    _exitCode(-1)
-{
-}
 
-QtlProcessResult::QtlProcessResult(const QtlProcessResult &other) :
-    _program(other._program),
-    _arguments(other._arguments),
-    _stdOutput(other._stdOutput),
-    _stdError(other._stdError),
-    _errorMessage(other._errorMessage),
-    _exitCode(other._exitCode)
+QtlSynchronousProcess::QtlSynchronousProcess(const QString &program,
+                                             const QStringList &arguments,
+                                             int msRunTestTimeout,
+                                             int maxProcessOutputSize,
+                                             QObject *parent,
+                                             const QProcessEnvironment &env) :
+    _eventLoop(),
+    _result(),
+    _terminated(false)
 {
+    // Create the process. The object will delete itself upon termination.
+    QtlProcess* process = QtlProcess::newInstance(program, arguments, msRunTestTimeout, maxProcessOutputSize, this, env);
+    connect(process, &QtlProcess::terminated, this, &QtlSynchronousProcess::processTerminated);
+    process->start();
 
-}
-
-const QtlProcessResult& QtlProcessResult::operator=(const QtlProcessResult &other)
-{
-    if (&other != this) {
-        _program = other._program;
-        _arguments = other._arguments;
-        _stdOutput = other._stdOutput;
-        _stdError = other._stdError;
-        _errorMessage = other._errorMessage;
-        _exitCode = other._exitCode;
+    // Run a private event loop while the process executes.
+    while (!_terminated) {
+        _eventLoop.exec();
     }
-    return *this;
+}
+
+
+//----------------------------------------------------------------------------
+// Invoked when the process is terminated or failed to start.
+//----------------------------------------------------------------------------
+
+void QtlSynchronousProcess::processTerminated(const QtlProcessResult &result)
+{
+    _terminated = true;
+    _result = result;
+    _eventLoop.exit();
 }

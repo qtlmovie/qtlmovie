@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>QObject</name>
     <message>
@@ -2261,33 +2261,33 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlProcess</name>
     <message>
-        <location filename="../QtlProcess.cpp" line="115"/>
+        <location filename="../QtlProcess.cpp" line="120"/>
         <source>Process execution canceled</source>
         <translation>Exécution du processus annulée</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="132"/>
+        <location filename="../QtlProcess.cpp" line="137"/>
         <source>Process output/error size exceeds limit</source>
         <translation>La taille de la sortie du processus dépasse la limite</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="144"/>
-        <location filename="../QtlProcess.cpp" line="160"/>
+        <location filename="../QtlProcess.cpp" line="149"/>
+        <location filename="../QtlProcess.cpp" line="165"/>
         <source>Process crashed</source>
         <translation>Le processus a été interrompu</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="157"/>
+        <location filename="../QtlProcess.cpp" line="162"/>
         <source>Failed to start process</source>
         <translation>Impossible de démarrer le processus</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="163"/>
+        <location filename="../QtlProcess.cpp" line="168"/>
         <source>Unknown process error</source>
         <translation>Erreur inconnue du process</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="175"/>
+        <location filename="../QtlProcess.cpp" line="180"/>
         <source>Process exceeds execution time limit</source>
         <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
     </message>
@@ -2333,42 +2333,42 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlTlvTableWidget</name>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="221"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="220"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="222"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="221"/>
         <source>Value (hexadecimal)</source>
         <translation>Valeur (héxadécimal)</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="229"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="228"/>
         <source>Insert before this one</source>
         <translation>Insérer au dessus</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="233"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="232"/>
         <source>Insert after this one</source>
         <translation>Insérer au dessous</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="237"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="236"/>
         <source>Move up</source>
         <translation>Déplacer vers le haut</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="242"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="241"/>
         <source>Move down</source>
         <translation>Déplacer vers le bas</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="247"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="246"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../QtlTlvTableWidget.cpp" line="374"/>
+        <location filename="../QtlTlvTableWidget.cpp" line="373"/>
         <source>Delete tag %1?</source>
         <translation>Supprimer le tag %1?</translation>
     </message>

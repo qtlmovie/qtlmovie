@@ -40,6 +40,7 @@
 #include "QtlMovieMkisofsProcess.h"
 #include "QtlMovieGrowisofsProcess.h"
 #include "QtlMovieCcExtractorProcess.h"
+#include "QtlOpticalDrive.h"
 #include "QtlStringList.h"
 #include "QtlSysInfo.h"
 
@@ -980,13 +981,23 @@ bool QtlMovieJob::addTranscodeToDvdIsoImage(const QtlMovieInputFile* inputFile, 
 
 bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
 {
+    // Get the device name for burning.
+    const QtlOpticalDrive drive(QtlOpticalDrive::getDrive(dvdBurner));
+    if (!drive.isValid()) {
+        return abortStart(tr("Cannot find device name for DVD drive name \"%1\"").arg(dvdBurner));
+    }
+    const QString dev(drive.burnerDeviceName());
+    if (dev.isEmpty()) {
+        return abortStart(tr("No media in drive \"%1\"").arg(dvdBurner));
+    }
+
     // Build a growisofs command to burn the DVD.
     // Important: In the last argument, use "device=isofile" in one single argument.
     // If the burning device and the ISO file are specified in two separate arguments,
     // growisofs creates a new file system with the ISO file inside. The "=" in the
     // same argument means that the file is an ISO image to burn.
     QStringList args;
-    args << "-dvd-compat" << "-Z" << (dvdBurner + "=" + isoFile);
+    args << "-dvd-compat" << "-Z" << (dev + "=" + isoFile);
 
     // Add the growisofs process to the job.
     QtlMovieProcess* process = new QtlMovieGrowisofsProcess(args, settings(), this, this);

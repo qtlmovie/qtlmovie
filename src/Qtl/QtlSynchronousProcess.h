@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,60 +26,47 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlProcessResult.h
+//! @file QtlSynchronousProcess.h
 //!
-//! Declare the class QtlProcessResult.
+//! Declare the class QtlSynchronousProcess, a synchronous encapsulation of QProcess.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLPROCESSRESULT_H
-#define QTLPROCESSRESULT_H
+#ifndef QTLSYNCHRONOUSPROCESS_H
+#define QTLSYNCHRONOUSPROCESS_H
 
-#include "QtlCore.h"
+#include <QObject>
+#include "QtlProcess.h"
 
 //!
-//! Result of a process execution.
+//! The QtlSynchronousProcess class implements the execution of a synchronous process.
 //!
-class QtlProcessResult
+//! The process is entirely executed during the constructor. Then, the standard
+//! output and error can be read.
+//!
+class QtlSynchronousProcess : public QObject
 {
+    Q_OBJECT
+
 public:
     //!
     //! Constructor.
+    //! The process executes synchronously. The constructor returns only upon
+    //! process completion.
     //! @param [in] program Executable file path.
     //! @param [in] arguments Command line arguments.
+    //! @param [in] msRunTestTimeout Timeout of process execution in milliseconds. Ignored if negative or zero.
+    //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
+    //! @param [in] parent Optional parent object.
+    //! @param [in] env Environment for the process. Current environment by default.
     //!
-    QtlProcessResult(const QString& program = QString(), const QStringList& arguments = QStringList());
-
-    //!
-    //! Copy constructor.
-    //! @param [in] other Other instance to copy.
-    //!
-    QtlProcessResult(const QtlProcessResult& other);
-
-    //!
-    //! Assignment operator.
-    //! @param [in] other Other instance to copy.
-    //!
-    const QtlProcessResult& operator=(const QtlProcessResult& other);
-
-    //!
-    //! Get the executable file path.
-    //! @return Executable file path.
-    //!
-    QString program() const
-    {
-        return _program;
-    }
-
-    //!
-    //! Get the command line arguments.
-    //! @return Command line arguments.
-    //!
-    QStringList arguments() const
-    {
-        return _arguments;
-    }
+    QtlSynchronousProcess(const QString& program,
+                          const QStringList& arguments = QStringList(),
+                          int msRunTestTimeout = 0,
+                          int maxProcessOutputSize = 0,
+                          QObject* parent = 0,
+                          const QProcessEnvironment& env = QProcessEnvironment());
 
     //!
     //! Get the content of the standard output after process termination.
@@ -87,7 +74,16 @@ public:
     //!
     QString standardOutput() const
     {
-        return _stdOutput;
+        return _result.standardOutput();
+    }
+
+    //!
+    //! Get the content of the standard output after process termination as list of lines.
+    //! @return Text of lines of standard output.
+    //!
+    QStringList standardOutputLines() const
+    {
+        return _result.standardOutput().split(QRegExp("\\r*\\n"));
     }
 
     //!
@@ -96,7 +92,7 @@ public:
     //!
     int standardOutputSize() const
     {
-        return _stdOutput.size();
+        return _result.standardOutputSize();
     }
 
     //!
@@ -105,7 +101,16 @@ public:
     //!
     QString standardError() const
     {
-        return _stdError;
+        return _result.standardError();
+    }
+
+    //!
+    //! Get the content of the standard error after process termination as list of lines.
+    //! @return Text of lines of standard error.
+    //!
+    QStringList standardErrorLines() const
+    {
+        return _result.standardError().split(QRegExp("\\r*\\n"));
     }
 
     //!
@@ -114,7 +119,7 @@ public:
     //!
     int standardErrorSize() const
     {
-        return _stdError.size();
+        return _result.standardErrorSize();
     }
 
     //!
@@ -123,7 +128,7 @@ public:
     //!
     bool hasError() const
     {
-        return !_errorMessage.isEmpty();
+        return _result.hasError();
     }
 
     //!
@@ -132,7 +137,7 @@ public:
     //!
     QString errorMessage() const
     {
-        return _errorMessage;
+        return _result.errorMessage();
     }
 
     //!
@@ -141,52 +146,24 @@ public:
     //!
     int exitCode() const
     {
-        return _exitCode;
+        return _result.exitCode();
     }
 
+private slots:
     //!
-    //! Append more data to standard output.
-    //! @param [in] data Data to append.
+    //! Invoked when the process is terminated or failed to start.
+    //! @param [in] result Process execution results.
     //!
-    void appendStandardOutput(const QByteArray& data)
-    {
-        _stdOutput.append(data);
-    }
-
-    //!
-    //! Append more data to standard error.
-    //! @param [in] data Data to append.
-    //!
-    void appendStandardError(const QByteArray& data)
-    {
-        _stdError.append(data);
-    }
-
-    //!
-    //! Set the error message.
-    //! @param [in] errorMessage Error message.
-    //!
-    void setErrorMessage(const QString& errorMessage)
-    {
-        _errorMessage = errorMessage;
-    }
-
-    //!
-    //! Set the exit code.
-    //! @param exitCode Exit code.
-    //!
-    void setExitCode(int exitCode)
-    {
-        _exitCode = exitCode;
-    }
+    void processTerminated(const QtlProcessResult& result);
 
 private:
-    QString     _program;       //!< Executable file path.
-    QStringList _arguments;     //!< Command line arguments.
-    QString     _stdOutput;     //!< Content of standard output.
-    QString     _stdError;      //!< Content of standard output.
-    QString     _errorMessage;  //!< Error message.
-    int         _exitCode;      //!< Process exit code.
+    QEventLoop       _eventLoop;  //!< Event loop which executes in the constructor.
+    QtlProcessResult _result;     //!< Process execution result.
+    bool             _terminated; //!< Process execution is completed.
+
+    // Unaccessible operations.
+    QtlSynchronousProcess() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlSynchronousProcess)
 };
 
-#endif // QTLPROCESSRESULT_H
+#endif // QTLSYNCHRONOUSPROCESS_H

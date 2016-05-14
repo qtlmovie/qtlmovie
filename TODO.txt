@@ -2,4 +2,3 @@
 QtlMovie "to do" list
 =====================
 
-- Mac: Better selection of DVD Burners in settings (/dev/rdisk?).

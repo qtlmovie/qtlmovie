@@ -92,7 +92,7 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     QStringList burnerDriveNames;
     foreach (const QtlOpticalDrive& drive, QtlOpticalDrive::getAllDrives()) {
         if (drive.canWriteDvd()) {
-            burnerDriveNames << drive.driveName();
+            burnerDriveNames << drive.name();
         }
     }
     burnerDriveNames.sort(Qt::CaseInsensitive);

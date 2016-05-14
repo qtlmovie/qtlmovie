@@ -271,7 +271,7 @@ private:
     //!
     //! Add the process for burning a DVD ISO image.
     //! @param [in] isoFile The input ISO image.
-    //! @param [in] dvdBurner The DVD burner device.
+    //! @param [in] dvdBurner The DVD burner drive name (see QtlOpticalDrive::name()).
     //! @return True on success, false on error.
     //!
     bool addBurnDvd(const QString& isoFile, const QString& dvdBurner);

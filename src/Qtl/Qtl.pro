@@ -74,7 +74,8 @@ SOURCES += \
     QtlSettings.cpp \
     QtlSelectionRectDelegate.cpp \
     QtlOpticalDrive.cpp \
-    QtlFileSystemInfo.cpp
+    QtlFileSystemInfo.cpp \
+    QtlSynchronousProcess.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -134,7 +135,8 @@ HEADERS += \
     QtlWinUtils.h \
     QtlSelectionRectDelegate.h \
     QtlOpticalDrive.h \
-    QtlFileSystemInfo.h
+    QtlFileSystemInfo.h \
+    QtlSynchronousProcess.h
 
 FORMS += \
     QtlBrowserDialog.ui \

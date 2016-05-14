@@ -32,11 +32,16 @@
 //----------------------------------------------------------------------------
 
 #include "QtlOpticalDrive.h"
+#include "QtlStringUtils.h"
+#include "QtlStringList.h"
+#include <QtDebug>
 
 #if defined(Q_OS_WIN)
 #include <QAxObject>
 #elif defined(Q_OS_LINUX)
 #include "QtlFile.h"
+#elif defined(Q_OS_OSX)
+#include "QtlSynchronousProcess.h"
 #endif
 
 
@@ -45,7 +50,9 @@
 //----------------------------------------------------------------------------
 
 QtlOpticalDrive::QtlOpticalDrive() :
-    _driveName(),
+    _name(),
+    _deviceName(),
+    _burnerDeviceName(),
     _vendorId(),
     _productId(),
     _productRevision(),
@@ -55,6 +62,9 @@ QtlOpticalDrive::QtlOpticalDrive() :
     _canWriteDvd(false),
     _canReadBluRay(false),
     _canWriteBluRay(false)
+#if defined(Q_OS_OSX)
+    , _driveNumber(0)
+#endif
 {
 }
 
@@ -76,6 +86,21 @@ QtlOpticalDrive QtlOpticalDrive::firstDriveWithCheck(bool QtlOpticalDrive::*chec
     return QtlOpticalDrive();
 }
 
+
+//----------------------------------------------------------------------------
+// Get the description of a drive.
+//----------------------------------------------------------------------------
+
+QtlOpticalDrive QtlOpticalDrive::getDrive(const QString &name)
+{
+    const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
+    foreach (const QtlOpticalDrive& drive, drives) {
+        if (drive.name() == name) {
+            return drive;
+        }
+    }
+    return QtlOpticalDrive();
+}
 
 //----------------------------------------------------------------------------
 // Update a boolean field in all elements in an array of QtlOpticalDrive.
@@ -215,13 +240,13 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
                 // Remove '\' after ':' (keep only drive names).
                 name.remove(QRegExp("\\\\.*"));
                 if (!name.isEmpty()) {
-                    discDrive._driveName = name;
+                    discDrive._name = discDrive._deviceName = discDrive._burnerDeviceName = name;
                     break;
                 }
             }
 
             // If we could not get the drive name, the object is useless.
-            if (discDrive._driveName.isEmpty()) {
+            if (discDrive._name.isEmpty()) {
                 continue;
             }
 
@@ -323,7 +348,7 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
 
                 // Initialize a drive object with the complete device name.
                 QtlOpticalDrive drive;
-                drive._driveName = QStringLiteral("/dev/%1").arg(name);
+                discDrive._name = discDrive._deviceName = discDrive._burnerDeviceName = QStringLiteral("/dev/%1").arg(name);
 
                 // The "commercial" informations are available elsewhere:
                 // $ cat /sys/block/sr0/device/vendor
@@ -362,7 +387,124 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
         }
     }
 
-#endif
+#elif defined(Q_OS_OSX)
+
+    // Mac OS X implementation, based of the output of the "drutil" command.
+    // First, the command "drutil list" lists all drives. The output looks like:
+    // ---------------- cut here --------------------------------
+    //    Vendor   Product           Rev   Bus       SupportLevel
+    // 1  NECVMWar VMware SATA CD01  1.00  ATAPI     Unsupported
+    // ---------------- cut here --------------------------------
+
+    // Execute "drutil list".
+    // As a foolproof precaution, don't let the process run more than 5 seconds and 32 KB of output.
+    const QtlSynchronousProcess drutilList("drutil", QStringList("list"), 5000, 32768);
+
+    // Get the output of "drutil list".
+    QStringList lines(drutilList.standardOutputLines());
+    if (lines.size() < 2) {
+        // Not even one drive found.
+        return drives;
+    }
+
+    // Locate the position of the header fields.
+    const QString& head(lines.first());
+    const int posVendor  = head.indexOf("Vendor", 0, Qt::CaseInsensitive);
+    const int posProduct = head.indexOf("Product", posVendor, Qt::CaseInsensitive);
+    const int posRev     = head.indexOf("Rev", posProduct, Qt::CaseInsensitive);
+    const int posBus     = head.indexOf("Bus", posRev, Qt::CaseInsensitive);
+    if (posVendor < 0 || posProduct < 0 || posRev < 0 || posBus < 0) {
+        qWarning() << "QtlOpticalDrive: unexpected header for \"drutil list\": " << head;
+        return drives;
+    }
+
+    // Iterate over all output lines, starting with the second one.
+    foreach (const QString& line, lines) {
+        QtlOpticalDrive drive;
+
+        // If the line as at least as long as "Bus" position and first field is an integer.
+        if (line.size() >= posBus && (drive._driveNumber = qtlToInt(line.left(posVendor))) >= 0) {
+
+            // Then we have a drive description.
+            drive._vendorId = line.mid(posVendor, posProduct - posVendor).simplified();
+            drive._productId = line.mid(posProduct, posRev - posProduct).simplified();
+            drive._productRevision = line.mid(posRev, posBus - posRev).simplified();
+            drive._name = QStringLiteral("%1: %2 %3").arg(drive._driveNumber).arg(drive._vendorId).arg(drive._productId).simplified();
+
+            // Add the drive in the list. For the moment, we do no know the drive's capabilities.
+            drives << drive;
+        }
+    }
+
+    // Then, for each drive, we run the command "drutil info -drive N".
+    // The output looks like:
+    // ---------------- cut here -------------------------------------------
+    //   Vendor   Product           Rev
+    //     NECVMWar VMware SATA CD01  1.00
+    //
+    //       Interconnect: ATAPI
+    //       SupportLevel: Unsupported
+    //       Profile Path: None
+    //              Cache: 2048k
+    //           CD-Write: -R, -RW, BUFE, CDText, Test, IndexPts, ISRC
+    //          DVD-Write: -R, -R DL, -RAM, -RW, +R, +R DL, +RW, BUFE, Test
+    //         Strategies: CD-TAO, CD-SAO, CD-Raw, DVD-DAO
+    // ---------------- cut here -------------------------------------------
+    //
+    // And then we run "drutil status -drive N" to see if a media is inserted
+    // and what is the device name. The output looks like:
+    // ---------------- cut here -------------------------------------------
+    // Vendor   Product           Rev
+    // NECVMWar VMware SATA CD01  1.00
+    //
+    //           Type: DVD+R         Name: /dev/disk2
+    //       Sessions: 1             Tracks: 1
+    //   Overwritable:   00:00:00    blocks:        0 /   0.00MB /   0.00MiB
+    //     Space Free:   00:00:00    blocks:        0 /   0.00MB /   0.00MiB
+    //     Space Used:  342:12:68    blocks:  1539968 /   3.15GB /   2.94GiB
+    //    Writability:
+    //      Book Type: DVD+R (v1)
+    //       Media ID: MCC 004
+    // ---------------- cut here -------------------------------------------
+
+    // Iterate over previous list of drives and drive numbers
+    for (QList<QtlOpticalDrive>::Iterator it = drives.begin(); it != drives.end(); ++it) {
+
+        // There is no real way to get the read capabilities. Assume that all drives can read DVD's.
+        it->_canReadCd = it->_canReadDvd = true;
+
+        // Execute "drutil info" and iterate over all output lines.
+        const QtlSynchronousProcess drutilInfo("drutil", QtlStringList("info", "-drive", QString::number(it->_driveNumber)), 5000, 32768);
+        foreach (const QString& line, drutilInfo.standardOutputLines()) {
+            if (line.contains("CD-Write:", Qt::CaseInsensitive)) {
+                it->_canWriteCd = true;
+            }
+            if (line.contains("DVD-Write:", Qt::CaseInsensitive)) {
+                it->_canWriteDvd = true;
+            }
+            // Don't really know for BluRay, just guessing what the output could be.
+            // In fact, it has been observed that the capability to read BluRay
+            // (without write capability) is not reported by drutil.
+            if (line.contains("BD-Write:", Qt::CaseInsensitive) || line.contains("BluRay-Write:", Qt::CaseInsensitive)) {
+                it->_canReadBluRay = it->_canWriteBluRay = true;
+            }
+        }
+
+        // Execute "drutil status" and iterate over all output lines.
+        const QtlSynchronousProcess drutilStatus("drutil", QtlStringList("status", "-drive", QString::number(it->_driveNumber)), 5000, 32768);
+        foreach (const QString& line, drutilStatus.standardOutputLines()) {
+            const int index = line.indexOf(QRegExp("Name:\\s+/dev/"));
+            if (index >= 0) {
+                it->_deviceName = line.mid(index + 5).trimmed();
+                // If the device name is /dev/disk.., then the burning device is the corresponding /dev/rdisk.
+                if (it->_deviceName.startsWith("/dev/disk")) {
+                    it->_burnerDeviceName = "/dev/r" + it->_deviceName.mid(5);
+                }
+            }
+        }
+    }
+
+#endif // System-specific implementations
 
     return drives;
 }
