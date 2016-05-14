@@ -37,7 +37,6 @@
 #include "QtlTableWidgetUtils.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlStringUtils.h"
-#include "QtlFontUtils.h"
 #include "QtlHexa.h"
 
 
@@ -296,7 +295,7 @@ void QtlTlvTableWidget::setTlvRowData(int row, quint32 tag, const QtlByteBlock& 
     item = this->item(row, 1);
     if (item == 0) {
         item = new QTableWidgetItem();
-        item->setFont(qtlMonospaceFont());
+        item->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
         setItem(row, 1, item);
     }

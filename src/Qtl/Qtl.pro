@@ -68,7 +68,6 @@ SOURCES += \
     QtlDialog.cpp \
     QtlCore.cpp \
     QtlStringUtils.cpp \
-    QtlFontUtils.cpp \
     QtlListWidgetUtils.cpp \
     QtlMessageBoxUtils.cpp \
     QtlTableWidgetUtils.cpp \
@@ -127,7 +126,6 @@ HEADERS += \
     QtlGeometrySettingsInterface.h \
     QtlCore.h \
     QtlStringUtils.h \
-    QtlFontUtils.h \
     QtlListWidgetUtils.h \
     QtlMessageBoxUtils.h \
     QtlTableWidgetUtils.h \

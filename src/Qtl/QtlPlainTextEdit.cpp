@@ -32,7 +32,6 @@
 //----------------------------------------------------------------------------
 
 #include "QtlPlainTextEdit.h"
-#include "QtlFontUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -42,7 +41,6 @@
 QtlPlainTextEdit::QtlPlainTextEdit(QWidget *parent, FormatFlags format) :
     QPlainTextEdit(parent),
     _standardFont(font()),
-    _monospaceFont(qtlMonospaceFont()),
     _format(AllCharacters)
 {
     setFormat(format);
@@ -51,7 +49,6 @@ QtlPlainTextEdit::QtlPlainTextEdit(QWidget *parent, FormatFlags format) :
 QtlPlainTextEdit::QtlPlainTextEdit(const QString& text, QWidget* parent, FormatFlags format) :
     QPlainTextEdit(text, parent),
     _standardFont(font()),
-    _monospaceFont(qtlMonospaceFont()),
     _format(AllCharacters)
 {
     setFormat(format);
@@ -67,7 +64,7 @@ void QtlPlainTextEdit::setFormat(const FormatFlags& format)
     // Change font if required.
     if (format.testFlag(Monospace) && !_format.testFlag(Monospace)) {
         // Switch to monospace font.
-        setFont(_monospaceFont);
+        setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     }
     else if (!format.testFlag(Monospace) && _format.testFlag(Monospace)) {
         // Switch back to standard font.

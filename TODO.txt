@@ -4,7 +4,5 @@ QtlMovie "to do" list
 
 - Mac: Better selection of DVD Burners in settings (/dev/rdisk?).
 
-- Check that the fixed size font method for Mac works on Windows and Linux.
-
 - Mac: With product build, the "Settings" action does not appear in Tools menu.
   With QtCreator, it works. ????

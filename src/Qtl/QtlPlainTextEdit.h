@@ -115,7 +115,6 @@ protected:
 
 private:
     const QFont _standardFont;   //!< Standard font for QPlainTextEdit.
-    const QFont _monospaceFont;  //!< Monospace font.
     FormatFlags _format;         //!< Format flags.
 
     //!
