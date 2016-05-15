@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
-    <height>499</height>
+    <width>656</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,8 +59,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>542</width>
-            <height>426</height>
+            <width>626</width>
+            <height>434</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutFFmpeg">
@@ -191,8 +191,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>118</width>
-            <height>82</height>
+            <width>124</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutDvdAuthor">
@@ -323,8 +323,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>115</width>
-            <height>82</height>
+            <width>121</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutMkisofs">
@@ -455,8 +455,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>542</width>
-            <height>426</height>
+            <width>121</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutGrowisofs">
@@ -587,8 +587,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>115</width>
-            <height>82</height>
+            <width>121</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutTelxcc">
@@ -719,8 +719,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>138</width>
-            <height>82</height>
+            <width>144</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutCcextractor">
@@ -851,8 +851,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>115</width>
-            <height>82</height>
+            <width>121</width>
+            <height>88</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutDvdDecrypter">

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>647</width>
-    <height>411</height>
+    <height>464</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -236,15 +236,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QtlLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>QtlLineEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>QtlButtonGrid</class>
    <extends>QWidget</extends>
    <header>QtlButtonGrid.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QtlLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>QtlLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
