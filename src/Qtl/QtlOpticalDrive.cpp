@@ -348,7 +348,7 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
 
                 // Initialize a drive object with the complete device name.
                 QtlOpticalDrive drive;
-                discDrive._name = discDrive._deviceName = discDrive._burnerDeviceName = QStringLiteral("/dev/%1").arg(name);
+                drive._name = drive._deviceName = drive._burnerDeviceName = QStringLiteral("/dev/%1").arg(name);
 
                 // The "commercial" informations are available elsewhere:
                 // $ cat /sys/block/sr0/device/vendor

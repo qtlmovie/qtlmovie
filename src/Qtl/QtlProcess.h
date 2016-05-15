@@ -127,6 +127,7 @@ private:
     //! @param [in] msRunTestTimeout Timeout of process execution in milliseconds. Ignored if negative or zero.
     //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
     //! @param [in] parent Optional parent object.
+    //! @param [in] env Optional process environment.
     //!
     QtlProcess(const QString& program,
                const QStringList& arguments,

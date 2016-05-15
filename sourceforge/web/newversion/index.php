@@ -46,7 +46,7 @@ function getLatestVersionLink($url, $prefix, $suffix)
 
     // Build the pattern to look for in the HTML text.
     $pattern = '|<a +href="('
-             . str_replace('#', '[0-9]+', preg_quote($prefix))
+             . str_replace('http\\:', 'https*\\:', str_replace('#', '[0-9]+', preg_quote($prefix)))
              . ')([^"]*)('
              . str_replace('#', '[0-9]+', preg_quote($suffix))
              . ')"|';

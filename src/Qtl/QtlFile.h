@@ -203,7 +203,7 @@ public:
     //! First the subdirectory @a subdir is searched in the directory @a dir.
     //! If not found, it is searched in the parent of @a dir and then in its
     //! upper level, etc., until @a subdir is found or the root directory is reached.
-    //! @param [in] path Start searching at @a dir.
+    //! @param [in] dir Start searching at @a dir.
     //! @param [in] subdir Name of the subdirectory to search.
     //! @param [in] maxLevels Maximum number of levels to search.
     //! @return Full path of the first subdirectory found or an empty string if none is found.
