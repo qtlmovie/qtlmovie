@@ -57,8 +57,8 @@ The various steps in the release process of a new version of QtlMovie are:
     - Go to the Files/mac directory, mark the latest QtlMovie-*.dmg as
       default download for Mac.
    - Go to the Files/src directory, mark the latest QtlMovie-*-src.zip as
-      default download for all platforms, except Windows. Note that the
-      "default download" system of SourceForge does not allow specific
+      default download for all platforms, except Windows and Mac. Note that
+      the "default download" system of SourceForge does not allow specific
       files for Ubuntu and Fedora.
     - Go to the "General Discussion" forum and create a topic announcing the
       new release and a copy of the extract of CHANGELOG.txt for this release.
@@ -66,7 +66,8 @@ The various steps in the release process of a new version of QtlMovie are:
   URL below), create a reply announcing the new release and a copy of the
   extract of CHANGELOG.txt for this release. Thread URL:
   http://forum.videohelp.com/threads/359441-Announcing-QtlMovie-a-specialized-graphical-front-end-to-FFmpeg
-
+- There is also a thread for the Mac version in the VideoHelp.com forums at:
+  http://forum.videohelp.com/threads/378564-Announcing-QtlMovie-for-Mac-OS-X-a-specialized-front-end-to-FFmpeg
 
 QtlMovie Home Page
 ------------------
