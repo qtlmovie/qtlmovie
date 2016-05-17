@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/qtlmovie-logo.png</file>
         <file>images/ffmpeg-logo.png</file>
         <file>images/gnu-logo.png</file>
         <file>images/dvd-logo.png</file>
@@ -15,5 +14,13 @@
         <file alias="help/qtlmovie-user_fr.html">../../help/qtlmovie-user_fr.html</file>
         <file alias="help/qtlmovie-build_fr.html">../../help/qtlmovie-build_fr.html</file>
         <file>sounds/completion.wav</file>
+        <file>images/qtlmovie-16.png</file>
+        <file>images/qtlmovie-24.png</file>
+        <file>images/qtlmovie-32.png</file>
+        <file>images/qtlmovie-48.png</file>
+        <file>images/qtlmovie-64.png</file>
+        <file>images/qtlmovie-72.png</file>
+        <file>images/qtlmovie-96.png</file>
+        <file>images/qtlmovie-128.png</file>
     </qresource>
 </RCC>

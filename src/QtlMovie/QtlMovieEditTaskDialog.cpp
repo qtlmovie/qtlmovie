@@ -43,7 +43,7 @@ QtlMovieEditTaskDialog::QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSetti
 {
     // Title and icon for this dialog.
     setWindowTitle(tr("QtlMovie - Edit Trancoding Task"));
-    setWindowIcon(QIcon(":/images/qtlmovie-logo.png"));
+    setWindowIcon(QIcon(":/images/qtlmovie-64.png"));
     resize(QTL_EDIT_TASK_WIDTH, QTL_EDIT_TASK_HEIGHT);
 
     // Restore the window geometry from the saved settings.

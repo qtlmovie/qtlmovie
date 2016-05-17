@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="QtlMovie.qrc">
-    <normaloff>:/images/qtlmovie-logo.png</normaloff>:/images/qtlmovie-logo.png</iconset>
+    <normaloff>:/images/qtlmovie-64.png</normaloff>:/images/qtlmovie-64.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">

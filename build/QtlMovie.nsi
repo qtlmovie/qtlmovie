@@ -69,8 +69,8 @@ RequestExecutionLevel admin
 
 ; "Modern User Interface" (MUI) settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "${RootDir}\src\QtlMovie\images\qtlmovie-logo.ico"
-!define MUI_UNICON "${RootDir}\src\QtlMovie\images\qtlmovie-logo.ico"
+!define MUI_ICON "${RootDir}\src\QtlMovie\images\qtlmovie.ico"
+!define MUI_UNICON "${RootDir}\src\QtlMovie\images\qtlmovie.ico"
 
 ; Language selection dialog
 !insertmacro MUI_RESERVEFILE_LANGDLL

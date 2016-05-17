@@ -66,7 +66,10 @@ cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
    build-QtlMovie-Desktop-Release/Qts/locale/qts_fr.qm \
    $RPM_BUILD_ROOT/usr/share/qt5/translations
 cp build/QtlMovie.desktop $RPM_BUILD_ROOT/usr/share/applications
-cp src/QtlMovie/images/qtlmovie-logo.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/apps/qtlmovie.png
+ICON_SIZES="16 24 32 48 64 72 96 128 256 512"
+for sz in $ICON_SIZES; do
+    cp src/QtlMovie/images/qtlmovie-${sz}.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT

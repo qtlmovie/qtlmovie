@@ -1,6 +1,6 @@
 body {
-    background-color: #fff;
-    color: #000;
+    background-color: white;
+    color: black;
     font-size: 0.9em;
     font-family: sans-serif,helvetica;
     margin: 0;
@@ -11,26 +11,26 @@ p {
     margin-bottom: 1em;
 }
 :link {
-    color: #4867a5;
+    color: #7e7050;
     text-decoration: none;
 }
 :visited {
-    color: #4867a5;
+    color: #7e7050;
     text-decoration: none;
 }
 a:hover {
-    color: #b6c4df;
+    color: black;
     text-decoration: none;
 }
 h1 {
-    background-color: #b6c4df;
-    color: white;
+    background-color: #ffce54;
+    color: black;
     font-weight: bold;
     font-size: 1.75em;
     text-align: center;
     margin: 0;
     padding: 0.6em 2em 0.4em;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid white;
 }
 h2 {
     font-weight: bold;

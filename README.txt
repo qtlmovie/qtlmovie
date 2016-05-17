@@ -12,3 +12,5 @@ Build requirements:
 License:
   This software is released under the terms of the Simplified BSD License.
   See the file LICENSE.txt for details.
+
+QtlMovie logo by DesignBolts (http://www.designbolts.com)

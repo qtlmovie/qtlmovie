@@ -49,13 +49,16 @@ $SCRIPTDIR/build.sh || exit 1
 
 # Build a temporary system root containing the installation
 TMPDIR=/tmp/qtlmovie-$$
+ICON_SIZES="16 24 32 48 64 72 96 128 256 512"
 rm -rf $TMPDIR
 mkdir -p -m 0755 \
     $TMPDIR/DEBIAN \
     $TMPDIR/usr/bin \
     $TMPDIR/usr/share/qt5/translations \
-    $TMPDIR/usr/share/applications \
-    $TMPDIR/usr/share/icons/hicolor/64x64/apps
+    $TMPDIR/usr/share/applications
+for sz in $ICON_SIZES; do
+    mkdir -p -m 0755 $TMPDIR/usr/share/icons/hicolor/${sz}x${sz}/apps
+done
 sed -e "s/{VERSION}/$QTLMOVIE_VERSION/" \
     -e "s/{ARCH}/$(dpkg-architecture -qDEB_BUILD_ARCH)/" \
     $SCRIPTDIR/QtlMovie.control >$TMPDIR/DEBIAN/control
@@ -68,7 +71,9 @@ install -m 0644 \
     $BUILDDIR/Qts/locale/qts_fr.qm \
     $TMPDIR/usr/share/qt5/translations
 install -m 0644 $SCRIPTDIR/QtlMovie.desktop $TMPDIR/usr/share/applications
-install -m 0644 $SRCDIR/QtlMovie/images/qtlmovie-logo.png $TMPDIR/usr/share/icons/hicolor/64x64/apps/qtlmovie.png
+for sz in $ICON_SIZES; do
+    install -m 0644 $SRCDIR/QtlMovie/images/qtlmovie-${sz}.png $TMPDIR/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
+done
 
 # Build the binary package
 dpkg --build $TMPDIR $ROOTDIR/installers

@@ -2,6 +2,12 @@
 QtlMovie Change Log
 ===================
 
+Version 1.6.1
+- Bug fix on Mac OS X installer. With version 1.6, QtlMovie failed to start
+  on some Mac's with error "could not find or load the Qt platform plugin
+  cocoa". This is fixed.
+- Updated logo to a more modern flat design style one.
+
 Version 1.6
 - QtlMovie is available on Mac OS X. The .dmg package contains precompiled
   versions of all media tools and is self-sufficient, like its Windows

@@ -579,7 +579,8 @@ void QtlMovieMainWindow::about()
                        QStringLiteral("<p><b>QtlMovie</b>: %1</p>"
                           "<p>%2 " QTLMOVIE_VERSION "</p>"
                           "<p>%3 " __DATE__ "</p>"
-                          "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>")
+                          "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
+                          "<p>QtlMovie logo by <a href=\"http://www.designbolts.com\">DesignBolts</a></p>")
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
                        .arg(tr("Built")));
@@ -595,7 +596,7 @@ void QtlMovieMainWindow::showHelp()
     QtlBrowserDialog box(this,
                          "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
                          tr("QtlMovie Help"),
-                         ":/images/qtlmovie-logo.png");
+                         ":/images/qtlmovie-64.png");
     box.setObjectName("QtlMovieHelpViewer");
     box.setGeometrySettings(_settings, true);
     box.exec();
@@ -611,7 +612,7 @@ void QtlMovieMainWindow::showReleaseNotes()
     QtlTextFileViewer box(this,
                           QtlTranslator::searchLocaleFile(":/changelog.txt"),
                           tr("QtlMovie Release Notes"),
-                          ":/images/qtlmovie-logo.png");
+                          ":/images/qtlmovie-64.png");
     box.setObjectName("QtlMovieReleaseNotesViewer");
     box.setGeometrySettings(_settings, true);
     box.exec();
