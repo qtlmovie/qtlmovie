@@ -74,6 +74,14 @@ if [[ -n "$QTCREATOR" ]]; then
     fi
 fi
 
+# On Mac OS X, Assistant and Liguist are bundles in same directory as qmake.
+if [[ -n "$QMAKE" && "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
+    LINGUIST=$(dirname "$QMAKE")/Linguist.app/Contents/MacOS/Linguist
+    ASSISTANT=$(dirname "$QMAKE")/Assistant.app/Contents/MacOS/Assistant
+    [[ -x "$LINGUIST" ]] && BIN="$BIN"$(dirname "$LINGUIST"):
+    [[ -x "$ASSISTANT" ]] && BIN="$BIN"$(dirname "$ASSISTANT"):
+fi
+
 # Update PATH and LD_LIBRARY_PATH.
 [[ -n "$BIN" && "$PATH" != "$BIN*" ]] && export PATH="$BIN$PATH"
 [[ -n "$LIB" && "$LD_LIBRARY_PATH" != "$LIB*" ]] && export LD_LIBRARY_PATH="$LIB$LD_LIBRARY_PATH"

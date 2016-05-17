@@ -27,10 +27,7 @@
 # 
 #-----------------------------------------------------------------------------
 # 
-#  Unix script to start Qt Creator.
-#  If an argument is provided, it is used as project file. If no argument is
-#  provided and one single .pro file exists in the same directory as this
-#  script or in src or ../src subdirectory, it is used as project file.
+#  Unix script to start Qt Linguist.
 # 
 #-----------------------------------------------------------------------------
 
@@ -59,10 +56,6 @@ fi
 # Locate Qt Linguist.
 LINGUIST=$(which linguist 2>/dev/null)
 [[ -z "$LINGUIST" ]] && LINGUIST=$(which Linguist 2>/dev/null)
-if [[ -z "$LINGUIST" && "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
-    # On Mac OS X, look into bundled applications.
-    LINGUIST=$(ls /Applications/Qt*inguist.app/Contents/MacOS/[Ll]inguist 2>/dev/null)
-fi
 [[ -z "$LINGUIST" ]] && error "Qt Linguist not found"
 
 # Start Qt Linguist

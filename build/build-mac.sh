@@ -75,7 +75,15 @@ chmod 755 $APPFONTS
 chmod 644 $APPFONTS/*
 
 # Deploy Qt requirements in the bundle.
-macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -no-plugins -always-overwrite || exit 1
+macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -always-overwrite || exit 1
+
+# Deploy platform plugin (not done by macdeployqt)
+PFPLUGINS="$APPDIR/Contents/plugins/platforms"
+LIBQCOCOA="$(dirname $(dirname $(which qmake)))/plugins/platforms/libqcocoa.dylib"
+[[ -e "$LIBQCOCOA" ]] || error "not found: $LIBQCOCOA"
+mkdir -p "$PFPLUGINS"
+cp "$LIBQCOCOA" "$PFPLUGINS"
+chmod 755 "$PFPLUGINS" "$PFPLUGINS/libqcocoa.dylib"
 
 # Install translations in the bundle.
 APPTRANS=$APPDIR/Contents/MacOS/translations
@@ -128,11 +136,13 @@ hdiutil convert "$DMGTMP" -format UDZO -o "$DMGFILE"
 rm -f "$DMGTMP"
 
 # Create a zip file for the Mac tools.
-echo "Creating QtlMovie-$QTLMOVIE_VERSION-mactools.zip"
-(cd $ROOTDIR; zip -rq9 $ROOTDIR/installers/QtlMovie-$QTLMOVIE_VERSION-mactools.zip mactools -x mactools/.gitignore)
+TOOLZIP="QtlMovie-$QTLMOVIE_VERSION-mactools.zip"
+echo "Creating $TOOLZIP"
+(cd $ROOTDIR; zip -rq9 "$ROOTDIR/installers/$TOOLZIP" mactools -x mactools/.gitignore)
 
 # Create a zip file for the QtlMovie sources.
-echo "Creating QtlMovie-$QTLMOVIE_VERSION-src.zip"
+SRCZIP="QtlMovie-$QTLMOVIE_VERSION-src.zip"
+echo "Creating $SRCZIP"
 TMPDIR=/tmp/qtlmovie-$$
 rm -rf $TMPDIR
 mkdir -p -m 0755 $TMPDIR/QtlMovie-$QTLMOVIE_VERSION
@@ -140,5 +150,13 @@ tar -C $ROOTDIR --exclude '*.dmg' --exclude .git --exclude 'build-QtlMovie-*' -c
     | tar -C $TMPDIR/QtlMovie-$QTLMOVIE_VERSION -x -p -f -
 $TMPDIR/QtlMovie-$QTLMOVIE_VERSION/build/cleanup.sh --deep
 rm -f $ROOTDIR/installers/QtlMovie-$QTLMOVIE_VERSION-src.zip
-(cd $TMPDIR; zip -rq9 $ROOTDIR/installers/QtlMovie-$QTLMOVIE_VERSION-src.zip QtlMovie-$QTLMOVIE_VERSION)
+(cd $TMPDIR; zip -rq9 "$ROOTDIR/installers/$SRCZIP" "QtlMovie-$QTLMOVIE_VERSION")
 rm -rf $TMPDIR
+
+# Export the binaries to a shared environment, if it exists.
+# Define the environment variable DELIVERY to point to the shared export.
+# Default value:
+DELIVERY_DIR=${DELIVERY:-$HOME/devel}/QtlMovie/installers
+if [[ -d "$DELIVERY_DIR" ]]; then
+    cp -v "$DMGFILE" "$ROOTDIR/installers/$TOOLZIP" "$ROOTDIR/installers/$SRCZIP" "$DELIVERY_DIR"
+fi

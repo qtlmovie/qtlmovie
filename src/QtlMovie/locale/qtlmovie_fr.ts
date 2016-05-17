@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>QObject</name>
     <message>
@@ -1601,27 +1601,27 @@ Restart now?</source>
 Redémarrer maintenant?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="583"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="584"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="584"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="585"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="585"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="586"/>
         <source>Built</source>
         <translation>Généré le </translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="597"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="598"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="613"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="614"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>
