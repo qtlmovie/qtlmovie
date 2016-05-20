@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.6.2
+- When encoding for NTSC DVD's, now use 29.97 f/s instead of 30 previously.
+
 Version 1.6.1
 - Bug fix on Mac OS X installer. With version 1.6, QtlMovie failed to start
   on some Mac's with error "could not find or load the Qt platform plugin

@@ -38,6 +38,40 @@
 
 #include "QtlCore.h"
 
+//! @cond nodoxygen
+#define QTL_STRINGIFY1(x) #x
+//! @endcond
+//!
+//! @hideinitializer
+//! This macro transforms the @e value of a macro parameter into the equivalent string.
+//!
+//! This is a very specific macro. It is typically used only inside the definition of
+//! another macro. It is similar to the @# token in the preprocessor but has a slightly
+//! different effect. The @# token transforms the @e text of a macro parameter into a
+//! string while QTL_STRINGIFY transforms the @e value of a macro parameter into a
+//! string, after all preprocessing substitutions.
+//!
+//! The following example illustrates the difference between the @# token and V_SYS_STRINGIFY:
+//!
+//! @code
+//! #define P1(v) printf ("#parameter:    %s = %d\n", #v, v)
+//! #define P2(v) printf ("QTL_STRINGIFY: %s = %d\n", QTL_STRINGIFY(v), v)
+//! ....
+//! #define X 1
+//! ....
+//! P1 (X);
+//! P2 (X);
+//! @endcode
+//!
+//! This will print:
+//!
+//! @code
+//! #parameter:    X = 1
+//! QTL_STRINGIFY: 1 = 1
+//! @endcode
+//!
+#define QTL_STRINGIFY(x) QTL_STRINGIFY1(x)
+
 //!
 //! Construct a QString from a raw memory area containing UTF-8 characters.
 //! @param [in] addr Starting address.

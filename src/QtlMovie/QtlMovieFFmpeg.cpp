@@ -32,6 +32,7 @@
 
 #include "QtlMovieFFmpeg.h"
 #include "QtlMovie.h"
+#include "QtlStringUtils.h"
 #include "QtlStringList.h"
 #include "QtlNumUtils.h"
 
@@ -168,32 +169,31 @@ QStringList QtlMovieFFmpeg::paletteOptions(const QtlByteBlock& palette)
 QStringList QtlMovieFFmpeg::frameRateOptions(const QtlMovieSettings* settings, QtlMovieOutputFile::OutputType outputType)
 {
     // Get frame rate by output type.
-    int frameRate = 0;
+    QString frameRate;
 
     switch (outputType) {
         case QtlMovieOutputFile::DvdFile:
         case QtlMovieOutputFile::DvdImage:
         case QtlMovieOutputFile::DvdBurn:
-            frameRate = settings->createPalDvd() ? QTL_DVD_PAL_FRAME_RATE : QTL_DVD_NTSC_FRAME_RATE;
+            frameRate = settings->createPalDvd() ? QTL_STRINGIFY(QTL_DVD_PAL_FRAME_RATE) : QTL_STRINGIFY(QTL_DVD_NTSC_FRAME_RATE);
             break;
         case QtlMovieOutputFile::Ipad:
         case QtlMovieOutputFile::Iphone:
-            frameRate = QTL_IOS_FRAME_RATE;
+            frameRate = QTL_STRINGIFY(QTL_IOS_FRAME_RATE);
             break;
         case QtlMovieOutputFile::Avi:
-            frameRate = QTL_AVI_FRAME_RATE;
+            frameRate = QTL_STRINGIFY(QTL_AVI_FRAME_RATE);
             break;
         case QtlMovieOutputFile::SubRip:
         case QtlMovieOutputFile::None:
         default:
-            frameRate = 0;
             break;
     }
 
     // Build the argument list.
     QStringList args;
-    if (frameRate > 0) {
-        args << "-r" << QString::number(frameRate);
+    if (!frameRate.isEmpty()) {
+        args << "-r" << frameRate;
     }
     return args;
 }
