@@ -65,6 +65,10 @@ unix|mingw|gcc {
     QMAKE_CXXFLAGS += -fno-strict-aliasing
 }
 
+# Activate C++11 extensions.
+
+CONFIG += c++11
+
 # Custom variable QMAKE_LRELEASE points to the translation file compiler.
 
 isEmpty(QMAKE_LRELEASE) {

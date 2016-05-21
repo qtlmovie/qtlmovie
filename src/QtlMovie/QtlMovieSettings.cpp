@@ -33,6 +33,7 @@
 
 #include "QtlMovieSettings.h"
 #include "QtlMovieSettingsMigration.h"
+#include "QtlMovieScreenSize.h"
 #include "QtlStringList.h"
 #include "QtlOpticalDrive.h"
 #include "QtlMovie.h"
@@ -137,44 +138,6 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     }
 }
 
-//----------------------------------------------------------------------------
-// Static definitions of iPad and iPhone models.
-//----------------------------------------------------------------------------
-
-const QtlMovieSettings::ModelScreenSize QtlMovieSettings::iPadModels[] = {
-    {"iPad 1/2/mini", 1024,  768},
-    {"iPad 3/4",      2048, 1536},
-};
-
-const QtlMovieSettings::ModelScreenSize QtlMovieSettings::iPhoneModels[] = {
-    {"iPhone 1/2G/3G/3GS",  480,  320},
-    {"iPhone 4/4S",         960,  640},
-    {"iPhone 5/5S",        1136,  640},
-    {"iPhone 6",           1334,  750},
-    {"iPhone 6 Plus",      2208, 1242},
-    {"iPhone SE",          1136,  640},
-};
-
-int QtlMovieSettings::iPadModelCount()
-{
-    return sizeof(iPadModels) / sizeof(iPadModels[0]);
-}
-
-const QtlMovieSettings::ModelScreenSize* QtlMovieSettings::iPadDescription(int index)
-{
-    return iPadModels + qMax<size_t>(0, qMin<size_t>(index, sizeof(iPadModels) / sizeof(iPadModels[0]) - 1));
-}
-
-int QtlMovieSettings::iPhoneModelCount()
-{
-    return sizeof(iPhoneModels) / sizeof(iPhoneModels[0]);
-}
-
-const QtlMovieSettings::ModelScreenSize* QtlMovieSettings::iPhoneDescription(int index)
-{
-    return iPhoneModels + qMax<size_t>(0, qMin<size_t>(index, sizeof(iPhoneModels) / sizeof(iPhoneModels[0]) - 1));
-}
-
 
 //----------------------------------------------------------------------------
 // "Normalize" a string list: lower case, sorted.
@@ -268,22 +231,22 @@ int QtlMovieSettings::dvdVideoHeight() const
 
 int QtlMovieSettings::iPadVideoWidth() const
 {
-    return iPadDescription(iPadScreenSize())->width;
+    return QtlMovieScreenSize::iPadModels.value(iPadScreenSize()).width;
 }
 
 int QtlMovieSettings::iPadVideoHeight() const
 {
-    return iPadDescription(iPadScreenSize())->height;
+    return QtlMovieScreenSize::iPadModels.value(iPadScreenSize()).height;
 }
 
 int QtlMovieSettings::iPhoneVideoWidth() const
 {
-    return iPhoneDescription(iPhoneScreenSize())->width;
+    return QtlMovieScreenSize::iPhoneModels.value(iPhoneScreenSize()).width;
 }
 
 int QtlMovieSettings::iPhoneVideoHeight() const
 {
-    return iPhoneDescription(iPhoneScreenSize())->height;
+    return QtlMovieScreenSize::iPhoneModels.value(iPhoneScreenSize()).height;
 }
 
 

@@ -39,6 +39,7 @@
 #include "ui_QtlMovieEditSettings.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieOutputFile.h"
+#include "QtlMovieScreenSize.h"
 
 //!
 //! A subclass of QtlDialog which implements the UI for the "Edit Settings" action.
@@ -215,10 +216,9 @@ private:
     //!
     //! Fill a button grid with all model screen sizes of a specific family of devices.
     //! @param [in] grid The button grid to fill.
-    //! @param [in] modelCount The number of models in this family of devices.
-    //! @param [in] getModel A function to get the description of a model.
+    //! @param [in] models List of devices.
     //!
-    void setModelScreenSizes(QtlButtonGrid* grid, int modelCount, const QtlMovieSettings::ModelScreenSize* (*getModel)(int index));
+    void setModelScreenSizes(QtlButtonGrid* grid, const QVector<QtlMovieScreenSize>& models);
 
     //!
     //! Set the default executable path of a media tool.

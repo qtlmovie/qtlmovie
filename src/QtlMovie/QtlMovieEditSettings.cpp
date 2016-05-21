@@ -123,8 +123,8 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     }
 
     // Setup the radio buttons to select iPhone and iPad sizes.
-    setModelScreenSizes(_ui.boxIpadSize, QtlMovieSettings::iPadModelCount(), &QtlMovieSettings::iPadDescription);
-    setModelScreenSizes(_ui.boxIphoneSize, QtlMovieSettings::iPhoneModelCount(), &QtlMovieSettings::iPhoneDescription);
+    setModelScreenSizes(_ui.boxIpadSize, QtlMovieScreenSize::iPadModels);
+    setModelScreenSizes(_ui.boxIphoneSize, QtlMovieScreenSize::iPhoneModels);
 
     // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
 #if !defined(Q_OS_WIN)
@@ -145,12 +145,11 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
 // Fill a button grid with all model screen sizes of a specific family.
 //-----------------------------------------------------------------------------
 
-void QtlMovieEditSettings::setModelScreenSizes(QtlButtonGrid* grid, int modelCount, const QtlMovieSettings::ModelScreenSize*(*getModel)(int))
+void QtlMovieEditSettings::setModelScreenSizes(QtlButtonGrid* grid, const QVector<QtlMovieScreenSize>& models)
 {
-    for (int index = 0; index < modelCount; ++index) {
+    for (int index = 0; index < models.size(); ++index) {
         QRadioButton* button(new QRadioButton(grid));
-        const QtlMovieSettings::ModelScreenSize* model(getModel(index));
-        button->setText(QStringLiteral("%1\n(%2x%3)").arg(model->name).arg(model->width).arg(model->height));
+        button->setText(QStringLiteral("%1\n(%2x%3)").arg(models[index].name).arg(models[index].width).arg(models[index].height));
         connect(button, &QRadioButton::toggled, this, &QtlMovieEditSettings::updateMaxBitRates);
         grid->setButtonId(button, index);
     }
@@ -561,12 +560,12 @@ void QtlMovieEditSettings::setNormalizeAudioSelectable(bool normalize)
 void QtlMovieEditSettings::updateMaxBitRates()
 {
     // iPad max bit rate.
-    const QtlMovieSettings::ModelScreenSize* iPad = QtlMovieSettings::iPadDescription(_ui.boxIpadSize->checkedId());
-    updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, iPad->width, iPad->height, QTL_IOS_FRAME_RATE);
+    const QtlMovieScreenSize iPad(QtlMovieScreenSize::iPadModels.value(_ui.boxIpadSize->checkedId()));
+    updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, iPad.width, iPad.height, QTL_IOS_FRAME_RATE);
 
     // iPhone max bit rate.
-    const QtlMovieSettings::ModelScreenSize* iPhone = QtlMovieSettings::iPhoneDescription(_ui.boxIphoneSize->checkedId());
-    updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, iPhone->width, iPhone->height, QTL_IOS_FRAME_RATE);
+    const QtlMovieScreenSize iPhone(QtlMovieScreenSize::iPhoneModels.value(_ui.boxIphoneSize->checkedId()));
+    updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, iPhone.width, iPhone.height, QTL_IOS_FRAME_RATE);
 
     // AVI max bit rate.
     updateMaxBitRate(_ui.labelAviMaxBitRate, _ui.spinAviQuality, _ui.spinAviWidth->value(), _ui.spinAviHeight->value(), QTL_AVI_FRAME_RATE);

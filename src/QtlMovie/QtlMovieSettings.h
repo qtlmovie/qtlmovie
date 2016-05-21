@@ -64,41 +64,6 @@ public:
     void reportMissingTools() const;
 
     //!
-    //! This structure defines the type and screen size of a device (iPad, iPhone, etc).
-    //!
-    struct ModelScreenSize {
-        const char* name;    //!< Device model name.
-        int         width;   //!< Screen width in pixels.
-        int         height;  //!< Screen height in pixels.
-    };
-
-    //!
-    //! Number of supported models of iPads.
-    //! @return The number of supported models of iPads.
-    //!
-    static int iPadModelCount();
-
-    //!
-    //! Get the description of one model of iPad.
-    //! @param index Index of iPad model, from 0 to iPadModelCount() - 1.
-    //! @return A pointer to a constant structure describing the iPad model.
-    //!
-    static const ModelScreenSize* iPadDescription(int index);
-
-    //!
-    //! Number of supported models of iPhones.
-    //! @return The number of supported models of iPhones.
-    //!
-    static int iPhoneModelCount();
-
-    //!
-    //! Get the description of one model of iPhone.
-    //! @param index Index of iPhone model, from 0 to iPhoneModelCount() - 1.
-    //! @return A pointer to a constant structure describing the iPhone model.
-    //!
-    static const ModelScreenSize* iPhoneDescription(int index);
-
-    //!
     //! Define how to normalize the audio when the input dymanic range is too large.
     //!
     enum AudioNormalizeMode {
@@ -311,9 +276,6 @@ private:
     QtlMovieExecFile* _ccextractorExplicit;   //!< CCExtractor explicit executable description.
     QtlMovieExecFile* _dvddecrypterDefault;   //!< DvdDecrypter default executable description.
     QtlMovieExecFile* _dvddecrypterExplicit;  //!< DvdDecrypter explicit executable description.
-
-    static const ModelScreenSize iPadModels[];    //!< List of supported iPad models.
-    static const ModelScreenSize iPhoneModels[];  //!< List of supported iPhone models.
 
     //!
     //! "Normalize" a string list: lower case, sorted.
