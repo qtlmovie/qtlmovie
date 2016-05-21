@@ -137,6 +137,44 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
     }
 }
 
+//----------------------------------------------------------------------------
+// Static definitions of iPad and iPhone models.
+//----------------------------------------------------------------------------
+
+const QtlMovieSettings::ModelScreenSize QtlMovieSettings::iPadModels[] = {
+    {"iPad 1/2/mini", 1024,  768},
+    {"iPad 3/4",      2048, 1536},
+};
+
+const QtlMovieSettings::ModelScreenSize QtlMovieSettings::iPhoneModels[] = {
+    {"iPhone 1/2G/3G/3GS",  480,  320},
+    {"iPhone 4/4S",         960,  640},
+    {"iPhone 5/5S",        1136,  640},
+    {"iPhone 6",           1334,  750},
+    {"iPhone 6 Plus",      2208, 1242},
+    {"iPhone SE",          1136,  640},
+};
+
+int QtlMovieSettings::iPadModelCount()
+{
+    return sizeof(iPadModels) / sizeof(iPadModels[0]);
+}
+
+const QtlMovieSettings::ModelScreenSize* QtlMovieSettings::iPadDescription(int index)
+{
+    return iPadModels + qMax<size_t>(0, qMin<size_t>(index, sizeof(iPadModels) / sizeof(iPadModels[0]) - 1));
+}
+
+int QtlMovieSettings::iPhoneModelCount()
+{
+    return sizeof(iPhoneModels) / sizeof(iPhoneModels[0]);
+}
+
+const QtlMovieSettings::ModelScreenSize* QtlMovieSettings::iPhoneDescription(int index)
+{
+    return iPhoneModels + qMax<size_t>(0, qMin<size_t>(index, sizeof(iPhoneModels) / sizeof(iPhoneModels[0]) - 1));
+}
+
 
 //----------------------------------------------------------------------------
 // "Normalize" a string list: lower case, sorted.
@@ -228,48 +266,24 @@ int QtlMovieSettings::dvdVideoHeight() const
     return createPalDvd() ? QTL_DVD_PAL_VIDEO_HEIGHT : QTL_DVD_NTSC_VIDEO_HEIGHT;
 }
 
-int QtlMovieSettings::ipadVideoWidth() const
+int QtlMovieSettings::iPadVideoWidth() const
 {
-    switch (ipadScreenSize()) {
-        case Ipad12Size: return QTL_IPAD12_VIDEO_WIDTH;
-        case Ipad34Size: return QTL_IPAD34_VIDEO_WIDTH;
-        default: return -1;
-    }
+    return iPadDescription(iPadScreenSize())->width;
 }
 
-int QtlMovieSettings::ipadVideoHeight() const
+int QtlMovieSettings::iPadVideoHeight() const
 {
-    switch (ipadScreenSize()) {
-        case Ipad12Size: return QTL_IPAD12_VIDEO_HEIGHT;
-        case Ipad34Size: return QTL_IPAD34_VIDEO_HEIGHT;
-        default: return -1;
-    }
+    return iPadDescription(iPadScreenSize())->height;
 }
 
-int QtlMovieSettings::iphoneVideoWidth() const
+int QtlMovieSettings::iPhoneVideoWidth() const
 {
-    switch (iphoneScreenSize()) {
-        case Iphone3Size: return QTL_IPHONE3_VIDEO_WIDTH;
-        case Iphone4Size: return QTL_IPHONE4_VIDEO_WIDTH;
-        case Iphone5Size: return QTL_IPHONE5_VIDEO_WIDTH;
-        case Iphone6Size: return QTL_IPHONE6_VIDEO_WIDTH;
-        case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_WIDTH;
-        case IphoneSeSize: return QTL_IPHONESE_VIDEO_WIDTH;
-        default: return -1;
-    }
+    return iPhoneDescription(iPhoneScreenSize())->width;
 }
 
-int QtlMovieSettings::iphoneVideoHeight() const
+int QtlMovieSettings::iPhoneVideoHeight() const
 {
-    switch (iphoneScreenSize()) {
-        case Iphone3Size: return QTL_IPHONE3_VIDEO_HEIGHT;
-        case Iphone4Size: return QTL_IPHONE4_VIDEO_HEIGHT;
-        case Iphone5Size: return QTL_IPHONE5_VIDEO_HEIGHT;
-        case Iphone6Size: return QTL_IPHONE6_VIDEO_HEIGHT;
-        case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_HEIGHT;
-        case IphoneSeSize: return QTL_IPHONESE_VIDEO_HEIGHT;
-        default: return -1;
-    }
+    return iPhoneDescription(iPhoneScreenSize())->height;
 }
 
 

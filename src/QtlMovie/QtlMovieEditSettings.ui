@@ -511,6 +511,12 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="labelFFprobeExecutionTimeout">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>FFprobe timeout :</string>
             </property>
@@ -728,46 +734,7 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelIpadResolution">
-         <property name="text">
-          <string>Screen size :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <spacer name="spacerIpadSize">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioIpad12">
-         <property name="text">
-          <string>iPad 1 / 2 / mini 1
-(1024x768)</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="radioIpad34">
-         <property name="text">
-          <string>iPad 3 / 4 / mini 2 / Air
-(2048x1536)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="3">
+       <item row="1" column="1">
         <widget class="QSpinBox" name="spinIpadQuality">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -792,6 +759,32 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelIpadResolution">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Screen size :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelIpadBitRate">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Video bitrate :</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelIpadQuality">
          <property name="sizePolicy">
@@ -805,23 +798,26 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelIpadBitRate">
-         <property name="text">
-          <string>Video bitrate :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="3">
+       <item row="2" column="1" colspan="2">
         <widget class="QLabel" name="labelIpadMaxBitRate">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QtlButtonGrid" name="boxIpadSize" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -832,20 +828,72 @@
        <string>iPhone</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayoutIphone">
-       <item row="0" column="6">
-        <spacer name="spacerIphoneSize">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelIphoneResolution">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Screen size :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <spacer name="spacerIphone">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="2" column="1" colspan="6">
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelIphoneQuality">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Video quality :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="labelIphoneMaxBitRate">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelIphoneBitRate">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Video bitrate :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
         <widget class="QSpinBox" name="spinIphoneQuality">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -870,107 +918,13 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <spacer name="spacerIphone">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelIphoneResolution">
-         <property name="text">
-          <string>Screen size :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelIphoneQuality">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Video quality :</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
-        <widget class="QRadioButton" name="radioIphone3">
-         <property name="text">
-          <string>iPhone 1 / 3G / 3GS
-(480x320)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="radioIphone4">
-         <property name="text">
-          <string>iPhone 4 / 4S
-(960x640)</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QRadioButton" name="radioIphone5">
-         <property name="text">
-          <string>iPhone 5 / 5S
-(1136x640)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelIphoneBitRate">
-         <property name="text">
-          <string>Video bitrate :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="6">
-        <widget class="QLabel" name="labelIphoneMaxBitRate">
+        <widget class="QtlButtonGrid" name="boxIphoneSize" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QRadioButton" name="radioIphoneSE">
-         <property name="text">
-          <string>iPhone SE
-(1136x640)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QRadioButton" name="radioIphone6">
-         <property name="text">
-          <string>iPhone 6
-(1334x750)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QRadioButton" name="radioIphone6Plus">
-         <property name="text">
-          <string>iPhone 6 Plus
-(2208x1242)</string>
          </property>
         </widget>
        </item>
@@ -1757,38 +1711,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioIpad12</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>149</x>
-     <y>54</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>311</x>
-     <y>286</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIpad34</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>271</x>
-     <y>54</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>311</x>
-     <y>286</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>spinIpadQuality</sender>
    <signal>valueChanged(int)</signal>
    <receiver>QtlMovieEditSettings</receiver>
@@ -1833,86 +1755,6 @@
     <hint type="destinationlabel">
      <x>311</x>
      <y>286</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIphone3</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>154</x>
-     <y>54</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>311</x>
-     <y>286</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIphone4</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIphone5</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIphone6</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioIphone6Plus</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>updateMaxBitRates()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
     </hint>
    </hints>
   </connection>

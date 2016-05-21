@@ -64,24 +64,39 @@ public:
     void reportMissingTools() const;
 
     //!
-    //! Define the screen size of an iPad.
+    //! This structure defines the type and screen size of a device (iPad, iPhone, etc).
     //!
-    enum IpadScreenSize {
-        Ipad12Size,  //!< iPad 1, 2, mini (1024x768)
-        Ipad34Size   //!< iPad 3, 4 (2048x1536)
+    struct ModelScreenSize {
+        const char* name;    //!< Device model name.
+        int         width;   //!< Screen width in pixels.
+        int         height;  //!< Screen height in pixels.
     };
 
     //!
-    //! Define the screen size of an iPhone.
+    //! Number of supported models of iPads.
+    //! @return The number of supported models of iPads.
     //!
-    enum IphoneScreenSize {
-        Iphone3Size,     //!< iPhone 1/2G/3G/3GS (480x320)
-        Iphone4Size,     //!< iPhone 4/4S (960x640)
-        Iphone5Size,     //!< iPhone 5/5S (1136x640)
-        Iphone6Size,     //!< iPhone 6 (1334x750)
-        Iphone6PlusSize, //!< iPhone 6 Plus (2208x1242)
-        IphoneSeSize     //!< iPhone SE (1136x640)
-    };
+    static int iPadModelCount();
+
+    //!
+    //! Get the description of one model of iPad.
+    //! @param index Index of iPad model, from 0 to iPadModelCount() - 1.
+    //! @return A pointer to a constant structure describing the iPad model.
+    //!
+    static const ModelScreenSize* iPadDescription(int index);
+
+    //!
+    //! Number of supported models of iPhones.
+    //! @return The number of supported models of iPhones.
+    //!
+    static int iPhoneModelCount();
+
+    //!
+    //! Get the description of one model of iPhone.
+    //! @param index Index of iPhone model, from 0 to iPhoneModelCount() - 1.
+    //! @return A pointer to a constant structure describing the iPhone model.
+    //!
+    static const ModelScreenSize* iPhoneDescription(int index);
 
     //!
     //! Define how to normalize the audio when the input dymanic range is too large.
@@ -153,25 +168,25 @@ public:
     //! Get the video width of iPad.
     //! @return The video width of iPad.
     //!
-    int ipadVideoWidth() const;
+    int iPadVideoWidth() const;
 
     //!
     //! Get the video height of iPad.
     //! @return The video height of iPad.
     //!
-    int ipadVideoHeight() const;
+    int iPadVideoHeight() const;
 
     //!
     //! Get the video width of iPhone.
     //! @return The video width of iPhone.
     //!
-    int iphoneVideoWidth() const;
+    int iPhoneVideoWidth() const;
 
     //!
     //! Get the video height of iPhone.
     //! @return The video height of iPhone.
     //!
-    int iphoneVideoHeight() const;
+    int iPhoneVideoHeight() const;
 
     //!
     //! Compute a video bitrate from quality indicator and video size.
@@ -192,9 +207,9 @@ public:
     //! @param [in] height Actual video height in pixels.
     //! @return The computed bitrate in bits per second.
     //!
-    int ipadVideoBitrate(int width, int height) const
+    int iPadVideoBitrate(int width, int height) const
     {
-        return videoBitRate(ipadVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
+        return videoBitRate(iPadVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
     }
 
     //!
@@ -203,9 +218,9 @@ public:
     //! @param [in] height Actual video height in pixels.
     //! @return The computed bitrate in bits per second.
     //!
-    int iphoneVideoBitrate(int width, int height) const
+    int iPhoneVideoBitrate(int width, int height) const
     {
-        return videoBitRate(iphoneVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
+        return videoBitRate(iPhoneVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
     }
 
     //!
@@ -227,8 +242,8 @@ public:
     QTL_SETTINGS_BOOL(transcodeComplete, setTranscodeComplete, QTL_TRANSCODE_COMPLETE)
     QTL_SETTINGS_INT(transcodeSeconds, setTranscodeSeconds, QTL_TRANSCODE_SECONDS)
     QTL_SETTINGS_INT(dvdVideoBitRate, setDvdVideoBitRate, QTL_DVD_DEFAULT_VIDEO_BITRATE)
-    QTL_SETTINGS_INT(ipadVideoQuality, setIpadVideoQuality, QTL_IPAD_DEFAULT_VIDEO_QUALITY)
-    QTL_SETTINGS_INT(iphoneVideoQuality, setIphoneVideoQuality, QTL_IPHONE_DEFAULT_VIDEO_QUALITY)
+    QTL_SETTINGS_INT(iPadVideoQuality, setIpadVideoQuality, QTL_IPAD_DEFAULT_VIDEO_QUALITY)
+    QTL_SETTINGS_INT(iPhoneVideoQuality, setIphoneVideoQuality, QTL_IPHONE_DEFAULT_VIDEO_QUALITY)
     QTL_SETTINGS_BOOL(keepIntermediateFiles, setKeepIntermediateFiles, QTL_KEEP_INTERMEDIATE_FILES)
     QTL_SETTINGS_INT(ffmpegProbeSeconds, setFFmpegProbeSeconds, QTL_FFMPEG_PROBE_SECONDS)
     QTL_SETTINGS_BOOL(srtUseVideoSizeHint, setSrtUseVideoSizeHint, QTL_SRT_USE_VIDEO_SIZE_HINT)
@@ -236,8 +251,8 @@ public:
     QTL_SETTINGS_BOOL(dvdRemuxAfterTranscode, setDvdRemuxAfterTranscode, QTL_DVD_REMUX_AFTER_TRANSCODE)
     QTL_SETTINGS_STRING(dvdBurner, setDvdBurner, "")
     QTL_SETTINGS_BOOL(createPalDvd, setCreatePalDvd, QTL_CREATE_PAL_DVD)
-    QTL_SETTINGS_ENUM(ipadScreenSize, setIpadScreenSize, IpadScreenSize, QTL_IPAD_SCREEN_SIZE)
-    QTL_SETTINGS_ENUM(iphoneScreenSize, setIphoneScreenSize, IphoneScreenSize, QTL_IPHONE_SCREEN_SIZE)
+    QTL_SETTINGS_INT(iPadScreenSize, setIpadScreenSize, 0)
+    QTL_SETTINGS_INT(iPhoneScreenSize, setIphoneScreenSize, 0)
     QTL_SETTINGS_BOOL(forceDvdTranscode, setForceDvdTranscode, QTL_FORCE_DVD_TRANSCODE)
     QTL_SETTINGS_BOOL(newVersionCheck, setNewVersionCheck, QTL_NEW_VERSION_CHECK)
     QTL_SETTINGS_INT(aviVideoQuality, setAviVideoQuality, QTL_AVI_DEFAULT_VIDEO_QUALITY)
@@ -296,6 +311,9 @@ private:
     QtlMovieExecFile* _ccextractorExplicit;   //!< CCExtractor explicit executable description.
     QtlMovieExecFile* _dvddecrypterDefault;   //!< DvdDecrypter default executable description.
     QtlMovieExecFile* _dvddecrypterExplicit;  //!< DvdDecrypter explicit executable description.
+
+    static const ModelScreenSize iPadModels[];    //!< List of supported iPad models.
+    static const ModelScreenSize iPhoneModels[];  //!< List of supported iPhone models.
 
     //!
     //! "Normalize" a string list: lower case, sorted.

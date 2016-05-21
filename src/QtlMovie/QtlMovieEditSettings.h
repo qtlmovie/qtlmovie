@@ -213,6 +213,14 @@ private:
     bool                     _useDvdBurnerCombo; //!< Alternate combo box for DVD burner selection.
 
     //!
+    //! Fill a button grid with all model screen sizes of a specific family of devices.
+    //! @param [in] grid The button grid to fill.
+    //! @param [in] modelCount The number of models in this family of devices.
+    //! @param [in] getModel A function to get the description of a model.
+    //!
+    void setModelScreenSizes(QtlButtonGrid* grid, int modelCount, const QtlMovieSettings::ModelScreenSize* (*getModel)(int index));
+
+    //!
     //! Set the default executable path of a media tool.
     //! @param [in] name Product name.
     //! @param [in,out] label The label widget to update.

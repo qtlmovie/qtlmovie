@@ -50,8 +50,6 @@
 #define QTL_CHAPTER_MINUTES                    5  //!< Duration of chapters to create.
 #define QTL_DVD_REMUX_AFTER_TRANSCODE       true  //!< If audio/video must be remuxed after transcode for DVD output.
 #define QTL_CREATE_PAL_DVD                  true  //!< If the format of created DVD is PAL or NTSC.
-#define QTL_IPAD_SCREEN_SIZE          Ipad12Size  //!< Default iPad screen size.
-#define QTL_IPHONE_SCREEN_SIZE       Iphone4Size  //!< Default iPhone screen size.
 #define QTL_FORCE_DVD_TRANSCODE            false  //!< Force transcoding even if input file is already DVD-compliant.
 #define QTL_NEW_VERSION_CHECK               true  //!< Check for a new version of QtlMovie on startup.
 #define QTL_AUTO_ROTATE_VIDEO               true  //!< If automatic rotation of video shall be applied.
@@ -86,26 +84,8 @@
 #define QTL_IOS_AUDIO_BITRATE             160000  //!< Common AAC audio bitrate (bits per second) for iPad/iPhone.
 #define QTL_IOS_AUDIO_SAMPLING             48000  //!< Common AAC audio sampling rate (Hz) for iPad/iPhone.
 #define QTL_IOS_FRAME_RATE                    30  //!< Common frames per second for iPad/iPhone.
-
 #define QTL_IPAD_DEFAULT_VIDEO_QUALITY        11  //!< H.264 video default quality indicator for iPad.
-#define QTL_IPAD12_VIDEO_WIDTH              1024  //!< Video width (pixels) for iPad 1, 2 & mini.
-#define QTL_IPAD12_VIDEO_HEIGHT              768  //!< Video height (pixels) for iPad 1, 2 & mini.
-#define QTL_IPAD34_VIDEO_WIDTH              2048  //!< Video width (pixels) for iPad 3 & 4.
-#define QTL_IPAD34_VIDEO_HEIGHT             1536  //!< Video height (pixels) for iPad 3 & 4.
-
 #define QTL_IPHONE_DEFAULT_VIDEO_QUALITY      11  //!< H.264 video default quality indicator for iPhone.
-#define QTL_IPHONE3_VIDEO_WIDTH              480  //!< Video width (pixels) for iPhone 1/2G/3G/3GS.
-#define QTL_IPHONE3_VIDEO_HEIGHT             320  //!< Video height (pixels) for iPhone 1/2G/3G/3GS.
-#define QTL_IPHONE4_VIDEO_WIDTH              960  //!< Video width (pixels) for iPhone 4/4S.
-#define QTL_IPHONE4_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 4/4S.
-#define QTL_IPHONE5_VIDEO_WIDTH             1136  //!< Video width (pixels) for iPhone 5C/5S.
-#define QTL_IPHONE5_VIDEO_HEIGHT             640  //!< Video height (pixels) for iPhone 5C/5S.
-#define QTL_IPHONE6_VIDEO_WIDTH             1334  //!< Video width (pixels) for iPhone 6.
-#define QTL_IPHONE6_VIDEO_HEIGHT             750  //!< Video height (pixels) for iPhone 6.
-#define QTL_IPHONE6P_VIDEO_WIDTH            2208  //!< Video width (pixels) for iPhone 6 Plus.
-#define QTL_IPHONE6P_VIDEO_HEIGHT           1242  //!< Video height (pixels) for iPhone 6 Plus.
-#define QTL_IPHONESE_VIDEO_WIDTH            1136  //!< Video width (pixels) for iPhone SE.
-#define QTL_IPHONESE_VIDEO_HEIGHT            640  //!< Video height (pixels) for iPhone SE.
 
 #define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.
 #define QTL_AVI_AUDIO_SAMPLING             48000  //!< MP3 audio sampling rate (Hz) for AVI.

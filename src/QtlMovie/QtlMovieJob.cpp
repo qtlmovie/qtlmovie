@@ -1024,12 +1024,12 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
     int maxHeight = 0;
     switch (outputType) {
         case QtlMovieOutputFile::Ipad:
-            maxWidth = settings()->ipadVideoWidth();
-            maxHeight = settings()->ipadVideoHeight();
+            maxWidth = settings()->iPadVideoWidth();
+            maxHeight = settings()->iPadVideoHeight();
             break;
         case QtlMovieOutputFile::Iphone:
-            maxWidth = settings()->iphoneVideoWidth();
-            maxHeight = settings()->iphoneVideoHeight();
+            maxWidth = settings()->iPhoneVideoWidth();
+            maxHeight = settings()->iPhoneVideoHeight();
             break;
         default:
             return abortStart(tr("Unsupported output type for MP4"));
@@ -1077,10 +1077,10 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
         // Set video bitrate based on actual output video size.
         switch (outputType) {
             case QtlMovieOutputFile::Ipad:
-                args << "-b:v" << QString::number(settings()->ipadVideoBitrate(widthOut, heightOut));
+                args << "-b:v" << QString::number(settings()->iPadVideoBitrate(widthOut, heightOut));
                 break;
             case QtlMovieOutputFile::Iphone:
-                args << "-b:v" << QString::number(settings()->iphoneVideoBitrate(widthOut, heightOut));
+                args << "-b:v" << QString::number(settings()->iPhoneVideoBitrate(widthOut, heightOut));
                 break;
             default:
                 return abortStart(tr("Unsupported output type for MP4"));

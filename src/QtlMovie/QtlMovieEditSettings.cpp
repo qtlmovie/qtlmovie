@@ -122,6 +122,10 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
         _ui.boxOutputType->setButtonId(button, int(type));
     }
 
+    // Setup the radio buttons to select iPhone and iPad sizes.
+    setModelScreenSizes(_ui.boxIpadSize, QtlMovieSettings::iPadModelCount(), &QtlMovieSettings::iPadDescription);
+    setModelScreenSizes(_ui.boxIphoneSize, QtlMovieSettings::iPhoneModelCount(), &QtlMovieSettings::iPhoneDescription);
+
     // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
 #if !defined(Q_OS_WIN)
     if (!_settings->dvddecrypter()->isSet()) {
@@ -134,6 +138,22 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
 
     // Load the initial values from the settings object.
     resetValues();
+}
+
+
+//-----------------------------------------------------------------------------
+// Fill a button grid with all model screen sizes of a specific family.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::setModelScreenSizes(QtlButtonGrid* grid, int modelCount, const QtlMovieSettings::ModelScreenSize*(*getModel)(int))
+{
+    for (int index = 0; index < modelCount; ++index) {
+        QRadioButton* button(new QRadioButton(grid));
+        const QtlMovieSettings::ModelScreenSize* model(getModel(index));
+        button->setText(QStringLiteral("%1\n(%2x%3)").arg(model->name).arg(model->width).arg(model->height));
+        connect(button, &QRadioButton::toggled, this, &QtlMovieEditSettings::updateMaxBitRates);
+        grid->setButtonId(button, index);
+    }
 }
 
 
@@ -195,8 +215,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     (_settings->transcodeComplete() ? _ui.radioButtonComplete : _ui.radioButtonPartial)->setChecked(true);
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
     _ui.spinDvdBitrate->setValue(_settings->dvdVideoBitRate() / 1000);   // input is kb/s
-    _ui.spinIpadQuality->setValue(_settings->ipadVideoQuality());
-    _ui.spinIphoneQuality->setValue(_settings->iphoneVideoQuality());
+    _ui.spinIpadQuality->setValue(_settings->iPadVideoQuality());
+    _ui.spinIphoneQuality->setValue(_settings->iPhoneVideoQuality());
     _ui.checkBoxKeepIntermediateFiles->setChecked(_settings->keepIntermediateFiles());
     _ui.spinFFmpegProbeSeconds->setValue(_settings->ffmpegProbeSeconds());
     _ui.spinFFprobeExecutionTimeout->setValue(_settings->ffprobeExecutionTimeout());
@@ -206,14 +226,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkDvdRemuxAfterTranscode->setChecked(_settings->dvdRemuxAfterTranscode());
     _ui.radioPal->setChecked(_settings->createPalDvd());
     _ui.radioNtsc->setChecked(!_settings->createPalDvd());
-    _ui.radioIpad12->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad12Size);
-    _ui.radioIpad34->setChecked(_settings->ipadScreenSize() == QtlMovieSettings::Ipad34Size);
-    _ui.radioIphone3->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone3Size);
-    _ui.radioIphone4->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone4Size);
-    _ui.radioIphone5->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone5Size);
-    _ui.radioIphone6->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6Size);
-    _ui.radioIphone6Plus->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6PlusSize);
-    _ui.radioIphoneSE->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::IphoneSeSize);
+    _ui.boxIpadSize->checkId(_settings->iPadScreenSize());
+    _ui.boxIphoneSize->checkId(_settings->iPhoneScreenSize());
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
     _ui.spinAviQuality->setValue(_settings->aviVideoQuality());
@@ -329,25 +343,8 @@ void QtlMovieEditSettings::applySettings()
     _settings->setChapterMinutes(_ui.checkCreateChapters->isChecked() ? _ui.spinChapterMinutes->value() : 0);
     _settings->setDvdRemuxAfterTranscode(_ui.checkDvdRemuxAfterTranscode->isChecked());
     _settings->setCreatePalDvd(_ui.radioPal->isChecked());
-    _settings->setIpadScreenSize(_ui.radioIpad12->isChecked() ? QtlMovieSettings::Ipad12Size : QtlMovieSettings::Ipad34Size);
-    if (_ui.radioIphone3->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone3Size);
-    }
-    else if (_ui.radioIphone4->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone4Size);
-    }
-    else if (_ui.radioIphone5->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone5Size);
-    }
-    else if (_ui.radioIphone6->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone6Size);
-    }
-    else if (_ui.radioIphone6Plus->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::Iphone6PlusSize);
-    }
-    else if (_ui.radioIphoneSE->isChecked()) {
-        _settings->setIphoneScreenSize(QtlMovieSettings::IphoneSeSize);
-    }
+    _settings->setIpadScreenSize(_ui.boxIpadSize->checkedId());
+    _settings->setIphoneScreenSize(_ui.boxIphoneSize->checkedId());
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());
     _settings->setAviVideoQuality(_ui.spinAviQuality->value());
@@ -564,38 +561,12 @@ void QtlMovieEditSettings::setNormalizeAudioSelectable(bool normalize)
 void QtlMovieEditSettings::updateMaxBitRates()
 {
     // iPad max bit rate.
-    if (_ui.radioIpad12->isChecked()) {
-        updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, QTL_IPAD12_VIDEO_WIDTH, QTL_IPAD12_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIpad34->isChecked()) {
-        updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, QTL_IPAD34_VIDEO_WIDTH, QTL_IPAD34_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else {
-        _ui.labelIpadMaxBitRate->clear();
-    }
+    const QtlMovieSettings::ModelScreenSize* iPad = QtlMovieSettings::iPadDescription(_ui.boxIpadSize->checkedId());
+    updateMaxBitRate(_ui.labelIpadMaxBitRate, _ui.spinIpadQuality, iPad->width, iPad->height, QTL_IOS_FRAME_RATE);
 
     // iPhone max bit rate.
-    if (_ui.radioIphone3->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE3_VIDEO_WIDTH, QTL_IPHONE3_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIphone4->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE4_VIDEO_WIDTH, QTL_IPHONE4_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIphone5->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE5_VIDEO_WIDTH, QTL_IPHONE5_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIphone6->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE6_VIDEO_WIDTH, QTL_IPHONE6_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIphone6Plus->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE6P_VIDEO_WIDTH, QTL_IPHONE6P_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else if (_ui.radioIphoneSE->isChecked()) {
-        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONESE_VIDEO_WIDTH, QTL_IPHONESE_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
-    }
-    else {
-        _ui.labelIphoneMaxBitRate->clear();
-    }
+    const QtlMovieSettings::ModelScreenSize* iPhone = QtlMovieSettings::iPhoneDescription(_ui.boxIphoneSize->checkedId());
+    updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, iPhone->width, iPhone->height, QTL_IOS_FRAME_RATE);
 
     // AVI max bit rate.
     updateMaxBitRate(_ui.labelAviMaxBitRate, _ui.spinAviQuality, _ui.spinAviWidth->value(), _ui.spinAviHeight->value(), QTL_AVI_FRAME_RATE);
