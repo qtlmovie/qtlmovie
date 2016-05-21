@@ -3,11 +3,12 @@ text2movsub
 remove_extra
 noise
 mov2textsub
+mpeg4_unpack_bframes
 mp3decomp
-mp3comp
 mjpegadump
 mjpeg2jpeg
 imxdump
+hevc_mp4toannexb
 h264_mp4toannexb
 dump_extra
 chomp

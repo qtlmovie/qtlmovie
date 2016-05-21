@@ -1,46 +1,52 @@
 Supported file protocols:
 Input:
-bluray
-cache
-concat
-crypto
-data
-file
-ftp
-gopher
-hls
-http
-httpproxy
-https
-mmsh
-mmst
-pipe
-rtp
-srtp
-tcp
-tls
-udp
-rtmp
-rtmpe
-rtmps
-rtmpt
-rtmpte
+  async
+  bluray
+  cache
+  concat
+  crypto
+  data
+  file
+  ftp
+  gopher
+  hls
+  http
+  httpproxy
+  https
+  mmsh
+  mmst
+  pipe
+  rtp
+  srtp
+  subfile
+  tcp
+  tls
+  udp
+  udplite
+  rtmp
+  rtmpe
+  rtmps
+  rtmpt
+  rtmpte
 Output:
-file
-ftp
-gopher
-http
-httpproxy
-https
-md5
-pipe
-rtp
-srtp
-tcp
-tls
-udp
-rtmp
-rtmpe
-rtmps
-rtmpt
-rtmpte
+  crypto
+  file
+  ftp
+  gopher
+  http
+  httpproxy
+  https
+  icecast
+  md5
+  pipe
+  rtp
+  srtp
+  tcp
+  tls
+  udp
+  udplite
+  rtmp
+  rtmpe
+  rtmps
+  rtmpt
+  rtmpte
