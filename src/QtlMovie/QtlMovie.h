@@ -78,10 +78,8 @@
 #define QTL_DVD_DEFAULT_VIDEO_BITRATE    4000000  //!< MPEG-2 video default bitrate for DVD.
 #define QTL_DVD_PAL_VIDEO_WIDTH              720  //!< Video width (pixels) for PAL DVD.
 #define QTL_DVD_PAL_VIDEO_HEIGHT             576  //!< Video height (pixels) for PAL DVD.
-#define QTL_DVD_PAL_FRAME_RATE                25  //!< Frames per second for PAL DVD.
 #define QTL_DVD_NTSC_VIDEO_WIDTH             720  //!< Video width (pixels) for NTSC DVD.
 #define QTL_DVD_NTSC_VIDEO_HEIGHT            480  //!< Video height (pixels) for NTSC DVD.
-#define QTL_DVD_NTSC_FRAME_RATE            29.97  //!< Frames per second for NTSC DVD.
 #define QTL_DVD_DAR                 QTL_DAR_16_9  //!< Display aspect ratio for DVD.
 #define QTL_DVD_DAR_FFMPEG                "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 

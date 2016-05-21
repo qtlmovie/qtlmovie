@@ -793,7 +793,6 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
              << "-codec:v" << "mpeg2video"
              << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
              << "-target" << (settings()->createPalDvd() ? "pal-dvd" : "ntsc-dvd")  // Select presets for DVD.
-             << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::DvdFile)
              << "-b:v" << QString::number(bitrate)
              << "-aspect" << QTL_DVD_DAR_FFMPEG
              << QtlMovieFFmpeg::videoFilterOptions(videoFilters)
@@ -1047,7 +1046,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
              << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
-             << QtlMovieFFmpeg::frameRateOptions(settings(), outputType)
+             << "-r" << QTL_STRINGIFY(QTL_IOS_FRAME_RATE)
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
              << "-preset" << "slow"
@@ -1155,7 +1154,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     // Common video options.
     args << "-map" << videoStream->ffSpecifier()
          << "-codec:v" << "mpeg4"      // H.263 (MPEG-4 part 2)
-         << QtlMovieFFmpeg::frameRateOptions(settings(), QtlMovieOutputFile::Avi);
+         << "-r" << QTL_STRINGIFY(QTL_AVI_FRAME_RATE);
 
     // Add video rotation options if required.
     int width = 0;

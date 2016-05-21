@@ -87,14 +87,6 @@ namespace QtlMovieFFmpeg
     QStringList paletteOptions(const QtlByteBlock& palette);
 
     //!
-    //! Build a video frame rate FFmpeg options list for the selected output type.
-    //! @param [in] settings Application settings.
-    //! @param [in] outputType Output file type.
-    //! @return FFmpeg options, possibly empty.
-    //!
-    QStringList frameRateOptions(const QtlMovieSettings* settings, QtlMovieOutputFile::OutputType outputType);
-
-    //!
     //! Build an audio conversion FFmpeg options list for DVD transcoding.
     //! @param [in] settings Application settings.
     //! @param [in] audioStream Audio stream description. Can be null.
