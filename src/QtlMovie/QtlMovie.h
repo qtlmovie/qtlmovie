@@ -104,6 +104,8 @@
 #define QTL_IPHONE6_VIDEO_HEIGHT             750  //!< Video height (pixels) for iPhone 6.
 #define QTL_IPHONE6P_VIDEO_WIDTH            2208  //!< Video width (pixels) for iPhone 6 Plus.
 #define QTL_IPHONE6P_VIDEO_HEIGHT           1242  //!< Video height (pixels) for iPhone 6 Plus.
+#define QTL_IPHONESE_VIDEO_WIDTH            1136  //!< Video width (pixels) for iPhone SE.
+#define QTL_IPHONESE_VIDEO_HEIGHT            640  //!< Video height (pixels) for iPhone SE.
 
 #define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.
 #define QTL_AVI_AUDIO_SAMPLING             48000  //!< MP3 audio sampling rate (Hz) for AVI.

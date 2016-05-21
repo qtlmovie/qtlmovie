@@ -254,6 +254,7 @@ int QtlMovieSettings::iphoneVideoWidth() const
         case Iphone5Size: return QTL_IPHONE5_VIDEO_WIDTH;
         case Iphone6Size: return QTL_IPHONE6_VIDEO_WIDTH;
         case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_WIDTH;
+        case IphoneSeSize: return QTL_IPHONESE_VIDEO_WIDTH;
         default: return -1;
     }
 }
@@ -266,6 +267,7 @@ int QtlMovieSettings::iphoneVideoHeight() const
         case Iphone5Size: return QTL_IPHONE5_VIDEO_HEIGHT;
         case Iphone6Size: return QTL_IPHONE6_VIDEO_HEIGHT;
         case Iphone6PlusSize: return QTL_IPHONE6P_VIDEO_HEIGHT;
+        case IphoneSeSize: return QTL_IPHONESE_VIDEO_HEIGHT;
         default: return -1;
     }
 }

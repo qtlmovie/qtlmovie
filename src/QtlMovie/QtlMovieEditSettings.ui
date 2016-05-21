@@ -832,42 +832,6 @@
        <string>iPhone</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayoutIphone">
-       <item row="0" column="5">
-        <widget class="QRadioButton" name="radioIphone6Plus">
-         <property name="text">
-          <string>iPhone 6 Plus
-(2208x1242)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <widget class="QRadioButton" name="radioIphone6">
-         <property name="text">
-          <string>iPhone 6
-(1334x750)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <spacer name="spacerIphone">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelIphoneResolution">
-         <property name="text">
-          <string>Screen size :</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="6">
         <spacer name="spacerIphoneSize">
          <property name="orientation">
@@ -881,7 +845,7 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="1" colspan="6">
+       <item row="2" column="1" colspan="6">
         <widget class="QSpinBox" name="spinIphoneQuality">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -906,7 +870,27 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="4" column="1">
+        <spacer name="spacerIphone">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelIphoneResolution">
+         <property name="text">
+          <string>Screen size :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="labelIphoneQuality">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -946,14 +930,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="labelIphoneBitRate">
          <property name="text">
           <string>Video bitrate :</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="6">
+       <item row="3" column="1" colspan="6">
         <widget class="QLabel" name="labelIphoneMaxBitRate">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -963,6 +947,30 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QRadioButton" name="radioIphoneSE">
+         <property name="text">
+          <string>iPhone SE
+(1136x640)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QRadioButton" name="radioIphone6">
+         <property name="text">
+          <string>iPhone 6
+(1334x750)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QRadioButton" name="radioIphone6Plus">
+         <property name="text">
+          <string>iPhone 6 Plus
+(2208x1242)</string>
          </property>
         </widget>
        </item>

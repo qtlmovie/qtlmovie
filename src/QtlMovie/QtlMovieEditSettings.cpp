@@ -213,6 +213,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioIphone5->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone5Size);
     _ui.radioIphone6->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6Size);
     _ui.radioIphone6Plus->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::Iphone6PlusSize);
+    _ui.radioIphoneSE->setChecked(_settings->iphoneScreenSize() == QtlMovieSettings::IphoneSeSize);
     _ui.checkForceDvdTranscode->setChecked(_settings->forceDvdTranscode());
     _ui.checkNewVersionCheck->setChecked(_settings->newVersionCheck());
     _ui.spinAviQuality->setValue(_settings->aviVideoQuality());
@@ -343,6 +344,9 @@ void QtlMovieEditSettings::applySettings()
     }
     else if (_ui.radioIphone6Plus->isChecked()) {
         _settings->setIphoneScreenSize(QtlMovieSettings::Iphone6PlusSize);
+    }
+    else if (_ui.radioIphoneSE->isChecked()) {
+        _settings->setIphoneScreenSize(QtlMovieSettings::IphoneSeSize);
     }
     _settings->setForceDvdTranscode(_ui.checkForceDvdTranscode->isChecked());
     _settings->setNewVersionCheck(_ui.checkNewVersionCheck->isChecked());
@@ -585,6 +589,9 @@ void QtlMovieEditSettings::updateMaxBitRates()
     }
     else if (_ui.radioIphone6Plus->isChecked()) {
         updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONE6P_VIDEO_WIDTH, QTL_IPHONE6P_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
+    }
+    else if (_ui.radioIphoneSE->isChecked()) {
+        updateMaxBitRate(_ui.labelIphoneMaxBitRate, _ui.spinIphoneQuality, QTL_IPHONESE_VIDEO_WIDTH, QTL_IPHONESE_VIDEO_HEIGHT, QTL_IOS_FRAME_RATE);
     }
     else {
         _ui.labelIphoneMaxBitRate->clear();
