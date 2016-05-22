@@ -29,6 +29,7 @@
             </li>
             <li><a href="#ipadout">Création d'une vidéo pour iPad</a></li>
             <li><a href="#iphoneout">Création d'une vidéo pour iPhone</a></li>
+            <li><a href="#androidout">Création d'une vidéo pour appareils Android</a></li>
             <li><a href="#aviout">Création d'un fichier AVI</a></li>
             <li><a href="#subout">Extraction de sous-titres</a></li>
             <li><a href="#forcedar">Forcer le format d'affichage</a></li>
@@ -50,6 +51,7 @@
             <li><a href="#dvdsettings">Onglet "DVD"</a></li>
             <li><a href="#ipadsettings">Onglet "iPad"</a></li>
             <li><a href="#iphonesettings">Onglet "iPhone"</a></li>
+            <li><a href="#androidsettings">Onglet "Android"</a></li>
             <li><a href="#avisettings">Onglet "AVI"</a></li>
             <li><a href="#audiosettings">Onglet "Audio"</a></li>
             <li><a href="#miscsettings">Onglet "Divers"</a></li>
@@ -83,14 +85,14 @@
       <p>Ces tâches sont les suivantes:</p>
       <ul>
         <li>Création d'un DVD vidéo simple avec un film, sans menu ni option de langue.</li>
-        <li>Création d'une vidéo pour iPad ou iPhone.</li>
+        <li>Création d'une vidéo pour iPad, iPhone ou appareils Android.</li>
         <li>Création d'un fichier AVI hautement compressé.</li>
       </ul>
       <p>Les principales fonctionnalités de QtlMovie sont les suivantes:</p>
       <ul>
         <li>Lecture de n'importe quel type courant de fichier audio/vidéo en entrée.</li>
         <li>Création d'images ISO pour DVD et les graver en option.</li>
-        <li>Création de fichiers audio/vidéo adaptés pour iPad ou iPhone.</li>
+        <li>Création de fichiers audio/vidéo adaptés pour iPad, iPhone ou appareils Android.</li>
         <li>Création d'un fichier audio/vidéo AVI hautement compressé pour stockage ou échange de fichier.</li>
         <li>Ne conserver qu'une seule piste audio.</li>
         <li>En option, incruster une piste de sous-titrage dans la vidéo mais
@@ -157,7 +159,7 @@
 
       <h3><a id="dvdin">DVD en entrée</a></h3>
 
-      <p>QtlMovie est idéal pour extraire un film d'un DVD et en faire un fichier pour iPad/iPhone,
+      <p>QtlMovie est idéal pour extraire un film d'un DVD et en faire un fichier pour iPad/iPhone/Android,
         une tâche habituelle pour qui possède un iPad et de nombreux DVD.</p>
       <p>Un DVD est un volume de fichiers standard. Tous les contenus vidéos sont dans le
         répertoire racine nommé VIDEO_TS. Dans ce répertoire, il y a plusieurs
@@ -309,6 +311,24 @@
         Un <i>indicateur de qualité vidéo</i> spécifique pour iPhone est défini dans les options.
         La qualité vidéo par défaut pour iPhone est de 11 bits / pixel / 100 images, ce qui donne
         un débit de 2,4 Mb/s pour une vidéo plein écran sur iPhone 5 (1136x640).</p>
+
+      <h3><a id="androidout">Création d'une vidéo pour appareils Android</a></h3>
+
+      <p>Les fichiers vidéo pour appareils Android produits par QtlMovie ont toujours les caractéristiques suivantes:</p>
+      <ul>
+        <li>Format de fichier MP4.</li>
+        <li>Vidéo MPEG-4 partie 10 / AVC / H.264, profil de base, niveau 3.0.
+          Le nombre d'images par seconde est de 30 sur la plupart des appareils.
+          Les proportions d'affichage sont inchangées (aucun bordure noire n'est ajoutée).
+          La taille d'image est inchangée, sauf si la taille de l'entrée excède la résolution
+          native de l'appareil, auquel cas la taille est réduite pour tenir à l'intérieur
+          de cette résolution tout en préservant les proportions d'origine.</li>
+        <li>Audio AAC, stéréo, échantillonné à 48 kHz. Le débit binaire audio est de 128 kb/s.</li>
+      </ul>
+      <p>Le débit vidéo est calculé de la même manière que pour <a href="#ipadout">iPad</a>.
+        Un <i>indicateur de qualité vidéo</i> spécifique pour Android est défini dans les options.
+        La qualité vidéo par défaut pour Android est de 11 bits / pixel / 100 images, ce qui donne
+        un débit de 6,8 Mb/s pour une vidéo plein écran sur Samsung Galaxy S5 (1920x1080).</p>
 
       <h3><a id="aviout">Création d'un fichier AVI</a></h3>
 
@@ -552,6 +572,17 @@
         le débit binaire vidéo maximum correspondant au modèle d'iPhone sélectionné est
         également affiché.</p>
 
+      <h3><a id="androidsettings">Onglet "Android"</a></h3>
+
+      <p>Cet onglet regroupe les options qui affectent la création de fichiers vidéo pour appareils Android.</p>
+      <p>L'option "Taille d'écran" spécifie le type d'appareil cible.
+        La résolution d'écran sera utilisée en tant que taille vidéo maximum.
+        Les vidéos plus grandes seront retaillées pour tenir à l'intérieur de cette résolution.</p>
+      <p>L'option "Qualité vidéo", en bits par pixel pour 100 images, est expliquée dans
+        la section <a href="#ipadout">création d'une vidéo pour iPad</a>. Pour information,
+        le débit binaire vidéo maximum correspondant au modèle d'appareil sélectionné est
+        également affiché.</p>
+
       <h3><a id="avisettings">Onglet "AVI"</a></h3>
 
       <p>Cet onglet regroupe les options qui affectent la création de fichiers AVI.</p>
@@ -567,7 +598,7 @@
       <p>Cet onglet regroupe les options qui affectent le transcodage audio.
         Il est à noter que les principales options de transcodage audio comme le
         débit binaire, la fréquence d'échantillonnage ou le nombre de canaux
-        sont fixes pour une cible donnée (DVD, iPad, iPhone, AVI) et ne peuvent être modifiées.</p>
+        sont fixes pour une cible donnée (DVD, iPad, iPhone, Android, AVI) et ne peuvent être modifiées.</p>
       <p>Quand l'option "Normaliser le niveau audio" est cochée, QtlMovie effectue
         une normalisation sur la piste audio. Ceci ajoute une passe initiale sur le
         fichier pour déterminer le niveau audio. La normalisation correspondante

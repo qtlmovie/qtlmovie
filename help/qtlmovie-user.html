@@ -29,6 +29,7 @@
             </li>
             <li><a href="#ipadout">iPad output</a></li>
             <li><a href="#iphoneout">iPhone output</a></li>
+            <li><a href="#androidout">Android output</a></li>
             <li><a href="#aviout">AVI output</a></li>
             <li><a href="#subout">Subtitle extraction</a></li>
             <li><a href="#forcedar">Forcing the display aspect ratio</a></li>
@@ -50,6 +51,7 @@
             <li><a href="#dvdsettings">"DVD" tab</a></li>
             <li><a href="#ipadsettings">"iPad" tab</a></li>
             <li><a href="#iphonesettings">"iPhone" tab</a></li>
+            <li><a href="#androidsettings">"Android" tab</a></li>
             <li><a href="#avisettings">"AVI" tab</a></li>
             <li><a href="#audiosettings">"Audio" tab</a></li>
             <li><a href="#miscsettings">"Miscellaneous" tab</a></li>
@@ -83,14 +85,14 @@
       <p>These tasks are:</p>
       <ul>
         <li>Create a simple video DVD with one movie, no menu, no alternate language.</li>
-        <li>Create video files for the iPad or iPhone.</li>
+        <li>Create video files for the iPad, iPhone or Android device.</li>
         <li>Create highly compressed AVI video files.</li>
       </ul>
       <p>QtlMovie main features are:</p>
       <ul>
         <li>Take any type of common audio/video file as input.</li>
         <li>Produce DVD ISO images and optionally burn them.</li>
-        <li>Produce video files for iPad or iPhone viewing.</li>
+        <li>Produce video files for iPad, iPhone or Android viewing.</li>
         <li>Produce highly compressed AVI video files for storage or interchange.</li>
         <li>Keep only one audio track.</li>
         <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
@@ -151,7 +153,7 @@
 
       <h3><a id="dvdin">DVD input</a></h3>
 
-      <p>QtlMovie is typically ideal to rip DVD and create iPad/iPhone movies, a typical task when you own
+      <p>QtlMovie is typically ideal to rip DVD and create iPad/iPhone/Android movies, a typical task when you own
         an iPad and many DVD's.</p>
       <p>A DVD is a standard file system. All video contents are in a top-level directory named VIDEO_TS.
         Inside VIDEO_TS, there are several <i>title sets</i>.
@@ -288,6 +290,23 @@
         The settings define a specific <i>video quality indicator</i> for iPhone.
         The default quality for iPhone is 11 bits / pixel / 100 frames,
         giving a bitrate of 2.4 Mb/s for a full-size iPhone 5 video (1136x640).</p>
+
+      <h3><a id="androidout">Android output</a></h3>
+
+      <p>QtlMovie always produces files for Android devices with the following characteristics:</p>
+      <ul>
+        <li>MP4 file format.</li>
+        <li>MPEG-4 part 10 / AVC / H.264 video, baseline profile, level 3.0.
+          The frame rate is 30 frames per second on most devices.
+          The display aspect ratio is unchanged (no black border is added).
+          The frame size is unchanged, unless the input size exceeds the native screen resolution of the device in
+          which case the size is reduced to fit within this resolution, preserving the input aspect ratio.</li>
+        <li>AAC audio, stereo, sampled at 48 kHz. The audio bitrate is 128 kb/s.</li>
+      </ul>
+      <p>The video bitrate is computed the same way as for <a href="#ipadout">iPad</a>.
+        The settings define a specific <i>video quality indicator</i> for Android.
+        The default quality for Android is 11 bits / pixel / 100 frames,
+        giving a bitrate of 6.8 Mb/s for a full-size Samsung Galaxy S5 video (1920x1080).</p>
 
       <h3><a id="aviout">AVI output</a></h3>
 
@@ -514,6 +533,16 @@
         the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
         maximum video bitrate for the selected iPhone model is also displayed.</p>
 
+      <h3><a id="androidsettings">"Android" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the generation of video files for Android devices.</p>
+      <p>The "Screen size" options specify the type of device to target.
+        The corresponding screen resolution will be used as maximum video size.
+        Larger videos will be resized to fit within the selected resolution.</p>
+      <p>The "Video quality" option, in bits per pixel per 100 frames, is explained in
+        the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
+        maximum video bitrate for the selected device model is also displayed.</p>
+
       <h3><a id="avisettings">"AVI" tab</a></h3>
 
       <p>This tab groups all the settings which affect the generation of AVI files.</p>
@@ -527,7 +556,7 @@
 
       <p>This tab groups all the settings which affect the audio transcoding.
         Note that most audio transcoding options like bit rate, sample rate or number of channels
-        are fixed to the appropriate value for a given target (DVD, iPad, iPhone, AVI) and cannot be modified.</p>
+        are fixed to the appropriate value for a given target (DVD, iPad, iPhone, Android, AVI) and cannot be modified.</p>
       <p>When the option "Normalize audio level" is checked, QtlMovie performs audio
         normalization on the transcoded audio track. This adds an initial pass on the file
         to determine the input audio level. The corresponding audio normalization it then

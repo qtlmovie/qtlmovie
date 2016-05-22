@@ -34,31 +34,44 @@
 #include "QtlMovieDeviceProfile.h"
 #include "QtlNumUtils.h"
 
-#define QTL_IOS_AUDIO_BITRATE             160000  //!< Common AAC audio bitrate (bits per second) for iPad/iPhone.
-#define QTL_IOS_AUDIO_SAMPLING             48000  //!< Common AAC audio sampling rate (Hz) for iPad/iPhone.
 
 //----------------------------------------------------------------------------
 // Predefined families of devices.
 //----------------------------------------------------------------------------
 
-const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPadModels({
-    // Model                     Width  Height  Frame/s  Au.bitrate  Au.sampling
-    //-------------------------  -----  ------  -------  ----------  -----------
-    {"iPad 1, 2, Mini",           1024,    768,      30,     160000,       48000},
-    {"iPad 3, 4, Air, Retina",    2048,   1536,      30,     160000,       48000},
-    {"iPad Pro",                  2732,   2048,      30,     160000,       48000},
-});
+const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPadModels
+({
+     // Model                    Width  Height  Frame/s  Au.bitrate  Au.sampling
+     //------------------------  -----  ------  -------  ----------  -----------
+     {"iPad 1, 2, Mini",          1024,    768,      30,     160000,       48000},
+     {"iPad 3, 4, Air, Retina",   2048,   1536,      30,     160000,       48000},
+     {"iPad Pro",                 2732,   2048,      30,     160000,       48000},
+ });
 
-const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPhoneModels({
-    // Model                     Width  Height  Frame/s  Au.bitrate  Au.sampling
-    //-------------------------  -----  ------  -------  ----------  -----------
-    {"iPhone 1, 2G, 3G, 3GS",      480,    320,      30,     160000,       48000},
-    {"iPhone 4, 4S",               960,    640,      30,     160000,       48000},
-    {"iPhone 5, 5S",              1136,    640,      30,     160000,       48000},
-    {"iPhone 6, 6S",              1334,    750,      30,     160000,       48000},
-    {"iPhone 6 Plus, 6S Plus",    2208,   1242,      30,     160000,       48000},
-    {"iPhone SE",                 1136,    640,      30,     160000,       48000},
-});
+const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPhoneModels
+({
+     // Model                    Width  Height  Frame/s  Au.bitrate  Au.sampling
+     //------------------------  -----  ------  -------  ----------  -----------
+     {"iPhone 1, 2G, 3G, 3GS",     480,    320,      30,     160000,       48000},
+     {"iPhone 4, 4S",              960,    640,      30,     160000,       48000},
+     {"iPhone 5, 5S",             1136,    640,      30,     160000,       48000},
+     {"iPhone 6, 6S",             1334,    750,      30,     160000,       48000},
+     {"iPhone 6 Plus, 6S Plus",   2208,   1242,      30,     160000,       48000},
+     {"iPhone SE",                1136,    640,      30,     160000,       48000},
+ });
+
+const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::androidModels
+({
+     // Model                           Width  Height  Frame/s  Au.bitrate  Au.sampling
+     //-------------------------------  -----  ------  -------  ----------  -----------
+     {"Samsung Galaxy S, S2, S3 mini",    800,    480,      30,     128000,       48000},
+     {"Samsung Galaxy S3, Note 2",       1280,    720,      30,     128000,       48000},
+     {"Samsung Galaxy Note",             1280,    800,      30,     128000,       48000},
+     {"Samsung Galaxy S4 mini",           960,    540,      30,     128000,       48000},
+     {"Samsung Galaxy S4, S5",           1920,   1080,      30,     128000,       48000},
+     {"Samsung Galaxy S5 mini",          1280,    720,      30,     128000,       48000},
+     {"Samsung Galaxy S6, S7",           2560,   1440,      30,     128000,       48000},
+ });
 
 
 //----------------------------------------------------------------------------

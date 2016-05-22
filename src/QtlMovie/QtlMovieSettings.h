@@ -60,6 +60,15 @@ public:
     explicit QtlMovieSettings(QtlLogger* log, QObject* parent = 0);
 
     //!
+    //! Get the log.
+    //! @return The log.
+    //!
+    QtlLogger* log() const
+    {
+        return _log;
+    }
+
+    //!
     //! Report missing media tools in the log.
     //!
     void reportMissingTools() const;
@@ -143,6 +152,12 @@ public:
     QtlMovieDeviceProfile iPhone() const;
 
     //!
+    //! Get the selected model of Android device.
+    //! @return The selected model of Android device.
+    //!
+    QtlMovieDeviceProfile android() const;
+
+    //!
     //! Compute the video bitrate for AVI.
     //! @param [in] width Actual video width in pixels.
     //! @param [in] height Actual video height in pixels.
@@ -163,6 +178,7 @@ public:
     QTL_SETTINGS_INT(dvdVideoBitRate, setDvdVideoBitRate, QTL_DVD_DEFAULT_VIDEO_BITRATE)
     QTL_SETTINGS_INT(iPadVideoQuality, setIpadVideoQuality, QTL_IPAD_DEFAULT_VIDEO_QUALITY)
     QTL_SETTINGS_INT(iPhoneVideoQuality, setIphoneVideoQuality, QTL_IPHONE_DEFAULT_VIDEO_QUALITY)
+    QTL_SETTINGS_INT(androidVideoQuality, setAndroidVideoQuality, QTL_ANDROID_DEFAULT_VIDEO_QUALITY)
     QTL_SETTINGS_BOOL(keepIntermediateFiles, setKeepIntermediateFiles, QTL_KEEP_INTERMEDIATE_FILES)
     QTL_SETTINGS_INT(ffmpegProbeSeconds, setFFmpegProbeSeconds, QTL_FFMPEG_PROBE_SECONDS)
     QTL_SETTINGS_BOOL(srtUseVideoSizeHint, setSrtUseVideoSizeHint, QTL_SRT_USE_VIDEO_SIZE_HINT)
@@ -172,6 +188,7 @@ public:
     QTL_SETTINGS_BOOL(createPalDvd, setCreatePalDvd, QTL_CREATE_PAL_DVD)
     QTL_SETTINGS_INT(iPadScreenSize, setIpadScreenSize, 0)
     QTL_SETTINGS_INT(iPhoneScreenSize, setIphoneScreenSize, 0)
+    QTL_SETTINGS_INT(androidScreenSize, setAndroidScreenSize, 0)
     QTL_SETTINGS_BOOL(forceDvdTranscode, setForceDvdTranscode, QTL_FORCE_DVD_TRANSCODE)
     QTL_SETTINGS_BOOL(newVersionCheck, setNewVersionCheck, QTL_NEW_VERSION_CHECK)
     QTL_SETTINGS_INT(aviVideoQuality, setAviVideoQuality, QTL_AVI_DEFAULT_VIDEO_QUALITY)

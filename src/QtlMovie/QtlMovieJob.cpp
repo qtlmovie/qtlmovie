@@ -343,33 +343,34 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
 
     // Decide what is supported.
     switch (outputType) {
-    case QtlMovieOutputFile::DvdFile:
-    case QtlMovieOutputFile::DvdImage:
-    case QtlMovieOutputFile::DvdBurn:
-    case QtlMovieOutputFile::Ipad:
-    case QtlMovieOutputFile::Iphone:
-    case QtlMovieOutputFile::Avi:
-        // Require any audio and video type.
-        // Require a supported or no subtitle type.
-        return inputFile->selectedAudioStreamIndex() >= 0 &&
-                inputFile->selectedVideoStreamIndex() >= 0 &&
-                subtitleType != QtlMovieStreamInfo::SubOther;
+        case QtlMovieOutputFile::DvdFile:
+        case QtlMovieOutputFile::DvdImage:
+        case QtlMovieOutputFile::DvdBurn:
+        case QtlMovieOutputFile::Ipad:
+        case QtlMovieOutputFile::Iphone:
+        case QtlMovieOutputFile::Android:
+        case QtlMovieOutputFile::Avi:
+            // Require any audio and video type.
+            // Require a supported or no subtitle type.
+            return inputFile->selectedAudioStreamIndex() >= 0 &&
+                    inputFile->selectedVideoStreamIndex() >= 0 &&
+                    subtitleType != QtlMovieStreamInfo::SubOther;
 
-    case QtlMovieOutputFile::SubRip:
-        // Require a subtitle type which can be exported as SubRip.
-        return subtitleType == QtlMovieStreamInfo::SubRip ||
-                subtitleType == QtlMovieStreamInfo::SubSsa ||
-                subtitleType == QtlMovieStreamInfo::SubAss ||
-                subtitleType == QtlMovieStreamInfo::SubTeletext ||
-                subtitleType == QtlMovieStreamInfo::SubCc;
+        case QtlMovieOutputFile::SubRip:
+            // Require a subtitle type which can be exported as SubRip.
+            return subtitleType == QtlMovieStreamInfo::SubRip ||
+                    subtitleType == QtlMovieStreamInfo::SubSsa ||
+                    subtitleType == QtlMovieStreamInfo::SubAss ||
+                    subtitleType == QtlMovieStreamInfo::SubTeletext ||
+                    subtitleType == QtlMovieStreamInfo::SubCc;
 
-    case QtlMovieOutputFile::None:
-        // It is always possible to do nothing.
-        return true;
+        case QtlMovieOutputFile::None:
+            // It is always possible to do nothing.
+            return true;
 
-    default:
-        // Unsupported output type.
-        return false;
+        default:
+            // Unsupported output type.
+            return false;
     }
 }
 
@@ -503,6 +504,11 @@ bool QtlMovieJob::buildScenario()
         case QtlMovieOutputFile::Iphone: {
             success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(),
                                         settings()->iPhone(), settings()->iPhoneVideoQuality());
+            break;
+        }
+        case QtlMovieOutputFile::Android: {
+            success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(),
+                                        settings()->android(), settings()->androidVideoQuality());
             break;
         }
         case QtlMovieOutputFile::Avi: {
@@ -1066,6 +1072,8 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
 
         // Set video bitrate based on actual output video size.
         const int videoBitRate = QtlMovieDeviceProfile::videoBitRate(videoQuality, widthOut, heightOut, profile.frameRate());
+        debug(tr("MP4: video quality: %1, width: %2, height: %3, frameRate: %4, bitrate: %5")
+              .arg(videoQuality).arg(widthOut).arg(heightOut).arg(profile.frameRate(), 0, 'f', 2).arg(videoBitRate));
         args << "-b:v" << QString::number(videoBitRate);
 
         // In case of 4:2:2 input chroma format, force a downgrade to 4:2:0

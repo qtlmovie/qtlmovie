@@ -228,6 +228,11 @@ QtlMovieDeviceProfile QtlMovieSettings::iPhone() const
     return QtlMovieDeviceProfile::iPhoneModels.value(iPhoneScreenSize());
 }
 
+QtlMovieDeviceProfile QtlMovieSettings::android() const
+{
+    return QtlMovieDeviceProfile::androidModels.value(androidScreenSize());
+}
+
 
 //----------------------------------------------------------------------------
 // Report missing media tools in the log.

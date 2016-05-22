@@ -83,6 +83,7 @@
 
 #define QTL_IPAD_DEFAULT_VIDEO_QUALITY        11  //!< H.264 video default quality indicator for iPad.
 #define QTL_IPHONE_DEFAULT_VIDEO_QUALITY      11  //!< H.264 video default quality indicator for iPhone.
+#define QTL_ANDROID_DEFAULT_VIDEO_QUALITY     11  //!< H.264 video default quality indicator for Android devices.
 
 #define QTL_AVI_AUDIO_BITRATE             128000  //!< MP3 audio bitrate (bits per second) for AVI.
 #define QTL_AVI_AUDIO_SAMPLING             48000  //!< MP3 audio sampling rate (Hz) for AVI.

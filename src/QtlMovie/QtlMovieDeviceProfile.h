@@ -26,10 +26,9 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieScreenSize.h
+//! @file QtlMovieDeviceProfile.h
 //!
-//! Declare the class QtlMovieScreenSize, the description of the screen size
-//! of a device model.
+//! Declare the class QtlMovieDeviceProfile, the description of a device model.
 //!
 //----------------------------------------------------------------------------
 
@@ -49,6 +48,7 @@ public:
     //! @param [in] name Device model name.
     //! @param [in] width Screen width in pixels.
     //! @param [in] height Screen height in pixels.
+    //! @param [in] frameRate Frame rate.
     //! @param [in] audioBitRate Audio bitrate.
     //! @param [in] audioSampling Audio samples per second.
     //!
@@ -142,8 +142,9 @@ public:
     //!
     static int videoBitRate(int qualityIndicator, int width, int height, float frameRate);
 
-    static const QVector<QtlMovieDeviceProfile> iPadModels;    //!< List of supported iPad models.
-    static const QVector<QtlMovieDeviceProfile> iPhoneModels;  //!< List of supported iPhone models.
+    static const QVector<QtlMovieDeviceProfile> iPadModels;     //!< List of supported iPad models.
+    static const QVector<QtlMovieDeviceProfile> iPhoneModels;   //!< List of supported iPhone models.
+    static const QVector<QtlMovieDeviceProfile> androidModels;  //!< List of supported Android devices.
 
 private:
     QString _name;           //!< Device model name.

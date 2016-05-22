@@ -148,7 +148,7 @@ void QtlMovieOutputFile::setDefaultFileName(const QString& inputFileName, bool k
 QList<QtlMovieOutputFile::OutputType> QtlMovieOutputFile::outputTypes()
 {
     QList<OutputType> list;
-    list << DvdFile << DvdImage << DvdBurn << Ipad << Iphone << Avi << SubRip;
+    list << DvdFile << DvdImage << DvdBurn << Ipad << Iphone << Android << Avi << SubRip;
     return list;
 }
 
@@ -160,15 +160,16 @@ QList<QtlMovieOutputFile::OutputType> QtlMovieOutputFile::outputTypes()
 QString QtlMovieOutputFile::outputTypeName(QtlMovieOutputFile::OutputType outputType)
 {
     switch (outputType) {
-    case DvdFile:  return tr("DVD MPEG File");
-    case DvdImage: return tr("DVD ISO Image");
-    case DvdBurn:  return tr("Burn DVD");
-    case Ipad:     return tr("iPad");
-    case Iphone:   return tr("iPhone");
-    case Avi:      return tr("AVI");
-    case SubRip:   return tr("SRT Subtitles");
-    case None:     return "";
-    default:       return "";
+        case DvdFile:  return tr("DVD MPEG File");
+        case DvdImage: return tr("DVD ISO Image");
+        case DvdBurn:  return tr("Burn DVD");
+        case Ipad:     return tr("iPad");
+        case Iphone:   return tr("iPhone");
+        case Android:  return tr("Android");
+        case Avi:      return tr("AVI");
+        case SubRip:   return tr("SRT Subtitles");
+        case None:     return "";
+        default:       return "";
     }
 }
 
@@ -181,15 +182,16 @@ QString QtlMovieOutputFile::outputIdName(QtlMovieOutputFile::OutputType outputTy
 {
     // These are identifiers, do not translate.
     switch (outputType) {
-    case DvdFile:  return "dvdfile";
-    case DvdImage: return "dvdiso";
-    case DvdBurn:  return "dvdburn";
-    case Ipad:     return "ipad";
-    case Iphone:   return "iphone";
-    case Avi:      return "avi";
-    case SubRip:   return "srt";
-    case None:     return "none";
-    default:       return "";
+        case DvdFile:  return "dvdfile";
+        case DvdImage: return "dvdiso";
+        case DvdBurn:  return "dvdburn";
+        case Ipad:     return "ipad";
+        case Iphone:   return "iphone";
+        case Android:  return "android";
+        case Avi:      return "avi";
+        case SubRip:   return "srt";
+        case None:     return "none";
+        default:       return "";
     }
 }
 
@@ -201,14 +203,15 @@ QString QtlMovieOutputFile::outputIdName(QtlMovieOutputFile::OutputType outputTy
 QString QtlMovieOutputFile::fileExtension(QtlMovieOutputFile::OutputType outputType)
 {
     switch (outputType) {
-    case DvdFile:  return ".mpg";
-    case DvdImage: return ".iso";
-    case DvdBurn:  return ".iso";
-    case Ipad:     return ".mp4";
-    case Iphone:   return ".mp4";
-    case Avi:      return ".avi";
-    case SubRip:   return ".srt";
-    case None:     return "";
-    default:       return "";
+        case DvdFile:  return ".mpg";
+        case DvdImage: return ".iso";
+        case DvdBurn:  return ".iso";
+        case Ipad:     return ".mp4";
+        case Iphone:   return ".mp4";
+        case Android:  return ".mp4";
+        case Avi:      return ".avi";
+        case SubRip:   return ".srt";
+        case None:     return "";
+        default:       return "";
     }
 }

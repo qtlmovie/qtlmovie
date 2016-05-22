@@ -185,7 +185,7 @@ private slots:
     void setNormalizeAudioSelectable(bool normalize);
 
     //!
-    //! Invoked when iPhone/iPad/AVI video quality is updated, update the corresponding max bitrate.
+    //! Invoked when iPhone/iPad/Android/AVI video quality is updated, update the corresponding max bitrate.
     //!
     void updateMaxBitRates();
 
@@ -250,7 +250,7 @@ private:
     //! @param [in] height Reference video height.
     //! @param [in] frameRate Reference video frame rate.
     //!
-    static void updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, float frameRate);
+    void updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, float frameRate);
 
     // Unaccessible operations.
     QtlMovieEditSettings() Q_DECL_EQ_DELETE;
