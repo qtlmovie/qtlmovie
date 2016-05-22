@@ -57,8 +57,7 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p \
     $RPM_BUILD_ROOT/usr/bin \
     $RPM_BUILD_ROOT/usr/share/qt5/translations \
-    $RPM_BUILD_ROOT/usr/share/applications \
-    $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/apps
+    $RPM_BUILD_ROOT/usr/share/applications
 cp build-QtlMovie-Desktop-Release/QtlMovie/QtlMovie $RPM_BUILD_ROOT/usr/bin
 strip $RPM_BUILD_ROOT/usr/bin/QtlMovie
 cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
@@ -68,6 +67,7 @@ cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
 cp build/QtlMovie.desktop $RPM_BUILD_ROOT/usr/share/applications
 ICON_SIZES="16 24 32 48 64 72 96 128 256 512"
 for sz in $ICON_SIZES; do
+    mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps
     cp src/QtlMovie/images/qtlmovie-${sz}.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
 done
 
@@ -81,5 +81,14 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/qt5/translations/qtlmovie_fr.qm
 /usr/share/qt5/translations/qts_fr.qm
 /usr/share/applications/QtlMovie.desktop
+/usr/share/icons/hicolor/16x16/apps/qtlmovie.png
+/usr/share/icons/hicolor/24x24/apps/qtlmovie.png
+/usr/share/icons/hicolor/32x32/apps/qtlmovie.png
+/usr/share/icons/hicolor/48x48/apps/qtlmovie.png
 /usr/share/icons/hicolor/64x64/apps/qtlmovie.png
+/usr/share/icons/hicolor/72x72/apps/qtlmovie.png
+/usr/share/icons/hicolor/96x96/apps/qtlmovie.png
+/usr/share/icons/hicolor/128x128/apps/qtlmovie.png
+/usr/share/icons/hicolor/256x256/apps/qtlmovie.png
+/usr/share/icons/hicolor/512x512/apps/qtlmovie.png
 %doc CHANGELOG.txt LICENSE.txt TODO.txt
