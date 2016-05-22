@@ -266,7 +266,7 @@ void QtlMovieEditTask::setOutputFileType()
         else {
             // Apply the output file type.
             _task->outputFile()->setOutputType(type);
-            _task->outputFile()->setDefaultFileName(_task->inputFile()->fileName(), true);
+            _task->outputFile()->setDefaultFileName(_task->inputFile()->fileName(), false, true);
         }
     }
 }
@@ -461,7 +461,7 @@ void QtlMovieEditTask::inputFileNameChanged(const QString& fileName)
             _task->outputFile()->setFileName("");
         }
         else {
-            _task->outputFile()->setDefaultFileName(fileName, false);
+            _task->outputFile()->setDefaultFileName(fileName, false, false);
         }
     }
 

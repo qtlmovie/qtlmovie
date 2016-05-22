@@ -105,19 +105,32 @@ QString QtlMovieOutputFile::defaultOutputDirectory(const QString& inputFileName)
 // Set the default output file name from an input file name.
 //----------------------------------------------------------------------------
 
-void QtlMovieOutputFile::setDefaultFileName(const QString& inputFileName, bool keepPreviousBase)
+void QtlMovieOutputFile::setDefaultFileName(const QString& inputFileName, bool keepPreviousDirectory, bool keepPreviousBase)
 {
     // If both input and output file names are empty, do nothing.
     if (inputFileName.isEmpty() && !isSet()) {
         return;
     }
 
-    // Use input file name as base if found, current output file name otherwise.
-    const QFileInfo info(inputFileName.isEmpty() || keepPreviousBase ? fileName() : inputFileName);
+    // Output directory.
+    QString outBase;
+    if (inputFileName.isEmpty() || keepPreviousDirectory) {
+        outBase = QFileInfo(fileName()).absolutePath();
+    }
+    else {
+        outBase = defaultOutputDirectory(inputFileName);
+    }
+
+    // Output base name.
+    outBase += QDir::separator();
+    if (inputFileName.isEmpty() || keepPreviousBase) {
+        outBase += QFileInfo(fileName()).completeBaseName();
+    }
+    else {
+        outBase += QFileInfo(inputFileName).completeBaseName();
+    }
 
     // Output file name.
-    const QString outDir(keepPreviousBase ? info.absolutePath() : defaultOutputDirectory(inputFileName));
-    const QString outBase(outDir + QDir::separator() + info.completeBaseName());
     const QString outExt(fileExtension(_outputType));
     const QString outFull(outBase + outExt);
 

@@ -111,15 +111,17 @@ public:
     //!
     //! Get the default output directory for an input file name, based on the output type.
     //! @param [in] inputFileName Input file name. Can be empty.
+    //! @return Directory name.
     //!
     QString defaultOutputDirectory(const QString& inputFileName);
 
     //!
     //! Set the default output file name from an input file name, based on the output type.
     //! @param [in] inputFileName Input file name. Can be empty.
-    //! @param [in] keepPreviousBase If true, only change suffix according to output type.
+    //! @param [in] keepPreviousDirectory If true, keep previous directory of output file.
+    //! @param [in] keepPreviousBase If true, keep previous base name (without directory and suffix).
     //!
-    void setDefaultFileName(const QString& inputFileName, bool keepPreviousBase);
+    void setDefaultFileName(const QString& inputFileName, bool keepPreviousDirectory, bool keepPreviousBase);
 
     //!
     //! Get the forced display aspect ratio.
