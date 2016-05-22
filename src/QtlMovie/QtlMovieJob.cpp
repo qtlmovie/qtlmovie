@@ -482,35 +482,40 @@ bool QtlMovieJob::buildScenario()
     // Build the ffmpeg command for the main process.
     bool success = false;
     switch (outputType) {
-    case QtlMovieOutputFile::DvdFile: {
-        success = addTranscodeToDvdFile(inputForTranscoding, _task->outputFile()->fileName());
-        break;
-    }
-    case QtlMovieOutputFile::DvdImage: {
-        success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName());
-        break;
-    }
-    case QtlMovieOutputFile::DvdBurn: {
-        success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName()) &&
-                addBurnDvd(_task->outputFile()->fileName(), settings()->dvdBurner());
-        break;
-    }
-    case QtlMovieOutputFile::Ipad:
-    case QtlMovieOutputFile::Iphone: {
-        success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(), outputType);
-        break;
-    }
-    case QtlMovieOutputFile::Avi: {
-        success = addTranscodeToAvi(inputForTranscoding, _task->outputFile()->fileName());
-        break;
-    }
-    case QtlMovieOutputFile::SubRip: {
-        QString subtitleFile(_task->outputFile()->fileName());
-        success = addExtractSubtitle(inputForTranscoding, subtitleFile);
-        break;
-    }
-    default:
-        return abortStart(tr("Unexpected output type %1").arg(outputType));
+        case QtlMovieOutputFile::DvdFile: {
+            success = addTranscodeToDvdFile(inputForTranscoding, _task->outputFile()->fileName());
+            break;
+        }
+        case QtlMovieOutputFile::DvdImage: {
+            success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName());
+            break;
+        }
+        case QtlMovieOutputFile::DvdBurn: {
+            success = addTranscodeToDvdIsoImage(inputForTranscoding, _task->outputFile()->fileName()) &&
+                    addBurnDvd(_task->outputFile()->fileName(), settings()->dvdBurner());
+            break;
+        }
+        case QtlMovieOutputFile::Ipad: {
+            success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(),
+                                        settings()->iPad(), settings()->iPadVideoQuality());
+            break;
+        }
+        case QtlMovieOutputFile::Iphone: {
+            success = addTranscodeToMp4(inputForTranscoding, _task->outputFile()->fileName(),
+                                        settings()->iPhone(), settings()->iPhoneVideoQuality());
+            break;
+        }
+        case QtlMovieOutputFile::Avi: {
+            success = addTranscodeToAvi(inputForTranscoding, _task->outputFile()->fileName());
+            break;
+        }
+        case QtlMovieOutputFile::SubRip: {
+            QString subtitleFile(_task->outputFile()->fileName());
+            success = addExtractSubtitle(inputForTranscoding, subtitleFile);
+            break;
+        }
+        default:
+            return abortStart(tr("Unexpected output type %1").arg(outputType));
     }
 
     // If more than one process is defined, give them a number.
@@ -1013,27 +1018,12 @@ bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
 
 bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                                     const QString& outputFileName,
-                                    QtlMovieOutputFile::OutputType outputType)
+                                    const QtlMovieDeviceProfile& profile,
+                                    int videoQuality)
 {
     // Video and audio stream to transcode.
     const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
     const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
-
-    // Output-specific parameters.
-    int maxWidth = 0;
-    int maxHeight = 0;
-    switch (outputType) {
-        case QtlMovieOutputFile::Ipad:
-            maxWidth = settings()->iPadVideoWidth();
-            maxHeight = settings()->iPadVideoHeight();
-            break;
-        case QtlMovieOutputFile::Iphone:
-            maxWidth = settings()->iPhoneVideoWidth();
-            maxHeight = settings()->iPhoneVideoHeight();
-            break;
-        default:
-            return abortStart(tr("Unsupported output type for MP4"));
-    }
 
     // Start FFmpeg argument list.
     QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
@@ -1046,7 +1036,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "libx264"      // H.264 (AVC, Advanced Video Coding, MPEG-4 part 10)
              << "-threads" << QString::number(QtlSysInfo::numberOfProcessors(1))
-             << "-r" << QTL_STRINGIFY(QTL_IOS_FRAME_RATE)
+             << "-r" << profile.frameRateString()
              << "-maxrate" << "10000k"
              << "-bufsize" << "10000k"
              << "-preset" << "slow"
@@ -1068,23 +1058,15 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                                               width,
                                               height,
                                               dar,
-                                              maxWidth,
-                                              maxHeight,
+                                              profile.width(),
+                                              profile.height(),
                                               1.0,
                                               widthOut,
                                               heightOut);
 
         // Set video bitrate based on actual output video size.
-        switch (outputType) {
-            case QtlMovieOutputFile::Ipad:
-                args << "-b:v" << QString::number(settings()->iPadVideoBitrate(widthOut, heightOut));
-                break;
-            case QtlMovieOutputFile::Iphone:
-                args << "-b:v" << QString::number(settings()->iPhoneVideoBitrate(widthOut, heightOut));
-                break;
-            default:
-                return abortStart(tr("Unsupported output type for MP4"));
-        }
+        const int videoBitRate = QtlMovieDeviceProfile::videoBitRate(videoQuality, widthOut, heightOut, profile.frameRate());
+        args << "-b:v" << QString::number(videoBitRate);
 
         // In case of 4:2:2 input chroma format, force a downgrade to 4:2:0
         // since the x264 codec does not support 4:2:2.
@@ -1109,8 +1091,8 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
              << "-codec:a" << "aac"         // AAC (Advanced Audio Coding, MPEG-4 part 3)
              << "-strict" << "experimental" // Allow experimental features, aac codec is one.
              << "-ac" << "2"                // Remix to 2 channels (stereo)
-             << "-ar" << QString::number(QTL_IOS_AUDIO_SAMPLING)
-             << "-b:a" << QString::number(QTL_IOS_AUDIO_BITRATE);
+             << "-ar" << QString::number(profile.audioSampling())
+             << "-b:a" << QString::number(profile.audioBitRate());
     }
 
     // The FFmpeg argument list ends with the output file name.

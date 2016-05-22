@@ -39,7 +39,7 @@
 #include "ui_QtlMovieEditSettings.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieOutputFile.h"
-#include "QtlMovieScreenSize.h"
+#include "QtlMovieDeviceProfile.h"
 
 //!
 //! A subclass of QtlDialog which implements the UI for the "Edit Settings" action.
@@ -218,7 +218,7 @@ private:
     //! @param [in] grid The button grid to fill.
     //! @param [in] models List of devices.
     //!
-    void setModelScreenSizes(QtlButtonGrid* grid, const QVector<QtlMovieScreenSize>& models);
+    void setModelScreenSizes(QtlButtonGrid* grid, const QVector<QtlMovieDeviceProfile>& models);
 
     //!
     //! Set the default executable path of a media tool.
@@ -250,7 +250,7 @@ private:
     //! @param [in] height Reference video height.
     //! @param [in] frameRate Reference video frame rate.
     //!
-    static void updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, int frameRate);
+    static void updateMaxBitRate(QLabel* labelMaxBitRate, const QSpinBox* spinBoxQuality, int width, int height, float frameRate);
 
     // Unaccessible operations.
     QtlMovieEditSettings() Q_DECL_EQ_DELETE;

@@ -39,6 +39,7 @@
 #include "QtlSettings.h"
 #include "QtlMovieExecFile.h"
 #include "QtlMovieOutputFile.h"
+#include "QtlMovieDeviceProfile.h"
 #include "QtlLogger.h"
 #include "QtlMovie.h"
 
@@ -130,63 +131,16 @@ public:
     int dvdVideoHeight() const;
 
     //!
-    //! Get the video width of iPad.
-    //! @return The video width of iPad.
+    //! Get the selected model of iPad.
+    //! @return The selected model of iPad.
     //!
-    int iPadVideoWidth() const;
+    QtlMovieDeviceProfile iPad() const;
 
     //!
-    //! Get the video height of iPad.
-    //! @return The video height of iPad.
+    //! Get the selected model of iPhone.
+    //! @return The selected model of iPhone.
     //!
-    int iPadVideoHeight() const;
-
-    //!
-    //! Get the video width of iPhone.
-    //! @return The video width of iPhone.
-    //!
-    int iPhoneVideoWidth() const;
-
-    //!
-    //! Get the video height of iPhone.
-    //! @return The video height of iPhone.
-    //!
-    int iPhoneVideoHeight() const;
-
-    //!
-    //! Compute a video bitrate from quality indicator and video size.
-    //! A <em>quality indicator</em> is a way to represent the video quality
-    //! independently from the actual video size and frame rate.
-    //! @param [in] qualityIndicator Specified video quality. This is the number
-    //! of bits per pixel per 100 frames.
-    //! @param [in] width Video width in pixels.
-    //! @param [in] height Video height in pixels.
-    //! @param [in] frameRate Number of frames per seconds.
-    //! @return The computed bitrate in bits per second.
-    //!
-    static int videoBitRate(int qualityIndicator, int width, int height, int frameRate);
-
-    //!
-    //! Compute the video bitrate for iPad.
-    //! @param [in] width Actual video width in pixels.
-    //! @param [in] height Actual video height in pixels.
-    //! @return The computed bitrate in bits per second.
-    //!
-    int iPadVideoBitrate(int width, int height) const
-    {
-        return videoBitRate(iPadVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
-    }
-
-    //!
-    //! Compute the video bitrate for iPhone.
-    //! @param [in] width Actual video width in pixels.
-    //! @param [in] height Actual video height in pixels.
-    //! @return The computed bitrate in bits per second.
-    //!
-    int iPhoneVideoBitrate(int width, int height) const
-    {
-        return videoBitRate(iPhoneVideoQuality(), width, height, QTL_IOS_FRAME_RATE);
-    }
+    QtlMovieDeviceProfile iPhone() const;
 
     //!
     //! Compute the video bitrate for AVI.
@@ -196,7 +150,7 @@ public:
     //!
     int aviVideoBitrate(int width, int height) const
     {
-        return videoBitRate(aviVideoQuality(), width, height, QTL_AVI_FRAME_RATE);
+        return QtlMovieDeviceProfile::videoBitRate(aviVideoQuality(), width, height, QTL_AVI_FRAME_RATE);
     }
 
     //

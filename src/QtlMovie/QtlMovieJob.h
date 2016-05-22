@@ -280,12 +280,14 @@ private:
     //! Add a process for transcoding to MP4 (iPad, iPhone).
     //! @param [in] inputFile The input file.
     //! @param [in] outputFileName The output file name.
-    //! @param [in] outputType Output file type (either iPad or iPhone).
+    //! @param [in] profile Description of output device.
+    //! @param [in] videoQuality Video quality indicator in bits / frame / 100 pixels.
     //! @return True on success, false on error.
     //!
     bool addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                            const QString& outputFileName,
-                           QtlMovieOutputFile::OutputType outputType);
+                           const QtlMovieDeviceProfile& profile,
+                           int videoQuality);
 
     //!
     //! Add a process for transcoding to AVI.

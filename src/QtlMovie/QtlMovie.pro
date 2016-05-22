@@ -74,7 +74,7 @@ SOURCES += main.cpp \
     QtlMovieTask.cpp \
     QtlMovieEditTaskDialog.cpp \
     QtlMovieTaskList.cpp \
-    QtlMovieScreenSize.cpp
+    QtlMovieDeviceProfile.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -110,7 +110,7 @@ HEADERS += \
     QtlMovieTask.h \
     QtlMovieEditTaskDialog.h \
     QtlMovieTaskList.h \
-    QtlMovieScreenSize.h
+    QtlMovieDeviceProfile.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

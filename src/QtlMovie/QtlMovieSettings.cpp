@@ -33,7 +33,7 @@
 
 #include "QtlMovieSettings.h"
 #include "QtlMovieSettingsMigration.h"
-#include "QtlMovieScreenSize.h"
+#include "QtlMovieDeviceProfile.h"
 #include "QtlStringList.h"
 #include "QtlOpticalDrive.h"
 #include "QtlMovie.h"
@@ -205,17 +205,6 @@ void QtlMovieSettings::setDefaultOutputDir(const QString& outputType, const QStr
 
 
 //----------------------------------------------------------------------------
-// Compute a video bitrate from quality indicator and video size.
-//----------------------------------------------------------------------------
-
-int QtlMovieSettings::videoBitRate(int qualityIndicator, int width, int height, int frameRate)
-{
-    // Use 64-bit int intermediate value to avoid overflow.
-    return int((qint64(qualityIndicator) * qint64(width) * qint64(height) * qint64(frameRate)) / 100);
-}
-
-
-//----------------------------------------------------------------------------
 // Synthetic getters for video width and height.
 //----------------------------------------------------------------------------
 
@@ -229,24 +218,14 @@ int QtlMovieSettings::dvdVideoHeight() const
     return createPalDvd() ? QTL_DVD_PAL_VIDEO_HEIGHT : QTL_DVD_NTSC_VIDEO_HEIGHT;
 }
 
-int QtlMovieSettings::iPadVideoWidth() const
+QtlMovieDeviceProfile QtlMovieSettings::iPad() const
 {
-    return QtlMovieScreenSize::iPadModels.value(iPadScreenSize()).width;
+    return QtlMovieDeviceProfile::iPadModels.value(iPadScreenSize());
 }
 
-int QtlMovieSettings::iPadVideoHeight() const
+QtlMovieDeviceProfile QtlMovieSettings::iPhone() const
 {
-    return QtlMovieScreenSize::iPadModels.value(iPadScreenSize()).height;
-}
-
-int QtlMovieSettings::iPhoneVideoWidth() const
-{
-    return QtlMovieScreenSize::iPhoneModels.value(iPhoneScreenSize()).width;
-}
-
-int QtlMovieSettings::iPhoneVideoHeight() const
-{
-    return QtlMovieScreenSize::iPhoneModels.value(iPhoneScreenSize()).height;
+    return QtlMovieDeviceProfile::iPhoneModels.value(iPhoneScreenSize());
 }
 
 

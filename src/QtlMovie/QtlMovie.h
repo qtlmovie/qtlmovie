@@ -81,9 +81,6 @@
 #define QTL_DVD_DAR                 QTL_DAR_16_9  //!< Display aspect ratio for DVD.
 #define QTL_DVD_DAR_FFMPEG                "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 
-#define QTL_IOS_AUDIO_BITRATE             160000  //!< Common AAC audio bitrate (bits per second) for iPad/iPhone.
-#define QTL_IOS_AUDIO_SAMPLING             48000  //!< Common AAC audio sampling rate (Hz) for iPad/iPhone.
-#define QTL_IOS_FRAME_RATE                    30  //!< Common frames per second for iPad/iPhone.
 #define QTL_IPAD_DEFAULT_VIDEO_QUALITY        11  //!< H.264 video default quality indicator for iPad.
 #define QTL_IPHONE_DEFAULT_VIDEO_QUALITY      11  //!< H.264 video default quality indicator for iPhone.
 

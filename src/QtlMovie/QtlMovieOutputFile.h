@@ -87,6 +87,7 @@ public:
         DvdBurn,  //!< DVD ISO image and burn it.
         Ipad,     //!< iPad target.
         Iphone,   //!< iPhone target.
+        //@@@ Android,  //!< Android devices.
         Avi,      //!< AVI target (highly compressed).
         SubRip,   //!< Subtitles only in SRT format.
         None      //!< No output.

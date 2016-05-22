@@ -2,9 +2,11 @@
 QtlMovie Change Log
 ===================
 
-Version 1.6.2
+Version 1.7
 - When encoding for NTSC DVD's, now use 29.97 f/s instead of 30 previously.
-- Added support for iPhone SE screen size.
+- Added support for iPhone SE and iPad Pro screen sizes.
+- Added support for Android devices. The generated encoding format is the
+  same as iOS devices. Added support for some popular devices screen sizes.
 
 Version 1.6.1
 - Bug fix on Mac OS X installer. With version 1.6, QtlMovie failed to start
