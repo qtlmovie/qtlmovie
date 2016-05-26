@@ -74,7 +74,7 @@ void QtsPesPacket::initialize(const QtlByteBlock& bb, QtsPid pid)
     // Packet structure depends on stream_id
     if (qtsIsLongHeaderPesStreamId(data[3])) {
         // Header size
-        if(size < 9) {
+        if (size < 9) {
             return;
         }
         _headerSize = 9 + int(data[8]);
@@ -168,4 +168,43 @@ bool QtsPesPacket::isAc3() const
     const quint8* pl = payload();
     const int size = payloadSize();
     return size > 2 && pl[0] == 0x0B && pl[1] == 0x77;
+}
+
+
+//-----------------------------------------------------------------------------
+// Get or set the PTS or DTS.
+//-----------------------------------------------------------------------------
+
+bool QtsPesPacket::hasPts() const
+{
+    return _isValid && _headerSize >= 14 && (_data[7] & 0x80) == 0x80;
+}
+
+quint64 QtsPesPacket::getPts() const
+{
+    return hasPts() ? qtsGetPtsDts(_data.data() + 9) : 0;
+}
+
+void QtsPesPacket::setPts(const quint64& pts)
+{
+    if (hasPts()) {
+        qtsPutPtsDts(_data.data() + 9, pts);
+    }
+}
+
+bool QtsPesPacket::hasDts() const
+{
+    return _isValid && _headerSize >= 19 && (_data[7] & 0xC0) == 0xC0;
+}
+
+quint64 QtsPesPacket::getDts() const
+{
+    return hasDts() ? qtsGetPtsDts(_data.data() + 14) : 0;
+}
+
+void QtsPesPacket::setDts(const quint64& dts)
+{
+    if (hasDts()) {
+        qtsPutPtsDts(_data.data() + 14, dts);
+    }
 }

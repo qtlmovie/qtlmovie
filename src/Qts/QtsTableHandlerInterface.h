@@ -36,7 +36,7 @@
 #ifndef QTSTABLEHANDLERINTERFACE_H
 #define QTSTABLEHANDLERINTERFACE_H
 
-#include "QtsTable.h"
+class QtsTable;
 class QtsSectionDemux;
 
 //!

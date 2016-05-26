@@ -58,7 +58,8 @@ SOURCES += \
     QtlIsoLanguagesTest.cpp \
     QtlOpticalDriveTest.cpp \
     QtlStringUtilsTest.cpp \
-    QtlFileSystemInfoTest.cpp
+    QtlFileSystemInfoTest.cpp \
+    QtsTeletextDemuxTest.cpp
 
 HEADERS += \
     QtlTest.h \
@@ -83,3 +84,6 @@ HEADERS += \
     QtsData/psi_bat_cplus_packets.h \
     QtsData/psi_sdt_r6_packets.h \
     QtsData/psi_sdt_r6_sections.h
+
+RESOURCES += \
+    UnitTest.qrc

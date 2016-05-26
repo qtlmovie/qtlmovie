@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2015, Thierry Lelegard
+// Copyright (c) 2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,18 +26,38 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieVersion.h
+//! @file QtsTeletextHandlerInterface.h
 //!
-//! Declare the version of the product.
+//! Declare the class QtsTeletextHandlerInterface.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEVERSION_H
-#define QTLMOVIEVERSION_H
+#ifndef QTSTELETEXTHANDLERINTERFACE_H
+#define QTSTELETEXTHANDLERINTERFACE_H
+
+class QtsTeletextFrame;
+class QtsTeletextDemux;
 
 //!
-//! Version of the product.
+//! Interface to be implemented by classes which need to be notified of Teletext messages using a Teletext demux.
 //!
-#define QTLMOVIE_VERSION "1.8"
+class QtsTeletextHandlerInterface
+{
+public:
+    //!
+    //! This hook is invoked when a complete Teletext message is available.
+    //! @param [in,out] demux The Teletext demux.
+    //! @param [in] frame Teletext frame.
+    //!
+    virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame) = 0;
 
-#endif // QTLMOVIEVERSION_H
+    //!
+    //! Virtual destructor.
+    //!
+    virtual ~QtsTeletextHandlerInterface()
+    {
+    }
+};
+
+#endif // QTSTELETEXTHANDLERINTERFACE_H

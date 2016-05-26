@@ -234,11 +234,9 @@ void QtsPesDemux::processPesPacket(QtsPid pid, PidContext& pc)
     _inHandler = true;
     _pidInHandler = pid;
 
+    // Handle complete packet
     try {
-        // Handle complete packet
-        if (_pesHandler != 0) {
-            _pesHandler->handlePesPacket(*this, pp);
-        }
+        handlePesPacket(pp);
     }
     catch (...) {
         _inHandler = false;
@@ -256,5 +254,17 @@ void QtsPesDemux::processPesPacket(QtsPid pid, PidContext& pc)
         // Reset of this PID was requested by a handler.
         pc.resetPending = false;
         resetPid(pid);
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// This hook is invoked when a complete PES packet is available.
+//-----------------------------------------------------------------------------
+
+void QtsPesDemux::handlePesPacket(const QtsPesPacket& packet)
+{
+    if (_pesHandler != 0) {
+        _pesHandler->handlePesPacket(*this, packet);
     }
 }

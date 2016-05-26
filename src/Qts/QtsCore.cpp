@@ -73,6 +73,30 @@ void qtsPutPcr(void* b, const quint64& pcr)
 
 
 //-----------------------------------------------------------------------------
+// Extract a PTS or DTS from a stream.
+//-----------------------------------------------------------------------------
+
+quint64 qtsGetPtsDts(const void* b)
+{
+    const quint64 v1 = *((const uchar*)(b));
+    const quint32 v2 = qFromBigEndian<quint32>((const uchar*)(b) + 1);
+    return ((v1 & 0x0E) << 29) | ((v2 & 0xFFFE0000) >> 2) | ((v2 & 0x0000FFFE) >> 1);
+}
+
+
+//-----------------------------------------------------------------------------
+// Insert a PTS or DTS in a stream.
+//-----------------------------------------------------------------------------
+
+void qtsPutPtsDts(void* b, const quint64& xts)
+{
+    // Marker bits are always '1'.
+    *(uchar*)(b) = (*(uchar*)(b) & 0xF0) | (uchar(xts >> 29) & 0x0E) | 0x01;
+    qToBigEndian(0x00010001 | quint32((xts << 2) & 0xFFFE0000) | quint32((xts << 1) & 0x0000FFFE), (uchar*)(b) + 1);
+}
+
+
+//-----------------------------------------------------------------------------
 // Check if a SID value indicates a PES packet with long header
 //-----------------------------------------------------------------------------
 

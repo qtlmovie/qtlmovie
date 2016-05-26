@@ -38,6 +38,7 @@
 
 #include "QtsCore.h"
 #include "QtsCrc32.h"
+#include "QtsExtTableId.h"
 #include "QtlByteBlock.h"
 #include "QtlSmartPointer.h"
 

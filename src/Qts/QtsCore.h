@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -275,6 +275,20 @@ quint64 qtsGetPcr(const void* b);
 //! @param [in] pcr A 42-bit PCR value.
 //!
 void qtsPutPcr(void* b, const quint64& pcr);
+
+//!
+//! Extract a PTS or DTS from a stream.
+//! @param [in] b Address of a 5-byte area where to extract the PTS or DTS.
+//! @return A 33-bit PTS or DTS value.
+//!
+quint64 qtsGetPtsDts(const void* b);
+
+//!
+//! Insert a PTS or DTS in a stream.
+//! @param [out] b Address of a 5-byte area where to insert the PTS or DTS.
+//! @param [in] xts A 33-bit PTS or DTS value.
+//!
+void qtsPutPtsDts(void* b, const quint64& xts);
 
 //!
 //! Check if PTS2 follows PTS1 after wrap up.
@@ -641,147 +655,6 @@ const QtsTableId QTS_TID_CAS_LAST      = 0x8F; //!< End of CAS range
 
 
 //---------------------------------------------------------------------
-// Extended table id.
-//---------------------------------------------------------------------
-
-//!
-//! Extended table id (include table id extension).
-//!
-//! For convenience, it is sometimes useful to identify tables using an
-//! "extended TID", a combination of TID and TIDext. On one PID, two tables
-//! with the same TID but with different TIDext are considered as distinct
-//! tables. By convention, the TIDext is always zero with short sections.
-//!
-class QtsExtTableId
-{
-private:
-    quint32 _etid; //!< 7-bit: unused, 1-bit: long table, 8-bit: tid, 16-bit: tid-ext
-public:
-    //!
-    //! Constructor from a short table id.
-    //! @param [in] tid Table id.
-    //!
-    QtsExtTableId(QtsTableId tid = 0xFF) :
-        _etid((quint32(tid) & 0xFF) << 16)
-    {
-    }
-    //!
-    //! Constructor from a long table id and tid-ext.
-    //! @param [in] tid Table id.
-    //! @param [in] tidExt Table id entension.
-    //!
-    QtsExtTableId(QtsTableId tid, QtsTableIdExt tidExt) :
-        _etid(0x01000000 | ((quint32(tid) & 0xFF) << 16) | (quint32(tidExt) & 0xFFFF))
-    {
-    }
-    //!
-    //! Copy constructor
-    //! @param [in] e Other instance to copy.
-    //!
-    QtsExtTableId(const QtsExtTableId& e) :
-        _etid(e._etid)
-    {
-    }
-    //!
-    //! Assignment
-    //! @param [in] e Other instance to copy.
-    //! @return A reference to this object.
-    //!
-    const QtsExtTableId& operator=(const QtsExtTableId& e)
-    {
-        _etid = e._etid;
-        return *this;
-    }
-    //!
-    //! Check if the extended table id references a section with a long header.
-    //! @return True if the extended table id references a section with a long header.
-    //!
-    bool isLongSection() const
-    {
-        return (_etid & 0x01000000) != 0;
-    }
-    //!
-    //! Check if the extended table id references a section with a short header.
-    //! @return True if the extended table id references a section with a short header.
-    //!
-    bool isShortSection() const
-    {
-        return (_etid & 0x01000000) == 0;
-    }
-    //!
-    //! Get the Table Id part.
-    //! @return The Table Id part.
-    //!
-    QtsTableId tid() const
-    {
-        return QtsTableId((_etid >> 16) & 0xFF);
-    }
-    //!
-    //! Get the Table Id Extension part.
-    //! @return The Table Id Extension part.
-    //!
-    QtsTableIdExt tidExt() const
-    {
-        return quint16(_etid & 0xFFFF);
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is equal to @a e.
-    //!
-    bool operator==(const QtsExtTableId& e) const
-    {
-        return _etid == e._etid;
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is different from @a e.
-    //!
-    bool operator!=(const QtsExtTableId& e) const
-    {
-        return _etid != e._etid;
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is logically less than @a e.
-    //!
-    bool operator<(const QtsExtTableId& e) const
-    {
-        return _etid <  e._etid;
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is logically less than or equal to @a e.
-    //!
-    bool operator<=(const QtsExtTableId& e) const
-    {
-        return _etid <= e._etid;
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is logically greater than @a e.
-    //!
-    bool operator>(const QtsExtTableId& e) const
-    {
-        return _etid >  e._etid;
-    }
-    //!
-    //! Comparison operator.
-    //! @param [in] e Other instance to compare.
-    //! @return True is this object is logically greater than or equal to @a e.
-    //!
-    bool operator>=(const QtsExtTableId& e) const
-    {
-        return _etid >= e._etid;
-    }
-};
-
-
-//---------------------------------------------------------------------
 // PSI/SI descriptor tag.
 //---------------------------------------------------------------------
 
@@ -1063,7 +936,13 @@ const int QTS_DBID_BBG                  = 0xBBBB; //!< Bertelsmann Broadband Gro
 const int QTS_TELETEXT_PES_FIRST_EBU_DATA_ID = 0x10; //!< First EBU data_identifier value in PES packets conveying Teletext.
 const int QTS_TELETEXT_PES_LAST_EBU_DATA_ID  = 0x1F; //!< Last EBU data_identifier value in PES packets conveying Teletext.
 
-const int QTS_TELETEXT_DATA_UNIT_ID_NON_SUBTITLE = 0x02; //!< Data_unit_id for EBU Teletext non-subtitle data.
-const int QTS_TELETEXT_DATA_UNIT_ID_SUBTITLE     = 0x03; //!< Data_unit_id for EBU Teletext subtitle data.
+const int QTS_TELETEXT_DATA_UNIT_ID_NON_SUBTITLE    = 0x02; //!< Data_unit_id for EBU Teletext non-subtitle data.
+const int QTS_TELETEXT_DATA_UNIT_ID_SUBTITLE        = 0x03; //!< Data_unit_id for EBU Teletext subtitle data.
+const int QTS_TELETEXT_DATA_UNIT_ID_INVERTED        = 0x0C; //!< Data_unit_id for EBU EBU Teletext Inverted (extension ?).
+const int QTS_TELETEXT_DATA_UNIT_ID_VPS             = 0xC3; //!< Data_unit_id for VPS (extension ?).
+const int QTS_TELETEXT_DATA_UNIT_ID_CLOSED_CAPTIONS = 0xC5; //!< Data_unit_id for Closed Caption (extension ?).
+const int QTS_TELETEXT_DATA_UNIT_ID_STUFFING        = 0xFF; //!< Data_unit_id for stuffing data.
+
+const int QTS_TELETEXT_PACKET_SIZE = 44; //!< Size of a Teletext packet.
 
 #endif //!< QTSCORE_H

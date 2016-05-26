@@ -75,6 +75,14 @@ public:
     //!
     virtual void resetPid(QtsPid pid);
 
+protected:
+    //!
+    //! This hook is invoked when a complete PES packet is available.
+    //! Can be overloaded by subclasses to add intermediate processing.
+    //! @param [in] packet The PES packet.
+    //!
+    virtual void handlePesPacket(const QtsPesPacket& packet);
+
 private:
     //!
     //! This internal structure contains the analysis context for one PID.

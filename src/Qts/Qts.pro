@@ -59,7 +59,11 @@ SOURCES += \
     QtsAbstractTable.cpp \
     QtsAbstractLongTable.cpp \
     QtsProgramMapTable.cpp \
-    QtsStandaloneTableDemux.cpp
+    QtsStandaloneTableDemux.cpp \
+    QtsTeletextDemux.cpp \
+    QtsTimeStamper.cpp \
+    QtsTeletextFrame.cpp \
+    QtsTeletextCharset.cpp
 
 HEADERS += \
     QtsCore.h \
@@ -85,7 +89,13 @@ HEADERS += \
     QtsPrivateDataSpecifierDescriptor.h \
     QtsProgramAssociationTable.h \
     QtsProgramMapTable.h \
-    QtsStandaloneTableDemux.h
+    QtsStandaloneTableDemux.h \
+    QtsExtTableId.h \
+    QtsTeletextDemux.h \
+    QtsTeletextHandlerInterface.h \
+    QtsTimeStamper.h \
+    QtsTeletextFrame.h \
+    QtsTeletextCharset.h
 
 TRANSLATIONS += \
     locale/qts_fr.ts

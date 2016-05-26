@@ -305,6 +305,44 @@ public:
     //!
     bool isAc3() const;
 
+    //!
+    //! Check if the PES packet contains a PTS (Presentation Time Stamp).
+    //! @return True if the PES packet contains a PTS.
+    //!
+    bool hasPts() const;
+
+    //!
+    //! Get the PTS (Presentation Time Stamp) - 33 bits.
+    //! @return PTS value or zero if not found.
+    //!
+    quint64 getPts() const;
+
+    //!
+    //! Replace the PTS (Presentation Time Stamp) value - 33 bits.
+    //! Do nothing if the packet has not PTS.
+    //! @param pts PTS value to replace.
+    //!
+    void setPts(const quint64& pts);
+
+    //!
+    //! Check if the PES packet contains a DTS (Decoding Time Stamp).
+    //! @return True if the PES packet contains a DTS.
+    //!
+    bool hasDts() const;
+
+    //!
+    //! Get the DTS (Decoding Time Stamp) - 33 bits.
+    //! @return DTS value or zero if not found.
+    //!
+    quint64 getDts() const;
+
+    //!
+    //! Replace the DTS (Decoding Time Stamp) value - 33 bits.
+    //! Do nothing if the packet has not DTS.
+    //! @param dts DTS value to replace.
+    //!
+    void setDts(const quint64& dts);
+
 private:
     // Private fields
     bool             _isValid;     //!< Content of _data is a valid packet.

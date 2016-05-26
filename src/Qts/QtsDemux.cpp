@@ -39,12 +39,34 @@
 
 QtsDemux::QtsDemux(const QtsPidSet& pidFilter) :
     _packetCount(0),
+    _lastPcr(-1),
     _pidFilter(pidFilter)
 {
 }
 
 QtsDemux::~QtsDemux()
 {
+}
+
+
+//-----------------------------------------------------------------------------
+// Feed the demux with a TS packet.
+//-----------------------------------------------------------------------------
+
+void QtsDemux::feedPacket(const QtsTsPacket& packet)
+{
+    // Get most recent PCR. Since a PCR is always >= 0, _lastPcr becomes valid.
+    if (packet.hasPcr()) {
+        _lastPcr = packet.getPcr();
+    }
+
+    // Process the packet if from a filtered PID.
+    if (_pidFilter[packet.getPid()]) {
+        processTsPacket(packet);
+    }
+
+    // Count packets after packet processing.
+    _packetCount++;
 }
 
 
@@ -97,11 +119,11 @@ void QtsDemux::removePid(QtsPid pid)
 
 //-----------------------------------------------------------------------------
 // Reset the analysis context (partially built sections and tables).
-// The default implementation does nothing.
 //-----------------------------------------------------------------------------
 
 void QtsDemux::reset()
 {
+    _lastPcr = 0;
 }
 
 

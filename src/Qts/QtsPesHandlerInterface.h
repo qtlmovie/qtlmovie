@@ -36,7 +36,7 @@
 #ifndef QTSPESHANDLERINTERFACE_H
 #define QTSPESHANDLERINTERFACE_H
 
-#include "QtsPesPacket.h"
+class QtsPesPacket;
 class QtsPesDemux;
 
 //!

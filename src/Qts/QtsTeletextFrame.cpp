@@ -1,0 +1,82 @@
+//----------------------------------------------------------------------------
+//
+// Copyright (c) 2013-2016, Thierry Lelegard
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice,
+//    this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+// THE POSSIBILITY OF SUCH DAMAGE.
+//
+//----------------------------------------------------------------------------
+//
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsTeletextFrame.
+//
+//----------------------------------------------------------------------------
+
+#include "QtsTeletextFrame.h"
+
+
+//----------------------------------------------------------------------------
+// Constructor.
+//----------------------------------------------------------------------------
+
+QtsTeletextFrame::QtsTeletextFrame(QtsPid pid_,
+                                   int page_,
+                                   int frameCount_,
+                                   quint64 showTimestamp_,
+                                   quint64 hideTimestamp_,
+                                   QStringList lines_) :
+    pid(pid_),
+    page(page_),
+    frameCount(frameCount_),
+    showTimestamp(showTimestamp_),
+    hideTimestamp(hideTimestamp_),
+    lines(lines_)
+{
+}
+
+
+//----------------------------------------------------------------------------
+// Format a timestamp as SRT time.
+//----------------------------------------------------------------------------
+
+QString QtsTeletextFrame::toSrtTime(quint64 timestamp)
+{
+    const int h = timestamp / 3600000;
+    const int m = timestamp / 60000 - 60 * h;
+    const int s = timestamp / 1000 - 3600 * h - 60 * m;
+    const int u = timestamp - 3600000 * h - 60000 * m - 1000 * s;
+    return QStringLiteral("%1:%2:%3,%4")
+            .arg(h, 2, 10, QLatin1Char('0'))
+            .arg(m, 2, 10, QLatin1Char('0'))
+            .arg(s, 2, 10, QLatin1Char('0'))
+            .arg(u, 3, 10, QLatin1Char('0'));
+}
+
+QString QtsTeletextFrame::srtDuration() const
+{
+    return srtShowTimestamp() + " --> " + srtHideTimestamp();
+}
+
+QString QtsTeletextFrame::srtFrame() const
+{
+    return QStringLiteral("%1\n%2 --> %3\n%4\n\n").arg(frameCount).arg(srtShowTimestamp()).arg(srtHideTimestamp()).arg(lines.join('\n'));
+}

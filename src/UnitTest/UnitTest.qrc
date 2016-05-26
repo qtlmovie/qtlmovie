@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="test/test-teletext.srt">QtsData/test-teletext.srt</file>
+        <file alias="test/test-teletext.ts">QtsData/test-teletext.ts</file>
+    </qresource>
+</RCC>

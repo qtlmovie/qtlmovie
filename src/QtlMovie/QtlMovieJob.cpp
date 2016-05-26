@@ -384,12 +384,12 @@ bool QtlMovieJob::canInsertSubtitles(const QString& subtitleFileName)
     // We can insert only SRT/SSA/ASS subtitles from an external file
     // and the file must exist.
     switch (QtlMovieStreamInfo::subtitleType(subtitleFileName, true)) {
-    case QtlMovieStreamInfo::SubAss:
-    case QtlMovieStreamInfo::SubSsa:
-    case QtlMovieStreamInfo::SubRip:
-        return true;
-    default:
-        return false;
+        case QtlMovieStreamInfo::SubAss:
+        case QtlMovieStreamInfo::SubSsa:
+        case QtlMovieStreamInfo::SubRip:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -420,13 +420,13 @@ bool QtlMovieJob::buildScenario()
     // External subtitle file.
     if (!_task->inputFile()->externalSubtitleFileName().isEmpty()) {
         switch (QtlMovieStreamInfo::subtitleType(_task->inputFile()->externalSubtitleFileName(), true)) {
-        case QtlMovieStreamInfo::SubAss:
-        case QtlMovieStreamInfo::SubSsa:
-        case QtlMovieStreamInfo::SubRip:
-            // Supported external subtitle file type.
-            break;
-        default:
-            return abortStart(tr("Non-existent or unsupported external subtitle file."));
+            case QtlMovieStreamInfo::SubAss:
+            case QtlMovieStreamInfo::SubSsa:
+            case QtlMovieStreamInfo::SubRip:
+                // Supported external subtitle file type.
+                break;
+            default:
+                return abortStart(tr("Non-existent or unsupported external subtitle file."));
         }
     }
 
@@ -573,21 +573,21 @@ bool QtlMovieJob::addSubtitleFileVideoFilter(QString& videoFilters, int widthIn,
     const QtlMovieStreamInfo::SubtitleType subType(QtlMovieStreamInfo::subtitleType(subtitleFileName));
     switch (subType) {
 
-    case QtlMovieStreamInfo::SubRip:
-        return addTextSubtitleFileVideoFilter(videoFilters, "subtitles", widthIn, heightIn, subtitleFileName);
+        case QtlMovieStreamInfo::SubRip:
+            return addTextSubtitleFileVideoFilter(videoFilters, "subtitles", widthIn, heightIn, subtitleFileName);
 
-    case QtlMovieStreamInfo::SubAss:
-    case QtlMovieStreamInfo::SubSsa:
-        return addTextSubtitleFileVideoFilter(videoFilters, "ass", widthIn, heightIn, subtitleFileName);
+        case QtlMovieStreamInfo::SubAss:
+        case QtlMovieStreamInfo::SubSsa:
+            return addTextSubtitleFileVideoFilter(videoFilters, "ass", widthIn, heightIn, subtitleFileName);
 
-    case QtlMovieStreamInfo::SubDvd:
-    case QtlMovieStreamInfo::SubDvb:
-    case QtlMovieStreamInfo::SubTeletext:
-    case QtlMovieStreamInfo::SubCc:
-    case QtlMovieStreamInfo::SubOther:
-    case QtlMovieStreamInfo::SubNone:
-    default:
-        return abortStart(tr("Unsupported subtitle type"));
+        case QtlMovieStreamInfo::SubDvd:
+        case QtlMovieStreamInfo::SubDvb:
+        case QtlMovieStreamInfo::SubTeletext:
+        case QtlMovieStreamInfo::SubCc:
+        case QtlMovieStreamInfo::SubOther:
+        case QtlMovieStreamInfo::SubNone:
+        default:
+            return abortStart(tr("Unsupported subtitle type"));
     }
 }
 
@@ -634,67 +634,67 @@ bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlM
     // Subtitle type.
     switch (subtitleStream->subtitleType()) {
 
-    case QtlMovieStreamInfo::SubDvb:
-    case QtlMovieStreamInfo::SubDvd: {
-        // Bitmap subtitles are picture frames with a transparent background which
-        // shall be displayed on top of the main video frames.
-        // We may need to create a complex filter with several branches.
-        // One branch resizes the subtitle frames, the other overlays the subtitles on video.
-        // First, setup the origin of the video branch.
-        QString videoBranchName;
-        if (videoFilters.isEmpty()) {
-            // No previous filter, use the video stream specification.
-            videoBranchName = videoStream->ffSpecifier();
-        }
-        else {
-            // A previous filter exists. Setup a branch name to the previous video branch.
-            videoBranchName="presub";
-            videoFilters.append("[presub];");
-        }
+        case QtlMovieStreamInfo::SubDvb:
+        case QtlMovieStreamInfo::SubDvd: {
+            // Bitmap subtitles are picture frames with a transparent background which
+            // shall be displayed on top of the main video frames.
+            // We may need to create a complex filter with several branches.
+            // One branch resizes the subtitle frames, the other overlays the subtitles on video.
+            // First, setup the origin of the video branch.
+            QString videoBranchName;
+            if (videoFilters.isEmpty()) {
+                // No previous filter, use the video stream specification.
+                videoBranchName = videoStream->ffSpecifier();
+            }
+            else {
+                // A previous filter exists. Setup a branch name to the previous video branch.
+                videoBranchName="presub";
+                videoFilters.append("[presub];");
+            }
 
-        // If required, setup a branch to resize the subtitle frame.
-        // Note: Bitmap subtitles are picture frames with a transparent background which
-        // shall be displayed on top of the main video frames. The size of the subtitle
-        // frames are reported by versions of ffprobe after 2013/09/06.
-        QString subtitleBranchName;
-        if (subtitleStream->width() == widthOut && subtitleStream->height() == heightOut) {
-            // Video and subtitle frames have the same size.
-            // Simply use the subtitle stream specification as name.
-            subtitleBranchName = subtitleStream->ffSpecifier();
-        }
-        else {
-            // Video and subtitle frames do not have the same size or the size of the
-            // subtitle frames is not known (the size of the subtitle frames is reported
-            // by versions of ffprobe after 2013/09/06).
-            // Add a branch to resize the subtitle frames.
-            // Note that we simply resize the subtitle frame without attempting to
-            // preserve its aspect ratio. When the video and subtitle frames do not
-            // have the same aspect ratio, this may distort the subtitle characters.
-            // However, some tests have shown that preserving the subtitle aspect ratio
-            // may lead to big subtitles which eat a large part of the video frame.
-            subtitleBranchName = "sub";
-            videoFilters.append(QStringLiteral("[%1]scale=width=%2:height=%3[sub];")
-                                .arg(subtitleStream->ffSpecifier())
-                                .arg(widthOut)
-                                .arg(heightOut));
-        }
+            // If required, setup a branch to resize the subtitle frame.
+            // Note: Bitmap subtitles are picture frames with a transparent background which
+            // shall be displayed on top of the main video frames. The size of the subtitle
+            // frames are reported by versions of ffprobe after 2013/09/06.
+            QString subtitleBranchName;
+            if (subtitleStream->width() == widthOut && subtitleStream->height() == heightOut) {
+                // Video and subtitle frames have the same size.
+                // Simply use the subtitle stream specification as name.
+                subtitleBranchName = subtitleStream->ffSpecifier();
+            }
+            else {
+                // Video and subtitle frames do not have the same size or the size of the
+                // subtitle frames is not known (the size of the subtitle frames is reported
+                // by versions of ffprobe after 2013/09/06).
+                // Add a branch to resize the subtitle frames.
+                // Note that we simply resize the subtitle frame without attempting to
+                // preserve its aspect ratio. When the video and subtitle frames do not
+                // have the same aspect ratio, this may distort the subtitle characters.
+                // However, some tests have shown that preserving the subtitle aspect ratio
+                // may lead to big subtitles which eat a large part of the video frame.
+                subtitleBranchName = "sub";
+                videoFilters.append(QStringLiteral("[%1]scale=width=%2:height=%3[sub];")
+                                    .arg(subtitleStream->ffSpecifier())
+                                    .arg(widthOut)
+                                    .arg(heightOut));
+            }
 
-        // Setup the branch which overlays the subtitle frames over the video frames.
-        videoFilters.append(QStringLiteral("[%1][%2]overlay").arg(videoBranchName).arg(subtitleBranchName));
-        return true;
-    }
-    case QtlMovieStreamInfo::SubRip:
-    case QtlMovieStreamInfo::SubAss:
-    case QtlMovieStreamInfo::SubSsa:
-    case QtlMovieStreamInfo::SubTeletext:
-    case QtlMovieStreamInfo::SubCc:
-        // These subtitles were extracted from the file in a previous pass. Ignore them now.
-        return true;
+            // Setup the branch which overlays the subtitle frames over the video frames.
+            videoFilters.append(QStringLiteral("[%1][%2]overlay").arg(videoBranchName).arg(subtitleBranchName));
+            return true;
+        }
+        case QtlMovieStreamInfo::SubRip:
+        case QtlMovieStreamInfo::SubAss:
+        case QtlMovieStreamInfo::SubSsa:
+        case QtlMovieStreamInfo::SubTeletext:
+        case QtlMovieStreamInfo::SubCc:
+            // These subtitles were extracted from the file in a previous pass. Ignore them now.
+            return true;
 
-    case QtlMovieStreamInfo::SubOther:
-    case QtlMovieStreamInfo::SubNone:
-    default:
-        return abortStart(tr("Unsupported subtitle type"));
+        case QtlMovieStreamInfo::SubOther:
+        case QtlMovieStreamInfo::SubNone:
+        default:
+            return abortStart(tr("Unsupported subtitle type"));
     }
 }
 
@@ -1219,16 +1219,16 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         // No file name suffix, compute appropriate output type.
         // Use same as input type, except a few cases.
         switch (inType) {
-        case QtlMovieStreamInfo::SubSsa:
-            outType = QtlMovieStreamInfo::SubAss;
-            break;
-        case QtlMovieStreamInfo::SubTeletext:
-        case QtlMovieStreamInfo::SubCc:
-            outType = QtlMovieStreamInfo::SubRip;
-            break;
-        default:
-            outType = inType;
-            break;
+            case QtlMovieStreamInfo::SubSsa:
+                outType = QtlMovieStreamInfo::SubAss;
+                break;
+            case QtlMovieStreamInfo::SubTeletext:
+            case QtlMovieStreamInfo::SubCc:
+                outType = QtlMovieStreamInfo::SubRip;
+                break;
+            default:
+                outType = inType;
+                break;
         }
         // Update output file name.
         outputFileName.append(QtlMovieStreamInfo::fileExtension(outType));
@@ -1296,16 +1296,16 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         // Determine codec type and output file format.
         QString codecName, fileFormat;
         switch (outType) {
-        case QtlMovieStreamInfo::SubRip:
-            codecName = "srt";
-            fileFormat = "srt";
-            break;
-        case QtlMovieStreamInfo::SubAss:
-            codecName = "ass";
-            fileFormat = "ass";
-            break;
-        default:
-            return abortStart(tr("This type of subtitles cannot be extracted by ffmpeg"));
+            case QtlMovieStreamInfo::SubRip:
+                codecName = "srt";
+                fileFormat = "srt";
+                break;
+            case QtlMovieStreamInfo::SubAss:
+                codecName = "ass";
+                fileFormat = "ass";
+                break;
+            default:
+                return abortStart(tr("This type of subtitles cannot be extracted by ffmpeg"));
         }
 
         // Build FFmpeg options to extract one subtitle track to SRT.

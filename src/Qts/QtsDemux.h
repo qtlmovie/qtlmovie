@@ -60,13 +60,7 @@ public:
     //! @param [in] packet TS packet from the stream to demultiplex.
     //! If the PID of the packet is not in the PID filter, it is ignored.
     //!
-    void feedPacket(const QtsTsPacket& packet)
-    {
-        if (_pidFilter[packet.getPid()]) {
-            processTsPacket(packet);
-        }
-        _packetCount++;
-    }
+    void feedPacket(const QtsTsPacket& packet);
 
     //!
     //! Set the list of PID's to filter.
@@ -109,6 +103,15 @@ public:
     virtual void resetPid(QtsPid pid);
 
     //!
+    //! Get the last PCR found in the stream.
+    //! @return Last PCR value or negative if none was found.
+    //!
+    qint64 lastPcr() const
+    {
+        return _lastPcr;
+    }
+
+    //!
     //! Get the number of process TS packets.
     //! @return The number of process TS packets.
     //!
@@ -127,6 +130,7 @@ public:
 
 private:
     QtsPacketCounter _packetCount; //!< Number of TS packets in demultiplexed stream.
+    qint64           _lastPcr;     //!< Last PCR is any TS packet, any PID.
     QtsPidSet        _pidFilter;   //!< PIDs to filter.
 
     //!

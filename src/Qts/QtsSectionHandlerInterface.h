@@ -36,7 +36,7 @@
 #ifndef QTSSECTIONHANDLERINTERFACE_H
 #define QTSSECTIONHANDLERINTERFACE_H
 
-#include "QtsSection.h"
+class QtsSection;
 class QtsSectionDemux;
 
 //!
