@@ -239,14 +239,14 @@ void TeletextExtractor::handleTeletextMessage(QtsTeletextDemux& demux, const Qts
     // Search an existing output file.
     OutputFilePtr out;
     for (OutputFileList::ConstIterator it = _outputs.begin(); out.isNull() && it != _outputs.end(); ++it) {
-        if (!it->isNull() && (*it)->pid() == frame.pid && (*it)->page() == frame.page) {
+        if (!it->isNull() && (*it)->pid() == frame.pid() && (*it)->page() == frame.page()) {
             out = *it;
         }
     }
 
     // Create a file if not found.
     if (out.isNull()) {
-        out = new OutputFile(frame.pid, frame.page, _outputPrefix);
+        out = new OutputFile(frame.pid(), frame.page(), _outputPrefix);
         _outputs << out;
     }
 

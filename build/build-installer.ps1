@@ -227,8 +227,6 @@ if (-not $NoStandalone) {
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "mkisofs.txt")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "growisofs.exe")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "growisofs.txt")) $TempWintools
-        Copy-Item (Join-MultiPath @($RootDir, "wintools", "telxcc.exe")) $TempWintools
-        Copy-Item (Join-MultiPath @($RootDir, "wintools", "telxcc.txt")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.exe")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.txt")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvddecrypter.exe")) $TempWintools

@@ -110,14 +110,6 @@ private slots:
     }
 
     //!
-    //! Invoked by the "Browse..." button for the Telxcc executable.
-    //!
-    void browseTelxcc()
-    {
-        browseFile(_ui.editTelxcc, tr("Locate Telxcc executable"));
-    }
-
-    //!
     //! Invoked by the "Browse..." button for the CCExtractor executable.
     //!
     void browseCcextractor()

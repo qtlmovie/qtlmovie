@@ -75,7 +75,6 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
                     !getString  ("dvdauthorExecutable",    &QtlMovieSettings::setDvdAuthorExplicitExecutable) &&
                     !getString  ("mkisofsExecutable",      &QtlMovieSettings::setMkisofsExplicitExecutable) &&
                     !getString  ("growisofsExecutable",    &QtlMovieSettings::setGrowisofsExplicitExecutable) &&
-                    !getString  ("telxccExecutable",       &QtlMovieSettings::setTelxccExplicitExecutable) &&
                     !getString  ("ccextractorExecutable",  &QtlMovieSettings::setCCextractorExplicitExecutable) &&
                     !getString  ("dvddecrypterExecutable", &QtlMovieSettings::setDvdDecrypterExplicitExecutable) &&
                     !getInt     ("maxLogLines",            &QtlMovieSettings::setMaxLogLines) &&

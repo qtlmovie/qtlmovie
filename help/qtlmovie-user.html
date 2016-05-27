@@ -100,13 +100,13 @@
       </ul>
       <p>QtlMovie is based on the Qt framework. It works on Windows, Mac, Linux and should
         work on any platform which is supported by Qt version 5. QtlMovie uses external free software
-        such as ffmpeg, DVD Author, telxcc, CCExtractor or mkisofs which are available on Windows, Mac and Linux.</p>
+        such as ffmpeg, DVD Author, CCExtractor or mkisofs which are available on Windows, Mac and Linux.</p>
       <p>QtlMovie is available either as source code or binary installer for Windows, Mac, Fedora and Ubuntu.
         The binary installers for Windows and Mac come prepackaged with Qt5 libraries and all required media tools.
         They are self-sufficient and do not depend on any prior installation.
         The binary packages for Fedora and Ubuntu rely on the system package dependency management
         to install the required Qt environment and media tools.
-        Some very specific media tools such as telxcc and CCExtractor have no standard binary packages
+        Some very specific media tools such as CCExtractor have no standard binary packages
         for Fedora and Ubuntu. In this case, the corresponding custom packages are provided on
         the QtlMovie distribution site.</p>
       <hr/>
@@ -434,9 +434,8 @@
         <li>DVD Author</li>
         <li>mkisofs</li>
         <li>growisofs</li>
-        <li>telxcc</li>
         <li>CCExtractor</li>
-        <li>DVD Decrypter</li>
+        <li>DVD Decrypter (Windows)</li>
       </ul>
       <p>For each tool, the "Default" value is the location where QtlMovie has found the corresponding executable.
         The way QtlMovie locates the media tools depends on the operating system.
@@ -712,7 +711,7 @@
       <p>FFmpeg needs to be available in version 1.2 or higher. On several systems, the standard version
         of FFmpeg which comes with the distro repositories is outdated and a more recent version may be needed.
         Mkisofs shall be used with version 2, the version 3 has proven to be broken.
-        There is usually no distro packaging for telxcc or CCExtractor and you need to
+        There is usually no distro packaging for CCExtractor and you need to
         download them from the QtlMovie download area (see below).</p>
       <p>All media tools are searched by QtlMovie in <i>$PATH</i>.</p>
 
@@ -720,7 +719,7 @@
 
       <p>Binary RPM packages for Fedora on x86_64 architecture are available on the 
         <a href="https://sourceforge.net/projects/qtlmovie/files/fedora/">QtlMovie distribution size for Fedora on SourceForge</a>
-        for QtlMovie, Telxcc and CCExtractor.</p>
+        for QtlMovie and CCExtractor.</p>
       <p>The package <i>ffmpeg</i> is available through the RPMfusion repository, not the standard Fedora repositories.
         See <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> for the way to configure RPMfusion as
         a default repository for your system.</p>
@@ -729,7 +728,7 @@
 
       <p>Binary DEB packages for Ubuntu on amd64 architecture are available on the 
         <a href="https://sourceforge.net/projects/qtlmovie/files/ubuntu/">QtlMovie distribution size for Ubuntu on SourceForge</a>
-        for QtlMovie, Telxcc and CCExtractor.</p>
+        for QtlMovie and CCExtractor.</p>
       <p>On Ubuntu version 15 and higher, the package <i>ffmpeg</i> is available from the standard Ubuntu repositories.</p>
       <p>On older versions of Ubuntu, FFmpeg is not directly available.
         At some point, for various reasons, Ubuntu decided to drop FFmpeg from their

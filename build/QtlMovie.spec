@@ -23,7 +23,7 @@ BuildRequires: qt5-qttools-devel
 # Installation requirements:
 # The package ffmpeg can be found in the RPMfusion repository. The packages
 # genisoimage and dvd+rw-tools respectively provide mkisofs and growisofs.
-# The packages ccextractor and telxcc are not available in standard
+# The package ccextractor is not available in standard
 # repositories but packages are available on the QtlMovie site.
 
 Requires: ffmpeg >= 1.2
@@ -31,11 +31,10 @@ Requires: genisoimage
 Requires: dvd+rw-tools
 Requires: dvdauthor
 Requires: ccextractor >= 0.67
-Requires: telxcc >= 2.5.1
 
 %description
-QtlMovie is a graphical frontend to FFmpeg, DVD Author, telxcc, CCExtractor,
-mkisofs and growisofs.
+QtlMovie is a graphical frontend to FFmpeg, DVD Author, CCExtractor, mkisofs
+and growisofs.
 
 QtlMovie is not a general purpose frontend to FFmpeg. It focuses on a small
 number of tasks such as the generation of DVD or iPad movie files from any

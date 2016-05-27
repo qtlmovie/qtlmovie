@@ -38,18 +38,18 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtsTeletextFrame::QtsTeletextFrame(QtsPid pid_,
-                                   int page_,
-                                   int frameCount_,
-                                   quint64 showTimestamp_,
-                                   quint64 hideTimestamp_,
-                                   QStringList lines_) :
-    pid(pid_),
-    page(page_),
-    frameCount(frameCount_),
-    showTimestamp(showTimestamp_),
-    hideTimestamp(hideTimestamp_),
-    lines(lines_)
+QtsTeletextFrame::QtsTeletextFrame(QtsPid pid,
+                                   int page,
+                                   int frameCount,
+                                   quint64 showTimestamp,
+                                   quint64 hideTimestamp,
+                                   QStringList lines) :
+    _pid(pid),
+    _page(page),
+    _frameCount(frameCount),
+    _showTimestamp(showTimestamp),
+    _hideTimestamp(hideTimestamp),
+    _lines(lines)
 {
 }
 
@@ -78,5 +78,5 @@ QString QtsTeletextFrame::srtDuration() const
 
 QString QtsTeletextFrame::srtFrame() const
 {
-    return QStringLiteral("%1\n%2 --> %3\n%4\n\n").arg(frameCount).arg(srtShowTimestamp()).arg(srtHideTimestamp()).arg(lines.join('\n'));
+    return QStringLiteral("%1\n%2 --> %3\n%4\n\n").arg(_frameCount).arg(srtShowTimestamp()).arg(srtHideTimestamp()).arg(_lines.join('\n'));
 }

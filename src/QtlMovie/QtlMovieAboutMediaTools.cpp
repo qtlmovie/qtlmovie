@@ -61,9 +61,6 @@ QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(QtlMovieSettings* settings, QWi
     _ui.growisofsTitle->setText(title(settings->growisofs()));
     _ui.growisofsDescription->setText(settings->growisofs()->htmlDescription());
 
-    _ui.telxccTitle->setText(title(settings->telxcc()));
-    _ui.telxccDescription->setText(settings->telxcc()->htmlDescription());
-
     _ui.ccextractorTitle->setText(title(settings->ccextractor()));
     _ui.ccextractorDescription->setText(settings->ccextractor()->htmlDescription());
 

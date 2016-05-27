@@ -1,5 +1,0 @@
-Currently, there is no pre-compiled binaries for telxcc.
-Download source code and recompile it using MinGW from:
-  https://github.com/forers/telxcc
-
-Be sure to get version 2.5.1 or higher to support M2TS files.

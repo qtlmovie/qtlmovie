@@ -166,7 +166,7 @@ void QtsTeletextDemuxTest::handleTeletextMessage(QtsTeletextDemux& demux, const 
 {
     const QString srt(frame.srtFrame());
     if (_verbose) {
-        qDebug() << "Teletext message: PID:" << frame.pid << "Page:" << frame.page << "SRT:\n    " << srt;
+        qDebug() << "Teletext message: PID:" << frame.pid() << "Page:" << frame.page() << "SRT:\n    " << srt;
     }
 
     QStringList srtLines(srt.split(QChar('\n')));
@@ -176,8 +176,8 @@ void QtsTeletextDemuxTest::handleTeletextMessage(QtsTeletextDemux& demux, const 
     QVERIFY(srtLines.last().isEmpty());
     srtLines.removeLast();
 
-    QVERIFY(frame.pid == 1068);
-    QVERIFY(frame.page == 889);
+    QVERIFY(frame.pid() == 1068);
+    QVERIFY(frame.page() == 889);
 
     foreach (const QString& line, srtLines) {
         QVERIFY(_refIterator != _refLines.end());

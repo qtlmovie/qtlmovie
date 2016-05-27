@@ -51,22 +51,22 @@ public:
 
     //!
     //! Check parity and translate any reasonable Teletext character into UCS-2.
-    //! @param [int] c Teletext character.
+    //! @param [in] c Teletext character.
     //! @return UCS-2 equivalent.
     //!
     quint16 teletextToUcs2(quint8 c) const;
 
     //!
     //! Translate a G2 character into UCS-2.
-    //! @param [int] c Teletext character.
-    //! @param [int] accent Accent mode (0 to 14) if @a c is a letter.
+    //! @param [in] c Teletext character.
+    //! @param [in] accent Accent mode (0 to 14) if @a c is a letter.
     //! @return UCS-2 equivalent.
     //!
     quint16 g2AccentToUcs2(quint8 c, quint8 accent) const;
 
     //!
     //! Translate a G2 character into UCS-2.
-    //! @param [int] c Teletext character.
+    //! @param [in] c Teletext character.
     //! @return UCS-2 equivalent.
     //!
     quint16 g2ToUcs2(quint8 c) const;

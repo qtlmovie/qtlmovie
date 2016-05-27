@@ -59,8 +59,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>626</width>
-            <height>434</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutFFmpeg">
@@ -191,8 +191,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>124</width>
-            <height>88</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutDvdAuthor">
@@ -323,8 +323,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>121</width>
-            <height>88</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutMkisofs">
@@ -455,8 +455,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>121</width>
-            <height>88</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutGrowisofs">
@@ -551,138 +551,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabTelxcc">
-      <attribute name="title">
-       <string>Telxcc</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="layoutTabTelxcc">
-       <property name="spacing">
-        <number>12</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QScrollArea" name="scrollTelxcc">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollTelxccContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>121</width>
-            <height>88</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="layoutTelxcc">
-           <property name="spacing">
-            <number>12</number>
-           </property>
-           <item row="2" column="1">
-            <spacer name="telxccSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="0" rowspan="3">
-            <widget class="QLabel" name="telxccLogo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap resource="QtlMovie.qrc">:/images/gnu-logo.png</pixmap>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="telxccTitle">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::AutoText</enum>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-             <property name="openExternalLinks">
-              <bool>true</bool>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="telxccDescription">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-             <property name="openExternalLinks">
-              <bool>true</bool>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabCcextractor">
       <attribute name="title">
        <string>CCExtractor</string>
@@ -719,8 +587,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>144</width>
-            <height>88</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutCcextractor">
@@ -851,8 +719,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>121</width>
-            <height>88</height>
+            <width>632</width>
+            <height>442</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="layoutDvdDecrypter">

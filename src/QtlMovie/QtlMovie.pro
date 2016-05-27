@@ -74,7 +74,8 @@ SOURCES += main.cpp \
     QtlMovieTask.cpp \
     QtlMovieEditTaskDialog.cpp \
     QtlMovieTaskList.cpp \
-    QtlMovieDeviceProfile.cpp
+    QtlMovieDeviceProfile.cpp \
+    QtlMovieTeletextExtract.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -110,7 +111,8 @@ HEADERS += \
     QtlMovieTask.h \
     QtlMovieEditTaskDialog.h \
     QtlMovieTaskList.h \
-    QtlMovieDeviceProfile.h
+    QtlMovieDeviceProfile.h \
+    QtlMovieTeletextExtract.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

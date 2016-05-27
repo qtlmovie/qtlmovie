@@ -40,6 +40,7 @@
 #include "QtlMovieMkisofsProcess.h"
 #include "QtlMovieGrowisofsProcess.h"
 #include "QtlMovieCcExtractorProcess.h"
+#include "QtlMovieTeletextExtract.h"
 #include "QtlOpticalDrive.h"
 #include "QtlStringList.h"
 #include "QtlSysInfo.h"
@@ -1240,26 +1241,24 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
 
     // Build the extraction command.
     if (inputFile->isTsFile() && inType == QtlMovieStreamInfo::SubTeletext) {
-        // Teletext subtitles are extracted from TS files using telxcc, not ffmpeg.
+        // Teletext subtitles are extracted from TS files using internal code, not ffmpeg.
         if (outType != QtlMovieStreamInfo::SubRip) {
             return abortStart(tr("Teletext subtitles can be extracted as SRT only"));
         }
 
-        // Build telxcc options to extract one subtitle track to SRT.
-        QStringList args;
-        args << "-n"                                             // No UTF-8 BOM in the SRT file.
-             << "-t" << QString::number(stream->streamId())      // PID (-t means transport).
-             << "-p" << QString::number(stream->teletextPage())  // Teletext page within PID.
-             << "-i" << inputFile->fileName()
-             << "-o" << outputFileName;
-        if (inputFile->isM2tsFile()) {
-            args << "-m"; // Input file has M2TS format.
-        }
+        // Build our own action to extract one subtitle track to SRT.
+        QtlMovieTeletextExtract* action = new QtlMovieTeletextExtract
+                (inputFile->fileName(),
+                 stream->streamId(), // PID
+                 stream->teletextPage(),
+                 outputFileName,
+                 settings(),
+                 this,               // log
+                 this);              // parent
 
-        // Add the telxcc process.
-        QtlMovieProcess* process = new QtlMovieProcess(settings()->telxcc(), args, false, settings(), this, this);
-        process->setDescription(tr("Extracting Teletext subtitles as SRT"));
-        _actionList.append(process);
+        // Add the extraction to the job.
+        action->setDescription(tr("Extracting Teletext subtitles as SRT"));
+        _actionList.append(action);
         return true;
     }
     else if (inType == QtlMovieStreamInfo::SubCc) {

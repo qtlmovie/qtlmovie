@@ -639,7 +639,7 @@ void QtsTeletextDemux::processTeletextPage(QtsPid pid, QtsTeletextDemux::PidCont
         }
 
         // Line is now complete.
-        frame.lines << line;
+        frame.addLine(line);
     }
 
     // Now call the user-specified handler.

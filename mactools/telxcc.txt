@@ -1,6 +1,0 @@
-Download source code from:
-  https://github.com/forers/telxcc
-Compile using:
-  gcc -std=gnu99 -Wno-write-strings -DGPAC_CONFIG_DARWIN -D_FILE_OFFSET_BITS=64 telxcc.c -o telxcc
-
-Be sure to get version 2.5.1 or higher to support M2TS files.

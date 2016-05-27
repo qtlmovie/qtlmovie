@@ -61,7 +61,7 @@ public:
 
     //!
     //! Activate or deactivate the font color tags in the output text.
-    //! @param {in] addColors If true, font colors tags will be inserted in the output text.
+    //! @param [in] addColors If true, font colors tags will be inserted in the output text.
     //!
     void setAddColors(bool addColors)
     {

@@ -225,7 +225,6 @@ public:
     QTLMOVIE_SETTINGS_EXEC(dvdauthor, DvdAuthor)
     QTLMOVIE_SETTINGS_EXEC(mkisofs, Mkisofs)
     QTLMOVIE_SETTINGS_EXEC(growisofs, Growisofs)
-    QTLMOVIE_SETTINGS_EXEC(telxcc, Telxcc)
     QTLMOVIE_SETTINGS_EXEC(ccextractor, CCextractor)
     QTLMOVIE_SETTINGS_EXEC(dvddecrypter, DvdDecrypter)
 
@@ -241,8 +240,6 @@ private:
     QtlMovieExecFile* _mkisofsExplicit;       //!< Mkisofs explicit executable description.
     QtlMovieExecFile* _growisofsDefault;      //!< Growisofs default executable description.
     QtlMovieExecFile* _growisofsExplicit;     //!< Growisofs explicit executable description.
-    QtlMovieExecFile* _telxccDefault;         //!< Telxcc default executable description.
-    QtlMovieExecFile* _telxccExplicit;        //!< Telxcc explicit executable description.
     QtlMovieExecFile* _ccextractorDefault;    //!< CCExtractor default executable description.
     QtlMovieExecFile* _ccextractorExplicit;   //!< CCExtractor explicit executable description.
     QtlMovieExecFile* _dvddecrypterDefault;   //!< DvdDecrypter default executable description.

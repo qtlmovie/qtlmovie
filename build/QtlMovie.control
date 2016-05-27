@@ -7,12 +7,12 @@ Section: free/video
 Priority: optional
 Depends: libc6, libstdc++6, libgcc1, qttranslations5-l10n,
  libqt5core5a, libqt5gui5, libqt5widgets5, libqt5multimedia5, libqt5network5,
- ffmpeg, genisoimage, growisofs, dvdauthor, telxcc, ccextractor
+ ffmpeg, genisoimage, growisofs, dvdauthor, ccextractor
 Description: Graphical frontend to FFmpeg and other media tools
- QtlMovie is a graphical frontend to FFmpeg, DVD Author, telxcc, CCExtractor,
- mkisofs and growisofs.
- QtlMovie is not a general purpose frontend to FFmpeg. It focuses on a small
- number of tasks such as the generation of DVD or iPad movie files from any
- video file or DVD. The unique feature of QtlMovie is the ability to correctly
- handle most types of subtitles: DVD, DVB, SRT, SSA/ASS, Teletext, Closed
- Captions and burn them into the output video in one click.
+ QtlMovie is a graphical frontend to FFmpeg, DVD Author, CCExtractor,
+ mkisofs and growisofs. QtlMovie is not a general purpose frontend to
+ FFmpeg. It focuses on a small number of tasks such as the generation
+ of DVD, iPad or AVI movie files from any video file or DVD. The unique
+ feature of QtlMovie is the ability to correctly handle most types of
+ subtitles: DVD, DVB, SRT, SSA/ASS, Teletext, Closed Captions and burn
+ them into the output video in one click.

@@ -148,7 +148,7 @@
        <string>Media Tools</string>
       </attribute>
       <layout class="QGridLayout" name="layoutTools">
-       <item row="12" column="2">
+       <item row="10" column="2">
         <widget class="QPushButton" name="buttonBrowseCcextractor">
          <property name="text">
           <string>Browse ...</string>
@@ -178,9 +178,6 @@
           <string>FFmpeg :</string>
          </property>
         </widget>
-       </item>
-       <item row="10" column="1">
-        <widget class="QtlLineEdit" name="editTelxcc"/>
        </item>
        <item row="2" column="1">
         <widget class="QtlLineEdit" name="editFFprobe"/>
@@ -212,7 +209,7 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="12" column="0">
         <widget class="QLabel" name="labelDvdDecrypter">
          <property name="text">
           <string>DVD Decrypter :</string>
@@ -247,13 +244,6 @@
         <widget class="QLabel" name="labelMkisofs">
          <property name="text">
           <string>mkisofs :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="labelTelxcc">
-         <property name="text">
-          <string>telxcc :</string>
          </property>
         </widget>
        </item>
@@ -292,38 +282,24 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="2">
-        <widget class="QPushButton" name="buttonBrowseTelxcc">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="1">
-        <widget class="QLabel" name="defaultTelxcc">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="1">
+       <item row="13" column="1">
         <widget class="QLabel" name="defaultDvdDecrypter">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="14" column="1">
+       <item row="12" column="1">
         <widget class="QtlLineEdit" name="editDvdDecrypter"/>
        </item>
-       <item row="14" column="2">
+       <item row="12" column="2">
         <widget class="QPushButton" name="buttonBrowseDvdDecrypter">
          <property name="text">
           <string>Browse ...</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="1">
+       <item row="14" column="1">
         <spacer name="spacerMediaTools">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -336,17 +312,17 @@
          </property>
         </spacer>
        </item>
-       <item row="12" column="1">
+       <item row="10" column="1">
         <widget class="QtlLineEdit" name="editCcextractor"/>
        </item>
-       <item row="12" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="labelCcextractor">
          <property name="text">
           <string>CCExtractor :</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="1">
+       <item row="11" column="1">
         <widget class="QLabel" name="defaultCcextractor">
          <property name="text">
           <string/>
@@ -1747,22 +1723,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBrowseTelxcc</sender>
-   <signal>clicked()</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>browseTelxcc()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>497</x>
-     <y>229</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>283</x>
-     <y>267</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>buttonBrowseDvdDecrypter</sender>
    <signal>clicked()</signal>
    <receiver>QtlMovieEditSettings</receiver>
@@ -1914,7 +1874,6 @@
   <slot>browseDvdAuthor()</slot>
   <slot>browseMkisofs()</slot>
   <slot>browseGrowisofs()</slot>
-  <slot>browseTelxcc()</slot>
   <slot>browseDvdDecrypter()</slot>
   <slot>browseInputDir()</slot>
   <slot>setDefaultOutputDirSelectable(bool)</slot>

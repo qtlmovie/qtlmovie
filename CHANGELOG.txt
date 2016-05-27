@@ -2,6 +2,13 @@
 QtlMovie Change Log
 ===================
 
+Version 1.8
+- Removed dependency on Telxcc as an independent application. Telxcc is
+  no longer maintained. Telxcc has been removed from the Windows and Mac
+  installers. The Fedora and Ubuntu packages no longer depend on telxcc.
+  QtlMovie now performs Teletext extraction internally, using some code
+  from Telxcc. Many thanks to Petr Kutalek for having developed Telxcc.
+
 Version 1.7
 - When encoding for NTSC DVD's, now use 29.97 f/s instead of 30 previously.
 - Added support for iPhone SE and iPad Pro screen sizes.

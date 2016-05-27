@@ -44,13 +44,6 @@
 class QtsTeletextFrame
 {
 public:
-    QtsPid      pid;            //!< PID number.
-    int         page;           //!< Teletext page number.
-    int         frameCount;     //!< Frame counter in this page, starting at 1.
-    quint64     showTimestamp;  //!< Show frame at this timestamp (in ms from start of stream)
-    quint64     hideTimestamp;  //!< Hide frame at this timestamp (in ms from start of stream)
-    QStringList lines;          //!< Text lines. May contain embedded HTML tags.
-
     //!
     //! Constructor.
     //! @param [in] pid PID number.
@@ -61,12 +54,66 @@ public:
     //! @param [in] lines Text lines.
     //!
     QtsTeletextFrame(
-            QtsPid      pid_           = 0,
-            int         page_          = 0,
-            int         frameCount_    = 0,
-            quint64     showTimestamp_ = 0,
-            quint64     hideTimestamp_ = 0,
-            QStringList lines_         = QStringList());
+            QtsPid      pid           = 0,
+            int         page          = 0,
+            int         frameCount    = 0,
+            quint64     showTimestamp = 0,
+            quint64     hideTimestamp = 0,
+            QStringList lines         = QStringList());
+
+    //!
+    //! Get the text lines. May contain embedded HTML tags.
+    //! @return The text lines.
+    //!
+    QStringList lines() const
+    {
+        return _lines;
+    }
+
+    //!
+    //! Add a line of text to the frame.
+    //! @param [in] line Text line to add.
+    //!
+    void addLine(const QString& line)
+    {
+        _lines << line;
+    }
+
+    //!
+    //! Get the PID from which the frame originates.
+    //! @return The PID from which the frame originates.
+    //!
+    QtsPid pid() const
+    {
+        return _pid;
+    }
+
+    //!
+    //! Get the Teletext page number.
+    //! @return The Teletext page number.
+    //!
+    int page() const
+    {
+        return _page;
+    }
+
+    //!
+    //! Get the frame number in this page, starting at 1.
+    //! @return The frame number in this page, starting at 1.
+    //!
+    int frameCount() const
+    {
+        return _frameCount;
+    }
+
+    //!
+    //! Get the "show" timestamp in ms from start of stream.
+    //! @return The "show" timestamp in ms from start of stream.
+    //!
+    quint64 showTimestamp() const
+    {
+        return _showTimestamp;
+    }
 
     //!
     //! Get the "show" timestamp in SRT format.
@@ -74,7 +121,16 @@ public:
     //!
     QString srtShowTimestamp() const
     {
-        return toSrtTime(showTimestamp);
+        return toSrtTime(_showTimestamp);
+    }
+
+    //!
+    //! Get the "hide" timestamp in ms from start of stream.
+    //! @return The "hide" timestamp in ms from start of stream.
+    //!
+    quint64 hideTimestamp() const
+    {
+        return _hideTimestamp;
     }
 
     //!
@@ -83,7 +139,7 @@ public:
     //!
     QString srtHideTimestamp() const
     {
-        return toSrtTime(hideTimestamp);
+        return toSrtTime(_hideTimestamp);
     }
 
     //!
@@ -104,6 +160,14 @@ public:
     //! @return SRT formatted time.
     //!
     static QString toSrtTime(quint64 timestamp);
+
+private:
+    QtsPid      _pid;            //!< PID number.
+    int         _page;           //!< Teletext page number.
+    int         _frameCount;     //!< Frame counter in this page, starting at 1.
+    quint64     _showTimestamp;  //!< Show frame at this timestamp (in ms from start of stream)
+    quint64     _hideTimestamp;  //!< Hide frame at this timestamp (in ms from start of stream)
+    QStringList _lines;          //!< Text lines. May contain embedded HTML tags.
 };
 
 #endif // QTSTELETEXTFRAME_H

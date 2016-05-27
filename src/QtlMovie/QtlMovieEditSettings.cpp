@@ -61,7 +61,6 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setDefaultExecutable("DVD Author", _ui.defaultDvdAuthor, _settings->dvdauthorDefaultExecutable());
     setDefaultExecutable("mkisofs", _ui.defaultMkisofs, _settings->mkisofsDefaultExecutable());
     setDefaultExecutable("growisofs", _ui.defaultGrowisofs, _settings->growisofsDefaultExecutable());
-    setDefaultExecutable("telxcc", _ui.defaultTelxcc, _settings->telxccDefaultExecutable());
     setDefaultExecutable("CCExtractor", _ui.defaultCcextractor, _settings->ccextractorDefaultExecutable());
     setDefaultExecutable("DVD Decrypter", _ui.defaultDvdDecrypter, _settings->dvddecrypterDefaultExecutable());
 
@@ -207,7 +206,6 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.editDvdAuthor->setText(_settings->dvdauthorExplicitExecutable());
     _ui.editMkisofs->setText(_settings->mkisofsExplicitExecutable());
     _ui.editGrowisofs->setText(_settings->growisofsExplicitExecutable());
-    _ui.editTelxcc->setText(_settings->telxccExplicitExecutable());
     _ui.editCcextractor->setText(_settings->ccextractorExplicitExecutable());
     _ui.editDvdDecrypter->setText(_settings->dvddecrypterExplicitExecutable());
     _ui.editInputDir->setText(_settings->initialInputDir());
@@ -326,7 +324,6 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdAuthorExplicitExecutable(_ui.editDvdAuthor->text());
     _settings->setMkisofsExplicitExecutable(_ui.editMkisofs->text());
     _settings->setGrowisofsExplicitExecutable(_ui.editGrowisofs->text());
-    _settings->setTelxccExplicitExecutable(_ui.editTelxcc->text());
     _settings->setCCextractorExplicitExecutable(_ui.editCcextractor->text());
     _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());

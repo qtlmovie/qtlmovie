@@ -576,14 +576,19 @@ void QtlMovieMainWindow::about()
 {
     QMessageBox::about(this,
                        tr("About QtlMovie"),
-                       QStringLiteral("<p><b>QtlMovie</b>: %1</p>"
-                          "<p>%2 " QTLMOVIE_VERSION "</p>"
-                          "<p>%3 " __DATE__ "</p>"
-                          "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
-                          "<p>QtlMovie logo by <a href=\"http://www.designbolts.com\">DesignBolts</a></p>")
+                       QStringLiteral("<p><b>%1</b>: %2</p>"
+                           "<p>%3 %4 (%5)</p>"
+                           "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
+                           "<p>Credits:<br/>"
+                           "Teletext code from Petr Kutalek's %6<br/>"
+                           "QtlMovie logo by %7</p>")
+                       .arg(qtlHtmlLink(WEBREF_QTLMOVIE, "QtlMovie"))
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
-                       .arg(tr("Built")));
+                       .arg(QTLMOVIE_VERSION)
+                       .arg(__DATE__)
+                       .arg(qtlHtmlLink(WEBREF_TELXCC, "Telxcc"))
+                       .arg(qtlHtmlLink(WEBREF_DESIGNBOLT, "DesignBolts")));
 }
 
 

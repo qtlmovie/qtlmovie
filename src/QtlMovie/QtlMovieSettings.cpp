@@ -96,18 +96,8 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
                                            log,
                                            this)),
     _growisofsExplicit(new QtlMovieExecFile(*_growisofsDefault, "", this)),
-    _telxccDefault(new QtlMovieExecFile("Telxcc",
-                                        "https://github.com/forers/telxcc",
-                                        "https://forers.com/download/telxcc/telxcc-windows-x86-v2.5.1.zip",
-                                        "telxcc",
-                                        QStringList("-h"),
-                                        QString(),
-                                        "Usage:",
-                                        log,
-                                        this)),
-    _telxccExplicit(new QtlMovieExecFile(*_telxccDefault, "", this)),
     _ccextractorDefault(new QtlMovieExecFile("CCExtractor",
-                                             "http://ccextractor.sourceforge.net/",
+                                             "http://www.ccextractor.org/",
                                              "http://sourceforge.net/projects/ccextractor/files/ccextractor/",
                                              "ccextractor",
                                              QStringList("-null"),
@@ -255,9 +245,6 @@ void QtlMovieSettings::reportMissingTools() const
     if (!growisofs()->isSet()) {
         _log->line(tr("Error searching for growisofs, install it or set explicit path in settings."));
     }
-    if (!telxcc()->isSet()) {
-        _log->line(tr("Error searching for telxcc, install it or set explicit path in settings."));
-    }
     if (!ccextractor()->isSet()) {
         _log->line(tr("Error searching for CCExtractor, install it or set explicit path in settings."));
     }
@@ -292,6 +279,5 @@ QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ffprobe, FFprobe)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvdauthor, DvdAuthor)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(mkisofs, Mkisofs)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(growisofs, Growisofs)
-QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(telxcc, Telxcc)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ccextractor, CCextractor)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvddecrypter, DvdDecrypter)

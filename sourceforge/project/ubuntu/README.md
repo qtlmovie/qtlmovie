@@ -9,6 +9,6 @@ On Ubuntu version 15 and higher, FFmpeg can be installed from the standard
 repositories. On older versions of Ubuntu, FFmpeg shall be installed from
 the [Jon Severinsson's PPA](https://launchpad.net/~jon-severinsson/+archive/ffmpeg).
 
-CCExtractor and telxcc are not present in standard repositories, use the DEB
-packages which are available in this directory. All other media tools will be
-installed from the standard Ubuntu repositories.
+CCExtractor is not present in standard repositories, use the DEB package which
+is available in this directory. All other media tools will be installed from the
+standard Ubuntu repositories.

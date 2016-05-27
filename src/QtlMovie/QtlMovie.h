@@ -38,6 +38,13 @@
 #include <QtGlobal>
 
 //
+// Web references.
+//
+#define WEBREF_QTLMOVIE   "http://qtlmovie.sourceforge.net"
+#define WEBREF_TELXCC     "http://github.com/petrkutalek/telxcc"
+#define WEBREF_DESIGNBOLT "http://www.designbolts.com"
+
+//
 // Default values for general options.
 //
 #define QTL_MAX_LOG_LINE                    1000  //!< Maximum lines in the log window.
