@@ -45,6 +45,7 @@
 #include "QtsTeletextFrame.h"
 #include "QtsProgramAssociationTable.h"
 #include "QtsProgramMapTable.h"
+#include "QtsTsFile.h"
 #include "QtlFile.h"
 #include <QtDebug>
 
@@ -59,6 +60,7 @@ private:
     const bool                 _verbose;
     const QStringList          _refLines;
     QStringList::ConstIterator _refIterator;
+    QtsTsFile                  _file;
 
     virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table);
     virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame);
@@ -75,7 +77,8 @@ QTL_TEST_CLASS(QtsTeletextDemuxTest);
 QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
     _verbose(!QProcessEnvironment::systemEnvironment().value("QTLTELETEXTDEMUX_TEST").isEmpty()),
     _refLines(QtlFile::readTextLinesFile(":/test/test-teletext.srt")),
-    _refIterator(_refLines.begin())
+    _refIterator(_refLines.begin()),
+    _file(":/test/test-teletext.ts")
 {
 }
 
@@ -86,6 +89,8 @@ QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
 
 void QtsTeletextDemuxTest::testReferenceTeletext()
 {
+    QVERIFY(_refLines.size() == 45);
+
     QtsSectionDemux sectionDemux(this);
     sectionDemux.addPid(QTS_PID_PAT);
     sectionDemux.addPid(160); // known PMT PID for test stream
@@ -94,21 +99,15 @@ void QtsTeletextDemuxTest::testReferenceTeletext()
     teletextDemux.addPid(1068);        // know Teletext PID for test stream
     // teletextDemux.setAddColors(true);  // add font color HTML tags
 
-    QFile tsFile(":/test/test-teletext.ts");
-    QVERIFY(tsFile.open(QFile::ReadOnly));
-
-    QVERIFY(_refLines.size() == 45);
-
+    QVERIFY(_file.open(QFile::ReadOnly));
     QtsTsPacket packet;
-    qint64 size;
-    while ((size = tsFile.read((char*)(packet.b), QTS_PKT_SIZE)) > 0) {
-        QVERIFY(size == QTS_PKT_SIZE);
+    while (_file.read(&packet) > 0) {
         sectionDemux.feedPacket(packet);
         teletextDemux.feedPacket(packet);
     }
-    QVERIFY(size == 0);
-
     teletextDemux.flushTeletext();
+    _file.close();
+
     QVERIFY(_refIterator == _refLines.end());
     QVERIFY(sectionDemux.packetCount() == 1987);
     QVERIFY(teletextDemux.packetCount() == 1987);
@@ -117,7 +116,6 @@ void QtsTeletextDemuxTest::testReferenceTeletext()
     QVERIFY(teletextDemux.frameCount(889) == 9);
     QVERIFY(teletextDemux.frameCount(888) == 0);
     QVERIFY(teletextDemux.frameCount(777) == 0);
-    tsFile.close();
 }
 
 

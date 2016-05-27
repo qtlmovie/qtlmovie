@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,10 +26,22 @@
 #
 #----------------------------------------------------------------------------
 #
-# Top-level qmake project file for the QtlMovie application.
+# Qmake project file for the TestTeletext tool.
 #
 #----------------------------------------------------------------------------
 
-TEMPLATE = subdirs
-CONFIG += ordered
-SUBDIRS += Qtl Qts QtlMovie UnitTest TestTeletext
+CONFIG += qts qtl
+include(../Qts/Qts.pri)
+
+TARGET = TestTeletext
+TEMPLATE = app
+
+# QTest configuration
+QT += testlib
+QT -= gui
+CONFIG += console
+CONFIG -= app_bundle
+DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+SOURCES += \
+    TestTeletext.cpp
