@@ -239,6 +239,8 @@ if (-not $NoStandalone) {
         Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffprobe.exe")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffmpeg.exe")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ffmpeg.txt")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ccextractor.exe")) $TempWintools
+        Copy-Item (Join-MultiPath @($RootDir, "wintools64", "ccextractor.txt")) $TempWintools
 
         # Create the 64-bit standalone zip file.
         Get-ChildItem -Recurse $TempDir | New-ZipFile (Join-Path $InstallerDir "${ProductName}-Win64-Standalone-${Version}.zip") -Force -Root $TempDir

@@ -112,9 +112,12 @@ protected:
     virtual void timerEvent(QTimerEvent* event);
 
 private:
-    QtsTsFile _file;    //!< TS file.
-    bool      _isM2ts;  //!< File has M2TS format.
-    int       _timerId; //!< Repetitive timer.
+    QtsTsFile _file;            //!< TS file.
+    bool      _isM2ts;          //!< File has M2TS format.
+    int       _timerId;         //!< Repetitive timer.
+    int       _totalPackets;    //!< File size in packets.
+    int       _packetInterval;  //!< Min number of packets between two progress reports.
+    int       _nextReport;      //!< Next packet index to indicate progress report.
 
     // Unaccessible operations.
     QtlMovieTsDemux() Q_DECL_EQ_DELETE;

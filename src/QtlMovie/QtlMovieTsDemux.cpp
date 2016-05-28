@@ -45,7 +45,10 @@ QtlMovieTsDemux::QtlMovieTsDemux(const QString& fileName,
     QtlMovieAction(settings, log, parent),
     _file(fileName),
     _isM2ts(false),
-    _timerId(-1)
+    _timerId(-1),
+    _totalPackets(0),
+    _packetInterval(0),
+    _nextReport(0)
 {
 }
 
@@ -69,6 +72,11 @@ bool QtlMovieTsDemux::start()
 
     // Start immediate timer, a way to read continuously packets but return periodically to the event loop.
     _timerId = startTimer(0);
+
+    // Do not report progress more often that every 1% of the file size.
+    _totalPackets = int(_file.size() / QTS_PKT_SIZE);
+    _packetInterval = qMax(1, _totalPackets / 100);
+    _nextReport = _packetInterval;
 
     // Will read packets later.
     return true;
@@ -140,6 +148,10 @@ void QtlMovieTsDemux::timerEvent(QTimerEvent* event)
             demux()->feedPacket(buffer[i]);
         }
         // Report progress in the file.
-        emitProgress(int(demux()->packetCount()), int(_file.size() / QTS_PKT_SIZE));
+        const int current  = int(demux()->packetCount());
+        if (current >= _nextReport) {
+            emitProgress(current, _totalPackets);
+            _nextReport += _packetInterval;
+        }
     }
 }
