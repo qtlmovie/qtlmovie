@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@
 
 #include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovieCcExtractorProcess.h"
+#include "QtlStringList.h"
 
 
 //----------------------------------------------------------------------------
@@ -39,12 +40,11 @@
 //----------------------------------------------------------------------------
 
 QtlMovieClosedCaptionsSearch* QtlMovieClosedCaptionsSearch::newInstance(const QString& fileName,
-                                                                        int ccChannel,
                                                                         const QtlMovieSettings* settings,
                                                                         QtlLogger* log,
                                                                         QObject* parent)
 {
-    return new QtlMovieClosedCaptionsSearch(fileName, ccChannel, settings, log, parent);
+    return new QtlMovieClosedCaptionsSearch(fileName, settings, log, parent);
 }
 
 
@@ -53,35 +53,59 @@ QtlMovieClosedCaptionsSearch* QtlMovieClosedCaptionsSearch::newInstance(const QS
 //----------------------------------------------------------------------------
 
 QtlMovieClosedCaptionsSearch::QtlMovieClosedCaptionsSearch(const QString& fileName,
-                                                           int ccChannel,
                                                            const QtlMovieSettings* settings,
                                                            QtlLogger* log,
                                                            QObject* parent) :
     QtlMovieProcess(settings->ccextractor(), QStringList(), false, settings, log, parent),
-    _fileName(fileName),
-    _ccChannel(ccChannel),
-    _output1(newFileName()),
-    _output2(newFileName())
+    _fileName(fileName)
 {
     // No need to report in search phase.
     setSilent(true);
 
-    // Build CCExtractor command line.
-    // The analysis duration is identical to the ffmpeg probe duration.
-    QStringList args;
-    args << "-quiet"              // No information message.
-         << "-noteletext"         // Closed Captions only, ignore Teletext.
-         << "-srt"                // Output format is SRT.
-         << "-utf8"               // UTF-8 output.
-         << QtlMovieCcExtractorProcess::durationOptions(settings->ffmpegProbeSeconds())
-         << "-12";                // Extract fields 1 and 2.
-    if (ccChannel > 1) {
-        args << "-cc2";           // Extract from channel 2.
+    // Build CCExtractor command line..
+    setArguments(QtlStringList("-out=report", fileName));
+}
+
+
+//----------------------------------------------------------------------------
+// Process one text line from standard error or standard output.
+//----------------------------------------------------------------------------
+
+void QtlMovieClosedCaptionsSearch::processOutputLine(QProcess::ProcessChannel channel, const QString& textLine)
+{
+    // Invoke superclass. In silent mode, the line is output in debug mode only.
+    QtlMovieProcess::processOutputLine(channel, textLine);
+
+    // We filter these lines:
+    //
+    //   EIA-608: Yes/No
+    //   CC1: Yes/No
+    //   CC2: Yes/No
+    //   CC3: Yes/No
+    //   CC4: Yes/No
+    //   CEA-708: Yes/No
+    //   Services: 1 2 3 ...
+
+    int cc;
+    QStringList fields(textLine.toLower().trimmed().split(QRegExp("\\s*:\\s*"), QString::SkipEmptyParts));
+    if (fields.size() >= 2 &&
+        fields[1] == "yes" &&
+        fields[0].size() >= 3 &&
+        fields[0].startsWith("cc") &&
+        (cc = fields[0].mid(2).toInt()) >= 1 &&
+        cc <= 4)
+    {
+        // Found an EIA-608 stream (CC1 to CC4).
+        emitFoundClosedCaptions(cc);
     }
-    args << "-o1" << _output1     // SRT file for field 1.
-         << "-o2" << _output2     // SRT file for field 2.
-         << fileName;             // Input file.
-    setArguments(args);
+    else if (fields.size() >= 2 && fields[0] == "services") {
+        // Found a list of CEA-708 streams.
+        foreach (const QString& num, fields[1].split(QRegExp("[\\s,]+"), QString::SkipEmptyParts)) {
+            if ((cc = num.toInt()) >= 1) {
+                emitFoundClosedCaptions(4 + cc);
+            }
+        }
+    }
 }
 
 
@@ -91,23 +115,7 @@ QtlMovieClosedCaptionsSearch::QtlMovieClosedCaptionsSearch(const QString& fileNa
 
 void QtlMovieClosedCaptionsSearch::emitCompleted(bool success, const QString& message)
 {
-    debug(tr("Closed Captions search completed on channel %1").arg(_ccChannel));
-
-    // Report CC if the resulting SRT file exists and is non empty.
-    // In fact, we check that the size is at least 10 characters.
-    // In version 0.68, CCextractor creates the file and writes an UTF-8 BOM.
-    // As a result, an "empty" CC file has 3 bytes. Below 10 characters,
-    // there cannot be any SRT time stamp, so this cannot be a valid SRT file.
-    QFile file1(_output1);
-    QFile file2(_output2);
-    if (file1.exists() && file1.size() > 10) {
-        emitFoundClosedCaptions(1);
-    }
-    if (file2.exists() && file2.size() > 10) {
-        emitFoundClosedCaptions(2);
-    }
-    file1.remove();
-    file2.remove();
+    debug(tr("Closed Captions search completed"));
 
     // Notify the completion vie super-class.
     QtlMovieAction::emitCompleted(success, message);
@@ -121,10 +129,9 @@ void QtlMovieClosedCaptionsSearch::emitCompleted(bool success, const QString& me
 // Emit the foundClosedCaptions() signal.
 //----------------------------------------------------------------------------
 
-void QtlMovieClosedCaptionsSearch::emitFoundClosedCaptions(int field)
+void QtlMovieClosedCaptionsSearch::emitFoundClosedCaptions(int ccNumber)
 {
     // Compute Close Caption number.
-    const int ccNumber = field + (_ccChannel == 1 ? 0 : 2);
     debug(tr("Found Closed Caption #%1").arg(ccNumber));
 
     // Build the stream information.
@@ -135,16 +142,4 @@ void QtlMovieClosedCaptionsSearch::emitFoundClosedCaptions(int field)
 
     // Send the new stream information to clients.
     emit foundClosedCaptions(info);
-}
-
-
-//----------------------------------------------------------------------------
-// Generate a new unique temporary file name.
-//----------------------------------------------------------------------------
-
-QString QtlMovieClosedCaptionsSearch::newFileName()
-{
-    QString uuid(QUuid::createUuid().toString());
-    uuid.remove(QRegExp("[^0-9a-zA-Z]+"));
-    return QtlFile::absoluteNativeFilePath(QDir::tempPath() + QDir::separator() + "qtlcctemp-" + QString::number(QCoreApplication::applicationPid()) + "-" + uuid + ".srt");
 }

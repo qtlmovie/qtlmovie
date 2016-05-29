@@ -208,10 +208,13 @@ public:
     //!
     //! Get the Close Captions number (CC subtitles only).
     //! The CC are numbered as follow:
-    //! - 1: channel 1, field 1
-    //! - 2: channel 1, field 1
-    //! - 3: channel 2, field 1
-    //! - 4: channel 2, field 2
+    //! - 1: EIA-608, channel 1, field 1
+    //! - 2: EIA-608, channel 1, field 2
+    //! - 3: EIA-608, channel 2, field 1
+    //! - 4: EIA-608, channel 2, field 2
+    //! - 5: CEA-708, service 1
+    //! - 6: CEA-708, service 2
+    //! - etc.
     //! This may not be ideal. Feedback from US users required.
     //! @return The Close Captions number or -1 if unknown.
     //!

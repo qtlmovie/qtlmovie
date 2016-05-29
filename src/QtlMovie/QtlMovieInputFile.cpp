@@ -178,20 +178,8 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     _ffprobeInProgress = true;
     process->start();
 
-    // Look for Closed Captions on channels 1 and 2.
-    startClosedCaptionsSearch(1);
-    startClosedCaptionsSearch(2);
-}
-
-
-//----------------------------------------------------------------------------
-// Start a Closed Caption search.
-//----------------------------------------------------------------------------
-
-void QtlMovieInputFile::startClosedCaptionsSearch(int ccChannel)
-{
-    // Create a new instance of CC search.
-    QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName(), ccChannel, _settings, _log, this);
+    // Look for Closed Captions. Create a new instance of CC search.
+    QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName, _settings, _log, this);
     connect(cc, &QtlMovieClosedCaptionsSearch::foundClosedCaptions, this, &QtlMovieInputFile::foundClosedCaptions);
     connect(cc, &QtlMovieClosedCaptionsSearch::completed, this, &QtlMovieInputFile::closedCaptionsSearchTerminated);
 

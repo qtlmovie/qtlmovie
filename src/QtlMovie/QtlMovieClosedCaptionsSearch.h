@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -52,13 +52,11 @@ public:
     //! Create a new instance.
     //! Enforce object creation on the heap.
     //! @param [in] fileName Input file name.
-    //! @param [in] ccChannel Channel number, either 1 or 2.
     //! @param [in] settings Application settings.
     //! @param [in] log Where to log errors.
     //! @param [in] parent Optional parent widget.
     //!
     static QtlMovieClosedCaptionsSearch* newInstance(const QString& fileName,
-                                                     int ccChannel,
                                                      const QtlMovieSettings* settings,
                                                      QtlLogger* log,
                                                      QObject *parent = 0);
@@ -72,6 +70,14 @@ signals:
 
 protected:
     //!
+    //! Process one text line from standard error or standard output.
+    //! Reimplemented from QtlMovieProcess.
+    //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
+    //! @param [in] textLine Text line.
+    //!
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& textLine);
+
+    //!
     //! Emit the completed() signal.
     //! Reimplemented from QtlMovieProcess.
     //! @param [in] success True when the action completed successfully, false otherwise.
@@ -81,35 +87,24 @@ protected:
 
 private:
     QString _fileName;  //!< Input file name.
-    int     _ccChannel; //!< Channel number, either 1 or 2.
-    QString _output1;   //!< SRT output for CC field 1.
-    QString _output2;   //!< SRT output for CC field 2.
 
     //!
     //! Private constructor.
     //! @param [in] fileName Input file name.
-    //! @param [in] ccChannel Channel number, either 1 or 2.
     //! @param [in] settings Application settings.
     //! @param [in] log Where to log errors.
     //! @param [in] parent Optional parent widget.
     //!
     QtlMovieClosedCaptionsSearch(const QString& fileName,
-                                 int ccChannel,
                                  const QtlMovieSettings* settings,
                                  QtlLogger* log,
                                  QObject *parent = 0);
 
     //!
     //! Emit the foundClosedCaptions() signal.
-    //! @param field CC field.
+    //! @param ccNumber CC number (see QtlMovieStreamInfo::ccNumber()).
     //!
-    void emitFoundClosedCaptions(int field);
-
-    //!
-    //! Generate a new unique temporary file name.
-    //! @return A new unique temporary file name.
-    //!
-    static QString newFileName();
+    void emitFoundClosedCaptions(int ccNumber);
 
     // Unaccessible operations.
     QtlMovieClosedCaptionsSearch() Q_DECL_EQ_DELETE;

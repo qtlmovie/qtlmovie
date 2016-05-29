@@ -1,0 +1,139 @@
+Options for channel extraction (none needed if only one channel):
+  EIA-608: CC1: -1
+  EIA-608: CC2: -2
+  EIA-608: CC3: ?
+  EIA-608: CC4: ?
+  CEA-708: -svc 1
+
+Other options of interest:
+  -bom: Append a BOM (Byte Order Mark) to output files.
+  -utf8: Encode subtitles in UTF-8 (no longer needed because UTF-8 is now the default).
+  -nofc --nofontcolor: For .srt/.sami/.vtt, don't add font color tags.
+  -trim: Trim lines.
+  -sc --sentencecap: Sentence capitalization. Use if you hate ALL CAPS in subtitles.
+  -lf: Use LF (UNIX) instead of CRLF (DOS, Windows) as line terminator.
+  --gui_mode_reports: Report progress and interesting events to stderr in a easy to parse format.
+
+EIA-608: Yes/No
+XDS: Yes/No ==> ?
+CC1: Yes/No ==> Option: -1
+CC2: Yes/No ==> Option: -2
+CC3: Yes/No ==> Option: -cc2 -1
+CC4: Yes/No ==> Option: -cc2 -2
+CEA-708: Yes/No
+Services: 1 ==> Option: -svc 1
+
+$ ccextractor -h | head -1
+CCExtractor 0.80, Carlos Fernandez Sanz, Volker Quetschke.
+$
+$ ccextractor -out=report cea608_field1.mpg
+File: cea608_field1.mpg
+Stream Mode: Transport Stream
+Program Count: 1
+Program Numbers: 1
+PID: 33, Program: 1, MPEG-2 video
+PID: 34, Program: 1, MPEG-1 audio
+//////// Program #1: ////////
+DVB Subtitles: No
+Teletext: No
+ATSC Closed Caption: Yes
+EIA-608: Yes
+XDS: No
+CC1: Yes
+CC2: No
+CC3: No
+CC4: No
+CEA-708: No
+Width: 720
+Height: 480
+Aspect Ratio: 02 - 4:3
+Frame Rate: 04 - 29.97
+
+MPEG-4 Timed Text: No
+$
+$ ccextractor -out=report cea708_dtv.mpg
+File: cea708_dtv.mpg
+Stream Mode: Transport Stream
+Program Count: 1
+Program Numbers: 1
+PID: 481, Program: 1, MPEG-2 video
+PID: 482, Program: 1, MPEG-1 audio
+//////// Program #1: ////////
+DVB Subtitles: No
+Teletext: No
+ATSC Closed Caption: Yes
+EIA-608: No
+CEA-708: Yes
+Services: 1
+Primary Language Present: Yes
+Secondary Language Present: No
+Width: 720
+Height: 480
+Aspect Ratio: 02 - 4:3
+Frame Rate: 04 - 29.97
+
+MPEG-4 Timed Text: No
+$
+$ ccextractor -out=report cea708ntsc_field1.mpg
+File: cea708ntsc_field1.mpg
+Stream Mode: Transport Stream
+Program Count: 1
+Program Numbers: 1
+PID: 481, Program: 1, MPEG-2 video
+PID: 482, Program: 1, MPEG-1 audio
+//////// Program #1: ////////
+DVB Subtitles: No
+Teletext: No
+ATSC Closed Caption: Yes
+EIA-608: Yes
+XDS: No
+CC1: Yes
+CC2: No
+CC3: No
+CC4: No
+CEA-708: No
+Width: 720
+Height: 480
+Aspect Ratio: 02 - 4:3
+Frame Rate: 04 - 29.97
+
+MPEG-4 Timed Text: No
+$
+$ ccextractor cea608_field1.mpg -stdout -1
+CCExtractor 0.80, Carlos Fernandez Sanz, Volker Quetschke.
+Teletext portions taken from Petr Kutalek's telxcc
+--------------------------------------------------------------------------
+Input: cea608_field1.mpg
+[Extract: 1] [Stream mode: Autodetect]
+[Program : Auto ] [Hauppage mode: No] [Use MythTV code: Auto]
+[Timing mode: Auto] [Debug: No] [Buffer input: Yes]
+[Use pic_order_cnt_lsb for H.264: No] [Print CC decoder traces: No]
+[Target format: .srt] [Encoding: UTF-8] [Delay: 0] [Trim lines: No]
+[Add font color data: Yes] [Add font typesetting: Yes]
+[Convert case: No] [Video-edit join: No]
+[Extraction start time: not set (from start)]
+[Extraction end time: not set (to end)]
+[Live stream: No] [Clock frequency: 90000]
+[Teletext page: Autodetect]
+[Start credits text: None]
+
+-----------------------------------------------------------------
+Opening file: cea608_field1.mpg
+File seems to be a transport stream, enabling TS mode
+Analyzing data in general mode
+Sending captions to stdout.
+
+
+New video information found
+[720 * 480] [AR: 02 - 4:3] [FR: 04 - 29.97] [progressive: yes]
+
+100%  |  00:04
+
+Total frames time:        00:00:05:005  (150 frames at 29.97fps)
+Done, processing time = 0 seconds
+This is beta software. Report issues to carlos at ccextractor org...
+1
+00:00:00,333 --> 00:00:05,003
+Have a Nice Day!g Insertion
+
+$

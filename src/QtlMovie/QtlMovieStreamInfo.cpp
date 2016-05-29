@@ -339,8 +339,11 @@ QString QtlMovieStreamInfo::description(bool compact) const
         if (_teletextPage > 0) {
             add(result, QObject::tr("Teletext %1%2").arg(compact ? "" : QObject::tr("page ")).arg(_teletextPage));
         }
-        if (_ccNumber > 0) {
-            add(result, QObject::tr("Closed Captions #%1").arg(_ccNumber));
+        if (_ccNumber >= 1 && _ccNumber <= 4) {
+            add(result, QObject::tr("Closed Captions channel %1 field %2").arg((_ccNumber + 1) / 2).arg(2 - (_ccNumber % 2)));
+        }
+        if (_ccNumber >= 5) {
+            add(result, QObject::tr("Closed Captions service %1").arg(_ccNumber - 4));
         }
     }
 
@@ -393,7 +396,7 @@ void QtlMovieStreamInfo::setTeletextPage(int teletextPage)
 
 void QtlMovieStreamInfo::setCcNumber(int ccNumber)
 {
-    _ccNumber = ccNumber >= 1 && ccNumber <= 4 ? ccNumber : -1;
+    _ccNumber = ccNumber >= 1 ? ccNumber : -1;
 }
 
 void QtlMovieStreamInfo::setWidth(int width)

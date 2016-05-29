@@ -355,12 +355,6 @@ private:
     bool    _isM2ts;                             //!< File has M2TS format.
 
     //!
-    //! Start a Closed Caption search.
-    //! @param [in] ccChannel Channel to search.
-    //!
-    void startClosedCaptionsSearch(int ccChannel);
-
-    //!
     //! Report that new media info has been found.
     //! If no more operation in progress, emit mediaInfoChanged().
     //!
