@@ -5,9 +5,10 @@
 #
 
 # Description of Ccextractor:
-CCEXTRACTOR_VERSION=${1:-0.69}
+CCEXTRACTOR_VERSION=${1:-0.80}
 CCEXTRACTOR_SRC=ccextractor.src.${CCEXTRACTOR_VERSION}.zip
 CCEXTRACTOR_URL=http://sourceforge.net/projects/ccextractor/files/ccextractor/${CCEXTRACTOR_VERSION}/${CCEXTRACTOR_SRC}
+CCEXTRACTOR_PATCH=ccextractor.${CCEXTRACTOR_VERSION}-linux.patch
 
 # This script:
 SCRIPT=$(basename $BASH_SOURCE)
@@ -24,13 +25,15 @@ error() { echo >&2 "$SCRIPT: $*"; cleanup 1; }
 trap "cleanup 1" SIGINT
 
 # Download Ccextractor sources if not yet present.
-[ -e $INSTDIR/$CCEXTRACTOR_SRC ] || wget -O $INSTDIR/$CCEXTRACTOR_SRC $CCEXTRACTOR_URL
+[ -e $INSTDIR/$CCEXTRACTOR_SRC ] || wget --no-check-certificate -O $INSTDIR/$CCEXTRACTOR_SRC $CCEXTRACTOR_URL
 
 # Build ccextractor in a temporary directory.
 rm -rf $TMPDIR
 mkdir -p -m 0755 $TMPDIR/build
 (cd $TMPDIR/build; unzip -q $INSTDIR/$CCEXTRACTOR_SRC)
-(cd $TMPDIR/build/ccextractor.$CCEXTRACTOR_VERSION/linux; ./build) || error "Error building ccextractor"
+BUILDDIR=$TMPDIR/build/ccextractor.$CCEXTRACTOR_VERSION
+[ -e $SCRIPTDIR/$CCEXTRACTOR_PATCH ] && (cd $BUILDDIR; patch -p1 <$SCRIPTDIR/$CCEXTRACTOR_PATCH)
+(cd $BUILDDIR/linux; ./build) || error "Error building ccextractor"
 
 # Build a temporary system root containing the installation
 mkdir -p -m 0755 $TMPDIR/sys/DEBIAN $TMPDIR/sys/usr/bin

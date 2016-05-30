@@ -30,7 +30,7 @@ Requires: ffmpeg >= 1.2
 Requires: genisoimage
 Requires: dvd+rw-tools
 Requires: dvdauthor
-Requires: ccextractor >= 0.67
+Requires: ccextractor >= 0.80
 
 %description
 QtlMovie is a graphical frontend to FFmpeg, DVD Author, CCExtractor, mkisofs

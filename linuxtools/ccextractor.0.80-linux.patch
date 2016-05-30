@@ -1,0 +1,13 @@
+diff -Nur -x '*.exe' ccextractor.0.80/src/ccextractor.c ccextractor.0.80.multibuild/src/ccextractor.c
+--- ccextractor.0.80/src/ccextractor.c	2016-03-18 09:51:37.000000000 +0100
++++ ccextractor.0.80.multibuild/src/ccextractor.c	2016-05-30 10:15:05.121372800 +0200
+@@ -316,7 +316,9 @@
+ 			s1, s2);
+ 	}
+ #endif
++	/* SEGFAULT with -out=report
+ 	dbg_print(CCX_DMT_708, "[CEA-708] The 708 decoder was reset [%d] times.\n", ctx->freport.data_from_708->reset_count);
++	*/
+ 
+ 	if (is_decoder_processed_enough(ctx) == CCX_TRUE)
+ 	{
