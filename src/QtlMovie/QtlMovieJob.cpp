@@ -1267,19 +1267,34 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
             return abortStart(tr("Closed Captions subtitles can be extracted as SRT only"));
         }
 
-        // Closed Captions channel and field.
-        const int channel = (stream->ccNumber() + 1) / 2;
-        const int field = (stream->ccNumber() - 1) % 2 + 1;
-
         // Build CCExtractor options.
+        const int cc = stream->ccNumber();
         QStringList args;
         args << "--gui_mode_reports"     // Report info to GUI.
              << "-noteletext"            // Closed Captions only, ignore Teletext.
              << "-srt"                   // Output format is SRT.
              << "-utf8"                  // UTF-8 output.
-             << QString::number(-field); // Field number.
-        if (channel > 1) {
-            args << "-cc2";              // Extract from channel 2.
+             << "-bom"                   // Append a BOM (Byte Order Mark) to output files.
+             << "-lf"                    // Use LF (UNIX) instead of CRLF (DOS, Windows) as line terminator.
+             << "-nofc"                  // Don't add font color tags.
+             << "-trim";                 // Trim lines.
+        if (settings()->capitalizeClosedCaptions()) {
+             args << "-sc";              // Sentence capitalization, suppress ALL CAPS in subtitles.
+        }
+        if (cc > 4) {
+            // CEA-708 service.
+            args << "-svc" << QString::number(cc - 4);
+        }
+        else if (cc > 2) {
+            // EIA-608 channel 2.
+            args << "-cc2" << (cc == 3 ? "-1" : "-2");
+        }
+        else if (cc > 0) {
+            // EIA-608 channel 1.
+            args << (cc == 1 ? "-1" : "-2");
+        }
+        else {
+            return abortStart(tr("Invalid Closed Captions number: %1").arg(cc));
         }
         args << "-o" << outputFileName   // SRT output file.
              << inputFile->fileName();   // Input file.

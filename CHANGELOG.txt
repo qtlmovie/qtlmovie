@@ -3,6 +3,12 @@ QtlMovie Change Log
 ===================
 
 Version 1.8
+- Improved US Closed Captions (EIA-608, CEA-708) detection and processing
+  using CCextractor version 0.80.
+- Added an option to "capitalize" (suppress ALL CAPS) in US Closed Captions.
+- Windows and Mac installers include CCextractor 0.80 binaries.
+- Fedora and Ubuntu packages for CCextractor 0.80 are available on QtlMovie
+  SourceForge project (and required to install QtlMovie 1.8).
 - Removed dependency on Telxcc as an independent application. Telxcc is
   no longer maintained. Telxcc has been removed from the Windows and Mac
   installers. The Fedora and Ubuntu packages no longer depend on telxcc.

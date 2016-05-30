@@ -49,26 +49,6 @@ QtlMovieCcExtractorProcess::QtlMovieCcExtractorProcess(const QStringList& argume
 
 
 //----------------------------------------------------------------------------
-// Build a list of options which limit the extraction duration.
-//----------------------------------------------------------------------------
-
-QStringList QtlMovieCcExtractorProcess::durationOptions(int totalSeconds)
-{
-    if (totalSeconds < 0) {
-        // No limit, no option.
-        return QStringList();
-    }
-    else {
-        // Build extraction duration as HH:MM:SS.
-        const int hours = (totalSeconds / 3600) % 100;
-        const int minutes = (totalSeconds % 3600) / 60;
-        const int seconds = totalSeconds % 60;
-        return QtlStringList("-endat", QStringLiteral("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-    }
-}
-
-
-//----------------------------------------------------------------------------
 // Process one text line from standard error or output.
 //----------------------------------------------------------------------------
 

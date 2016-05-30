@@ -59,13 +59,6 @@ public:
                                QtlLogger* log,
                                QObject *parent = 0);
 
-    //!
-    //! Build a list of options which limit the extraction duration.
-    //! @param totalSeconds Number of seconds or negative if there is no limit.
-    //! @return Arguments for CCExtractor, possibly empty.
-    //!
-    static QStringList durationOptions(int totalSeconds);
-
 protected:
     //!
     //! Process one text line from standard error.

@@ -1,0 +1,224 @@
+diff -Nur -x '*.exe' ccextractor.0.80/src/ccextractor.c ccextractor.0.80.multibuild/src/ccextractor.c
+--- ccextractor.0.80/src/ccextractor.c	2016-03-18 09:51:37.000000000 +0100
++++ ccextractor.0.80.multibuild/src/ccextractor.c	2016-05-30 10:15:05.121372800 +0200
+@@ -316,7 +316,9 @@
+ 			s1, s2);
+ 	}
+ #endif
++	/* SEGFAULT with -out=report
+ 	dbg_print(CCX_DMT_708, "[CEA-708] The 708 decoder was reset [%d] times.\n", ctx->freport.data_from_708->reset_count);
++	*/
+ 
+ 	if (is_decoder_processed_enough(ctx) == CCX_TRUE)
+ 	{
+diff -Nur -x '*.exe' ccextractor.0.80/src/lib_ccx/ccx_common_platform.h ccextractor.0.80.multibuild/src/lib_ccx/ccx_common_platform.h
+--- ccextractor.0.80/src/lib_ccx/ccx_common_platform.h	2015-07-14 09:28:55.000000000 +0200
++++ ccextractor.0.80.multibuild/src/lib_ccx/ccx_common_platform.h	2016-05-30 10:15:05.136973400 +0200
+@@ -23,9 +23,13 @@
+ 		#define STDOUT_FILENO 1
+ 		#define STDERR_FILENO 2
+ 		#include "inttypes.h"
++#ifndef UINT64_MAX
+ 		#define UINT64_MAX   _UI64_MAX
++#endif
+ 		typedef int socklen_t;
++#ifndef UINT64_MAX
+ 		typedef int ssize_t;
++#endif
+ 		typedef uint32_t in_addr_t;
+ 		#ifndef IN_CLASSD
+ 			#define IN_CLASSD(i)       (((INT32)(i) & 0xf0000000) == 0xe0000000)
+diff -Nur -x '*.exe' ccextractor.0.80/src/lib_ccx/ccx_encoders_common.c ccextractor.0.80.multibuild/src/lib_ccx/ccx_encoders_common.c
+--- ccextractor.0.80/src/lib_ccx/ccx_encoders_common.c	2016-03-19 11:16:13.000000000 +0100
++++ ccextractor.0.80.multibuild/src/lib_ccx/ccx_encoders_common.c	2016-05-30 11:10:56.715432800 +0200
+@@ -13,7 +13,10 @@
+ #ifdef WIN32
+ int fsync(int fd)
+ {
++	/* INCORRECT: FlushFileBuffers uses a HANDLE, not a POSIX file descriptor (int).
+ 	FlushFileBuffers(fd);
++	*/
++	return FlushFileBuffers((HANDLE)_get_osfhandle(fd)) ? 0 : -1;
+ }
+ #endif
+ 
+diff -Nur -x '*.exe' ccextractor.0.80/src/lib_ccx/networking.c ccextractor.0.80.multibuild/src/lib_ccx/networking.c
+--- ccextractor.0.80/src/lib_ccx/networking.c	2015-09-16 21:50:47.000000000 +0200
++++ ccextractor.0.80.multibuild/src/lib_ccx/networking.c	2016-05-30 11:31:29.081303800 +0200
+@@ -19,7 +19,9 @@
+ #define BIN_HEADER      5
+ #define BIN_DATA        6
+ #define EPG_DATA        7
+-#pragma warning( suppress : 4005)
++#ifdef ERROR
++#undef ERROR
++#endif
+ #define ERROR           51
+ #define UNKNOWN_COMMAND 52
+ #define WRONG_PASSWORD  53
+@@ -1095,17 +1097,18 @@
+ 
+ int set_nonblocking(int fd)
+ {
+-    int f;
+ #ifdef O_NONBLOCK
++    int f;
+     if ((f = fcntl(fd, F_GETFL, 0)) < 0)
+         f = 0;
+ 
+     return fcntl(fd, F_SETFL, f | O_NONBLOCK);
+ #else
+-    f = 1;
+ 	#if _WIN32
++		u_long f = 1;
+ 		return ioctlsocket(fd, FIONBIO, &f);
+ 	#else
++		int f = 1;
+ 		return ioctl(fd, FIONBIO, &f);
+ 	#endif
+ #endif
+diff -Nur -x '*.exe' ccextractor.0.80/src/lib_ccx/telxcc.c ccextractor.0.80.multibuild/src/lib_ccx/telxcc.c
+--- ccextractor.0.80/src/lib_ccx/telxcc.c	2016-03-18 08:46:26.000000000 +0100
++++ ccextractor.0.80.multibuild/src/lib_ccx/telxcc.c	2016-05-30 10:44:54.903631800 +0200
+@@ -41,9 +41,15 @@
+ int _CRT_fmode = _O_BINARY;
+ 
+ // for better UX in Windows we want to detect that app is not run by "double-clicking" in Explorer
++#ifndef WIN32_LEAN_AND_MEAN
+ #define WIN32_LEAN_AND_MEAN
++#endif
++#ifndef _WIN32_WINNT
+ #define _WIN32_WINNT 0x0502
++#endif
++#ifndef _WIN32_IE
+ #define _WIN32_IE 0x0400
++#endif
+ #include <windows.h>
+ #include <commctrl.h>
+ #endif
+@@ -1509,4 +1515,4 @@
+ 	freep(&ttext->ucs2_buffer_cur);
+ 	freep(&ttext->page_buffer_cur);
+ 	freep(ctx);
+-}
+\ No newline at end of file
++}
+diff -Nur -x '*.exe' ccextractor.0.80/src/win_iconv/iconv.h ccextractor.0.80.multibuild/src/win_iconv/iconv.h
+--- ccextractor.0.80/src/win_iconv/iconv.h	2015-08-28 10:04:32.000000000 +0200
++++ ccextractor.0.80.multibuild/src/win_iconv/iconv.h	2016-05-30 11:18:55.917107000 +0200
+@@ -7,7 +7,8 @@
+ typedef void* iconv_t;
+ iconv_t iconv_open(const char *tocode, const char *fromcode);
+ int iconv_close(iconv_t cd);
+-size_t iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
++/* inbuf is really a "const char **" but removed const for Linux compatibility */
++size_t iconv(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
+ #ifdef __cplusplus
+ }
+ #endif
+diff -Nur -x '*.exe' ccextractor.0.80/src/win_iconv/win_iconv.c ccextractor.0.80.multibuild/src/win_iconv/win_iconv.c
+--- ccextractor.0.80/src/win_iconv/win_iconv.c	2015-08-28 10:04:32.000000000 +0200
++++ ccextractor.0.80.multibuild/src/win_iconv/win_iconv.c	2016-05-30 11:27:08.128746700 +0200
+@@ -53,7 +53,8 @@
+ 
+ iconv_t iconv_open(const char *tocode, const char *fromcode);
+ int iconv_close(iconv_t cd);
+-size_t iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
++/* inbuf is really a "const char **" but removed const for Linux compatibility */
++size_t iconv(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
+ 
+ /* libiconv interface for vim */
+ #if defined(MAKE_DLL)
+@@ -71,7 +72,7 @@
+ 
+ typedef iconv_t (*f_iconv_open)(const char *tocode, const char *fromcode);
+ typedef int (*f_iconv_close)(iconv_t cd);
+-typedef size_t (*f_iconv)(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
++typedef size_t (*f_iconv)(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
+ typedef int* (*f_errno)(void);
+ typedef int (*f_mbtowc)(csconv_t *cv, const uchar *buf, int bufsize, ushort *wbuf, int *wbufsize);
+ typedef int (*f_wctomb)(csconv_t *cv, ushort *wbuf, int wbufsize, uchar *buf, int bufsize);
+@@ -113,7 +114,7 @@
+ 
+ static int win_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode);
+ static int win_iconv_close(iconv_t cd);
+-static size_t win_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
++static size_t win_iconv(iconv_t cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
+ 
+ static int load_mlang(void);
+ static int make_csconv(const char *name, csconv_t *cv);
+@@ -768,7 +769,7 @@
+ }
+ 
+ size_t
+-iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft)
++iconv(iconv_t _cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft)
+ {
+     rec_iconv_t *cd = (rec_iconv_t *)_cd;
+     size_t r = cd->iconv(cd->cd, inbuf, inbytesleft, outbuf, outbytesleft);
+@@ -795,7 +796,7 @@
+ }
+ 
+ static size_t
+-win_iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft)
++win_iconv(iconv_t _cd, char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft)
+ {
+     rec_iconv_t *cd = (rec_iconv_t *)_cd;
+     ushort wbuf[MB_CHAR_MAX]; /* enough room for one character */
+diff -Nur -x '*.exe' ccextractor.0.80/windows-msys2/build ccextractor.0.80.multibuild/windows-msys2/build
+--- ccextractor.0.80/windows-msys2/build	1970-01-01 01:00:00.000000000 +0100
++++ ccextractor.0.80.multibuild/windows-msys2/build	2016-05-30 13:33:44.366897900 +0200
+@@ -0,0 +1,43 @@
++#!/bin/bash
++# Without option: build for default platform. Use "-32" or "-64" for explicit platform.
++# Syntax: build [-32|-64 [-debug]]
++
++case "$1" in
++    -32)
++        export PATH=/mingw32/bin:$PATH
++        GCC="gcc -m32"
++        EXEC=ccextractor32
++        ;;
++    -64)
++        export PATH=/mingw64/bin:$PATH
++        GCC=gcc
++        EXEC=ccextractor64
++        ;;
++    *)
++        GCC=gcc
++        EXEC=ccextractor
++        ;;
++esac
++
++case "$2" in
++    -debug)
++        BLD_DEBUG="-O0 -g"
++        EXEC="${EXEC}_dbg"
++        ;;
++    *)
++        BLD_DEBUG="-O2"
++        ;;
++esac
++
++BLD_FLAGS="-std=gnu99 -Wno-write-strings -DGPAC_CONFIG_LINUX -D_FILE_OFFSET_BITS=64"
++BLD_INCLUDE="-I../src/lib_ccx/ -I../src/gpacmp4/ -I../src/libpng/ -I../src/zlib/ -I../src/zvbi"
++SRC_LIBPNG="$(find ../src/libpng/ -name '*.c')"
++SRC_ZLIB="$(find ../src/zlib/ -name '*.c')"
++SRC_ZVBI="$(find ../src/zvbi/ -name '*.c')"
++SRC_CCX="$(find ../src/lib_ccx/ -name '*.c')"
++SRC_GPAC="$(find ../src/gpacmp4/ -name '*.c')"
++SRC_ICONV="$(find ../src/win_iconv/ -name '*.c')"
++BLD_SOURCES="../src/ccextractor.c $SRC_CCX $SRC_GPAC $SRC_ZLIB $SRC_ZVBI $SRC_LIBPNG $SRC_ICONV"
++BLD_LINKER="-static -lm -lwinmm -lws2_32"
++
++$GCC $BLD_DEBUG $BLD_FLAGS $BLD_INCLUDE -o ${EXEC}.exe $BLD_SOURCES $BLD_LINKER
+diff -Nur -x '*.exe' ccextractor.0.80/windows-msys2/README.txt ccextractor.0.80.multibuild/windows-msys2/README.txt
+--- ccextractor.0.80/windows-msys2/README.txt	1970-01-01 01:00:00.000000000 +0100
++++ ccextractor.0.80.multibuild/windows-msys2/README.txt	2016-05-30 10:27:37.414835900 +0200
+@@ -0,0 +1,6 @@
++The "build" scripts can be used to build 32-bit and 64-bit versions of CCextractor
++on Windows using the Msys2 environment.
++
++On a 64-bit machine, make sure to install the 32-bit and 64-bit environments first:
++
++$ pacman -S base-devel msys2-devel mingw-w64-i686-toolchain mingw-w64-x86_64-toolchain 

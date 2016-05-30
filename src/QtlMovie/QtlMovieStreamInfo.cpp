@@ -333,17 +333,23 @@ QString QtlMovieStreamInfo::description(bool compact) const
         add(result, QObject::tr("visual impaired"));
     }
     if (_streamType == Subtitle) {
-        if (_impaired) {
-            add(result, QObject::tr("hearing impaired"));
-        }
         if (_teletextPage > 0) {
             add(result, QObject::tr("Teletext %1%2").arg(compact ? "" : QObject::tr("page ")).arg(_teletextPage));
         }
-        if (_ccNumber >= 1 && _ccNumber <= 4) {
-            add(result, QObject::tr("Closed Captions channel %1 field %2").arg((_ccNumber + 1) / 2).arg(2 - (_ccNumber % 2)));
+        if (_ccNumber > 0) {
+            add(result, QObject::tr("Closed Captions"));
+            if (_ccNumber > 4) {
+                add(result, QObject::tr("service %1").arg(_ccNumber - 4));
+            }
+            else if (_ccNumber > 2) {
+                add(result, QObject::tr("channel 2"));
+            }
+            if (_ccNumber == 2 || _ccNumber == 4) {
+                add(result, QObject::tr("field 2"));
+            }
         }
-        if (_ccNumber >= 5) {
-            add(result, QObject::tr("Closed Captions service %1").arg(_ccNumber - 4));
+        if (_impaired) {
+            add(result, QObject::tr("hearing impaired"));
         }
     }
 

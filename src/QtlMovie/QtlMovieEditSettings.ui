@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>669</width>
-    <height>574</height>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -422,6 +422,13 @@
            <widget class="QCheckBox" name="checkBoxSrtUseVideoSize">
             <property name="text">
              <string>Use original video size as a hint for SRT/SSA/ASS character shape</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxCapitalizeCc">
+            <property name="text">
+             <string>Capitalize US Closed Captions (suppress ALL CAPS)</string>
             </property>
            </widget>
           </item>

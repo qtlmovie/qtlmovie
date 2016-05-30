@@ -78,7 +78,7 @@ QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
     _verbose(!QProcessEnvironment::systemEnvironment().value("QTLTELETEXTDEMUX_TEST").isEmpty()),
     _refLines(QtlFile::readTextLinesFile(":/test/test-teletext.srt")),
     _refIterator(_refLines.begin()),
-    _file(":/test/test-teletext.ts")
+    _file(":/test/test-teletext.stream")
 {
 }
 

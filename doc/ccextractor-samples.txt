@@ -21,7 +21,7 @@ CC2: Yes/No ==> Option: -2
 CC3: Yes/No ==> Option: -cc2 -1
 CC4: Yes/No ==> Option: -cc2 -2
 CEA-708: Yes/No
-Services: 1 ==> Option: -svc 1
+Services: 1 2 3 ... ==> Option: -svc 1,2,3
 
 $ ccextractor -h | head -1
 CCExtractor 0.80, Carlos Fernandez Sanz, Volker Quetschke.

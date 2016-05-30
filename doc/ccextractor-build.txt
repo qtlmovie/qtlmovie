@@ -2,8 +2,10 @@ Building CCextractor
 --------------------
 
 Download latest sources from:
-   https://sourceforge.net/projects/ccextractor/files/ccextractor/
+  https://sourceforge.net/projects/ccextractor/files/ccextractor/
 
+Example:
+  https://sourceforge.net/projects/ccextractor/files/ccextractor/0.80/ccextractor.src.0.80.zip/download
 
 Build on Windows
 ----------------
@@ -19,21 +21,17 @@ Latest source download:
 
 Using Msys2 on a Win64 system:
 
-1) Make sure you have installed the 32-bit toolchain also:
+1) Make sure you have installed the 32-bit and 64-bit toolchains:
 
-$ pacman -S mingw-w64-i686-toolchain
+$ pacman -S base-devel msys2-devel mingw-w64-i686-toolchain mingw-w64-x86_64-toolchain 
 
 2) Build ccextractor for 32 and 64 bits:
 
 $ wget https://sourceforge.net/projects/ccextractor/files/ccextractor/0.80/ccextractor.src.0.80.zip
 $ unzip -q ccextractor.src.0.80.zip
 $ cd ccextractor.0.80
-$ patch -p1 <../ccextractor.0.80.msys2.patch
-$ cd linux
-$ make
-$ mv objs objs64
-$ mv ccextractor.exe ccextractor64.exe
-$ PATH=/mingw32/bin:$PATH make CC="gcc -m32"
-$ mv objs objs32
-$ mv ccextractor.exe ccextractor32.exe
+$ patch -p1 <${QTLMOVIE_SOURCES}/doc/ccextractor.0.80.multibuild.patch
+$ cd windows-msys2
+$ ./build -32
+$ ./build -64
 $ strip ccextractor*.exe
