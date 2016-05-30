@@ -63,7 +63,7 @@ rm -f "$DMGTMP" "$DMGFILE"
 APPTOOLS=$APPDIR/Contents/MacOS/mactools
 rm -rf $APPTOOLS
 find $ROOTDIR/mactools -type f ! -name '.*' ! -name '*.txt' | xargs chmod 755
-tar -C $ROOTDIR --exclude .gitignore --exclude '*.txt' -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
+tar -C $ROOTDIR --exclude .gitignore -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
 strip $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS/*
 chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS $APPTOOLS/*
 
@@ -76,14 +76,6 @@ chmod 644 $APPFONTS/*
 
 # Deploy Qt requirements in the bundle.
 macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -always-overwrite || exit 1
-
-# Deploy platform plugin (not done by macdeployqt)
-PFPLUGINS="$APPDIR/Contents/plugins/platforms"
-LIBQCOCOA="$(dirname $(dirname $(which qmake)))/plugins/platforms/libqcocoa.dylib"
-[[ -e "$LIBQCOCOA" ]] || error "not found: $LIBQCOCOA"
-mkdir -p "$PFPLUGINS"
-cp "$LIBQCOCOA" "$PFPLUGINS"
-chmod 755 "$PFPLUGINS" "$PFPLUGINS/libqcocoa.dylib"
 
 # Install translations in the bundle.
 APPTRANS=$APPDIR/Contents/MacOS/translations

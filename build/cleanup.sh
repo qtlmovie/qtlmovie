@@ -73,7 +73,7 @@ find $ROOT \
 # Remove executable right from source files.
 find $ROOT \( -iname 'build-*' -prune \) -o \( -iname .git -prune \) -o ! -type d ! -iname '*.sh' | xargs chmod 640
 find $ROOT \( -iname .git -prune \) -o -type d -o -iname '*.sh' -o -iname '*.postinst' | xargs chmod 750
-for f in $(find $ROOT/mactools -type f ! -name '.*' ! -name '*.txt'); do xargs chmod 755 $f; done
+for f in $(find $ROOT/mactools -type f ! -name '.*' ! -name '*.txt'); do chmod 755 $f; done
 
 # In deep mode, delete git repository, installers and non-original files in SourceForge mirror.
 if $DEEP; then
