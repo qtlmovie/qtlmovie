@@ -122,7 +122,7 @@ if ($Deep) {
     Delete "$RootDir\sourceforge\web\doc"
     Delete "$RootDir\sourceforge\web\doxy"
     Get-ChildItem -Recurse $RootDir | Where-Object {
-        ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.deb" -or $_.Name -like "*.zip")
+        ($_.Name -like "*.exe" -or $_.Name -like "*.rpm" -or $_.Name -like "*.deb" -or $_.Name -like "*.dmg" -or $_.Name -like "*.zip")
     } | ForEach-Object { Delete $_.FullName }
     Get-ChildItem -Recurse (Join-Path $RootDir "mactools") | Where-Object {
         ($_.Name -notlike "*.txt" -and $_.Name -notlike ".gitignore")
