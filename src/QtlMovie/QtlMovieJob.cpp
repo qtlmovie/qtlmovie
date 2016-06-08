@@ -143,7 +143,7 @@ bool QtlMovieJob::start()
     _tempDir = QtlFile::shortPath(_tempDir, true);
 
     // Force the display aspect ratio of the video stream if required.
-    const QtlMovieStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
     if (!video.isNull()) {
         video->setForcedDisplayAspectRatio(_task->outputFile()->forcedDisplayAspectRatio());
     }
@@ -339,8 +339,8 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
     }
 
     // Subtitle type.
-    const QtlMovieStreamInfoPtr subtitleInfo(inputFile->selectedSubtitleStreamInfo());
-    const QtlMovieStreamInfo::SubtitleType subtitleType(subtitleInfo.isNull() ? QtlMovieStreamInfo::SubNone : subtitleInfo->subtitleType());
+    const QtlMediaStreamInfoPtr subtitleInfo(inputFile->selectedSubtitleStreamInfo());
+    const QtlMediaStreamInfo::SubtitleType subtitleType(subtitleInfo.isNull() ? QtlMediaStreamInfo::SubNone : subtitleInfo->subtitleType());
 
     // Decide what is supported.
     switch (outputType) {
@@ -355,15 +355,15 @@ bool QtlMovieJob::canTranscode(const QtlMovieInputFile* inputFile, QtlMovieOutpu
             // Require a supported or no subtitle type.
             return inputFile->selectedAudioStreamIndex() >= 0 &&
                     inputFile->selectedVideoStreamIndex() >= 0 &&
-                    subtitleType != QtlMovieStreamInfo::SubOther;
+                    subtitleType != QtlMediaStreamInfo::SubOther;
 
         case QtlMovieOutputFile::SubRip:
             // Require a subtitle type which can be exported as SubRip.
-            return subtitleType == QtlMovieStreamInfo::SubRip ||
-                    subtitleType == QtlMovieStreamInfo::SubSsa ||
-                    subtitleType == QtlMovieStreamInfo::SubAss ||
-                    subtitleType == QtlMovieStreamInfo::SubTeletext ||
-                    subtitleType == QtlMovieStreamInfo::SubCc;
+            return subtitleType == QtlMediaStreamInfo::SubRip ||
+                    subtitleType == QtlMediaStreamInfo::SubSsa ||
+                    subtitleType == QtlMediaStreamInfo::SubAss ||
+                    subtitleType == QtlMediaStreamInfo::SubTeletext ||
+                    subtitleType == QtlMediaStreamInfo::SubCc;
 
         case QtlMovieOutputFile::None:
             // It is always possible to do nothing.
@@ -384,10 +384,10 @@ bool QtlMovieJob::canInsertSubtitles(const QString& subtitleFileName)
 {
     // We can insert only SRT/SSA/ASS subtitles from an external file
     // and the file must exist.
-    switch (QtlMovieStreamInfo::subtitleType(subtitleFileName, true)) {
-        case QtlMovieStreamInfo::SubAss:
-        case QtlMovieStreamInfo::SubSsa:
-        case QtlMovieStreamInfo::SubRip:
+    switch (QtlMediaStreamInfo::subtitleType(subtitleFileName, true)) {
+        case QtlMediaStreamInfo::SubAss:
+        case QtlMediaStreamInfo::SubSsa:
+        case QtlMediaStreamInfo::SubRip:
             return true;
         default:
             return false;
@@ -420,10 +420,10 @@ bool QtlMovieJob::buildScenario()
 
     // External subtitle file.
     if (!_task->inputFile()->externalSubtitleFileName().isEmpty()) {
-        switch (QtlMovieStreamInfo::subtitleType(_task->inputFile()->externalSubtitleFileName(), true)) {
-            case QtlMovieStreamInfo::SubAss:
-            case QtlMovieStreamInfo::SubSsa:
-            case QtlMovieStreamInfo::SubRip:
+        switch (QtlMediaStreamInfo::subtitleType(_task->inputFile()->externalSubtitleFileName(), true)) {
+            case QtlMediaStreamInfo::SubAss:
+            case QtlMediaStreamInfo::SubSsa:
+            case QtlMediaStreamInfo::SubRip:
                 // Supported external subtitle file type.
                 break;
             default:
@@ -432,7 +432,7 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Subtitle stream in input file.
-    const QtlMovieStreamInfoPtr subtitleStream(_task->inputFile()->selectedSubtitleStreamInfo());
+    const QtlMediaStreamInfoPtr subtitleStream(_task->inputFile()->selectedSubtitleStreamInfo());
 
     // Do we need to add an initial pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
@@ -440,8 +440,8 @@ bool QtlMovieJob::buildScenario()
     //   No need to have a separate first pass to extract them.
     // - The final output file is not simply a subtitle extraction.
     if (!subtitleStream.isNull() &&
-        subtitleStream->subtitleType() != QtlMovieStreamInfo::SubDvd &&
-        subtitleStream->subtitleType() != QtlMovieStreamInfo::SubDvb &&
+        subtitleStream->subtitleType() != QtlMediaStreamInfo::SubDvd &&
+        subtitleStream->subtitleType() != QtlMediaStreamInfo::SubDvb &&
         outputType != QtlMovieOutputFile::SubRip) {
 
         // Extract subtitles in an intermediate file.
@@ -462,7 +462,7 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Selected audio stream in input file.
-    const QtlMovieStreamInfoPtr audioStream(inputForTranscoding->selectedAudioStreamInfo());
+    const QtlMediaStreamInfoPtr audioStream(inputForTranscoding->selectedAudioStreamInfo());
 
     // Check if we need an initial pass to determine the audio volume of the input file.
     // This is required if audio normalization is requested and both input and output contain audio.
@@ -571,22 +571,22 @@ bool QtlMovieJob::addSubtitleFileVideoFilter(QString& videoFilters, int widthIn,
     }
 
     // Subtitle file type.
-    const QtlMovieStreamInfo::SubtitleType subType(QtlMovieStreamInfo::subtitleType(subtitleFileName));
+    const QtlMediaStreamInfo::SubtitleType subType(QtlMediaStreamInfo::subtitleType(subtitleFileName));
     switch (subType) {
 
-        case QtlMovieStreamInfo::SubRip:
+        case QtlMediaStreamInfo::SubRip:
             return addTextSubtitleFileVideoFilter(videoFilters, "subtitles", widthIn, heightIn, subtitleFileName);
 
-        case QtlMovieStreamInfo::SubAss:
-        case QtlMovieStreamInfo::SubSsa:
+        case QtlMediaStreamInfo::SubAss:
+        case QtlMediaStreamInfo::SubSsa:
             return addTextSubtitleFileVideoFilter(videoFilters, "ass", widthIn, heightIn, subtitleFileName);
 
-        case QtlMovieStreamInfo::SubDvd:
-        case QtlMovieStreamInfo::SubDvb:
-        case QtlMovieStreamInfo::SubTeletext:
-        case QtlMovieStreamInfo::SubCc:
-        case QtlMovieStreamInfo::SubOther:
-        case QtlMovieStreamInfo::SubNone:
+        case QtlMediaStreamInfo::SubDvd:
+        case QtlMediaStreamInfo::SubDvb:
+        case QtlMediaStreamInfo::SubTeletext:
+        case QtlMediaStreamInfo::SubCc:
+        case QtlMediaStreamInfo::SubOther:
+        case QtlMediaStreamInfo::SubNone:
         default:
             return abortStart(tr("Unsupported subtitle type"));
     }
@@ -624,8 +624,8 @@ bool QtlMovieJob::addTextSubtitleFileVideoFilter(QString& videoFilters, const QS
 bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlMovieInputFile* inputFile, int widthOut, int heightOut)
 {
     // Selected subtitle and video streams.
-    const QtlMovieStreamInfoPtr subtitleStream(inputFile->selectedSubtitleStreamInfo());
-    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr subtitleStream(inputFile->selectedSubtitleStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
 
     // If no video or subtitle stream specified, nothing to do.
     if (subtitleStream.isNull() || videoStream.isNull()) {
@@ -635,8 +635,8 @@ bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlM
     // Subtitle type.
     switch (subtitleStream->subtitleType()) {
 
-        case QtlMovieStreamInfo::SubDvb:
-        case QtlMovieStreamInfo::SubDvd: {
+        case QtlMediaStreamInfo::SubDvb:
+        case QtlMediaStreamInfo::SubDvd: {
             // Bitmap subtitles are picture frames with a transparent background which
             // shall be displayed on top of the main video frames.
             // We may need to create a complex filter with several branches.
@@ -684,16 +684,16 @@ bool QtlMovieJob::addSubtitleStreamVideoFilter(QString& videoFilters, const QtlM
             videoFilters.append(QStringLiteral("[%1][%2]overlay").arg(videoBranchName).arg(subtitleBranchName));
             return true;
         }
-        case QtlMovieStreamInfo::SubRip:
-        case QtlMovieStreamInfo::SubAss:
-        case QtlMovieStreamInfo::SubSsa:
-        case QtlMovieStreamInfo::SubTeletext:
-        case QtlMovieStreamInfo::SubCc:
+        case QtlMediaStreamInfo::SubRip:
+        case QtlMediaStreamInfo::SubAss:
+        case QtlMediaStreamInfo::SubSsa:
+        case QtlMediaStreamInfo::SubTeletext:
+        case QtlMediaStreamInfo::SubCc:
             // These subtitles were extracted from the file in a previous pass. Ignore them now.
             return true;
 
-        case QtlMovieStreamInfo::SubOther:
-        case QtlMovieStreamInfo::SubNone:
+        case QtlMediaStreamInfo::SubOther:
+        case QtlMediaStreamInfo::SubNone:
         default:
             return abortStart(tr("Unsupported subtitle type"));
     }
@@ -737,7 +737,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
          << QtlMovieFFmpeg::dvdAudioOptions(settings(), inputFile->selectedAudioStreamInfo());
 
     // Video stream to transcode.
-    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
 
     if (videoStream.isNull()) {
         return abortStart(tr("No selected video stream"));
@@ -839,8 +839,8 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
     const bool dvdCompliant = !settings()->forceDvdTranscode() && inputFile->isDvdCompliant();
 
     // Video and audio stream to transcode.
-    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
-    const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
     // Explicit remux of audio and video if required in settings and both audio and video are present.
     // If the file is already DVD-compliant, always perform remux.
@@ -1029,8 +1029,8 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
                                     int videoQuality)
 {
     // Video and audio stream to transcode.
-    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
-    const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
     // Start FFmpeg argument list.
     QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
@@ -1119,8 +1119,8 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
 bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QString& outputFileName)
 {
     // Video and audio stream to transcode.
-    const QtlMovieStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
-    const QtlMovieStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(inputFile->selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
     if (videoStream.isNull()) {
         return abortStart(tr("No selected video stream"));
@@ -1206,43 +1206,43 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
 bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName)
 {
     // There must be one selected subtitle track.
-    const QtlMovieStreamInfoPtr stream(inputFile->selectedSubtitleStreamInfo());
+    const QtlMediaStreamInfoPtr stream(inputFile->selectedSubtitleStreamInfo());
     if (stream.isNull()) {
         return abortStart(tr("No subtitle stream was selected"));
     }
 
     // Input subtitle type.
-    const QtlMovieStreamInfo::SubtitleType inType = stream->subtitleType();
+    const QtlMediaStreamInfo::SubtitleType inType = stream->subtitleType();
 
     // Output subtitle type.
-    QtlMovieStreamInfo::SubtitleType outType;
+    QtlMediaStreamInfo::SubtitleType outType;
     if (QFileInfo(outputFileName).suffix().isEmpty()) {
         // No file name suffix, compute appropriate output type.
         // Use same as input type, except a few cases.
         switch (inType) {
-            case QtlMovieStreamInfo::SubSsa:
-                outType = QtlMovieStreamInfo::SubAss;
+            case QtlMediaStreamInfo::SubSsa:
+                outType = QtlMediaStreamInfo::SubAss;
                 break;
-            case QtlMovieStreamInfo::SubTeletext:
-            case QtlMovieStreamInfo::SubCc:
-                outType = QtlMovieStreamInfo::SubRip;
+            case QtlMediaStreamInfo::SubTeletext:
+            case QtlMediaStreamInfo::SubCc:
+                outType = QtlMediaStreamInfo::SubRip;
                 break;
             default:
                 outType = inType;
                 break;
         }
         // Update output file name.
-        outputFileName.append(QtlMovieStreamInfo::fileExtension(outType));
+        outputFileName.append(QtlMediaStreamInfo::fileExtension(outType));
     }
     else {
         // A file suffix is provided, used corresponding subtitle type.
-        outType = QtlMovieStreamInfo::subtitleType(outputFileName);
+        outType = QtlMediaStreamInfo::subtitleType(outputFileName);
     }
 
     // Build the extraction command.
-    if (inputFile->isTsFile() && inType == QtlMovieStreamInfo::SubTeletext) {
+    if (inputFile->isTsFile() && inType == QtlMediaStreamInfo::SubTeletext) {
         // Teletext subtitles are extracted from TS files using internal code, not ffmpeg.
-        if (outType != QtlMovieStreamInfo::SubRip) {
+        if (outType != QtlMediaStreamInfo::SubRip) {
             return abortStart(tr("Teletext subtitles can be extracted as SRT only"));
         }
 
@@ -1261,9 +1261,9 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         _actionList.append(action);
         return true;
     }
-    else if (inType == QtlMovieStreamInfo::SubCc) {
+    else if (inType == QtlMediaStreamInfo::SubCc) {
         // Closed Caption subtitles are extracted using CCextractor, not ffmpeg.
-        if (outType != QtlMovieStreamInfo::SubRip) {
+        if (outType != QtlMediaStreamInfo::SubRip) {
             return abortStart(tr("Closed Captions subtitles can be extracted as SRT only"));
         }
 
@@ -1310,11 +1310,11 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         // Determine codec type and output file format.
         QString codecName, fileFormat;
         switch (outType) {
-            case QtlMovieStreamInfo::SubRip:
+            case QtlMediaStreamInfo::SubRip:
                 codecName = "srt";
                 fileFormat = "srt";
                 break;
-            case QtlMovieStreamInfo::SubAss:
+            case QtlMediaStreamInfo::SubAss:
                 codecName = "ass";
                 fileFormat = "ass";
                 break;

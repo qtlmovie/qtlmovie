@@ -166,7 +166,7 @@ QStringList QtlMovieFFmpeg::paletteOptions(const QtlByteBlock& palette)
 // Build an audio conversion FFmpeg options list for DVD transcoding.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::dvdAudioOptions(const QtlMovieSettings* settings, const QtlMovieStreamInfoPtr& audioStream)
+QStringList QtlMovieFFmpeg::dvdAudioOptions(const QtlMovieSettings* settings, const QtlMediaStreamInfoPtr& audioStream)
 {
     QStringList args;
     if (!audioStream.isNull()) {
@@ -369,7 +369,7 @@ void QtlMovieFFmpeg::addBoundedSizeOptions(QStringList& ffmpegArguments,
 //----------------------------------------------------------------------------
 
 void QtlMovieFFmpeg::addRotateOptions(const QtlMovieSettings* settings,
-                                      const QtlMovieStreamInfoPtr& videoStream,
+                                      const QtlMediaStreamInfoPtr& videoStream,
                                       QStringList& ffmpegArguments,
                                       QString& videoFilters,
                                       int& width,

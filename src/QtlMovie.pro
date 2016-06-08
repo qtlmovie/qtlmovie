@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,4 +32,4 @@
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += Qtl Qts QtlMovie UnitTest TestTeletext
+SUBDIRS += libdvdcss libQtl libQts QtlMovie TestUnit TestDvd TestTeletext

@@ -135,9 +135,9 @@ void QtlMovieClosedCaptionsSearch::emitFoundClosedCaptions(int ccNumber)
     debug(tr("Found Closed Caption #%1").arg(ccNumber));
 
     // Build the stream information.
-    const QtlMovieStreamInfoPtr info(new QtlMovieStreamInfo());
-    info->setStreamType(QtlMovieStreamInfo::Subtitle);
-    info->setSubtitleType(QtlMovieStreamInfo::SubCc);
+    const QtlMediaStreamInfoPtr info(new QtlMediaStreamInfo());
+    info->setStreamType(QtlMediaStreamInfo::Subtitle);
+    info->setSubtitleType(QtlMediaStreamInfo::SubCc);
     info->setCcNumber(ccNumber);
 
     // Send the new stream information to clients.

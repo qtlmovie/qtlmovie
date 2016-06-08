@@ -98,9 +98,9 @@ void QtlMovieTeletextSearch::handleTable(QtsSectionDemux& demux, const QtsTable&
                             if (entry.type == QTS_TELETEXT_SUBTITLES || entry.type == QTS_TELETEXT_SUBTITLES_HI) {
                                 // Found teletext subtitles.
                                 // Create a stream description.
-                                const QtlMovieStreamInfoPtr info(new QtlMovieStreamInfo());
-                                info->setStreamType(QtlMovieStreamInfo::Subtitle);
-                                info->setSubtitleType(QtlMovieStreamInfo::SubTeletext);
+                                const QtlMediaStreamInfoPtr info(new QtlMediaStreamInfo());
+                                info->setStreamType(QtlMediaStreamInfo::Subtitle);
+                                info->setSubtitleType(QtlMediaStreamInfo::SubTeletext);
                                 info->setStreamId(stream.pid); // stream id = PID for MPEG-TS files.
                                 info->setTeletextPage(entry.page);
                                 info->setLanguage(entry.language);

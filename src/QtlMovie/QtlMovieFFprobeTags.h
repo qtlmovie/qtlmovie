@@ -36,7 +36,7 @@
 #define QTLMOVIEFFPROBETAGS_H
 
 #include <QtCore>
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 #include "QtlStringUtils.h"
 
 //!
@@ -57,7 +57,7 @@ public:
     //! Analyze the FFprobe tags and add in a list of stream info.
     //! @param [in,out] streams The list of streams to build.
     //!
-    void buildStreamInfo(QtlMovieStreamInfoPtrVector& streams);
+    void buildStreamInfo(QtlMediaStreamInfoPtrVector& streams);
 
     //!
     //! Get the value of a global tag in FFprobe output.

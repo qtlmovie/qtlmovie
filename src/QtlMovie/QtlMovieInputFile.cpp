@@ -219,7 +219,7 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
 
         // Merge the info which were previously collected in
         // the .IFO file with the stream info from ffprobe.
-        QtlMovieStreamInfo::merge(_streams, _dvdIfoStreams);
+        QtlMediaStreamInfo::merge(_streams, _dvdIfoStreams);
 
         // Sort streams in the DVD order for user's convenience.
         qSort(_streams.begin(), _streams.end(), QtlMovieDvd::lessThan);
@@ -233,10 +233,10 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
     // subtitles are Teletext (unknown subtitle type) and we need to analyze the file as well.
     bool searchTeletext = false;
     if (_isTs) {
-        foreach (const QtlMovieStreamInfoPtr& stream, _streams) {
+        foreach (const QtlMediaStreamInfoPtr& stream, _streams) {
             if (!stream.isNull() &&
-                stream->streamType() == QtlMovieStreamInfo::Subtitle &&
-                ((stream->subtitleType() == QtlMovieStreamInfo::SubTeletext && stream->teletextPage() < 0) || stream->subtitleType() == QtlMovieStreamInfo::SubOther)) {
+                stream->streamType() == QtlMediaStreamInfo::Subtitle &&
+                ((stream->subtitleType() == QtlMediaStreamInfo::SubTeletext && stream->teletextPage() < 0) || stream->subtitleType() == QtlMediaStreamInfo::SubOther)) {
                 searchTeletext = true;
                 break;
             }
@@ -277,7 +277,7 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
 // Invoked when a Teletext subtitle stream is found.
 //----------------------------------------------------------------------------
 
-void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
+void QtlMovieInputFile::foundTeletextSubtitles(QtlMediaStreamInfoPtr stream)
 {
     _log->debug(tr("Found one Teletext subtitle stream, page %1").arg(stream->teletextPage()));
 
@@ -287,8 +287,8 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
     if (stream->streamId() >= 0) {
         // We know the PID of the stream in the TS file (should be always the case).
         // Look for previous streams with the same PID.
-        for (QtlMovieStreamInfoPtrVector::Iterator it = _streams.begin(); it != _streams.end(); ++it) {
-            const QtlMovieStreamInfoPtr& s(*it);
+        for (QtlMediaStreamInfoPtrVector::Iterator it = _streams.begin(); it != _streams.end(); ++it) {
+            const QtlMediaStreamInfoPtr& s(*it);
             if (s->streamId() == stream->streamId()) {
                 // Found a previous stream with same PID.
                 // If the new stream's ffmpeg index is unknown, get it from the previous stream on same PID.
@@ -297,8 +297,8 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
                 }
                 // If the previous stream is unknown subtitle or teletext with unknown page, remove it
                 // since we know have a better characterization of the stream.
-                if (s->streamType() == QtlMovieStreamInfo::Subtitle &&
-                    (s->subtitleType() == QtlMovieStreamInfo::SubOther || (s->subtitleType() == QtlMovieStreamInfo::SubTeletext && s->teletextPage() < 0))) {
+                if (s->streamType() == QtlMediaStreamInfo::Subtitle &&
+                    (s->subtitleType() == QtlMediaStreamInfo::SubOther || (s->subtitleType() == QtlMediaStreamInfo::SubTeletext && s->teletextPage() < 0))) {
                     _streams.erase(it);
                     // We can stop now and we must since our iterator is broken by erase().
                     break;
@@ -316,7 +316,7 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMovieStreamInfoPtr stream)
 // Invoked when a Closed Captions stream is found.
 //----------------------------------------------------------------------------
 
-void QtlMovieInputFile::foundClosedCaptions(QtlMovieStreamInfoPtr stream)
+void QtlMovieInputFile::foundClosedCaptions(QtlMediaStreamInfoPtr stream)
 {
     // Append the new stream in the input file.
     _streams.append(stream);
@@ -396,10 +396,10 @@ void QtlMovieInputFile::newMediaInfo()
 // Get the number of streams in the file matching a given type.
 //----------------------------------------------------------------------------
 
-int QtlMovieInputFile::streamCount(QtlMovieStreamInfo::StreamType streamType) const
+int QtlMovieInputFile::streamCount(QtlMediaStreamInfo::StreamType streamType) const
 {
     int count = 0;
-    foreach (const QtlMovieStreamInfoPtr& s, _streams) {
+    foreach (const QtlMediaStreamInfoPtr& s, _streams) {
         if (!s.isNull() && s->streamType() == streamType) {
             count++;
         }
@@ -412,9 +412,9 @@ int QtlMovieInputFile::streamCount(QtlMovieStreamInfo::StreamType streamType) co
 // Get the information about the first stream in the file matching a given type.
 //----------------------------------------------------------------------------
 
-QtlMovieStreamInfoPtr QtlMovieInputFile::firstStream(QtlMovieStreamInfo::StreamType streamType) const
+QtlMediaStreamInfoPtr QtlMovieInputFile::firstStream(QtlMediaStreamInfo::StreamType streamType) const
 {
-    foreach (const QtlMovieStreamInfoPtr& s, _streams) {
+    foreach (const QtlMediaStreamInfoPtr& s, _streams) {
         if (!s.isNull() && s->streamType() == streamType) {
             return s;
         }
@@ -427,7 +427,7 @@ QtlMovieStreamInfoPtr QtlMovieInputFile::firstStream(QtlMovieStreamInfo::StreamT
 // Get the information about a stream in input file.
 //----------------------------------------------------------------------------
 
-QtlMovieStreamInfoPtr QtlMovieInputFile::streamInfo(int streamIndex) const
+QtlMediaStreamInfoPtr QtlMovieInputFile::streamInfo(int streamIndex) const
 {
     return streamIndex >= 0 && streamIndex < _streams.size() ? _streams[streamIndex] : 0;
 }
@@ -463,11 +463,11 @@ bool QtlMovieInputFile::isDvdCompliant() const
     // - Exactly 2 streams: one MPEG-2 video and one AC-3 audio.
     // - Same video size and aspect ratio.
 
-    const QtlMovieStreamInfoPtr audioStream(firstStream(QtlMovieStreamInfo::Audio));
+    const QtlMediaStreamInfoPtr audioStream(firstStream(QtlMediaStreamInfo::Audio));
 
-    return  streamCount(QtlMovieStreamInfo::Video) == 1 &&
-            streamCount(QtlMovieStreamInfo::Audio) == 1 &&
-            streamCount(QtlMovieStreamInfo::Subtitle) == 0 &&
+    return  streamCount(QtlMediaStreamInfo::Video) == 1 &&
+            streamCount(QtlMediaStreamInfo::Audio) == 1 &&
+            streamCount(QtlMediaStreamInfo::Subtitle) == 0 &&
             externalSubtitleFileName().isEmpty() &&
             selectedVideoStreamIsDvdCompliant() &&
             !audioStream.isNull() &&
@@ -482,7 +482,7 @@ bool QtlMovieInputFile::isDvdCompliant() const
 
 bool QtlMovieInputFile::selectedVideoStreamIsDvdCompliant() const
 {
-    const QtlMovieStreamInfoPtr videoStream(selectedVideoStreamInfo());
+    const QtlMediaStreamInfoPtr videoStream(selectedVideoStreamInfo());
 
     // Compliant if:
     // - Selected video stream exists.
@@ -535,14 +535,14 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     for (int streamIndex = 0; streamIndex < streamMax; streamIndex++) {
 
         // Stream description.
-        const QtlMovieStreamInfoPtr& stream(_streams[streamIndex]);
+        const QtlMediaStreamInfoPtr& stream(_streams[streamIndex]);
 
         // Is this stream in the intended audience languages?
         const bool inAudienceLanguages = audienceLanguages.contains(stream->language(), Qt::CaseInsensitive);
 
         // Type-specific processing.
         switch (stream->streamType()) {
-        case QtlMovieStreamInfo::Video: {
+        case QtlMediaStreamInfo::Video: {
             // Compute video frame size (width x height). Zero if width or height undefined.
             const int frameSize = stream->width() * stream->height();
             if (frameSize > highestFrameSize) {
@@ -553,7 +553,7 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
             break;
         }
 
-        case QtlMovieStreamInfo::Audio: {
+        case QtlMediaStreamInfo::Audio: {
             if (firstAudio < 0) {
                 // Found first audio track.
                 firstAudio = streamIndex;
@@ -573,7 +573,7 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
             break;
         }
 
-        case QtlMovieStreamInfo::Subtitle: {
+        case QtlMediaStreamInfo::Subtitle: {
             if (inAudienceLanguages) {
                 // Keep only subtitles for intended audience.
                 if (firstSubtitle < 0) {
@@ -671,7 +671,7 @@ void QtlMovieInputFile::setSelectedVideoStreamIndex(int index)
             (index >= 0 &&
              index < streamCount() &&
              !_streams[index].isNull() &&
-             _streams[index]->streamType() == QtlMovieStreamInfo::Video) ?
+             _streams[index]->streamType() == QtlMediaStreamInfo::Video) ?
             index : -1;
 }
 
@@ -686,7 +686,7 @@ void QtlMovieInputFile::setSelectedAudioStreamIndex(int index)
             (index >= 0 &&
              index < streamCount() &&
              !_streams[index].isNull() &&
-             _streams[index]->streamType() == QtlMovieStreamInfo::Audio) ?
+             _streams[index]->streamType() == QtlMediaStreamInfo::Audio) ?
             index : -1;
 }
 
@@ -701,7 +701,7 @@ void QtlMovieInputFile::setSelectedSubtitleStreamIndex(int index)
             (index >= 0 &&
              index < streamCount() &&
              !_streams[index].isNull() &&
-             _streams[index]->streamType() == QtlMovieStreamInfo::Subtitle) ?
+             _streams[index]->streamType() == QtlMediaStreamInfo::Subtitle) ?
             index : -1;
 }
 

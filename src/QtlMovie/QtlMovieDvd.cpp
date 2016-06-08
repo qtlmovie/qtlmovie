@@ -140,7 +140,7 @@ bool QtlMovieDvd::buildFileNames(const QString& fileName, QString& ifoFileName, 
 // Read an IFO file and load the descriptioos of its streams.
 //----------------------------------------------------------------------------
 
-bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVector& streams, QtlByteBlock& palette, QtlLogger* log)
+bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMediaStreamInfoPtrVector& streams, QtlByteBlock& palette, QtlLogger* log)
 {
     // Reset returned content.
     streams.clear();
@@ -165,9 +165,9 @@ bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVect
     }
 
     // There is always one video stream.
-    QtlMovieStreamInfoPtr video(new QtlMovieStreamInfo());
+    QtlMediaStreamInfoPtr video(new QtlMediaStreamInfo());
     streams.append(video);
-    video->setStreamType(QtlMovieStreamInfo::Video);
+    video->setStreamType(QtlMediaStreamInfo::Video);
 
     // Stream id: maybe 0xE0 (according to various web resources) or 0x01E0 (according to ffprobe).
     video->setStreamId(0x01E0);
@@ -256,9 +256,9 @@ bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVect
         const quint8 type = header[start + 5];
 
         // Create the audio stream description.
-        QtlMovieStreamInfoPtr audio(new QtlMovieStreamInfo());
+        QtlMediaStreamInfoPtr audio(new QtlMediaStreamInfo());
         streams.append(audio);
-        audio->setStreamType(QtlMovieStreamInfo::Audio);
+        audio->setStreamType(QtlMediaStreamInfo::Audio);
 
         // Compute stream id.
         // For audio, the stream ids depend on the codec.
@@ -308,10 +308,10 @@ bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVect
         const quint8 type = header[start + 5];
 
         // Create the subtitle stream description.
-        QtlMovieStreamInfoPtr subtitle(new QtlMovieStreamInfo());
+        QtlMediaStreamInfoPtr subtitle(new QtlMediaStreamInfo());
         streams.append(subtitle);
-        subtitle->setStreamType(QtlMovieStreamInfo::Subtitle);
-        subtitle->setSubtitleType(QtlMovieStreamInfo::SubDvd);
+        subtitle->setStreamType(QtlMediaStreamInfo::Subtitle);
+        subtitle->setSubtitleType(QtlMediaStreamInfo::SubDvd);
 
         // Compute stream id.
         // For DVD subpictures (=subtitle), the stream id is always 0x20 + index of
@@ -358,11 +358,11 @@ bool QtlMovieDvd::readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVect
 
 
 //----------------------------------------------------------------------------
-// Compare two QtlMovieStreamInfoPtr for DVD stream ordering.
+// Compare two QtlMediaStreamInfoPtr for DVD stream ordering.
 // We reorder stream in "DVD order" for user convenience.
 //----------------------------------------------------------------------------
 
-bool QtlMovieDvd::lessThan(const QtlMovieStreamInfoPtr& p1, const QtlMovieStreamInfoPtr& p2)
+bool QtlMovieDvd::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2)
 {
     // A null pointer is always less than a non null pointer.
     if (p1.isNull() || p2.isNull()) {
@@ -379,7 +379,7 @@ bool QtlMovieDvd::lessThan(const QtlMovieStreamInfoPtr& p1, const QtlMovieStream
     int id2 = p2->streamId();
 
     // At most 8 audio streams, the logical order in the low-order 3 bits.
-    if (p1->streamType() == QtlMovieStreamInfo::Audio) {
+    if (p1->streamType() == QtlMediaStreamInfo::Audio) {
         id1 &= 0x07;
         id2 &= 0x07;
     }

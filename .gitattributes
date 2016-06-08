@@ -1,0 +1,42 @@
+# How git should manipulate text files.
+#
+
+*.a     binary
+*.c     text
+*.cpp   text
+*.dox   text
+*.exe   binary
+*.h     text
+*.html  text eol=lf
+*.icns  binary
+*.ico   binary
+*.jpg   binary
+*.lib   binary
+*.md    text
+*.png   binary
+*.pri   text
+*.pro   text
+*.props text eol=crlf
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+*.qrc   text
+*.rc    text eol=crlf
+*.sh    text eol=lf
+*.sln   text eol=crlf
+*.srt   text
+*.ttf   binary
+*.txt   text
+*.ui    text
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+*.wav   binary
+
+Makefile* text eol=lf
+AUTHORS   text
+COPYING   text
+
+# Problem about .ts files: Can be either
+# - Qt translation files (text, XML)
+# - MPEG transport streams (binary), use .stream instead for test files
+*.stream binary
+*_??.ts text

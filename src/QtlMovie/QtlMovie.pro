@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -30,8 +30,8 @@
 #
 #----------------------------------------------------------------------------
 
-CONFIG += qts qtl
-include(../Qts/Qts.pri)
+CONFIG += libQts libQtl
+include(../libQts/libQts.pri)
 
 # The application uses QtMultimedia and, on Windows with Qt >= 5.2, winextras.
 QT += multimedia
@@ -58,7 +58,6 @@ SOURCES += main.cpp \
     QtlMovieAction.cpp \
     QtlMovieDvdAuthorProcess.cpp \
     QtlMovieDeleteAction.cpp \
-    QtlMovieStreamInfo.cpp \
     QtlMovieFFmpeg.cpp \
     QtlMovieFFprobeTags.cpp \
     QtlMovieDvd.cpp \
@@ -95,7 +94,6 @@ HEADERS += \
     QtlMovieAction.h \
     QtlMovieDvdAuthorProcess.h \
     QtlMovieDeleteAction.h \
-    QtlMovieStreamInfo.h \
     QtlMovieFFmpeg.h \
     QtlMovieFFprobeTags.h \
     QtlMovieDvd.h \

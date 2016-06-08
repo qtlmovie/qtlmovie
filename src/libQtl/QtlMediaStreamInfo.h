@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,43 +26,53 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieStreamInfo.h
+//! @file QtlMediaStreamInfo.h
 //!
-//! Declare the class QtlMovieStreamInfo.
+//! Declare the class QtlMediaStreamInfo.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIESTREAMINFO_H
-#define QTLMOVIESTREAMINFO_H
+#ifndef QTLMEDIASTREAMINFO_H
+#define QTLMEDIASTREAMINFO_H
 
 #include <QtCore>
 #include "QtlSmartPointer.h"
 
+#define QTL_DAR_4_3   (float(4.0)/float(3.0))  //!< Display aspect ratio value for 4:3.
+#define QTL_DAR_16_9 (float(16.0)/float(9.0))  //!< Display aspect ratio value for 16:9.
+#define QTL_DVD_DAR              QTL_DAR_16_9  //!< Display aspect ratio for DVD.
+#define QTL_DVD_DAR_FFMPEG             "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
+
 //
 // Forward definition of the class in this file.
 //
-class QtlMovieStreamInfo;
+class QtlMediaStreamInfo;
 
 //!
-//! Smart pointer to a QtlMovieStreamInfo (non thread-safe).
+//! Smart pointer to a QtlMediaStreamInfo (non thread-safe).
 //!
-typedef QtlSmartPointer<QtlMovieStreamInfo,QtlNullMutexLocker> QtlMovieStreamInfoPtr;
+typedef QtlSmartPointer<QtlMediaStreamInfo,QtlNullMutexLocker> QtlMediaStreamInfoPtr;
 
 //!
-//! Vector of smart pointers to QtlMovieStreamInfo (non thread-safe).
+//! Vector of smart pointers to QtlMediaStreamInfo (non thread-safe).
 //!
-typedef QVector<QtlMovieStreamInfoPtr> QtlMovieStreamInfoPtrVector;
+typedef QVector<QtlMediaStreamInfoPtr> QtlMediaStreamInfoPtrVector;
+
+//!
+//! List of smart pointers to QtlMediaStreamInfo (non thread-safe).
+//!
+typedef QList<QtlMediaStreamInfoPtr> QtlMediaStreamInfoPtrList;
 
 //!
 //! Description of a stream (video, audio, subtitle) in a multimedia file.
 //!
-class QtlMovieStreamInfo
+class QtlMediaStreamInfo
 {
 public:
     //!
     //! Default constructor.
     //!
-    QtlMovieStreamInfo();
+    QtlMediaStreamInfo();
 
     //!
     //! Type of stream in a multimedia file.
@@ -75,12 +85,28 @@ public:
     };
 
     //!
+    //! Convert a StreamType into a string.
+    //! @param [in] type Stream type.
+    //! @return Human readable string.
+    //!
+    static QString streamTypeName(StreamType type);
+
+    //!
     //! Get the stream type.
     //! @return The stream type.
     //!
     StreamType streamType() const
     {
         return _streamType;
+    }
+
+    //!
+    //! Get the stream type as a string.
+    //! @return The stream type as a string.
+    //!
+    QString streamTypeName() const
+    {
+        return streamTypeName(_streamType);
     }
 
     //!
@@ -516,7 +542,7 @@ public:
     //! are added in the stream in @a destination.
     //! @param [in] source A list of stream information.
     //!
-    static void merge(QtlMovieStreamInfoPtrVector& destination, const QtlMovieStreamInfoPtrVector& source);
+    static void merge(QtlMediaStreamInfoPtrVector& destination, const QtlMediaStreamInfoPtrVector& source);
 
 private:
     StreamType   _streamType;       //!< Stream type (audio, video, etc.)
@@ -552,4 +578,4 @@ private:
     static void add(QString& str, const QString& item, const QString& separator = ", ");
 };
 
-#endif // QTLMOVIESTREAMINFO_H
+#endif // QTLMEDIASTREAMINFO_H

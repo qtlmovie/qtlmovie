@@ -233,7 +233,7 @@ void QtlMovieEditTask::showInputFileProperties()
 
 void QtlMovieEditTask::showAudioTest()
 {
-    if (_task != 0 && _task->inputFile()->streamCount(QtlMovieStreamInfo::Audio) > 0) {
+    if (_task != 0 && _task->inputFile()->streamCount(QtlMediaStreamInfo::Audio) > 0) {
         QtlMovieAudioTestDialog dialog(_task->inputFile(), _ui.boxAudioStreams->checkedId(), _settings, _log, this);
         dialog.exec();
     }
@@ -335,7 +335,7 @@ void QtlMovieEditTask::inputFileFormatChanged()
     const int streamCount = _task == 0 ? 0 : _task->inputFile()->streamCount();
     for (int si = 0; si < streamCount; ++si) {
 
-        const QtlMovieStreamInfoPtr stream(_task->inputFile()->streamInfo(si));
+        const QtlMediaStreamInfoPtr stream(_task->inputFile()->streamInfo(si));
         Q_ASSERT(!stream.isNull());
 
         QtlButtonGrid* box = 0;
@@ -343,19 +343,19 @@ void QtlMovieEditTask::inputFileFormatChanged()
 
         // Select group box and widget type based on stream type.
         switch (stream->streamType()) {
-        case QtlMovieStreamInfo::Video:
+        case QtlMediaStreamInfo::Video:
             box = _ui.boxVideoStreams;
             selected = si == _task->inputFile()->selectedVideoStreamIndex();
             break;
-        case QtlMovieStreamInfo::Audio:
+        case QtlMediaStreamInfo::Audio:
             box = _ui.boxAudioStreams;
             selected = si == _task->inputFile()->selectedAudioStreamIndex();
             break;
-        case QtlMovieStreamInfo::Subtitle:
+        case QtlMediaStreamInfo::Subtitle:
             box = _ui.boxSubtitleStreams;
             selected = si == _task->inputFile()->selectedSubtitleStreamIndex();
             break;
-        case QtlMovieStreamInfo::Other:
+        case QtlMediaStreamInfo::Other:
             // Ignore these streams.
             break;
         default:
@@ -518,7 +518,7 @@ void QtlMovieEditTask::resetForcedDisplayAspectRatio()
 
     if (_task != 0) {
         // Update the "Forced DAR" editable value with actual video DAR.
-        const QtlMovieStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
+        const QtlMediaStreamInfoPtr video(_task->inputFile()->selectedVideoStreamInfo());
         if (!video.isNull()) {
             _ui.editForceDAR->setText(video->displayAspectRatioString(true, true));
         }

@@ -36,7 +36,7 @@
 #define QTLMOVIEINPUTFILE_H
 
 #include "QtlFile.h"
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieFFprobeTags.h"
 #include "QtlMovieTeletextSearch.h"
@@ -104,21 +104,21 @@ public:
     //! @param [in] streamType Stream type to look for.
     //! @return Number of streams in the file for that type.
     //!
-    int streamCount(QtlMovieStreamInfo::StreamType streamType) const;
+    int streamCount(QtlMediaStreamInfo::StreamType streamType) const;
 
     //!
     //! Get the information about the first stream in the file matching a given type.
     //! @param [in] streamType Stream type to look for.
     //! @return A smart pointer to the stream information data or a null pointer if not found.
     //!
-    QtlMovieStreamInfoPtr firstStream(QtlMovieStreamInfo::StreamType streamType) const;
+    QtlMediaStreamInfoPtr firstStream(QtlMediaStreamInfo::StreamType streamType) const;
 
     //!
     //! Get the information about a stream in input file.
     //! @param [in] streamIndex Index of the stream to query, from 0 to streamCount()-1.
     //! @return A smart pointer to the stream information data or a null pointer on error.
     //!
-    QtlMovieStreamInfoPtr streamInfo(int streamIndex) const;
+    QtlMediaStreamInfoPtr streamInfo(int streamIndex) const;
 
     //!
     //! Try to evaluate the duration of the media file in seconds.
@@ -192,7 +192,7 @@ public:
     //! Get the information about the selected video stream.
     //! @return A smart pointer to the stream information data or a null pointer if no stream is selected.
     //!
-    QtlMovieStreamInfoPtr selectedVideoStreamInfo() const
+    QtlMediaStreamInfoPtr selectedVideoStreamInfo() const
     {
         return streamInfo(_selectedVideoStreamIndex);
     }
@@ -213,7 +213,7 @@ public:
     //! Get the information about the selected audio stream.
     //! @return A smart pointer to the stream information data or a null pointer if no stream is selected.
     //!
-    QtlMovieStreamInfoPtr selectedAudioStreamInfo() const
+    QtlMediaStreamInfoPtr selectedAudioStreamInfo() const
     {
         return streamInfo(_selectedAudioStreamIndex);
     }
@@ -234,7 +234,7 @@ public:
     //! Get the information about the selected subtitle stream.
     //! @return A smart pointer to the stream information data or a null pointer if no stream is selected.
     //!
-    QtlMovieStreamInfoPtr selectedSubtitleStreamInfo() const
+    QtlMediaStreamInfoPtr selectedSubtitleStreamInfo() const
     {
         return streamInfo(_selectedSubtitleStreamIndex);
     }
@@ -319,12 +319,12 @@ private slots:
     //! Invoked when a Teletext subtitle stream is found.
     //! @param [in] stream A smart pointer to the stream info data.
     //!
-    void foundTeletextSubtitles(QtlMovieStreamInfoPtr stream);
+    void foundTeletextSubtitles(QtlMediaStreamInfoPtr stream);
     //!
     //! Invoked when a Closed Captions stream is found.
     //! @param [in] stream A smart pointer to the stream info data.
     //!
-    void foundClosedCaptions(QtlMovieStreamInfoPtr stream);
+    void foundClosedCaptions(QtlMediaStreamInfoPtr stream);
     //!
     //! Invoked when the search for Teletext subtitles completes.
     //! @param [in] success True on success, false on error.
@@ -341,8 +341,8 @@ private:
     const QtlMovieSettings*     _settings;       //!< Application settings.
     QString                     _ffmpegInput;    //!< Name to specify as input to ffmpeg.
     QtlMovieFFprobeTags         _ffInfo;         //!< Media info in ffprobe flat format.
-    QtlMovieStreamInfoPtrVector _streams;        //!< Stream information.
-    QtlMovieStreamInfoPtrVector _dvdIfoStreams;  //!< Stream info from the DVD .IFO file (when applicable).
+    QtlMediaStreamInfoPtrVector _streams;        //!< Stream information.
+    QtlMediaStreamInfoPtrVector _dvdIfoStreams;  //!< Stream info from the DVD .IFO file (when applicable).
     QtlByteBlock                _dvdPalette;     //!< DVD color palette in RGB format.
     QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
     int     _ffprobeInProgress;                  //!< Execution of ffprobe in progress.

@@ -26,12 +26,11 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlMovieStreamInfo.
+// Define the class QtlMediaStreamInfo.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieStreamInfo.h"
-#include "QtlMovie.h"
+#include "QtlMediaStreamInfo.h"
 #include "QtlIsoLanguages.h"
 #include "QtlNumUtils.h"
 
@@ -40,7 +39,7 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieStreamInfo::QtlMovieStreamInfo() :
+QtlMediaStreamInfo::QtlMediaStreamInfo() :
     _streamType(Other),
     _title(),
     _codecName(),
@@ -69,10 +68,26 @@ QtlMovieStreamInfo::QtlMovieStreamInfo() :
 
 
 //----------------------------------------------------------------------------
+// Convert a StreamType into a string.
+//----------------------------------------------------------------------------
+
+QString QtlMediaStreamInfo::streamTypeName(QtlMediaStreamInfo::StreamType type)
+{
+    switch (type) {
+        case Video:    return "Video";
+        case Audio:    return "Audio";
+        case Subtitle: return "Subtitle";
+        case Other:    return "Other";
+        default:       return QString::number(int(type));
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Get the type of a subtitle file, based on its extension.
 //----------------------------------------------------------------------------
 
-QtlMovieStreamInfo::SubtitleType QtlMovieStreamInfo::subtitleType(const QString& fileName, bool checkExistence)
+QtlMediaStreamInfo::SubtitleType QtlMediaStreamInfo::subtitleType(const QString& fileName, bool checkExistence)
 {
     // No file specified => not a subtitle file.
     if (fileName.isEmpty()) {
@@ -116,7 +131,7 @@ QtlMovieStreamInfo::SubtitleType QtlMovieStreamInfo::subtitleType(const QString&
 // Get the usual file extension for subtitle.
 //----------------------------------------------------------------------------
 
-QString QtlMovieStreamInfo::fileExtension(SubtitleType type)
+QString QtlMediaStreamInfo::fileExtension(SubtitleType type)
 {
     switch (type) {
     case SubRip:
@@ -142,10 +157,10 @@ QString QtlMovieStreamInfo::fileExtension(SubtitleType type)
 // Merge two lists of stream informations.
 //----------------------------------------------------------------------------
 
-void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const QtlMovieStreamInfoPtrVector& source)
+void QtlMediaStreamInfo::merge(QtlMediaStreamInfoPtrVector& destination, const QtlMediaStreamInfoPtrVector& source)
 {
     // Loop on all destination streams.
-    foreach (const QtlMovieStreamInfoPtr& dest, destination) {
+    foreach (const QtlMediaStreamInfoPtr& dest, destination) {
 
         // If the stream has no stream id, cannot find its counterpart in source.
         if (dest.isNull() || dest->_streamId < 0) {
@@ -153,8 +168,8 @@ void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const Q
         }
 
         // Search its counterpart in source list.
-        QtlMovieStreamInfoPtr src;
-        foreach (const QtlMovieStreamInfoPtr& s, source) {
+        QtlMediaStreamInfoPtr src;
+        foreach (const QtlMediaStreamInfoPtr& s, source) {
             if (!s.isNull() && s->_streamId == dest->_streamId) {
                 src = s;
                 break;
@@ -235,7 +250,7 @@ void QtlMovieStreamInfo::merge(QtlMovieStreamInfoPtrVector& destination, const Q
 // Append a separator to a string if it is non empty and a new item.
 //----------------------------------------------------------------------------
 
-void QtlMovieStreamInfo::add(QString& str, const QString& item, const QString& separator)
+void QtlMediaStreamInfo::add(QString& str, const QString& item, const QString& separator)
 {
     if (!item.isEmpty()) {
         if (!str.isEmpty()) {
@@ -250,7 +265,7 @@ void QtlMovieStreamInfo::add(QString& str, const QString& item, const QString& s
 // Get a human readable full description of the stream.
 //----------------------------------------------------------------------------
 
-QString QtlMovieStreamInfo::description(bool compact) const
+QString QtlMediaStreamInfo::description(bool compact) const
 {
     // The description is built here.
     QString result;
@@ -366,17 +381,17 @@ QString QtlMovieStreamInfo::description(bool compact) const
 // Accessors.
 //----------------------------------------------------------------------------
 
-void QtlMovieStreamInfo::setTitle(const QString& title)
+void QtlMediaStreamInfo::setTitle(const QString& title)
 {
     _title = title.trimmed();
 }
 
-void QtlMovieStreamInfo::setCodecName(const QString& codecName)
+void QtlMediaStreamInfo::setCodecName(const QString& codecName)
 {
     _codecName = codecName.trimmed();
 }
 
-void QtlMovieStreamInfo::setLanguage(const QString& language)
+void QtlMediaStreamInfo::setLanguage(const QString& language)
 {
     _language = language.trimmed().toLower();
     if (_language == "und") {
@@ -385,42 +400,42 @@ void QtlMovieStreamInfo::setLanguage(const QString& language)
     }
 }
 
-QString QtlMovieStreamInfo::ffSpecifier(int fileIndex) const
+QString QtlMediaStreamInfo::ffSpecifier(int fileIndex) const
 {
     return _ffIndex < 0 ? QString() : QStringLiteral("%1:%2").arg(fileIndex).arg(_ffIndex);
 }
 
-void QtlMovieStreamInfo::setFFIndex(int ffIndex)
+void QtlMediaStreamInfo::setFFIndex(int ffIndex)
 {
     _ffIndex = ffIndex < 0 ? -1 : ffIndex;
 }
 
-void QtlMovieStreamInfo::setTeletextPage(int teletextPage)
+void QtlMediaStreamInfo::setTeletextPage(int teletextPage)
 {
     _teletextPage = teletextPage < 0 ? -1 : teletextPage;
 }
 
-void QtlMovieStreamInfo::setCcNumber(int ccNumber)
+void QtlMediaStreamInfo::setCcNumber(int ccNumber)
 {
     _ccNumber = ccNumber >= 1 ? ccNumber : -1;
 }
 
-void QtlMovieStreamInfo::setWidth(int width)
+void QtlMediaStreamInfo::setWidth(int width)
 {
     _width = width < 0 ? 0 : width;
 }
 
-void QtlMovieStreamInfo::setHeight(int height)
+void QtlMediaStreamInfo::setHeight(int height)
 {
     _height = height < 0 ? 0 : height;
 }
 
-float QtlMovieStreamInfo::displayAspectRatio(bool original) const
+float QtlMediaStreamInfo::displayAspectRatio(bool original) const
 {
     return original || qtlFloatZero(_forcedDar) ? _dar : _forcedDar;
 }
 
-QString QtlMovieStreamInfo::displayAspectRatioString(bool original, bool validFloat) const
+QString QtlMediaStreamInfo::displayAspectRatioString(bool original, bool validFloat) const
 {
     const float dar = displayAspectRatio(original);
     if (qtlFloatZero(dar)) {
@@ -442,37 +457,37 @@ QString QtlMovieStreamInfo::displayAspectRatioString(bool original, bool validFl
     }
 }
 
-void QtlMovieStreamInfo::setDisplayAspectRatio(float dar)
+void QtlMediaStreamInfo::setDisplayAspectRatio(float dar)
 {
     _dar = qtlFloatZero(dar) ? 0.0 : dar;
 }
 
-void QtlMovieStreamInfo::setForcedDisplayAspectRatio(float dar)
+void QtlMediaStreamInfo::setForcedDisplayAspectRatio(float dar)
 {
     _forcedDar = qtlFloatZero(dar) ? 0.0 : dar;
 }
 
-void QtlMovieStreamInfo::setRotation(int rotation)
+void QtlMediaStreamInfo::setRotation(int rotation)
 {
     _rotation = rotation % 360;
 }
 
-void QtlMovieStreamInfo::setBitRate(int bitRate)
+void QtlMediaStreamInfo::setBitRate(int bitRate)
 {
     _bitRate = bitRate < 0 ? 0 : bitRate;
 }
 
-void QtlMovieStreamInfo::setFrameRate(float frameRate)
+void QtlMediaStreamInfo::setFrameRate(float frameRate)
 {
     _frameRate = qtlFloatZero(frameRate) ? 0.0 : frameRate;
 }
 
-void QtlMovieStreamInfo::setAudioChannels(int audioChannels)
+void QtlMediaStreamInfo::setAudioChannels(int audioChannels)
 {
     _audioChannels = audioChannels < 0 ? 0 : audioChannels;
 }
 
-void QtlMovieStreamInfo::setSamplingRate(int samplingRate)
+void QtlMediaStreamInfo::setSamplingRate(int samplingRate)
 {
     _samplingRate = samplingRate < 9 ? 0 : samplingRate;
 }

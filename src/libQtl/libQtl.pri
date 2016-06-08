@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 #----------------------------------------------------------------------------
 #
 # Common qmake definition file.
-# Must be included from all projects using the Qtl library.
+# Must be included from all projects using the libQtl library.
 #
 #----------------------------------------------------------------------------
 
@@ -84,14 +84,19 @@ updateqm.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm locale/${QMAKE_FILE_BA
 updateqm.CONFIG += no_link target_predeps
 QMAKE_EXTRA_COMPILERS += updateqm
 
-# Applications using the Qtl library depends on it.
+# Applications using the libQtl library depends on it.
 
-qtl {
-    LIBS += -L../Qtl -lQtl
-    PRE_TARGETDEPS += ../Qtl/libQtl.a
-    INCLUDEPATH += ../Qtl
-    DEPENDPATH += ../Qtl
+libQtl {
+    CONFIG += libdvdcss
+    LIBS += -L../libQtl -lQtl
+    PRE_TARGETDEPS += ../libQtl/libQtl.a
+    INCLUDEPATH += ../libQtl
+    DEPENDPATH += ../libQtl
 }
+
+# Configuration with "CONFIG += libdvdcss".
+
+include(../libdvdcss/libdvdcss.pri)
 
 # Applications using OpenSSL shall use "CONFIG += openssl".
 # On Windows, assume default location used by binary installers from

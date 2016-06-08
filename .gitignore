@@ -25,3 +25,4 @@ build-*-[Dd]ebug-[Ss]tatic
 *.log
 *.tmp
 .DS_Store
+.project

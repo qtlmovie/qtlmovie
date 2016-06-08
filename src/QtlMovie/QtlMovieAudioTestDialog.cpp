@@ -72,8 +72,8 @@ QtlMovieAudioTestDialog::QtlMovieAudioTestDialog(const QtlMovieInputFile* inputF
     for (int si = 0; si < streamCount; ++si) {
 
         // Stream description.
-        const QtlMovieStreamInfoPtr stream(_file->streamInfo(si));
-        if (!stream.isNull() && stream->streamType() == QtlMovieStreamInfo::Audio) {
+        const QtlMediaStreamInfoPtr stream(_file->streamInfo(si));
+        if (!stream.isNull() && stream->streamType() == QtlMediaStreamInfo::Audio) {
 
             // Create a radio button for the audio stream.
             QRadioButton* radio = new QRadioButton(stream->description(true), _ui.audioStreamsBox);
@@ -176,7 +176,7 @@ void QtlMovieAudioTestDialog::start()
     Q_ASSERT(_audio == 0);
 
     // Get selected audio stream.
-    const QtlMovieStreamInfoPtr stream(_file->streamInfo(_ui.audioStreamsBox->checkedId()));
+    const QtlMediaStreamInfoPtr stream(_file->streamInfo(_ui.audioStreamsBox->checkedId()));
     if (stream.isNull()) {
         _log->line(tr("No audio stream in input file."));
         return;

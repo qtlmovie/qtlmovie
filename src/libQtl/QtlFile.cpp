@@ -427,13 +427,18 @@ bool QtlFile::writeBinaryFile(const QString& fileName, const QtlByteBlock& conte
 {
     // Open the file. Note: the ~QFile() destructor will close it.
     QFile file(fileName);
-    if (!file.open(QFile::WriteOnly)) {
-        return false;
-    }
+    return file.open(QFile::WriteOnly) && writeBinary(file, content);
+}
 
-    // Write the file.
-    const char* current = reinterpret_cast<const char*>(content.data());
-    qint64 remain = content.size();
+
+//-----------------------------------------------------------------------------
+// Write binary data into an open file.
+//-----------------------------------------------------------------------------
+
+bool QtlFile::writeBinary(QIODevice& file, const void* data, int size)
+{
+    const char* current = reinterpret_cast<const char*>(data);
+    qint64 remain = size;
     while (remain > 0) {
         // Write as many bytes as possible.
         const qint64 written = file.write(current, remain);

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2016, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,22 +26,21 @@
 #
 #----------------------------------------------------------------------------
 #
-# Qmake project file for the TestTeletext tool.
+# Common qmake definition file.
+# Must be included from all projects using the Qts library.
 #
 #----------------------------------------------------------------------------
 
-CONFIG += libQts libQtl
-include(../libQts/libQts.pri)
+# Applications using the Qts library depends on it and Qtl.
 
-TARGET = TestTeletext
-TEMPLATE = app
+libQts {
+    CONFIG += libQtl
+    LIBS += -L../libQts -lQts
+    PRE_TARGETDEPS += ../libQts/libQts.a
+    INCLUDEPATH += ../libQts
+    DEPENDPATH += ../libQts
+}
 
-# QTest configuration
-QT += testlib
-QT -= gui
-CONFIG += console
-CONFIG -= app_bundle
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
+# General application config
 
-SOURCES += \
-    TestTeletext.cpp
+include(../libQtl/libQtl.pri)

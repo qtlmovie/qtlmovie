@@ -73,9 +73,6 @@
 #define QTL_SELECT_TARGET_SUBTITLES         true  //!< Automatically select subtitles for the target language.
 #define QTL_CAPITALIZE_CC                  false  //!< Capitalize US Closed Captions (suppress ALL CAPS).
 
-#define QTL_DAR_4_3      (float(4.0)/float(3.0))  //!< Display aspect ratio value for 4:3.
-#define QTL_DAR_16_9    (float(16.0)/float(9.0))  //!< Display aspect ratio value for 16:9.
-
 //
 // Transcoding presets.
 //
@@ -86,8 +83,6 @@
 #define QTL_DVD_PAL_VIDEO_HEIGHT             576  //!< Video height (pixels) for PAL DVD.
 #define QTL_DVD_NTSC_VIDEO_WIDTH             720  //!< Video width (pixels) for NTSC DVD.
 #define QTL_DVD_NTSC_VIDEO_HEIGHT            480  //!< Video height (pixels) for NTSC DVD.
-#define QTL_DVD_DAR                 QTL_DAR_16_9  //!< Display aspect ratio for DVD.
-#define QTL_DVD_DAR_FFMPEG                "16:9"  //!< Same as QTL_DVD_DAR, used with ffmpeg -aspect option.
 
 #define QTL_IPAD_DEFAULT_VIDEO_QUALITY        11  //!< H.264 video default quality indicator for iPad.
 #define QTL_IPHONE_DEFAULT_VIDEO_QUALITY      11  //!< H.264 video default quality indicator for iPhone.

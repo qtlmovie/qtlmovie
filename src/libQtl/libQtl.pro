@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013-2015, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,16 +26,18 @@
 #
 #----------------------------------------------------------------------------
 #
-# Qtl, Qt utility library.
-# Qmake project file for the Qtl library.
+# libQtl, Qt utility library.
+# Qmake project file for the libQtl library.
 #
 #----------------------------------------------------------------------------
 
-include(Qtl.pri)
+include(libQtl.pri)
 
 TARGET = Qtl
 TEMPLATE = lib
 CONFIG += staticlib
+
+INCLUDEPATH += ../libdvdcss/include
 
 SOURCES += \
     QtlByteBlock.cpp \
@@ -75,7 +77,9 @@ SOURCES += \
     QtlSelectionRectDelegate.cpp \
     QtlOpticalDrive.cpp \
     QtlFileSystemInfo.cpp \
-    QtlSynchronousProcess.cpp
+    QtlSynchronousProcess.cpp \
+    QtlMediaStreamInfo.cpp \
+    QtlDvdTitleSet.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -136,7 +140,10 @@ HEADERS += \
     QtlSelectionRectDelegate.h \
     QtlOpticalDrive.h \
     QtlFileSystemInfo.h \
-    QtlSynchronousProcess.h
+    QtlSynchronousProcess.h \
+    QtlMediaStreamInfo.h \
+    QtlDvdTitleSet.h \
+    QtlStdoutLogger.h
 
 FORMS += \
     QtlBrowserDialog.ui \

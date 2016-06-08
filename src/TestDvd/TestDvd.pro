@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,21 +26,18 @@
 #
 #----------------------------------------------------------------------------
 #
-# Common qmake definition file.
-# Must be included from all projects using the Qts library.
+# Qmake project file for the TestDvd tool.
 #
 #----------------------------------------------------------------------------
 
-# Applications using the Qts library depends on it and Qtl.
+CONFIG += libQtl
+include(../libQtl/libQtl.pri)
 
-qts {
-    CONFIG += qtl
-    LIBS += -L../Qts -lQts
-    PRE_TARGETDEPS += ../Qts/libQts.a
-    INCLUDEPATH += ../Qts
-    DEPENDPATH += ../Qts
-}
+TARGET = TestDvd
+TEMPLATE = app
 
-# General application config
+QT -= gui
+CONFIG += console
+CONFIG -= app_bundle
 
-include(../Qtl/Qtl.pri)
+SOURCES += TestDvd.cpp

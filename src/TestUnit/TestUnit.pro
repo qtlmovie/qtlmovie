@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -30,10 +30,10 @@
 #
 #----------------------------------------------------------------------------
 
-CONFIG += qts qtl
-include(../Qts/Qts.pri)
+CONFIG += libQts libQtl
+include(../libQts/libQts.pri)
 
-TARGET = UnitTest
+TARGET = TestUnit
 TEMPLATE = app
 
 # QTest configuration
@@ -86,4 +86,4 @@ HEADERS += \
     QtsData/psi_sdt_r6_sections.h
 
 RESOURCES += \
-    UnitTest.qrc
+    TestUnit.qrc

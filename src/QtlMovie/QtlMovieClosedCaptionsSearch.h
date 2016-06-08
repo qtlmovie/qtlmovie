@@ -38,7 +38,7 @@
 #include <QtCore>
 #include "QtlMovieProcess.h"
 #include "QtlMovieSettings.h"
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 
 //!
 //! This file scans a multimedia file and searches Closed Captions streams.
@@ -66,7 +66,7 @@ signals:
     //! Emitted when a Closed Captions stream is found.
     //! @param [in] stream A smart pointer to the stream info data.
     //!
-    void foundClosedCaptions(QtlMovieStreamInfoPtr stream);
+    void foundClosedCaptions(QtlMediaStreamInfoPtr stream);
 
 protected:
     //!
@@ -102,7 +102,7 @@ private:
 
     //!
     //! Emit the foundClosedCaptions() signal.
-    //! @param ccNumber CC number (see QtlMovieStreamInfo::ccNumber()).
+    //! @param ccNumber CC number (see QtlMediaStreamInfo::ccNumber()).
     //!
     void emitFoundClosedCaptions(int ccNumber);
 

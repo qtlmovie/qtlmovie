@@ -74,14 +74,14 @@ void QtlMovieFFprobeTags::loadFFprobeOutput(const QString& ffprobeOutput)
 // Analyze the FFprobe tags and build a list of stream info.
 //----------------------------------------------------------------------------
 
-void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
+void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoPtrVector& streams)
 {
     // Loop on all streams.
     const int ffStreamCount = intValue("format.nb_streams");
     for (int index = 0; index < ffStreamCount; ++index) {
 
         // FFprobe info reference.
-        const QtlMovieStreamInfoPtr info(new QtlMovieStreamInfo());
+        const QtlMediaStreamInfoPtr info(new QtlMediaStreamInfo());
         info->setFFIndex(index);
 
         // Codec description.
@@ -96,13 +96,13 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
 
         // Stream type.
         if (codecType == "video") {
-            info->setStreamType(QtlMovieStreamInfo::Video);
+            info->setStreamType(QtlMediaStreamInfo::Video);
         }
         else if (codecType == "audio") {
-            info->setStreamType(QtlMovieStreamInfo::Audio);
+            info->setStreamType(QtlMediaStreamInfo::Audio);
         }
         else if (codecType.startsWith("subtitle")) {
-            info->setStreamType(QtlMovieStreamInfo::Subtitle);
+            info->setStreamType(QtlMediaStreamInfo::Subtitle);
         }
 
         // Video size attributes (usually zeroes on non-video streams).
@@ -134,27 +134,27 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMovieStreamInfoPtrVector& streams)
 
         // Subtitle type is based on codec name.
         // Closed Captions are embedded in a video stream and are not detected by ffprobe.
-        if (info->streamType() == QtlMovieStreamInfo::Subtitle) {
+        if (info->streamType() == QtlMediaStreamInfo::Subtitle) {
             if (codecName == "subrip" || codecName == "srt") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubRip);
+                info->setSubtitleType(QtlMediaStreamInfo::SubRip);
             }
             else if (codecName == "ssa") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubSsa);
+                info->setSubtitleType(QtlMediaStreamInfo::SubSsa);
             }
             else if (codecName == "ass") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubAss);
+                info->setSubtitleType(QtlMediaStreamInfo::SubAss);
             }
             else if (codecName == "vobsub" || codecName == "dvdsub") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubDvd);
+                info->setSubtitleType(QtlMediaStreamInfo::SubDvd);
             }
             else if (codecName == "dvbsub") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubDvb);
+                info->setSubtitleType(QtlMediaStreamInfo::SubDvb);
             }
             else if (codecName == "teletext" || codecName == "dvb_teletext") {
-                info->setSubtitleType(QtlMovieStreamInfo::SubTeletext);
+                info->setSubtitleType(QtlMediaStreamInfo::SubTeletext);
             }
             else if (!codecName.isEmpty()) {
-                info->setSubtitleType(QtlMovieStreamInfo::SubOther);
+                info->setSubtitleType(QtlMediaStreamInfo::SubOther);
             }
         }
 

@@ -264,6 +264,30 @@ public:
     static bool writeBinaryFile(const QString& fileName, const QtlByteBlock& content);
 
     //!
+    //! Write binary data into an open file.
+    //! Loop on write operations until all data are written or an error occured.
+    //! Error reporting is minimal.
+    //! @param [in] file An open file.
+    //! @param [in] data Binary data to write.
+    //! @return True on success, false on error.
+    //!
+    static bool writeBinary(QIODevice& file, const QtlByteBlock& data)
+    {
+        return writeBinary(file, data.data(), data.size());
+    }
+
+    //!
+    //! Write binary data into an open file.
+    //! Loop on write operations until all data are written or an error occured.
+    //! Error reporting is minimal.
+    //! @param [in] file An open file.
+    //! @param [in] data Address of binary data to write.
+    //! @param [in] size Size in bytes of binary data to write.
+    //! @return True on success, false on error.
+    //!
+    static bool writeBinary(QIODevice& file, const void* data, int size);
+
+    //!
     //! Write the binary content of the file.
     //! Error reporting is minimal.
     //! @param [in] content Content of the file to write.

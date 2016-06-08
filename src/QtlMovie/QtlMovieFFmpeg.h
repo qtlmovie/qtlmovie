@@ -38,7 +38,7 @@
 #include "QtlByteBlock.h"
 #include "QtlMovie.h"
 #include "QtlMovieSettings.h"
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 #include "QtlMovieOutputFile.h"
 
 //!
@@ -92,7 +92,7 @@ namespace QtlMovieFFmpeg
     //! @param [in] audioStream Audio stream description. Can be null.
     //! @return FFmpeg options, possibly empty.
     //!
-    QStringList dvdAudioOptions(const QtlMovieSettings* settings, const QtlMovieStreamInfoPtr& audioStream);
+    QStringList dvdAudioOptions(const QtlMovieSettings* settings, const QtlMediaStreamInfoPtr& audioStream);
 
     //!
     //! Format the argument of an ffmpeg filter using proper escaping.
@@ -162,7 +162,7 @@ namespace QtlMovieFFmpeg
     //! @param [out] dar New display aspect ratio after rotation.
     //!
     void addRotateOptions(const QtlMovieSettings* settings,
-                          const QtlMovieStreamInfoPtr& videoStream,
+                          const QtlMediaStreamInfoPtr& videoStream,
                           QStringList& ffmpegArguments,
                           QString& videoFilters,
                           int& width,

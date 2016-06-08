@@ -35,10 +35,9 @@
 #ifndef QTLMOVIEDVDIFOFILE_H
 #define QTLMOVIEDVDIFOFILE_H
 
-#include <QtCore>
 #include "QtlLogger.h"
 #include "QtlByteBlock.h"
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 
 //!
 //! Namespace for DVD utilities.
@@ -77,7 +76,7 @@ namespace QtlMovieDvd
     //! @param [in] log Where to log errors.
     //! @return True on success, false on error.
     //!
-    bool readIfoFile(const QString& fileName, QtlMovieStreamInfoPtrVector& streams, QtlByteBlock& palette, QtlLogger* log);
+    bool readIfoFile(const QString& fileName, QtlMediaStreamInfoPtrVector& streams, QtlByteBlock& palette, QtlLogger* log);
 
     //!
     //! Convert a YUV palette into RGB.
@@ -89,13 +88,13 @@ namespace QtlMovieDvd
     void convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log);
 
     //!
-    //! Compare two QtlMovieStreamInfoPtr for DVD stream ordering.
+    //! Compare two QtlMediaStreamInfoPtr for DVD stream ordering.
     //! We reorder stream in "DVD order" for user convenience.
     //! @param [in] p1 First pointer.
     //! @param [in] p2 Second pointer.
     //! @return True is @a p1 is logically less than @a p2.
     //!
-    bool lessThan(const QtlMovieStreamInfoPtr& p1, const QtlMovieStreamInfoPtr& p2);
+    bool lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2);
 }
 
 #endif // QTLMOVIEDVDIFOFILE_H

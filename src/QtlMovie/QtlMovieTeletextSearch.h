@@ -37,7 +37,7 @@
 
 #include <QtCore>
 #include "QtlMovieTsDemux.h"
-#include "QtlMovieStreamInfo.h"
+#include "QtlMediaStreamInfo.h"
 #include "QtsSectionDemux.h"
 
 //!
@@ -65,7 +65,7 @@ signals:
     //! Emitted when a Teletext subtitle stream is found.
     //! @param [in] stream A smart pointer to the stream info data.
     //!
-    void foundTeletextSubtitles(QtlMovieStreamInfoPtr stream);
+    void foundTeletextSubtitles(QtlMediaStreamInfoPtr stream);
 
 protected:
     //!

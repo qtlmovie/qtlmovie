@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2013, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -31,8 +31,8 @@
 #
 #----------------------------------------------------------------------------
 
-CONFIG += qtl
-include(Qts.pri)
+CONFIG += libQtl
+include(libQts.pri)
 
 TARGET = Qts
 TEMPLATE = lib
