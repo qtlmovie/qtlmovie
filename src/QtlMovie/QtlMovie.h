@@ -143,7 +143,8 @@
 //! the environment variable AV_LOG_FORCE_COLOR. The use of the environment variable
 //! NO_COLOR is deprecated and will be dropped in a following FFmpeg version.
 //!
-#define QTL_FFMPEG_LOGLEVEL "warning"
+#define QTL_FFPROBE_LOGLEVEL "warning"
+#define QTL_FFMPEG_LOGLEVEL  "warning"
 
 //!
 //! Number of MPEG Transport Stream packets to read at a time when

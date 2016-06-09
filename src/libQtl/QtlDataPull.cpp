@@ -212,7 +212,7 @@ void QtlDataPull::processNewState()
             // Transfer aborted.
             cleanupTransfer(_device, false);
             _state = Inactive;
-            _log->debug(tr("Data transfer aborted: %1").arg(_error));
+            _log->debug(tr("Data transfer aborted, read %1 bytes, written %2 bytes, error: %3").arg(_totalIn).arg(_totalOut).arg(_error));
             emit completed(false, _error);
             autoDelete();
             break;
@@ -221,7 +221,7 @@ void QtlDataPull::processNewState()
             // Proper close was requested.
             cleanupTransfer(_device, true);
             _state = Inactive;
-            _log->debug(tr("Data transfer completed"));
+            _log->debug(tr("Data transfer completed, read %1 bytes, written %2 bytes").arg(_totalIn).arg(_totalOut));
             emit completed(true, _error);
             autoDelete();
             break;

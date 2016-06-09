@@ -177,7 +177,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     // Pipe DVD content into process input.
     if (pipeDvdInput) {
         _dvdTitleSet.backgroundWrite(process->inputDevice());
-        _log->line(tr("Decrypting DVD, please be patient..."));
+        _log->line(tr("Decrypting DVD, please be patient..."), QColor("green"));
     }
 
     // Look for Closed Captions. Create a new instance of CC search.

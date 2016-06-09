@@ -65,7 +65,7 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
     const QString sizeSpec(QStringLiteral("%1M").arg(seconds));
 
     QStringList args;
-    args << "-probesize" << sizeSpec << "-analyzeduration" << sizeSpec << "-loglevel" << "0";
+    args << "-probesize" << sizeSpec << "-analyzeduration" << sizeSpec;
     return args;
 }
 
@@ -77,7 +77,8 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
 QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat)
 {
     QStringList args;
-    args << probeArguments(settings);
+    args << "-loglevel" << QTL_FFPROBE_LOGLEVEL
+         << probeArguments(settings);
     if (!fileFormat.isEmpty()) {
         args << "-f" << fileFormat;
     }
