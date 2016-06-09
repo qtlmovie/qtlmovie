@@ -62,6 +62,7 @@ public:
     //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
     //! @param [in] parent Optional parent object.
     //! @param [in] env Environment for the process. Current environment by default.
+    //! @param [in] pipeInput If true, the standard input of the process can be fed using inputDevice().
     //! @return The new QtlProcess instance.
     //!
     static QtlProcess* newInstance(const QString& program,
@@ -69,7 +70,8 @@ public:
                                    int msRunTestTimeout = 0,
                                    int maxProcessOutputSize = 0,
                                    QObject* parent = 0,
-                                   const QProcessEnvironment& env = QProcessEnvironment());
+                                   const QProcessEnvironment& env = QProcessEnvironment(),
+                                   bool pipeInput = false);
 
     //!
     //! Start the process.
@@ -82,6 +84,17 @@ public:
     //! signal is sent with a cancelation message.
     //!
     void cancel();
+
+    //!
+    //! Get the device representing the input pipe of the process.
+    //! The returned QIODevice is writeable only.
+    //! @return The input pipe as a QIODevice or zero if @a pipeInput
+    //! was set to false in the constructor.
+    //!
+    QIODevice* inputDevice() const
+    {
+        return _pipeInput ? _process : 0;
+    }
 
 signals:
     //!
@@ -115,6 +128,7 @@ private:
     const int        _msRunTestTimeout;     //!< Timeout of process execution in milliseconds. Ignored if negative or zero.
     const int        _maxProcessOutputSize; //!< Maximum size in bytes of process output. Ignored if negative or zero.
     QtlProcessResult _result;               //!< Process execution results.
+    bool             _pipeInput;            //!< Process input is an accessible pipe.
     bool             _started;              //!< start() was called.
     bool             _terminated;           //!< terminated() has been signaled.
     QProcess*        _process;              //!< Actual QProcess object.
@@ -128,13 +142,15 @@ private:
     //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
     //! @param [in] parent Optional parent object.
     //! @param [in] env Optional process environment.
+    //! @param [in] pipeInput If true, the standard input of the process can be fed using inputDevice().
     //!
     QtlProcess(const QString& program,
                const QStringList& arguments,
                int msRunTestTimeout,
                int maxProcessOutputSize,
                QObject* parent,
-               const QProcessEnvironment& env = QProcessEnvironment());
+               const QProcessEnvironment& env = QProcessEnvironment(),
+               bool pipeInput = false);
 
     //!
     //! Send the terminated() signal.

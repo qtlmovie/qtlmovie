@@ -43,9 +43,10 @@ QtlProcess* QtlProcess::newInstance(const QString& program,
                                     int msRunTestTimeout,
                                     int maxProcessOutputSize,
                                     QObject* parent,
-                                    const QProcessEnvironment& env)
+                                    const QProcessEnvironment& env,
+                                    bool pipeInput)
 {
-    return new QtlProcess(program, arguments, msRunTestTimeout, maxProcessOutputSize, parent, env);
+    return new QtlProcess(program, arguments, msRunTestTimeout, maxProcessOutputSize, parent, env, pipeInput);
 }
 
 
@@ -58,11 +59,13 @@ QtlProcess::QtlProcess(const QString& program,
                        int msRunTestTimeout,
                        int maxProcessOutputSize,
                        QObject* parent,
-                       const QProcessEnvironment& env) :
+                       const QProcessEnvironment& env,
+                       bool pipeInput) :
     QObject(parent),
     _msRunTestTimeout(msRunTestTimeout),
     _maxProcessOutputSize(maxProcessOutputSize),
     _result(program, arguments),
+    _pipeInput(pipeInput),
     _started(false),
     _terminated(false),
     _process(new QProcess(this)),
@@ -95,9 +98,10 @@ void QtlProcess::start()
     // Start the process.
     _process->start(_result.program(), _result.arguments());
 
-    // Immediately close the write channel.
-    // We have nothing to write on the standard input of the process.
-    _process->closeWriteChannel();
+    // Immediately close the write channel if we have nothing to write on the standard input of the process.
+    if (!_pipeInput) {
+        _process->closeWriteChannel();
+    }
 
     // Set a sigle-shot timer to kill process on timeout.
     if (_msRunTestTimeout > 0) {

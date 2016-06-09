@@ -60,8 +60,10 @@
 //! The content of a VTS is physically contiguous on the DVD, starting from
 //! VTS_nn_0.VOB, VTS_nn_1.VOB, etc., ending with the VTS_nn_0.BUP.
 //!
-class QtlDvdTitleSet
+class QtlDvdTitleSet : public QObject
 {
+    Q_OBJECT
+
 public:
     //!
     //! Size in bytes of a DVD sector.
@@ -72,8 +74,18 @@ public:
     //! Constructor
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
     //! @param [in] log Where to log errors.
+    //! @param [in] parent Optional parent widget.
     //!
-    QtlDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0);
+    QtlDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0);
+
+    //!
+    //! Copy constructor.
+    //! @param [in] other Other instance to copy (except parent).
+    //! If @a other is open on an encrypted DVD, the new instance has a new independent
+    //! session on the DVD and the read pointer is set to the beginning of the title set.
+    //! @param [in] parent Optional parent widget.
+    //!
+    explicit QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent = 0);
 
     //!
     //! Destructor.
@@ -186,7 +198,7 @@ public:
     //! Get the description of all video, audio and subtitle streams in the title set.
     //! @return A list of smart pointers to the description of all streams.
     //!
-    QtlMediaStreamInfoPtrList streams() const
+    QtlMediaStreamInfoPtrVector streams() const
     {
         return _streams;
     }
@@ -252,6 +264,14 @@ public:
     }
 
     //!
+    //! Start the transfer of the video content of the title set to a device.
+    //! The transfer occurs in the background.
+    //! @param destination Device onto which the transfer is done.
+    //! @return True on success, false on error.
+    //!
+    bool backgroundWrite(QIODevice* destination);
+
+    //!
     //! Check if a file is a .IFO or .VOB.
     //! @param [in] fileName Name of a file.
     //! @return True if the file name is valid for a .IFO or .VOB.
@@ -277,20 +297,20 @@ public:
     static bool lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2);
 
 private:
-    QtlNullLogger    _nullLog;           //!< Dummy null logger if none specified by caller.
-    QtlLogger*       _log;               //!< Where to log errors.
-    QString          _deviceName;        //!< DVD device name.
-    QString          _volumeId;          //!< Volume identifier.
-    bool             _isEncrypted;       //!< DVD is encrypted, need libdvdcss.
-    struct dvdcss_s* _dvdcss;            //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
-    int              _vtsNumber;         //!< Title set number.
-    QString          _ifoFileName;       //!< IFO file name.
-    QStringList      _vobFileNames;      //!< List of VOB files.
-    qint64           _vobSize;           //!< Total size in bytes of all VOB's.
-    int              _vobStartSector;    //!< First sector of VOB files on DVD media.
-    int              _nextSector;        //!< Next sector to read, relative to the beginning of the MPEG content of the VTS.
-    QtlByteBlock     _palette;           //!< VTS color palette in YUV format.
-    QtlMediaStreamInfoPtrList _streams;  //!< List of streams in the VTS.
+    QtlNullLogger    _nullLog;            //!< Dummy null logger if none specified by caller.
+    QtlLogger*       _log;                //!< Where to log errors.
+    QString          _deviceName;         //!< DVD device name.
+    QString          _volumeId;           //!< Volume identifier.
+    bool             _isEncrypted;        //!< DVD is encrypted, need libdvdcss.
+    struct dvdcss_s* _dvdcss;             //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
+    int              _vtsNumber;          //!< Title set number.
+    QString          _ifoFileName;        //!< IFO file name.
+    QStringList      _vobFileNames;       //!< List of VOB files.
+    qint64           _vobSize;            //!< Total size in bytes of all VOB's.
+    int              _vobStartSector;     //!< First sector of VOB files on DVD media.
+    int              _nextSector;         //!< Next sector to read, relative to the beginning of the MPEG content of the VTS.
+    QtlByteBlock     _palette;            //!< VTS color palette in YUV format.
+    QtlMediaStreamInfoPtrVector _streams; //!< List of streams in the VTS.
 
     //!
     //! Build the IFO and VOB file names for the VTS.
@@ -342,9 +362,6 @@ private:
     //! @return True on success, false on error.
     //!
     bool locateDirectoryEntry(int dirSector, int dirSize, const QString& entryName, int& entrySector, int& entrySize, bool& isDirectory);
-
-    // Unaccessible operations.
-    Q_DISABLE_COPY(QtlDvdTitleSet)
 };
 
 #endif // QTLDVDTITLESET_H

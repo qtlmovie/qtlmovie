@@ -65,7 +65,7 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
     const QString sizeSpec(QStringLiteral("%1M").arg(seconds));
 
     QStringList args;
-    args << "-probesize" << sizeSpec << "-analyzeduration" << sizeSpec;
+    args << "-probesize" << sizeSpec << "-analyzeduration" << sizeSpec << "-loglevel" << "0";
     return args;
 }
 
@@ -74,14 +74,14 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
 // Build FFprobe command line arguments for an input file.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName)
+QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat)
 {
     QStringList args;
-    args << probeArguments(settings)
-         << fileName
-         << "-print_format" << "flat"
-         << "-show_format"
-         << "-show_streams";
+    args << probeArguments(settings);
+    if (!fileFormat.isEmpty()) {
+        args << "-f" << fileFormat;
+    }
+    args << fileName << "-print_format" << "flat" << "-show_format" << "-show_streams";
     return args;
 }
 

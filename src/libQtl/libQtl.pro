@@ -79,7 +79,10 @@ SOURCES += \
     QtlFileSystemInfo.cpp \
     QtlSynchronousProcess.cpp \
     QtlMediaStreamInfo.cpp \
-    QtlDvdTitleSet.cpp
+    QtlDvdTitleSet.cpp \
+    QtlDataPull.cpp \
+    QtlDvdDataPull.cpp \
+    QtlFileDataPull.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -143,7 +146,10 @@ HEADERS += \
     QtlSynchronousProcess.h \
     QtlMediaStreamInfo.h \
     QtlDvdTitleSet.h \
-    QtlStdoutLogger.h
+    QtlStdoutLogger.h \
+    QtlDataPull.h \
+    QtlDvdDataPull.h \
+    QtlFileDataPull.h
 
 FORMS += \
     QtlBrowserDialog.ui \

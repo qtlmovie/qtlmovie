@@ -579,15 +579,16 @@ void QtlMovieMainWindow::about()
                        QStringLiteral("<p><b>%1</b>: %2</p>"
                            "<p>%3 %4 (%5)</p>"
                            "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
-                           "<p>Credits:<br/>"
-                           "Teletext code from Petr Kutalek's %6<br/>"
-                           "QtlMovie logo by %7</p>")
+                           "<hr/>"
+                           "<p><b>Contributions:</b></p>"
+                           "<p>Teletext code from Petr Kutalek's Telxcc.<br/>"
+                           "Libdvdcss by St&eacute;phane Borel, Sam Hocevar et al.<br/>"
+                           "QtlMovie logo by %6.</p>")
                        .arg(qtlHtmlLink(WEBREF_QTLMOVIE, "QtlMovie"))
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
                        .arg(QTLMOVIE_VERSION)
                        .arg(__DATE__)
-                       .arg(qtlHtmlLink(WEBREF_TELXCC, "Telxcc"))
                        .arg(qtlHtmlLink(WEBREF_DESIGNBOLT, "DesignBolts")));
 }
 

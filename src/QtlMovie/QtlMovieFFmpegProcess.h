@@ -63,13 +63,16 @@ public:
     //! @param [in] settings Application settings.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
+    //! @param [in] pipeInput If true, the standard input of the process can be fed
+    //! using inputDevice().
     //!
     QtlMovieFFmpegProcess(const QStringList& ffmpegArguments,
                           int inputDurationInSeconds,
                           const QString& temporaryDirectory,
                           const QtlMovieSettings* settings,
                           QtlLogger* log,
-                          QObject *parent = 0);
+                          QObject *parent = 0,
+                          bool pipeInput = false);
 
 protected:
     //!

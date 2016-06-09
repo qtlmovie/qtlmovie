@@ -51,6 +51,8 @@
 //----------------------------------------------------------------------------
 
 #include "QtlDvdTitleSet.h"
+#include "QtlDvdDataPull.h"
+#include "QtlFileDataPull.h"
 #include "QtlFile.h"
 #include "QtlHexa.h"
 #include "dvdcss.h"
@@ -93,7 +95,8 @@
 // Constructor & destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log) :
+QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject* parent) :
+    QObject(parent),
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
     _deviceName(),
@@ -119,6 +122,32 @@ QtlDvdTitleSet::~QtlDvdTitleSet()
     close();
 }
 
+QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
+    QObject(parent),
+    _nullLog(),
+    _log(other._log != 0 && other._log != &other._nullLog ? other._log : &_nullLog),
+    _deviceName(other._deviceName),
+    _volumeId(other._volumeId),
+    _isEncrypted(other._isEncrypted),
+    _dvdcss(0),
+    _vtsNumber(other._vtsNumber),
+    _ifoFileName(other._ifoFileName),
+    _vobFileNames(other._vobFileNames),
+    _vobSize(other._vobSize),
+    _vobStartSector(other._vobStartSector),
+    _nextSector(0),
+    _palette(other._palette),
+    _streams(other._streams)
+{
+    // If the title set is on an encrypted DVD, re-open it, but no need to reanalyze info.
+    if (_isEncrypted) {
+        const QByteArray name(_deviceName.toUtf8());
+        _dvdcss = dvdcss_open(name.data());
+        if (_dvdcss == 0) {
+            _log->line(tr("Error reopening DVD at %1").arg(_deviceName));
+        }
+    }
+}
 
 //----------------------------------------------------------------------------
 // Close a title set.
@@ -209,7 +238,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 {
     // Only .IFO and .VOB are DVD structures.
     if (!isDvdTitleSetFileName(fileName)) {
-        _log->line(QObject::tr("%1 is not a valid DVD title set file").arg(fileName));
+        _log->line(tr("%1 is not a valid DVD title set file").arg(fileName));
         return false;
     }
 
@@ -241,7 +270,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 
     // There must be at least one VOB file, otherwise there is no video.
     if (_vobFileNames.isEmpty()) {
-        _log->line(QObject::tr("No VOB file for %1").arg(fileName), QColor("red"));
+        _log->line(tr("No VOB file for %1").arg(fileName), QColor("red"));
         return false;
     }
 
@@ -249,7 +278,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
     _ifoFileName = dir + QDir::separator() + name + "_0.IFO";
     if (!QFile(_ifoFileName).exists()) {
         // No IFO file: not an error but no language info available.
-        _log->line(QObject::tr("DVD IFO file not found: %1").arg(_ifoFileName));
+        _log->line(tr("DVD IFO file not found: %1").arg(_ifoFileName));
         return false;
     }
 
@@ -288,7 +317,7 @@ bool QtlDvdTitleSet::readVtsIfo()
     // Open IFO file. Will be closed by destructor.
     QFile ifo(_ifoFileName);
     if (!ifo.open(QFile::ReadOnly)) {
-        _log->line(QObject::tr("Error opening %1").arg(_ifoFileName));
+        _log->line(tr("Error opening %1").arg(_ifoFileName));
         return false;
     }
 
@@ -299,7 +328,7 @@ bool QtlDvdTitleSet::readVtsIfo()
         header.size() == DVD_IFO_HEADER_SIZE &&
         ::memcmp(header.data(), DVD_IFO_START_VALUE, ::strlen(DVD_IFO_START_VALUE)) == 0;
     if (!valid) {
-        _log->line(QObject::tr("%1 is not a valid VTS IFO").arg(_ifoFileName));
+        _log->line(tr("%1 is not a valid VTS IFO").arg(_ifoFileName));
         return false;
     }
 
@@ -362,7 +391,7 @@ bool QtlDvdTitleSet::readVtsIfo()
             break;
         }
         default: {
-            _log->line(QObject::tr("Unknown video standard value %1 in DVD IFO file").arg(videoStandard));
+            _log->line(tr("Unknown video standard value %1 in DVD IFO file").arg(videoStandard));
             break;
         }
     }
@@ -383,7 +412,7 @@ bool QtlDvdTitleSet::readVtsIfo()
     // Get audio attributes.
     // See http://dvd.sourceforge.net/dvdinfo/ifo.html#audatt
     const int audioCount = qMin<int>(header.fromBigEndian<quint16>(DVD_IFO_AUDIO_COUNT_OFFSET), DVD_IFO_AUDIO_MAX_COUNT);
-    _log->debug(QObject::tr("IFO: %1 audio streams").arg(audioCount));
+    _log->debug(tr("IFO: %1 audio streams").arg(audioCount));
 
     for (int i = 0; i < audioCount; ++i) {
 
@@ -436,7 +465,7 @@ bool QtlDvdTitleSet::readVtsIfo()
     // Get subpicture (subtitle) attributes.
     // See http://dvd.sourceforge.net/dvdinfo/ifo.html#spatt
     const int subpicCount = qMin<int>(header.fromBigEndian<quint16>(DVD_IFO_SUBPIC_COUNT_OFFSET), DVD_IFO_SUBPIC_MAX_COUNT);
-    _log->debug(QObject::tr("IFO: %1 subtitle streams").arg(subpicCount));
+    _log->debug(tr("IFO: %1 subtitle streams").arg(subpicCount));
 
     for (int i = 0; i < subpicCount; ++i) {
 
@@ -485,7 +514,7 @@ bool QtlDvdTitleSet::readVtsIfo()
         _palette.size() == paletteSize;
 
     if (!valid) {
-        _log->line(QObject::tr("Error reading palette from %1").arg(_ifoFileName));
+        _log->line(tr("Error reading palette from %1").arg(_ifoFileName));
     }
     return valid;
 }
@@ -503,7 +532,7 @@ bool QtlDvdTitleSet::readDvdStructure()
 
     // Unsuccessful open is not an error. The file is simply probably not on a DVD media.
     if (_dvdcss == 0) {
-        _log->debug(QObject::tr("cannot initialize libdvdcss on %1, probably not a DVD media").arg(_deviceName));
+        _log->debug(tr("cannot initialize libdvdcss on %1, probably not a DVD media").arg(_deviceName));
         return true;
     }
 
@@ -523,7 +552,7 @@ bool QtlDvdTitleSet::readDvdStructure()
         const QString id = data.getLatin1(1, sizeof(DVD_VOLUME_DESCRIPTOR_ID) - 1);
         if (id != DVD_VOLUME_DESCRIPTOR_ID) {
             // Not a valid volume descriptor.
-            _log->debug(QObject::tr("Invalid volume descriptor, id=\"%1\" instead of \"%2\"").arg(id).arg(DVD_VOLUME_DESCRIPTOR_ID));
+            _log->debug(tr("Invalid volume descriptor, id=\"%1\" instead of \"%2\"").arg(id).arg(DVD_VOLUME_DESCRIPTOR_ID));
             break;
         }
         else if (type == DVD_VOLDESC_TYPE_TERMINATOR) {
@@ -548,7 +577,7 @@ bool QtlDvdTitleSet::readDvdStructure()
     // If the DVD is not scrambled, no need to use libdvdcss.
     _isEncrypted = dvdcss_is_scrambled(_dvdcss);
     if (!_isEncrypted) {
-        _log->debug(QObject::tr("DVD %1 is not encryted, not using libdvdcss").arg(_deviceName));
+        _log->debug(tr("DVD %1 is not encryted, not using libdvdcss").arg(_deviceName));
         dvdcss_close(_dvdcss);
         _dvdcss = 0;
         return true;
@@ -557,7 +586,7 @@ bool QtlDvdTitleSet::readDvdStructure()
     // We now need to find the file VTS_nn_1.VOB
     // If root directory not found, cannot read DVD content.
     if (rootDirSector <= 0 || rootDirSize <= 0) {
-        _log->line(QObject::tr("Cannot find root directory of DVD %1").arg(_deviceName));
+        _log->line(tr("Cannot find root directory of DVD %1").arg(_deviceName));
         return false;
     }
 
@@ -579,10 +608,10 @@ bool QtlDvdTitleSet::readDvdStructure()
             _vobStartSector > 0;
 
     if (ok) {
-        _log->debug(QObject::tr("VOB first sector: %1").arg(_vobStartSector));
+        _log->debug(tr("VOB first sector: %1").arg(_vobStartSector));
     }
     else {
-        _log->line(QObject::tr("Error locating %1 on DVD media").arg(vobDirectory + QDir::separator() + firstVobName));
+        _log->line(tr("Error locating %1 on DVD media").arg(vobDirectory + QDir::separator() + firstVobName));
         return false;
     }
 
@@ -635,7 +664,7 @@ bool QtlDvdTitleSet::readDvdSectors(void* buffer, int sectorCount, int seekSecto
     if (seekSector >= 0) {
         const int count = dvdcss_seek(_dvdcss, seekSector, vobContent ? DVDCSS_SEEK_MPEG : DVDCSS_NOFLAGS);
         if (count < 0) {
-            _log->line(QObject::tr("Error seeking DVD to sector %1, seek returned %2").arg(seekSector).arg(count));
+            _log->line(tr("Error seeking DVD to sector %1, seek returned %2").arg(seekSector).arg(count));
             return false;
         }
     }
@@ -645,7 +674,7 @@ bool QtlDvdTitleSet::readDvdSectors(void* buffer, int sectorCount, int seekSecto
     while (sectorCount > 0) {
         const int count = dvdcss_read(_dvdcss, buf, sectorCount, vobContent ? DVDCSS_READ_DECRYPT : DVDCSS_NOFLAGS);
         if (count <= 0) {
-            _log->line(QObject::tr("Error reading DVD media"));
+            _log->line(tr("Error reading DVD media"));
             return false;
         }
         sectorCount -= count;
@@ -670,7 +699,7 @@ bool QtlDvdTitleSet::locateDirectoryEntry(int dirSector, int dirSize, const QStr
     const int dirSectorCount = dirSize / DVD_SECTOR_SIZE + int(dirSize % DVD_SECTOR_SIZE != 0);
     QtlByteBlock data(dirSectorCount * DVD_SECTOR_SIZE);
     if (!readDvdSectors(data.data(), dirSectorCount, dirSector, false)) {
-        _log->line(QObject::tr("Error reading DVD directory information at sector %1").arg(dirSector));
+        _log->line(tr("Error reading DVD directory information at sector %1").arg(dirSector));
         return false;
     }
 
@@ -714,7 +743,7 @@ bool QtlDvdTitleSet::locateDirectoryEntry(int dirSector, int dirSize, const QStr
 void QtlDvdTitleSet::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log)
 {
     if (palette.size() % 4 != 0 && log != 0) {
-        log->line(QObject::tr("Palette conversion: palette size is %1 bytes, not a multiple of 4").arg(palette.size()));
+        log->line(tr("Palette conversion: palette size is %1 bytes, not a multiple of 4").arg(palette.size()));
     }
 
     // On input, each entry contains 4 bytes: (0, Y, Cr, Cb).
@@ -738,7 +767,7 @@ void QtlDvdTitleSet::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* lo
 
     for (int base = 0; base + 4 <= palette.size(); base += 4) {
         if (palette[base] != 0 && log != 0) {
-            log->line(QObject::tr("Palette conversion: unexpected value 0x%1, should be 0").arg(int(palette[base]), 2, 16, QChar('0')));
+            log->line(tr("Palette conversion: unexpected value 0x%1, should be 0").arg(int(palette[base]), 2, 16, QChar('0')));
         }
         int y = int(palette[base+1]);
         int cr = int(palette[base+2]) - 128;
@@ -781,4 +810,40 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 
     // Return order of stream on DVD.
     return id1 < id2;
+}
+
+
+//----------------------------------------------------------------------------
+//! Start the transfer of the video content of the title set to a device.
+//----------------------------------------------------------------------------
+
+bool QtlDvdTitleSet::backgroundWrite(QIODevice* destination)
+{
+    // Create an object that will write the VTS in the background.
+    // If the DVD is encrypted, use QtlDvdDataPull.
+    // Otherwise, we are not sure the media a DVD, so use file transfer.
+    QtlDataPull* writer;
+
+    if (_isEncrypted) {
+        writer = new QtlDvdDataPull(_deviceName,
+                                    _vobStartSector,
+                                    _vobSize / DVD_SECTOR_SIZE,
+                                    QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
+                                    QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
+                                    _log,
+                                    this);
+    }
+    else {
+        writer = new QtlFileDataPull(_vobFileNames,
+                                     QtlFileDataPull::DEFAULT_TRANSFER_SIZE,
+                                     QtlFileDataPull::DEFAULT_MIN_BUFFER_SIZE,
+                                     _log,
+                                     this);
+    }
+
+    // This object will delete itself upon transfer completion.
+    writer->setAutoDelete(true);
+
+    // Start the transfer.
+    return writer->start(destination);
 }

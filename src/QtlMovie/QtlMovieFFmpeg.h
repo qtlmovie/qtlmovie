@@ -57,9 +57,10 @@ namespace QtlMovieFFmpeg
     //! Build FFprobe command line arguments for an input file.
     //! @param [in] settings Application settings.
     //! @param [in] fileName Input file name.
+    //! @param [in] fileFormat Optional input file format.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName);
+    QStringList ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat = QString());
 
     //!
     //! Build FFmpeg command line arguments for an input file.

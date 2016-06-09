@@ -32,7 +32,6 @@
 
 #include "QtlMovieInputFile.h"
 #include "QtlMovieFFmpeg.h"
-#include "QtlMovieDvd.h"
 #include "QtlMovieTeletextSearch.h"
 #include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovie.h"
@@ -41,21 +40,21 @@
 
 
 //----------------------------------------------------------------------------
-// Constructor.
+// Constructors and destructors.
 //----------------------------------------------------------------------------
 
 QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
                                      const QtlMovieSettings* settings,
                                      QtlLogger* log,
-                                     QObject *parent) :
+                                     QObject* parent) :
     QtlFile(fileName, parent),
     _log(log),
     _settings(settings),
     _ffmpegInput(),
+    _ffmpegFormat(),
     _ffInfo(),
     _streams(),
-    _dvdIfoStreams(),
-    _dvdPalette(),
+    _dvdTitleSet(fileName, log),
     _teletextSearch(0),
     _ffprobeInProgress(false),
     _ccSearchCount(0),
@@ -81,10 +80,10 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _log(other._log),
     _settings(other._settings),
     _ffmpegInput(other._ffmpegInput),
+    _ffmpegFormat(other._ffmpegFormat),
     _ffInfo(other._ffInfo),
     _streams(other._streams),
-    _dvdIfoStreams(other._dvdIfoStreams),
-    _dvdPalette(other._dvdPalette),
+    _dvdTitleSet(other._dvdTitleSet),
     _teletextSearch(0),        // don't copy
     _ffprobeInProgress(false), // don't copy
     _ccSearchCount(0),         // don't copy
@@ -108,6 +107,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
 {
     // By default, the ffmpeg input spec is the file name.
     _ffmpegInput = fileName;
+    _ffmpegFormat.clear();
 
     // Clear all previous media info.
     const bool wasNone = _streams.isEmpty();
@@ -131,52 +131,54 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
         return;
     }
 
-    // Check if the file belongs to a DVD structure and collect file names.
-    QString ifoFileName;
-    QStringList vobFiles;
-    if (!QtlMovieDvd::buildFileNames(fileName, ifoFileName, vobFiles, _log)) {
-        // Found an invalid DVD structure.
-        return;
-    }
+    // Check if the file belongs to a DVD structure and collect relevant information.
+    bool pipeDvdInput = false;
+    int ffprobeTimeout = _settings->ffprobeExecutionTimeout();
+    if (_dvdTitleSet.open(fileName)) {
 
-    // Load DVD .IFO file if one was found.
-    _dvdIfoStreams.clear();
-    _dvdPalette.clear();
-    if (!ifoFileName.isEmpty()) {
-        if (!QtlMovieDvd::readIfoFile(ifoFileName, _dvdIfoStreams, _dvdPalette, _log)) {
-            _log->line(tr("DVD IFO file not correctly analyzed, audio and subtitle languages are unknown"));
+        // Give a 4 times longer timeout on DVD devices, they are so slow to start.
+        ffprobeTimeout *= 4;
+
+        if (_dvdTitleSet.isEncrypted()) {
+            // Encrypted DVD's shall be read from stdin.
+            // We need to specify the file format for ffmpeg.
+            _ffmpegInput = "-";
+            _ffmpegFormat = "mpeg";
+            pipeDvdInput = true;
+        }
+        else if (_dvdTitleSet.vobCount() == 1) {
+            // Only one file to transcode. Specify it since fileName was maybe the IFO file.
+            _ffmpegInput = _dvdTitleSet.vobFileNames().first();
         }
         else {
-            // Convert palette to RGB format.
-            QtlMovieDvd::convertPaletteYuvToRgb(_dvdPalette, _log);
+            // More than one VOB file are present.
+            // Use the "concat" protocol to specify a list of file to concatenate as input.
+            // Example: ffmpeg -i "concat:vts_01_1.vob|vts_01_2.vob|vts_01_3.vob"
+            _ffmpegInput = "concat:" + _dvdTitleSet.vobFileNames().join('|');
         }
-    }
-
-    // Build the ffmpeg input file specification for multiple DVD VOB files.
-    if (vobFiles.size() == 1) {
-        // Only one file to transcode. Specify it since fileName was maybe the IFO file.
-        _ffmpegInput = vobFiles.first();
-    }
-    else if (!vobFiles.isEmpty()) {
-        // More than one VOB file are present.
-        // Use the "concat" protocol to specify a list of file to concatenate as input.
-        // Example: ffmpeg -i "concat:vts_01_1.vob|vts_01_2.vob|vts_01_3.vob"
-        _ffmpegInput = "concat:" + vobFiles.join('|');
     }
 
     // Create the process object. It will automatically delete itself after completion.
-    const QStringList args(QtlMovieFFmpeg::ffprobeArguments(_settings, _ffmpegInput));
+    const QStringList args(QtlMovieFFmpeg::ffprobeArguments(_settings, _ffmpegInput, _ffmpegFormat));
     _log->debug(ffprobe + " " + args.join(' '));
     QtlProcess* process = QtlProcess::newInstance(ffprobe, // command
                                                   args,    // command line arguments
-                                                  1000 * _settings->ffprobeExecutionTimeout(),
-                                                  40000,   // max output size: 40 kB
-                                                  this);   // parent object
+                                                  1000 * ffprobeTimeout,
+                                                  65536,   // max output size: 64 kB
+                                                  this,    // parent object
+                                                  QProcessEnvironment(),
+                                                  pipeDvdInput);
 
     // Get notified of process termination and starts the process.
     connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
     _ffprobeInProgress = true;
     process->start();
+
+    // Pipe DVD content into process input.
+    if (pipeDvdInput) {
+        _dvdTitleSet.backgroundWrite(process->inputDevice());
+        _log->line(tr("Decrypting DVD, please be patient..."));
+    }
 
     // Look for Closed Captions. Create a new instance of CC search.
     QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName, _settings, _log, this);
@@ -215,14 +217,14 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
     _ffInfo.buildStreamInfo(_streams);
 
     // Post-processing when the input has a DVD structure.
-    if (!_dvdIfoStreams.isEmpty()) {
+    if (_dvdTitleSet.isOpen()) {
 
         // Merge the info which were previously collected in
         // the .IFO file with the stream info from ffprobe.
-        QtlMediaStreamInfo::merge(_streams, _dvdIfoStreams);
+        QtlMediaStreamInfo::merge(_streams, _dvdTitleSet.streams());
 
         // Sort streams in the DVD order for user's convenience.
-        qSort(_streams.begin(), _streams.end(), QtlMovieDvd::lessThan);
+        qSort(_streams.begin(), _streams.end(), QtlDvdTitleSet::lessThan);
     }
 
     // Is the file a transport stream?

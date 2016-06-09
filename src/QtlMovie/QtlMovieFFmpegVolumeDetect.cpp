@@ -54,7 +54,7 @@ QStringList QtlMovieFFmpegVolumeDetect::commandLineOptions(const QString& inputF
          << "-map" << audioStream    // Audio stream selection.
          << "-af" << "volumedetect"  // Run "volumedetect" filter on this audio stream.
          << "-vn"                    // Drop video.
-         << QtlMovieFFmpeg::outputArguments(settings, QTL_NULL_DEVICE, "null"); // Drop output
+         << QtlMovieFFmpeg::outputArguments(settings, QProcess::nullDevice(), "null"); // Drop output
     return args;
 }
 

@@ -41,8 +41,7 @@
 #include "QtlMovieFFprobeTags.h"
 #include "QtlMovieTeletextSearch.h"
 #include "QtlProcessResult.h"
-#include <QMap>
-#include <QStringList>
+#include "QtlDvdTitleSet.h"
 
 //!
 //! Describes an input video file.
@@ -62,14 +61,14 @@ public:
     QtlMovieInputFile(const QString& fileName,
                       const QtlMovieSettings* settings,
                       QtlLogger* log,
-                      QObject *parent = 0);
+                      QObject* parent = 0);
 
     //!
     //! Copy constructor.
     //! @param [in] other Other instance to copy (except parent).
     //! @param [in] parent Optional parent widget.
     //!
-    explicit QtlMovieInputFile(const QtlMovieInputFile& other, QObject *parent = 0);
+    explicit QtlMovieInputFile(const QtlMovieInputFile& other, QObject* parent = 0);
 
     //!
     //! Get the associated error logger.
@@ -88,6 +87,15 @@ public:
     QString ffmpegInputFileSpecification() const
     {
         return _ffmpegInput;
+    }
+
+    //!
+    //! Get the name to specify as input file format to ffmpeg when this object is used as input to ffmpeg.
+    //! @return A string to specify as input file format to ffmpeg. Empty is ffmpeg is able to figure it out.
+    //!
+    QString ffmpegInputFileFormat() const
+    {
+        return _ffmpegFormat;
     }
 
     //!
@@ -179,7 +187,7 @@ public:
     //!
     QtlByteBlock palette() const
     {
-        return _dvdPalette;
+        return _dvdTitleSet.rgbPalette();
     }
 
     //!
@@ -340,10 +348,10 @@ private:
     QtlLogger*                  _log;            //!< Where to log errors.
     const QtlMovieSettings*     _settings;       //!< Application settings.
     QString                     _ffmpegInput;    //!< Name to specify as input to ffmpeg.
+    QString                     _ffmpegFormat;   //!< Name to specify as input file format to ffmpeg.
     QtlMovieFFprobeTags         _ffInfo;         //!< Media info in ffprobe flat format.
     QtlMediaStreamInfoPtrVector _streams;        //!< Stream information.
-    QtlMediaStreamInfoPtrVector _dvdIfoStreams;  //!< Stream info from the DVD .IFO file (when applicable).
-    QtlByteBlock                _dvdPalette;     //!< DVD color palette in RGB format.
+    QtlDvdTitleSet              _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
     QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
     int     _ffprobeInProgress;                  //!< Execution of ffprobe in progress.
     int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.
@@ -362,7 +370,6 @@ private:
 
     // Unaccessible operations.
     QtlMovieInputFile() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlMovieInputFile)
 };
 
 #endif // QTLMOVIEINPUTFILE_H

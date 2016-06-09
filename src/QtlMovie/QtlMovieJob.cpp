@@ -817,7 +817,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
 
         pass1Args << args
                   << "-pass" << "1"
-                  << QtlMovieFFmpeg::outputArguments(settings(), QTL_NULL_DEVICE, "dvd");
+                  << QtlMovieFFmpeg::outputArguments(settings(), QProcess::nullDevice(), "dvd");
 
         pass2Args << args
                   << "-pass" << "2"
@@ -1188,7 +1188,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
 
     pass1Args << args
               << "-pass" << "1"
-              << QtlMovieFFmpeg::outputArguments(settings(), QTL_NULL_DEVICE, "avi");
+              << QtlMovieFFmpeg::outputArguments(settings(), QProcess::nullDevice(), "avi");
 
     pass2Args << args
               << "-pass" << "2"

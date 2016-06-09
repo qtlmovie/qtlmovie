@@ -50,15 +50,6 @@
 #endif
 
 //!
-//! Null file device.
-//!
-#if defined(Q_OS_WIN)
-#define QTL_NULL_DEVICE "NUL"
-#else
-#define QTL_NULL_DEVICE "/dev/null"
-#endif
-
-//!
 //! Case sensitivity of the file system, as a Qt::CaseSensitivity value.
 //!
 #if defined(Q_OS_WIN)
@@ -428,7 +419,6 @@ private:
 
     // Unaccessible operations.
     QtlFile() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlFile)
 };
 
 #endif // QTLFILE_H

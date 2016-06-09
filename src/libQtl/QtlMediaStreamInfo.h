@@ -59,11 +59,6 @@ typedef QtlSmartPointer<QtlMediaStreamInfo,QtlNullMutexLocker> QtlMediaStreamInf
 typedef QVector<QtlMediaStreamInfoPtr> QtlMediaStreamInfoPtrVector;
 
 //!
-//! List of smart pointers to QtlMediaStreamInfo (non thread-safe).
-//!
-typedef QList<QtlMediaStreamInfoPtr> QtlMediaStreamInfoPtrList;
-
-//!
 //! Description of a stream (video, audio, subtitle) in a multimedia file.
 //!
 class QtlMediaStreamInfo

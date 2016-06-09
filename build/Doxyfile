@@ -41,7 +41,7 @@ OUTPUT_DIRECTORY = ../build-doxygen
 # Source files are in src
 FULL_PATH_NAMES = NO
 INPUT = ../src
-EXCLUDE = ../src/UnitTest
+EXCLUDE = ../src/libdvdcss ../src/TestDvd ../src/TestTeletext ../src/TestUnit
 
 # Extract all definitions. Also recognizes Qt slots and signals.
 EXTRACT_ALL = YES

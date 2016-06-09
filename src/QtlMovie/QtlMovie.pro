@@ -60,7 +60,6 @@ SOURCES += main.cpp \
     QtlMovieDeleteAction.cpp \
     QtlMovieFFmpeg.cpp \
     QtlMovieFFprobeTags.cpp \
-    QtlMovieDvd.cpp \
     QtlMovieTeletextSearch.cpp \
     QtlMovieTsDemux.cpp \
     QtlMovieMkisofsProcess.cpp \
@@ -96,7 +95,6 @@ HEADERS += \
     QtlMovieDeleteAction.h \
     QtlMovieFFmpeg.h \
     QtlMovieFFprobeTags.h \
-    QtlMovieDvd.h \
     QtlMovieTeletextSearch.h \
     QtlMovieTsDemux.h \
     QtlMovieMkisofsProcess.h \
