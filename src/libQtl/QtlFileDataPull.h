@@ -73,10 +73,9 @@ protected:
     //!
     //! Initialize the transfer.
     //! Reimplemented from QtlDataPull.
-    //! @param [in] device Data destination. Never null.
     //! @return True on success, false on error.
     //!
-    virtual bool initializeTransfer(QIODevice* device);
+    virtual bool initializeTransfer();
 
     //!
     //! Invoked when more data is needed.
@@ -88,10 +87,9 @@ protected:
     //!
     //! Cleanup the transfer.
     //! Reimplemented from QtlDataPull.
-    //! @param [in] device Data destination. It can be null.
     //! @param [in] clean If true, this is a clean termination.
     //!
-    virtual void cleanupTransfer(QIODevice* device, bool clean);
+    virtual void cleanupTransfer(bool clean);
 
 private:
     QStringList  _fileNames;    //!< List of files to transfer.

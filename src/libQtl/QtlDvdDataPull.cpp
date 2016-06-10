@@ -71,7 +71,7 @@ QtlDvdDataPull::~QtlDvdDataPull()
 // Initialize the transfer.
 //----------------------------------------------------------------------------
 
-bool QtlDvdDataPull::initializeTransfer(QIODevice* device)
+bool QtlDvdDataPull::initializeTransfer()
 {
     // Filter invalid initial parameters.
     if (_deviceName.isEmpty() || _startSector < 0 || _sectorCount < 0) {
@@ -111,7 +111,7 @@ bool QtlDvdDataPull::needTransfer()
         return true;
     }
     else if ((count = dvdcss_read(_dvdcss, _buffer.data(), qMin(_sectorChunk, _sectorRemain), DVDCSS_READ_DECRYPT)) <= 0) {
-        setError(tr("Error reading DVD media"));
+        log()->line(tr("Error reading DVD media"));
         return false;
     }
     else {
@@ -125,14 +125,8 @@ bool QtlDvdDataPull::needTransfer()
 // Cleanup the transfer.
 //----------------------------------------------------------------------------
 
-void QtlDvdDataPull::cleanupTransfer(QIODevice* device, bool clean)
+void QtlDvdDataPull::cleanupTransfer(bool clean)
 {
-    // If the output is a process, notify the end of input.
-    QProcess* process = qobject_cast<QProcess*>(device);
-    if (process != 0) {
-        process->closeWriteChannel();
-    }
-
     // Close libdvdcss.
     if (_dvdcss != 0) {
         dvdcss_close(_dvdcss);

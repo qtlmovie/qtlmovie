@@ -57,7 +57,7 @@ QtlFileDataPull::QtlFileDataPull(const QStringList& fileNames,
 // Initialize the transfer.
 //----------------------------------------------------------------------------
 
-bool QtlFileDataPull::initializeTransfer(QIODevice* device)
+bool QtlFileDataPull::initializeTransfer()
 {
     // Make sure the current file is closed.
     if (_input.isOpen()) {
@@ -95,7 +95,7 @@ bool QtlFileDataPull::needTransfer()
         if (!_input.isOpen()) {
             _input.setFileName(_fileNames.at(_currentIndex));
             if (!_input.open(QFile::ReadOnly)) {
-                setError(tr("Error opening %1").arg(_fileNames.at(_currentIndex)));
+                log()->line(tr("Error opening %1").arg(_fileNames.at(_currentIndex)));
                 return false;
             }
         }
@@ -109,7 +109,7 @@ bool QtlFileDataPull::needTransfer()
         }
         else if (count < 0) {
             // Read error.
-            setError(tr("Error reading %1").arg(_fileNames.at(_currentIndex)));
+            log()->line(tr("Error reading %1").arg(_fileNames.at(_currentIndex)));
             return false;
         }
         else {
@@ -124,14 +124,8 @@ bool QtlFileDataPull::needTransfer()
 // Cleanup the transfer.
 //----------------------------------------------------------------------------
 
-void QtlFileDataPull::cleanupTransfer(QIODevice* device, bool clean)
+void QtlFileDataPull::cleanupTransfer(bool clean)
 {
-    // If the output is a process, notify the end of input.
-    QProcess* process = qobject_cast<QProcess*>(device);
-    if (process != 0) {
-        process->closeWriteChannel();
-    }
-
     // Make sure the current file is closed.
     if (_input.isOpen()) {
         _input.close();

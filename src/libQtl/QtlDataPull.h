@@ -40,7 +40,7 @@
 #include "QtlNullLogger.h"
 
 //!
-//! Base class to pull data from a base class into an asynchronous device such as QProcess.
+//! Base class to pull data from a base class into asynchronous devices such as QProcess or QTcpSocket.
 //!
 //! This class is based on a "pull" model where the data are "pulled" from the
 //! subclass when it is appropriate to write to the device's input. QProcess and
@@ -97,7 +97,7 @@ public:
     //!
     bool isStarted() const
     {
-        return _state != Inactive;
+        return !_devices.isEmpty();
     }
 
     //!
@@ -118,9 +118,38 @@ public slots:
     bool start(QIODevice* device);
 
     //!
+    //! Start to transfer data into the several devices in parallel.
+    //! The data are pulled only once but duplicated to all devices.
+    //! @param [in] devices Data destinations. Must be open for write.
+    //! @return True if successfully started.
+    //!
+    bool start(const QList<QIODevice*>& devices);
+
+    //!
     //! Force a premature stop of the data transfer.
     //!
     void stop();
+
+    //!
+    //! Stop the transfer on the specified device.
+    //! Transfer will continue to the other devices.
+    //! If the @a device was the last one, then the transfer is aborted.
+    //! @param [in] device The device to remove from the transfer.
+    //!
+    void stopDevice(QIODevice* device);
+
+    //!
+    //! This slot stops the transfer on the device which sent the signal.
+    //! This is a convenience slot which can be connected to a signal from
+    //! a destination device, any form of signal such as "finished",
+    //! "completed", "aborted" or "disconnected" that the device may support.
+    //!
+    //! Note that the following device's signals are automatically connected
+    //! to this slot:
+    //! - QProcess::finished()
+    //! - QAbstractSocket::disconnected()
+    //!
+    void stopCaller();
 
 signals:
     //!
@@ -129,22 +158,38 @@ signals:
     void started();
 
     //!
-    //! Emitted when the transfer is completed.
-    //! @param [in] success True if all data were successfully transmitted, false on premature error.
-    //! @param [in] message Optional error message.
+    //! Emitted when the transfer is completed on one device.
+    //! This signal can be used to close, flush, disconnect or any other
+    //! appropriate operation on the device.
     //!
-    void completed(bool success, const QString& message);
+    //! Note that the following actions are automatically performed on
+    //! various subclasses of QIODevice and the application does not need
+    //! to take care about it.
+    //! - QProcess::closeWriteChannel()
+    //! - QAbstractSocket::disconnectFromHost()
+    //!
+    //! @param [in] device Device for which the transfer is completed.
+    //! @param [in] success True if all data were successfully transmitted
+    //! to this device, false on premature error.
+    //!
+    void deviceCompleted(QIODevice* device, bool success);
+
+    //!
+    //! Emitted when the transfer is completed on all devices.
+    //! The signal deviceCompleted() is sent once for each device.
+    //! Then the signal completed() is sent once.
+    //! @param [in] success True if all data were successfully transmitted
+    //! to all device, false on premature error on at least one device.
+    //!
+    void completed(bool success);
 
 protected:
     //!
     //! Initialize the transfer.
     //! May be reimplemented by subclass.
-    //! @param [in] device Data destination. Never null. The subclass may perform some
-    //! initialization task on the device but should not write data into it.
-    //! @return True on success, false on error. In case of error, cleanupTransfer()
-    //! will be called later.
+    //! @return True on success, false on error. In case of error, the transfer is not started.
     //!
-    virtual bool initializeTransfer(QIODevice* device)
+    virtual bool initializeTransfer()
     {
         return true;
     }
@@ -162,52 +207,41 @@ protected:
     //!
     //! Cleanup the transfer.
     //! May be reimplemented by subclass.
-    //! @param [in] device Data destination. It can be null. When not null, the subclass
-    //! may perform some termination task on the device but should not write data into it.
-    //! When null, the device has been destroyed and is no longer available; the subclass
-    //! still have the opportunity to perform its own cleanup.
-    //! @param [in] clean If true, this is a clean termination, after the subclass called
-    //! cleanup(). When false, the transfer has been interrupted for an external reason.
+    //! @param [in] closed If true, this is a clean termination, after the subclass called
+    //! close(). When false, the transfer has been interrupted for an external reason.
     //!
-    virtual void cleanupTransfer(QIODevice* device, bool clean)
+    virtual void cleanupTransfer(bool closed)
     {
     }
 
     //!
-    //! Write data to the device.
+    //! Write data to all devices.
     //! Must be called by subclass to transfer data.
     //! @param [in] data Address of data to transfer.
     //! @param [in] dataSize Size in bytes of data to transfer.
-    //! @return True on success, all bytes are written. On error, the transfer will be
-    //! aborted automatically and cleanupTransfer() will be called later.
+    //! @return True if all bytes are written on at least one device.
+    //! False if all transfers failed. On error on one device, the transfer
+    //! will be aborted automatically on this device and deviceCompleted()
+    //! will be signalled.
     //!
     bool write(const void* data, int dataSize);
 
     //!
     //! Properly terminate the transfer.
     //! Must be called by subclass to signal the end of the transfer.
-    //! The method cleanupTransfer() will be called later with @a clean set to @c true.
+    //! The method cleanupTransfer() will be called later with @a closed set to @c true.
     //!
     void close();
 
-    //!
-    //! Set the error message that will be sent after transfer completion.
-    //! @param [in] message The message to set.
-    //!
-    void setError(const QString& message)
-    {
-        _error = message;
-    }
-
 private slots:
     //!
-    //! Invoked when the device has written data.
+    //! Invoked when a device has written data.
     //! @param [in] bytes Number of bytes written.
     //!
     void bytesWritten(qint64 bytes);
 
     //!
-    //! Invoked when the device object is destroyed.
+    //! Invoked when a device object is destroyed.
     //!
     void deviceDestroyed(QObject* object);
 
@@ -226,39 +260,35 @@ private:
     }
 
     //!
-    //! Complete the transfer.
+    //! Check if more data need to be pulled from the subclass.
+    //! @return True is all active devices are underflow.
     //!
-    void completeTransfer();
+    bool needMoreData() const;
 
     //!
-    //! Check if the subclass needs to provide more data.
-    //! @return True if we need more data.
+    //! Describe the context of one device.
     //!
-    bool bufferUnderflow() const
+    class Context
     {
-        return _state == Running && (_totalIn - _totalOut) < _minBufferSize;
-    }
-
-    //!
-    //! Describe the state of the object.
-    //!
-    enum State {
-        Inactive,  //!< Object is completely inactive.
-        Running,   //!< Transfer is running normally.
-        Aborting,  //!< Transfer is currently prematurely aborting.
-        Closing    //!< Transfer was properly closed by subclass.
+    public:
+        QIODevice* device;    //!< Device descriptor.
+        bool       running;   //!< The device is active.
+        qint64     totalOut;  //!< Total written data as reported by the device.
+        //!
+        //! Constructor.
+        //! @param [in] dev Optional device descriptor.
+        //!
+        Context(QIODevice* dev = 0);
     };
 
-    QtlNullLogger _nullLog;       //!< Default logger.
-    QtlLogger*    _log;           //!< Message logger.
-    bool          _autoDelete;    //!< Automatic object deletion on transfer completion.
-    int           _minBufferSize; //!< Lower limit of buffer size.
-    qint64        _totalIn;       //!< Total data transfered by write().
-    qint64        _totalOut;      //!< Total written data as reported by the device.
-    State         _state;         //!< Current object state.
-    QIODevice*    _device;        //!< The output device.
-    QString       _error;         //!< Last error message.
-    QTime         _startTime;     //!< Time of start operation.
+    QtlNullLogger  _nullLog;       //!< Default logger.
+    QtlLogger*     _log;           //!< Message logger.
+    bool           _autoDelete;    //!< Automatic object deletion on transfer completion.
+    int            _minBufferSize; //!< Lower limit of buffer size.
+    QTime          _startTime;     //!< Time of start operation.
+    bool           _closed;        //!< True when close() is requested by subclass.
+    qint64         _totalIn;       //!< Total data transfered by write().
+    QList<Context> _devices;       //!< Active output devices.
 };
 
 #endif // QTLDATAPULL_H
