@@ -41,6 +41,7 @@
 
 //!
 //! A class to pull data from an encrypted DVD into an asynchronous device such as QProcess.
+//! @see QtlDataPull
 //!
 class QtlDvdDataPull : public QtlDataPull
 {

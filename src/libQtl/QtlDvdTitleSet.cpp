@@ -814,10 +814,10 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 
 
 //----------------------------------------------------------------------------
-//! Start the transfer of the video content of the title set to a device.
+// Create a QtlDataPull to transfer of the video content of the title set.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::backgroundWrite(QIODevice* destination)
+QtlDataPull* QtlDvdTitleSet::dataPull(QObject* parent) const
 {
     // Create an object that will write the VTS in the background.
     // If the DVD is encrypted, use QtlDvdDataPull.
@@ -831,19 +831,17 @@ bool QtlDvdTitleSet::backgroundWrite(QIODevice* destination)
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     _log,
-                                    this);
+                                    parent);
     }
     else {
         writer = new QtlFileDataPull(_vobFileNames,
                                      QtlFileDataPull::DEFAULT_TRANSFER_SIZE,
                                      QtlFileDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                      _log,
-                                     this);
+                                     parent);
     }
 
     // This object will delete itself upon transfer completion.
     writer->setAutoDelete(true);
-
-    // Start the transfer.
-    return writer->start(destination);
+    return writer;
 }

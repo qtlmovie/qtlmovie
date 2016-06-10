@@ -39,7 +39,6 @@
 #include "QtlMovie.h"
 #include "QtlMovieSettings.h"
 #include "QtlMediaStreamInfo.h"
-#include "QtlMovieOutputFile.h"
 
 //!
 //! Namespace for ffmpeg utilities.
@@ -60,16 +59,22 @@ namespace QtlMovieFFmpeg
     //! @param [in] fileFormat Optional input file format.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat = QString());
+    QStringList ffprobeArguments(const QtlMovieSettings* settings,
+                                 const QString& fileName,
+                                 const QString& fileFormat = QString());
 
     //!
     //! Build FFmpeg command line arguments for an input file.
     //! @param [in] settings Application settings.
     //! @param [in] fileName Input file name. If omitted, do not specify an input file name.
-    //! @param [in] palette Input file palette in RGB format.
+    //! @param [in] palette Optional input file palette in RGB format.
+    //! @param [in] fileFormat Optional input file format.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList inputArguments(const QtlMovieSettings* settings, const QString& fileName = QString(), const QtlByteBlock& palette = QtlByteBlock());
+    QStringList inputArguments(const QtlMovieSettings* settings,
+                               const QString& fileName = QString(),
+                               const QtlByteBlock& palette = QtlByteBlock(),
+                               const QString& fileFormat = QString());
 
     //!
     //! Build FFmpeg command line arguments for output file.
@@ -78,7 +83,9 @@ namespace QtlMovieFFmpeg
     //! @param [in] fileFormat If non empty, specifies the FFmpeg format of the output file.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList outputArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat = QString());
+    QStringList outputArguments(const QtlMovieSettings* settings,
+                                const QString& fileName,
+                                const QString& fileFormat = QString());
 
     //!
     //! Build the palette FFmpeg options list .

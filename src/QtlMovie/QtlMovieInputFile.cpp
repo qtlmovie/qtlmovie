@@ -63,7 +63,8 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _selectedSubtitleStreamIndex(-1),
     _externalSubtitleFileName(),
     _isTs(false),
-    _isM2ts(false)
+    _isM2ts(false),
+    _pipeInput(false)
 {
     Q_ASSERT(log != 0);
     Q_ASSERT(settings != 0);
@@ -92,7 +93,9 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _selectedSubtitleStreamIndex(other._selectedSubtitleStreamIndex),
     _externalSubtitleFileName(other._externalSubtitleFileName),
     _isTs(other._isTs),
-    _isM2ts(other._isM2ts)
+    _isM2ts(other._isM2ts),
+    _pipeInput(other._pipeInput)
+
 {
     // Update media info when the file name is changed.
     connect(this, &QtlMovieInputFile::fileNameChanged, this, &QtlMovieInputFile::updateMediaInfo);
@@ -132,7 +135,6 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     }
 
     // Check if the file belongs to a DVD structure and collect relevant information.
-    bool pipeDvdInput = false;
     int ffprobeTimeout = _settings->ffprobeExecutionTimeout();
     if (_dvdTitleSet.open(fileName)) {
 
@@ -144,7 +146,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
             // We need to specify the file format for ffmpeg.
             _ffmpegInput = "-";
             _ffmpegFormat = "mpeg";
-            pipeDvdInput = true;
+            _pipeInput = true;
         }
         else if (_dvdTitleSet.vobCount() == 1) {
             // Only one file to transcode. Specify it since fileName was maybe the IFO file.
@@ -167,7 +169,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
                                                   65536,   // max output size: 64 kB
                                                   this,    // parent object
                                                   QProcessEnvironment(),
-                                                  pipeDvdInput);
+                                                  _pipeInput);
 
     // Get notified of process termination and starts the process.
     connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
@@ -175,8 +177,8 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     process->start();
 
     // Pipe DVD content into process input.
-    if (pipeDvdInput) {
-        _dvdTitleSet.backgroundWrite(process->inputDevice());
+    if (_pipeInput) {
+        dataPull(this)->start(process->inputDevice());
         _log->line(tr("Decrypting DVD, please be patient..."), QColor("green"));
     }
 
@@ -391,6 +393,17 @@ void QtlMovieInputFile::newMediaInfo()
         // No more operation in progress, notify the new media information.
         emit mediaInfoChanged();
     }
+}
+
+
+//----------------------------------------------------------------------------
+// Get an instance of QtlDataPull to transfer the content of the input file.
+//----------------------------------------------------------------------------
+
+QtlDataPull* QtlMovieInputFile::dataPull(QObject* parent) const
+{
+    // Currently, return a QtlDataPull for encrypted DVD's only.
+    return _pipeInput && _dvdTitleSet.isEncrypted() ? _dvdTitleSet.dataPull(parent) : 0;
 }
 
 

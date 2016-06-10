@@ -38,6 +38,7 @@
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
+#include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
 
 //!
@@ -264,12 +265,12 @@ public:
     }
 
     //!
-    //! Start the transfer of the video content of the title set to a device.
-    //! The transfer occurs in the background.
-    //! @param destination Device onto which the transfer is done.
-    //! @return True on success, false on error.
+    //! Create a QtlDataPull to transfer of the video content of the title set to a device.
+    //! @param parent Optional parent object of the QtlDataPull instance.
+    //! @return An instance of QtlDataPull which can transfer the content of
+    //! the title set. The QtlDataPull is created but not started.
     //!
-    bool backgroundWrite(QIODevice* destination);
+    QtlDataPull* dataPull(QObject* parent = 0) const;
 
     //!
     //! Check if a file is a .IFO or .VOB.

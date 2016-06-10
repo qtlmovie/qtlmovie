@@ -94,6 +94,11 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
     // Set log debug mode.
     _ui.log->setDebugMode(logDebug);
 
+    // In debug mode, set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
+    if (logDebug) {
+        qputenv("DVDCSS_VERBOSE", "2");
+    }
+
     // Create and load settings. Ignore errors (typically default settings file not yet created).
     _settings = new QtlMovieSettings(_ui.log, this);
     applyUiSettings();

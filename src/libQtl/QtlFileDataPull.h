@@ -41,6 +41,7 @@
 
 //!
 //! A class to pull data from a list of files into an asynchronous device such as QProcess.
+//! @see QtlDataPull
 //!
 class QtlFileDataPull : public QtlDataPull
 {

@@ -36,12 +36,13 @@
 #define QTLMOVIEINPUTFILE_H
 
 #include "QtlFile.h"
+#include "QtlDataPull.h"
+#include "QtlDvdTitleSet.h"
+#include "QtlProcessResult.h"
 #include "QtlMediaStreamInfo.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieFFprobeTags.h"
 #include "QtlMovieTeletextSearch.h"
-#include "QtlProcessResult.h"
-#include "QtlDvdTitleSet.h"
 
 //!
 //! Describes an input video file.
@@ -180,6 +181,35 @@ public:
     {
         return _isM2ts;
     }
+
+    //!
+    //! Check if the input file content must be piped from QtlMovie.
+    //!
+    //! Some input files cannot be read directly from the file system.
+    //! This is the case for encrypted DVD's: you can browse files, you can
+    //! read metadata files (.IFO) but you cannot read the content of video
+    //! files (.VOB). For that kind of files, ffmpeg or ffprobe cannot
+    //! directly read the file. They must read the content from their standard
+    //! input and QtlMovie will pipe the extracted file content into it.
+    //!
+    //! @return True if the input file content must be piped from QtlMovie.
+    //! @see dataPull()
+    //! @see ffmpegInputFileSpecification()
+    //!
+    bool pipeInput() const
+    {
+        return _pipeInput;
+    }
+
+    //!
+    //! Get an instance of QtlDataPull to transfer the content of the input file.
+    //! @return An instance of QtlDataPull which can transfer the content of the input
+    //! file into a QIODevice. Return a null pointer if the file shall be read directly
+    //! from the file system.
+    //! @param parent Optional parent object of the QtlDataPull instance.
+    //! @see pipeInput()
+    //!
+    QtlDataPull* dataPull(QObject* parent = 0) const;
 
     //!
     //! Get the DVD palette in RGB format.
@@ -361,6 +391,7 @@ private:
     QString _externalSubtitleFileName;           //!< Subtitle file name, can be empty.
     bool    _isTs;                               //!< File is a transport stream (TS or M2TS format).
     bool    _isM2ts;                             //!< File has M2TS format.
+    bool    _pipeInput;                          //!< Input file content shall be piped from QtlMovie.
 
     //!
     //! Report that new media info has been found.

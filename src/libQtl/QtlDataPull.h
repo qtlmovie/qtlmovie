@@ -119,8 +119,6 @@ public slots:
 
     //!
     //! Force a premature stop of the data transfer.
-    //! You should typically connect here termination signals for the device
-    //! such as QTcpSocket::disconnected() or QProcess::finished().
     //!
     void stop();
 
@@ -228,14 +226,9 @@ private:
     }
 
     //!
-    //! Commit suicide if auto-delete is on.
+    //! Complete the transfer.
     //!
-    void autoDelete()
-    {
-        if (_autoDelete) {
-            deleteLater();
-        }
-    }
+    void completeTransfer();
 
     //!
     //! Check if the subclass needs to provide more data.
@@ -265,6 +258,7 @@ private:
     State         _state;         //!< Current object state.
     QIODevice*    _device;        //!< The output device.
     QString       _error;         //!< Last error message.
+    QTime         _startTime;     //!< Time of start operation.
 };
 
 #endif // QTLDATAPULL_H

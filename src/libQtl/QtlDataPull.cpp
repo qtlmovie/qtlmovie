@@ -49,7 +49,8 @@ QtlDataPull::QtlDataPull(int minBufferSize, QtlLogger* log, QObject* parent) :
     _totalOut(0),
     _state(Inactive),
     _device(0),
-    _error()
+    _error(),
+    _startTime()
 {
 }
 
@@ -99,12 +100,12 @@ bool QtlDataPull::start(QIODevice* device)
         _log->debug(tr("Data transfer started"));
         emit started();
         processNewStateLater();
+        _startTime.start();
         return true;
     }
     else {
         _log->debug(tr("Data failed to start"));
-        cleanupTransfer(_device, false);
-        autoDelete();
+        completeTransfer();
         return false;
     }
 }
@@ -204,28 +205,12 @@ void QtlDataPull::deviceDestroyed(QObject* object)
 void QtlDataPull::processNewState()
 {
     switch (_state) {
-        case Inactive: {
-            // Nothing to do.
+        case Inactive: // Nothing to do.
             break;
-        }
-        case Aborting: {
-            // Transfer aborted.
-            cleanupTransfer(_device, false);
-            _state = Inactive;
-            _log->debug(tr("Data transfer aborted, read %1 bytes, written %2 bytes, error: %3").arg(_totalIn).arg(_totalOut).arg(_error));
-            emit completed(false, _error);
-            autoDelete();
+        case Aborting: // Transfer aborted.
+        case Closing:  // Proper close was requested.
+            completeTransfer();
             break;
-        }
-        case Closing: {
-            // Proper close was requested.
-            cleanupTransfer(_device, true);
-            _state = Inactive;
-            _log->debug(tr("Data transfer completed, read %1 bytes, written %2 bytes").arg(_totalIn).arg(_totalOut));
-            emit completed(true, _error);
-            autoDelete();
-            break;
-        }
         case Running: {
             // Ask for more data to the subclass.
             const bool ok = needTransfer();
@@ -247,5 +232,47 @@ void QtlDataPull::processNewState()
             }
             break;
         }
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Complete the transfer.
+//----------------------------------------------------------------------------
+
+void QtlDataPull::completeTransfer()
+{
+    // At this point, there are 3 cases:
+    // - state = Inactive => failed to start.
+    // - state = Aborting => started but failed later on error or abort.
+    // - state = Closing  => successful transfer completion.
+    const bool started = _state != Inactive;
+    const bool success = _state == Closing;
+
+    // Let the subclass do its cleanup.
+    cleanupTransfer(_device, success);
+
+    // If we started, notify the completion.
+    if (started) {
+        const int ms = _startTime.elapsed();
+        const qint64 bps = ms <= 0 ? 0 : (qint64(_totalIn) * 8 * 1000) / ms;
+        _log->debug(tr("Data transfer %1, read %2 bytes, written %3 bytes, time: %4 ms, bandwidth: %5 b/s, %6 B/s")
+                    .arg(success ? "completed" : "aborted")
+                    .arg(_totalIn)
+                    .arg(_totalOut)
+                    .arg(ms)
+                    .arg(bps)
+                    .arg(bps / 8));
+
+        // Back in inactive state.
+        _state = Inactive;
+
+        // Notify clients
+        emit completed(success, _error);
+    }
+
+    // If auto-delete is on, delete later when back in event loop.
+    if (_autoDelete) {
+        deleteLater();
     }
 }

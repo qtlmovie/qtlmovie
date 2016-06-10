@@ -53,8 +53,8 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
     const QString input(argv[1]);
-    const QString output(argc > 2 ? argv[2] : "");
-    int sectorCount = argc > 3 ? QString(argv[3]).toInt() : -1;
+    const QString output(argc <= 2 ? "" : (argv[2] != QStringLiteral("-") ? argv[2] : QProcess::nullDevice()));
+    int sectorCount = argc <= 3 ? -1 : QString(argv[3]).toInt();
 
     // Set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
     qputenv("DVDCSS_VERBOSE", "2");
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
     else {
         // Create binary output file.
         QFile file(output);
-        if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+        if (!file.open(QFile::WriteOnly)) {
             err << "Error creating " << output << endl;
             return EXIT_FAILURE;
         }
@@ -122,6 +122,11 @@ int main(int argc, char* argv[])
             out << "Reading VTS as " << output << endl;
         }
 
+        // Measure transfer bandwidth.
+        QTime time;
+        time.start();
+        int transferCount = 0;
+
         char buffer[READ_CHUNK * QtlDvdTitleSet::DVD_SECTOR_SIZE];
         while (sectorCount > 0) {
 
@@ -132,12 +137,20 @@ int main(int argc, char* argv[])
                 break;
             }
             sectorCount -= count;
+            transferCount += count;
 
             // Write to output file.
             if (!QtlFile::writeBinary(file, buffer, count * QtlDvdTitleSet::DVD_SECTOR_SIZE)) {
                 err << "Error writing " << output << endl;
                 break;
             }
+        }
+
+        // Report transfer bandwidth.
+        const int milliSec = time.elapsed();
+        if (milliSec > 0) {
+            const qint64 bps = (qint64(transferCount) * QtlDvdTitleSet::DVD_SECTOR_SIZE * 8 * 1000) / milliSec;
+            out << "Transfer bandwidth: " << bps << " b/s, " << (bps / 8) << " B/s" << endl;
         }
 
         file.close();

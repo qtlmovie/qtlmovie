@@ -91,7 +91,7 @@ QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, c
 // Build FFmpeg command line arguments for input file.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, const QString& fileName, const QtlByteBlock& palette)
+QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, const QString& fileName, const QtlByteBlock& palette, const QString& fileFormat)
 {
     QStringList args;
     args << "-nostdin"               // Do not attempt to read from standard input.
@@ -101,6 +101,9 @@ QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, con
          << "-fflags" << "+genpts"   // Make FFmpeg generate PTS (time stamps).
          << paletteOptions(palette); // Input file palette if specified.
 
+    if (!fileFormat.isEmpty()) {
+        args << "-f" << fileFormat;
+    }
     if (!fileName.isEmpty()) {
         args << "-i" << fileName;
     }
