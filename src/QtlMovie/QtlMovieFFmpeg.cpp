@@ -41,11 +41,16 @@
 // Build FFmpeg command line arguments for the initial probe size and duration.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
+QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings, int probeTimeDivisor)
 {
     // Get the analyze duration. Our minimum value is 2 seconds.
-    // The maximum value is such that the number of micro-seconds fits in an int (31 bits).
-    const int seconds = qBound(2, settings->ffmpegProbeSeconds(), 2100);
+    // The maximum value (2147) is such that the number of micro-seconds fits in an int (31 bits).
+    int seconds = qBound(2, settings->ffmpegProbeSeconds(), 2147);
+
+    // Apply a custom time reduction if requested. Do not drop below 2 seconds.
+    if (probeTimeDivisor > 1) {
+        seconds = qMax(2, seconds / probeTimeDivisor);
+    }
 
     // Now read carefully the following trick;
     //
@@ -74,11 +79,14 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings)
 // Build FFprobe command line arguments for an input file.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, const QString& fileName, const QString& fileFormat)
+QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings,
+                                             const QString& fileName,
+                                             const QString& fileFormat,
+                                             int probeTimeDivisor)
 {
     QStringList args;
     args << "-loglevel" << QTL_FFPROBE_LOGLEVEL
-         << probeArguments(settings);
+         << probeArguments(settings, probeTimeDivisor);
     if (!fileFormat.isEmpty()) {
         args << "-f" << fileFormat;
     }
@@ -91,7 +99,10 @@ QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings, c
 // Build FFmpeg command line arguments for input file.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, const QString& fileName, const QtlByteBlock& palette, const QString& fileFormat)
+QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings,
+                                           const QString& fileName,
+                                           const QtlByteBlock& palette,
+                                           const QString& fileFormat)
 {
     QStringList args;
     args << "-nostdin"               // Do not attempt to read from standard input.

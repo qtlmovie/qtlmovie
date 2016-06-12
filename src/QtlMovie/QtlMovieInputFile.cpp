@@ -35,7 +35,6 @@
 #include "QtlMovieTeletextSearch.h"
 #include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovie.h"
-#include "QtlProcess.h"
 #include "QtlNumUtils.h"
 
 
@@ -56,11 +55,14 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _streams(),
     _dvdTitleSet(fileName, log),
     _teletextSearch(0),
-    _ffprobeInProgress(false),
+    _ffprobeCount(0),
     _ccSearchCount(0),
     _selectedVideoStreamIndex(-1),
     _selectedAudioStreamIndex(-1),
     _selectedSubtitleStreamIndex(-1),
+    _selectedVideoExplicit(false),
+    _selectedAudioExplicit(false),
+    _selectedSubtitleExplicit(false),
     _externalSubtitleFileName(),
     _isTs(false),
     _isM2ts(false),
@@ -85,20 +87,48 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _ffInfo(other._ffInfo),
     _streams(other._streams),
     _dvdTitleSet(other._dvdTitleSet),
-    _teletextSearch(0),        // don't copy
-    _ffprobeInProgress(false), // don't copy
-    _ccSearchCount(0),         // don't copy
+    _teletextSearch(0),  // don't copy
+    _ffprobeCount(0),    // don't copy
+    _ccSearchCount(0),   // don't copy
     _selectedVideoStreamIndex(other._selectedVideoStreamIndex),
     _selectedAudioStreamIndex(other._selectedAudioStreamIndex),
     _selectedSubtitleStreamIndex(other._selectedSubtitleStreamIndex),
+    _selectedVideoExplicit(false),     // don't copy
+    _selectedAudioExplicit(false),     // don't copy
+    _selectedSubtitleExplicit(false),  // don't copy
     _externalSubtitleFileName(other._externalSubtitleFileName),
     _isTs(other._isTs),
     _isM2ts(other._isM2ts),
     _pipeInput(other._pipeInput)
-
 {
     // Update media info when the file name is changed.
     connect(this, &QtlMovieInputFile::fileNameChanged, this, &QtlMovieInputFile::updateMediaInfo);
+}
+
+
+//----------------------------------------------------------------------------
+// Create and start a ffprobe process.
+//----------------------------------------------------------------------------
+
+QtlProcess*QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout)
+{
+    const QString ffprobe(_settings->ffprobe()->fileName());
+    const QStringList args(QtlMovieFFmpeg::ffprobeArguments(_settings, _ffmpegInput, _ffmpegFormat, probeTimeDivisor));
+    _log->debug(ffprobe + " " + args.join(' '));
+
+    QtlProcess* process = QtlProcess::newInstance(ffprobe,
+                                                  args,
+                                                  1000 * ffprobeTimeout,
+                                                  65536,   // max output size: 64 kB
+                                                  this,    // parent object
+                                                  QProcessEnvironment(),
+                                                  _pipeInput);
+
+    // Get notified of process termination and starts the process.
+    connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
+    process->start();
+    _ffprobeCount++;
+    return process;
 }
 
 
@@ -116,6 +146,12 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     const bool wasNone = _streams.isEmpty();
     _streams.clear();
     _ffInfo.clear();
+    _selectedVideoStreamIndex = -1;
+    _selectedAudioStreamIndex = -1;
+    _selectedSubtitleStreamIndex = -1;
+    _selectedVideoExplicit = false;
+    _selectedAudioExplicit = false;
+    _selectedSubtitleExplicit = false;
 
     // If the file is an ISO image, there is nothing to analyze.
     if (isIsoImage()) {
@@ -135,13 +171,17 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     }
 
     // Check if the file belongs to a DVD structure and collect relevant information.
+    const bool isOnDvd = _dvdTitleSet.open(fileName);
+    const bool isOnEncryptedDvd = isOnDvd && _dvdTitleSet.isEncrypted();
+
+    // DVD media and file structure requires special treatment.
     int ffprobeTimeout = _settings->ffprobeExecutionTimeout();
-    if (_dvdTitleSet.open(fileName)) {
+    if (isOnDvd) {
 
         // Give a 4 times longer timeout on DVD devices, they are so slow to start.
         ffprobeTimeout *= 4;
 
-        if (_dvdTitleSet.isEncrypted()) {
+        if (isOnEncryptedDvd) {
             // Encrypted DVD's shall be read from stdin.
             // We need to specify the file format for ffmpeg.
             _ffmpegInput = "-";
@@ -161,38 +201,43 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     }
 
     // Create the process object. It will automatically delete itself after completion.
-    const QStringList args(QtlMovieFFmpeg::ffprobeArguments(_settings, _ffmpegInput, _ffmpegFormat));
-    _log->debug(ffprobe + " " + args.join(' '));
-    QtlProcess* process = QtlProcess::newInstance(ffprobe, // command
-                                                  args,    // command line arguments
-                                                  1000 * ffprobeTimeout,
-                                                  65536,   // max output size: 64 kB
-                                                  this,    // parent object
-                                                  QProcessEnvironment(),
-                                                  _pipeInput);
+    QtlProcess* process = ffprobeProcess(1, ffprobeTimeout);
 
-    // Get notified of process termination and starts the process.
-    connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
-    _ffprobeInProgress = true;
-    process->start();
+    // Here is another trick. Reading an encrypted DVD, or a DVD media in general,
+    // is very slow. A typical bitrate is 21 Mb/s. Reading the default probe size
+    // duration (200 s. of contents) takes approximately 1 minute. So, you cannot
+    // see the audio and subtitle streams before that. This is not user-friendly.
+    // To improve the user experience, we start shorter ffprobes in parallel. These
+    // shorter ffprobes may not find all streams but will give information much
+    // faster. If other streams are found later, they will appear later. This is not
+    // perfect but better than waiting 1 minute.
 
-    // Pipe DVD content into process input.
-    if (_pipeInput) {
-        dataPull(this)->start(process->inputDevice());
-        _log->line(tr("Decrypting DVD, please be patient..."), QColor("green"));
-    }
+    if (isOnDvd) {
+        QtlProcess* process2 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_2, ffprobeTimeout);
+        QtlProcess* process3 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_3, ffprobeTimeout);
 
-    // Look for Closed Captions. Create a new instance of CC search.
-    QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName, _settings, _log, this);
-    connect(cc, &QtlMovieClosedCaptionsSearch::foundClosedCaptions, this, &QtlMovieInputFile::foundClosedCaptions);
-    connect(cc, &QtlMovieClosedCaptionsSearch::completed, this, &QtlMovieInputFile::closedCaptionsSearchTerminated);
-
-    // Start it.
-    if (cc->start()) {
-        _ccSearchCount++;
+        // Pipe DVD content into both process process inputs at the same time.
+        if (_pipeInput) {
+            QList<QIODevice*> processInputs;
+            processInputs << process->inputDevice() << process2->inputDevice() << process3->inputDevice();
+            dataPull(this)->start(processInputs);
+            _log->line(tr("Decrypting DVD, please be patient..."), QColor("green"));
+        }
     }
     else {
-        delete cc;
+        // Look for Closed Captions. Create a new instance of CC search.
+        // DVD's do not have CC, they have DVD subtitles. So, skip this phase on DVD.
+        QtlMovieClosedCaptionsSearch* cc = QtlMovieClosedCaptionsSearch::newInstance(fileName, _settings, _log, this);
+        connect(cc, &QtlMovieClosedCaptionsSearch::foundClosedCaptions, this, &QtlMovieInputFile::foundClosedCaptions);
+        connect(cc, &QtlMovieClosedCaptionsSearch::completed, this, &QtlMovieInputFile::closedCaptionsSearchTerminated);
+
+        // Start it.
+        if (cc->start()) {
+            _ccSearchCount++;
+        }
+        else {
+            delete cc;
+        }
     }
 }
 
@@ -204,7 +249,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
 void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
 {
     // FFprobe terminated.
-    _ffprobeInProgress = false;
+    _ffprobeCount--;
 
     // Filter ffprobe process execution.
     if (result.hasError()) {
@@ -376,21 +421,8 @@ void QtlMovieInputFile::closedCaptionsSearchTerminated(bool success)
 void QtlMovieInputFile::newMediaInfo()
 {
     // Notify the new media information when no more operation in progress.
-    // Do no take search for Closed Captions into account for the following reasons:
-    // - If no CC is present, the "search duration" of CCExtractor is ineffective
-    //   and CCExtractor will read the entire input file. This can take a lot of
-    //   time which delays the display of the other streams and will not bring
-    //   any new information since there is no CC
-    // - CC have no metadata and will never affect the default stream selection.
-    //   So, there is no inconvenient to notify mediaInfoChanged before CC search
-    //   is completed. If some CC is finally found, we will emit it again and only
-    //   the new CC streams will appear.
-
-    if (!_ffprobeInProgress && _teletextSearch == 0) {
-        // Select the "best" default video/audio/subtitles streams.
+    if (_teletextSearch == 0) {
         selectDefaultStreams(_settings->audienceLanguages());
-
-        // No more operation in progress, notify the new media information.
         emit mediaInfoChanged();
     }
 }
@@ -530,10 +562,9 @@ bool QtlMovieInputFile::isIsoImage() const
 
 void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguages)
 {
-    // Reset selected streams.
-    _selectedVideoStreamIndex = -1;
-    _selectedAudioStreamIndex = -1;
-    _selectedSubtitleStreamIndex = -1;
+    int defaultVideoStreamIndex = -1;
+    int defaultAudioStreamIndex = -1;
+    int defaultSubtitleStreamIndex = -1;
 
     int highestFrameSize = -1;  // Largest video frame size (width x height).
     int firstAudio = -1;        // First audio stream index.
@@ -562,7 +593,7 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
             const int frameSize = stream->width() * stream->height();
             if (frameSize > highestFrameSize) {
                 // Largest frame size so far or first video stream, keep it.
-                _selectedVideoStreamIndex = streamIndex;
+                defaultVideoStreamIndex = streamIndex;
                 highestFrameSize = frameSize;
             }
             break;
@@ -620,54 +651,63 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     // Select the default audio stream.
     if (!_settings->selectOriginalAudio()) {
         // Do not look for original audio track, just use first audio stream.
-        _selectedAudioStreamIndex = firstAudio;
+        defaultAudioStreamIndex = firstAudio;
     }
     else if (originalAudio >= 0) {
         // Use original audio stream.
-        _selectedAudioStreamIndex = originalAudio;
+        defaultAudioStreamIndex = originalAudio;
     }
     else if (notAudienceAudio >= 0) {
         // Use first audio stream index not in intended audience languages.
-        _selectedAudioStreamIndex = notAudienceAudio;
+        defaultAudioStreamIndex = notAudienceAudio;
     }
     else if (notImpairedAudio >= 0) {
         // Use first audio stream index not for hearing/visual impaired.
-        _selectedAudioStreamIndex = notImpairedAudio;
+        defaultAudioStreamIndex = notImpairedAudio;
     }
     else {
         // Use first audio stream index (if any).
-        _selectedAudioStreamIndex = firstAudio;
+        defaultAudioStreamIndex = firstAudio;
     }
 
     // Check if the selected audio stream is in a language for the intended audience.
     // This will impact the selection of the subtitle stream.
     const bool audioInAudienceLanguages =
-            _selectedAudioStreamIndex >= 0 &&
-            audienceLanguages.contains(_streams[_selectedAudioStreamIndex]->language(), Qt::CaseInsensitive);
+            defaultAudioStreamIndex >= 0 &&
+            audienceLanguages.contains(_streams[defaultAudioStreamIndex]->language(), Qt::CaseInsensitive);
 
     // Select the default subtitle stream.
     if (audioInAudienceLanguages) {
         // Use only "forced" subtitles (if any) when audio is for the intended audience.
-        _selectedSubtitleStreamIndex = forcedSubtitle;
+        defaultSubtitleStreamIndex = forcedSubtitle;
     }
     else if (!_settings->selectTargetSubtitles()) {
         // Do not look for subtitles.
-        _selectedSubtitleStreamIndex = -1;
+        defaultSubtitleStreamIndex = -1;
     }
     else if (completeSubtitle >= 0) {
         // Use complete subtitles.
-        _selectedSubtitleStreamIndex = completeSubtitle;
+        defaultSubtitleStreamIndex = completeSubtitle;
     }
     else if (impairedSubtitle >= 0) {
         // Use subtitles for hearing/visual impaired.
-        _selectedSubtitleStreamIndex = impairedSubtitle;
+        defaultSubtitleStreamIndex = impairedSubtitle;
     }
     else {
         // Use first subtitles stream (if any).
-        _selectedSubtitleStreamIndex = firstSubtitle;
+        defaultSubtitleStreamIndex = firstSubtitle;
     }
 
-    // Debug display.
+    // Now set the default streams as selected if not already explicitly selected.
+    if (!_selectedVideoExplicit) {
+        _selectedVideoStreamIndex = defaultVideoStreamIndex;
+    }
+    if (!_selectedAudioExplicit) {
+        _selectedAudioStreamIndex = defaultAudioStreamIndex;
+    }
+    if (!_selectedSubtitleExplicit && _externalSubtitleFileName.isEmpty()) {
+        _selectedSubtitleStreamIndex = defaultSubtitleStreamIndex;
+    }
 }
 
 
@@ -688,6 +728,7 @@ void QtlMovieInputFile::setSelectedVideoStreamIndex(int index)
              !_streams[index].isNull() &&
              _streams[index]->streamType() == QtlMediaStreamInfo::Video) ?
             index : -1;
+    _selectedVideoExplicit = _selectedVideoStreamIndex >= 0;
 }
 
 int QtlMovieInputFile::selectedAudioStreamIndex() const
@@ -703,6 +744,7 @@ void QtlMovieInputFile::setSelectedAudioStreamIndex(int index)
              !_streams[index].isNull() &&
              _streams[index]->streamType() == QtlMediaStreamInfo::Audio) ?
             index : -1;
+    _selectedAudioExplicit = _selectedAudioStreamIndex >= 0;
 }
 
 int QtlMovieInputFile::selectedSubtitleStreamIndex() const
@@ -718,6 +760,7 @@ void QtlMovieInputFile::setSelectedSubtitleStreamIndex(int index)
              !_streams[index].isNull() &&
              _streams[index]->streamType() == QtlMediaStreamInfo::Subtitle) ?
             index : -1;
+    _selectedSubtitleExplicit = _selectedSubtitleStreamIndex >= 0;
 }
 
 QString QtlMovieInputFile::externalSubtitleFileName() const

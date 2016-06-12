@@ -48,20 +48,27 @@ namespace QtlMovieFFmpeg
     //!
     //! Build FFmpeg command line arguments for the initial probe size and duration.
     //! @param [in] settings Application settings.
+    //! @param [in] probeTimeDivisor If positive, this value is used to reduce the
+    //! probe time duration. The actual probe time is the value from @a settings,
+    //! divided by @a probeTimeDivisor.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList probeArguments(const QtlMovieSettings* settings);
+    QStringList probeArguments(const QtlMovieSettings* settings, int probeTimeDivisor = 0);
 
     //!
     //! Build FFprobe command line arguments for an input file.
     //! @param [in] settings Application settings.
     //! @param [in] fileName Input file name.
     //! @param [in] fileFormat Optional input file format.
+    //! @param [in] probeTimeDivisor If positive, this value is used to reduce the
+    //! probe time duration. The actual probe time is the value from @a settings,
+    //! divided by @a probeTimeDivisor.
     //! @return FFmpeg command line arguments.
     //!
     QStringList ffprobeArguments(const QtlMovieSettings* settings,
                                  const QString& fileName,
-                                 const QString& fileFormat = QString());
+                                 const QString& fileFormat = QString(),
+                                 int probeTimeDivisor = 0);
 
     //!
     //! Build FFmpeg command line arguments for an input file.

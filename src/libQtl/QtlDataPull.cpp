@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlDataPull.h"
+#include "QtlIncrement.h"
 #include "QtlFile.h"
 #include <QtNetwork>
 
@@ -49,7 +50,8 @@ QtlDataPull::QtlDataPull(int minBufferSize, QtlLogger* log, QObject* parent) :
     _startTime(),
     _closed(false),
     _totalIn(0),
-    _devices()
+    _devices(),
+    _processingState(0)
 {
 }
 
@@ -93,15 +95,7 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
 {
     // Filter invalid state.
     if (!_devices.isEmpty()) {
-        // A transfer is already in progress.
-        return false;
-    }
-    if (devices.isEmpty() || devices.contains(0)) {
-        // Invalid parameters.
-        // If auto-delete is on, delete later when back in event loop.
-        if (_autoDelete) {
-            deleteLater();
-        }
+        // A transfer is already in progress. Don't delete this object!
         return false;
     }
 
@@ -112,16 +106,16 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
     _totalIn = 0;
 
     // Detect duplicates.
-    QSet<QIODevice*> seen;
+    QSet<QIODevice*> alreadySeen;
 
     // Loop on all specified devices.
     foreach (QIODevice* dev, devices) {
 
-        // Drop duplicates.
-        if (seen.contains(dev)) {
+        // Drop duplicates and invalid pointers.
+        if (dev == 0 || alreadySeen.contains(dev)) {
             continue;
         }
-        seen.insert(dev);
+        alreadySeen.insert(dev);
 
         // Add a device context.
         _devices.append(Context(dev));
@@ -129,31 +123,27 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
         // Get notified of device events.
         connect(dev, &QIODevice::bytesWritten, this, &QtlDataPull::bytesWritten);
         connect(dev, &QObject::destroyed, this, &QtlDataPull::deviceDestroyed);
+        deviceSpecificSetup(dev);
+    }
 
-        // If the device is a process, abort the transfer if the process unexpectedly terminates.
-        QProcess* process = qobject_cast<QProcess*>(dev);
-        if (process != 0) {
-            // Note: In Qt 5, the signal QProcess::finished is overloaded and we must explicitly
-            // select the one to use in order to resolve the template instantiation.
-            connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &QtlDataPull::stopCaller);
+    // If no valid device was found, this is an error.
+    if (_devices.isEmpty()) {
+        // If auto-delete is on, delete later when back in event loop.
+        if (_autoDelete) {
+            deleteLater();
         }
-
-        // If the device is a socket, abort the transfer if the socket is unexpectedly disconnected.
-        QAbstractSocket* socket = qobject_cast<QAbstractSocket*>(dev);
-        if (socket != 0) {
-            connect(socket, &QAbstractSocket::disconnected, this, &QtlDataPull::stopCaller);
-        }
+        return false;
     }
 
     // Let the subclass initialize the transfer.
     if (initializeTransfer()) {
-        _log->debug(tr("Data transfer started"));
+        _log->debug(tr("DataPull: Data transfer started, %1 devices").arg(_devices.size()));
         emit started();
         processNewStateLater();
         return true;
     }
     else {
-        _log->debug(tr("Data transfer failed to start"));
+        _log->debug(tr("DataPull: Data transfer failed to start"));
         _devices.clear();
         // If auto-delete is on, delete later when back in event loop.
         if (_autoDelete) {
@@ -170,6 +160,9 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
 
 void QtlDataPull::stop()
 {
+    _log->debug(tr("DataPull: stop requested, %1 devices").arg(_devices.size()));
+
+    // Mark all devices as aborting.
     if (!_devices.isEmpty()) {
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
             ctx->running = false;
@@ -193,6 +186,8 @@ void QtlDataPull::stopCaller()
 void QtlDataPull::stopDevice(QIODevice* device)
 {
     if (device != 0) {
+        _log->debug(tr("DataPull: stop requested on %1").arg(device->objectName()));
+
         // Search the context for the device.
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
             if (ctx->device == device) {
@@ -216,11 +211,11 @@ bool QtlDataPull::write(const void* data, int dataSize)
         return dataSize == 0;
     }
 
-    // Do we succeed on at least one device?
-    bool success = false;
-
     // Accumulate input data size.
     _totalIn += dataSize;
+
+    // Do we succeed on at least one device?
+    bool success = false;
 
     // Track aborted devices.
     bool aborted = false;
@@ -228,7 +223,8 @@ bool QtlDataPull::write(const void* data, int dataSize)
     // Write the data on all devices.
     for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
         if (ctx->running) {
-            if (QtlFile::writeBinary(*(ctx->device), data, dataSize)) {
+            // Write data on device and process all events before each write.
+            if (QtlFile::writeBinary(*(ctx->device), data, dataSize, true)) {
                 // At least one device succeeded.
                 success = true;
             }
@@ -286,7 +282,7 @@ void QtlDataPull::bytesWritten(qint64 bytes)
 
 
 //----------------------------------------------------------------------------
-// Invoked when the device object is destroyed.
+// Invoked when a device object is destroyed.
 //----------------------------------------------------------------------------
 
 void QtlDataPull::deviceDestroyed(QObject* object)
@@ -298,7 +294,7 @@ void QtlDataPull::deviceDestroyed(QObject* object)
             ctx->device = 0;
             // Abort the transfer if was in progress.
             if (ctx->running) {
-                _log->debug(tr("Data transfer destination destroyed"));
+                _log->debug(tr("DataPull: Data transfer destination destroyed"));
                 ctx->running = false;
                 processNewStateLater();
             }
@@ -343,16 +339,29 @@ bool QtlDataPull::needMoreData() const
 
 void QtlDataPull::processNewState()
 {
+    // Prevent recursion during nested event processing. When we call needTransfer(),
+    // there will be calls to write(). During write(), we process events to make the
+    // application more responsive. If there are queued calls to processNewState(),
+    // they could be called. Such recursion could lead to output data in the wrong
+    // compared to input data.
+    QtlIncrement<int> updating(&_processingState);
+    if (_processingState > 1) {
+        return;
+    }
+
     // Filter outdated calls.
     if (_devices.isEmpty()) {
         return;
     }
 
     // If some devices need data and none are busy, ask for more data to the subclass.
-    if (needMoreData() && !needTransfer()) {
-        // The subclass returned false, abort everything.
-        for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
-            ctx->running = false;
+    if (needMoreData()) {
+        if (!needTransfer()) {
+            // The subclass returned false, abort everything.
+            _log->debug(tr("DataPull: subclass returned an error on needTransfer"));
+            for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
+                ctx->running = false;
+            }
         }
     }
 
@@ -362,6 +371,8 @@ void QtlDataPull::processNewState()
         Context& ctx(_devices[index]);
         if (_closed || !ctx.running) {
             // Found a terminating device.
+            _log->debug(tr("DataPull: cleaning up terminating device %1").arg(ctx.device == 0 ? "(null)" : ctx.device->objectName()));
+
             // The device is zero when the device object has been destroyed.
             if (ctx.device != 0) {
                 // Notify application.
@@ -371,16 +382,7 @@ void QtlDataPull::processNewState()
                 disconnect(ctx.device, 0, this, 0);
 
                 // Device-specific operations to notify the termination.
-                // If the device is a process, close the write channel to notify the termination.
-                QProcess* process = qobject_cast<QProcess*>(ctx.device);
-                if (process != 0) {
-                    process->closeWriteChannel();
-                }
-                // If the device is a socket, disconnect.
-                QAbstractSocket* socket = qobject_cast<QAbstractSocket*>(ctx.device);
-                if (socket != 0) {
-                    socket->disconnectFromHost();
-                }
+                deviceSpecificCleanup(ctx.device, _closed && ctx.running);
             }
             // Remove this device from the list.
             _devices.removeAt(index);
@@ -394,7 +396,7 @@ void QtlDataPull::processNewState()
         // Report a full debug message.
         const int ms = _startTime.elapsed();
         const qint64 bps = ms <= 0 ? 0 : (qint64(_totalIn) * 8 * 1000) / ms;
-        _log->debug(tr("Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s")
+        _log->debug(tr("DataPull: Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s")
                     .arg(_closed ? "completed" : "aborted")
                     .arg(_totalIn)
                     .arg(ms)
@@ -411,5 +413,48 @@ void QtlDataPull::processNewState()
     // If some devices need data and none are busy, ask for more data to the subclass.
     if (needMoreData()) {
         processNewStateLater();
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Perform specific setup on a device, depending on its class.
+//----------------------------------------------------------------------------
+
+void QtlDataPull::deviceSpecificSetup(QIODevice* dev)
+{
+    // If the device is a process, abort the transfer if the process unexpectedly terminates.
+    QProcess* process = qobject_cast<QProcess*>(dev);
+    if (process != 0) {
+        // Note: In Qt 5, the signal QProcess::finished is overloaded and we must explicitly
+        // select the one to use in order to resolve the template instantiation. Quite dirty...
+        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &QtlDataPull::stopCaller);
+    }
+
+    // If the device is a socket, abort the transfer if the socket is unexpectedly disconnected.
+    QAbstractSocket* socket = qobject_cast<QAbstractSocket*>(dev);
+    if (socket != 0) {
+        connect(socket, &QAbstractSocket::disconnected, this, &QtlDataPull::stopCaller);
+    }
+}
+
+void QtlDataPull::deviceSpecificCleanup(QIODevice* dev, bool closed)
+{
+    // Don't do this on abort, we assume that the device is in error state.
+    // In case of close(), the device is fine but we decide to stop the transfer.
+    // In this case, we need to notify the device that the transfer is complete.
+    if (closed) {
+
+        // If the device is a process, close the write channel to notify the termination.
+        QProcess* process = qobject_cast<QProcess*>(dev);
+        if (process != 0) {
+            process->closeWriteChannel();
+        }
+
+        // If the device is a socket, disconnect.
+        QAbstractSocket* socket = qobject_cast<QAbstractSocket*>(dev);
+        if (socket != 0) {
+            socket->disconnectFromHost();
+        }
     }
 }

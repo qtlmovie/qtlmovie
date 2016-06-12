@@ -83,7 +83,7 @@ void QtlMovieEditTask::clearInputStreamInfo()
 {
     // List of group boxes to clean up.
     QList<QtlButtonGrid*> boxes;
-    boxes << _ui.boxVideoStreams<< _ui.boxAudioStreams << _ui.boxSubtitleStreams;
+    boxes << _ui.boxVideoStreams << _ui.boxAudioStreams << _ui.boxSubtitleStreams;
 
     // Cleanup all group boxes.
     foreach (QtlButtonGrid* box, boxes) {
@@ -343,24 +343,24 @@ void QtlMovieEditTask::inputFileFormatChanged()
 
         // Select group box and widget type based on stream type.
         switch (stream->streamType()) {
-        case QtlMediaStreamInfo::Video:
-            box = _ui.boxVideoStreams;
-            selected = si == _task->inputFile()->selectedVideoStreamIndex();
-            break;
-        case QtlMediaStreamInfo::Audio:
-            box = _ui.boxAudioStreams;
-            selected = si == _task->inputFile()->selectedAudioStreamIndex();
-            break;
-        case QtlMediaStreamInfo::Subtitle:
-            box = _ui.boxSubtitleStreams;
-            selected = si == _task->inputFile()->selectedSubtitleStreamIndex();
-            break;
-        case QtlMediaStreamInfo::Other:
-            // Ignore these streams.
-            break;
-        default:
-            _log->line(tr("Internal error, invalid stream type"));
-            break;
+            case QtlMediaStreamInfo::Video:
+                box = _ui.boxVideoStreams;
+                selected = si == _task->inputFile()->selectedVideoStreamIndex();
+                break;
+            case QtlMediaStreamInfo::Audio:
+                box = _ui.boxAudioStreams;
+                selected = si == _task->inputFile()->selectedAudioStreamIndex();
+                break;
+            case QtlMediaStreamInfo::Subtitle:
+                box = _ui.boxSubtitleStreams;
+                selected = si == _task->inputFile()->selectedSubtitleStreamIndex();
+                break;
+            case QtlMediaStreamInfo::Other:
+                // Ignore these streams.
+                break;
+            default:
+                _log->line(tr("Internal error, invalid stream type"));
+                break;
         }
 
         if (box != 0) {

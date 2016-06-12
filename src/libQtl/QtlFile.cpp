@@ -435,11 +435,17 @@ bool QtlFile::writeBinaryFile(const QString& fileName, const QtlByteBlock& conte
 // Write binary data into an open file.
 //-----------------------------------------------------------------------------
 
-bool QtlFile::writeBinary(QIODevice& file, const void* data, int size)
+bool QtlFile::writeBinary(QIODevice& file, const void* data, int size, bool processEvents)
 {
     const char* current = reinterpret_cast<const char*>(data);
     qint64 remain = size;
     while (remain > 0) {
+
+        // Process pending events if required before entering a write operation.
+        if (processEvents) {
+            qApp->processEvents();
+        }
+
         // Write as many bytes as possible.
         const qint64 written = file.write(current, remain);
         if (written <= 0) {

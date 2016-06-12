@@ -80,9 +80,21 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoPtrVector& streams)
     const int ffStreamCount = intValue("format.nb_streams");
     for (int index = 0; index < ffStreamCount; ++index) {
 
-        // FFprobe info reference.
-        const QtlMediaStreamInfoPtr info(new QtlMediaStreamInfo());
-        info->setFFIndex(index);
+        // Search existing stream with same index.
+        QtlMediaStreamInfoPtr info;
+        foreach (const QtlMediaStreamInfoPtr& p, streams) {
+            if (p->ffIndex() == index) {
+                info = p;
+                break;
+            }
+         }
+
+        // If none found, use a new one.
+        if (info.isNull()) {
+            info = new QtlMediaStreamInfo();
+            info->setFFIndex(index);
+            streams.append(info);
+        }
 
         // Codec description.
         const QString codecType(valueOfStream(index, "codec_type").toLower());
@@ -157,9 +169,6 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoPtrVector& streams)
                 info->setSubtitleType(QtlMediaStreamInfo::SubOther);
             }
         }
-
-        // Append the new stream.
-        streams.append(info);
     }
 }
 

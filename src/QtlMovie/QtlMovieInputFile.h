@@ -38,7 +38,7 @@
 #include "QtlFile.h"
 #include "QtlDataPull.h"
 #include "QtlDvdTitleSet.h"
-#include "QtlProcessResult.h"
+#include "QtlProcess.h"
 #include "QtlMediaStreamInfo.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieFFprobeTags.h"
@@ -383,11 +383,14 @@ private:
     QtlMediaStreamInfoPtrVector _streams;        //!< Stream information.
     QtlDvdTitleSet              _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
     QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
-    int     _ffprobeInProgress;                  //!< Execution of ffprobe in progress.
+    int     _ffprobeCount;                       //!< Number of ffprobe in progress.
     int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.
     int     _selectedVideoStreamIndex;           //!< Index of video stream to transcode.
     int     _selectedAudioStreamIndex;           //!< Index of audio stream to transcode.
     int     _selectedSubtitleStreamIndex;        //!< Index of subtitle stream to transcode.
+    bool    _selectedVideoExplicit;              //!< Video stream explicitly selected (vs. default choice).
+    bool    _selectedAudioExplicit;              //!< Audio stream explicitly selected (vs. default choice).
+    bool    _selectedSubtitleExplicit;           //!< Subtitle stream explicitly selected (vs. default choice).
     QString _externalSubtitleFileName;           //!< Subtitle file name, can be empty.
     bool    _isTs;                               //!< File is a transport stream (TS or M2TS format).
     bool    _isM2ts;                             //!< File has M2TS format.
@@ -398,6 +401,15 @@ private:
     //! If no more operation in progress, emit mediaInfoChanged().
     //!
     void newMediaInfo();
+
+    //!
+    //! Create and start a ffprobe process.
+    //! @param [in] probeTimeDivisor If positive, this value is used to reduce the probe time duration.
+    //! The actual probe time is the value from @a settings, divided by @a probeTimeDivisor.
+    //! @param [in] ffprobeTimeout Timeout of process execution in seconds.
+    //! @return A new instance of QtlProcess.
+    //!
+    QtlProcess* ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout);
 
     // Unaccessible operations.
     QtlMovieInputFile() Q_DECL_EQ_DELETE;

@@ -274,9 +274,10 @@ public:
     //! @param [in] file An open file.
     //! @param [in] data Address of binary data to write.
     //! @param [in] size Size in bytes of binary data to write.
+    //! @param [in] processEvents If true, process all pending events before each write operation.
     //! @return True on success, false on error.
     //!
-    static bool writeBinary(QIODevice& file, const void* data, int size);
+    static bool writeBinary(QIODevice& file, const void* data, int size, bool processEvents = false);
 
     //!
     //! Write the binary content of the file.

@@ -256,7 +256,7 @@ private:
     //!
     void processNewStateLater()
     {
-        QTimer::singleShot(0, this, &QtlDataPull::processNewState);
+        QMetaObject::invokeMethod(this, "processNewState", Qt::QueuedConnection);
     }
 
     //!
@@ -264,6 +264,19 @@ private:
     //! @return True is all active devices are underflow.
     //!
     bool needMoreData() const;
+
+    //!
+    //! Perform specific setup on a device, depending on its class.
+    //! @param [in] dev Device to setup.
+    //!
+    void deviceSpecificSetup(QIODevice* dev);
+
+    //!
+    //! Perform specific cleanup on a device, depending on its class.
+    //! @param [in] dev Device to setup.
+    //! @param [in] closed True on normal termination, false if the transfer was aborted.
+    //!
+    void deviceSpecificCleanup(QIODevice* dev, bool closed);
 
     //!
     //! Describe the context of one device.
@@ -281,14 +294,15 @@ private:
         Context(QIODevice* dev = 0);
     };
 
-    QtlNullLogger  _nullLog;       //!< Default logger.
-    QtlLogger*     _log;           //!< Message logger.
-    bool           _autoDelete;    //!< Automatic object deletion on transfer completion.
-    int            _minBufferSize; //!< Lower limit of buffer size.
-    QTime          _startTime;     //!< Time of start operation.
-    bool           _closed;        //!< True when close() is requested by subclass.
-    qint64         _totalIn;       //!< Total data transfered by write().
-    QList<Context> _devices;       //!< Active output devices.
+    QtlNullLogger  _nullLog;         //!< Default logger.
+    QtlLogger*     _log;             //!< Message logger.
+    bool           _autoDelete;      //!< Automatic object deletion on transfer completion.
+    int            _minBufferSize;   //!< Lower limit of buffer size.
+    QTime          _startTime;       //!< Time of start operation.
+    bool           _closed;          //!< True when close() is requested by subclass.
+    qint64         _totalIn;         //!< Total data transfered by write().
+    QList<Context> _devices;         //!< Active output devices.
+    int            _processingState; //!< A counter to protect processNewState().
 };
 
 #endif // QTLDATAPULL_H

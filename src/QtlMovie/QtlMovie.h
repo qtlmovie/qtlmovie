@@ -54,6 +54,8 @@
 #define QTL_TRANSCODE_SECONDS                  0  //!< Number of seconds to transcode if not complete video.
 #define QTL_KEEP_INTERMEDIATE_FILES        false  //!< Keep intermediate transcoding files.
 #define QTL_FFMPEG_PROBE_SECONDS             200  //!< Initial probe size in media playout seconds for ffprobe / ffmpeg.
+#define QTL_FFPROBE_DVD_DIVISOR_2              5  //!< On DVD's, a second shorter ffprobe is run.
+#define QTL_FFPROBE_DVD_DIVISOR_3             20  //!< On DVD's, a third shorter ffprobe is run.
 #define QTL_SRT_USE_VIDEO_SIZE_HINT         true  //!< Check if the insertion of SRT/SSA/ASS subtitles shall use the original video size as a hint.
 #define QTL_CHAPTER_MINUTES                    5  //!< Duration of chapters to create.
 #define QTL_DVD_REMUX_AFTER_TRANSCODE       true  //!< If audio/video must be remuxed after transcode for DVD output.
