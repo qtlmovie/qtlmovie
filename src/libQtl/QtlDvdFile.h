@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2015, Thierry Lelegard
+// Copyright (c) 2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,78 +26,79 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlFileSystemInfo.h
+//! @file QtlDvdFile.h
 //!
-//! Declare the class QtlFileSystemInfo.
+//! Declare the class QtlDvdFile.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLFILESYSTEMINFO_H
-#define QTLFILESYSTEMINFO_H
+#ifndef QTLDVDFILE_H
+#define QTLDVDFILE_H
 
 #include "QtlCore.h"
 
 //!
-//! A class which describes file system.
+//! A class which describes a file on DVD.
 //!
-class QtlFileSystemInfo
+class QtlDvdFile
 {
 public:
     //!
-    //! Constructor
-    //! @param [in] fileName Name of a file somewhere in the file system.
+    //! Constructor.
+    //! @param [in] name File name, without directory.
+    //! @param [in] startSector First sector on DVD media.
+    //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlFileSystemInfo(const QString& fileName = QString());
-
-    //!
-    //! Get the list of all mounted filesystems in the system.
-    //! @return The list of all root directories.
-    //!
-    static QStringList getAllRoots();
-
-    //!
-    //! Get the list of all mounted filesystems in the system.
-    //! @return The list of all file systems.
-    //!
-    static QList<QtlFileSystemInfo> getAllFileSystems();
-
-    //!
-    //! Get the root of the file system.
-    //! @return The root of the file system.
-    //!
-    QString rootName() const
+    QtlDvdFile(const QString& name = QString(), int startSector = -1, int sizeInBytes = 0) :
+        _name(name),
+        _sector(startSector),
+        _size(sizeInBytes)
     {
-        return _rootName;
     }
-
     //!
-    //! Get the total size in bytes of the file system.
-    //! @return The total size in bytes of the file system or -1 on error.
+    //! Virtual destructor.
     //!
-    qlonglong totalBytes() const
+    virtual ~QtlDvdFile()
     {
-        return byteSize(true);
     }
-
     //!
-    //! Get the free size in bytes of the file system.
-    //! @return The free size in bytes of the file system or -1 on error.
+    //! Get the file name.
+    //! @return The file name, without directory.
     //!
-    qlonglong freeBytes() const
+    QString name() const
     {
-        return byteSize(false);
+        return _name;
     }
-
-private:
-    QString _rootName; //!< Path name of the root.
-
     //!
-    //! Get either the total size or free size in bytes of the file system.
-    //! @param [in] total If true, return the total size. If false, return the free size.
-    //! @return The requested size in bytes.
+    //! Get the first sector on DVD media.
+    //! @return The first sector on DVD media.
     //!
-    qlonglong byteSize(bool total) const;
+    int startSector() const
+    {
+        return _sector;
+    }
+    //!
+    //! Get the file size in bytes.
+    //! @return The file size in bytes.
+    //!
+    int sizeInBytes() const
+    {
+        return _size;
+    }
+protected:
+    QString _name;    //!< File name.
+    int     _sector;  //!< First sector on DVD media.
+    int     _size;    //!< Size in bytes.
+    //!
+    //! Clear the content of this object.
+    //!
+    virtual void clear()
+    {
+        _name.clear();
+        _sector = -1;
+        _size = 0;
+    }
 };
 
-#endif // QTLFILESYSTEMINFO_H
+#endif // QTLDVDFILE_H

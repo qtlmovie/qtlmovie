@@ -224,6 +224,15 @@ public:
     }
 
     //!
+    //! Get the volume size (in sectors) of the DVD.
+    //! @return DVD volume size (in sectors).
+    //!
+    int volumeSize() const
+    {
+        return _volumeSize;
+    }
+
+    //!
     //! Set the next sector to read at the beginning of the MPEG content of the VTS.
     //!
     void rewind()
@@ -303,6 +312,7 @@ private:
     QtlLogger*       _log;                //!< Where to log errors.
     QString          _deviceName;         //!< DVD device name.
     QString          _volumeId;           //!< Volume identifier.
+    int              _volumeSize;         //!< Volume size in sectors.
     bool             _isEncrypted;        //!< DVD is encrypted, need libdvdcss.
     struct dvdcss_s* _dvdcss;             //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
     int              _vtsNumber;          //!< Title set number.

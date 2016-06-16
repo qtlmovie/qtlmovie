@@ -76,13 +76,13 @@ SOURCES += \
     QtlSettings.cpp \
     QtlSelectionRectDelegate.cpp \
     QtlOpticalDrive.cpp \
-    QtlFileSystemInfo.cpp \
     QtlSynchronousProcess.cpp \
     QtlMediaStreamInfo.cpp \
     QtlDvdTitleSet.cpp \
     QtlDataPull.cpp \
     QtlDvdDataPull.cpp \
-    QtlFileDataPull.cpp
+    QtlFileDataPull.cpp \
+    QtlDvdMedia.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -142,14 +142,16 @@ HEADERS += \
     QtlWinUtils.h \
     QtlSelectionRectDelegate.h \
     QtlOpticalDrive.h \
-    QtlFileSystemInfo.h \
     QtlSynchronousProcess.h \
     QtlMediaStreamInfo.h \
     QtlDvdTitleSet.h \
     QtlStdoutLogger.h \
     QtlDataPull.h \
     QtlDvdDataPull.h \
-    QtlFileDataPull.h
+    QtlFileDataPull.h \
+    QtlDvdMedia.h \
+    QtlDvdFile.h \
+    QtlDvdDirectory.h
 
 FORMS += \
     QtlBrowserDialog.ui \

@@ -132,9 +132,10 @@ public:
     //!
     //! Build an absolute file path with native directory separators.
     //! @param [in] path The file path to transform.
+    //! @param [in] removeSymLinks If true, remove symbolic links.
     //! @return Resulting absolute path.
     //!
-    static QString absoluteNativeFilePath(const QString& path);
+    static QString absoluteNativeFilePath(const QString& path, bool removeSymLinks = false);
 
     //!
     //! Return the list of directories in the system search path.

@@ -101,6 +101,7 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject*
     _log(log != 0 ? log : &_nullLog),
     _deviceName(),
     _volumeId(),
+    _volumeSize(0),
     _isEncrypted(false),
     _dvdcss(0),
     _vtsNumber(-1),
@@ -128,6 +129,7 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
     _log(other._log != 0 && other._log != &other._nullLog ? other._log : &_nullLog),
     _deviceName(other._deviceName),
     _volumeId(other._volumeId),
+    _volumeSize(other._volumeSize),
     _isEncrypted(other._isEncrypted),
     _dvdcss(0),
     _vtsNumber(other._vtsNumber),
@@ -157,6 +159,7 @@ void QtlDvdTitleSet::close()
 {
     _deviceName.clear();
     _volumeId.clear();
+    _volumeSize = 0;
     _isEncrypted = false;
     _vtsNumber = -1;
     _ifoFileName.clear();
@@ -563,6 +566,7 @@ bool QtlDvdTitleSet::readDvdStructure()
             // Found the "primary volume descriptor".
             // Format: see ECMA-119, section 8.4.
             _volumeId = data.getLatin1(40, 32).trimmed();
+            _volumeSize = data.fromLittleEndian<quint32>(80);
             // The "Directory Record for Root Directory" is at offset 156, 34 bytes long.
             // Format: see ECMA-119, section 9.1. Size of record is in first byte.
             if (data[DVD_ROOTDIRDESC_OFFSET] == DVD_ROOTDIRDESC_SIZE) {

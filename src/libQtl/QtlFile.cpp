@@ -99,15 +99,27 @@ bool QtlFile::setFileName(const QString& fileName)
 // Build an absolute file path with native directory separators.
 //----------------------------------------------------------------------------
 
-QString QtlFile::absoluteNativeFilePath(const QString& path)
+QString QtlFile::absoluteNativeFilePath(const QString& path, bool removeSymLinks)
 {
     // Qt conversion and clean path operates on '/' only.
     // Make sure that the Windows separators are converted into slashes.
-    QString path1(path);
-    path1.replace('\\', '/');
+    QString normPath(path);
+    normPath.replace('\\', '/');
 
     // Build an absolute file path, remove redundant "." and "..", convert directory separators to "/".
-    QString clean(QDir::cleanPath(QFileInfo(path1).absoluteFilePath()));
+    const QFileInfo info(normPath);
+    QString clean;
+    if (removeSymLinks) {
+        // Remove symbolic links and redundant "." or "..".
+        // If the file does not exist, return an empty string.
+        clean = info.canonicalFilePath();
+    }
+    if (clean.isEmpty()) {
+        // Never return an ampty string but does not remove redundant "." or "..".
+        clean = info.absoluteFilePath();
+    }
+    // Always remove redundant "." or ".." but does not remove symbolic links.
+    clean = QDir::cleanPath(clean);
 
     // Collapse multiple slashes. Note that "//" shall remain at the beginning of the string (Windows share).
 #if defined(Q_OS_WIN)

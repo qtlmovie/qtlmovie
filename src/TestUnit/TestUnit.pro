@@ -58,7 +58,6 @@ SOURCES += \
     QtlIsoLanguagesTest.cpp \
     QtlOpticalDriveTest.cpp \
     QtlStringUtilsTest.cpp \
-    QtlFileSystemInfoTest.cpp \
     QtsTeletextDemuxTest.cpp
 
 HEADERS += \

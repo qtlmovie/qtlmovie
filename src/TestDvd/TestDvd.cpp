@@ -33,8 +33,35 @@
 #include "QtlFile.h"
 #include "QtlStdoutLogger.h"
 #include "QtlDvdTitleSet.h"
+#include "QtlDvdMedia.h"
 
 #define READ_CHUNK 1000  // Number of sectors per read operation.
+
+
+//----------------------------------------------------------------------------
+// Display a directory structure.
+//----------------------------------------------------------------------------
+
+namespace {
+    void displayFile(QTextStream& out, const QString& indent, const QtlDvdFile& file)
+    {
+        out << indent << file.name()
+            << ", " << file.sizeInBytes() << " bytes"
+            << ", LBA " << file.startSector() << "-" << (file.startSector() + (file.sizeInBytes() - 1) / QtlDvdMedia::DVD_SECTOR_SIZE)
+            << endl;
+    }
+
+    void displayDirectory(QTextStream& out, const QString& indent, const QtlDvdDirectory& dir)
+    {
+        displayFile(out, indent + "Directory: ", dir);
+        foreach (const QtlDvdFile& file, dir.files()) {
+            displayFile(out, indent + "    File: ", file);
+        }
+        foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
+            displayDirectory(out, indent + "    ", subdir);
+        }
+    }
+}
 
 
 //----------------------------------------------------------------------------
@@ -59,6 +86,21 @@ int main(int argc, char* argv[])
     // Set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
     qputenv("DVDCSS_VERBOSE", "2");
 
+    // Load DVD media description.
+    QtlDvdMedia dvd(input, &log);
+
+    // Display DVD information.
+    out << "Input file: " << input << endl
+        << "Is open: " << dvd.isOpen() << endl
+        << "Is encrypted: " << dvd.isEncrypted() << endl
+        << "Root name: " << dvd.rootName() << endl
+        << "Device name: " << dvd.deviceName() << endl
+        << "Volume id: \"" << dvd.volumeId() << "\"" << endl
+        << "Volume size: " << dvd.volumeSizeInSectors() << " sectors" << endl
+        << "File structure:" << endl;
+    displayDirectory(out, "", dvd.rootDirectory());
+    out << endl;
+
     // Load VTS description.
     QtlDvdTitleSet vts(input, &log);
     if (!vts.isOpen()) {
@@ -75,6 +117,7 @@ int main(int argc, char* argv[])
         << "VOB files: " << endl << "    " << vts.vobFileNames().join("\n    ") << endl
         << "DVD device name: " << vts.deviceName() << endl
         << "DVD volume id: \"" << vts.volumeId() << "\"" << endl
+        << "DVD volume size: " << vts.volumeSize() << " sectors" << endl
         << "Stream count: " << vts.streamCount() << endl;
 
     // Display stream information.
