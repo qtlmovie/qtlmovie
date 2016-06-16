@@ -268,7 +268,8 @@ public:
     //! Create a QtlDataPull to transfer of the video content of the title set to a device.
     //! @param parent Optional parent object of the QtlDataPull instance.
     //! @return An instance of QtlDataPull which can transfer the content of
-    //! the title set. The QtlDataPull is created but not started.
+    //! the title set. The QtlDataPull is created but not started. This object will
+    //! delete itself at the end of the transfer.
     //!
     QtlDataPull* dataPull(QObject* parent = 0) const;
 

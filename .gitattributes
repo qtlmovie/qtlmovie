@@ -1,5 +1,4 @@
 # How git should manipulate text files.
-#
 
 *.a     binary
 *.c     text

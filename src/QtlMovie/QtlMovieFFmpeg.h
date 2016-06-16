@@ -37,8 +37,9 @@
 
 #include "QtlByteBlock.h"
 #include "QtlMovie.h"
-#include "QtlMovieSettings.h"
 #include "QtlMediaStreamInfo.h"
+#include "QtlMovieSettings.h"
+#include "QtlMovieInputFile.h"
 
 //!
 //! Namespace for ffmpeg utilities.
@@ -56,32 +57,12 @@ namespace QtlMovieFFmpeg
     QStringList probeArguments(const QtlMovieSettings* settings, int probeTimeDivisor = 0);
 
     //!
-    //! Build FFprobe command line arguments for an input file.
-    //! @param [in] settings Application settings.
-    //! @param [in] fileName Input file name.
-    //! @param [in] fileFormat Optional input file format.
-    //! @param [in] probeTimeDivisor If positive, this value is used to reduce the
-    //! probe time duration. The actual probe time is the value from @a settings,
-    //! divided by @a probeTimeDivisor.
-    //! @return FFmpeg command line arguments.
-    //!
-    QStringList ffprobeArguments(const QtlMovieSettings* settings,
-                                 const QString& fileName,
-                                 const QString& fileFormat = QString(),
-                                 int probeTimeDivisor = 0);
-
-    //!
     //! Build FFmpeg command line arguments for an input file.
     //! @param [in] settings Application settings.
-    //! @param [in] fileName Input file name. If omitted, do not specify an input file name.
-    //! @param [in] palette Optional input file palette in RGB format.
-    //! @param [in] fileFormat Optional input file format.
+    //! @param [in] file Input file description. If omitted, do not specify an input file name.
     //! @return FFmpeg command line arguments.
     //!
-    QStringList inputArguments(const QtlMovieSettings* settings,
-                               const QString& fileName = QString(),
-                               const QtlByteBlock& palette = QtlByteBlock(),
-                               const QString& fileFormat = QString());
+    QStringList inputArguments(const QtlMovieSettings* settings, const QtlMovieInputFile* file = 0);
 
     //!
     //! Build FFmpeg command line arguments for output file.
@@ -93,13 +74,6 @@ namespace QtlMovieFFmpeg
     QStringList outputArguments(const QtlMovieSettings* settings,
                                 const QString& fileName,
                                 const QString& fileFormat = QString());
-
-    //!
-    //! Build the palette FFmpeg options list .
-    //! @param [in] palette The palette in RGB format. If empty, no option is generated.
-    //! @return FFmpeg options, possibly empty.
-    //!
-    QStringList paletteOptions(const QtlByteBlock& palette);
 
     //!
     //! Build an audio conversion FFmpeg options list for DVD transcoding.

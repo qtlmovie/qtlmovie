@@ -217,7 +217,7 @@ void QtlMovieAudioTestDialog::start()
          << "-";                        // Output file is standard output.
 
     // Create the process object.
-    _process = new QtlMovieFFmpegProcess(args, _file->durationInSeconds(), QString(), _settings, _log, this);
+    _process = new QtlMovieFFmpegProcess(args, _file->durationInSeconds(), QString(), _settings, _log, this, _file->dataPull(this));
 
     // Attempt cleanup as soon as the process completes.
     connect(_process, &QtlMovieFFmpegProcess::completed, this, &QtlMovieAudioTestDialog::processCompleted);

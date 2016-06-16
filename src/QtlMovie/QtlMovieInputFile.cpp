@@ -110,12 +110,22 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
 // Create and start a ffprobe process.
 //----------------------------------------------------------------------------
 
-QtlProcess*QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout)
+QtlProcess* QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout)
 {
+    // ffprobe executable.
     const QString ffprobe(_settings->ffprobe()->fileName());
-    const QStringList args(QtlMovieFFmpeg::ffprobeArguments(_settings, _ffmpegInput, _ffmpegFormat, probeTimeDivisor));
-    _log->debug(ffprobe + " " + args.join(' '));
 
+    // Build ffprobe arguments
+    QStringList args;
+    args << "-loglevel" << QTL_FFPROBE_LOGLEVEL
+         << QtlMovieFFmpeg::probeArguments(_settings, probeTimeDivisor);
+    if (!_ffmpegFormat.isEmpty()) {
+        args << "-f" << _ffmpegFormat;
+    }
+    args << _ffmpegInput << "-print_format" << "flat" << "-show_format" << "-show_streams";
+
+    // Create the process object.
+    _log->debug(ffprobe + " " + args.join(' '));
     QtlProcess* process = QtlProcess::newInstance(ffprobe,
                                                   args,
                                                   1000 * ffprobeTimeout,
@@ -141,6 +151,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     // By default, the ffmpeg input spec is the file name.
     _ffmpegInput = fileName;
     _ffmpegFormat.clear();
+    _pipeInput = false;
 
     // Clear all previous media info.
     const bool wasNone = _streams.isEmpty();
@@ -216,12 +227,12 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
         QtlProcess* process2 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_2, ffprobeTimeout);
         QtlProcess* process3 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_3, ffprobeTimeout);
 
-        // Pipe DVD content into both process process inputs at the same time.
+        // Pipe DVD content into all process inputs at the same time.
         if (_pipeInput) {
             QList<QIODevice*> processInputs;
             processInputs << process->inputDevice() << process2->inputDevice() << process3->inputDevice();
             dataPull(this)->start(processInputs);
-            _log->line(tr("Decrypting DVD, please be patient..."), QColor("green"));
+            _log->line(tr("Searching audio and subtitles tracks on DVD, please be patient..."), QColor("green"));
         }
     }
     else {

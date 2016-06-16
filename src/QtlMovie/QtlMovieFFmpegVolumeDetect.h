@@ -60,6 +60,7 @@ public:
     //! @param [in] settings Application settings.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
+    //! @param [in] dataPull If non zero, used to feed the standard input of the process.
     //!
     QtlMovieFFmpegVolumeDetect(const QString& inputFile,
                                const QString& audioStream,
@@ -67,7 +68,8 @@ public:
                                const QString& temporaryDirectory,
                                const QtlMovieSettings* settings,
                                QtlLogger* log,
-                               QObject *parent = 0);
+                               QObject *parent = 0,
+                               QtlDataPull* dataPull = 0);
 
 protected:
     //!

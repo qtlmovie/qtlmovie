@@ -36,6 +36,7 @@
 #define QTLMOVIEPROCESS_H
 
 #include <QtCore>
+#include "QtlDataPull.h"
 #include "QtlMovieAction.h"
 #include "QtlMovieExecFile.h"
 
@@ -68,8 +69,7 @@ public:
     //! @param [in] settings Application settings.
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
-    //! @param [in] pipeInput If true, the standard input of the process can be fed
-    //! using inputDevice().
+    //! @param [in] dataPull If non zero, used to feed the standard input of the process.
     //!
     QtlMovieProcess(const QtlMovieExecFile* execFile,
                     const QStringList& arguments,
@@ -77,7 +77,7 @@ public:
                     const QtlMovieSettings* settings,
                     QtlLogger* log,
                     QObject* parent = 0,
-                    bool pipeInput = false);
+                    QtlDataPull* dataPull = 0);
 
     //!
     //! Start the process.
@@ -123,17 +123,6 @@ public:
     QIODevice* outputDevice() const
     {
         return _hasBinaryOutput ? _process : 0;
-    }
-
-    //!
-    //! Get the device representing the input pipe of the process.
-    //! The returned QIODevice is writeable only.
-    //! @return The input pipe as a QIODevice or zero if @a pipeInput
-    //! was set to false in the constructor.
-    //!
-    QIODevice* inputDevice() const
-    {
-        return _pipeInput ? _process : 0;
     }
 
 signals:
@@ -197,7 +186,7 @@ private:
     const QtlMovieExecFile* _execFile;        //!< Process executable file.
     QStringList             _arguments;       //!< Command line arguments.
     bool                    _hasBinaryOutput; //!< Treat standard output as binary data.
-    bool                    _pipeInput;       //!< Process input is an accessible pipe.
+    QtlDataPull*            _dataPull;        //!< Process input.
     QString                 _stdOutput;       //!< Standard error buffer.
     QString                 _stdError;        //!< Standard error buffer.
 

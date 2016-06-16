@@ -204,8 +204,8 @@ public:
     //!
     //! Get an instance of QtlDataPull to transfer the content of the input file.
     //! @return An instance of QtlDataPull which can transfer the content of the input
-    //! file into a QIODevice. Return a null pointer if the file shall be read directly
-    //! from the file system.
+    //! file into a QIODevice. This object will delete itself at the end of the transfer.
+    //! Return a null pointer if the file shall be read directly from the file system.
     //! @param parent Optional parent object of the QtlDataPull instance.
     //! @see pipeInput()
     //!

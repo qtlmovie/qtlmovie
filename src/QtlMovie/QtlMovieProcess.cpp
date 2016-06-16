@@ -44,13 +44,13 @@ QtlMovieProcess::QtlMovieProcess(const QtlMovieExecFile* execFile,
                                  const QtlMovieSettings* settings,
                                  QtlLogger* log,
                                  QObject *parent,
-                                 bool pipeInput):
+                                 QtlDataPull* dataPull):
     QtlMovieAction(settings, log, parent),
     _process(new QProcess(this)),
     _execFile(execFile),
     _arguments(arguments),
     _hasBinaryOutput(hasBinaryOutput),
-    _pipeInput(pipeInput),
+    _dataPull(dataPull),
     _stdOutput(),
     _stdError()
 {
@@ -143,8 +143,12 @@ bool QtlMovieProcess::start()
     // Start the process.
     _process->start(exec, _arguments);
 
-    // Immediately close the write channel if we have nothing to write on the standard input of the process.
-    if (!_pipeInput) {
+    if (_dataPull != 0) {
+        // Start feed the standard input of the process using a QtlDataPull object.
+        _dataPull->start(_process);
+    }
+    else {
+        // Immediately close the write channel if we have nothing to write on the standard input of the process.
         _process->closeWriteChannel();
     }
     return true;

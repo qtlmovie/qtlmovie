@@ -194,9 +194,11 @@ private:
     //! Add an FFmpeg process in the process list.
     //! @param [in] description Description of this process.
     //! @param [in] ffmpegArguments FFmpeg arguments, empty meaning error.
+    //! @param [in] originalInput If true, the input is the original input
+    //! file, otherwise it is some intermediate file.
     //! @return True on success, false on error.
     //!
-    bool addFFmpeg(const QString& description, const QStringList ffmpegArguments);
+    bool addFFmpeg(const QString& description, const QStringList ffmpegArguments, bool originalInput);
 
     //!
     //! Compute an FFmpeg video filter for burning subtitles from an external file into video.

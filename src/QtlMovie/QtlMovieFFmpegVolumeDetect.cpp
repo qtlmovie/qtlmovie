@@ -69,13 +69,15 @@ QtlMovieFFmpegVolumeDetect::QtlMovieFFmpegVolumeDetect(const QString& inputFile,
                                                        const QString& temporaryDirectory,
                                                        const QtlMovieSettings* settings,
                                                        QtlLogger* log,
-                                                       QObject* parent) :
+                                                       QObject* parent,
+                                                       QtlDataPull* dataPull) :
     QtlMovieFFmpegProcess(commandLineOptions(inputFile, audioStream, settings),
                           inputDurationInSeconds,
                           temporaryDirectory,
                           settings,
                           log,
-                          parent),
+                          parent,
+                          dataPull),
     _meanLevel(0.0),
     _peakLevel(0.0)
 {

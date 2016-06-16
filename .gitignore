@@ -4,6 +4,7 @@ build-*-[Dd]ebug
 build-*-[Rr]elease-[Ss]tatic
 build-*-[Dd]ebug-[Ss]tatic
 *~
+*.autosave
 *.bak
 *.exe
 *.dll

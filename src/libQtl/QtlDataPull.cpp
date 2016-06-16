@@ -186,7 +186,7 @@ void QtlDataPull::stopCaller()
 void QtlDataPull::stopDevice(QIODevice* device)
 {
     if (device != 0) {
-        _log->debug(tr("DataPull: stop requested on %1").arg(device->objectName()));
+        _log->debug(tr("DataPull: stop requested on one device"));
 
         // Search the context for the device.
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
@@ -270,6 +270,10 @@ void QtlDataPull::bytesWritten(qint64 bytes)
             if (ctx->device == dev) {
                 // Accumulate total number of bytes on this device.
                 ctx->totalOut += bytes;
+                //@@@@@@@@@@@@@@@@@@@@@
+                static quint64 counter = 0;//@@
+                if (++counter % 100 == 0) _log->debug(tr("QtlDataPull::bytesWritten(), called %1 times, buffered data: %2 bytes").arg(counter).arg(_totalIn - ctx->totalOut));//@@@@
+                //@@@@@@@@@@@@@@@@@@@@@
                 // Detect underflow.
                 if (_totalIn - ctx->totalOut <= _minBufferSize) {
                     processNewStateLater();
@@ -371,8 +375,6 @@ void QtlDataPull::processNewState()
         Context& ctx(_devices[index]);
         if (_closed || !ctx.running) {
             // Found a terminating device.
-            _log->debug(tr("DataPull: cleaning up terminating device %1").arg(ctx.device == 0 ? "(null)" : ctx.device->objectName()));
-
             // The device is zero when the device object has been destroyed.
             if (ctx.device != 0) {
                 // Notify application.

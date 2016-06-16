@@ -476,7 +476,8 @@ bool QtlMovieJob::buildScenario()
                                                _tempDir,
                                                settings(),
                                                this,
-                                               this);
+                                               this,
+                                               _task->inputFile()->dataPull(this));
         process->setDescription(tr("Evaluate audio level"));
         _actionList.append(process);
     }
@@ -543,14 +544,20 @@ bool QtlMovieJob::buildScenario()
 // Add an FFmpeg process in the process list.
 //----------------------------------------------------------------------------
 
-bool QtlMovieJob::addFFmpeg(const QString& description, const QStringList ffmpegArguments)
+bool QtlMovieJob::addFFmpeg(const QString& description, const QStringList ffmpegArguments, bool originalInput)
 {
     if (ffmpegArguments.isEmpty()) {
         // Error building argument list.
         return abortStart(tr("Internal error, no FFmpeg option"));
     }
     else {
-        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments, _outSeconds, _tempDir, settings(), this, this);
+        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments,
+                                                                   _outSeconds,
+                                                                   _tempDir,
+                                                                   settings(),
+                                                                   this,
+                                                                   this,
+                                                                   originalInput ? task()->inputFile()->dataPull(this) : 0);
         process->setDescription(description);
         _actionList.append(process);
         return true;
@@ -733,7 +740,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
 {
     // Start FFmpeg argument lists (input file and audio options).
     QStringList args;
-    args << QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette())
+    args << QtlMovieFFmpeg::inputArguments(settings(), inputFile)
          << QtlMovieFFmpeg::dvdAudioOptions(settings(), inputFile->selectedAudioStreamInfo());
 
     // Video stream to transcode.
@@ -750,7 +757,7 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
         args << "-map" << videoStream->ffSpecifier()
              << "-codec:v" << "copy"
              << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "dvd");
-        return addFFmpeg(tr("Transcoding audio only"), args);
+        return addFFmpeg(tr("Transcoding audio only"), args, true);
     }
     else {
         // Transcode video in two passes.
@@ -824,7 +831,8 @@ bool QtlMovieJob::addTranscodeAudioVideoToDvd(const QtlMovieInputFile* inputFile
                   << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "dvd");
 
         // Add 2 processes for video transcoding.
-        return addFFmpeg(tr("Transcoding, pass 1"), pass1Args) && addFFmpeg(tr("Transcoding, pass 2"), pass2Args);
+        return addFFmpeg(tr("Transcoding, pass 1"), pass1Args, true) &&
+                addFFmpeg(tr("Transcoding, pass 2"), pass2Args, true);
     }
 }
 
@@ -887,7 +895,7 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
 
     // Add the process for audio extraction.
     // Note that this never fails since the argument list is not empty.
-    addFFmpeg(tr("Extracting audio"), args);
+    addFFmpeg(tr("Extracting audio"), args, false);
 
     // Perform the audio/video remux into the final file.
     args.clear();
@@ -902,7 +910,7 @@ bool QtlMovieJob::addTranscodeToDvdFile(const QtlMovieInputFile* inputFile, cons
 
     // Add the process for remux.
     // Note that this never fails since the argument list is not empty.
-    addFFmpeg(tr("Remuxing audio/video"), args);
+    addFFmpeg(tr("Remuxing audio/video"), args, false);
 
     // Add an action to delete the intermediate files now.
     // If the job continues with an ISO image file generation, this save a lot of transient disk space.
@@ -1033,7 +1041,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
     const QtlMediaStreamInfoPtr audioStream(inputFile->selectedAudioStreamInfo());
 
     // Start FFmpeg argument list.
-    QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
+    QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile));
 
     // Process selected video stream.
     if (!videoStream.isNull()) {
@@ -1108,7 +1116,7 @@ bool QtlMovieJob::addTranscodeToMp4(const QtlMovieInputFile* inputFile,
     args << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "mp4");
 
     // Add the FFmpeg process.
-    return addFFmpeg(tr("Transcoding audio/video"), args);
+    return addFFmpeg(tr("Transcoding audio/video"), args, true);
 }
 
 
@@ -1127,7 +1135,7 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
     }
 
     // Start FFmpeg argument list.
-    QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification(), inputFile->palette()));
+    QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile));
 
     // Process selected audio stream.
     if (!audioStream.isNull()) {
@@ -1195,7 +1203,8 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
               << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, "avi");
 
     // Add 2 processes for video transcoding.
-    return addFFmpeg(tr("Transcoding, pass 1"), pass1Args) && addFFmpeg(tr("Transcoding, pass 2"), pass2Args);
+    return addFFmpeg(tr("Transcoding, pass 1"), pass1Args, true) &&
+            addFFmpeg(tr("Transcoding, pass 2"), pass2Args, true);
 }
 
 
@@ -1323,7 +1332,7 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         }
 
         // Build FFmpeg options to extract one subtitle track to SRT.
-        QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile->ffmpegInputFileSpecification()));
+        QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile));
         args << "-vn"   // Suppress video streams.
              << "-an"   // Suppress audio streams.
              << "-codec:s" << codecName
@@ -1331,6 +1340,6 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
              << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, fileFormat);
 
         // Add the FFmpeg process.
-        return addFFmpeg(tr("Extracting subtitles"), args);
+        return addFFmpeg(tr("Extracting subtitles"), args, true);
     }
 }

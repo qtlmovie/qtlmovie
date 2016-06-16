@@ -62,8 +62,8 @@ QtlMovieFFmpegProcess::QtlMovieFFmpegProcess(const QStringList& ffmpegArguments,
                                              const QtlMovieSettings* settings,
                                              QtlLogger* log,
                                              QObject *parent,
-                                             bool pipeInput) :
-    QtlMovieProcess(settings->ffmpeg(), ffmpegArguments, true, settings, log, parent, pipeInput),
+                                             QtlDataPull* dataPull) :
+    QtlMovieProcess(settings->ffmpeg(), ffmpegArguments, true, settings, log, parent, dataPull),
     _inputDurationInSeconds(inputDurationInSeconds),
     _tempDir(temporaryDirectory)
 {

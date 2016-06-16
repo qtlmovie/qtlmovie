@@ -76,48 +76,55 @@ QStringList QtlMovieFFmpeg::probeArguments(const QtlMovieSettings* settings, int
 
 
 //----------------------------------------------------------------------------
-// Build FFprobe command line arguments for an input file.
-//----------------------------------------------------------------------------
-
-QStringList QtlMovieFFmpeg::ffprobeArguments(const QtlMovieSettings* settings,
-                                             const QString& fileName,
-                                             const QString& fileFormat,
-                                             int probeTimeDivisor)
-{
-    QStringList args;
-    args << "-loglevel" << QTL_FFPROBE_LOGLEVEL
-         << probeArguments(settings, probeTimeDivisor);
-    if (!fileFormat.isEmpty()) {
-        args << "-f" << fileFormat;
-    }
-    args << fileName << "-print_format" << "flat" << "-show_format" << "-show_streams";
-    return args;
-}
-
-
-//----------------------------------------------------------------------------
 // Build FFmpeg command line arguments for input file.
 //----------------------------------------------------------------------------
 
-QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings,
-                                           const QString& fileName,
-                                           const QtlByteBlock& palette,
-                                           const QString& fileFormat)
+QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, const QtlMovieInputFile* file)
 {
+    // Common options.
     QStringList args;
-    args << "-nostdin"               // Do not attempt to read from standard input.
+    args << "-nostdin"               // Do not attempt to read commands from standard input.
          << "-stats"                 // Print progress report (caught by our output analysis).
          << "-loglevel" << QTL_FFMPEG_LOGLEVEL
          << probeArguments(settings)
-         << "-fflags" << "+genpts"   // Make FFmpeg generate PTS (time stamps).
-         << paletteOptions(palette); // Input file palette if specified.
+         << "-fflags" << "+genpts";  // Make FFmpeg generate PTS (time stamps).
 
+    // If no input file specified, nothing more to add.
+    if (file == 0) {
+        return args;
+    }
+
+    // Build the color palette options. This is typically used for DVD subtitles where the
+    // color palette of the subtitles bitmaps is stored outside the video file (in the .IFO).
+    const QtlByteBlock palette(file->palette());
+    QString paletteDescription;
+    for (int base = 0; base + 4 <= palette.size(); base += 4) {
+        const quint8 r = palette[base+1];
+        const quint8 g = palette[base+2];
+        const quint8 b = palette[base+3];
+        if (!paletteDescription.isEmpty()) {
+            paletteDescription.append(",");
+        }
+        paletteDescription.append(QStringLiteral("%1%2%3").arg(r,2,16,QChar('0')).arg(g,2,16,QChar('0')).arg(b,2,16,QChar('0')));
+    }
+    if (!paletteDescription.isEmpty()) {
+        args << "-palette" << paletteDescription;
+    }
+
+    // Add explicit file format. This is typically used when the input is stdin
+    // and the file format cannot be derived from the file name.
+    const QString fileFormat(file->ffmpegInputFileFormat());
     if (!fileFormat.isEmpty()) {
         args << "-f" << fileFormat;
     }
+
+    // Add the input file name. This is not really a file name but the "ffmpeg specification"
+    // which can be '-' (stdin) or 'concat:...' (concatenation of DVD VTS files).
+    const QString fileName(file->ffmpegInputFileSpecification());
     if (!fileName.isEmpty()) {
         args << "-i" << fileName;
     }
+
     return args;
 }
 
@@ -143,37 +150,6 @@ QStringList QtlMovieFFmpeg::outputArguments(const QtlMovieSettings* settings, co
     // Output file name
     args << "-y" << fileName;
     return args;
-}
-
-
-//----------------------------------------------------------------------------
-// Build the palette FFmpeg options list .
-//----------------------------------------------------------------------------
-
-QStringList QtlMovieFFmpeg::paletteOptions(const QtlByteBlock& palette)
-{
-    // Build the palette description.
-    QString spec;
-    for (int base = 0; base + 4 <= palette.size(); base += 4) {
-        const quint8 r = palette[base+1];
-        const quint8 g = palette[base+2];
-        const quint8 b = palette[base+3];
-        if (!spec.isEmpty()) {
-            spec.append(",");
-        }
-        spec.append(QStringLiteral("%1%2%3").arg(r,2,16,QChar('0')).arg(g,2,16,QChar('0')).arg(b,2,16,QChar('0')));
-    }
-
-    // Build the ffmpeg option.
-    if (spec.isEmpty()) {
-        // No palette => no option.
-        return QStringList();
-    }
-    else {
-        QStringList args;
-        args << "-palette" << spec;
-        return args;
-    }
 }
 
 
