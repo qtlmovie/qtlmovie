@@ -270,10 +270,6 @@ void QtlDataPull::bytesWritten(qint64 bytes)
             if (ctx->device == dev) {
                 // Accumulate total number of bytes on this device.
                 ctx->totalOut += bytes;
-                //@@@@@@@@@@@@@@@@@@@@@
-                static quint64 counter = 0;//@@
-                if (++counter % 100 == 0) _log->debug(tr("QtlDataPull::bytesWritten(), called %1 times, buffered data: %2 bytes").arg(counter).arg(_totalIn - ctx->totalOut));//@@@@
-                //@@@@@@@@@@@@@@@@@@@@@
                 // Detect underflow.
                 if (_totalIn - ctx->totalOut <= _minBufferSize) {
                     processNewStateLater();
