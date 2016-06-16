@@ -2,6 +2,9 @@
 QtlMovie Change Log
 ===================
 
+Version 1.9
+- Precompiled Windows and Mac binaries uses Qt 5.7.0.
+
 Version 1.8
 - Improved US Closed Captions (EIA-608, CEA-708) detection and processing
   using CCextractor version 0.80.
