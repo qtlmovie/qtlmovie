@@ -37,7 +37,7 @@
 #define QTLDVDDATAPULL_H
 
 #include "QtlDataPull.h"
-#include "QtlDvdTitleSet.h"
+#include "QtlByteBlock.h"
 
 //!
 //! A class to pull data from an encrypted DVD into an asynchronous device such as QProcess.
@@ -89,9 +89,10 @@ protected:
     //!
     //! Invoked when more data is needed.
     //! Reimplemented from QtlDataPull.
+    //! @param [in] maxSize Maximum size in bytes of the requested transfer.
     //! @return True on success, false on error.
     //!
-    virtual bool needTransfer();
+    virtual bool needTransfer(qint64 maxSize);
 
     //!
     //! Cleanup the transfer.
@@ -108,6 +109,9 @@ private:
     int              _sectorRemain; //!< Remaining number of sectors to transfer.
     QtlByteBlock     _buffer;       //!< Transfer buffer.
     struct dvdcss_s* _dvdcss;       //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
+
+    // Unaccessible operations.
+    Q_DISABLE_COPY(QtlDvdDataPull)
 };
 
 #endif // QTLDVDDATAPULL_H

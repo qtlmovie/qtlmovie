@@ -92,12 +92,31 @@ public:
     }
 
     //!
+    //! Set the maximum number of bytes to pull. After that number of bytes is
+    //! read, a proper close is triggered.
+    //! @param [in] size Maximum size in bytes. If negative, no maximum is applied.
+    //!
+    void setMaxPulledSize(qint64 size)
+    {
+        _maxIn = size;
+    }
+
+    //!
     //! Check if the data transfer is started.
     //! @return True if the transfer is started.
     //!
     bool isStarted() const
     {
         return !_devices.isEmpty();
+    }
+
+    //!
+    //! Get the total size of all pulled data.
+    //! @return Total pulled data size in bytes.
+    //!
+    qint64 pulledSize() const
+    {
+        return _totalIn;
     }
 
     //!
@@ -199,10 +218,12 @@ protected:
     //! Must be reimplemented by subclass.
     //! An implementation will typically call write() to provide data.
     //! If no more data is available, an implementation must call close().
+    //! @param [in] maxSize Maximum size in bytes of the requested transfer.
+    //! If negative, there is not limit.
     //! @return True on success, false on error. In case of error, the transfer is aborted
     //! and cleanupTransfer() will be called later.
     //!
-    virtual bool needTransfer() = 0;
+    virtual bool needTransfer(qint64 maxSize) = 0;
 
     //!
     //! Cleanup the transfer.
@@ -260,6 +281,13 @@ private:
     }
 
     //!
+    //! Invoked when a device has written data.
+    //! @param [in] dev Destination device.
+    //! @param [in] bytes Number of bytes written.
+    //!
+    void processBytesWritten(QIODevice* dev, qint64 bytes);
+
+    //!
     //! Check if more data need to be pulled from the subclass.
     //! @return True is all active devices are underflow.
     //!
@@ -284,9 +312,10 @@ private:
     class Context
     {
     public:
-        QIODevice* device;    //!< Device descriptor.
-        bool       running;   //!< The device is active.
-        qint64     totalOut;  //!< Total written data as reported by the device.
+        QIODevice*   device;    //!< Device descriptor.
+        QFileDevice* file;      //!< Same as a QFileDevice, zero is not a file.
+        bool         running;   //!< The device is active.
+        qint64       totalOut;  //!< Total written data as reported by the device.
         //!
         //! Constructor.
         //! @param [in] dev Optional device descriptor.
@@ -300,9 +329,13 @@ private:
     int            _minBufferSize;   //!< Lower limit of buffer size.
     QTime          _startTime;       //!< Time of start operation.
     bool           _closed;          //!< True when close() is requested by subclass.
+    qint64         _maxIn;           //!< Maximum data size to transfer.
     qint64         _totalIn;         //!< Total data transfered by write().
     QList<Context> _devices;         //!< Active output devices.
     int            _processingState; //!< A counter to protect processNewState().
+
+    // Unaccessible operations.
+    Q_DISABLE_COPY(QtlDataPull)
 };
 
 #endif // QTLDATAPULL_H

@@ -82,7 +82,8 @@ SOURCES += \
     QtlDataPull.cpp \
     QtlDvdDataPull.cpp \
     QtlFileDataPull.cpp \
-    QtlDvdMedia.cpp
+    QtlDvdMedia.cpp \
+    QtlDvdDirectory.cpp
 
 HEADERS += \
     QtlByteBlock.h \

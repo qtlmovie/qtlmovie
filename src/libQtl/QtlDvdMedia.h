@@ -182,6 +182,16 @@ public:
         return _rootDirectory;
     }
 
+    //!
+    //! Locate a file in the DVD.
+    //! @param [in] fileName Name of the file to locate. It the absolute path name of the file
+    //! starts with the mount point of the DVD, then only the relative part is used. Otherwise,
+    //! the @a fileName must be a path relative to the DVD root directory.
+    //! @param [in] cs Case sensitivity when looking for file names.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
+
 signals:
     //!
     //! Emitted when a new DVD media is open.

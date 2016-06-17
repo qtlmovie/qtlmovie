@@ -74,7 +74,7 @@ bool QtlFileDataPull::initializeTransfer()
 // Invoked when more data is needed.
 //----------------------------------------------------------------------------
 
-bool QtlFileDataPull::needTransfer()
+bool QtlFileDataPull::needTransfer(qint64 maxSize)
 {
     // Loop until something is read.
     for (;;) {
@@ -100,8 +100,17 @@ bool QtlFileDataPull::needTransfer()
             }
         }
 
+        // Maximum size of data to read.
+        qint64 count = _buffer.size();
+        if (maxSize >= 0 && maxSize < count) {
+            count = maxSize;
+        }
+        if (count <= 0) {
+            return true;
+        }
+
         // Read some data from the input file.
-        const qint64 count = _input.read(reinterpret_cast<char*>(_buffer.data()), _buffer.size());
+        count = _input.read(reinterpret_cast<char*>(_buffer.data()), count);
         if (count == 0) {
             // At end of file, loop on next one.
             _input.close();

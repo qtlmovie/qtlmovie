@@ -34,38 +34,13 @@
 // - http://dvd.sourceforge.net/dvdinfo/
 //   Information about DVD metadata, contents of VMG and VTS .IFO files.
 //
-// - http://www.osta.org/specs/pdf/udf102.pdf
-//   UDF 1.0.2 specifications (Universal Disk Format). UDF is the underlying
-//   file system structure in Video DVD's. This specification includes the
-//   specificities for Video DVD. Note that more recent versions of this
-//   specification are available but not used on Video DVD's.
-//
-// - http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
-//   Volume and File Structure of CDROM for Information Interchange
-//
-// The structure of a Video DVD has limitations:
-// - Sector size = logical block size = 2048 bytes
-// - One single volume
-// - One single partition
-//
 //----------------------------------------------------------------------------
 
 #include "QtlDvdTitleSet.h"
 #include "QtlDvdDataPull.h"
 #include "QtlFileDataPull.h"
 #include "QtlFile.h"
-#include "QtlHexa.h"
-#include "dvdcss.h"
-
-//
-// Layout of a DVD volume. See ECMA-119.
-//
-#define DVD_VOLUME_DESCRIPTORS_SECTOR       16
-#define DVD_VOLUME_DESCRIPTOR_ID       "CD001"
-#define DVD_VOLDESC_TYPE_PRIMARY             1
-#define DVD_VOLDESC_TYPE_TERMINATOR        255
-#define DVD_ROOTDIRDESC_OFFSET             156
-#define DVD_ROOTDIRDESC_SIZE                34
+#include "QtlStringUtils.h"
 
 //
 // Layout of IFO file for title sets (VTS_nn_0.IFO).
@@ -101,26 +76,19 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject*
     _log(log != 0 ? log : &_nullLog),
     _deviceName(),
     _volumeId(),
-    _volumeSize(0),
+    _volumeSectors(0),
     _isEncrypted(false),
-    _dvdcss(0),
     _vtsNumber(-1),
     _ifoFileName(),
     _vobFileNames(),
-    _vobSize(0),
+    _vobSizeInBytes(0),
     _vobStartSector(-1),
-    _nextSector(0),
     _palette(),
     _streams()
 {
     if (!fileName.isEmpty()) {
-        open(fileName);
+        load(fileName);
     }
-}
-
-QtlDvdTitleSet::~QtlDvdTitleSet()
-{
-    close();
 }
 
 QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
@@ -129,63 +97,36 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
     _log(other._log != 0 && other._log != &other._nullLog ? other._log : &_nullLog),
     _deviceName(other._deviceName),
     _volumeId(other._volumeId),
-    _volumeSize(other._volumeSize),
+    _volumeSectors(other._volumeSectors),
     _isEncrypted(other._isEncrypted),
-    _dvdcss(0),
     _vtsNumber(other._vtsNumber),
     _ifoFileName(other._ifoFileName),
     _vobFileNames(other._vobFileNames),
-    _vobSize(other._vobSize),
+    _vobSizeInBytes(other._vobSizeInBytes),
     _vobStartSector(other._vobStartSector),
-    _nextSector(0),
     _palette(other._palette),
     _streams(other._streams)
 {
-    // If the title set is on an encrypted DVD, re-open it, but no need to reanalyze info.
-    if (_isEncrypted) {
-        const QByteArray name(_deviceName.toUtf8());
-        _dvdcss = dvdcss_open(name.data());
-        if (_dvdcss == 0) {
-            _log->line(tr("Error reopening DVD at %1").arg(_deviceName));
-        }
-    }
 }
 
+
 //----------------------------------------------------------------------------
-// Close a title set.
+// Clear object content.
 //----------------------------------------------------------------------------
 
-void QtlDvdTitleSet::close()
+void QtlDvdTitleSet::clear()
 {
     _deviceName.clear();
     _volumeId.clear();
-    _volumeSize = 0;
+    _volumeSectors = 0;
     _isEncrypted = false;
     _vtsNumber = -1;
     _ifoFileName.clear();
     _vobFileNames.clear();
-    _vobSize = 0;
+    _vobSizeInBytes = 0;
     _vobStartSector = -1;
-    _nextSector = 0;
     _palette.clear();
     _streams.clear();
-
-    if (_dvdcss != 0) {
-        dvdcss_close(_dvdcss);
-        _dvdcss = 0;
-    }
-}
-
-
-//----------------------------------------------------------------------------
-// Get the color palette of the title set in RGB format.
-//----------------------------------------------------------------------------
-
-QtlByteBlock QtlDvdTitleSet::rgbPalette() const
-{
-    QtlByteBlock palette(_palette);
-    convertPaletteYuvToRgb(palette, _log);
-    return palette;
 }
 
 
@@ -193,18 +134,38 @@ QtlByteBlock QtlDvdTitleSet::rgbPalette() const
 // Load the description of a title set.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::open(const QString& fileName)
+bool QtlDvdTitleSet::load(const QString& fileName)
 {
-    close();
-    const bool ok =
-            buildFileNames(fileName) &&
-            buildDeviceName() &&
-            readVtsIfo() &&
-            readDvdStructure();
-    if (!ok) {
-        close();
+    // Reset previous content.
+    clear();
+
+    // Build all VTS file names and read the content of the IFO file
+    if (!buildFileNames(fileName) || !readVtsIfo()) {
+        clear();
+        return false;
     }
-    return ok;
+
+    // Check if the files are on a DVD media.
+    QtlDvdMedia dvd(fileName, _log);
+    if (dvd.isOpen()) {
+
+        // Save generic information on the DVD media.
+        _deviceName = dvd.deviceName();
+        _volumeId = dvd.volumeId();
+        _volumeSectors = dvd.volumeSizeInSectors();
+        _isEncrypted = dvd.isEncrypted();
+
+        // Look for the starting sector of the VTS.
+        const QtlDvdFile vob(dvd.searchFile(_vobFileNames.first()));
+        _vobStartSector = vob.startSector();
+        if (_vobStartSector < 0) {
+            _log->line(tr("Cannot find start sector for %1 on %2").arg(_vobFileNames.first()).arg(_deviceName));
+            clear();
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -268,7 +229,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
             break;
         }
         _vobFileNames << vobFile;
-        _vobSize += QFileInfo(vobFile).size();
+        _vobSizeInBytes += QFileInfo(vobFile).size();
     }
 
     // There must be at least one VOB file, otherwise there is no video.
@@ -286,28 +247,6 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
     }
 
     return true;
-}
-
-//----------------------------------------------------------------------------
-// Build device name for libdvdcss from IFO file name.
-//----------------------------------------------------------------------------
-
-bool QtlDvdTitleSet::buildDeviceName()
-{
-#if defined(Q_OS_WIN)
-
-    // On Windows, if we are on a DVD readed, the IFO file name starts with a drive name.
-    if (_ifoFileName.length() > 2 && _ifoFileName[1] == ':') {
-        _deviceName = _ifoFileName.left(2);
-        return true;
-    }
-    else {
-        return false;
-    }
-
-#else
-#error "unsupported OS"
-#endif
 }
 
 
@@ -512,8 +451,8 @@ bool QtlDvdTitleSet::readVtsIfo()
     const int paletteSize = DVD_IFO_PALETTE_ENTRY_SIZE * DVD_IFO_PALETTE_ENTRY_COUNT;
     valid =
         QtlFile::readBigEndianAt(ifo, DVD_IFO_VTS_PGCI_OFFSET, pgci) &&
-        QtlFile::readBigEndianAt(ifo, (DVD_SECTOR_SIZE * pgci) + DVD_IFO_VTS_PGC_OFFSET_IN_PGCI, pgc) &&
-        QtlFile::readBinaryAt(ifo, (DVD_SECTOR_SIZE * pgci) + pgc + DVD_IFO_PALETTE_OFFSET_IN_PGC, _palette, paletteSize) &&
+        QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + DVD_IFO_VTS_PGC_OFFSET_IN_PGCI, pgc) &&
+        QtlFile::readBinaryAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + pgc + DVD_IFO_PALETTE_OFFSET_IN_PGC, _palette, paletteSize) &&
         _palette.size() == paletteSize;
 
     if (!valid) {
@@ -524,219 +463,14 @@ bool QtlDvdTitleSet::readVtsIfo()
 
 
 //----------------------------------------------------------------------------
-// Open DVD structure and check if the media is encrypted.
+// Get the color palette of the title set in RGB format.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::readDvdStructure()
+QtlByteBlock QtlDvdTitleSet::rgbPalette() const
 {
-    // Initialize libdvdcss.
-    const QByteArray name(_deviceName.toUtf8());
-    _dvdcss = dvdcss_open(name.data());
-
-    // Unsuccessful open is not an error. The file is simply probably not on a DVD media.
-    if (_dvdcss == 0) {
-        _log->debug(tr("cannot initialize libdvdcss on %1, probably not a DVD media").arg(_deviceName));
-        return true;
-    }
-
-    // Read primary volume descriptor.
-    // ECMA-119, section 6.7.1: The volume descriptor set starts at sector 16.
-    // Each volume descriptor uses one sector. There must be one primary volume
-    // descriptor and the list is terminated by one volume descriptor set terminator.
-    // Here, we do not read more than 8 sectors (not standard, but highly probable).
-    QtlByteBlock data(DVD_SECTOR_SIZE);
-    int sectorNumber = DVD_VOLUME_DESCRIPTORS_SECTOR;
-    int rootDirSector = -1;
-    int rootDirSize = -1;
-    for (int count = 8; count > 0 && readDvdSectors(data.data(), 1, sectorNumber++, false); --count) {
-        // Volume descriptor type is in first byte.
-        const int type = data[0];
-        // Volume descriptor standard identified is in the next 5 bytes.
-        const QString id = data.getLatin1(1, sizeof(DVD_VOLUME_DESCRIPTOR_ID) - 1);
-        if (id != DVD_VOLUME_DESCRIPTOR_ID) {
-            // Not a valid volume descriptor.
-            _log->debug(tr("Invalid volume descriptor, id=\"%1\" instead of \"%2\"").arg(id).arg(DVD_VOLUME_DESCRIPTOR_ID));
-            break;
-        }
-        else if (type == DVD_VOLDESC_TYPE_TERMINATOR) {
-            // Reached the "volume description set terminator", primary volume descriptor not found.
-            break;
-        }
-        else if (type == DVD_VOLDESC_TYPE_PRIMARY) {
-            // Found the "primary volume descriptor".
-            // Format: see ECMA-119, section 8.4.
-            _volumeId = data.getLatin1(40, 32).trimmed();
-            _volumeSize = data.fromLittleEndian<quint32>(80);
-            // The "Directory Record for Root Directory" is at offset 156, 34 bytes long.
-            // Format: see ECMA-119, section 9.1. Size of record is in first byte.
-            if (data[DVD_ROOTDIRDESC_OFFSET] == DVD_ROOTDIRDESC_SIZE) {
-                // Sector number at offset 2, size in bytes at offset 10.
-                rootDirSector = data.fromLittleEndian<quint32>(DVD_ROOTDIRDESC_OFFSET + 2);
-                rootDirSize = data.fromLittleEndian<quint32>(DVD_ROOTDIRDESC_OFFSET + 10);
-            }
-            break;
-        }
-    }
-
-    // If the DVD is not scrambled, no need to use libdvdcss.
-    _isEncrypted = dvdcss_is_scrambled(_dvdcss);
-    if (!_isEncrypted) {
-        _log->debug(tr("DVD %1 is not encryted, not using libdvdcss").arg(_deviceName));
-        dvdcss_close(_dvdcss);
-        _dvdcss = 0;
-        return true;
-    }
-
-    // We now need to find the file VTS_nn_1.VOB
-    // If root directory not found, cannot read DVD content.
-    if (rootDirSector <= 0 || rootDirSize <= 0) {
-        _log->line(tr("Cannot find root directory of DVD %1").arg(_deviceName));
-        return false;
-    }
-
-    // To be on a DVD, the files must be on a directory named "VIDEO_TS", itself being on top level directory.
-    const QString firstVobName(QFileInfo(_vobFileNames.first()).fileName());
-    const QString vobDirectory(QFileInfo(QtlFile::parentPath(_vobFileNames.first())).fileName());
-
-    // Locate the first VOB on DVD.
-    int vobDirSector = 0;
-    int vobDirSize = 0;
-    bool vobDirValid = false;
-    int firstVobSize = 0;
-    bool firstVobIsDir = false;
-    const bool ok =
-            locateDirectoryEntry(rootDirSector, rootDirSize, vobDirectory, vobDirSector, vobDirSize, vobDirValid) &&
-            vobDirValid &&
-            locateDirectoryEntry(vobDirSector, vobDirSize, firstVobName, _vobStartSector, firstVobSize, firstVobIsDir) &&
-            !firstVobIsDir &&
-            _vobStartSector > 0;
-
-    if (ok) {
-        _log->debug(tr("VOB first sector: %1").arg(_vobStartSector));
-    }
-    else {
-        _log->line(tr("Error locating %1 on DVD media").arg(vobDirectory + QDir::separator() + firstVobName));
-        return false;
-    }
-
-    return true;
-}
-
-
-//----------------------------------------------------------------------------
-// Read a given number of sectors from the MPEG content of the VTS.
-//----------------------------------------------------------------------------
-
-int QtlDvdTitleSet::readSectors(void* buffer, int count, int position)
-{
-    // After last sector of VOB's:
-    const int endSector = _vobSize / DVD_SECTOR_SIZE;
-
-    // Reject non-open object, unencrypted DVD, wrong file position.
-    if (_dvdcss == 0 || _nextSector < 0 || _nextSector > endSector || buffer == 0 || count < 0 || position > endSector) {
-        return -1;
-    }
-
-    // Read at given position.
-    if (position >= 0) {
-        _nextSector = position;
-    }
-
-    // Max number of sectors to read.
-    if (count > endSector - _nextSector) {
-        count = endSector - _nextSector;
-    }
-
-    // Now read the sectors.
-    if (count == 0 || readDvdSectors(buffer, count, _vobStartSector + _nextSector, true)) {
-        _nextSector += count;
-        return count;
-    }
-    else {
-        return -1;
-    }
-}
-
-
-//----------------------------------------------------------------------------
-// Read exactly N sectors from the DVD.
-//----------------------------------------------------------------------------
-
-bool QtlDvdTitleSet::readDvdSectors(void* buffer, int sectorCount, int seekSector, bool vobContent)
-{
-    // Optionally seek first.
-    if (seekSector >= 0) {
-        const int count = dvdcss_seek(_dvdcss, seekSector, vobContent ? DVDCSS_SEEK_MPEG : DVDCSS_NOFLAGS);
-        if (count < 0) {
-            _log->line(tr("Error seeking DVD to sector %1, seek returned %2").arg(seekSector).arg(count));
-            return false;
-        }
-    }
-
-    // Loop on sectors read.
-    char* buf = reinterpret_cast<char*>(buffer);
-    while (sectorCount > 0) {
-        const int count = dvdcss_read(_dvdcss, buf, sectorCount, vobContent ? DVDCSS_READ_DECRYPT : DVDCSS_NOFLAGS);
-        if (count <= 0) {
-            _log->line(tr("Error reading DVD media"));
-            return false;
-        }
-        sectorCount -= count;
-        buf += count * DVD_SECTOR_SIZE;
-    }
-
-    return true;
-}
-
-
-//----------------------------------------------------------------------------
-// Locate an entry inside a directory.
-//----------------------------------------------------------------------------
-
-bool QtlDvdTitleSet::locateDirectoryEntry(int dirSector, int dirSize, const QString& entryName, int& entrySector, int& entrySize, bool& isDirectory)
-{
-    // Reset output data.
-    entrySector = entrySize = 0;
-    isDirectory = false;
-
-    // Read directory content.
-    const int dirSectorCount = dirSize / DVD_SECTOR_SIZE + int(dirSize % DVD_SECTOR_SIZE != 0);
-    QtlByteBlock data(dirSectorCount * DVD_SECTOR_SIZE);
-    if (!readDvdSectors(data.data(), dirSectorCount, dirSector, false)) {
-        _log->line(tr("Error reading DVD directory information at sector %1").arg(dirSector));
-        return false;
-    }
-
-    // Loop on all directory entries. Format: see ECMA-119, section 9.1.
-    int length = 0;
-    for (int index = 0; (length = data[index]) >= 34 && index + length <= dirSize; index += length) {
-
-        // Get entry name.
-        // Special entry names have are one byte long with special value for this byte:
-        // - 00 = descriptor for current directory
-        // - 01 = descriptor for parent directory (or current if at root directory)
-        const int nameLength = data[index + 32];
-        QString name;
-        if (nameLength == 1 && (data[index + 33] == 0x00 || data[index + 33] == 0x01)) {
-            continue; // skip this one
-        }
-        name = data.getLatin1(index + 33, nameLength);
-
-        // Remove version number after ';'.
-        name.remove(QRegExp(";.*$"));
-
-        // Check expected entry name.
-        if (name.compare(entryName, Qt::CaseInsensitive) == 0) {
-            // Entry found.
-            isDirectory = (data[index + 25] & 0x02) != 0;
-            entrySector = data.fromLittleEndian<quint32>(index + 2);
-            entrySize = data.fromLittleEndian<quint32>(index + 10);
-            return true;
-        }
-    }
-
-    // Entry not found.
-    return false;
+    QtlByteBlock palette(_palette);
+    convertPaletteYuvToRgb(palette, _log);
+    return palette;
 }
 
 
@@ -821,7 +555,7 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 // Create a QtlDataPull to transfer of the video content of the title set.
 //----------------------------------------------------------------------------
 
-QtlDataPull* QtlDvdTitleSet::dataPull(QObject* parent) const
+QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent) const
 {
     // Create an object that will write the VTS in the background.
     // If the DVD is encrypted, use QtlDvdDataPull.
@@ -831,17 +565,17 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QObject* parent) const
     if (_isEncrypted) {
         writer = new QtlDvdDataPull(_deviceName,
                                     _vobStartSector,
-                                    _vobSize / DVD_SECTOR_SIZE,
+                                    vobSectorCount(),
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
-                                    _log,
+                                    log,
                                     parent);
     }
     else {
         writer = new QtlFileDataPull(_vobFileNames,
                                      QtlFileDataPull::DEFAULT_TRANSFER_SIZE,
                                      QtlFileDataPull::DEFAULT_MIN_BUFFER_SIZE,
-                                     _log,
+                                     log,
                                      parent);
     }
 

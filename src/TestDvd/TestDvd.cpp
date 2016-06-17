@@ -34,6 +34,7 @@
 #include "QtlStdoutLogger.h"
 #include "QtlDvdTitleSet.h"
 #include "QtlDvdMedia.h"
+#include "QtlDataPullWrapper.h"
 
 #define READ_CHUNK 1000  // Number of sectors per read operation.
 
@@ -70,18 +71,20 @@ namespace {
 
 int main(int argc, char* argv[])
 {
+    QCoreApplication app(argc, argv);
     QTextStream out(stdout, QIODevice::WriteOnly);
     QTextStream err(stderr, QIODevice::WriteOnly);
     QtlStdoutLogger log(0, true);
 
     // Expect at least one argument, the name of a VTS file on DVD.
-    if (argc < 2) {
-        err << "syntax: " << argv[0] << " ifo-or-vob-file [out-file [sector-count]]" << endl;
+    const QStringList args(app.arguments());
+    if (args.size() < 2) {
+        err << "syntax: " << args[0] << " ifo-or-vob-file [out-file [sector-count]]" << endl;
         return EXIT_FAILURE;
     }
-    const QString input(argv[1]);
-    const QString output(argc <= 2 ? "" : (argv[2] != QStringLiteral("-") ? argv[2] : QProcess::nullDevice()));
-    int sectorCount = argc <= 3 ? -1 : QString(argv[3]).toInt();
+    const QString input(args[1]);
+    const QString output(args.size() <= 2 ? "" : (args[2] != "-" ? args[2] : QProcess::nullDevice()));
+    int sectorCount = args.size() <= 3 ? -1 : args[3].toInt();
 
     // Set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
     qputenv("DVDCSS_VERBOSE", "2");
@@ -103,21 +106,23 @@ int main(int argc, char* argv[])
 
     // Load VTS description.
     QtlDvdTitleSet vts(input, &log);
-    if (!vts.isOpen()) {
-        err << "Error opening " << input << endl;
+    if (!vts.isLoaded()) {
+        err << "Error loading " << input << endl;
         return EXIT_FAILURE;
     }
 
     // Display VTS information.
     out << "IFO file: " << vts.ifoFileName() << endl
-        << "VOB size: " << vts.vobSize() << " bytes" << endl
+        << "VOB size: " << vts.vobSizeInBytes() << " bytes" << endl
         << "Is encrypted: " << vts.isEncrypted() << endl
         << "VTS number: " << vts.vtsNumber() << endl
         << "VOB count: " << vts.vobCount() << endl
         << "VOB files: " << endl << "    " << vts.vobFileNames().join("\n    ") << endl
         << "DVD device name: " << vts.deviceName() << endl
         << "DVD volume id: \"" << vts.volumeId() << "\"" << endl
-        << "DVD volume size: " << vts.volumeSize() << " sectors" << endl
+        << "DVD volume size: " << vts.volumeSizeInSectors() << " sectors" << endl
+        << "VOB start sector: " << vts.vobStartSector() << endl
+        << "VOB sector count: " << vts.vobSectorCount() << endl
         << "Stream count: " << vts.streamCount() << endl;
 
     // Display stream information.
@@ -146,9 +151,6 @@ int main(int argc, char* argv[])
     if (output.isEmpty()) {
         // Nothing to do.
     }
-    else if (!vts.isEncrypted()) {
-        err << "DVD is not encrypted, " << output << " not created" << endl;
-    }
     else {
         // Create binary output file.
         QFile file(output);
@@ -161,38 +163,24 @@ int main(int argc, char* argv[])
             out << "Reading at most " << sectorCount << " VTS sectors in " << output << endl;
         }
         else {
-            sectorCount = vts.sectorCount();
             out << "Reading VTS as " << output << endl;
         }
 
         // Measure transfer bandwidth.
         QTime time;
         time.start();
-        int transferCount = 0;
 
-        char buffer[READ_CHUNK * QtlDvdTitleSet::DVD_SECTOR_SIZE];
-        while (sectorCount > 0) {
-
-            // Read some sectors from the VOB's.
-            const int count = vts.readSectors(buffer, qMin(READ_CHUNK, sectorCount));
-            if (count <= 0) {
-                err << "Error reading VTS, readSectors() returns " << count << endl;
-                break;
-            }
-            sectorCount -= count;
-            transferCount += count;
-
-            // Write to output file.
-            if (!QtlFile::writeBinary(file, buffer, count * QtlDvdTitleSet::DVD_SECTOR_SIZE)) {
-                err << "Error writing " << output << endl;
-                break;
-            }
+        // Transfer the file using a wrapper test class.
+        QtlDataPull* dataPull = vts.dataPull(&log, &vts);
+        if (sectorCount > 0) {
+            dataPull->setMaxPulledSize(qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE);
         }
+        QtlDataPullWrapper wrapper(dataPull, &file);
 
         // Report transfer bandwidth.
         const int milliSec = time.elapsed();
         if (milliSec > 0) {
-            const qint64 bps = (qint64(transferCount) * QtlDvdTitleSet::DVD_SECTOR_SIZE * 8 * 1000) / milliSec;
+            const qint64 bps = (dataPull->pulledSize() * 8 * 1000) / milliSec;
             out << "Transfer bandwidth: " << bps << " b/s, " << (bps / 8) << " B/s" << endl;
         }
 

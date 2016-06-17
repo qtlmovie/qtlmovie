@@ -146,7 +146,7 @@ bool QtlDvdMedia::open(const QString& fileName)
 
     // Get the device name.
 #if defined(Q_OS_WIN)
-    // On Windows, if we are on a DVD readed, the file name starts with a drive name.
+    // On Windows, if we are on a DVD reader, the file name starts with a drive name.
     // Network shares like \\... cannot be DVD readers.
     if (fileName.length() > 2 && fileName[1] == ':') {
         _deviceName = fileName.left(2);
@@ -368,4 +368,29 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth)
     }
 
     return true;
+}
+
+
+//----------------------------------------------------------------------------
+// Locate a file in the DVD.
+//----------------------------------------------------------------------------
+
+QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity cs)
+{
+    // Can't search file if there is no DVD.
+    if (!_isOpen) {
+        return QtlDvdFile();
+    }
+
+    // Full path of the file to search.
+    QString path(QtlFile::absoluteNativeFilePath(fileName));
+
+    // Check if it starts with the mount point of the DVD. Note that we compare
+    // using the case sensitivity of the operating system, not the user-specified one.
+    if (path.startsWith(_rootName, QTL_FILE_NAMES_CASE_SENSITIVE)) {
+        path.remove(0, _rootName.length());
+    }
+
+    // Search the rest of the path from the root directory.
+    return _rootDirectory.searchPath(path, cs);
 }

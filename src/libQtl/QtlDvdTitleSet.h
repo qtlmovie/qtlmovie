@@ -38,6 +38,7 @@
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
+#include "QtlDvdMedia.h"
 #include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
 
@@ -67,11 +68,6 @@ class QtlDvdTitleSet : public QObject
 
 public:
     //!
-    //! Size in bytes of a DVD sector.
-    //!
-    static const int DVD_SECTOR_SIZE = 2048;
-
-    //!
     //! Constructor
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
     //! @param [in] log Where to log errors.
@@ -82,34 +78,27 @@ public:
     //!
     //! Copy constructor.
     //! @param [in] other Other instance to copy (except parent).
-    //! If @a other is open on an encrypted DVD, the new instance has a new independent
-    //! session on the DVD and the read pointer is set to the beginning of the title set.
     //! @param [in] parent Optional parent widget.
     //!
     explicit QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent = 0);
 
     //!
-    //! Destructor.
-    //!
-    ~QtlDvdTitleSet();
-
-    //!
-    //! Open and load the description of a title set.
+    //! Load the description of a title set.
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
     //! @return True on success, false on error.
     //!
-    bool open(const QString& fileName = QString());
+    bool load(const QString& fileName = QString());
 
     //!
-    //! Close a title set.
+    //! Clear object content.
     //!
-    void close();
+    void clear();
 
     //!
-    //! Check if a title set was successfully open.
+    //! Check if a title set was successfully loaded.
     //! @return True if this object contains a valid VTS description, false otherwise.
     //!
-    bool isOpen() const
+    bool isLoaded() const
     {
         return !_ifoFileName.isEmpty();
     }
@@ -155,9 +144,9 @@ public:
     //! Get the total size in bytes of all VOB's.
     //! @return The total size in bytes of all VOB's.
     //!
-    qint64 vobSize() const
+    qint64 vobSizeInBytes() const
     {
-        return _vobSize;
+        return _vobSizeInBytes;
     }
 
     //!
@@ -167,6 +156,53 @@ public:
     bool isEncrypted() const
     {
         return _isEncrypted;
+    }
+
+    //!
+    //! Get the device name of the DVD reader containing the title set.
+    //! The returned device name can be used by libdvdcss.
+    //! @return The device name or en empty string if no DVD reader was found.
+    //!
+    QString deviceName() const
+    {
+        return _deviceName;
+    }
+
+    //!
+    //! Get the volume identifier of the DVD.
+    //! @return DVD volume identifier, empty if not on a DVD media.
+    //!
+    QString volumeId() const
+    {
+        return _volumeId;
+    }
+
+    //!
+    //! Get the volume size (in sectors) of the DVD.
+    //! @return DVD volume size (in sectors).
+    //!
+    int volumeSizeInSectors() const
+    {
+        return _volumeSectors;
+    }
+
+    //!
+    //! Get the first sector of the MPEG content of the VTS on DVD media.
+    //! All VOB's of a given title set are always contiguous on a DVD media.
+    //! @return The first sector or -1 if the not on a DVD media.
+    //!
+    int vobStartSector() const
+    {
+        return _vobStartSector;
+    }
+
+    //!
+    //! Get the total size in sectors of the MPEG content of the VTS.
+    //! @return The total size in sectors.
+    //!
+    int vobSectorCount() const
+    {
+        return int(_vobSizeInBytes / QtlDvdMedia::DVD_SECTOR_SIZE);
     }
 
     //!
@@ -205,82 +241,14 @@ public:
     }
 
     //!
-    //! Get the device name of the DVD reader containing the title set.
-    //! The returned device name can be used by libdvdcss.
-    //! @return The device name or en empty string if no DVD reader was found.
-    //!
-    QString deviceName() const
-    {
-        return _deviceName;
-    }
-
-    //!
-    //! Get the volume identifier of the DVD.
-    //! @return DVD volume identifier, empty if not on a DVD media.
-    //!
-    QString volumeId() const
-    {
-        return _volumeId;
-    }
-
-    //!
-    //! Get the volume size (in sectors) of the DVD.
-    //! @return DVD volume size (in sectors).
-    //!
-    int volumeSize() const
-    {
-        return _volumeSize;
-    }
-
-    //!
-    //! Set the next sector to read at the beginning of the MPEG content of the VTS.
-    //!
-    void rewind()
-    {
-        _nextSector = 0;
-    }
-
-    //!
-    //! Read a given number of sectors from the MPEG content of the VTS.
-    //! This operation is reserved to encrypted DVD's.
-    //! Unencrypted DVD's must be read using standard file operations.
-    //! @param [out] buffer Where to read sectors into. Must be at least as large as 2048 x @a count bytes.
-    //! @param [in] count Number of sectors to read.
-    //! @param [in] position Index of the sector where to seek first. Read at current sector if negative.
-    //! @return Number of sectors read. Always read as many sectors as possible. If the returned value
-    //! is less than @a count, then either an error or the end of VTS occured. Return zero at end of VTS
-    //! and -1 on error (such as trying to read an unencrypted DVD).
-    //! @see isEncrypted()
-    //!
-    int readSectors(void *buffer, int count, int position = -1);
-
-    //!
-    //! Get the next sector position to read from the start of the VTS.
-    //! The first sector of the VTS is at index zero.
-    //! @return The index of the next sector to read.
-    //!
-    int nextSector() const
-    {
-        return _nextSector;
-    }
-
-    //!
-    //! Get the total size in sectors of the MPEG content of the VTS.
-    //! @return The total size in sectors.
-    //!
-    int sectorCount() const
-    {
-        return int(_vobSize / DVD_SECTOR_SIZE);
-    }
-
-    //!
     //! Create a QtlDataPull to transfer of the video content of the title set to a device.
+    //! @param [in] log Where to log errors.
     //! @param parent Optional parent object of the QtlDataPull instance.
     //! @return An instance of QtlDataPull which can transfer the content of
     //! the title set. The QtlDataPull is created but not started. This object will
     //! delete itself at the end of the transfer.
     //!
-    QtlDataPull* dataPull(QObject* parent = 0) const;
+    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0) const;
 
     //!
     //! Check if a file is a .IFO or .VOB.
@@ -308,20 +276,18 @@ public:
     static bool lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2);
 
 private:
-    QtlNullLogger    _nullLog;            //!< Dummy null logger if none specified by caller.
-    QtlLogger*       _log;                //!< Where to log errors.
-    QString          _deviceName;         //!< DVD device name.
-    QString          _volumeId;           //!< Volume identifier.
-    int              _volumeSize;         //!< Volume size in sectors.
-    bool             _isEncrypted;        //!< DVD is encrypted, need libdvdcss.
-    struct dvdcss_s* _dvdcss;             //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
-    int              _vtsNumber;          //!< Title set number.
-    QString          _ifoFileName;        //!< IFO file name.
-    QStringList      _vobFileNames;       //!< List of VOB files.
-    qint64           _vobSize;            //!< Total size in bytes of all VOB's.
-    int              _vobStartSector;     //!< First sector of VOB files on DVD media.
-    int              _nextSector;         //!< Next sector to read, relative to the beginning of the MPEG content of the VTS.
-    QtlByteBlock     _palette;            //!< VTS color palette in YUV format.
+    QtlNullLogger _nullLog;        //!< Dummy null logger if none specified by caller.
+    QtlLogger*    _log;            //!< Where to log errors.
+    QString       _deviceName;     //!< DVD device name.
+    QString       _volumeId;       //!< Volume identifier.
+    int           _volumeSectors;  //!< Volume size in sectors.
+    bool          _isEncrypted;    //!< DVD is encrypted, need libdvdcss.
+    int           _vtsNumber;      //!< Title set number.
+    QString       _ifoFileName;    //!< IFO file name.
+    QStringList   _vobFileNames;   //!< List of VOB files.
+    qint64        _vobSizeInBytes; //!< Total size in bytes of all VOB's.
+    int           _vobStartSector; //!< First sector of VOB files on DVD media.
+    QtlByteBlock  _palette;        //!< VTS color palette in YUV format.
     QtlMediaStreamInfoPtrVector _streams; //!< List of streams in the VTS.
 
     //!
@@ -333,47 +299,10 @@ private:
     bool buildFileNames(const QString& fileName);
 
     //!
-    //! Build device name for libdvdcss from IFO file name.
-    //! @return True on success, false on error.
-    //!
-    bool buildDeviceName();
-
-    //!
     //! Read the content of the VTS IFO.
     //! @return True on success, false on error.
     //!
     bool readVtsIfo();
-
-    //!
-    //! Open DVD structure and check if the media is encrypted.
-    //! @return True on success, false on error.
-    //!
-    bool readDvdStructure();
-
-    //!
-    //! Read exactly @a sectorCount sectors from the DVD.
-    //! Optionally seek to @a seekOffset first.
-    //! If @a sectorCount is negative or zero and @a seekSector is positive, only seek is performed.
-    //! @param [out] buffer Where to read sectors into. Must be at least as large as 2048 x @a sectorCount bytes.
-    //! @param [in] sectorCount Number of sectors to read.
-    //! @param [in] seekSector Where to seek first, ignored if negative.
-    //! @param [in] vobContent If true, read possibly encrypted VOB data, otherwise read metadata.
-    //! @return True on success, false on error.
-    //!
-    bool readDvdSectors(void* buffer, int sectorCount, int seekSector, bool vobContent);
-
-    //!
-    //! Locate an entry inside a directory.
-    //! The directory to search is defined by its start sector on media and size in bytes.
-    //! @param [in] dirSector First sector of the directory content.
-    //! @param [in] dirSize Size in bytes of the directory content.
-    //! @param [in] entryName Name of the directory entry to search. Not case-sensitive. No UDF version number.
-    //! @param [out] entrySector Returned first sector of the entry (file or directory).
-    //! @param [out] entrySize Returned size in bytes of the entry (file or directory).
-    //! @param [out] isDirectory Returned true if the entry is a directory.
-    //! @return True on success, false on error.
-    //!
-    bool locateDirectoryEntry(int dirSector, int dirSize, const QString& entryName, int& entrySector, int& entrySize, bool& isDirectory);
 };
 
 #endif // QTLDVDTITLESET_H

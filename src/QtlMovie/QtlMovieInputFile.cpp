@@ -182,7 +182,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     }
 
     // Check if the file belongs to a DVD structure and collect relevant information.
-    const bool isOnDvd = _dvdTitleSet.open(fileName);
+    const bool isOnDvd = _dvdTitleSet.load(fileName);
     const bool isOnEncryptedDvd = isOnDvd && _dvdTitleSet.isEncrypted();
 
     // DVD media and file structure requires special treatment.
@@ -275,7 +275,7 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
     _ffInfo.buildStreamInfo(_streams);
 
     // Post-processing when the input has a DVD structure.
-    if (_dvdTitleSet.isOpen()) {
+    if (_dvdTitleSet.isLoaded()) {
 
         // Merge the info which were previously collected in
         // the .IFO file with the stream info from ffprobe.
@@ -446,7 +446,7 @@ void QtlMovieInputFile::newMediaInfo()
 QtlDataPull* QtlMovieInputFile::dataPull(QObject* parent) const
 {
     // Currently, return a QtlDataPull for encrypted DVD's only.
-    return _pipeInput && _dvdTitleSet.isEncrypted() ? _dvdTitleSet.dataPull(parent) : 0;
+    return _pipeInput && _dvdTitleSet.isEncrypted() ? _dvdTitleSet.dataPull(_log, parent) : 0;
 }
 
 

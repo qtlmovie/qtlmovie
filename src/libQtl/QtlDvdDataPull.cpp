@@ -101,16 +101,25 @@ bool QtlDvdDataPull::initializeTransfer()
 // Invoked when more data is needed.
 //----------------------------------------------------------------------------
 
-bool QtlDvdDataPull::needTransfer()
+bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 {
-    int count;
-
+    // Transfer completed.
     if (_sectorRemain <= 0) {
-        // Transfer completed.
         close();
         return true;
     }
-    else if ((count = dvdcss_read(_dvdcss, _buffer.data(), qMin(_sectorChunk, _sectorRemain), DVDCSS_READ_DECRYPT)) <= 0) {
+
+    // Compute maximum number of sectors to read.
+    int count = qMin(_sectorChunk, _sectorRemain);
+    if (maxSize >= 0) {
+        count = qMin(count, int(maxSize / DVDCSS_BLOCK_SIZE));
+    }
+    if (count <= 0) {
+        return true;
+    }
+
+    // Read and write sectors.
+    if ((count = dvdcss_read(_dvdcss, _buffer.data(), count, DVDCSS_READ_DECRYPT)) <= 0) {
         log()->line(tr("Error reading DVD media"));
         return false;
     }

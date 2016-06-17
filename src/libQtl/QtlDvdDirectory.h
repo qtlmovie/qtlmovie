@@ -50,18 +50,15 @@ public:
     //! @param [in] startSector First sector on DVD media.
     //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlDvdDirectory(const QString& name = QString(), int startSector = -1, int sizeInBytes = 0) :
-        QtlDvdFile(name, startSector, sizeInBytes),
-        _subDirectories(),
-        _files()
-    {
-    }
+    QtlDvdDirectory(const QString& name = QString(), int startSector = -1, int sizeInBytes = 0);
+
     //!
     //! Virtual destructor.
     //!
     virtual ~QtlDvdDirectory()
     {
     }
+
     //!
     //! Get the list of all subdirectories in this directory.
     //! @return The list of all subdirectories in this directory.
@@ -70,6 +67,7 @@ public:
     {
         return _subDirectories;
     }
+
     //!
     //! Get the list of all files in this directory.
     //! @return The list of all files in this directory.
@@ -78,6 +76,40 @@ public:
     {
         return _files;
     }
+
+    //!
+    //! Search a file in the directory.
+    //! @param [in] fileName Name of the file to search. Must be a simple name (no directory).
+    //! @param [in] cs Case sensitivity when looking for file names.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+
+    //!
+    //! Search a file in the directory tree.
+    //! @param [in] path Either a simple file or a path with directory components.
+    //! @param [in] cs Case sensitivity when looking for file names.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile searchPath(const QString& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+
+    //!
+    //! Search a file in the directory tree.
+    //! @param [in] path A list of directory components, ending with the file name.
+    //! @param [in] cs Case sensitivity when looking for file names.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile searchPath(const QStringList& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+
+    //!
+    //! Search a file in the directory tree.
+    //! @param [in] begin Iterator to a list of directory components, ending with the file name.
+    //! @param [in] end Iterator past the end of the list.
+    //! @param [in] cs Case sensitivity when looking for file names.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile searchPath(QStringList::ConstIterator begin, QStringList::ConstIterator end, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+
 private:
     friend class QtlDvdMedia;
     QList<QtlDvdDirectory> _subDirectories;  //!< All subdirectories in this directory.
@@ -85,12 +117,7 @@ private:
     //!
     //! Clear the content of this object.
     //!
-    virtual void clear()
-    {
-        QtlDvdFile::clear();
-        _subDirectories.clear();
-        _files.clear();
-    }
+    virtual void clear();
 };
 
 #endif // QTLDVDDIRECTORY_H

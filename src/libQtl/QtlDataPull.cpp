@@ -49,6 +49,7 @@ QtlDataPull::QtlDataPull(int minBufferSize, QtlLogger* log, QObject* parent) :
     _minBufferSize(minBufferSize),
     _startTime(),
     _closed(false),
+    _maxIn(-1),
     _totalIn(0),
     _devices(),
     _processingState(0)
@@ -74,6 +75,7 @@ QtlDataPull::~QtlDataPull()
 
 QtlDataPull::Context::Context(QIODevice* dev) :
     device(dev),
+    file(qobject_cast<QFileDevice*>(dev)),
     running(true),
     totalOut(0)
 {
@@ -120,8 +122,12 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
         // Add a device context.
         _devices.append(Context(dev));
 
-        // Get notified of device events.
-        connect(dev, &QIODevice::bytesWritten, this, &QtlDataPull::bytesWritten);
+        // Get notified of device events. Note that QFileDevice does not report
+        // bytesWritten (QTBUG-54187). So, we explicitly flush and account written bytes.
+        if (_devices.last().file == 0) {
+            // Connect to bytesWritten only if the device is not a file.
+            connect(dev, &QIODevice::bytesWritten, this, &QtlDataPull::bytesWritten);
+        }
         connect(dev, &QObject::destroyed, this, &QtlDataPull::deviceDestroyed);
         deviceSpecificSetup(dev);
     }
@@ -137,7 +143,7 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
 
     // Let the subclass initialize the transfer.
     if (initializeTransfer()) {
-        _log->debug(tr("DataPull: Data transfer started, %1 devices").arg(_devices.size()));
+        _log->debug(tr("DataPull: Data transfer started, %1 devices, max size: %2").arg(_devices.size()).arg(_maxIn));
         emit started();
         processNewStateLater();
         return true;
@@ -225,6 +231,11 @@ bool QtlDataPull::write(const void* data, int dataSize)
         if (ctx->running) {
             // Write data on device and process all events before each write.
             if (QtlFile::writeBinary(*(ctx->device), data, dataSize, true)) {
+                if (ctx->file != 0) {
+                    // This is a QFileDevice, bytesWritten does not work, flush explicitely.
+                    ctx->file->flush();
+                    processBytesWritten(ctx->file, dataSize);
+                }
                 // At least one device succeeded.
                 success = true;
             }
@@ -262,8 +273,13 @@ void QtlDataPull::close()
 
 void QtlDataPull::bytesWritten(qint64 bytes)
 {
+    // This is a slot, get the sender device.
+    processBytesWritten(qobject_cast<QIODevice*>(sender()), bytes);
+}
+
+void QtlDataPull::processBytesWritten(QIODevice* dev, qint64 bytes)
+{
     // Get the sender device.
-    QIODevice* dev = qobject_cast<QIODevice*>(sender());
     if (dev != 0) {
         // Search the sender device.
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
@@ -311,7 +327,7 @@ void QtlDataPull::deviceDestroyed(QObject* object)
 bool QtlDataPull::needMoreData() const
 {
     // If the transfer was properly closed, we do not need more data.
-    if (_closed) {
+    if (_closed || (_maxIn >= 0 && _totalIn >= _maxIn)) {
         return false;
     }
 
@@ -356,13 +372,19 @@ void QtlDataPull::processNewState()
 
     // If some devices need data and none are busy, ask for more data to the subclass.
     if (needMoreData()) {
-        if (!needTransfer()) {
+        if (!needTransfer(_maxIn < 0 ? -1 : qMax<qint64>(0, _maxIn - _totalIn))) {
             // The subclass returned false, abort everything.
             _log->debug(tr("DataPull: subclass returned an error on needTransfer"));
             for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
                 ctx->running = false;
             }
         }
+    }
+
+    // If maximum size is reached, do a proper close.
+    if (_maxIn >= 0 && _totalIn >= _maxIn) {
+        _log->debug(tr("DataPull: reached maximum size: %1/%2 bytes").arg(_totalIn).arg(_maxIn));
+        _closed = true;
     }
 
     // Process closing or aborting devices.

@@ -41,3 +41,4 @@ CONFIG += console
 CONFIG -= app_bundle
 
 SOURCES += TestDvd.cpp
+HEADERS += QtlDataPullWrapper.h

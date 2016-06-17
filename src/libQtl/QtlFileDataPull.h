@@ -63,7 +63,7 @@ public:
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
     //!
-    explicit QtlFileDataPull(const QStringList& fileNames,
+    explicit QtlFileDataPull(const QStringList& fileNames = QStringList(),
                              int transferSize = DEFAULT_TRANSFER_SIZE,
                              int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                              QtlLogger* log = 0,
@@ -80,9 +80,10 @@ protected:
     //!
     //! Invoked when more data is needed.
     //! Reimplemented from QtlDataPull.
+    //! @param [in] maxSize Maximum size in bytes of the requested transfer.
     //! @return True on success, false on error.
     //!
-    virtual bool needTransfer();
+    virtual bool needTransfer(qint64 maxSize);
 
     //!
     //! Cleanup the transfer.
@@ -96,6 +97,9 @@ private:
     QFile        _input;        //!< Current input file.
     int          _currentIndex; //!< Current file index.
     QtlByteBlock _buffer;       //!< Transfer buffer.
+
+    // Unaccessible operations.
+    Q_DISABLE_COPY(QtlFileDataPull)
 };
 
 #endif // QTLFILEDATAPULL_H
