@@ -66,9 +66,9 @@ install -m 0755 $SCRIPTDIR/QtlMovie.postinst $TMPDIR/DEBIAN/postinst
 install -m 0755 $BUILDDIR/QtlMovie/QtlMovie $TMPDIR/usr/bin
 strip $TMPDIR/usr/bin/QtlMovie
 install -m 0644 \
-    $BUILDDIR/Qtl/locale/qtl_fr.qm \
+    $BUILDDIR/libQtl/locale/qtl_fr.qm \
+    $BUILDDIR/libQts/locale/qts_fr.qm \
     $BUILDDIR/QtlMovie/locale/qtlmovie_fr.qm \
-    $BUILDDIR/Qts/locale/qts_fr.qm \
     $TMPDIR/usr/share/qt5/translations
 install -m 0644 $SCRIPTDIR/QtlMovie.desktop $TMPDIR/usr/share/applications
 for sz in $ICON_SIZES; do

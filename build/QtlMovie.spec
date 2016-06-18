@@ -59,9 +59,9 @@ mkdir -p \
     $RPM_BUILD_ROOT/usr/share/applications
 cp build-QtlMovie-Desktop-Release/QtlMovie/QtlMovie $RPM_BUILD_ROOT/usr/bin
 strip $RPM_BUILD_ROOT/usr/bin/QtlMovie
-cp build-QtlMovie-Desktop-Release/Qtl/locale/qtl_fr.qm \
+cp build-QtlMovie-Desktop-Release/libQtl/locale/qtl_fr.qm \
+   build-QtlMovie-Desktop-Release/libQts/locale/qts_fr.qm \
    build-QtlMovie-Desktop-Release/QtlMovie/locale/qtlmovie_fr.qm \
-   build-QtlMovie-Desktop-Release/Qts/locale/qts_fr.qm \
    $RPM_BUILD_ROOT/usr/share/qt5/translations
 cp build/QtlMovie.desktop $RPM_BUILD_ROOT/usr/share/applications
 ICON_SIZES="16 24 32 48 64 72 96 128 256 512"

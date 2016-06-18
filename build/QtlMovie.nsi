@@ -179,8 +179,8 @@ Section "Install"
 
     SetOutPath "$INSTDIR\translations"
     File "${QtDir}\translations\qt*_fr.qm"
-    File "${BuildDir}\Qtl\locale\qtl_fr.qm"
-    File "${BuildDir}\Qts\locale\qts_fr.qm"
+    File "${BuildDir}\libQtl\locale\qtl_fr.qm"
+    File "${BuildDir}\libQts\locale\qts_fr.qm"
     File "${BuildDir}\QtlMovie\locale\qtlmovie_fr.qm"
 
     SetOutPath "$INSTDIR\fonts"

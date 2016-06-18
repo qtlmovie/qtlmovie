@@ -1,17 +1,17 @@
 ﻿#-----------------------------------------------------------------------------
-# 
+#
 #  Copyright (c) 2013-2015, Thierry Lelegard
 #  All rights reserved.
-# 
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions are met:
-# 
+#
 #  1. Redistributions of source code must retain the above copyright notice,
-#     this list of conditions and the following disclaimer. 
+#     this list of conditions and the following disclaimer.
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
-#     documentation and/or other materials provided with the distribution. 
-# 
+#     documentation and/or other materials provided with the distribution.
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 #  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,12 +23,12 @@
 #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 #  THE POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 #-----------------------------------------------------------------------------
-# 
+#
 #  Windows PowerShell script to build the binary installer for Windows.
 #  Also build a source file zip archive.
-# 
+#
 #-----------------------------------------------------------------------------
 
 <#
@@ -208,8 +208,8 @@ if (-not $NoStandalone) {
 
         $TempTranslations = New-Directory @($TempRoot, "translations")
         Get-ChildItem (Join-Path $QtDir "translations") -Filter "qt*_fr.qm" | ForEach-Object { Copy-Item $_.FullName $TempTranslations }
-        Copy-Item (Join-MultiPath @($BuildDir, "Qtl", "locale", "qtl_fr.qm")) $TempTranslations
-        Copy-Item (Join-MultiPath @($BuildDir, "Qts", "locale", "qts_fr.qm")) $TempTranslations
+        Copy-Item (Join-MultiPath @($BuildDir, "libQtl", "locale", "qtl_fr.qm")) $TempTranslations
+        Copy-Item (Join-MultiPath @($BuildDir, "libQts", "locale", "qts_fr.qm")) $TempTranslations
         Copy-Item (Join-MultiPath @($BuildDir, "QtlMovie", "locale", "qtlmovie_fr.qm")) $TempTranslations
 
         $TempFonts = New-Directory @($TempRoot, "fonts")
