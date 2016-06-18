@@ -32,6 +32,10 @@
 # 
 #-----------------------------------------------------------------------------
 
+# Functions to add a directory in the path.
+qtpathmunge() { egrep <<<$PATH -q "(^|:)$1($|:)" || export PATH=$1:$PATH; }
+qtlibpathmunge() { egrep <<<$LD_LIBRARY_PATH -q "(^|:)$1($|:)" || export LD_LIBRARY_PATH=$1:$LD_LIBRARY_PATH; }
+
 # Locate qmake and qtcreator.
 QMAKE=
 QTCREATOR=
@@ -39,15 +43,11 @@ QTCREATOR=
 # Locate latest versions on installation default root.
 if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
     # On MacOS, Qt is installed in user's account.
-    if [[ -d "$HOME/Qt" ]]; then
-        QMAKE=$(find "$HOME/Qt" -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
-        QTCREATOR=$(find "$HOME/Qt" -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
-    fi
+    QMAKE=$(find $HOME/[Qq]* -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
+    QTCREATOR=$(find $HOME/[Qq]* -type f -perm +0100 \( -iname qtcreator -o -iname "qt creator" \) 2>/dev/null | sort | tail -1)
 else
-    if [[ -d "$HOME/Qt" ]]; then
-        QMAKE=$(find /opt/[Qq]* -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
-        QTCREATOR=$(find /opt/[Qq]* -type f -executable -name qtcreator 2>/dev/null | sort | tail -1)
-    fi
+    QMAKE=$(find /opt/[Qq]* -type f -perm +0100 -name qmake 2>/dev/null | sort | tail -1)
+    QTCREATOR=$(find /opt/[Qq]* -type f -perm +0100 -name qtcreator 2>/dev/null | sort | tail -1)
 fi
 
 # Locate latest versions on /usr/local if not found in /opt
@@ -56,34 +56,30 @@ if [[ -z "$QMAKE" ]]; then
    QTCREATOR=$(ls /usr/local/[Qq]*/bin/qtcreator 2>/dev/null | sort | tail -1)
 fi
 
-# Portions to add to PATH and LD_LIBRARY_PATH.
-BIN=
-LIB=
-
-# Compute Qt and Qt Creator root.
+# Add Qt and Qt Creator roots to paths.
 if [[ -n "$QMAKE" ]]; then
-    export QTDIR=$(dirname $(dirname "$QMAKE"))
-    BIN="$QTDIR/bin:"
-    LIB="$QTDIR/lib:"
+    QMAKEDIR=$(dirname "$QMAKE")
+    qtpathmunge "$QMAKEDIR"
+    export QTDIR=$(dirname "$QMAKEDIR")
+    qtlibpathmunge "$QTDIR/lib"
 fi
 if [[ -n "$QTCREATOR" ]]; then
-    export QTCREATORDIR=$(dirname $(dirname "$QTCREATOR"))
-    if [[ "$QTCREATORDIR" != "$QTDIR" ]]; then
-        BIN="$BIN$QTCREATORDIR/bin:"
-        LIB="$LIB$QTCREATORDIR/lib:"
-    fi
+    QTCREATORDIR=$(dirname "$QTCREATOR")
+    qtpathmunge "$QTCREATORDIR"
+    QTCREATORROOT=$(dirname "$QTCREATORDIR")
+    qtlibpathmunge "$QTCREATORROOT/lib"
 fi
 
 # On Mac OS X, Assistant and Liguist are bundles in same directory as qmake.
-if [[ -n "$QMAKE" && "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
-    LINGUIST=$(dirname "$QMAKE")/Linguist.app/Contents/MacOS/Linguist
-    ASSISTANT=$(dirname "$QMAKE")/Assistant.app/Contents/MacOS/Assistant
-    [[ -x "$LINGUIST" ]] && BIN="$BIN"$(dirname "$LINGUIST"):
-    [[ -x "$ASSISTANT" ]] && BIN="$BIN"$(dirname "$ASSISTANT"):
+if [[ -n "$QMAKEDIR" && "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
+    LINGUIST="$QMAKEDIR/Linguist.app/Contents/MacOS/Linguist"
+    if [[ -x "$LINGUIST" ]]; then
+        LINGUISTDIR=$(dirname "$LINGUIST")
+        qtpathmunge "$LINGUISTDIR"
+    fi
+    ASSISTANT="$QMAKEDIR/Assistant.app/Contents/MacOS/Assistant"
+    if [[ -x "$ASSISTANT" ]]; then
+        ASSISTANTDIR=$(dirname "$ASSISTANT")
+        qtpathmunge "$ASSISTANTDIR"
+    fi
 fi
-
-# Update PATH and LD_LIBRARY_PATH.
-[[ -n "$BIN" && "$PATH" != "$BIN*" ]] && export PATH="$BIN$PATH"
-[[ -n "$LIB" && "$LD_LIBRARY_PATH" != "$LIB*" ]] && export LD_LIBRARY_PATH="$LIB$LD_LIBRARY_PATH"
-
-unset QMAKE QTCREATOR BIN LIB

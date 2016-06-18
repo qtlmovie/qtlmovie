@@ -62,10 +62,10 @@ rm -f "$DMGTMP" "$DMGFILE"
 # Populate Mac tools in the bundle.
 APPTOOLS=$APPDIR/Contents/MacOS/mactools
 rm -rf $APPTOOLS
-find $ROOTDIR/mactools -type f ! -name '.*' ! -name '*.txt' | xargs chmod 755
 tar -C $ROOTDIR --exclude .gitignore -c -p -f - mactools | tar -C $APPDIR/Contents/MacOS -x -p -f -
-strip $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS/*
-chmod 755 $APPDIR/Contents/MacOS/QtlMovie $APPTOOLS $APPTOOLS/*
+MACTOOLS=$(find $APPTOOLS -type f ! -name '*.txt')
+strip $APPDIR/Contents/MacOS/QtlMovie $MACTOOLS
+chmod 755 $APPDIR/Contents/MacOS/QtlMovie $MACTOOLS
 
 # Copy fonts in the bundle.
 APPFONTS=$APPDIR/Contents/MacOS/fonts

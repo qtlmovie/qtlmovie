@@ -11,7 +11,8 @@ CONFIG -= warn_off
 CONFIG *= warn_on
 
 INCLUDEPATH += include
-unix|mingw|gcc:QMAKE_CFLAGS_WARN_ON = -Wall -Wextra
+unix|mingw|gcc:QMAKE_CFLAGS_WARN_ON = -Wall -Wextra -Wno-unused-parameter
+macx:QMAKE_CFLAGS_WARN_ON += -Wno-missing-braces -Wno-missing-field-initializers
 win32:QMAKE_CFLAGS += -mwin32
 win32:DEFINES -= UNICODE
 
