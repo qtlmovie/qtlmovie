@@ -2098,6 +2098,127 @@ L&apos;application va s&apos;arrêter</translation>
         <source>Invalid &quot;value=name&quot;: %1</source>
         <translation>Expression &quot;valeur=nom&quot; invalide: %1</translation>
     </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="275"/>
+        <source>#%1</source>
+        <translation>#%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="282"/>
+        <source>%1x%2</source>
+        <translation>%1x%2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="289"/>
+        <source>%1 degrees</source>
+        <translation>%1 degrés</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="292"/>
+        <source>rotate %1 degrees</source>
+        <translation>rotation de %1 degrés</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="297"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="316"/>
+        <source>%1 b/s</source>
+        <translation>%1 b/s</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="301"/>
+        <source>%1 f/s</source>
+        <translation>%1 i/s</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="308"/>
+        <source>forced</source>
+        <translation>forcé</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="323"/>
+        <source>mono</source>
+        <translation>mono</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="326"/>
+        <source>stereo</source>
+        <translation>stéréo</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="329"/>
+        <source>%1 channels</source>
+        <translation>%1 canaux</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="334"/>
+        <source>@%1 Hz</source>
+        <translation>@%1 Hz</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="345"/>
+        <source>commentary</source>
+        <translation>commentaires</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="348"/>
+        <source>visual impaired</source>
+        <translation>malvoyants</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="352"/>
+        <source>Teletext %1%2</source>
+        <translation>Teletext %1%2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="352"/>
+        <source>page </source>
+        <translation>page </translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="355"/>
+        <source>Closed Captions</source>
+        <translation>Closed Captions</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="357"/>
+        <source>service %1</source>
+        <translation>service %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="360"/>
+        <source>channel 2</source>
+        <translation>canal 2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="363"/>
+        <source>field 2</source>
+        <translation>champ 2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="367"/>
+        <source>hearing impaired</source>
+        <translation>malentendants</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="447"/>
+        <source>4:3</source>
+        <translation>4:3</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="450"/>
+        <source>16:9</source>
+        <translation>16:9</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="453"/>
+        <source>%1</source>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMediaStreamInfo.cpp" line="456"/>
+        <source>DAR %1</source>
+        <translation>DAR %1</translation>
+    </message>
 </context>
 <context>
     <name>QtlBrowserDialog</name>
@@ -2105,6 +2226,201 @@ L&apos;application va s&apos;arrêter</translation>
         <location filename="../QtlBrowserDialog.ui" line="33"/>
         <source>Close</source>
         <translation>Fermer</translation>
+    </message>
+</context>
+<context>
+    <name>QtlDataPull</name>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="146"/>
+        <source>DataPull: Data transfer started, %1 devices, max size: %2</source>
+        <translation>DataPull: Transfert de données démarré, %1 sorties, taille max: %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="152"/>
+        <source>DataPull: Data transfer failed to start</source>
+        <translation>DataPull: Echec du démarrage de transfert de données</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="169"/>
+        <source>DataPull: stop requested, %1 devices</source>
+        <translation>DataPull: Arrêt demandé, %1 sorties</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="195"/>
+        <source>DataPull: stop requested on one device</source>
+        <translation>DataPull: arrêt demandé sur une sortie</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="244"/>
+        <source>Error writing on %1</source>
+        <translation>Erreur d&apos;écriture sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="313"/>
+        <source>DataPull: Data transfer destination destroyed</source>
+        <translation>DataPull: Destination du transfert de données détruite</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="377"/>
+        <source>DataPull: subclass returned an error on needTransfer</source>
+        <translation>DataPull: erreur renvoyée par la sous-classe lors de needTransfer</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="386"/>
+        <source>DataPull: reached maximum size: %1/%2 bytes</source>
+        <translation>DataPull: taille maximum atteinte: %1/%2 octets</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="419"/>
+        <source>DataPull: Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s</source>
+        <translation>DataPull: Transfert de données %1, %2 octets lus, temps: %3 ms, débit: %4 b/s, %5 O/s</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="420"/>
+        <source>completed</source>
+        <translation>terminé</translation>
+    </message>
+    <message>
+        <location filename="../QtlDataPull.cpp" line="420"/>
+        <source>aborted</source>
+        <translation>interrompu</translation>
+    </message>
+</context>
+<context>
+    <name>QtlDvdDataPull</name>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="85"/>
+        <source>Cannot initialize libdvdcss on %1, probably not a DVD media</source>
+        <translation>Impossible d&apos;initialiser libdvdcss sur %1, probablement pas un DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="91"/>
+        <source>Error seeking DVD to sector %1</source>
+        <translation>Erreur de positionnement sur le secteur %1 du DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="123"/>
+        <source>Error reading DVD media</source>
+        <translation>Erreur de lecture du DVD</translation>
+    </message>
+</context>
+<context>
+    <name>QtlDvdMedia</name>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="164"/>
+        <source>Device name not found for %1</source>
+        <translation>Nom de périphérique introuvable pour %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="175"/>
+        <source>Cannot initialize libdvdcss on %1</source>
+        <translation>Impossible d&apos;initialiser libdvdcss sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="198"/>
+        <source>Invalid DVD volume descriptor &quot;%1&quot; instead of &quot;%2&quot;</source>
+        <translation>Descripteur de volume DVD invalide: %1 au lieu de %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="224"/>
+        <source>Cannot locate root directory on %1</source>
+        <translation>Impossible de trouver le répertoire racine pour %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="257"/>
+        <source>Error seeking DVD to sector %1, seek returned %2</source>
+        <translation>Erreur de positionnement du DVD au secteur %1, seek a renvoyé %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="298"/>
+        <source>Error reading sector %1 on DVD media in %2</source>
+        <translation>Erreur de lecture au secteur %1 du DVD dans %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="320"/>
+        <source>Too many directory levels in DVD structure, probably incorrect media</source>
+        <translation>Trop de niveaux de répertoires sur le DVD, média probablement incorrect</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdMedia.cpp" line="328"/>
+        <source>Error reading DVD directory information at sector %1</source>
+        <translation>Erreur de lecture de répertoire au secteur %1</translation>
+    </message>
+</context>
+<context>
+    <name>QtlDvdTitleSet</name>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="162"/>
+        <source>Cannot find start sector for %1 on %2</source>
+        <translation>Impossible de trouver le premier secteur de %1 sur %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="205"/>
+        <source>%1 is not a valid DVD title set file</source>
+        <translation>%1 n&apos;est pas un fichier vidéo DVD valide</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="237"/>
+        <source>No VOB file for %1</source>
+        <translation>Pas de fichier VOB pour %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="245"/>
+        <source>DVD IFO file not found: %1</source>
+        <translation>Pas de fichier IFO DVD: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="262"/>
+        <source>Error opening %1</source>
+        <translation>Erreur à l&apos;ouverture de %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="273"/>
+        <source>%1 is not a valid VTS IFO</source>
+        <translation>%1 n&apos;est pas un fichier IFO valid</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="336"/>
+        <source>Unknown video standard value %1 in DVD IFO file</source>
+        <translation>Valeur de standard vidéo inconnue %1 dans le fichier IFO</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="357"/>
+        <source>IFO: %1 audio streams</source>
+        <translation>IFO: %1 flux vidéo</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="410"/>
+        <source>IFO: %1 subtitle streams</source>
+        <translation>IFO: %1 flux de sous-titres</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="459"/>
+        <source>Error reading palette from %1</source>
+        <translation>Erreur de lecture de la palette de couleurs dans %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="484"/>
+        <source>Palette conversion: palette size is %1 bytes, not a multiple of 4</source>
+        <translation>Conversion de palette de couleur: la taille de la palette est %1 octets, pas un mulitple de 4</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="508"/>
+        <source>Palette conversion: unexpected value 0x%1, should be 0</source>
+        <translation>Conversion de palette de couleurs: valeur %1 inattendue, aurait dû être 0</translation>
+    </message>
+</context>
+<context>
+    <name>QtlFileDataPull</name>
+    <message>
+        <location filename="../QtlFileDataPull.cpp" line="98"/>
+        <source>Error opening %1</source>
+        <translation>Erreur à l&apos;ouverture de %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlFileDataPull.cpp" line="121"/>
+        <source>Error reading %1</source>
+        <translation>Erreur de lecture sur %1</translation>
     </message>
 </context>
 <context>
@@ -2261,33 +2577,33 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlProcess</name>
     <message>
-        <location filename="../QtlProcess.cpp" line="120"/>
+        <location filename="../QtlProcess.cpp" line="124"/>
         <source>Process execution canceled</source>
         <translation>Exécution du processus annulée</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="137"/>
+        <location filename="../QtlProcess.cpp" line="141"/>
         <source>Process output/error size exceeds limit</source>
         <translation>La taille de la sortie du processus dépasse la limite</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="149"/>
-        <location filename="../QtlProcess.cpp" line="165"/>
+        <location filename="../QtlProcess.cpp" line="153"/>
+        <location filename="../QtlProcess.cpp" line="169"/>
         <source>Process crashed</source>
         <translation>Le processus a été interrompu</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="162"/>
+        <location filename="../QtlProcess.cpp" line="166"/>
         <source>Failed to start process</source>
         <translation>Impossible de démarrer le processus</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="168"/>
+        <location filename="../QtlProcess.cpp" line="172"/>
         <source>Unknown process error</source>
         <translation>Erreur inconnue du process</translation>
     </message>
     <message>
-        <location filename="../QtlProcess.cpp" line="180"/>
+        <location filename="../QtlProcess.cpp" line="184"/>
         <source>Process exceeds execution time limit</source>
         <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
     </message>

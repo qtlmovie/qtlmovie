@@ -417,7 +417,7 @@ void QtlDataPull::processNewState()
         const int ms = _startTime.elapsed();
         const qint64 bps = ms <= 0 ? 0 : (qint64(_totalIn) * 8 * 1000) / ms;
         _log->debug(tr("DataPull: Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s")
-                    .arg(_closed ? "completed" : "aborted")
+                    .arg(_closed ? tr("completed") : tr("aborted"))
                     .arg(_totalIn)
                     .arg(ms)
                     .arg(bps)
