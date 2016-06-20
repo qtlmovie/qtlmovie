@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QtlMovieMainWindow</class>
- <widget class="QtlMovieMainWindowBase" name="QtlMovieMainWindow">
+ <class>QtlMovieDvdRipWindow</class>
+ <widget class="QtlMovieMainWindowBase" name="QtlMovieDvdRipWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>669</height>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QtlMovie</string>
+   <string>QtlMovie DVD Extraction</string>
   </property>
   <property name="windowIcon">
    <iconset resource="QtlMovie.qrc">
@@ -19,7 +19,41 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="layoutCentral">
-    <item row="1" column="0" colspan="2">
+    <item row="3" column="0" colspan="2">
+     <widget class="QtlPlainTextLogger" name="log">
+      <property name="textInteractionFlags">
+       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="buttonStart">
+      <property name="text">
+       <string>Start ...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QProgressBar" name="progressBarEncode">
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="textVisible">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="labelRemainingTime">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
      <widget class="QWidget" name="taskBox" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="leftMargin">
@@ -35,25 +69,6 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QtlMovieTaskList" name="taskList">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="acceptDrops">
-          <bool>true</bool>
-         </property>
-         <property name="dragDropMode">
-          <enum>QAbstractItemView::DropOnly</enum>
-         </property>
-         <property name="defaultDropAction">
-          <enum>Qt::CopyAction</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QWidget" name="buttonBox" native="true">
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="leftMargin">
@@ -68,54 +83,6 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
-           <spacer name="taskButtonsSpacer1">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonNewTask">
-            <property name="text">
-             <string>New ...</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonTaskUp">
-            <property name="text">
-             <string>Up</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonTaskDown">
-            <property name="text">
-             <string>Down</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonRemoveTask">
-            <property name="text">
-             <string>Remove</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonPurge">
-            <property name="text">
-             <string>Purge</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <spacer name="taskButtonsSpacer2">
             <property name="orientation">
@@ -135,43 +102,6 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLabel" name="labelRemainingTime">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QProgressBar" name="progressBarEncode">
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="textVisible">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="2">
-     <widget class="QtlPlainTextLogger" name="log">
-      <property name="textInteractionFlags">
-       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="buttonStart">
-      <property name="text">
-       <string>Start ...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QtlMovieEditTask" name="singleTask" native="true"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -187,11 +117,7 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen"/>
-    <addaction name="actionNewTask"/>
-    <addaction name="actionPurgeCompleted"/>
-    <addaction name="actionTranscode"/>
-    <addaction name="separator"/>
+    <addaction name="actionStart"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -204,23 +130,15 @@
     <addaction name="actionSearchNewVersion"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
-    <addaction name="actionAboutMediaTools"/>
     <addaction name="actionAboutQt"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionInputFileProperties"/>
-    <addaction name="actionTestAudio"/>
-    <addaction name="actionDvdExtraction"/>
-    <addaction name="actionDvdDecrypter"/>
-    <addaction name="separator"/>
     <addaction name="actionClearLog"/>
     <addaction name="actionLogDebug"/>
     <addaction name="actionSaveLog"/>
-    <addaction name="separator"/>
-    <addaction name="actionSwitchMode"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -255,9 +173,9 @@
     <enum>QAction::QuitRole</enum>
    </property>
   </action>
-  <action name="actionOpen">
+  <action name="actionStart">
    <property name="text">
-    <string>Open ...</string>
+    <string>Start ...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -401,11 +319,6 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-  <action name="actionDvdExtraction">
-   <property name="text">
-    <string>DVD Extraction ...</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -433,32 +346,6 @@
     <slot>save()</slot>
    </slots>
   </customwidget>
-  <customwidget>
-   <class>QtlMovieTaskList</class>
-   <extends>QTableWidget</extends>
-   <header>QtlMovieTaskList.h</header>
-   <slots>
-    <slot>addAndEditTask()</slot>
-    <slot>deleteSelectedTasks()</slot>
-    <slot>editSelectedTask()</slot>
-    <slot>moveUpSelectedTasks()</slot>
-    <slot>moveDownSelectedTasks()</slot>
-    <slot>removeCompletedTasks()</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>QtlMovieEditTask</class>
-   <extends>QWidget</extends>
-   <header>QtlMovieEditTask.h</header>
-   <container>1</container>
-   <slots>
-    <slot>showInputFileProperties()</slot>
-    <slot>showAudioTest()</slot>
-    <slot>selectInputFile()</slot>
-    <slot>selectOutputFile()</slot>
-    <slot>selectSubtitleFile()</slot>
-   </slots>
-  </customwidget>
  </customwidgets>
  <resources>
   <include location="QtlMovie.qrc"/>
@@ -467,7 +354,7 @@
   <connection>
    <sender>actionQuit</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -483,7 +370,7 @@
   <connection>
    <sender>actionAbout</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>about()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -499,7 +386,7 @@
   <connection>
    <sender>actionSettings</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>editSettings()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -545,41 +432,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionAboutMediaTools</sender>
-   <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
-   <slot>aboutMediaTools()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionDvdDecrypter</sender>
-   <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
-   <slot>startDvdDecrypter()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionHelp</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>showHelp()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -611,7 +466,7 @@
   <connection>
    <sender>actionSearchNewVersion</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>searchNewVersion()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -627,7 +482,7 @@
   <connection>
    <sender>actionReleaseNotes</sender>
    <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
+   <receiver>QtlMovieDvdRipWindow</receiver>
    <slot>showReleaseNotes()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -640,205 +495,5 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>actionNewTask</sender>
-   <signal>triggered()</signal>
-   <receiver>taskList</receiver>
-   <slot>addAndEditTask()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>158</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonNewTask</sender>
-   <signal>clicked()</signal>
-   <receiver>taskList</receiver>
-   <slot>addAndEditTask()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>632</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>158</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonTaskUp</sender>
-   <signal>clicked()</signal>
-   <receiver>taskList</receiver>
-   <slot>moveUpSelectedTasks()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>632</x>
-     <y>144</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>158</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonTaskDown</sender>
-   <signal>clicked()</signal>
-   <receiver>taskList</receiver>
-   <slot>moveDownSelectedTasks()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>632</x>
-     <y>173</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>158</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonRemoveTask</sender>
-   <signal>clicked()</signal>
-   <receiver>taskList</receiver>
-   <slot>deleteSelectedTasks()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>632</x>
-     <y>202</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>158</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionOpen</sender>
-   <signal>triggered()</signal>
-   <receiver>singleTask</receiver>
-   <slot>selectInputFile()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>29</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionInputFileProperties</sender>
-   <signal>triggered()</signal>
-   <receiver>singleTask</receiver>
-   <slot>showInputFileProperties()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>29</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionTestAudio</sender>
-   <signal>triggered()</signal>
-   <receiver>singleTask</receiver>
-   <slot>showAudioTest()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>29</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionPurgeCompleted</sender>
-   <signal>triggered()</signal>
-   <receiver>taskList</receiver>
-   <slot>removeCompletedTasks()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>299</x>
-     <y>168</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonPurge</sender>
-   <signal>clicked()</signal>
-   <receiver>taskList</receiver>
-   <slot>removeCompletedTasks()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>633</x>
-     <y>227</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>299</x>
-     <y>168</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSwitchMode</sender>
-   <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
-   <slot>switchMode()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionDvdExtraction</sender>
-   <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
-   <slot>startDvdExtraction()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>363</x>
-     <y>334</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
- <slots>
-  <slot>startDvdDecrypter()</slot>
-  <slot>transcodingStarted()</slot>
-  <slot>transcodingStopped(bool)</slot>
-  <slot>transcodingProgress(QString,int,int,int,int)</slot>
-  <slot>switchMode()</slot>
-  <slot>startDvdExtraction()</slot>
- </slots>
 </ui>

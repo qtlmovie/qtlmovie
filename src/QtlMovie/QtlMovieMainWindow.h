@@ -37,22 +37,16 @@
 #define QTLMOVIEMAINWINDOW_H
 
 #include "ui_QtlMovieMainWindow.h"
-#include "QtlLogger.h"
-#include "QtlMovieJob.h"
+#include "QtlMovieMainWindowBase.h"
 #include "QtlMovieInputFile.h"
 #include "QtlMovieOutputFile.h"
-#include "QtlMovieSettings.h"
-#include <QSoundEffect>
-
-#if defined(QTL_WINEXTRAS)
-#include <QtWinExtras>
-#endif
+#include "QtlMovieJob.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the application.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieMainWindow : public QMainWindow
+class QtlMovieMainWindow : public QtlMovieMainWindowBase
 {
     Q_OBJECT
 
@@ -84,38 +78,17 @@ private slots:
     //!
     void cancelTranscoding();
     //!
+    //! Invoked by the "DVD Extraction..." button.
+    //!
+    void startDvdExtraction();
+    //!
     //! Invoked by the "DVD Decrypter..." button.
     //!
     void startDvdDecrypter();
     //!
-    //! Invoked by the "Settings..." button.
-    //!
-    void editSettings();
-    //!
     //! Invoked by the "Switch to {Single File|Batch} Mode" button.
     //!
     void switchMode();
-    //!
-    //! Invoked by the "About Media Tools" button.
-    //!
-    void aboutMediaTools();
-    //!
-    //! Invoked by the "About" button.
-    //!
-    void about();
-    //!
-    //! Invoked by the "Help" button.
-    //!
-    void showHelp();
-    //!
-    //! Invoked by the "Release Notes" button.
-    //!
-    void showReleaseNotes();
-    //!
-    //! Invoked by the "Search New Version" button.
-    //! @param [in] silent Do not report errors or no new version.
-    //!
-    void searchNewVersion(bool silent = false);
     //!
     //! Invoked when transcoding starts.
     //!
@@ -137,26 +110,7 @@ private slots:
     //!
     void transcodingProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
 
-protected:
-    //!
-    //! Event handler to handle window close.
-    //! @param event Notified event.
-    //!
-    virtual void closeEvent(QCloseEvent* event);
-
 private:
-    Ui::QtlMovieMainWindow _ui;                 //!< UI from Qt Designer.
-    QtlMovieSettings*      _settings;           //!< Global settings.
-#if defined(QTL_WINEXTRAS)
-    QWinTaskbarButton*     _taskbarButton;      //!< The application button in the Windows task bar.
-    QWinTaskbarProgress*   _taskbarProgress;    //!< The progress indicator in the Windows task bar.
-#endif
-    QtlMovieJob*           _job;                //!< Current transcoding job.
-    QSoundEffect           _sound;              //!< Sound player for notification.
-    bool                   _batchMode;          //!< The UI is currently in batch mode (ie not single file mode).
-    bool                   _closePending;       //!< Close the application as soon as possible.
-    bool                   _restartRequested;   //!< A restart of the application is requested.
-
     //!
     //! Start the first transcoding in the list.
     //! In case of failure, clear the complete list of transcodings.
@@ -165,26 +119,17 @@ private:
     bool startFirstTranscoding();
 
     //!
-    //! The type of transcoding cancelation.
-    //!
-    enum CancelStatus {
-        NothingToCancel,  //!< No transcoding in progress, nothing to cancel.
-        CancelInProgress, //!< Cancel accepted and in progress.
-        CancelRefused     //!< Transcoding in progress, refuse to cancel it.
-    };
-
-    //!
     //! Check if an encoding is currently in progress and propose to abort it.
     //! If the user accept to abort it, start the cancelation. The completion
     //! of the cancelation will be notified later by transcodingStopped().
     //! @return Cancel status.
     //!
-    CancelStatus proposeToCancelTranscoding();
+    virtual CancelStatus proposeToCancel();
 
     //!
     //! Apply the settings which affect the UI.
     //!
-    void applyUiSettings();
+    void applyUserInterfaceSettings();
 
     //!
     //! Update the UI when transcoding starts or stops.
@@ -199,10 +144,10 @@ private:
     //!
     bool startNewJob(QtlMovieTask* task);
 
-    //!
-    //! Start to play the notification sound.
-    //!
-    void playNotificationSound();
+    Ui::QtlMovieMainWindow _ui;                 //!< UI from Qt Designer.
+    QtlMovieJob*           _job;                //!< Current transcoding job.
+    bool                   _batchMode;          //!< The UI is currently in batch mode (ie not single file mode).
+    bool                   _restartRequested;   //!< A restart of the application is requested.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlMovieMainWindow)

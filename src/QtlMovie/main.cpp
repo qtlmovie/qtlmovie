@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieMainWindow.h"
+#include "QtlMovieDvdRipWindow.h"
 #include "QtlTranslator.h"
 #include "QtsTsPacket.h"
 #include <QtCore>
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
     const QStringList args(QCoreApplication::arguments());
     QString locale;
     QStringList inputFiles;
+    bool useDvdRip = false;
     bool logDebug = false;
 
     for (int i = 1; i < args.size(); ++i) {
@@ -55,6 +57,10 @@ int main(int argc, char *argv[])
         else if (args[i] == "-d") {
             // Option "-d" means activate log debug.
             logDebug = true;
+        }
+        else if (args[i] == "-e") {
+            // Option "-e" means activate DVD extraction.
+            useDvdRip = true;
         }
         else if (!args[i].startsWith("-")) {
             // Not an option, this is an input file.
@@ -76,13 +82,22 @@ int main(int argc, char *argv[])
     // Various sanity checks.
     QtsTsPacket::sanityCheck();
 
-    // Run the application GUI. When a restart is requested, create a new main window.
-    for (;;) {
-        QtlMovieMainWindow win(0, inputFiles, logDebug);
+    // Run the application GUI.
+    if (useDvdRip) {
+        QtlMovieDvdRipWindow win(0, logDebug);
         win.show();
-        const int status = QCoreApplication::exec();
-        if (!win.restartRequested()) {
-            return status;
+        return QCoreApplication::exec();
+    }
+    else {
+        // Standard QtlMovie window.
+        for (;;) {
+            QtlMovieMainWindow win(0, inputFiles, logDebug);
+            win.show();
+            const int status = QCoreApplication::exec();
+            // When a restart is requested, create a new main window.
+            if (!win.restartRequested()) {
+                return status;
+            }
         }
     }
 }

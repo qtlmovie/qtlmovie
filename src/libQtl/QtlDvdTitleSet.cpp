@@ -202,7 +202,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 {
     // Only .IFO and .VOB are DVD structures.
     if (!isDvdTitleSetFileName(fileName)) {
-        _log->line(tr("%1 is not a valid DVD title set file").arg(fileName));
+        _log->debug(tr("%1 is not a valid DVD title set file").arg(fileName));
         return false;
     }
 

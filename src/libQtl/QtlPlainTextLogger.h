@@ -78,6 +78,14 @@ public:
     //! @param [in] color When a valid color is passed, try to display the text in this color.
     //!
     virtual void debug(const QString& line, const QColor& color = QColor());
+    //!
+    //! Check if debug mode is active.
+    //! @return True if debug mode is set, false otherwise.
+    //!
+    bool debugMode() const
+    {
+        return _debug;
+    }
 
 public slots:
     //!

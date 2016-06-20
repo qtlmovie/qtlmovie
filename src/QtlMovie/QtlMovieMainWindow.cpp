@@ -31,16 +31,8 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieMainWindow.h"
-#include "QtlMovieVersion.h"
 #include "QtlMovie.h"
-#include "QtlMovieEditSettings.h"
-#include "QtlMovieAboutMediaTools.h"
-#include "QtlNewVersionCheckerJson.h"
-#include "QtlBrowserDialog.h"
-#include "QtlTextFileViewer.h"
-#include "QtlTranslator.h"
 #include "QtlProcess.h"
-#include "QtlSysInfo.h"
 #include "QtlStringUtils.h"
 #include "QtlMessageBoxUtils.h"
 
@@ -50,68 +42,29 @@
 //-----------------------------------------------------------------------------
 
 QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initialFileNames, bool logDebug) :
-    QMainWindow(parent),
-    _settings(0),
-#if defined(QTL_WINEXTRAS)
-    _taskbarButton(0),
-    _taskbarProgress(0),
-#endif
+    QtlMovieMainWindowBase(parent, logDebug),
     _job(0),
-    _sound(),
     _batchMode(false),
-    _closePending(false),
     _restartRequested(false)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
 
-#if defined(QTL_WINEXTRAS)
-    // On Windows Vista, it has been reported that QtlMovie crashes on exit
-    // when using a progress bar on icon. To avoid that, we use it only on
-    // Windows 7 and higher.
-    if ((QSysInfo::WindowsVersion & QSysInfo::WV_NT_based) != 0 && QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7) {
-
-        // The following sequence is a mystery. If not present, the taskbar progress does not work.
-        // But the Qt documentation is not really clear on what this does.
-        if (QtWin::isCompositionEnabled()) {
-            QtWin::enableBlurBehindWindow(this);
-        }
-        else {
-            QtWin::disableBlurBehindWindow(this);
-        }
-
-        // Setup the Windows taskbar button.
-        _taskbarButton = new QWinTaskbarButton(this);
-        _taskbarButton->setWindow(windowHandle());
-        _taskbarProgress = _taskbarButton->progress();
-        _taskbarProgress->setRange(0, 1000);
-    }
-#endif
-
-    // Connect the "About Qt" action.
-    connect(_ui.actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
-
     // Set log debug mode.
-    _ui.log->setDebugMode(logDebug);
+    _ui.actionLogDebug->setChecked(logDebug);
 
-    // In debug mode, set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
-    if (logDebug) {
-        qputenv("DVDCSS_VERBOSE", "2");
-    }
-
-    // Create and load settings. Ignore errors (typically default settings file not yet created).
-    _settings = new QtlMovieSettings(_ui.log, this);
-    applyUiSettings();
+    // Load settings and finish up base class part of user interface.
+    setupUserInterface(_ui.log, _ui.actionAboutQt);
 
     // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
 #if !defined(Q_OS_WIN)
-    if (!_settings->dvddecrypter()->isSet()) {
+    if (!settings()->dvddecrypter()->isSet()) {
         _ui.actionDvdDecrypter->setVisible(false);
     }
 #endif
 
     // Adjust UI for single file mode or batch mode.
-    _batchMode = _settings->useBatchMode();
+    _batchMode = settings()->useBatchMode();
     if (_batchMode) {
         // Batch mode: Hide unused widgets.
         _ui.actionOpen->setVisible(false);
@@ -123,7 +76,7 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
         _ui.actionSwitchMode->setText(tr("Switch to Single File Mode"));
 
         // Initialize task list.
-        _ui.taskList->initialize(_settings, _ui.log);
+        _ui.taskList->initialize(settings(), log());
     }
     else {
         // Single file mode: Hide unused widgets.
@@ -135,14 +88,11 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
         _ui.actionSwitchMode->setText(tr("Switch to Batch Mode"));
 
         // Initialize the task editor.
-        _ui.singleTask->initialize(new QtlMovieTask(_settings, _ui.log, this), _settings, _ui.log);
+        _ui.singleTask->initialize(new QtlMovieTask(settings(), log(), this), settings(), log());
     }
 
-    // Restore the window geometry from the saved settings.
-    _settings->restoreGeometry(this);
-
     // Report missing tools (FFmpeg, DvdAuthor, etc.)
-    _settings->reportMissingTools();
+    settings()->reportMissingTools();
 
     // Transcoding is initially stopped.
     transcodingUpdateUi(false);
@@ -159,11 +109,6 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
             // Single file mode, simply set the input file name.
             _ui.singleTask->task()->inputFile()->setFileName(initialFileNames.first());
         }
-    }
-
-    // Start a search for a new version online.
-    if (_settings->newVersionCheck()) {
-        searchNewVersion(true);
     }
 }
 
@@ -209,11 +154,7 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
     _ui.labelRemainingTime->setVisible(false);
 
     // Set the Windows task bar button.
-#if defined(QTL_WINEXTRAS)
-    if (_taskbarProgress != 0) {
-        _taskbarProgress->setVisible(started);
-    }
-#endif
+    setIconTaskBarVisible(started);
 }
 
 
@@ -223,7 +164,7 @@ void QtlMovieMainWindow::transcodingUpdateUi(bool started)
 
 bool QtlMovieMainWindow::startNewJob(QtlMovieTask* task)
 {
-    _job = new QtlMovieJob(task, _settings, _ui.log, this);
+    _job = new QtlMovieJob(task, settings(), log(), this);
 
     // Connect the job's signals to the UI.
     connect(_job, &QtlMovieJob::started,   this, &QtlMovieMainWindow::transcodingStarted);
@@ -252,7 +193,7 @@ void QtlMovieMainWindow::startTranscoding()
 {
     // Fool-proof check.
     if (_job != 0) {
-        _ui.log->line(tr("Internal error, transcoding job already created."));
+        log()->line(tr("Internal error, transcoding job already created."));
         return;
     }
 
@@ -273,7 +214,7 @@ void QtlMovieMainWindow::startTranscoding()
             // If the output file already exists...
             if (!task->askOverwriteOutput()) {
                 // Don't overwrite, give up.
-                _ui.log->line(tr("Overwritting output file denied"));
+                log()->line(tr("Overwritting output file denied"));
                 task->setCompleted(false);
             }
             else {
@@ -292,7 +233,7 @@ void QtlMovieMainWindow::startTranscoding()
 void QtlMovieMainWindow::cancelTranscoding()
 {
     // Ask the user to confirm the cancelation of the current transcoding.
-    proposeToCancelTranscoding();
+    proposeToCancel();
 }
 
 
@@ -303,7 +244,7 @@ void QtlMovieMainWindow::cancelTranscoding()
 void QtlMovieMainWindow::transcodingStarted()
 {
     // Clear the log if required.
-    if (_settings->clearLogBeforeTranscode()) {
+    if (settings()->clearLogBeforeTranscode()) {
         _ui.log->clear();
     }
 
@@ -353,11 +294,9 @@ void QtlMovieMainWindow::transcodingProgress(const QString& description, int cur
     }
 
     // Update the Windows task bar button.
-#if defined(QTL_WINEXTRAS)
-    if (_taskbarProgress != 0 && _job != 0) {
-        _taskbarProgress->setValue(_job->currentProgress(current, maximum, _taskbarProgress->maximum()));
+    if (_job != 0) {
+        setIconTaskBarValue(_job->currentProgress(current, maximum, iconTaskBarMaximumValue()));
     }
-#endif
 }
 
 
@@ -371,15 +310,15 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     if (_job != 0) {
 
         // Play notification sound at complete end of all jobs.
-        if (_settings->playSoundOnCompletion() && (!_batchMode || !_ui.taskList->hasQueuedTasks())) {
+        if (settings()->playSoundOnCompletion() && (!_batchMode || !_ui.taskList->hasQueuedTasks())) {
             playNotificationSound();
         }
 
         // Save log file if required.
-        if (_settings->saveLogAfterTranscode()) {
-            const QString logFile(_job->task()->outputFile()->fileName() + _settings->logFileExtension());
+        if (settings()->saveLogAfterTranscode()) {
+            const QString logFile(_job->task()->outputFile()->fileName() + settings()->logFileExtension());
             _ui.log->saveToFile(logFile);
-            _ui.log->line(tr("Saved log to %1").arg(logFile));
+            log()->line(tr("Saved log to %1").arg(logFile));
         }
 
         // Delete transcoding job.
@@ -391,7 +330,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
     transcodingUpdateUi(false);
 
     // If the application needs to be closed, close it now.
-    if (_closePending) {
+    if (closePending()) {
         close();
     }
     else if (_batchMode) {
@@ -405,7 +344,7 @@ void QtlMovieMainWindow::transcodingStopped(bool success)
 // Check if an encoding is currently in progress. Propose to abort.
 //-----------------------------------------------------------------------------
 
-QtlMovieMainWindow::CancelStatus QtlMovieMainWindow::proposeToCancelTranscoding()
+QtlMovieMainWindow::CancelStatus QtlMovieMainWindow::proposeToCancel()
 {
     // If there is nothing to cancel now, no need to ask.
     if (_job == 0) {
@@ -432,47 +371,22 @@ QtlMovieMainWindow::CancelStatus QtlMovieMainWindow::proposeToCancelTranscoding(
 
 
 //-----------------------------------------------------------------------------
-// Event handler to handle window close.
+// Invoked by the "DVD Extraction..." button.
 //-----------------------------------------------------------------------------
 
-void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
+void QtlMovieMainWindow::startDvdExtraction()
 {
-    if (_closePending) {
-        // If _closePending is already true, either this is a close following the completion
-        // of the transcoding cancelation or the cancelation does not work and the user tries
-        // to close again. In both cases, we accept the close.
-        event->accept();
-    }
-    else {
-        // Check if should abort any transcoding.
-        switch (proposeToCancelTranscoding()) {
-        case NothingToCancel:
-            // It is always safe to close when no transcoding is in progress.
-            event->accept();
-            break;
-        case CancelRefused:
-            // The user refused to cancel the transcoding. Do not close.
-            event->ignore();
-            break;
-        case CancelInProgress:
-            // The user accepted to cancel the transcoding. However, we wait for the
-            // cancelation to complete before closing. Will close later.
-            _closePending = true;
-            event->ignore();
-            break;
-        default:
-            _ui.log->line(tr("Internal error, invalid cancel state"));
-            event->ignore();
-            break;
-        }
+    // Use the same executable with option "-e" (DVD "e"xtraction).
+    // Also propagate debug mode to child process.
+    QStringList args("-e");
+    if (_ui.log->debugMode()) {
+        args << "-d";
     }
 
-    // If the event is accepted, save the geometry of the window.
-    if (event->isAccepted()) {
-        _settings->saveGeometry(this);
-        _settings->sync();
-    }
+    // Start the process.
+    QProcess::startDetached(QApplication::applicationFilePath(), args);
 }
+
 
 
 //-----------------------------------------------------------------------------
@@ -482,37 +396,12 @@ void QtlMovieMainWindow::closeEvent(QCloseEvent* event)
 void QtlMovieMainWindow::startDvdDecrypter()
 {
     // DVD Decrypter executable file.
-    const QString exec(_settings->dvddecrypter()->fileName());
+    const QString exec(settings()->dvddecrypter()->fileName());
     if (exec.isEmpty()) {
         qtlError(this, tr("DVD Decrypter not found, install it or set explicit path in settings."));
     }
     else {
-        QtlProcess::newInstance(exec, QStringList(), 0, 0, this)->start();
-    }
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "Settings..." button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::editSettings()
-{
-    // Open an edition dialog with the current settings.
-    QtlMovieEditSettings edit(_settings, this);
-    if (edit.exec() == QDialog::Accepted) {
-
-        // Button "OK" has been selected, update settings from the values in the dialog box.
-        edit.applySettings();
-        applyUiSettings();
-
-        // Check if the application needs a restart.
-        // Currently, the single file vs. batch mode option is the only cause for a restart.
-        _restartRequested = int(_batchMode) ^ int(_settings->useBatchMode());
-
-        if (_restartRequested && qtlConfirm(this, tr("These settings will be applied when the application restarts.\nRestart now?"))) {
-            close();
-        }
+        QProcess::startDetached(exec);
     }
 }
 
@@ -526,7 +415,7 @@ void QtlMovieMainWindow::switchMode()
     // We need to restart the application to change the UI. Ask the user.
     if (qtlConfirm(this, tr("Switching mode needs the application to restart.\nRestart now?"))) {
         // Update the settings with the reverse of the current mode (single file vs. batch).
-        _settings->setUseBatchMode(!_batchMode);
+        settings()->setUseBatchMode(!_batchMode);
         // Close the main window and let main() restart a new instance.
         _restartRequested = true;
         close();
@@ -538,108 +427,15 @@ void QtlMovieMainWindow::switchMode()
 // Apply the settings which affect the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieMainWindow::applyUiSettings()
+void QtlMovieMainWindow::applyUserInterfaceSettings()
 {
-    _ui.log->setMaximumBlockCount(_settings->maxLogLines());
-}
+    _ui.log->setMaximumBlockCount(settings()->maxLogLines());
 
+    // Check if the application needs a restart.
+    // Currently, the single file vs. batch mode option is the only cause for a restart.
+    _restartRequested = int(_batchMode) ^ int(settings()->useBatchMode());
 
-//-----------------------------------------------------------------------------
-// Start to play the notification sound.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::playNotificationSound()
-{
-    // Stop current play (if any).
-    _sound.stop();
-
-    // Set new sound source.
-    _sound.setSource(QUrl("qrc:/sounds/completion.wav"));
-
-    // Play the sound.
-    _sound.setVolume(1.0);
-    _sound.play();
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "About Media Tools" button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::aboutMediaTools()
-{
-    QtlMovieAboutMediaTools box(_settings, this);
-    box.exec();
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "About" button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::about()
-{
-    QMessageBox::about(this,
-                       tr("About QtlMovie"),
-                       QStringLiteral("<p><b>%1</b>: %2</p>"
-                           "<p>%3 %4 (%5)</p>"
-                           "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
-                           "<hr/>"
-                           "<p><b>Contributions:</b></p>"
-                           "<p>Teletext code from Petr Kutalek's Telxcc.<br/>"
-                           "Libdvdcss by St&eacute;phane Borel, Sam Hocevar et al.<br/>"
-                           "QtlMovie logo by %6.</p>")
-                       .arg(qtlHtmlLink(WEBREF_QTLMOVIE, "QtlMovie"))
-                       .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
-                       .arg(tr("Version"))
-                       .arg(QTLMOVIE_VERSION)
-                       .arg(__DATE__)
-                       .arg(qtlHtmlLink(WEBREF_DESIGNBOLT, "DesignBolts")));
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "Help" button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::showHelp()
-{
-    QtlBrowserDialog box(this,
-                         "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
-                         tr("QtlMovie Help"),
-                         ":/images/qtlmovie-64.png");
-    box.setObjectName("QtlMovieHelpViewer");
-    box.setGeometrySettings(_settings, true);
-    box.exec();
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "Release Notes" button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::showReleaseNotes()
-{
-    QtlTextFileViewer box(this,
-                          QtlTranslator::searchLocaleFile(":/changelog.txt"),
-                          tr("QtlMovie Release Notes"),
-                          ":/images/qtlmovie-64.png");
-    box.setObjectName("QtlMovieReleaseNotesViewer");
-    box.setGeometrySettings(_settings, true);
-    box.exec();
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "Search New Version" button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::searchNewVersion(bool silent)
-{
-    // Start searching for new versions.
-    QtlNewVersionCheckerJson::newInstance(QtlVersion(QTLMOVIE_VERSION),
-                                          "http://qtlmovie.sourceforge.net/newversion/",
-                                          silent,
-                                          _ui.log,
-                                          this);
+    if (_restartRequested && qtlConfirm(this, tr("These settings will be applied when the application restarts.\nRestart now?"))) {
+        close();
+    }
 }

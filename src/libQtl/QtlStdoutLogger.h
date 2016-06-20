@@ -36,6 +36,7 @@
 #ifndef QTLSTDOUTLOGGER_H
 #define QTLSTDOUTLOGGER_H
 
+#include "QtlCore.h"
 #include "QtlLogger.h"
 
 //!
