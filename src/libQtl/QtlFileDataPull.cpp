@@ -32,7 +32,6 @@
 //----------------------------------------------------------------------------
 
 #include "QtlFileDataPull.h"
-#include "dvdcss.h"
 
 
 //----------------------------------------------------------------------------
@@ -50,6 +49,18 @@ QtlFileDataPull::QtlFileDataPull(const QStringList& fileNames,
     _currentIndex(0),
     _buffer(qMax(1024, transferSize))
 {
+    // Set total transfer size in bytes.
+    qint64 total = 0;
+    foreach (const QString& name, _fileNames) {
+        const qint64 size = QFileInfo(name).size();
+        if (size > 0) {
+            total += size;
+        }
+    }
+    setProgressMaxHint(total);
+
+    // Set progress interval: every 5% below 100 MB, every 1% above.
+    setProgressIntervalInBytes(total < 100000000 ? total / 20 : total / 100);
 }
 
 

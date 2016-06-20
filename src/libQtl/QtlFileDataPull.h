@@ -55,6 +55,7 @@ public:
 
     //!
     //! Constructor.
+    //! Progress reporting is automatically enabled.
     //! @param [in] fileNames List of files to transfer. They are concatenated on the destination.
     //! @param [in] transferSize Data transfer size in bytes.
     //! @param [in] minBufferSize The minimum buffer size is the lower limit of the

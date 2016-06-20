@@ -92,13 +92,37 @@ public:
     }
 
     //!
-    //! Set the maximum number of bytes to pull. After that number of bytes is
-    //! read, a proper close is triggered.
+    //! Set the maximum number of bytes to pull.
+    //! After that number of bytes is read, a proper close is triggered.
     //! @param [in] size Maximum size in bytes. If negative, no maximum is applied.
     //!
     void setMaxPulledSize(qint64 size)
     {
         _maxIn = size;
+    }
+
+    //!
+    //! Set the interval between two emissions of progress().
+    //! The interval is specified in number of input bytes.
+    //! The signal progress() is emitted at most once in each interval but it not
+    //! guaranteed that it is emitted on strict multiples of the interval size.
+    //! @param [in] size Emit progress() each time that number of input bytes is read.
+    //! If negative or zero, progress() is never emitted.
+    //!
+    void setProgressIntervalInBytes(qint64 size)
+    {
+        _progressInterval = size;
+    }
+
+    //!
+    //! Set the probable ("hint") total size of the transfer.
+    //! This size is reported by progress() as @a maximum.
+    //! This is useful only if a GUI needs to report the current percentage of the transfer.
+    //! @param [in] size Probable total size of the transfer.
+    //!
+    void setProgressMaxHint(qint64 size)
+    {
+        _progressMaxHint = size;
     }
 
     //!
@@ -175,6 +199,15 @@ signals:
     //! Emitted when the transfer is started.
     //!
     void started();
+
+    //!
+    //! Emitted when some progress in the data transfer is available.
+    //! @param [in] current Current number of input bytes.
+    //! @param [in] maximum Total size of the data transfer. It is only a hint.
+    //! When neither setProgressMaxHint() not setMaxPulledSize() were called,
+    //! @a maximum is -1.
+    //!
+    void progress(qint64 current, qint64 maximum);
 
     //!
     //! Emitted when the transfer is completed on one device.
@@ -323,16 +356,19 @@ private:
         Context(QIODevice* dev = 0);
     };
 
-    QtlNullLogger  _nullLog;         //!< Default logger.
-    QtlLogger*     _log;             //!< Message logger.
-    bool           _autoDelete;      //!< Automatic object deletion on transfer completion.
-    int            _minBufferSize;   //!< Lower limit of buffer size.
-    QTime          _startTime;       //!< Time of start operation.
-    bool           _closed;          //!< True when close() is requested by subclass.
-    qint64         _maxIn;           //!< Maximum data size to transfer.
-    qint64         _totalIn;         //!< Total data transfered by write().
-    QList<Context> _devices;         //!< Active output devices.
-    int            _processingState; //!< A counter to protect processNewState().
+    QtlNullLogger  _nullLog;           //!< Default logger.
+    QtlLogger*     _log;               //!< Message logger.
+    bool           _autoDelete;        //!< Automatic object deletion on transfer completion.
+    int            _minBufferSize;     //!< Lower limit of buffer size.
+    QTime          _startTime;         //!< Time of start operation.
+    bool           _closed;            //!< True when close() is requested by subclass.
+    qint64         _maxIn;             //!< Maximum data size to transfer.
+    qint64         _progressInterval;  //!< Emit progress() at this interval (input size in bytes).
+    qint64         _progressMaxHint;   //!< Probable max input size, as reported by progress().
+    qint64         _progressNext;      //!< Emit next progress() at this input size.
+    qint64         _totalIn;           //!< Total data transfered by write().
+    QList<Context> _devices;           //!< Active output devices.
+    int            _processingState;   //!< A counter to protect processNewState().
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDataPull)

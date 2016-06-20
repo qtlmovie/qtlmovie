@@ -55,6 +55,7 @@ public:
 
     //!
     //! Constructor.
+    //! Progress reporting is automatically enabled.
     //! @param [in] deviceName DVD device name.
     //! @param [in] startSector First sector to read.
     //! @param [in] sectorCount Total number of sectors to read.

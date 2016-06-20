@@ -50,6 +50,9 @@ QtlDataPull::QtlDataPull(int minBufferSize, QtlLogger* log, QObject* parent) :
     _startTime(),
     _closed(false),
     _maxIn(-1),
+    _progressInterval(-1),
+    _progressMaxHint(-1),
+    _progressNext(-1),
     _totalIn(0),
     _devices(),
     _processingState(0)
@@ -106,6 +109,7 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
     _startTime.start();
     _closed = false;
     _totalIn = 0;
+    _progressNext = _progressInterval > 0 ? _progressInterval : -1;
 
     // Detect duplicates.
     QSet<QIODevice*> alreadySeen;
@@ -248,8 +252,12 @@ bool QtlDataPull::write(const void* data, int dataSize)
         }
     }
 
-    // If one device aborted or still underflow, do it later in the event loop.
-    if (aborted || needMoreData()) {
+    // We have something to do in several cases:
+    // - Need to report progress.
+    // - At least one device aborted.
+    // - Still underflow.
+    // But we will do it later, from the event loop, not from write().
+    if ((_progressNext > 0 && _totalIn >= _progressNext) || aborted || needMoreData()) {
         processNewStateLater();
     }
     return success;
@@ -368,6 +376,12 @@ void QtlDataPull::processNewState()
     // Filter outdated calls.
     if (_devices.isEmpty()) {
         return;
+    }
+
+    // Report progress if necessary.
+    if (_progressNext > 0 && _totalIn >= _progressNext) {
+        emit progress(_totalIn, _progressMaxHint > 0 ? _progressMaxHint : (_maxIn > 0 ? _maxIn : -1));
+        _progressNext = _progressInterval > 0 ? _totalIn + _progressInterval : -1;
     }
 
     // If some devices need data and none are busy, ask for more data to the subclass.

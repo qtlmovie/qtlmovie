@@ -55,6 +55,12 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     _buffer(_sectorChunk * DVDCSS_BLOCK_SIZE),
     _dvdcss(0)
 {
+    // Set total transfer size in bytes.
+    const qint64 total = qint64(sectorCount) * DVDCSS_BLOCK_SIZE;
+    setProgressMaxHint(total);
+
+    // Set progress interval: every 5% below 100 MB, every 1% above.
+    setProgressIntervalInBytes(total < 100000000 ? total / 20 : total / 100);
 }
 
 QtlDvdDataPull::~QtlDvdDataPull()
