@@ -38,6 +38,7 @@
 
 #include "QtlDataPull.h"
 #include "QtlByteBlock.h"
+#include "QtlDvdMedia.h"
 
 //!
 //! A class to pull data from an encrypted DVD into an asynchronous device such as QProcess.
@@ -59,6 +60,9 @@ public:
     //! @param [in] deviceName DVD device name.
     //! @param [in] startSector First sector to read.
     //! @param [in] sectorCount Total number of sectors to read.
+    //! @param [in] skipBadSectors If true, ignore and skip bad sectors which may be used as "protection".
+    //! Ignored bad sectors are included in @a sectorCount. Consequently, at the end of a successful data
+    //! transfer, the total number of transferted sectors can be less than @a sectorCount.
     //! @param [in] transferSize Data transfer size in bytes.
     //! @param [in] minBufferSize The minimum buffer size is the lower limit of the
     //! buffered data. When the amount of data not yet written to the device is lower
@@ -69,15 +73,11 @@ public:
     explicit QtlDvdDataPull(const QString& deviceName,
                             int startSector,
                             int sectorCount,
+                            bool skipBadSectors = true,
                             int transferSize = DEFAULT_TRANSFER_SIZE,
                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                             QtlLogger* log = 0,
                             QObject* parent = 0);
-
-    //!
-    //! Destructor.
-    //!
-    virtual ~QtlDvdDataPull();
 
 protected:
     //!
@@ -103,13 +103,14 @@ protected:
     virtual void cleanupTransfer(bool clean);
 
 private:
-    QString          _deviceName;   //!< DVD device name.
-    int              _startSector;  //!< First sector to transfer.
-    int              _sectorCount;  //!< Total number of sectors to transfer.
-    int              _sectorChunk;  //!< Number of sectors per transfer.
-    int              _sectorRemain; //!< Remaining number of sectors to transfer.
-    QtlByteBlock     _buffer;       //!< Transfer buffer.
-    struct dvdcss_s* _dvdcss;       //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
+    QString      _deviceName;     //!< DVD device name.
+    int          _startSector;    //!< First sector to transfer.
+    int          _endSector;      //!< Last sector + 1 to transfer.
+    bool         _skipBadSectors; //!< If true, ignore and skip bad sectors which may be used as "protection".
+    int          _sectorChunk;    //!< Number of sectors per transfer.
+    QtlByteBlock _buffer;         //!< Transfer buffer.
+    QtlDvdMedia  _dvd;            //!< Access to DVD media.
+
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDvdDataPull)

@@ -32,7 +32,6 @@
 //----------------------------------------------------------------------------
 
 #include "QtlDvdDataPull.h"
-#include "dvdcss.h"
 
 
 //----------------------------------------------------------------------------
@@ -42,6 +41,7 @@
 QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
                                int startSector,
                                int sectorCount,
+                               bool skipBadSectors,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
@@ -49,27 +49,19 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     QtlDataPull(minBufferSize, log, parent),
     _deviceName(deviceName),
     _startSector(startSector),
-    _sectorCount(sectorCount),
-    _sectorChunk(qMax(1, transferSize / DVDCSS_BLOCK_SIZE)),
-    _sectorRemain(0),
-    _buffer(_sectorChunk * DVDCSS_BLOCK_SIZE),
-    _dvdcss(0)
+    _endSector(startSector + sectorCount),
+    _skipBadSectors(skipBadSectors),
+    _sectorChunk(qMax(1, transferSize / QtlDvdMedia::DVD_SECTOR_SIZE)),
+    _buffer(_sectorChunk * QtlDvdMedia::DVD_SECTOR_SIZE),
+    _dvd(QString(), log)
 {
-    // Set total transfer size in bytes.
-    const qint64 total = qint64(sectorCount) * DVDCSS_BLOCK_SIZE;
+    // Set total transfer size in bytes. In case of ignored bad sectors, the
+    // total size will be slightly smaller, but this is just a hint.
+    const qint64 total = qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE;
     setProgressMaxHint(total);
 
     // Set progress interval: every 5% below 100 MB, every 1% above.
     setProgressIntervalInBytes(total < 100000000 ? total / 20 : total / 100);
-}
-
-QtlDvdDataPull::~QtlDvdDataPull()
-{
-    // Close libdvdcss.
-    if (_dvdcss != 0) {
-        dvdcss_close(_dvdcss);
-        _dvdcss = 0;
-    }
 }
 
 
@@ -80,25 +72,20 @@ QtlDvdDataPull::~QtlDvdDataPull()
 bool QtlDvdDataPull::initializeTransfer()
 {
     // Filter invalid initial parameters.
-    if (_deviceName.isEmpty() || _startSector < 0 || _sectorCount < 0) {
+    if (_dvd.isOpen() || _deviceName.isEmpty() || _startSector < 0 || _endSector < _startSector) {
         return false;
     }
 
-    // Initialize libdvdcss.
-    const QByteArray name(_deviceName.toUtf8());
-    _dvdcss = dvdcss_open(name.data());
-    if (_dvdcss == 0) {
-        log()->debug(tr("Cannot initialize libdvdcss on %1, probably not a DVD media").arg(_deviceName));
+    // Initialize DVD access. Do not load file structure, we won't need it.
+    if (!_dvd.openFromDevice(_deviceName, false)) {
         return false;
     }
 
     // Seek to start sector.
-    if (dvdcss_seek(_dvdcss, _startSector, DVDCSS_SEEK_MPEG) < 0) {
-        log()->line(tr("Error seeking DVD to sector %1").arg(_startSector));
+    if (!_dvd.seekSector(_startSector, true)) {
+        _dvd.close();
         return false;
     }
-
-    _sectorRemain = _sectorCount;
     return true;
 }
 
@@ -110,28 +97,27 @@ bool QtlDvdDataPull::initializeTransfer()
 bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 {
     // Transfer completed.
-    if (_sectorRemain <= 0) {
+    if (_dvd.nextSector() >= _endSector) {
         close();
         return true;
     }
 
     // Compute maximum number of sectors to read.
-    int count = qMin(_sectorChunk, _sectorRemain);
+    int count = qMin(_sectorChunk, _endSector - _dvd.nextSector());
     if (maxSize >= 0) {
-        count = qMin(count, int(maxSize / DVDCSS_BLOCK_SIZE));
+        count = qMin(count, int(maxSize / QtlDvdMedia::DVD_SECTOR_SIZE));
     }
     if (count <= 0) {
         return true;
     }
 
     // Read and write sectors.
-    if ((count = dvdcss_read(_dvdcss, _buffer.data(), count, DVDCSS_READ_DECRYPT)) <= 0) {
-        log()->line(tr("Error reading DVD media"));
+
+    if ((count = _dvd.readSectors(_buffer.data(), count, -1, true, _skipBadSectors)) <= 0) {
         return false;
     }
     else {
-        _sectorRemain -= count;
-        return write(_buffer.data(), count * DVDCSS_BLOCK_SIZE);
+        return write(_buffer.data(), count * QtlDvdMedia::DVD_SECTOR_SIZE);
     }
 }
 
@@ -142,9 +128,5 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 
 void QtlDvdDataPull::cleanupTransfer(bool clean)
 {
-    // Close libdvdcss.
-    if (_dvdcss != 0) {
-        dvdcss_close(_dvdcss);
-        _dvdcss = 0;
-    }
+    _dvd.close();
 }

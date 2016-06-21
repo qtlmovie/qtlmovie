@@ -566,6 +566,7 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent) const
         writer = new QtlDvdDataPull(_deviceName,
                                     _vobStartSector,
                                     vobSectorCount(),
+                                    true, // skipBadSectors
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     log,

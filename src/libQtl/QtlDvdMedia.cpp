@@ -83,7 +83,7 @@ QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* paren
     _rootDirectory()
 {
     if (!fileName.isEmpty()) {
-        open(fileName);
+        openFromFile(fileName);
     }
 }
 
@@ -130,10 +130,10 @@ bool QtlDvdMedia::isEncrypted() const
 
 
 //----------------------------------------------------------------------------
-// Open and load the description of a DVD media.
+// Open and load the description of a DVD media starting from a file.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::open(const QString& fileName)
+bool QtlDvdMedia::openFromFile(const QString& fileName)
 {
     // Close previous media if necessary.
     close();
@@ -145,37 +145,58 @@ bool QtlDvdMedia::open(const QString& fileName)
     }
 
     // Get the device name.
+    QString deviceName;
 #if defined(Q_OS_WIN)
     // On Windows, if we are on a DVD reader, the file name starts with a drive name.
     // Network shares like \\... cannot be DVD readers.
     if (fileName.length() > 2 && fileName[1] == ':') {
-        _deviceName = fileName.left(2);
+        deviceName = fileName.left(2);
     }
 #elif defined(Q_OS_OSX)
     // On Mac OS X, make sure we use /dev/rdiskN, not the block device /dev/diskN.
-    _deviceName = QString(fs.device());
-    _deviceName.replace(QRegExp("^/dev/disk"), "/dev/rdisk");
+    deviceName = QString(fs.device());
+    deviceName.replace(QRegExp("^/dev/disk"), "/dev/rdisk");
 #else
-    _deviceName = QString(fs.device());
+    deviceName = QString(fs.device());
 #endif
 
     // Check the device name.
-    if (_deviceName.isEmpty()){
+    if (deviceName.isEmpty()){
         _log->debug(tr("Device name not found for %1").arg(fileName));
         return false;
     }
 
-    // Get the root directory / mount point.
+    // Open the device.
+    if (!openFromDevice(deviceName, true)) {
+        return false;
+    }
+
+    // Save the root directory / mount point.
     _rootName = QtlFile::absoluteNativeFilePath(fs.rootPath());
+    return true;
+}
+
+
+//----------------------------------------------------------------------------
+// Open and load the description of a DVD media starting from its device name.
+//----------------------------------------------------------------------------
+
+bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructure)
+{
+    // Close previous media if necessary.
+    close();
 
     // Initialize libdvdcss.
-    const QByteArray name(_deviceName.toUtf8());
+    const QByteArray name(deviceName.toUtf8());
     _dvdcss = dvdcss_open(name.data());
     if (_dvdcss == 0) {
-        _log->debug(tr("Cannot initialize libdvdcss on %1").arg(_deviceName));
+        _log->debug(tr("Cannot initialize libdvdcss on %1").arg(deviceName));
         close();
         return false;
     }
+
+    // Keep device name.
+    _deviceName = deviceName;
 
     // Position and size of the root directory.
     int rootDirSector = -1;
@@ -219,18 +240,22 @@ bool QtlDvdMedia::open(const QString& fileName)
         }
     }
 
-    // Check the detection of the root directory.
-    if (rootDirSector < 0 || rootDirSize < 0) {
-        _log->debug(tr("Cannot locate root directory on %1").arg(_deviceName));
-        close();
-        return false;
-    }
+    // Load the file structure if requested.
+    if (loadFileStructure) {
 
-    // Read the complete file structure.
-    _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
-    if (!readDirectoryStructure(_rootDirectory, 0)) {
-        close();
-        return false;
+        // Check the detection of the root directory.
+        if (rootDirSector < 0 || rootDirSize < 0) {
+            _log->debug(tr("Cannot locate root directory on %1").arg(_deviceName));
+            close();
+            return false;
+        }
+
+        // Read the complete file structure.
+        _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
+        if (!readDirectoryStructure(_rootDirectory, 0)) {
+            close();
+            return false;
+        }
     }
 
     // DVD media now successfully open.

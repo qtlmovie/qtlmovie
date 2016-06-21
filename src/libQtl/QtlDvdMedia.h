@@ -75,11 +75,20 @@ public:
     }
 
     //!
-    //! Open and load the description of a DVD media.
+    //! Open and load the description of a DVD media starting from a file on the DVD.
+    //! The description of the file structure is also loaded.
     //! @param [in] fileName Name of a file or directory anywhere on the DVD media.
     //! @return True on success, false on error.
     //!
-    bool open(const QString& fileName = QString());
+    bool openFromFile(const QString& fileName);
+
+    //!
+    //! Open and load the description of a DVD media starting from its device name.
+    //! @param [in] deviceName Name of the device containing the DVD media.
+    //! @param [in] loadFileStructure If true (the default), load the file structure of the DVD.
+    //! @return True on success, false on error.
+    //!
+    bool openFromDevice(const QString& deviceName, bool loadFileStructure = true);
 
     //!
     //! Close a DVD media.
@@ -103,7 +112,9 @@ public:
 
     //!
     //! Get the root directory name of the DVD (ie mount point).
-    //! @return The root directory name of the DVD or an empty string if no DVD reader was found.
+    //! This information is only available if the DVD was open using a constructor or openFromFile().
+    //! @return The root directory name of the DVD or an empty string if no DVD reader was found or
+    //! if the DVD was open using openFromDevice().
     //!
     QString rootName() const
     {
@@ -175,6 +186,8 @@ public:
     //!
     //! Get a description of the root directory.
     //! Can be used to describe the complete file system on DVD.
+    //! This information is not available if the DVD was open using openFromDevice()
+    //! with @a loadFileStructure set to @c false.
     //! @return A description of the root directory.
     //!
     QtlDvdDirectory rootDirectory() const
@@ -184,6 +197,8 @@ public:
 
     //!
     //! Locate a file in the DVD.
+    //! This operation will fail if the DVD was open using openFromDevice()
+    //! with @a loadFileStructure set to @c false.
     //! @param [in] fileName Name of the file to locate. It the absolute path name of the file
     //! starts with the mount point of the DVD, then only the relative part is used. Otherwise,
     //! the @a fileName must be a path relative to the DVD root directory.
