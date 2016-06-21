@@ -96,23 +96,32 @@ void QtlPlainTextLogger::line(const QString& line, const QColor& color)
     // Check if the cursor is as end of the text.
     const bool wasAtEnd = textCursor().atEnd();
 
+    // Move a copy of the cursor at end of document.
+    // This does not change the cursor in the text edit.
+    QTextCursor cursor(textCursor());
+    cursor.movePosition(QTextCursor::End);
+
     // Save current character format.
-    const QTextCharFormat previousFormat (currentCharFormat());
+    const QTextCharFormat previousFormat(cursor.charFormat());
 
     // If a valid color was passed, apply it.
     if (color.isValid()) {
-        QTextCharFormat newFormat(previousFormat);
-        newFormat.setForeground(QBrush(color));
-        setCurrentCharFormat(newFormat);
+        QTextCharFormat format(cursor.charFormat());
+        format.setForeground(QBrush(color));
+        cursor.setCharFormat(format);
     }
 
-    // Add the line as one paragraph in the text.
-    appendPlainText(line);
-
-    // Restore previous character format if we changed it.
+    // Insert the text at end of document.
+    if (!toPlainText().isEmpty() && !toPlainText().endsWith(QChar('\n'))) {
+        cursor.insertText("\n");
+    }
+    cursor.insertText(line);
     if (color.isValid()) {
-        setCurrentCharFormat (previousFormat);
+        // Restore previous character format. Do that before inserting the new-line.
+        // Otherwise, the last character in the text edit still has the modified format.
+        cursor.setCharFormat(previousFormat);
     }
+    cursor.insertText("\n");
 
     // If the cursor was at the end of text, we assume that the user is following
     // the text and we need to ensure the cursor is still visible after insertion.
