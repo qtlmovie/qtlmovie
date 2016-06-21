@@ -2231,118 +2231,100 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDataPull</name>
     <message>
-        <location filename="../QtlDataPull.cpp" line="146"/>
+        <location filename="../QtlDataPull.cpp" line="150"/>
         <source>DataPull: Data transfer started, %1 devices, max size: %2</source>
         <translation>DataPull: Transfert de données démarré, %1 sorties, taille max: %2</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="152"/>
+        <location filename="../QtlDataPull.cpp" line="156"/>
         <source>DataPull: Data transfer failed to start</source>
         <translation>DataPull: Echec du démarrage de transfert de données</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="169"/>
+        <location filename="../QtlDataPull.cpp" line="173"/>
         <source>DataPull: stop requested, %1 devices</source>
         <translation>DataPull: Arrêt demandé, %1 sorties</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="195"/>
+        <location filename="../QtlDataPull.cpp" line="199"/>
         <source>DataPull: stop requested on one device</source>
         <translation>DataPull: arrêt demandé sur une sortie</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="244"/>
+        <location filename="../QtlDataPull.cpp" line="248"/>
         <source>Error writing on %1</source>
         <translation>Erreur d&apos;écriture sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="313"/>
+        <location filename="../QtlDataPull.cpp" line="321"/>
         <source>DataPull: Data transfer destination destroyed</source>
         <translation>DataPull: Destination du transfert de données détruite</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="377"/>
+        <location filename="../QtlDataPull.cpp" line="391"/>
         <source>DataPull: subclass returned an error on needTransfer</source>
         <translation>DataPull: erreur renvoyée par la sous-classe lors de needTransfer</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="386"/>
+        <location filename="../QtlDataPull.cpp" line="400"/>
         <source>DataPull: reached maximum size: %1/%2 bytes</source>
         <translation>DataPull: taille maximum atteinte: %1/%2 octets</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="419"/>
+        <location filename="../QtlDataPull.cpp" line="433"/>
         <source>DataPull: Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s</source>
         <translation>DataPull: Transfert de données %1, %2 octets lus, temps: %3 ms, débit: %4 b/s, %5 O/s</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="420"/>
+        <location filename="../QtlDataPull.cpp" line="434"/>
         <source>completed</source>
         <translation>terminé</translation>
     </message>
     <message>
-        <location filename="../QtlDataPull.cpp" line="420"/>
+        <location filename="../QtlDataPull.cpp" line="434"/>
         <source>aborted</source>
         <translation>interrompu</translation>
     </message>
 </context>
 <context>
-    <name>QtlDvdDataPull</name>
-    <message>
-        <location filename="../QtlDvdDataPull.cpp" line="85"/>
-        <source>Cannot initialize libdvdcss on %1, probably not a DVD media</source>
-        <translation>Impossible d&apos;initialiser libdvdcss sur %1, probablement pas un DVD</translation>
-    </message>
-    <message>
-        <location filename="../QtlDvdDataPull.cpp" line="91"/>
-        <source>Error seeking DVD to sector %1</source>
-        <translation>Erreur de positionnement sur le secteur %1 du DVD</translation>
-    </message>
-    <message>
-        <location filename="../QtlDvdDataPull.cpp" line="123"/>
-        <source>Error reading DVD media</source>
-        <translation>Erreur de lecture du DVD</translation>
-    </message>
-</context>
-<context>
     <name>QtlDvdMedia</name>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="164"/>
+        <location filename="../QtlDvdMedia.cpp" line="165"/>
         <source>Device name not found for %1</source>
         <translation>Nom de périphérique introuvable pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="175"/>
+        <location filename="../QtlDvdMedia.cpp" line="193"/>
         <source>Cannot initialize libdvdcss on %1</source>
         <translation>Impossible d&apos;initialiser libdvdcss sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="198"/>
+        <location filename="../QtlDvdMedia.cpp" line="219"/>
         <source>Invalid DVD volume descriptor &quot;%1&quot; instead of &quot;%2&quot;</source>
         <translation>Descripteur de volume DVD invalide: %1 au lieu de %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="224"/>
+        <location filename="../QtlDvdMedia.cpp" line="248"/>
         <source>Cannot locate root directory on %1</source>
         <translation>Impossible de trouver le répertoire racine pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="257"/>
+        <location filename="../QtlDvdMedia.cpp" line="282"/>
         <source>Error seeking DVD to sector %1, seek returned %2</source>
         <translation>Erreur de positionnement du DVD au secteur %1, seek a renvoyé %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="298"/>
+        <location filename="../QtlDvdMedia.cpp" line="323"/>
         <source>Error reading sector %1 on DVD media in %2</source>
         <translation>Erreur de lecture au secteur %1 du DVD dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="320"/>
+        <location filename="../QtlDvdMedia.cpp" line="345"/>
         <source>Too many directory levels in DVD structure, probably incorrect media</source>
         <translation>Trop de niveaux de répertoires sur le DVD, média probablement incorrect</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="328"/>
+        <location filename="../QtlDvdMedia.cpp" line="353"/>
         <source>Error reading DVD directory information at sector %1</source>
         <translation>Erreur de lecture de répertoire au secteur %1</translation>
     </message>
@@ -2413,12 +2395,12 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlFileDataPull</name>
     <message>
-        <location filename="../QtlFileDataPull.cpp" line="98"/>
+        <location filename="../QtlFileDataPull.cpp" line="109"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
     <message>
-        <location filename="../QtlFileDataPull.cpp" line="121"/>
+        <location filename="../QtlFileDataPull.cpp" line="132"/>
         <source>Error reading %1</source>
         <translation>Erreur de lecture sur %1</translation>
     </message>
