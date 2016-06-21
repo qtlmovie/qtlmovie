@@ -113,6 +113,15 @@ public:
     }
 
     //!
+    //! Get the title set playback duration in seconds.
+    //! @return The title set playback duration in seconds.
+    //!
+    int durationInSeconds() const
+    {
+        return _duration;
+    }
+
+    //!
     //! Get the full absolute file name of the IFO file for the title set.
     //! @return The full absolute file name of the IFO file for the title set.
     //!
@@ -283,6 +292,7 @@ private:
     int           _volumeSectors;  //!< Volume size in sectors.
     bool          _isEncrypted;    //!< DVD is encrypted, need libdvdcss.
     int           _vtsNumber;      //!< Title set number.
+    int           _duration;       //!< Title set duration in seconds.
     QString       _ifoFileName;    //!< IFO file name.
     QStringList   _vobFileNames;   //!< List of VOB files.
     qint64        _vobSizeInBytes; //!< Total size in bytes of all VOB's.

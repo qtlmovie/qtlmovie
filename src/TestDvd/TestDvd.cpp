@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlFile.h"
+#include "QtlStringUtils.h"
 #include "QtlStdoutLogger.h"
 #include "QtlDvdTitleSet.h"
 #include "QtlDvdMedia.h"
@@ -116,6 +117,8 @@ int main(int argc, char* argv[])
         << "VOB size: " << vts.vobSizeInBytes() << " bytes" << endl
         << "Is encrypted: " << vts.isEncrypted() << endl
         << "VTS number: " << vts.vtsNumber() << endl
+        << "Duration: " << vts.durationInSeconds() << " seconds"
+        << " (" << qtlSecondsToString(vts.durationInSeconds()) << ")" << endl
         << "VOB count: " << vts.vobCount() << endl
         << "VOB files: " << endl << "    " << vts.vobFileNames().join("\n    ") << endl
         << "DVD device name: " << vts.deviceName() << endl

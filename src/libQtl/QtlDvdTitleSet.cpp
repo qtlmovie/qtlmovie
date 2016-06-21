@@ -52,6 +52,7 @@
 #define DVD_IFO_START_SECTOR            0x00C4
 #define DVD_IFO_VTS_PGCI_OFFSET         0x00CC
 #define DVD_IFO_VTS_PGC_OFFSET_IN_PGCI  0x000C
+#define DVD_IFO_PLAYBACK_OFFSET_IN_PGC  0x0004
 #define DVD_IFO_PALETTE_OFFSET_IN_PGC   0x00A4
 #define DVD_IFO_PALETTE_ENTRY_SIZE           4
 #define DVD_IFO_PALETTE_ENTRY_COUNT         16
@@ -79,6 +80,7 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject*
     _volumeSectors(0),
     _isEncrypted(false),
     _vtsNumber(-1),
+    _duration(0),
     _ifoFileName(),
     _vobFileNames(),
     _vobSizeInBytes(0),
@@ -100,6 +102,7 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
     _volumeSectors(other._volumeSectors),
     _isEncrypted(other._isEncrypted),
     _vtsNumber(other._vtsNumber),
+    _duration(other._duration),
     _ifoFileName(other._ifoFileName),
     _vobFileNames(other._vobFileNames),
     _vobSizeInBytes(other._vobSizeInBytes),
@@ -262,6 +265,9 @@ bool QtlDvdTitleSet::readVtsIfo()
         _log->line(tr("Error opening %1").arg(_ifoFileName));
         return false;
     }
+
+    // Sizeo of the IFO file.
+    const qint64 ifoSize = ifo.size();
 
     // Read the IFO header. Must start with "DVDVIDEO-VTS".
     QtlByteBlock header;
@@ -442,22 +448,65 @@ bool QtlDvdTitleSet::readVtsIfo()
         }
     }
 
-    // Read a chain of pointers and data:
-    // - pointer to the VTS_PGCI (Title Program Chain table).
-    // - offset to VTS_PGC relative to VTS_PGCI.
-    // - palette in VTS_PGC
+    // Locate the VTS_PGCI (Title Program Chain table).
+    // - pgci: the relative sector VTS_PGCI.
+    // - pgcCount: number of entries in the PGCI.
+    // - pgcLastByte: index of last PGC byte, relative to start of PGCI.
     quint32 pgci = 0;
-    quint32 pgc = 0;
-    const int paletteSize = DVD_IFO_PALETTE_ENTRY_SIZE * DVD_IFO_PALETTE_ENTRY_COUNT;
-    valid =
-        QtlFile::readBigEndianAt(ifo, DVD_IFO_VTS_PGCI_OFFSET, pgci) &&
-        QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + DVD_IFO_VTS_PGC_OFFSET_IN_PGCI, pgc) &&
-        QtlFile::readBinaryAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + pgc + DVD_IFO_PALETTE_OFFSET_IN_PGC, _palette, paletteSize) &&
-        _palette.size() == paletteSize;
+    quint16 pgcCount = 0;
+    quint32 pgcLastByte = 0;
+    valid = QtlFile::readBigEndianAt(ifo, DVD_IFO_VTS_PGCI_OFFSET, pgci) &&
+            pgci < (ifoSize / QtlDvdMedia::DVD_SECTOR_SIZE) &&
+            QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + 0, pgcCount) &&
+            pgcCount > 0 &&
+            QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + 4, pgcLastByte) &&
+            (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + pgcLastByte < ifoSize;
 
-    if (!valid) {
-        _log->line(tr("Error reading palette from %1").arg(_ifoFileName));
+    // Make pgci a byte offset from the beginning of the file.
+    pgci = pgci * QtlDvdMedia::DVD_SECTOR_SIZE;
+
+    // Size of the color palette in bytes.
+    const int paletteSize = DVD_IFO_PALETTE_ENTRY_SIZE * DVD_IFO_PALETTE_ENTRY_COUNT;
+
+    // Clear info to collect.
+    _palette.clear();
+    _duration = 0;
+
+    // Read interesting information in each PGC.
+    for (quint16 pgcIndex = 0; valid && pgcIndex < pgcCount; ++pgcIndex) {
+        // Read the starting offset of each PGC, relative to the start of PGCI.
+        // Then, read the playback time in the PGC.
+        quint32 pgcStart = 0;
+        quint32 playbackTime = 0;
+        valid = QtlFile::readBigEndianAt(ifo, pgci + 12 + (pgcIndex * 8), pgcStart) &&
+                pgcStart < pgcLastByte &&
+                QtlFile::readBigEndianAt(ifo, pgci + pgcStart + DVD_IFO_PLAYBACK_OFFSET_IN_PGC, playbackTime);
+        if (!valid) {
+            break;
+        }
+
+        // The playback time is encoded in BCD as: hh:mm:ss:ff (ff = frame count within second)
+        // With 2 MSBits of ff indicating frame rate: 11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal
+        // We use a number of seconds and ignore the frame count within last second.
+        const int hours   = (((playbackTime >> 28) & 0x0F) * 10) + ((playbackTime >> 24) & 0x0F);
+        const int minutes = (((playbackTime >> 20) & 0x0F) * 10) + ((playbackTime >> 16) & 0x0F);
+        const int seconds = (((playbackTime >> 12) & 0x0F) * 10) + ((playbackTime >>  8) & 0x0F);
+
+        // Add the duration of this PCG in the title set duration.
+        _duration += (hours * 3600) + (minutes * 60) + seconds;
+
+        // We read the palette in the first PGC only. If there are several
+        // PGC's, we hope they all have the same palette.
+        if (_palette.isEmpty()) {
+            valid = QtlFile::readBinaryAt(ifo, pgci + pgcStart + DVD_IFO_PALETTE_OFFSET_IN_PGC, _palette, paletteSize) &&
+                    _palette.size() == paletteSize;
+        }
     }
+    if (!valid) {
+        _log->line(tr("Error reading Program Chain Table (PGC) from %1").arg(_ifoFileName));
+        return false;
+    }
+
     return valid;
 }
 

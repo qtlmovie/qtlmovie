@@ -506,6 +506,15 @@ float QtlMovieInputFile::durationInSeconds() const
         duration = _ffInfo.floatValueOfStream(si, "duration");
     }
 
+    // If this is a DVD title set, get the title set duration as a last resort.
+    // This information is read from the IFO file, not evaluated by ffprobe.
+    // However, when the input file is on an encrypted DVD, ffprobe only
+    // reads its standard input pipe, it has no global view on the file and
+    // cannot evaluate its duration.
+    if (qtlFloatZero(duration)) {
+        duration = _dvdTitleSet.durationInSeconds();
+    }
+
     return duration;
 }
 
