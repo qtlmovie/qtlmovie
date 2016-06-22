@@ -83,7 +83,8 @@ SOURCES += \
     QtlDvdDataPull.cpp \
     QtlFileDataPull.cpp \
     QtlDvdMedia.cpp \
-    QtlDvdDirectory.cpp
+    QtlDvdDirectory.cpp \
+    QtlLayoutUtils.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -152,7 +153,8 @@ HEADERS += \
     QtlFileDataPull.h \
     QtlDvdMedia.h \
     QtlDvdFile.h \
-    QtlDvdDirectory.h
+    QtlDvdDirectory.h \
+    QtlLayoutUtils.h
 
 FORMS += \
     QtlBrowserDialog.ui \

@@ -34,6 +34,7 @@
 #include "QtlLineEdit.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
+#include "QtlLayoutUtils.h"
 #include "QtlOpticalDrive.h"
 #include "QtlStringUtils.h"
 #include "QtlWinUtils.h"
@@ -65,26 +66,30 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setDefaultExecutable("DVD Decrypter", _ui.defaultDvdDecrypter, _settings->dvddecrypterDefaultExecutable());
 
     // Create one line per output type for default output directory selection.
-    foreach (QtlMovieOutputFile::OutputType type, QtlMovieOutputFile::outputTypes()) {
+    // Add new widgets just before last row in group box layout.
+    // The last row is reserved for "DVD Extraction", already set in Designer, not a real "output type".
+    const QList<QtlMovieOutputFile::OutputType> allTypes(QtlMovieOutputFile::outputTypes());
+    int insertRow = _ui.layoutDefaultOutputDir->rowCount() - 1;
+    qtlLayoutInsertRows(_ui.layoutDefaultOutputDir, insertRow, allTypes.size());
+    foreach (QtlMovieOutputFile::OutputType type, allTypes) {
 
         // Description of the output directory for this type.
         OutputDirectory& outDir(_outDirs[type]);
 
-        // Add new widgets after last row in group box layout.
-        const int row = _ui.layoutDefaultOutputDir->rowCount() + 1;
-
         // Left element is a label.
         outDir.label = new QLabel(QStringLiteral("%1 :").arg(QtlMovieOutputFile::outputTypeName(type)), _ui.groupBoxOutputDir);
-        _ui.layoutDefaultOutputDir->addWidget(outDir.label, row, 0, 1, 1);
+        _ui.layoutDefaultOutputDir->addWidget(outDir.label, insertRow, 0, 1, 1);
 
         // Center element is a line edit for the directory.
         outDir.lineEdit = new QtlLineEdit(_ui.groupBoxOutputDir);
-        _ui.layoutDefaultOutputDir->addWidget(outDir.lineEdit, row, 1, 1, 1);
+        _ui.layoutDefaultOutputDir->addWidget(outDir.lineEdit, insertRow, 1, 1, 1);
 
         // Right element is the corresponding "Browse ..." button.
         outDir.pushButton = new QPushButton(tr("Browse ..."), _ui.groupBoxOutputDir);
-        _ui.layoutDefaultOutputDir->addWidget(outDir.pushButton, row, 2, 1, 1);
+        _ui.layoutDefaultOutputDir->addWidget(outDir.pushButton, insertRow, 2, 1, 1);
         connect(outDir.pushButton, &QPushButton::clicked, this, &QtlMovieEditSettings::browseOutputDir);
+
+        insertRow++;
     }
 
     // Extract list of DVD burner drive names from the list of all optical drives in the system.
@@ -209,6 +214,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.editCcextractor->setText(_settings->ccextractorExplicitExecutable());
     _ui.editDvdDecrypter->setText(_settings->dvddecrypterExplicitExecutable());
     _ui.editInputDir->setText(_settings->initialInputDir());
+    _ui.editDvdExtraction->setText(_settings->defaultDvdExtractionDir());
     _ui.checkBoxSameAsInput->setChecked(_settings->defaultOutputDirIsInput());
     (_settings->transcodeComplete() ? _ui.radioButtonComplete : _ui.radioButtonPartial)->setChecked(true);
     _ui.spinMaxTranscode->setValue(_settings->transcodeSeconds());
@@ -328,6 +334,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setCCextractorExplicitExecutable(_ui.editCcextractor->text());
     _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());
+    _settings->setDefaultDvdExtractionDir(_ui.editDvdExtraction->text());
     _settings->setDefaultOutputDirIsInput(_ui.checkBoxSameAsInput->isChecked());
     _settings->setDvdBurner(_useDvdBurnerCombo ? _ui.comboDvdBurner->currentText() : _ui.editDvdBurner->text());
     _settings->setAudienceLanguages(qtlListItems(_ui.listLanguages));

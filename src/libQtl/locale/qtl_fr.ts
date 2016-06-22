@@ -2332,62 +2332,62 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDvdTitleSet</name>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="162"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="165"/>
         <source>Cannot find start sector for %1 on %2</source>
         <translation>Impossible de trouver le premier secteur de %1 sur %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="205"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="208"/>
         <source>%1 is not a valid DVD title set file</source>
         <translation>%1 n&apos;est pas un fichier vidéo DVD valide</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="237"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="240"/>
         <source>No VOB file for %1</source>
         <translation>Pas de fichier VOB pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="245"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="248"/>
         <source>DVD IFO file not found: %1</source>
         <translation>Pas de fichier IFO DVD: %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="262"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="265"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="273"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="279"/>
         <source>%1 is not a valid VTS IFO</source>
         <translation>%1 n&apos;est pas un fichier IFO valid</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="336"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="342"/>
         <source>Unknown video standard value %1 in DVD IFO file</source>
         <translation>Valeur de standard vidéo inconnue %1 dans le fichier IFO</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="357"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="363"/>
         <source>IFO: %1 audio streams</source>
         <translation>IFO: %1 flux vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="410"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="416"/>
         <source>IFO: %1 subtitle streams</source>
         <translation>IFO: %1 flux de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="459"/>
-        <source>Error reading palette from %1</source>
-        <translation>Erreur de lecture de la palette de couleurs dans %1</translation>
+        <location filename="../QtlDvdTitleSet.cpp" line="506"/>
+        <source>Error reading Program Chain Table (PGC) from %1</source>
+        <translation>Erreur de lecture de la Program Chain Table (PGC) dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="484"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="533"/>
         <source>Palette conversion: palette size is %1 bytes, not a multiple of 4</source>
         <translation>Conversion de palette de couleur: la taille de la palette est %1 octets, pas un mulitple de 4</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="508"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="557"/>
         <source>Palette conversion: unexpected value 0x%1, should be 0</source>
         <translation>Conversion de palette de couleurs: valeur %1 inattendue, aurait dû être 0</translation>
     </message>
@@ -2536,22 +2536,22 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlPlainTextLogger</name>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="165"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="174"/>
         <source>Save Log</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="167"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="176"/>
         <source>Log files (*.log);;Text files (*.txt)</source>
         <translation>Fichiers journaux (*.log);;Fichiers texte (*.txt)</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="182"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="191"/>
         <source>Save Error</source>
         <translation>Erreur de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../QtlPlainTextLogger.cpp" line="182"/>
+        <location filename="../QtlPlainTextLogger.cpp" line="191"/>
         <source>Error creating file %1</source>
         <translation>Erreur à la création du fichier %1</translation>
     </message>

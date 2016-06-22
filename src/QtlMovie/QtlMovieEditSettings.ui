@@ -60,7 +60,24 @@
           <string>Default output directory</string>
          </property>
          <layout class="QGridLayout" name="layoutDefaultOutputDir">
-          <item row="0" column="0" colspan="2">
+          <item row="1" column="1">
+           <widget class="QtlLineEdit" name="editDvdExtraction"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelDvdExtraction">
+            <property name="text">
+             <string>DVD Extraction :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="buttonBrowseDvdExtraction">
+            <property name="text">
+             <string>Browse ...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="checkBoxSameAsInput">
             <property name="text">
              <string>Same as input file directory</string>
@@ -1873,6 +1890,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonBrowseDvdExtraction</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>browseDvdExtractionDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>resetValues(QAbstractButton*)</slot>
@@ -1892,5 +1925,6 @@
   <slot>browseCcextractor()</slot>
   <slot>setNormalizeAudioSelectable(bool)</slot>
   <slot>updateMaxBitRates()</slot>
+  <slot>browseDvdExtractionDir()</slot>
  </slots>
 </ui>

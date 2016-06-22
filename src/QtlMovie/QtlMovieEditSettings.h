@@ -134,6 +134,14 @@ private slots:
     }
 
     //!
+    //! Invoked by the "Browse..." button for the default output directory for DVD extraction.
+    //!
+    void browseDvdExtractionDir()
+    {
+        browseDirectory(_ui.editDvdExtraction, tr("Default DVD extraction directory"));
+    }
+
+    //!
     //! Invoked when the check box "default output directory is same as input" is toggled.
     //! @param sameAsInput State of the check box.
     //!
