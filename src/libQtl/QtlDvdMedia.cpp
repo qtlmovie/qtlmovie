@@ -138,8 +138,9 @@ bool QtlDvdMedia::openFromFile(const QString& fileName)
     // Close previous media if necessary.
     close();
 
-    // Get the file system for this file.
-    QStorageInfo fs(fileName);
+    // Get the file system for this file. Make sure to use a complete path
+    // with all symbolic links removed just in case QStorageInfo is fooled.
+    QStorageInfo fs(QtlFile::absoluteNativeFilePath(fileName, true));
     if (!fs.isValid() || !fs.isReady()) {
         return false;
     }
@@ -408,7 +409,7 @@ QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity 
     }
 
     // Full path of the file to search.
-    QString path(QtlFile::absoluteNativeFilePath(fileName));
+    QString path(QtlFile::absoluteNativeFilePath(fileName, true));
 
     // Check if it starts with the mount point of the DVD. Note that we compare
     // using the case sensitivity of the operating system, not the user-specified one.
