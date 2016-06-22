@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 #
-# Copyright (c) 2016, Thierry Lelegard
+# Copyright (c) 2013-2016, Thierry Lelegard
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,19 +26,25 @@
 #
 #----------------------------------------------------------------------------
 #
-# Qmake project file for the TestDvd tool.
+# Qmake project file for the QtlMovie command line test tool.
 #
 #----------------------------------------------------------------------------
 
-CONFIG += libQtl
-include(../libQtl/libQtl.pri)
+CONFIG += libQts libQtl
+include(../libQts/libQts.pri)
 
-TARGET = TestDvd
+TARGET = TestTool
 TEMPLATE = app
 
 QT -= gui
 CONFIG += console
 CONFIG -= app_bundle
 
-SOURCES += TestDvd.cpp
-HEADERS += QtlDataPullWrapper.h
+SOURCES += \
+    main.cpp \
+    QtlTestCommand.cpp \
+    QtlTestDvd.cpp \
+    QtlTestTeletext.cpp
+
+HEADERS += \
+    QtlTestCommand.h

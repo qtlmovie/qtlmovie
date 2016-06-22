@@ -32,4 +32,4 @@
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += libdvdcss libQtl libQts QtlMovie TestUnit TestDvd TestTeletext
+SUBDIRS += libdvdcss libQtl libQts QtlMovie TestUnit TestTool

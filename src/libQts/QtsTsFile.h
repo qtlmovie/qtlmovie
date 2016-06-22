@@ -152,7 +152,6 @@ private:
     bool writeRawData(const void* data, int size);
 
     // Unaccessible operations.
-    QtsTsFile() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtsTsFile)
 };
 

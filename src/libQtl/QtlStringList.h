@@ -51,10 +51,22 @@ class QtlStringList : public QStringList
 public:
     //!
     //! Constructor.
+    //!
+    QtlStringList();
+
+    //!
+    //! Constructor.
+    //! @param [in] s1 First string to set in the list.
+    //!
+    QtlStringList(const QString& s1);
+
+    //!
+    //! Constructor.
     //! @param [in] s1 First string to set in the list.
     //! @param [in] s2 Next string to set in the list.
     //!
     QtlStringList(const QString& s1, const QString& s2);
+
     //!
     //! Constructor.
     //! @param [in] s1 First string to set in the list.
@@ -62,6 +74,7 @@ public:
     //! @param [in] s3 Next string to set in the list.
     //!
     QtlStringList(const QString& s1, const QString& s2, const QString& s3);
+
     //!
     //! Constructor.
     //! @param [in] s1 First string to set in the list.
@@ -70,6 +83,18 @@ public:
     //! @param [in] s4 Next string to set in the list.
     //!
     QtlStringList(const QString& s1, const QString& s2, const QString& s3, const QString& s4);
+
+    //!
+    //! Constructor.
+    //! @param [in] other A list to copy.
+    //!
+    QtlStringList(const QList<QString>& other);
+
+    //!
+    //! Get the maximum length of all strings.
+    //! @return The maximum length of all strings.
+    //!
+    int maxLength() const;
 };
 
 #endif // QTLSTRINGLIST_H

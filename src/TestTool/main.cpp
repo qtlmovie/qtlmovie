@@ -25,34 +25,48 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
+//
+// Test tool main program.
+//
+//----------------------------------------------------------------------------
 
-#ifndef QTLDATAPULLWRAPPER_H
-#define QTLDATAPULLWRAPPER_H
+#include "QtlTestCommand.h"
 
-#include "QtlDataPull.h"
-
-//!
-//! A class which synchronously waits for a QtlDataPull.
-//!
-class QtlDataPullWrapper : public QObject
+int main(int argc, char* argv[])
 {
-    Q_OBJECT
-private:
-    QEventLoop _loop;
-private slots:
-    void completed(bool success)
-    {
-        _loop.exit();
-    }
-public:
-    QtlDataPullWrapper(QtlDataPull* dataPull, QIODevice* device)
-    {
-        connect(dataPull, &QtlDataPull::completed, this, &QtlDataPullWrapper::completed);
-        dataPull->start(device);
-        while (dataPull->isStarted()) {
-            _loop.exec();
-        }
-    }
-};
+    QCoreApplication app(argc, argv);
+    QStringList args(app.arguments());
+    QTextStream err(stderr, QIODevice::WriteOnly);
 
-#endif // QTLDATAPULLWRAPPER_H
+    // We need at least one subcommand.
+    if (args.size() < 2) {
+        err << "usage: " << app.applicationName() << " command [options]" << endl;
+        return EXIT_FAILURE;
+    }
+
+    // Command help is hard-coded.
+    if (args.at(1) == "help") {
+        err << "Available commands:" << endl;
+        const QtlStringList names(QtlTestCommand::allCommands());
+        const int length = names.maxLength();
+        foreach (const QString& name, names) {
+            QtlTestCommand* command = QtlTestCommand::instance(name);
+            if (command != 0) {
+                err << "  " << command->command() << QString(length - command->command().length() + 1, QChar(' ')) << command->syntax() << endl;
+            }
+        }
+        return EXIT_SUCCESS;
+    }
+
+    // Fetch the command description.
+    QtlTestCommand* command = QtlTestCommand::instance(args.at(1));
+    if (command == 0) {
+        err << app.applicationName() << ": command \"" << args.at(1) << "\" is unknown, try \"help\"" << endl;
+        return EXIT_FAILURE;
+    }
+
+    // Run the command.
+    args.removeFirst();
+    args.removeFirst();
+    return command->run(args);
+}

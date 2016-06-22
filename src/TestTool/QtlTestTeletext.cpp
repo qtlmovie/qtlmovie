@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,10 +26,11 @@
 //
 //----------------------------------------------------------------------------
 //
-// Main program for the TestTeletext tool.
+// Command line tool to test DVD.
 //
 //----------------------------------------------------------------------------
 
+#include "QtlTestCommand.h"
 #include "QtsSectionDemux.h"
 #include "QtsTeletextDemux.h"
 #include "QtsTeletextDescriptor.h"
@@ -38,7 +39,6 @@
 #include "QtsProgramMapTable.h"
 #include "QtsTsFile.h"
 #include "QtlSmartPointer.h"
-#include <QtDebug>
 
 
 //----------------------------------------------------------------------------
@@ -48,7 +48,7 @@
 class OutputFile
 {
 public:
-    OutputFile(QtsPid pid, int page, const QString& outputPrefix);
+    OutputFile(QtsPid pid, int page, const QString& outputPrefix, QtlLogger* log);
     ~OutputFile() {close();}
     bool isOpen() const {return _file.isOpen();}
     QtsPid pid() const {return _pid;}
@@ -67,7 +67,7 @@ private:
 typedef QtlSmartPointer<OutputFile,QtlNullMutexLocker> OutputFilePtr;
 typedef QList<OutputFilePtr> OutputFileList;
 
-OutputFile::OutputFile(QtsPid pid, int page, const QString& outputPrefix) :
+OutputFile::OutputFile(QtsPid pid, int page, const QString& outputPrefix, QtlLogger* log) :
     _pid(pid),
     _page(page),
     _fileName(QStringLiteral("%1_%2_%3.srt").arg(outputPrefix).arg(pid).arg(page)),
@@ -78,10 +78,10 @@ OutputFile::OutputFile(QtsPid pid, int page, const QString& outputPrefix) :
     _stream.setGenerateByteOrderMark(true);
 
     if (_file.open(QFile::WriteOnly)) {
-        qWarning() << "Created" << _fileName;
+        log->line(QStringLiteral("Created %1").arg(_fileName));
     }
     else {
-        qWarning() << "*** Error creating" << _fileName;
+        log->line(QStringLiteral("*** Error creating %1").arg(_fileName));
     }
 }
 
@@ -95,45 +95,45 @@ void OutputFile::close()
 
 
 //----------------------------------------------------------------------------
-// Class implementing the Teletext extraction.
+// Test class.
 //----------------------------------------------------------------------------
 
-class TeletextExtractor : private QtsTeletextHandlerInterface, private QtsTableHandlerInterface
+class QtlTestTeletext : public QtlTestCommand, private QtsTeletextHandlerInterface, private QtsTableHandlerInterface
 {
+    Q_OBJECT
+
 public:
-    TeletextExtractor(const QString& inputFile, const QString& outputPrefix);
-    bool locateStreams();
-    bool extractStreams();
+    virtual int run(const QStringList& args);
+
+    QtlTestTeletext() :
+        QtlTestCommand("teletext", "input-file [output-file-prefix]"),
+        _outputPrefix(),
+        _teletextDemux(this),
+        _input(),
+        _outputs(),
+        _frameCount(0)
+    {
+    }
 
 private:
-    const QString    _outputPrefix;
+    QString          _outputPrefix;
     QtsTeletextDemux _teletextDemux;
     QtsTsFile        _input;
     OutputFileList   _outputs;
     int              _frameCount;
 
+    bool locateStreams();
+    bool extractStreams();
     virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table);
     virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame);
 };
-
-TeletextExtractor::TeletextExtractor(const QString& inputFile, const QString& outputPrefix) :
-    _outputPrefix(outputPrefix.isEmpty() ? QFileInfo(inputFile).completeBaseName() : outputPrefix),
-    _teletextDemux(this),
-    _input(inputFile),
-    _outputs(),
-    _frameCount(0)
-{
-    if (!_input.open()) {
-        qWarning() << "**** Error opening" << inputFile;
-    }
-}
 
 
 //----------------------------------------------------------------------------
 // Locate all Teletext streams in the file.
 //----------------------------------------------------------------------------
 
-bool TeletextExtractor::locateStreams()
+bool QtlTestTeletext::locateStreams()
 {
     if (!_input.isOpen() || !_input.seek(0)) {
         return false;
@@ -149,7 +149,7 @@ bool TeletextExtractor::locateStreams()
     }
 
     if (_teletextDemux.filteredPidCount() == 0) {
-        qWarning() << "**** No Teletext stream found in" << _input.fileName();
+        err << "**** No Teletext stream found in " << _input.fileName() << endl;
         return false;
     }
 
@@ -161,7 +161,7 @@ bool TeletextExtractor::locateStreams()
 // PSI Table Handler
 //----------------------------------------------------------------------------
 
-void TeletextExtractor::handleTable(QtsSectionDemux& demux, const QtsTable& table)
+void QtlTestTeletext::handleTable(QtsSectionDemux& demux, const QtsTable& table)
 {
     switch (table.tableId()) {
         case QTS_TID_PAT: {
@@ -189,7 +189,7 @@ void TeletextExtractor::handleTable(QtsSectionDemux& demux, const QtsTable& tabl
                             foreach (const QtsTeletextDescriptor::Entry& entry, td.entries) {
                                 if (entry.type == QTS_TELETEXT_SUBTITLES || entry.type == QTS_TELETEXT_SUBTITLES_HI) {
                                     _teletextDemux.addPid(stream.pid);
-                                    qWarning() << "Found Teletext page" << entry.page << "in PID" << stream.pid << "for language" << entry.language;
+                                    err << "Found Teletext page " << entry.page << " in PID " << stream.pid << " for language " << entry.language << endl;
                                 }
                             }
                         }
@@ -206,7 +206,7 @@ void TeletextExtractor::handleTable(QtsSectionDemux& demux, const QtsTable& tabl
 // Extract all Teletext streams.
 //----------------------------------------------------------------------------
 
-bool TeletextExtractor::extractStreams()
+bool QtlTestTeletext::extractStreams()
 {
     if (!_input.isOpen() || !_input.seek(0)) {
         return false;
@@ -222,7 +222,7 @@ bool TeletextExtractor::extractStreams()
     _outputs.clear();
 
     if (_frameCount == 0) {
-        qWarning() << "**** No Teletext frame found in" << _input.fileName();
+        err << "**** No Teletext frame found in " << _input.fileName() << endl;
         return false;
     }
 
@@ -234,7 +234,7 @@ bool TeletextExtractor::extractStreams()
 // Teletext frame handler.
 //----------------------------------------------------------------------------
 
-void TeletextExtractor::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
+void QtlTestTeletext::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
     // Search an existing output file.
     OutputFilePtr out;
@@ -246,7 +246,7 @@ void TeletextExtractor::handleTeletextMessage(QtsTeletextDemux& demux, const Qts
 
     // Create a file if not found.
     if (out.isNull()) {
-        out = new OutputFile(frame.pid(), frame.page(), _outputPrefix);
+        out = new OutputFile(frame.pid(), frame.page(), _outputPrefix, &log);
         _outputs << out;
     }
 
@@ -262,14 +262,30 @@ void TeletextExtractor::handleTeletextMessage(QtsTeletextDemux& demux, const Qts
 // Program entry point.
 //----------------------------------------------------------------------------
 
-int main(int argc, char* argv[])
+int QtlTestTeletext::run(const QStringList& args)
 {
-    if (argc < 2 || argc > 3) {
-        qWarning("syntax: %s input-file [output-file-prefix]", argv[0]);
+    if (args.size() < 1) {
+        return syntaxError();
+    }
+
+    const QString inputFile(args[0]);
+    _input.setFileName(inputFile);
+    if (!_input.open()) {
+        err << "**** Error opening " << inputFile << endl;
         return EXIT_FAILURE;
     }
-    else {
-        TeletextExtractor ext(argv[1], argc < 3 ? "" : argv[2]);
-        return ext.locateStreams() && ext.extractStreams() ? EXIT_SUCCESS : EXIT_FAILURE;
+
+    if (args.size() >= 2) {
+        _outputPrefix = args[1];
     }
+    if (_outputPrefix.isEmpty()) {
+        _outputPrefix = QFileInfo(inputFile).completeBaseName();
+    }
+
+    return locateStreams() && extractStreams() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+//----------------------------------------------------------------------------
+
+#include "QtlTestTeletext.moc"
+namespace {QtlTestTeletext thisTest;}

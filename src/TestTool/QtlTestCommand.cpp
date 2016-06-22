@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,57 +26,58 @@
 //
 //----------------------------------------------------------------------------
 //
-// Qtl, Qt utility library.
-// Define the class QtlStringList.
+// Define the class QtlTestCommand.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlStringList.h"
+#include "QtlTestCommand.h"
+
+QtlTestCommand::CommandMap* QtlTestCommand::_commandMap = 0;
 
 
 //----------------------------------------------------------------------------
-// Constructors.
+// Constructor
 //----------------------------------------------------------------------------
 
-QtlStringList::QtlStringList() : QStringList()
+QtlTestCommand::QtlTestCommand(const QString& command, const QString& syntax, QObject* parent) :
+    QObject(parent),
+    out(stdout, QIODevice::WriteOnly),
+    err(stderr, QIODevice::WriteOnly),
+    log(0, true),
+    _command(command),
+    _syntax(syntax)
 {
-}
-
-QtlStringList::QtlStringList(const QString& s1) : QStringList(s1)
-{
-}
-
-QtlStringList::QtlStringList(const QString& s1, const QString& s2) : QStringList(s1)
-{
-    *this << s2;
-}
-
-QtlStringList::QtlStringList(const QString& s1, const QString& s2, const QString& s3) : QStringList(s1)
-{
-    *this << s2 << s3;
-}
-
-QtlStringList::QtlStringList(const QString& s1, const QString& s2, const QString& s3, const QString& s4) : QStringList(s1)
-{
-    *this << s2 << s3 << s4;
-}
-
-QtlStringList::QtlStringList(const QList<QString>& other) : QStringList(other)
-{
-}
-
-
-//----------------------------------------------------------------------------
-// Get the maximum length of all strings.
-//----------------------------------------------------------------------------
-
-int QtlStringList::maxLength() const
-{
-    int max = 0;
-    for (ConstIterator it = begin(); it != end(); ++it) {
-        if (it->length() > max) {
-            max = it->length();
-        }
+    if (_commandMap == 0) {
+        _commandMap = new CommandMap;
     }
-    return max;
+    _commandMap->insert(command.toLower(), this);
+}
+
+int QtlTestCommand::syntaxError()
+{
+    err << "syntax: " << QCoreApplication::applicationName() << " " << _command << " " << _syntax << endl;
+    return EXIT_FAILURE;
+}
+
+
+//----------------------------------------------------------------------------
+// Command repository.
+//----------------------------------------------------------------------------
+
+QtlStringList QtlTestCommand::allCommands()
+{
+    if (_commandMap == 0) {
+        return QtlStringList();
+    }
+    else {
+        QtlStringList names(_commandMap->keys());
+        names.sort(Qt::CaseInsensitive);
+        return names;
+    }
+}
+
+QtlTestCommand* QtlTestCommand::instance(const QString& command)
+{
+    CommandMap::ConstIterator it;
+    return _commandMap != 0 && (it = _commandMap->find(command.toLower())) != _commandMap->end() ? it.value() : 0;
 }

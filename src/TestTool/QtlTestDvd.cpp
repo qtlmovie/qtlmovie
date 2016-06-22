@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2016, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,66 +26,91 @@
 //
 //----------------------------------------------------------------------------
 //
-// Main program for the TestDvd tool.
+// Command line tool to test DVD.
 //
 //----------------------------------------------------------------------------
 
+#include "QtlTestCommand.h"
 #include "QtlFile.h"
 #include "QtlStringUtils.h"
 #include "QtlStdoutLogger.h"
 #include "QtlDvdTitleSet.h"
 #include "QtlDvdMedia.h"
-#include "QtlDataPullWrapper.h"
 
 #define READ_CHUNK 1000  // Number of sectors per read operation.
 
-
-//----------------------------------------------------------------------------
-// Display a directory structure.
 //----------------------------------------------------------------------------
 
-namespace {
-    void displayFile(QTextStream& out, const QString& indent, const QtlDvdFile& file)
+class QtlTestDvd : public QtlTestCommand
+{
+    Q_OBJECT
+
+public:
+    QtlTestDvd() : QtlTestCommand("dvd", "ifo-or-vob-file [out-file [sector-count]]") {}
+    virtual int run(const QStringList& args);
+
+private:
+    void displayFile(const QString& indent, const QtlDvdFile& file);
+    void displayDirectory(const QString& indent, const QtlDvdDirectory& dir);
+};
+
+//----------------------------------------------------------------------------
+
+// A class which synchronously waits for a QtlDataPull.
+class QtlDataPullWrapper : public QObject
+{
+    Q_OBJECT
+private:
+    QEventLoop _loop;
+private slots:
+    void completed(bool success)
     {
-        out << indent << file.name()
-            << ", " << file.sizeInBytes() << " bytes"
-            << ", LBA " << file.startSector() << "-" << (file.startSector() + (file.sizeInBytes() - 1) / QtlDvdMedia::DVD_SECTOR_SIZE)
-            << endl;
+        _loop.exit();
     }
-
-    void displayDirectory(QTextStream& out, const QString& indent, const QtlDvdDirectory& dir)
+public:
+    QtlDataPullWrapper(QtlDataPull* dataPull, QIODevice* device)
     {
-        displayFile(out, indent + "Directory: ", dir);
-        foreach (const QtlDvdFile& file, dir.files()) {
-            displayFile(out, indent + "    File: ", file);
+        connect(dataPull, &QtlDataPull::completed, this, &QtlDataPullWrapper::completed);
+        dataPull->start(device);
+        while (dataPull->isStarted()) {
+            _loop.exec();
         }
-        foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
-            displayDirectory(out, indent + "    ", subdir);
-        }
+    }
+};
+
+//----------------------------------------------------------------------------
+
+void QtlTestDvd::displayFile(const QString& indent, const QtlDvdFile& file)
+{
+    out << indent << file.name()
+        << ", " << file.sizeInBytes() << " bytes"
+        << ", LBA " << file.startSector() << "-" << (file.startSector() + (file.sizeInBytes() - 1) / QtlDvdMedia::DVD_SECTOR_SIZE)
+        << endl;
+}
+
+void QtlTestDvd::displayDirectory(const QString& indent, const QtlDvdDirectory& dir)
+{
+    displayFile(indent + "Directory: ", dir);
+    foreach (const QtlDvdFile& file, dir.files()) {
+        displayFile(indent + "    File: ", file);
+    }
+    foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
+        displayDirectory(indent + "    ", subdir);
     }
 }
 
-
-//----------------------------------------------------------------------------
-// Program entry point.
 //----------------------------------------------------------------------------
 
-int main(int argc, char* argv[])
+int QtlTestDvd::run(const QStringList& args)
 {
-    QCoreApplication app(argc, argv);
-    QTextStream out(stdout, QIODevice::WriteOnly);
-    QTextStream err(stderr, QIODevice::WriteOnly);
-    QtlStdoutLogger log(0, true);
-
     // Expect at least one argument, the name of a VTS file on DVD.
-    const QStringList args(app.arguments());
-    if (args.size() < 2) {
-        err << "syntax: " << args[0] << " ifo-or-vob-file [out-file [sector-count]]" << endl;
-        return EXIT_FAILURE;
+    if (args.size() < 1) {
+        return syntaxError();
     }
-    const QString input(args[1]);
-    const QString output(args.size() <= 2 ? "" : (args[2] != "-" ? args[2] : QProcess::nullDevice()));
-    int sectorCount = args.size() <= 3 ? -1 : args[3].toInt();
+
+    const QString input(args[0]);
+    const QString output(args.size() < 2 ? "" : (args[1] != "-" ? args[1] : QProcess::nullDevice()));
+    int sectorCount = args.size() < 3 ? -1 : args[2].toInt();
 
     // Set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
     qputenv("DVDCSS_VERBOSE", "2");
@@ -102,7 +127,7 @@ int main(int argc, char* argv[])
         << "Volume id: \"" << dvd.volumeId() << "\"" << endl
         << "Volume size: " << dvd.volumeSizeInSectors() << " sectors" << endl
         << "File structure:" << endl;
-    displayDirectory(out, "", dvd.rootDirectory());
+    displayDirectory("", dvd.rootDirectory());
     out << endl;
 
     // Load VTS description.
@@ -192,3 +217,8 @@ int main(int argc, char* argv[])
 
     return EXIT_SUCCESS;
 }
+
+//----------------------------------------------------------------------------
+
+#include "QtlTestDvd.moc"
+namespace {QtlTestDvd thisTest;}
