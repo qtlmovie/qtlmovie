@@ -99,6 +99,7 @@ void QtlMovieMainWindowBase::setupUserInterface(QtlLogger* log, QAction* aboutQt
 
     // Restore the window geometry from the saved settings.
     _settings->restoreGeometry(this);
+    _settings->restoreState(this);
 
     // Let the subclass finish up settings-dependent configuration of the UI.
     applyUserInterfaceSettings();
@@ -190,9 +191,9 @@ void QtlMovieMainWindowBase::playNotificationSound()
 void QtlMovieMainWindowBase::closeEvent(QCloseEvent* event)
 {
     if (_closePending) {
-        // If _closePending is already true, either this is a close following the completion
-        // of the transcoding cancelation or the cancelation does not work and the user tries
-        // to close again. In both cases, we accept the close.
+        // If _closePending is already true, either this is an explicit close() following the completion
+        // of the transcoding cancelation or the cancelation does not work and the user tries to close
+        // the window again. In both cases, we accept the close.
         event->accept();
     }
     else {
@@ -219,9 +220,10 @@ void QtlMovieMainWindowBase::closeEvent(QCloseEvent* event)
         }
     }
 
-    // If the event is accepted or about to be, save the geometry of the window.
-    if (event->isAccepted() || _closePending) {
+    // If the event is accepted, save the geometry of the window.
+    if (event->isAccepted()) {
         _settings->saveGeometry(this);
+        _settings->saveState(this);
         _settings->sync();
     }
 }

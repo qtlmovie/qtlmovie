@@ -85,6 +85,13 @@ private slots:
     //!
     void extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
 
+protected:
+    //!
+    //! Event handler to handle window close.
+    //! @param event Notified event.
+    //!
+    virtual void closeEvent(QCloseEvent* event);
+
 private:
     //!
     //! Check if an extraction is currently in progress and propose to abort it.

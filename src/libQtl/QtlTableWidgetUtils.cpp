@@ -44,6 +44,12 @@ QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, c
         return 0;
     }
     else {
+        // Increase the number of columns if required.
+        if (table->columnCount() <= column) {
+            table->setColumnCount(column + 1);
+        }
+
+        // Fill the header.
         QTableWidgetItem* item = new QTableWidgetItem(text);
         item->setTextAlignment(alignment);
         table->setHorizontalHeaderItem(column, item);

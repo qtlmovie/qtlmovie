@@ -35,6 +35,7 @@
 #include "QtlProcess.h"
 #include "QtlStringUtils.h"
 #include "QtlMessageBoxUtils.h"
+#include "QtlTableWidgetUtils.h"
 
 
 //-----------------------------------------------------------------------------
@@ -52,9 +53,63 @@ QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
 
     // Load settings and finish up base class part of user interface.
     setupUserInterface(_ui.log, _ui.actionAboutQt);
+    settings()->restoreState(_ui.splitter);
+
+    // Set table headers.
+    _ui.tableTitleSets->setShowGrid(false);
+    _ui.tableTitleSets->verticalHeader()->setVisible(false);
+    _ui.tableTitleSets->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    _ui.tableTitleSets->horizontalHeader()->setVisible(true);
+    _ui.tableTitleSets->horizontalHeader()->setCascadingSectionResizes(true);
+    _ui.tableTitleSets->horizontalHeader()->setSortIndicatorShown(true);
+    _ui.tableTitleSets->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    _ui.tableTitleSets->horizontalHeader()->setStretchLastSection(true);
+
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 0, tr("Number"), Qt::AlignCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 1, tr("Duration"), Qt::AlignRight);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 2, tr("Size in bytes"), Qt::AlignLeft);
+
+    for (int row = 0; row < 3; ++row) {
+        _ui.tableTitleSets->setRowCount(row + 1);
+
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(row + 1));
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item->setCheckState(Qt::Checked);
+        item->setTextAlignment(Qt::AlignCenter);
+        _ui.tableTitleSets->setItem(row, 0, item);
+
+        item = new QTableWidgetItem("foo");
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignRight);
+        _ui.tableTitleSets->setItem(row, 1, item);
+
+        item = new QTableWidgetItem("foo");
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignLeft);
+        _ui.tableTitleSets->setItem(row, 2, item);
+    }
+
+
 
     // Extraction is initially stopped.
     extractionUpdateUi(false);
+}
+
+
+//-----------------------------------------------------------------------------
+// Event handler to handle window close.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::closeEvent(QCloseEvent* event)
+{
+    // Let the superclass handle the event.
+    QtlMovieMainWindowBase::closeEvent(event);
+
+    // If the event was accepted by the superclass, save our state.
+    if (event->isAccepted()) {
+        settings()->saveState(_ui.splitter);
+        settings()->sync();
+    }
 }
 
 
@@ -88,9 +143,9 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
     // Set the progress bar.
     // When extraction starts, we set the maximum to zero to force a "busy" bar.
     // If a more precise progression indicator is set later, an exact percentage will be displayed.
-    _ui.progressBarEncode->setTextVisible(false);
-    _ui.progressBarEncode->setRange(0, started ? 0 : 100);
-    _ui.progressBarEncode->reset();
+    _ui.progressBar->setTextVisible(false);
+    _ui.progressBar->setRange(0, started ? 0 : 100);
+    _ui.progressBar->reset();
     _ui.labelRemainingTime->setVisible(false);
 
     // Set the Windows task bar button.
@@ -149,14 +204,14 @@ void QtlMovieDvdRipWindow::extractionProgress(const QString& description, int cu
     // Progress bar.
     if (maximum <= 0) {
         // Cannot evaluate the progression, display a "busy" progress bar without percentage.
-        _ui.progressBarEncode->setRange(0, 0);
-        _ui.progressBarEncode->setTextVisible(false);
+        _ui.progressBar->setRange(0, 0);
+        _ui.progressBar->setTextVisible(false);
     }
     else {
         // Display the progression.
-        _ui.progressBarEncode->setRange(0, maximum);
-        _ui.progressBarEncode->setValue(current);
-        _ui.progressBarEncode->setTextVisible(true);
+        _ui.progressBar->setRange(0, maximum);
+        _ui.progressBar->setValue(current);
+        _ui.progressBar->setTextVisible(true);
     }
 
     // Job description and remaining time.

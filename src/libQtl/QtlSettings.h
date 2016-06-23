@@ -76,9 +76,33 @@ public:
     //!
     //! Restore the geometry of a widget.
     //! Implementation of QtlGeometrySettingsInterface.
-    //! @param [in,out] widget The widget to restore the geometry.
+    //! @param [in,out] widget The widget to restore the geometry of.
     //!
     virtual void restoreGeometry(QWidget* widget);
+
+    //!
+    //! Save the "state" of a widget, for widget classes implementing save/restore state.
+    //! @tparam WIDGET A widget class implementing save/restore state, typically one of
+    //! QMainWindow, QSplitter, QHeaderView, QFileDialog.
+    //! @param [in] widget The widget to save the state of.
+    //!
+    template<class WIDGET>
+    void saveState(const WIDGET* widget)
+    {
+        _settings.setValue(widget->objectName() + "/state", widget->saveState());
+    }
+
+    //!
+    //! Restore the "state" of a widget, for widget classes implementing save/restore state.
+    //! @tparam WIDGET A widget class implementing save/restore state, typically one of
+    //! QMainWindow, QSplitter, QHeaderView, QFileDialog.
+    //! @param [in,out] widget The widget to restore the state of.
+    //!
+    template<class WIDGET>
+    void restoreState(WIDGET* widget)
+    {
+        widget->restoreState(_settings.value(widget->objectName() + "/state").toByteArray());
+    }
 
 protected:
     //!
