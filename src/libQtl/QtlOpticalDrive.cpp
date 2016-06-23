@@ -292,6 +292,9 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
             // Drive complete, add it in the list.
             drives << discDrive;
         }
+
+        // On Windows, the order of drives is strange. Sort them by name.
+        qSort(drives.begin(), drives.end(), lessThanByName);
     }
 
 #elif defined(Q_OS_LINUX)

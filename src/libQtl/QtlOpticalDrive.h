@@ -267,6 +267,17 @@ private:
     //!
     static QtlOpticalDrive firstDriveWithCheck(bool QtlOpticalDrive::*check);
 
+    //!
+    //! A function helper to sort optical drives by name.
+    //! @param [in] o1 First object to compare.
+    //! @param [in] o2 Second object to compare.
+    //! @return True is @a o1 is logically less the @a o2.
+    //!
+    static bool lessThanByName(const QtlOpticalDrive& o1, const QtlOpticalDrive& o2)
+    {
+        return QString::compare(o1._name, o2._name, Qt::CaseInsensitive) < 0;
+    }
+
 #if defined(Q_OS_LINUX) || defined(DOXYGEN)
     //!
     //! Update a boolean field in all elements in an array of QtlOpticalDrive.

@@ -28,14 +28,6 @@
 //
 // Unit test for class QtsTeletextDemux
 //
-// To view the result, define the environment variable QTLTELETEXTDEMUX_TEST
-// to a non-empty string.
-// Windows PowerShell:
-//   PS> $env:QTLTELETEXTDEMUX_TEST="true"
-//   PS> .\UnitTest.exe QtsTeletextDemuxTest
-// Linux bash:
-//   $ QTLTELETEXTDEMUX_TEST="true" ./UnitTest QtsTeletextDemuxTest
-//
 //----------------------------------------------------------------------------
 
 #include "QtlTest.h"
@@ -47,7 +39,6 @@
 #include "QtsProgramMapTable.h"
 #include "QtsTsFile.h"
 #include "QtlFile.h"
-#include <QtDebug>
 
 class QtsTeletextDemuxTest : public QObject, private QtsTableHandlerInterface, private QtsTeletextHandlerInterface
 {
@@ -57,7 +48,6 @@ public:
 private slots:
     void testReferenceTeletext();
 private:
-    const bool                 _verbose;
     const QStringList          _refLines;
     QStringList::ConstIterator _refIterator;
     QtsTsFile                  _file;
@@ -75,7 +65,6 @@ QTL_TEST_CLASS(QtsTeletextDemuxTest);
 //----------------------------------------------------------------------------
 
 QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
-    _verbose(!QProcessEnvironment::systemEnvironment().value("QTLTELETEXTDEMUX_TEST").isEmpty()),
     _refLines(QtlFile::readTextLinesFile(":/test/test-teletext.srt")),
     _refIterator(_refLines.begin()),
     _file(":/test/test-teletext.stream")
@@ -165,10 +154,6 @@ void QtsTeletextDemuxTest::handleTable(QtsSectionDemux& demux, const QtsTable& t
 void QtsTeletextDemuxTest::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
     const QString srt(frame.srtFrame());
-    if (_verbose) {
-        qDebug() << "Teletext message: PID:" << frame.pid() << "Page:" << frame.page() << "SRT:\n    " << srt;
-    }
-
     QStringList srtLines(srt.split(QChar('\n')));
 
     // Remove last line (trailing \n causes an additional line to be added by split()).

@@ -91,7 +91,7 @@ protected:
     //! @param [in] syntax Brief parameter syntax overview.
     //! @param [in] parent Optional parent object.
     //!
-    QtlTestCommand(const QString& command, const QString& syntax, QObject* parent = 0);
+    QtlTestCommand(const QString& command, const QString& syntax = QString(), QObject* parent = 0);
 
     //!
     //! Display an syntax error message and return EXIT_FAILURE.

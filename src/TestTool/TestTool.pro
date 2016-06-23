@@ -44,7 +44,9 @@ SOURCES += \
     main.cpp \
     QtlTestCommand.cpp \
     QtlTestDvd.cpp \
-    QtlTestTeletext.cpp
+    QtlTestTeletext.cpp \
+    QtlTestOptical.cpp \
+    QtlTestSysInfo.cpp
 
 HEADERS += \
     QtlTestCommand.h

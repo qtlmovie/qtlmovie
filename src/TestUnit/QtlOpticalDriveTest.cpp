@@ -32,8 +32,6 @@
 
 #include "QtlTest.h"
 #include "QtlOpticalDrive.h"
-#include <QtCore>
-#include <QtDebug>
 
 class QtlOpticalDriveTest : public QObject
 {
@@ -72,19 +70,8 @@ void QtlOpticalDriveTest::testInvalid()
 // This is not a fully reproduceable test since the hardware configuration
 // varies from one test to another.
 
-// To view the result, define the environment variable QTLOPTICALDRIVE_TEST
-// to a non-empty string.
-// Windows PowerShell:
-//   PS> $env:QTLOPTICALDRIVE_TEST="true"
-//   PS> .\UnitTest.exe QtlOpticalDriveTest
-// Linux bash:
-//   $ QTLOPTICALDRIVE_TEST="true" ./UnitTest QtlOpticalDriveTest
-
 void QtlOpticalDriveTest::testSystem()
 {
-    // Check environment variable QTLOPTICALDRIVE_TEST
-    const bool verbose = !QProcessEnvironment::systemEnvironment().value("QTLOPTICALDRIVE_TEST").isEmpty();
-
     // Get the list of all optical drives in the system.
     const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
 
@@ -131,31 +118,5 @@ void QtlOpticalDriveTest::testSystem()
     if (drive.isValid()) {
         QVERIFY(!drive.name().isEmpty());
         QVERIFY(drive.canWriteBluRay());
-    }
-
-    // Display the configuration in verbose mode.
-    if (verbose) {
-        qDebug() << "Found" << drives.size() << "optical drives";
-        foreach (const QtlOpticalDrive& drive, drives) {
-            qDebug() << "====== Drive:" << drive.name();
-            qDebug() << "Device name:" << drive.deviceName();
-            qDebug() << "Burner device name:" << drive.burnerDeviceName();
-            qDebug() << "Vendor id:" << drive.vendorId();
-            qDebug() << "Product id:" << drive.productId();
-            qDebug() << "Product revision:" << drive.productRevision();
-            qDebug() << "Can read CD:" << drive.canReadCd();
-            qDebug() << "Can write CD:" << drive.canWriteCd();
-            qDebug() << "Can read DVD:" << drive.canReadDvd();
-            qDebug() << "Can write DVD:" << drive.canWriteDvd();
-            qDebug() << "Can read Blu-Ray:" << drive.canReadBluRay();
-            qDebug() << "Can write Blu-Ray:" << drive.canWriteBluRay();
-        }
-        qDebug() << "====== Default drives:";
-        qDebug() << "First CD reader:" << QtlOpticalDrive::firstCdReader().name();
-        qDebug() << "First CD writer:" << QtlOpticalDrive::firstCdWriter().name();
-        qDebug() << "First DVD reader:" << QtlOpticalDrive::firstDvdReader().name();
-        qDebug() << "First DVD writer:" << QtlOpticalDrive::firstDvdWriter().name();
-        qDebug() << "First Blu-Ray reader:" << QtlOpticalDrive::firstBluRayReader().name();
-        qDebug() << "First Blu-Ray writer:" << QtlOpticalDrive::firstBluRayWriter().name();
     }
 }

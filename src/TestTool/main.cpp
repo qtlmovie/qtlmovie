@@ -34,7 +34,10 @@
 
 int main(int argc, char* argv[])
 {
-    QCoreApplication app(argc, argv);
+    // Do not remove the QApplication instance. On Windows, it ensures that
+    // CoInitialize is invoked and this is required for some classes in Qtl.
+    QApplication app(argc, argv);
+
     QStringList args(app.arguments());
     QTextStream err(stderr, QIODevice::WriteOnly);
 
