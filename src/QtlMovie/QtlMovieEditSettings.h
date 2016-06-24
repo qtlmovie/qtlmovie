@@ -40,6 +40,7 @@
 #include "QtlMovieSettings.h"
 #include "QtlMovieOutputFile.h"
 #include "QtlMovieDeviceProfile.h"
+#include "QtlFileDialogUtils.h"
 
 //!
 //! A subclass of QtlDialog which implements the UI for the "Edit Settings" action.
@@ -74,7 +75,7 @@ private slots:
     //!
     void browseFFmpeg()
     {
-        browseFile(_ui.editFFmpeg, tr("Locate FFmpeg executable"));
+        qtlBrowseFile(this, _ui.editFFmpeg, tr("Locate FFmpeg executable"));
     }
 
     //!
@@ -82,7 +83,7 @@ private slots:
     //!
     void browseFFprobe()
     {
-        browseFile(_ui.editFFprobe, tr("Locate FFprobe executable"));
+        qtlBrowseFile(this, _ui.editFFprobe, tr("Locate FFprobe executable"));
     }
 
     //!
@@ -90,7 +91,7 @@ private slots:
     //!
     void browseDvdAuthor()
     {
-        browseFile(_ui.editDvdAuthor, tr("Locate DvdAuthor executable"));
+        qtlBrowseFile(this, _ui.editDvdAuthor, tr("Locate DvdAuthor executable"));
     }
 
     //!
@@ -98,7 +99,7 @@ private slots:
     //!
     void browseMkisofs()
     {
-        browseFile(_ui.editMkisofs, tr("Locate Mkisofs executable"));
+        qtlBrowseFile(this, _ui.editMkisofs, tr("Locate Mkisofs executable"));
     }
 
     //!
@@ -106,7 +107,7 @@ private slots:
     //!
     void browseGrowisofs()
     {
-        browseFile(_ui.editGrowisofs, tr("Locate Growisofs executable"));
+        qtlBrowseFile(this, _ui.editGrowisofs, tr("Locate Growisofs executable"));
     }
 
     //!
@@ -114,7 +115,7 @@ private slots:
     //!
     void browseCcextractor()
     {
-        browseFile(_ui.editCcextractor, tr("Locate CCExtractor executable"));
+        qtlBrowseFile(this, _ui.editCcextractor, tr("Locate CCExtractor executable"));
     }
 
     //!
@@ -122,7 +123,7 @@ private slots:
     //!
     void browseDvdDecrypter()
     {
-        browseFile(_ui.editDvdDecrypter, tr("Locate DvdDecrypter executable"));
+        qtlBrowseFile(this, _ui.editDvdDecrypter, tr("Locate DvdDecrypter executable"));
     }
 
     //!
@@ -130,7 +131,7 @@ private slots:
     //!
     void browseInputDir()
     {
-        browseDirectory(_ui.editInputDir, tr("Default input directory"));
+        qtlBrowseDirectory(this, _ui.editInputDir, tr("Default input directory"));
     }
 
     //!
@@ -138,7 +139,7 @@ private slots:
     //!
     void browseDvdExtractionDir()
     {
-        browseDirectory(_ui.editDvdExtraction, tr("Default DVD extraction directory"));
+        qtlBrowseDirectory(this, _ui.editDvdExtraction, tr("Default DVD extraction directory"));
     }
 
     //!
@@ -227,20 +228,6 @@ private:
     //! @param [in] fileName The default executable path.
     //!
     void setDefaultExecutable(const QString& name, QLabel* label, const QString& fileName);
-
-    //!
-    //! Invoked by the "Browse..." buttons for a file.
-    //! @param [in,out] edit Line edit to read and write.
-    //! @param [in] title Browse window title.
-    //!
-    void browseFile(QLineEdit* edit, const QString& title);
-
-    //!
-    //! Invoked by the "Browse..." buttons for a directory.
-    //! @param [in,out] edit Line edit to read and write.
-    //! @param [in] title Browse window title.
-    //!
-    void browseDirectory(QLineEdit* edit, const QString& title);
 
     //!
     //! Update a label containing the maximum video bitrate for an output type.

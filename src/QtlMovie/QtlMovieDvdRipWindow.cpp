@@ -32,10 +32,12 @@
 
 #include "QtlMovieDvdRipWindow.h"
 #include "QtlMovie.h"
+#include "QtlFile.h"
 #include "QtlProcess.h"
 #include "QtlStringUtils.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlTableWidgetUtils.h"
+#include "QtlCheckableHeaderView.h"
 
 
 //-----------------------------------------------------------------------------
@@ -43,7 +45,8 @@
 //-----------------------------------------------------------------------------
 
 QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
-    QtlMovieMainWindowBase(parent, logDebug)
+    QtlMovieMainWindowBase(parent, logDebug),
+    _dvdList()
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
@@ -53,46 +56,107 @@ QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
 
     // Load settings and finish up base class part of user interface.
     setupUserInterface(_ui.log, _ui.actionAboutQt);
+
+    // Restore the position of the splitter from the settings.
     settings()->restoreState(_ui.splitter);
 
-    // Set table headers.
-    _ui.tableTitleSets->setShowGrid(false);
-    _ui.tableTitleSets->verticalHeader()->setVisible(false);
-    _ui.tableTitleSets->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    _ui.tableTitleSets->horizontalHeader()->setVisible(true);
-    _ui.tableTitleSets->horizontalHeader()->setCascadingSectionResizes(true);
-    _ui.tableTitleSets->horizontalHeader()->setSortIndicatorShown(true);
-    _ui.tableTitleSets->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    _ui.tableTitleSets->horizontalHeader()->setStretchLastSection(true);
+    // The "ISO file name" cannot contain directory separators.
+    _ui.editIsoFile->setValidator(new QRegExpValidator(QRegExp("[^/\\\\]+"), this));
 
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 0, tr("Number"), Qt::AlignCenter);
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 1, tr("Duration"), Qt::AlignRight);
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 2, tr("Size in bytes"), Qt::AlignLeft);
+    // Configure the VTS and Files tables.
+    setupTable(_ui.tableTitleSets);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 0, "");
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 1, tr("VTS"), Qt::AlignCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 2, tr("Duration"), Qt::AlignRight | Qt::AlignVCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 3, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
 
+    setupTable(_ui.tableFiles);
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 0, "");
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 1, tr("File"), Qt::AlignLeft | Qt::AlignVCenter);
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 2, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
+
+
+
+
+    /*@@@@@@@@@@@@@@@@@@@
     for (int row = 0; row < 3; ++row) {
         _ui.tableTitleSets->setRowCount(row + 1);
+        int col = 0;
 
-        QTableWidgetItem* item = new QTableWidgetItem(QString::number(row + 1));
+        QTableWidgetItem* item = new QTableWidgetItem();
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setCheckState(Qt::Checked);
+        item->setCheckState(Qt::Unchecked);
         item->setTextAlignment(Qt::AlignCenter);
-        _ui.tableTitleSets->setItem(row, 0, item);
+        _ui.tableTitleSets->setItem(row, col++, item);
 
-        item = new QTableWidgetItem("foo");
+        item = new QTableWidgetItem(QString::number(row + 1));
         item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignRight);
-        _ui.tableTitleSets->setItem(row, 1, item);
+        item->setTextAlignment(Qt::AlignCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
 
-        item = new QTableWidgetItem("foo");
+        item = new QTableWidgetItem(qtlSecondsToString(61 + row * 7));
         item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignLeft);
-        _ui.tableTitleSets->setItem(row, 2, item);
+        item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
+
+        item = new QTableWidgetItem(qtlSizeToString(1000000 + row * 30000));
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
     }
 
+    for (int row = 0; row < 3; ++row) {
+        _ui.tableFiles->setRowCount(row + 1);
+        int col = 0;
 
+        QTableWidgetItem* item = new QTableWidgetItem();
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item->setCheckState(Qt::Unchecked);
+        item->setTextAlignment(Qt::AlignCenter);
+        _ui.tableFiles->setItem(row, col++, item);
+
+        item = new QTableWidgetItem("foo/bar");
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        _ui.tableFiles->setItem(row, col++, item);
+
+        item = new QTableWidgetItem(qtlSizeToString(1000000 + row * 30000));
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        _ui.tableFiles->setItem(row, col++, item);
+    }
+    @@@@@@@@@@@@@@*/
 
     // Extraction is initially stopped.
     extractionUpdateUi(false);
+
+    // Read the list of DVD and selects the first one.
+    refresh();
+}
+
+
+//-----------------------------------------------------------------------------
+// Common setup for the VTS and Files tables.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::setupTable(QTableWidget* table)
+{
+    // Use a table header with a checkbox in first column.
+    table->setHorizontalHeader(new QtlCheckableHeaderView(table));
+    table->horizontalHeader()->setVisible(true);
+    table->horizontalHeader()->setCascadingSectionResizes(true);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setStretchLastSection(true);
+
+    // No vertical header.
+    table->verticalHeader()->setVisible(false);
+    table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    // Table general properties.
+    table->setShowGrid(false);
+
+    // Setup properties that can be set only using stylesheets.
+    table->setStyleSheet("::item {border: 0px; padding-left: 5px; padding-right: 5px;};");
 }
 
 
@@ -140,6 +204,10 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
         connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::startExtraction);
     }
 
+    // Enable / disable other buttons.
+    _ui.actionRefresh->setEnabled(!started);
+    _ui.buttonRefreshDvd->setEnabled(!started);
+
     // Set the progress bar.
     // When extraction starts, we set the maximum to zero to force a "busy" bar.
     // If a more precise progression indicator is set later, an exact percentage will be displayed.
@@ -150,6 +218,81 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
 
     // Set the Windows task bar button.
     setIconTaskBarVisible(started);
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked by the "Refresh ..." buttons.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::refresh()
+{
+    refreshDvdList();
+
+    //@@@@
+}
+
+
+//-----------------------------------------------------------------------------
+// Refresh the list of DVD's.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::refreshDvdList()
+{
+    // Get currently selected DVD. Used to check if it is still there after refresh.
+    const QString previousSelected(_ui.comboDvd->currentText());
+    int indexToPreviousSelected = -1;
+
+    // Clear current contents.
+    _ui.comboDvd->clear();
+    _dvdList.clear();
+
+    // Refresh the list of currenly inserted DVD's.
+    foreach (const QStorageInfo& si, QStorageInfo::mountedVolumes()) {
+
+        // Reading DVD's maybe a long operation, process pending events in the meantime.
+        qApp->processEvents();
+
+        // DVD's are read-only and use UDF file systems. Note that the file system type
+        // name is OS-dependent. We "assume" here that the name contains "UDF".
+        if (si.isReadOnly() && QString(si.fileSystemType()).contains(QStringLiteral("udf"), Qt::CaseInsensitive)) {
+            // This is maybe a DVD. Maybe. Let's try to open it.
+            QtlDvdMedia* dvd = new QtlDvdMedia(si.rootPath(), log(), this);
+            if (!dvd->isOpen()) {
+                // Finally not a DVD.
+                delete dvd;
+            }
+            else {
+                // This is a DVD, keep it.
+                _dvdList << dvd;
+                const QString id(dvd->volumeId());
+                QString name(dvd->deviceName());
+                if (!id.isEmpty()) {
+                    name += " (" + id + ")";
+                }
+                // Add the DVD in the combo box and keep the DVD pointer as user data.
+                _ui.comboDvd->addItem(name, QVariant::fromValue(dvd));
+                if (name == previousSelected) {
+                    indexToPreviousSelected = _ui.comboDvd->count() - 1;
+                }
+            }
+        }
+    }
+
+    // If the previous selected DVD is still there, reselect it.
+    if (indexToPreviousSelected >= 0) {
+        // Reselect same DVD, but possibly at a different index.
+        _ui.comboDvd->setCurrentIndex(indexToPreviousSelected);
+    }
+    else if (_ui.comboDvd->count() > 0) {
+        // Otherwise, select the first DVD.
+        _ui.comboDvd->setCurrentIndex(0);
+        // Preset the ISO file name at the volume id.
+        QtlDvdMedia* dvd = _ui.comboDvd->currentData().value<QtlDvdMedia*>();
+        if (dvd != 0) {
+            _ui.editIsoFile->setText(dvd->volumeId());
+        }
+    }
 }
 
 
@@ -292,4 +435,25 @@ QtlMovieDvdRipWindow::CancelStatus QtlMovieDvdRipWindow::proposeToCancel()
 void QtlMovieDvdRipWindow::applyUserInterfaceSettings()
 {
     _ui.log->setMaximumBlockCount(settings()->maxLogLines());
+    if (_ui.editDestination->text().isEmpty()) {
+        _ui.editDestination->setText(settings()->defaultDvdExtractionDir());
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Update the label containing the ISO full path.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::updateIsoFullPath()
+{
+    QString path(_ui.editDestination->text());
+    if (!path.isEmpty()) {
+        path.append(QDir::separator());
+    }
+    path.append(_ui.editIsoFile->text());
+    if (!path.endsWith(".iso", Qt::CaseInsensitive)) {
+        path.append(".iso");
+    }
+    _ui.valueFullPath->setText(QtlFile::absoluteNativeFilePath(path));
 }

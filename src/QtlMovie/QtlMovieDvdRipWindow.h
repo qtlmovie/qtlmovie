@@ -38,6 +38,9 @@
 
 #include "ui_QtlMovieDvdRipWindow.h"
 #include "QtlMovieMainWindowBase.h"
+#include "QtlFileDialogUtils.h"
+#include "QtlPointerList.h"
+#include "QtlDvdMedia.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the DVD Ripper application.
@@ -57,22 +60,31 @@ public:
 
 private slots:
     //!
+    //! Invoked by the "Refresh ..." buttons.
+    //!
+    void refresh();
+
+    //!
     //! Invoked by the "Start ..." buttons.
     //!
     void startExtraction();
+
     //!
     //! Invoked by the "Cancel ..." buttons.
     //!
     void cancelExtraction();
+
     //!
     //! Invoked when extraction starts.
     //!
     void extractionStarted();
+
     //!
     //! Invoked when extraction stops.
     //! @param [in] success Indicates whether the extraction succeeded or failed.
     //!
     void extractionStopped(bool success);
+
     //!
     //! Invoked when some progress is made in the extraction process.
     //! @param [in] description The description of the current process.
@@ -84,6 +96,19 @@ private slots:
     //! Negative if the remaining time cannot be estimated.
     //!
     void extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
+
+    //!
+    //! Update the label containing the ISO full path.
+    //!
+    void updateIsoFullPath();
+
+    //!
+    //! Invoked by the "Browse..." button for the output directory for DVD extraction.
+    //!
+    void browseDestination()
+    {
+        qtlBrowseDirectory(this, _ui.editDestination, tr("DVD extraction directory"));
+    }
 
 protected:
     //!
@@ -102,6 +127,12 @@ private:
     virtual CancelStatus proposeToCancel();
 
     //!
+    //! Common setup for the VTS and Files tables.
+    //! @param [in] table The table to setup.
+    //!
+    void setupTable(QTableWidget* table);
+
+    //!
     //! Apply the settings which affect the UI.
     //!
     void applyUserInterfaceSettings();
@@ -112,7 +143,13 @@ private:
     //!
     void extractionUpdateUi(bool started);
 
-    Ui::QtlMovieDvdRipWindow _ui;  //!< UI from Qt Designer.
+    //!
+    //! Refresh the list of DVD's.
+    //!
+    void refreshDvdList();
+
+    Ui::QtlMovieDvdRipWindow    _ui;       //!< UI from Qt Designer.
+    QtlPointerList<QtlDvdMedia> _dvdList;  //!< List of detected DVD's.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlMovieDvdRipWindow)

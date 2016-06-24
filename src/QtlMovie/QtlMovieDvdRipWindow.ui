@@ -51,6 +51,13 @@
             <string>ISO</string>
            </attribute>
            <layout class="QGridLayout" name="layoutTabIso">
+            <item row="1" column="0">
+             <widget class="QLabel" name="labelFullPath">
+              <property name="text">
+               <string>Full path :</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="labelIsoFile">
               <property name="text">
@@ -61,7 +68,7 @@
             <item row="0" column="1">
              <widget class="QtlLineEdit" name="editIsoFile"/>
             </item>
-            <item row="1" column="0">
+            <item row="2" column="0">
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -73,6 +80,13 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="valueFullPath">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -98,9 +112,6 @@
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
-              <property name="lineWidth">
-               <number>1</number>
-              </property>
              </widget>
             </item>
            </layout>
@@ -109,6 +120,27 @@
            <attribute name="title">
             <string>Files</string>
            </attribute>
+           <layout class="QVBoxLayout" name="layoutTabFiles">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QTableWidget" name="tableFiles">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
@@ -239,6 +271,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionRefresh"/>
     <addaction name="actionStart"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -298,9 +331,6 @@
   <action name="actionStart">
    <property name="text">
     <string>Start ...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -436,6 +466,17 @@
   <action name="actionSwitchMode">
    <property name="text">
     <string>Switch Mode</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionRefresh">
+   <property name="text">
+    <string>Refresh ...</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -623,5 +664,90 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRefresh</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieDvdRipWindow</receiver>
+   <slot>refresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonRefreshDvd</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieDvdRipWindow</receiver>
+   <slot>refresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDestination</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>QtlMovieDvdRipWindow</receiver>
+   <slot>updateIsoFullPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editIsoFile</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>QtlMovieDvdRipWindow</receiver>
+   <slot>updateIsoFullPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBrowseDestination</sender>
+   <signal>clicked()</signal>
+   <receiver>QtlMovieDvdRipWindow</receiver>
+   <slot>browseDestination()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>262</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>refresh()</slot>
+  <slot>updateIsoFullPath()</slot>
+  <slot>browseDestination()</slot>
+ </slots>
 </ui>

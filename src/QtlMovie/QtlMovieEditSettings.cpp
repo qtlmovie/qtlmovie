@@ -392,42 +392,6 @@ void QtlMovieEditSettings::applySettings()
 
 
 //-----------------------------------------------------------------------------
-// Invoked by the "Browse..." buttons for a file.
-//-----------------------------------------------------------------------------
-
-void QtlMovieEditSettings::browseFile(QLineEdit* edit, const QString& title)
-{
-    // Ask the user to select an input file.
-    const QString current(edit->text());
-    const QString initial(current.isEmpty()? QDir::homePath() : current);
-    const QString selected(QFileDialog::getOpenFileName(this, title, initial));
-
-    // Set the new file name.
-    if (!selected.isEmpty()) {
-        edit->setText(QtlFile::absoluteNativeFilePath(selected));
-    }
-}
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "Browse..." buttons for a directory.
-//-----------------------------------------------------------------------------
-
-void QtlMovieEditSettings::browseDirectory(QLineEdit* edit, const QString& title)
-{
-    // Ask the user to select a directory.
-    const QString current(edit->text());
-    const QString initial(current.isEmpty()? QDir::homePath() : current);
-    const QString selected(QFileDialog::getExistingDirectory(this, title, initial));
-
-    // Set the new file name.
-    if (!selected.isEmpty()) {
-        edit->setText(QtlFile::absoluteNativeFilePath(selected));
-    }
-}
-
-
-//-----------------------------------------------------------------------------
 // Invoked when the check box "default output directory is same as input"
 // is toggled.
 //-----------------------------------------------------------------------------
@@ -456,7 +420,7 @@ void QtlMovieEditSettings::browseOutputDir()
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
         if (it.value().pushButton == button) {
             // Found the output type. Browse directory.
-            browseDirectory(it.value().lineEdit, tr("Default output directory for %1").arg(QtlMovieOutputFile::outputTypeName(it.key())));
+            qtlBrowseDirectory(this, it.value().lineEdit, tr("Default output directory for %1").arg(QtlMovieOutputFile::outputTypeName(it.key())));
             break;
         }
     }

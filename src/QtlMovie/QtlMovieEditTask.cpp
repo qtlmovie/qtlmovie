@@ -34,6 +34,7 @@
 #include "QtlMovieInputFilePropertiesDialog.h"
 #include "QtlMovieAudioTestDialog.h"
 #include "QtlMovieJob.h"
+#include "QtlFileDialogUtils.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlIncrement.h"
 
@@ -197,20 +198,11 @@ void QtlMovieEditTask::selectOutputFile()
 
 void QtlMovieEditTask::selectSubtitleFile()
 {
-    // Previous content of edit box.
-    QString previous(_ui.editSubtitleFile->text());
-
-    // If no previous content, use the input file directory.
-    if (previous.isEmpty()) {
-        previous = _task != 0 && _task->inputFile()->isSet() ? QFileInfo(_task->inputFile()->fileName()).absolutePath() : _settings->initialInputDir();
-    }
-
-    // Select the subtitle file.
-    const QString filters(tr("Subtitle files (*.srt *.ssa *.ass)"));
-    const QString name(QFileDialog::getOpenFileName(this, tr("Select Subtitle File"), previous, filters));
-    if (!name.isEmpty()) {
-        _ui.editSubtitleFile->setText(QtlFile::absoluteNativeFilePath(name));
-    }
+    qtlBrowseFile(this,
+                  _ui.editSubtitleFile,
+                  tr("Select Subtitle File"),
+                  _task != 0 && _task->inputFile()->isSet() ? QFileInfo(_task->inputFile()->fileName()).absolutePath() : _settings->initialInputDir(),
+                  tr("Subtitle files (*.srt *.ssa *.ass)"));
 }
 
 

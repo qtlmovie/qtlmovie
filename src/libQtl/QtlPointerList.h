@@ -45,6 +45,9 @@
 template<typename T>
 class QtlPointerList : public QList<T*>
 {
+private:
+    typedef QList<T*> SuperClass; //!< A name for the superclass.
+
 public:
     //!
     //! Default constructor.
@@ -64,12 +67,21 @@ public:
     }
 
     //!
+    //! Remove all items from the list.
+    //! All pointed items are deleted.
+    //!
+    void clear()
+    {
+        qDeleteAll(*this);
+        SuperClass::clear();
+    }
+
+    //!
     //! Destructor.
     //! All pointed items are deleted.
     //!
     virtual ~QtlPointerList()
     {
-        qDeleteAll(*this);
         this->clear();
     }
 };
