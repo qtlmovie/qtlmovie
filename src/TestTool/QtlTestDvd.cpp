@@ -126,7 +126,12 @@ int QtlTestDvd::run(const QStringList& args)
         << "Device name: " << dvd.deviceName() << endl
         << "Volume id: \"" << dvd.volumeId() << "\"" << endl
         << "Volume size: " << dvd.volumeSizeInSectors() << " sectors" << endl
-        << "File structure:" << endl;
+        << "VTS count: " << dvd.vtsCount() << endl
+        << "IFO file names:" << endl;
+    for (int vts = 1; vts <= dvd.vtsCount(); ++vts) {
+        out << "    " << dvd.vtsInformationFileName(vts) << endl;
+    }
+    out << "File structure:" << endl;
     displayDirectory("", dvd.rootDirectory());
     out << endl;
 

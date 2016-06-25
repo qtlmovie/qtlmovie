@@ -75,58 +75,6 @@ QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
     qtlSetTableHorizontalHeader(_ui.tableFiles, 1, tr("File"), Qt::AlignLeft | Qt::AlignVCenter);
     qtlSetTableHorizontalHeader(_ui.tableFiles, 2, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
 
-
-
-
-    /*@@@@@@@@@@@@@@@@@@@
-    for (int row = 0; row < 3; ++row) {
-        _ui.tableTitleSets->setRowCount(row + 1);
-        int col = 0;
-
-        QTableWidgetItem* item = new QTableWidgetItem();
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setCheckState(Qt::Unchecked);
-        item->setTextAlignment(Qt::AlignCenter);
-        _ui.tableTitleSets->setItem(row, col++, item);
-
-        item = new QTableWidgetItem(QString::number(row + 1));
-        item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignCenter);
-        _ui.tableTitleSets->setItem(row, col++, item);
-
-        item = new QTableWidgetItem(qtlSecondsToString(61 + row * 7));
-        item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        _ui.tableTitleSets->setItem(row, col++, item);
-
-        item = new QTableWidgetItem(qtlSizeToString(1000000 + row * 30000));
-        item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        _ui.tableTitleSets->setItem(row, col++, item);
-    }
-
-    for (int row = 0; row < 3; ++row) {
-        _ui.tableFiles->setRowCount(row + 1);
-        int col = 0;
-
-        QTableWidgetItem* item = new QTableWidgetItem();
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setCheckState(Qt::Unchecked);
-        item->setTextAlignment(Qt::AlignCenter);
-        _ui.tableFiles->setItem(row, col++, item);
-
-        item = new QTableWidgetItem("foo/bar");
-        item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        _ui.tableFiles->setItem(row, col++, item);
-
-        item = new QTableWidgetItem(qtlSizeToString(1000000 + row * 30000));
-        item->setFlags(Qt::ItemIsEnabled);
-        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        _ui.tableFiles->setItem(row, col++, item);
-    }
-    @@@@@@@@@@@@@@*/
-
     // Extraction is initially stopped.
     extractionUpdateUi(false);
 
@@ -156,7 +104,7 @@ void QtlMovieDvdRipWindow::setupTable(QTableWidget* table)
     table->setShowGrid(false);
 
     // Setup properties that can be set only using stylesheets.
-    table->setStyleSheet("::item {border: 0px; padding-left: 5px; padding-right: 5px;};");
+    table->setStyleSheet("::item {border: 0px; padding-right: 5px;};");
 }
 
 
@@ -222,14 +170,24 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
 
 
 //-----------------------------------------------------------------------------
+// Get the currently selected DVD.
+//-----------------------------------------------------------------------------
+
+QtlDvdMediaPtr QtlMovieDvdRipWindow::currentDvd() const
+{
+    return _ui.comboDvd->count() > 0 ? _ui.comboDvd->currentData().value<QtlDvdMediaPtr>() : QtlDvdMediaPtr();
+}
+
+
+//-----------------------------------------------------------------------------
 // Invoked by the "Refresh ..." buttons.
 //-----------------------------------------------------------------------------
 
 void QtlMovieDvdRipWindow::refresh()
 {
     refreshDvdList();
-
-    //@@@@
+    refreshVtsList();
+    refreshFilesList();
 }
 
 
@@ -245,6 +203,7 @@ void QtlMovieDvdRipWindow::refreshDvdList()
 
     // Clear current contents.
     _ui.comboDvd->clear();
+    _ui.editIsoFile->clear();
     _dvdList.clear();
 
     // Refresh the list of currenly inserted DVD's.
@@ -257,12 +216,8 @@ void QtlMovieDvdRipWindow::refreshDvdList()
         // name is OS-dependent. We "assume" here that the name contains "UDF".
         if (si.isReadOnly() && QString(si.fileSystemType()).contains(QStringLiteral("udf"), Qt::CaseInsensitive)) {
             // This is maybe a DVD. Maybe. Let's try to open it.
-            QtlDvdMedia* dvd = new QtlDvdMedia(si.rootPath(), log(), this);
-            if (!dvd->isOpen()) {
-                // Finally not a DVD.
-                delete dvd;
-            }
-            else {
+            QtlDvdMediaPtr dvd(new QtlDvdMedia(si.rootPath(), log(), this));
+            if (dvd->isOpen()) {
                 // This is a DVD, keep it.
                 _dvdList << dvd;
                 const QString id(dvd->volumeId());
@@ -288,11 +243,149 @@ void QtlMovieDvdRipWindow::refreshDvdList()
         // Otherwise, select the first DVD.
         _ui.comboDvd->setCurrentIndex(0);
         // Preset the ISO file name at the volume id.
-        QtlDvdMedia* dvd = _ui.comboDvd->currentData().value<QtlDvdMedia*>();
-        if (dvd != 0) {
+        QtlDvdMediaPtr dvd(_ui.comboDvd->currentData().value<QtlDvdMediaPtr>());
+        if (!dvd.isNull()) {
             _ui.editIsoFile->setText(dvd->volumeId());
         }
     }
+}
+
+
+//-----------------------------------------------------------------------------
+// Refresh the list of video title sets.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::refreshVtsList()
+{
+    // Clear the previous content of the table.
+    _ui.tableTitleSets->setRowCount(0);
+
+    // Get selected DVD.
+    const QtlDvdMediaPtr dvd(currentDvd());
+    if (dvd.isNull()) {
+        return;
+    }
+
+    // Create one row per title set.
+    for (int vtsNumber = 1; vtsNumber <= dvd->vtsCount(); ++vtsNumber) {
+
+        // Get the description of the VTS.
+        QtlDvdTitleSetPtr vts(new QtlDvdTitleSet(QString(), log(), this));
+        if (!vts->load(dvd->vtsInformationFileName(vtsNumber), &*dvd)) {
+            // Cannot open VTS, strange, skip it.
+            log()->line(tr("Cannot open video title set %1").arg(vtsNumber));
+            continue;
+        }
+
+        // Enlarge the table.
+        const int row = _ui.tableTitleSets->rowCount();
+        _ui.tableTitleSets->setRowCount(row + 1);
+        int col = 0;
+
+        // First item is a check box. Also used to store the title set description.
+        QTableWidgetItem* item = new QTableWidgetItem();
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item->setCheckState(Qt::Unchecked);
+        item->setTextAlignment(Qt::AlignCenter);
+        item->setData(Qt::UserRole, QVariant::fromValue(vts));
+        _ui.tableTitleSets->setItem(row, col++, item);
+
+        // Next item is VTS number.
+        item = new QTableWidgetItem(QString::number(vtsNumber));
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
+
+        // Next item is VTS duration.
+        item = new QTableWidgetItem(qtlSecondsToString(vts->durationInSeconds()));
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
+
+        // Next item is size of the VOB files.
+        item = new QTableWidgetItem(qtlSizeToString(vts->vobSizeInBytes(), 2));
+        item->setFlags(Qt::ItemIsEnabled);
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        _ui.tableTitleSets->setItem(row, col++, item);
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Refresh the list of files.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::refreshFilesList()
+{
+    // Clear the previous content of the table.
+    _ui.tableFiles->setRowCount(0);
+
+    // Get selected DVD.
+    const QtlDvdMediaPtr dvd(currentDvd());
+    if (dvd.isNull()) {
+        return;
+    }
+
+    // Create one row per file.
+    addDirectoryTree("", dvd->rootDirectory());
+}
+
+
+//-----------------------------------------------------------------------------
+// Add a tree of files and directories in the table of files.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::addDirectoryTree(const QString& path, const QtlDvdDirectory& dir)
+{
+    // Build path to local files.
+    QString parent(path);
+    if (!dir.name().isEmpty()) {
+        parent.append(dir.name());
+        parent.append(QDir::separator());
+    }
+
+    // First, add local files in current directory.
+    foreach (const QtlDvdFile& file, dir.files()) {
+        addFile(parent, file);
+    }
+
+    // Then, add subdirectory trees.
+    foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
+        addDirectoryTree(parent, subdir);
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Add a file in the table of files.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::addFile(const QString& path, const QtlDvdFile& file)
+{
+    // Enlarge the table.
+    const int row = _ui.tableFiles->rowCount();
+    _ui.tableFiles->setRowCount(row + 1);
+    int col = 0;
+
+    // First item is a check box. Also used to store the file description.
+    QTableWidgetItem* item = new QTableWidgetItem();
+    item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    item->setCheckState(Qt::Unchecked);
+    item->setTextAlignment(Qt::AlignCenter);
+    item->setData(Qt::UserRole, QVariant::fromValue(file));
+    _ui.tableFiles->setItem(row, col++, item);
+
+    // Next item is file path.
+    item = new QTableWidgetItem(path + file.name());
+    item->setFlags(Qt::ItemIsEnabled);
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    _ui.tableFiles->setItem(row, col++, item);
+
+    // Next item is file size.
+    item = new QTableWidgetItem(qtlSizeToString(file.sizeInBytes(), 2));
+    item->setFlags(Qt::ItemIsEnabled);
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    _ui.tableFiles->setItem(row, col++, item);
 }
 
 

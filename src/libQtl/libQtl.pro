@@ -158,7 +158,8 @@ HEADERS += \
     QtlDvdDirectory.h \
     QtlLayoutUtils.h \
     QtlCheckableHeaderView.h \
-    QtlFileDialogUtils.h
+    QtlFileDialogUtils.h \
+    QtlDvdMetaTypes.h
 
 FORMS += \
     QtlBrowserDialog.ui \

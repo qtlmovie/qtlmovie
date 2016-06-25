@@ -85,9 +85,11 @@ public:
     //!
     //! Load the description of a title set.
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
+    //! @param [in] dvd If the caller already knows that the file is on a DVD media and this DVD media
+    //! is already open, pass it as an optimization. This is optional, using 0 always works.
     //! @return True on success, false on error.
     //!
-    bool load(const QString& fileName = QString());
+    bool load(const QString& fileName = QString(), const QtlDvdMedia* dvd = 0);
 
     //!
     //! Clear object content.

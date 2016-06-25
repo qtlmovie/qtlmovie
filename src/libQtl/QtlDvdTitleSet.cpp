@@ -137,7 +137,7 @@ void QtlDvdTitleSet::clear()
 // Load the description of a title set.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::load(const QString& fileName)
+bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
 {
     // Reset previous content.
     clear();
@@ -149,17 +149,23 @@ bool QtlDvdTitleSet::load(const QString& fileName)
     }
 
     // Check if the files are on a DVD media.
-    QtlDvdMedia dvd(fileName, _log);
-    if (dvd.isOpen()) {
+    // Use the provided QtlDvdMedia or open a local one.
+    // Opening takes some time, so providing an already open one is faster.
+    QtlDvdMedia dvdLocal(QString(), _log);
+    if (dvd == 0 || !dvd->isOpen()) {
+        dvd = &dvdLocal;
+        dvdLocal.openFromFile(fileName);
+    }
+    if (dvd->isOpen()) {
 
         // Save generic information on the DVD media.
-        _deviceName = dvd.deviceName();
-        _volumeId = dvd.volumeId();
-        _volumeSectors = dvd.volumeSizeInSectors();
-        _isEncrypted = dvd.isEncrypted();
+        _deviceName = dvd->deviceName();
+        _volumeId = dvd->volumeId();
+        _volumeSectors = dvd->volumeSizeInSectors();
+        _isEncrypted = dvd->isEncrypted();
 
         // Look for the starting sector of the VTS.
-        const QtlDvdFile vob(dvd.searchFile(_vobFileNames.first()));
+        const QtlDvdFile vob(dvd->searchFile(_vobFileNames.first()));
         _vobStartSector = vob.startSector();
         if (_vobStartSector < 0) {
             _log->line(tr("Cannot find start sector for %1 on %2").arg(_vobFileNames.first()).arg(_deviceName));

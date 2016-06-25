@@ -25,8 +25,37 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//
-//
-//
+//!
+//! @file QtlDvdMetaTypes.h
+//!
+//! Declare some meta types for DVD handling.
+//! Qtl, Qt utility library.
+//!
 //----------------------------------------------------------------------------
 
+#ifndef QTLDVDMETATYPES_H
+#define QTLDVDMETATYPES_H
+
+#include "QtlSmartPointer.h"
+#include "QtlDvdMedia.h"
+#include "QtlDvdTitleSet.h"
+
+//!
+//! Smart pointer to QtlDvdMedia, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdMedia,QtlNullMutexLocker> QtlDvdMediaPtr;
+
+//!
+//! Smart pointer to QtlDvdTitleSet, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdTitleSet,QtlNullMutexLocker> QtlDvdTitleSetPtr;
+
+//
+//  Meta-types
+//
+Q_DECLARE_METATYPE(QtlDvdMediaPtr)
+Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
+Q_DECLARE_METATYPE(QtlDvdFile)
+Q_DECLARE_METATYPE(QtlDvdDirectory)
+
+#endif // QTLDVDMETATYPES_H

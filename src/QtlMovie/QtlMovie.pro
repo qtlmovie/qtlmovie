@@ -135,3 +135,6 @@ OTHER_FILES += \
 
 TRANSLATIONS += \
     locale/qtlmovie_fr.ts
+
+DISTFILES += \
+    ../HEADER.txt

@@ -50,6 +50,7 @@
 #include "QtlDvdMedia.h"
 #include "QtlDvdDataPull.h"
 #include "QtlByteBlock.h"
+#include "QtlStringUtils.h"
 #include "QtlFile.h"
 #include "dvdcss.h"
 
@@ -78,6 +79,7 @@ QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* paren
     _rootName(),
     _volumeId(),
     _volumeSize(0),
+    _vtsCount(0),
     _dvdcss(0),
     _nextSector(0),
     _rootDirectory()
@@ -253,7 +255,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructu
 
         // Read the complete file structure.
         _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
-        if (!readDirectoryStructure(_rootDirectory, 0)) {
+        if (!readDirectoryStructure(_rootDirectory, 0, true, false)) {
             close();
             return false;
         }
@@ -339,7 +341,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool vobCont
 // Read the file structure under the specified directory.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth)
+bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs)
 {
     // Avoid loops in the file system, limit the depth.
     if (depth > 256) {
@@ -383,13 +385,20 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth)
         if (isDirectory) {
             // Add a directory entry.
             dir._subDirectories.append(QtlDvdDirectory(name, entrySector, entrySize));
-            if (!readDirectoryStructure(dir._subDirectories.last(), depth + 1)) {
+            // Is this directory the root VIDEO_TS?
+            const bool vts = inRoot && name.compare("VIDEO_TS", Qt::CaseInsensitive) == 0;
+            // Explore subdirectory tree.
+            if (!readDirectoryStructure(dir._subDirectories.last(), depth + 1, false, vts)) {
                 return false;
             }
         }
         else {
             // Add a file entry.
             dir._files.append(QtlDvdFile(name, entrySector, entrySize));
+            // Is this a video title set? Must be VTS_nn_0.IFO.
+            if (inVideoTs && vtsInformationFileNumber(name) >= 0) {
+                ++_vtsCount;
+            }
         }
     }
 
@@ -401,7 +410,7 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth)
 // Locate a file in the DVD.
 //----------------------------------------------------------------------------
 
-QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity cs)
+QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity cs) const
 {
     // Can't search file if there is no DVD.
     if (!_isOpen) {
@@ -419,4 +428,31 @@ QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity 
 
     // Search the rest of the path from the root directory.
     return _rootDirectory.searchPath(path, cs);
+}
+
+
+//----------------------------------------------------------------------------
+// Build the full path name of a Video Title Set information file on the DVD.
+//----------------------------------------------------------------------------
+
+QString QtlDvdMedia::vtsInformationFileName(int vtsNumber) const
+{
+    const QString name(QStringLiteral("VIDEO_TS%1VTS_%2_0.IFO").arg(QDir::separator()).arg(vtsNumber, 2, 10, QLatin1Char('0')));
+    return _rootName.isEmpty() ? name : _rootName + QDir::separator() + name;
+}
+
+
+//----------------------------------------------------------------------------
+// Check if a file name matches a Video Title Set information file.
+//----------------------------------------------------------------------------
+
+int QtlDvdMedia::vtsInformationFileNumber(const QString& fileName)
+{
+    const QString name(QFileInfo(fileName).fileName());
+    // Does name match "VTS_nn_0.IFO"?
+    int vts = -1;
+    if (name.length() == 12 && name.startsWith("VTS_", Qt::CaseInsensitive) && name.endsWith("_0.IFO", Qt::CaseInsensitive)) {
+        vts = qtlToInt(name.mid(4, 2)); // -1 if incorrect
+    }
+    return vts;
 }

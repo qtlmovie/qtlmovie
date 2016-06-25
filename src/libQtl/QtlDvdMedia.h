@@ -184,6 +184,17 @@ public:
     int readSectors(void *buffer, int count, int position = -1, bool vobContent = true, bool skipBadSectors = true);
 
     //!
+    //! Get the number of Video Title Sets (VTS) on the DVD.
+    //! This information is not available if the DVD was open using openFromDevice()
+    //! with @a loadFileStructure set to @c false.
+    //! @return The number of Video Title Sets (VTS) on the DVD.
+    //!
+    int vtsCount() const
+    {
+        return _vtsCount;
+    }
+
+    //!
     //! Get a description of the root directory.
     //! Can be used to describe the complete file system on DVD.
     //! This information is not available if the DVD was open using openFromDevice()
@@ -205,7 +216,23 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
+    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+
+    //!
+    //! Build the full path name of a Video Title Set information file on the DVD.
+    //! @param [in] vtsNumber VTS number. It is not necessary that the VTS exists.
+    //! @return The path name of the corresponding .IFO file. It the DVD is open,
+    //! return a full file path. If the DVD is not open, return the file path
+    //! relative to the DVD root.
+    //!
+    QString vtsInformationFileName(int vtsNumber) const;
+
+    //!
+    //! Check if a file name matches a Video Title Set information file (VTS_nn_0.IFO).
+    //! @param [in] fileName File name.
+    //! @return The VTS number ("nn") or -1 if the file is not a valid VTS IFO.
+    //!
+    static int vtsInformationFileNumber(const QString& fileName);
 
 signals:
     //!
@@ -227,6 +254,7 @@ private:
     QString          _rootName;      //!< DVD root directory (ie. mount point).
     QString          _volumeId;      //!< Volume identifier.
     int              _volumeSize;    //!< Volume size in sectors.
+    int              _vtsCount;      //!< Number of video title sets.
     struct dvdcss_s* _dvdcss;        //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
     int              _nextSector;    //!< Next sector to read.
     QtlDvdDirectory  _rootDirectory; //!< Description of root directory
@@ -235,9 +263,11 @@ private:
     //! Read the file structure under the specified directory.
     //! @param [in,out] dir A directory to update.
     //! @param [in] depth Depth in the file system.
+    //! @param [in] inRoot True when @a dir is the root directory of the DVD.
+    //! @param [in] inVideoTs True when @a dir is VIDEO_TS.
     //! @return True on success, false on error.
     //!
-    bool readDirectoryStructure(QtlDvdDirectory& dir, int depth);
+    bool readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs);
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDvdMedia)

@@ -39,8 +39,7 @@
 #include "ui_QtlMovieDvdRipWindow.h"
 #include "QtlMovieMainWindowBase.h"
 #include "QtlFileDialogUtils.h"
-#include "QtlPointerList.h"
-#include "QtlDvdMedia.h"
+#include "QtlDvdMetaTypes.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the DVD Ripper application.
@@ -144,12 +143,42 @@ private:
     void extractionUpdateUi(bool started);
 
     //!
+    //! Get the currently selected DVD.
+    //! @return A pointer to the currently selected DVD or a null pointer if none is selected.
+    //!
+    QtlDvdMediaPtr currentDvd() const;
+
+    //!
     //! Refresh the list of DVD's.
     //!
     void refreshDvdList();
 
-    Ui::QtlMovieDvdRipWindow    _ui;       //!< UI from Qt Designer.
-    QtlPointerList<QtlDvdMedia> _dvdList;  //!< List of detected DVD's.
+    //!
+    //! Refresh the list of video title sets.
+    //!
+    void refreshVtsList();
+
+    //!
+    //! Refresh the list of files.
+    //!
+    void refreshFilesList();
+
+    //!
+    //! Add a file in the table of files.
+    //! @param [in] path Parent path.
+    //! @param [in] file File description.
+    //!
+    void addFile(const QString& path, const QtlDvdFile& file);
+
+    //!
+    //! Add a tree of files and directories in the table of files.
+    //! @param [in] path Parent path.
+    //! @param [in] dir Directory description.
+    //!
+    void addDirectoryTree(const QString& path, const QtlDvdDirectory& dir);
+
+    Ui::QtlMovieDvdRipWindow _ui;       //!< UI from Qt Designer.
+    QList<QtlDvdMediaPtr>    _dvdList;  //!< List of detected DVD's.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlMovieDvdRipWindow)
