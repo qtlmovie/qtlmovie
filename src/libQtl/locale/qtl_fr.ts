@@ -2289,42 +2289,42 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDvdMedia</name>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="165"/>
+        <location filename="../QtlDvdMedia.cpp" line="166"/>
         <source>Device name not found for %1</source>
         <translation>Nom de périphérique introuvable pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="193"/>
+        <location filename="../QtlDvdMedia.cpp" line="194"/>
         <source>Cannot initialize libdvdcss on %1</source>
         <translation>Impossible d&apos;initialiser libdvdcss sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="219"/>
+        <location filename="../QtlDvdMedia.cpp" line="220"/>
         <source>Invalid DVD volume descriptor &quot;%1&quot; instead of &quot;%2&quot;</source>
         <translation>Descripteur de volume DVD invalide: %1 au lieu de %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="248"/>
+        <location filename="../QtlDvdMedia.cpp" line="249"/>
         <source>Cannot locate root directory on %1</source>
         <translation>Impossible de trouver le répertoire racine pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="282"/>
+        <location filename="../QtlDvdMedia.cpp" line="283"/>
         <source>Error seeking DVD to sector %1, seek returned %2</source>
         <translation>Erreur de positionnement du DVD au secteur %1, seek a renvoyé %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="323"/>
+        <location filename="../QtlDvdMedia.cpp" line="324"/>
         <source>Error reading sector %1 on DVD media in %2</source>
         <translation>Erreur de lecture au secteur %1 du DVD dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="345"/>
+        <location filename="../QtlDvdMedia.cpp" line="346"/>
         <source>Too many directory levels in DVD structure, probably incorrect media</source>
         <translation>Trop de niveaux de répertoires sur le DVD, média probablement incorrect</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="353"/>
+        <location filename="../QtlDvdMedia.cpp" line="354"/>
         <source>Error reading DVD directory information at sector %1</source>
         <translation>Erreur de lecture de répertoire au secteur %1</translation>
     </message>

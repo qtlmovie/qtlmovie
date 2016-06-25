@@ -222,158 +222,227 @@ Ligne %3, colonne %4</translation>
         <translation>Extraction de DVD par QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="32"/>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="178"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="79"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="83"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="51"/>
+        <source>ISO</source>
+        <translation>ISO</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="57"/>
+        <source>Full path :</source>
+        <translation>Nom complet :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="64"/>
+        <source>ISO file name :</source>
+        <translation>Fichier ISO :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="95"/>
+        <source>Video Title Sets</source>
+        <translation>Film vidéo (VTS)</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="121"/>
+        <source>Files</source>
+        <translation>Fichiers
+</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="165"/>
+        <source>Input DVD :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="175"/>
+        <source>Refresh</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="182"/>
+        <source>Destination directory :</source>
+        <translation>Répertoire de destination :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="192"/>
+        <source>Browse ...</source>
+        <translation>Parcourir ...</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="217"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="333"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="198"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="202"/>
         <source>Start ...</source>
         <translation>Démarrer ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="118"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="272"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="75"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="125"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="280"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="137"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="292"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="151"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="306"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="159"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="314"/>
         <source>About Qt</source>
         <translation>A propos de Qt</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="167"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="322"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="170"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="325"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="181"/>
-        <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
-    </message>
-    <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="189"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="341"/>
         <source>Transcode ...</source>
         <translation>Transcoder ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="192"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="344"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="479"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="200"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="352"/>
         <source>Settings ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="208"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="360"/>
         <source>Input File Properties ...</source>
         <translation>Propriétés du fichier d&apos;entrée ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="211"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="363"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="219"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="371"/>
         <source>Clear Log</source>
         <translation>Effacer le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="227"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="379"/>
         <source>Save Log ...</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="235"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="387"/>
         <source>Test Audio ...</source>
         <translation>Tester les pistes audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="238"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="390"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="246"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="398"/>
         <source>About Media Tools</source>
         <translation>A propos des outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="254"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="406"/>
         <source>DVD Decrypter ...</source>
         <translation>DVD Decrypter ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="262"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="414"/>
         <source>Help ...</source>
         <translation>Aide ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="273"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="425"/>
         <source>Log Debug</source>
         <translation>Activer le debug</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="281"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="433"/>
         <source>Search New Version</source>
         <translation>Rechercher une nouvelle version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="289"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="441"/>
         <source>Release Notes ...</source>
         <translation>Historique des versions</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="297"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="449"/>
         <source>New Task ...</source>
         <translation>Nouveau ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="300"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="452"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="308"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="460"/>
         <source>Purge Completed Tasks</source>
         <translation>Purger les tâches terminées</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.ui" line="316"/>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="468"/>
         <source>Switch Mode</source>
         <translation>Changer de mode</translation>
     </message>
     <message>
+        <location filename="../QtlMovieDvdRipWindow.ui" line="476"/>
+        <source>Refresh ...</source>
+        <translation>Actualiser ...</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="69"/>
+        <source>VTS</source>
+        <translation>VTS</translation>
+    </message>
+    <message>
         <location filename="../QtlMovieDvdRipWindow.cpp" line="70"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="74"/>
+        <source>Duration</source>
+        <translation>Durée</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="71"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="76"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="189"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="193"/>
         <source>Cancel ...</source>
         <translation>Annuler ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="164"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="362"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.h" line="110"/>
+        <source>DVD extraction directory</source>
+        <translation>Répertoire d&apos;extraction DVD</translation>
     </message>
 </context>
 <context>
@@ -390,7 +459,7 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="34"/>
-        <location filename="../QtlMovieEditSettings.h" line="133"/>
+        <location filename="../QtlMovieEditSettings.h" line="134"/>
         <source>Default input directory</source>
         <translation>Répertoire d&apos;entrée par défaut</translation>
     </message>
@@ -782,36 +851,46 @@ Ligne %3, colonne %4</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="1412"/>
+        <source>DVD extraction</source>
+        <translation>Extraction DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="1418"/>
+        <source>Recreate directory tree when extracting DVD</source>
+        <translation>Recréer l&apos;arborescence des répertoires lors de l&apos;extraction</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="1431"/>
         <source>Log panel</source>
         <translation>Fenêtre de journal (log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1424"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1443"/>
         <source>Max log :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1437"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1456"/>
         <source> lines</source>
         <translation> lignes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1456"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1475"/>
         <source>Clear log before transcoding</source>
         <translation>Effacer le journal avant de transcoder</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1463"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1482"/>
         <source>Save log after transcoding (same name as output file with extension .log)</source>
         <translation>Sauvegarder le journal après le transcodage (même nom que le fichier de sortie avec l&apos;extension .log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1473"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1492"/>
         <source>Version check</source>
         <translation>Recherche de version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1479"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1498"/>
         <source>Automatically search for a new version on startup</source>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
@@ -826,67 +905,67 @@ Ligne %3, colonne %4</translation>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="321"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="322"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="459"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="425"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="472"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="438"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="598"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="564"/>
         <source>%1 bit / second for %2x%3 @%4</source>
         <translation>%1 bit / seconde pour %2x%3 @%4</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="600"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="566"/>
         <source>%1: video quality: %2, width: %3, height: %4, frameRate: %5, bitrate: %6</source>
         <translation>%1: qualité vidéo: %2, largeur: %3, hauteur: %4, débit d&apos;images: %5, débit binaire: %6</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="77"/>
+        <location filename="../QtlMovieEditSettings.h" line="78"/>
         <source>Locate FFmpeg executable</source>
         <translation>Recherche de l&apos;exécutable FFmpeg</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="85"/>
+        <location filename="../QtlMovieEditSettings.h" line="86"/>
         <source>Locate FFprobe executable</source>
         <translation>Recherche de l&apos;exécutable FFprobe</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="93"/>
+        <location filename="../QtlMovieEditSettings.h" line="94"/>
         <source>Locate DvdAuthor executable</source>
         <translation>Recherche de l&apos;exécutable  DVD Author</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="101"/>
+        <location filename="../QtlMovieEditSettings.h" line="102"/>
         <source>Locate Mkisofs executable</source>
         <translation>Recherche de l&apos;exécutable mkisofs</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="109"/>
+        <location filename="../QtlMovieEditSettings.h" line="110"/>
         <source>Locate Growisofs executable</source>
         <translation>Recherche de l&apos;exécutable growisofs</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="117"/>
+        <location filename="../QtlMovieEditSettings.h" line="118"/>
         <source>Locate CCExtractor executable</source>
         <translation>Recherche de l&apos;exécutable CCExtractor</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="125"/>
+        <location filename="../QtlMovieEditSettings.h" line="126"/>
         <source>Locate DvdDecrypter executable</source>
         <translation>Recherche de l&apos;exécutable DVD Decrypter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="141"/>
+        <location filename="../QtlMovieEditSettings.h" line="142"/>
         <source>Default DVD extraction directory</source>
         <translation>Répertoire de sortie par défaut pour l&apos;extraction DVD</translation>
     </message>
@@ -943,49 +1022,49 @@ Ligne %3, colonne %4</translation>
         <translation>Forcer le format d&apos;affichage :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="165"/>
+        <location filename="../QtlMovieEditTask.cpp" line="166"/>
         <source>Open Movie File</source>
         <translation>Ouverture d&apos;un fichier vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="184"/>
+        <location filename="../QtlMovieEditTask.cpp" line="185"/>
         <source>Output Movie File</source>
         <translation>Fichier vidéo de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="209"/>
+        <location filename="../QtlMovieEditTask.cpp" line="205"/>
         <source>Subtitle files (*.srt *.ssa *.ass)</source>
         <translation>Fichiers de sous-titres (*.srt *.ssa *.ass)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="210"/>
+        <location filename="../QtlMovieEditTask.cpp" line="203"/>
         <source>Select Subtitle File</source>
         <translation>Sélection d&apos;un fichier de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="241"/>
+        <location filename="../QtlMovieEditTask.cpp" line="233"/>
         <source>No audio stream in file</source>
         <translation>Aucun flux audio dans le fichier</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="255"/>
+        <location filename="../QtlMovieEditTask.cpp" line="247"/>
         <source>Internal error, cannot get output file type</source>
         <translation>Erreur interne, impossible de déterminer le type de fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="262"/>
+        <location filename="../QtlMovieEditTask.cpp" line="254"/>
         <source>Cannot burn DVD, specify the burning device in settings</source>
         <translation>Impossible de graver un DVD, spécifier d&apos;abord le nom du graveur dans les options</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="308"/>
+        <location filename="../QtlMovieEditTask.cpp" line="300"/>
         <source>File not found or invalid subtitle file:
 %1</source>
         <translation>Fichier de sous-titres introuvable ou incorrect:
 %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditTask.cpp" line="362"/>
+        <location filename="../QtlMovieEditTask.cpp" line="354"/>
         <source>Internal error, invalid stream type</source>
         <translation>Erreur interne, type de flux invalide</translation>
     </message>
@@ -1568,32 +1647,32 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieMainWindowBase</name>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="216"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="217"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="264"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="266"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="274"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="276"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="275"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="277"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="290"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="292"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="306"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="308"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>
