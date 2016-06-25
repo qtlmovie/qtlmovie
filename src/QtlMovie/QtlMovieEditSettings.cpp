@@ -254,6 +254,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.boxOutputType->checkId(int (_settings->defaultOutputType()));
     _ui.checkOriginalAudio->setChecked(_settings->selectOriginalAudio());
     _ui.checkTargetSubtitles->setChecked(_settings->selectTargetSubtitles());
+    _ui.checkDvdExtractDirTree->setChecked(_settings->dvdExtractDirTree());
 
     // Update max bit rates according to video qualities.
     updateMaxBitRates();
@@ -380,6 +381,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDefaultOutputType(QtlMovieOutputFile::OutputType(_ui.boxOutputType->checkedId()));
     _settings->setSelectOriginalAudio(_ui.checkOriginalAudio->isChecked());
     _settings->setSelectTargetSubtitles(_ui.checkTargetSubtitles->isChecked());
+    _settings->setDvdExtractDirTree(_ui.checkDvdExtractDirTree->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

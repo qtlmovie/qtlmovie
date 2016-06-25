@@ -75,6 +75,7 @@
 #define QTL_SELECT_ORIGINAL_AUDIO           true  //!< Automatically select original audio track.
 #define QTL_SELECT_TARGET_SUBTITLES         true  //!< Automatically select subtitles for the target language.
 #define QTL_CAPITALIZE_CC                  false  //!< Capitalize US Closed Captions (suppress ALL CAPS).
+#define QTL_DVD_EXTRACT_DIR_TREE            true  //!< Recreate directory tree when extracting DVD.
 
 //
 // Transcoding presets.

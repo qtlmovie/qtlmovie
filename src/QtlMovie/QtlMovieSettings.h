@@ -210,6 +210,7 @@ public:
     QTL_SETTINGS_BOOL(selectTargetSubtitles, setSelectTargetSubtitles, QTL_SELECT_TARGET_SUBTITLES)
     QTL_SETTINGS_BOOL(capitalizeClosedCaptions, setCapitalizeClosedCaptions, QTL_CAPITALIZE_CC)
     QTL_SETTINGS_STRING(defaultDvdExtractionDir, setDefaultDvdExtractionDir, "")
+    QTL_SETTINGS_BOOL(dvdExtractDirTree, setDvdExtractDirTree, QTL_DVD_EXTRACT_DIR_TREE)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

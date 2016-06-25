@@ -1407,6 +1407,25 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBoxDvdExtraction">
+         <property name="title">
+          <string>DVD extraction</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QCheckBox" name="checkDvdExtractDirTree">
+            <property name="text">
+             <string>Recreate directory tree when extracting DVD</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBoxLog">
          <property name="title">
           <string>Log panel</string>
