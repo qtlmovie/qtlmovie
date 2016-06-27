@@ -86,6 +86,15 @@ public:
     {
         return _size;
     }
+    //!
+    //! Get the file size in sectors.
+    //! @return The file size in sectors.
+    //!
+    int sectorCount() const
+    {
+        // Cannot use QtlDvdMedia::DVD_SECTOR_SIZE here because of header inclusion order.
+        return _size / 2048 + int(_size % 2048 > 0);
+    }
 protected:
     QString _name;    //!< File name.
     int     _sector;  //!< First sector on DVD media.

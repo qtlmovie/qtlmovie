@@ -40,6 +40,11 @@
 #include "QtlTableWidgetUtils.h"
 #include "QtlCheckableHeaderView.h"
 
+// List of tabs:
+#define QTL_TAB_ISO    0
+#define QTL_TAB_VTS    1
+#define QTL_TAB_FILES  2
+
 
 //-----------------------------------------------------------------------------
 // Constructor.
@@ -47,7 +52,8 @@
 
 QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
     QtlMovieMainWindowBase(parent, logDebug),
-    _dvdList()
+    _dvdList(),
+    _extraction(0)
 {
     // Build the UI as defined in Qt Designer.
     _ui.setupUi(this);
@@ -85,6 +91,23 @@ QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
 
 
 //-----------------------------------------------------------------------------
+// Event handler to handle window close.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::closeEvent(QCloseEvent* event)
+{
+    // Let the superclass handle the event.
+    QtlMovieMainWindowBase::closeEvent(event);
+
+    // If the event was accepted by the superclass, save our state.
+    if (event->isAccepted()) {
+        settings()->saveState(_ui.splitter);
+        settings()->sync();
+    }
+}
+
+
+//-----------------------------------------------------------------------------
 // Common setup for the VTS and Files tables.
 //-----------------------------------------------------------------------------
 
@@ -111,19 +134,33 @@ void QtlMovieDvdRipWindow::setupTable(QTableWidget* table)
 
 
 //-----------------------------------------------------------------------------
-// Event handler to handle window close.
+// Apply the settings which affect the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::closeEvent(QCloseEvent* event)
+void QtlMovieDvdRipWindow::applyUserInterfaceSettings()
 {
-    // Let the superclass handle the event.
-    QtlMovieMainWindowBase::closeEvent(event);
-
-    // If the event was accepted by the superclass, save our state.
-    if (event->isAccepted()) {
-        settings()->saveState(_ui.splitter);
-        settings()->sync();
+    _ui.log->setMaximumBlockCount(settings()->maxLogLines());
+    if (_ui.editDestination->text().isEmpty()) {
+        _ui.editDestination->setText(settings()->defaultDvdExtractionDir());
     }
+}
+
+
+//-----------------------------------------------------------------------------
+// Update the label containing the ISO full path.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::updateIsoFullPath()
+{
+    QString path(_ui.editDestination->text());
+    if (!path.isEmpty()) {
+        path.append(QDir::separator());
+    }
+    path.append(_ui.editIsoFile->text());
+    if (!path.endsWith(".iso", Qt::CaseInsensitive)) {
+        path.append(".iso");
+    }
+    _ui.valueFullPath->setText(QtlFile::absoluteNativeFilePath(path));
 }
 
 
@@ -154,9 +191,10 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
         connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::startExtraction);
     }
 
-    // Enable / disable other buttons.
+    // Enable / disable other widgets.
     _ui.actionRefresh->setEnabled(!started);
     _ui.buttonRefreshDvd->setEnabled(!started);
+    _ui.tabDvd->setEnabled(!started);
 
     // Set the progress bar.
     // When extraction starts, we set the maximum to zero to force a "busy" bar.
@@ -349,7 +387,132 @@ void QtlMovieDvdRipWindow::addDirectoryTree(const QString& path, const QtlDvdDir
 
 void QtlMovieDvdRipWindow::startExtraction()
 {
-    //@@@@
+    // Fool-proof check.
+    if (_extraction != 0) {
+        log()->line(tr("Internal error, DVD extraction already created."));
+        return;
+    }
+
+    // Get currently selected DVD.
+    QtlDvdMediaPtr dvd(currentDvd());
+    if (dvd.isNull() || !dvd->isOpen()) {
+        log()->line(tr("No DVD found, try to refresh"));
+        return;
+    }
+
+    // Create a DVD extraction object.
+    _extraction = new QtlMovieDvdExtraction(dvd->deviceName(), settings(), log(), this);
+
+    // Select the various extraction. This depends on the mode, extraction of ISO, VTS or files.
+    switch (_ui.tabDvd->currentIndex()) {
+        case QTL_TAB_ISO: {
+            // Only one big file to extract.
+            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors());
+            break;
+        }
+        case QTL_TAB_VTS: {
+            // Loop on all rows in the title set table.
+            for (int row = 0; row < _ui.tableTitleSets->rowCount(); ++ row) {
+                // Get cell in first column and see if it is checked.
+                // The second cell contains the file path with directory.
+                QTableWidgetItem* item1 = _ui.tableTitleSets->item(row, 0);
+                QTableWidgetItem* item2 = _ui.tableTitleSets->item(row, 1);
+                if (item1 != 0 && item1->checkState() == Qt::Checked && item2 != 0) {
+                    // We need to extract this title set.
+                    // The first cell is used to store the title set description.
+                    const QtlDvdTitleSetPtr vts(item1->data(Qt::UserRole).value<QtlDvdTitleSetPtr>());
+                    const int vtsNumber = qtlToInt(item2->text());
+                    if (!vts.isNull() && vtsNumber > 0) {
+                        addFileForExtraction(*dvd, dvd->vtsInformationFile(vtsNumber));
+                        for (int vob = 1; vob <= vts->vobCount(); ++ vob) {
+                            addFileForExtraction(*dvd, dvd->vtsVideoFile(vtsNumber, vob));
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case QTL_TAB_FILES: {
+            // Loop on all rows in the file table.
+            for (int row = 0; row < _ui.tableFiles->rowCount(); ++ row) {
+                // Get cell in first column and see if it is checked.
+                // The second cell contains the file path with directory.
+                QTableWidgetItem* item1 = _ui.tableFiles->item(row, 0);
+                QTableWidgetItem* item2 = _ui.tableFiles->item(row, 1);
+                if (item1 != 0 && item1->checkState() == Qt::Checked && item2 != 0) {
+                    // We need to extract this file.
+                    // The first cell is used to store the file description.
+                    const QtlDvdFile file(item1->data(Qt::UserRole).value<QtlDvdFile>());
+                    addFileForExtraction(*dvd, file, item2->text());
+                }
+            }
+            break;
+        }
+        default: {
+            log()->line(tr("Internal error, wrong tab index %1").arg(_ui.tabDvd->currentIndex()));
+            break;
+        }
+    }
+
+    // Make sure we have something selected.
+    if (_extraction->remainingTransferCount() <= 0) {
+        log()->line(tr("Nothing to extract"));
+        delete _extraction;
+        _extraction = 0;
+        return;
+    }
+
+    // If some output files already exist, ask confirmation.
+    if (!_extraction->askOverwriteOutput()) {
+        // Don't overwrite, give up.
+        log()->line(tr("Overwritting output files denied"));
+        delete _extraction;
+        _extraction = 0;
+        return;
+    }
+
+    // Get notifications from the extraction object.
+    connect(_extraction, &QtlMovieDvdExtraction::started, this, &QtlMovieDvdRipWindow::extractionStarted);
+    connect(_extraction, &QtlMovieDvdExtraction::progress, this, &QtlMovieDvdRipWindow::extractionProgress);
+    connect(_extraction, &QtlMovieDvdExtraction::completed, this, &QtlMovieDvdRipWindow::extractionStopped);
+
+    // Start the job.
+    if (!_extraction->start()) {
+       // Error starting the job, delete it now.
+        delete _extraction;
+        _extraction = 0;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Add a file in the current extraction.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdMedia& dvd, const QtlDvdFile& file, const QString& fullPath)
+{
+    // Check the validity of the file.
+    if (file.startSector() < 0) {
+        log()->line(tr("File %1 not found on DVD").arg(fullPath));
+        return;
+    }
+
+    // Output file path.
+    QString outputPath(_ui.editDestination->text());
+    if (!outputPath.isEmpty()) {
+        outputPath.append(QDir::separator());
+    }
+    if (settings()->dvdExtractDirTree() && !fullPath.isEmpty()) {
+        outputPath.append(fullPath);
+    }
+    else {
+        outputPath.append(file.name());
+    }
+
+    // Add the file.
+    if (_extraction != 0) {
+        _extraction->addFile(outputPath, file.startSector(), file.sectorCount());
+    }
 }
 
 
@@ -421,11 +584,7 @@ void QtlMovieDvdRipWindow::extractionProgress(const QString& description, int cu
     }
 
     // Update the Windows task bar button.
-    /*@@@@
-    if (_job != 0) {
-        setIconTaskBarValue(_job->currentProgress(current, maximum, iconTaskBarMaximumValue()));
-    }
-    @@@@@*/
+    setIconTaskBarValue(current, maximum);
 }
 
 
@@ -436,24 +595,17 @@ void QtlMovieDvdRipWindow::extractionProgress(const QString& description, int cu
 void QtlMovieDvdRipWindow::extractionStopped(bool success)
 {
     // Check if a extraction job was actually in progress.
-    //@@@ if (_job != 0) {
+    if (_extraction != 0) {
 
         // Play notification sound at complete end of all jobs.
         if (settings()->playSoundOnCompletion()) {
             playNotificationSound();
         }
 
-        // Save log file if required.
-        if (settings()->saveLogAfterTranscode()) {
-            //@@@@ const QString logFile(_job->task()->outputFile()->fileName() + settings()->logFileExtension());
-            //@@@@ _ui.log->saveToFile(logFile);
-            //@@@@ log()->line(tr("Saved log to %1").arg(logFile));
-        }
-
         // Delete extraction job.
-        //@@@@ _job->deleteLater();
-        //@@@@ _job = 0;
-    //@@@@ }
+        _extraction->deleteLater();
+        _extraction = 0;
+    }
 
     // Update UI.
     extractionUpdateUi(false);
@@ -471,36 +623,38 @@ void QtlMovieDvdRipWindow::extractionStopped(bool success)
 
 QtlMovieDvdRipWindow::CancelStatus QtlMovieDvdRipWindow::proposeToCancel()
 {
-    return NothingToCancel;  //@@@@
-}
+    // If there is nothing to cancel now, no need to ask.
+    if (_extraction == 0) {
+        return NothingToCancel;
+    }
 
+    // Ask the user if we should cancel the current extraction?
+    const bool confirm = qtlConfirm(this, tr("Do you want to abort the current DVD extraction ?"));
 
-//-----------------------------------------------------------------------------
-// Apply the settings which affect the UI.
-//-----------------------------------------------------------------------------
-
-void QtlMovieDvdRipWindow::applyUserInterfaceSettings()
-{
-    _ui.log->setMaximumBlockCount(settings()->maxLogLines());
-    if (_ui.editDestination->text().isEmpty()) {
-        _ui.editDestination->setText(settings()->defaultDvdExtractionDir());
+    if (_extraction == 0) {
+        // If extraction completed in the meantime, all clear...
+        return NothingToCancel;
+    }
+    else if (!confirm) {
+        // The user refused to cancel and the extraction is still in progress, refuse.
+        return CancelRefused;
+    }
+    else {
+        // A extraction is in progress and the user decided to abort it.
+        // Defer the actual abort() when back in event loop.
+        QMetaObject::invokeMethod(this, "deferredAbort", Qt::QueuedConnection);
+        return CancelInProgress;
     }
 }
 
 
 //-----------------------------------------------------------------------------
-// Update the label containing the ISO full path.
+// Abort the extraction, using a slot to defer the abort when back in the event loop.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::updateIsoFullPath()
+void QtlMovieDvdRipWindow::deferredAbort()
 {
-    QString path(_ui.editDestination->text());
-    if (!path.isEmpty()) {
-        path.append(QDir::separator());
+    if (_extraction != 0) {
+        _extraction->abort();
     }
-    path.append(_ui.editIsoFile->text());
-    if (!path.endsWith(".iso", Qt::CaseInsensitive)) {
-        path.append(".iso");
-    }
-    _ui.valueFullPath->setText(QtlFile::absoluteNativeFilePath(path));
 }

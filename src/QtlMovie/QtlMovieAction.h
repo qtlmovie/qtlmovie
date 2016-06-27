@@ -103,7 +103,7 @@ public:
     virtual void abort();
 
     //!
-    //! Check if the action was started (and possible completed in the meantime).
+    //! Check if the action was started (and possibly completed in the meantime).
     //! @return True if the action was started.
     //!
     bool isStarted() const

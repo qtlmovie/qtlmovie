@@ -333,9 +333,52 @@ QString QtlFile::parentPath(const QString& path, int upLevels)
 {
     QFileInfo info(path);
     while (upLevels-- > 0) {
-        info = QFileInfo(info.absolutePath());
+        info.setFile(info.absolutePath());
     }
     return absoluteNativeFilePath(info.absoluteFilePath());
+}
+
+
+//-----------------------------------------------------------------------------
+// Create a directory and all parent directories if necessary.
+//-----------------------------------------------------------------------------
+
+bool QtlFile::createDirectory(const QString& path, bool createOnly)
+{
+    // Avoid looping forever.
+    int foolProof = 1024;
+
+    // Iterate over parents until one is found, keep path elements to create.
+    QFileInfo info(absoluteNativeFilePath(path));
+    QStringList subdirs;
+    while (!info.isDir()) {
+        // When too many levels of parents, this is suspect, abort.
+        // If something with that name exists, this is not a directory, abort.
+        // If we reached a root that is not a directory, abort.
+        if (--foolProof < 0 || info.exists() || info.isRoot()) {
+            return false;
+        }
+        // Push local name.
+        subdirs.prepend(info.fileName());
+        // Now examine parent.
+        info.setFile(info.path());
+    }
+
+    // If the directory already exists and createOnly is true, this is an error.
+    if (createOnly && subdirs.isEmpty()) {
+        return false;
+    }
+
+    // Now create all levels of directory.
+    QDir dir(info.filePath());
+    while (!subdirs.isEmpty()) {
+        const QString name(subdirs.takeFirst());
+        if (!dir.mkdir(name)) {
+            return false;
+        }
+        dir.setPath(dir.path() + QDir::separator() + name);
+    }
+    return true;
 }
 
 

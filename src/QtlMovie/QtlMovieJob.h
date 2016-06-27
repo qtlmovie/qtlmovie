@@ -35,7 +35,6 @@
 #ifndef QTLMOVIEJOB_H
 #define QTLMOVIEJOB_H
 
-#include <QtCore>
 #include "QtlMovieAction.h"
 #include "QtlMovieTask.h"
 #include "QtlMessageBoxUtils.h"

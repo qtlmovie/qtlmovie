@@ -50,6 +50,7 @@
 #include "QtlDvdMedia.h"
 #include "QtlDvdDataPull.h"
 #include "QtlByteBlock.h"
+#include "QtlStringList.h"
 #include "QtlStringUtils.h"
 #include "QtlFile.h"
 #include "dvdcss.h"
@@ -439,6 +440,39 @@ QString QtlDvdMedia::vtsInformationFileName(int vtsNumber) const
 {
     const QString name(QStringLiteral("VIDEO_TS%1VTS_%2_0.IFO").arg(QDir::separator()).arg(vtsNumber, 2, 10, QLatin1Char('0')));
     return _rootName.isEmpty() ? name : _rootName + QDir::separator() + name;
+}
+
+
+//----------------------------------------------------------------------------
+// Build the full path name of a Video Title Set video file on the DVD.
+//----------------------------------------------------------------------------
+
+QString QtlDvdMedia::vtsVideoFileName(int vtsNumber, int vobIndex) const
+{
+    const QString name(QStringLiteral("VIDEO_TS%1VTS_%2_%3.VOB").arg(QDir::separator()).arg(vtsNumber, 2, 10, QLatin1Char('0')).arg(vobIndex));
+    return _rootName.isEmpty() ? name : _rootName + QDir::separator() + name;
+}
+
+
+//----------------------------------------------------------------------------
+// Get the description of a Video Title Set information file on the DVD.
+//----------------------------------------------------------------------------
+
+QtlDvdFile QtlDvdMedia::vtsInformationFile(int vtsNumber) const
+{
+    const QString name(QStringLiteral("VTS_%1_0.IFO").arg(vtsNumber, 2, 10, QLatin1Char('0')));
+    return _rootDirectory.searchPath(QtlStringList("VIDEO_TS", name));
+}
+
+
+//----------------------------------------------------------------------------
+// Get the description of a Video Title Set video file on the DVD.
+//----------------------------------------------------------------------------
+
+QtlDvdFile QtlDvdMedia::vtsVideoFile(int vtsNumber, int vobIndex) const
+{
+    const QString name(QStringLiteral("VTS_%1_%2.VOB").arg(vtsNumber, 2, 10, QLatin1Char('0')).arg(vobIndex));
+    return _rootDirectory.searchPath(QtlStringList("VIDEO_TS", name));
 }
 
 

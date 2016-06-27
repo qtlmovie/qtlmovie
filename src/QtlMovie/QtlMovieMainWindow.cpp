@@ -364,8 +364,21 @@ QtlMovieMainWindow::CancelStatus QtlMovieMainWindow::proposeToCancel()
     }
     else {
         // A transcoding is in progress and the user decided to abort it.
-        _job->abort();
+        // Defer the actual abort() when back in event loop.
+        QMetaObject::invokeMethod(this, "deferredAbort", Qt::QueuedConnection);
         return CancelInProgress;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Abort the extraction, using a slot to defer the abort when back in the event loop.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindow::deferredAbort()
+{
+    if (_job != 0) {
+        _job->abort();
     }
 }
 

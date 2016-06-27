@@ -228,6 +228,31 @@ public:
     QString vtsInformationFileName(int vtsNumber) const;
 
     //!
+    //! Build the full path name of a Video Title Set video file on the DVD.
+    //! @param [in] vtsNumber VTS number. It is not necessary that the VTS exists.
+    //! @param [in] vobIndex Index of the VOB file, starting at 1.
+    //! @return The path name of the corresponding .VOB file. It the DVD is open,
+    //! return a full file path. If the DVD is not open, return the file path
+    //! relative to the DVD root.
+    //!
+    QString vtsVideoFileName(int vtsNumber, int vobIndex) const;
+
+    //!
+    //! Get the description of a Video Title Set information file on the DVD.
+    //! @param [in] vtsNumber VTS number.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile vtsInformationFile(int vtsNumber) const;
+
+    //!
+    //! Get the description of a Video Title Set video file on the DVD.
+    //! @param [in] vtsNumber VTS number.
+    //! @param [in] vobIndex Index of the VOB file, starting at 1.
+    //! @return Description of the file. Return an invalid file if not found.
+    //!
+    QtlDvdFile vtsVideoFile(int vtsNumber, int vobIndex) const;
+
+    //!
     //! Check if a file name matches a Video Title Set information file (VTS_nn_0.IFO).
     //! @param [in] fileName File name.
     //! @return The VTS number ("nn") or -1 if the file is not a valid VTS IFO.

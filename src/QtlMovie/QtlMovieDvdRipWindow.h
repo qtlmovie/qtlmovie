@@ -38,6 +38,7 @@
 
 #include "ui_QtlMovieDvdRipWindow.h"
 #include "QtlMovieMainWindowBase.h"
+#include "QtlMovieDvdExtraction.h"
 #include "QtlFileDialogUtils.h"
 #include "QtlDvdMetaTypes.h"
 
@@ -62,28 +63,27 @@ private slots:
     //! Invoked by the "Refresh ..." buttons.
     //!
     void refresh();
-
     //!
     //! Invoked by the "Start ..." buttons.
     //!
     void startExtraction();
-
     //!
     //! Invoked by the "Cancel ..." buttons.
     //!
     void cancelExtraction();
-
+    //!
+    //! Abort the extraction, using a slot to defer the abort when back in the event loop.
+    //!
+    void deferredAbort();
     //!
     //! Invoked when extraction starts.
     //!
     void extractionStarted();
-
     //!
     //! Invoked when extraction stops.
     //! @param [in] success Indicates whether the extraction succeeded or failed.
     //!
     void extractionStopped(bool success);
-
     //!
     //! Invoked when some progress is made in the extraction process.
     //! @param [in] description The description of the current process.
@@ -95,12 +95,10 @@ private slots:
     //! Negative if the remaining time cannot be estimated.
     //!
     void extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
-
     //!
     //! Update the label containing the ISO full path.
     //!
     void updateIsoFullPath();
-
     //!
     //! Invoked by the "Browse..." button for the output directory for DVD extraction.
     //!
@@ -164,14 +162,23 @@ private:
     void refreshFilesList();
 
     //!
+    //! Add a file in the current extraction.
+    //! @param [in] dvd DVD media.
+    //! @param [in] file File description.
+    //! @param [in] fullPath Full path of the file from DVD root. If omitted, use simple file name.
+    //!
+    void addFileForExtraction(const QtlDvdMedia& dvd, const QtlDvdFile& file, const QString& fullPath = QString());
+
+    //!
     //! Add a tree of files and directories in the table of files.
     //! @param [in] path Parent path.
     //! @param [in] dir Directory description.
     //!
     void addDirectoryTree(const QString& path, const QtlDvdDirectory& dir);
 
-    Ui::QtlMovieDvdRipWindow _ui;       //!< UI from Qt Designer.
-    QList<QtlDvdMediaPtr>    _dvdList;  //!< List of detected DVD's.
+    Ui::QtlMovieDvdRipWindow _ui;          //!< UI from Qt Designer.
+    QList<QtlDvdMediaPtr>    _dvdList;     //!< List of detected DVD's.
+    QtlMovieDvdExtraction*   _extraction;  //!< Current extraction.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlMovieDvdRipWindow)

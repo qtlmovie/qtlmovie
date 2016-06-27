@@ -114,8 +114,9 @@ public:
     //!
     //! Set the value of the task bar in the application's icon.
     //! @param [in] value The value to set, between zero and iconTaskBarMaximumValue().
+    //! @param [in] maximum If positive, then also set the maximum value.
     //!
-    void setIconTaskBarValue(int value);
+    void setIconTaskBarValue(int value, int maximum = -1);
 
 public slots:
     //!

@@ -156,10 +156,13 @@ int QtlMovieMainWindowBase::iconTaskBarMaximumValue() const
     return 100; // typically a percentage
 }
 
-void QtlMovieMainWindowBase::setIconTaskBarValue(int value)
+void QtlMovieMainWindowBase::setIconTaskBarValue(int value, int maximum)
 {
 #if defined(QTL_WINEXTRAS)
     if (_taskbarProgress != 0) {
+        if (maximum > 0) {
+            _taskbarProgress->setMaximum(maximum);
+        }
         _taskbarProgress->setValue(value);
     }
 #endif

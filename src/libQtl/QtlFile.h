@@ -190,6 +190,15 @@ public:
     static QString parentPath(const QString& path, int upLevels = 1);
 
     //!
+    //! Create a directory and all parent directories if necessary.
+    //! @param [in] path Directory path to create.
+    //! @param [in] createOnly If true, the directory must be created, meaning that
+    //! the operation fails if the directory already exists.
+    //! @return True on success, false on error.
+    //!
+    static bool createDirectory(const QString& path, bool createOnly = false);
+
+    //!
     //! Search a subdirectory in the parent path.
     //!
     //! First the subdirectory @a subdir is searched in the directory @a dir.

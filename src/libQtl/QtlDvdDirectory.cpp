@@ -68,7 +68,7 @@ QtlDvdFile QtlDvdDirectory::searchFile(const QString& fileName, Qt::CaseSensitiv
             return file;
         }
     }
-    return QtlDvdFile();
+    return QtlDvdFile(fileName);
 }
 
 QtlDvdFile QtlDvdDirectory::searchPath(const QString& path, Qt::CaseSensitivity cs) const
@@ -98,5 +98,5 @@ QtlDvdFile QtlDvdDirectory::searchPath(QStringList::ConstIterator begin, QString
         }
     }
     // Not found
-    return QtlDvdFile();
+    return QtlDvdFile(*(end - 1));
 }

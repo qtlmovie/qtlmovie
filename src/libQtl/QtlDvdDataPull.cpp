@@ -60,8 +60,8 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     const qint64 total = qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE;
     setProgressMaxHint(total);
 
-    // Set progress interval: every 5% below 100 MB, every 1% above.
-    setProgressIntervalInBytes(total < 100000000 ? total / 20 : total / 100);
+    // Set progress interval: every 1 MB.
+    setProgressIntervalInBytes(1024 * 1024);
 }
 
 

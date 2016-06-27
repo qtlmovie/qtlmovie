@@ -78,6 +78,10 @@ private slots:
     //!
     void cancelTranscoding();
     //!
+    //! Abort the transcoding, using a slot to defer the abort when back in the event loop.
+    //!
+    void deferredAbort();
+    //!
     //! Invoked by the "DVD Extraction..." button.
     //!
     void startDvdExtraction();
@@ -111,13 +115,6 @@ private slots:
     void transcodingProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
 
 private:
-    //!
-    //! Start the first transcoding in the list.
-    //! In case of failure, clear the complete list of transcodings.
-    //! @return True if the transcoding started successfully, false otherwise.
-    //!
-    bool startFirstTranscoding();
-
     //!
     //! Check if an encoding is currently in progress and propose to abort it.
     //! If the user accept to abort it, start the cancelation. The completion
