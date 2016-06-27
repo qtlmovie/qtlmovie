@@ -46,7 +46,7 @@
 //! @param [in] alignment Header alignment.
 //! @return The created item.
 //!
-QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment = Qt::AlignLeft);
+QTableWidgetItem* qtlSetTableHorizontalHeader(QTableWidget* table, int column, const QString& text, int alignment = Qt::AlignLeft | Qt::AlignVCenter);
 
 //!
 //! Remove all items in a row of a QTableWidget and return them.
@@ -59,18 +59,29 @@ QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row);
 //!
 //! Set all items in a row of a QTableWidget.
 //! @param [in,out] table The table to modify.
-//! @param [in] row The row to set.
+//! @param [in] row The row to set. If outside the table size, the table is enlarged.
 //! @param [in] items A list of items to set. The QTableWidget takes ownership of the items.
+//! @return The row number. This may not be identical to @a row if automatic sorting was enabled.
 //!
-void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items);
+int qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items);
 
 //!
 //! Set the texts of all items in a row of a QTableWidget.
 //! @param [in,out] table The table to modify.
-//! @param [in] row The row to set.
+//! @param [in] row The row to set. If outside the table size, the table is enlarged.
 //! @param [in] texts The texts to set in the various columns of the row.
+//! @param [in] copyHeaderTextAlignment If true, set the text alignment to the same value as the header of the same column.
+//! @param [in] flags The flags to set in all cells in this row. If @a checkBoxColumn is non-negative, the cell with the
+//! checkbox automatically has flags @c Qt::ItemIsUserCheckable and @c Qt::ItemIsEnabled.
+//! @param [in] checkBoxColumn Add a checkbox in this column. Ignored if negative.
+//! @return The row number. This may not be identical to @a row if automatic sorting was enabled.
 //!
-void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts);
+int qtlSetTableRow(QTableWidget* table,
+                   int row,
+                   const QStringList& texts,
+                   bool copyHeaderTextAlignment = false,
+                   Qt::ItemFlags flags = Qt::ItemIsEnabled,
+                   int checkBoxColumn = -1);
 
 //!
 //! Set the text style of a region of a QTableWidget.

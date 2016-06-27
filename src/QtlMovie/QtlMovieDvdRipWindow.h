@@ -164,13 +164,6 @@ private:
     void refreshFilesList();
 
     //!
-    //! Add a file in the table of files.
-    //! @param [in] path Parent path.
-    //! @param [in] file File description.
-    //!
-    void addFile(const QString& path, const QtlDvdFile& file);
-
-    //!
     //! Add a tree of files and directories in the table of files.
     //! @param [in] path Parent path.
     //! @param [in] dir Directory description.

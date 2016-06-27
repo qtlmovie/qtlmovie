@@ -78,9 +78,16 @@ QList<QTableWidgetItem*> qtlTakeTableRow(QTableWidget* table, int row)
 // Set all items in a row of a QTableWidget.
 //-----------------------------------------------------------------------------
 
-void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items)
+int qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>& items)
 {
-    if (table != 0 && !items.isEmpty() && row >= 0 && row < table->rowCount()) {
+    if (table != 0 && !items.isEmpty() && row >= 0) {
+
+        // Enlarge the table if required.
+        if (row >= table->rowCount()) {
+            table->setRowCount(row + 1);
+        }
+
+        // Set all columns in the row.
         for (int column = 0; column < items.size() && column < table->columnCount(); ++column) {
             QTableWidgetItem* const item = items[column];
             if (item != 0) {
@@ -90,6 +97,8 @@ void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>
             }
         }
     }
+
+    return row;
 }
 
 
@@ -97,20 +106,49 @@ void qtlSetTableRow(QTableWidget* table, int row, const QList<QTableWidgetItem*>
 // Set the texts of all items in a row of a QTableWidget.
 //-----------------------------------------------------------------------------
 
-void qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts)
+int qtlSetTableRow(QTableWidget* table, int row, const QStringList& texts, bool copyHeaderTextAlignment, Qt::ItemFlags flags, int checkBoxColumn)
 {
-    if (table != 0 && !texts.isEmpty() && row >= 0 && row < table->rowCount()) {
+    if (table != 0 && !texts.isEmpty() && row >= 0) {
+
+        // Enlarge the table if required.
+        if (row >= table->rowCount()) {
+            table->setRowCount(row + 1);
+        }
+
+        // Set all columns in the row.
         for (int column = 0; column < texts.size() && column < table->columnCount(); ++column) {
+
             // Get the item, create it if necessary.
             QTableWidgetItem* item = table->item(row, column);
             if (item == 0) {
                 item = new QTableWidgetItem();
                 table->setItem(row, column, item);
             }
+
             // Update the text in the item.
             item->setText(texts[column]);
+            item->setFlags(flags);
+
+            // Copy text alignment from header if requested.
+            if (copyHeaderTextAlignment) {
+                QTableWidgetItem* header = table->horizontalHeaderItem(column);
+                if (header != 0) {
+                    item->setTextAlignment(header->textAlignment());
+                }
+            }
+
+            // Add a checkbox if requested.
+            if (column == checkBoxColumn) {
+                item->setFlags(flags | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+                item->setCheckState(Qt::Unchecked);
+            }
+
+            // The row may have changed if automatic sorting was enabled.
+            row = item->row();
         }
     }
+
+    return row;
 }
 
 
