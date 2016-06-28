@@ -60,10 +60,6 @@ QtlMovieMainWindowBase::QtlMovieMainWindowBase(QWidget *parent, bool logDebug) :
     _sound(),
     _closePending(false)
 {
-    // In debug mode, set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
-    if (logDebug) {
-        qputenv("DVDCSS_VERBOSE", "2");
-    }
 }
 
 

@@ -112,9 +112,6 @@ int QtlTestDvd::run(const QStringList& args)
     const QString output(args.size() < 2 ? "" : (args[1] != "-" ? args[1] : QProcess::nullDevice()));
     int sectorCount = args.size() < 3 ? -1 : args[2].toInt();
 
-    // Set DVDCSS_VERBOSE=2 for verbose logs from libdvdcss.
-    qputenv("DVDCSS_VERBOSE", "2");
-
     // Load DVD media description.
     QtlDvdMedia dvd(input, &log);
 

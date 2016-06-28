@@ -77,6 +77,10 @@ struct dvdcss_s
 
     void                *p_stream;
     dvdcss_stream_cb    *p_stream_cb;
+
+    /* TL: Extended error log */
+    dvdcss_log   p_log;
+    void       * p_log_param;
 };
 
 /*****************************************************************************

@@ -123,6 +123,26 @@ void QtlDvdMedia::close()
 
 
 //----------------------------------------------------------------------------
+// A function that can be used as message logger by libdvdcss.
+// Require a modified version of libdvdcss.
+// The logParam must be a QtlLogger*.
+//----------------------------------------------------------------------------
+
+extern "C" void dvdMessageLogger(void* logParam, int debug, const char* message)
+{
+    QtlLogger* log = reinterpret_cast<QtlLogger*>(logParam);
+    if (log != 0 && message != 0) {
+        if (debug != 0) {
+            log->debug(QStringLiteral("libdvdcss: %1").arg(message));
+        }
+        else {
+            log->line(QStringLiteral("libdvdcss: %1").arg(message));
+        }
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Check if the DVD media is encrypted.
 //----------------------------------------------------------------------------
 
@@ -192,7 +212,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructu
 
     // Initialize libdvdcss.
     const QByteArray name(deviceName.toUtf8());
-    _dvdcss = dvdcss_open(name.data());
+    _dvdcss = dvdcss_open_log(name.data(), dvdMessageLogger, _log, 2);
     if (_dvdcss == 0) {
         _log->debug(tr("Cannot initialize libdvdcss on %1").arg(deviceName));
         close();

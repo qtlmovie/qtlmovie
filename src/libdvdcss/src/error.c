@@ -33,12 +33,30 @@ static void print_message( const char *prefix, const char *psz_string,
     fprintf( stderr, "\n" );
 }
 
+/* TL: Extended error log */
+static void log_message( dvdcss_log p_log, void *p_log_param,
+                         int b_debug, const char *psz_string, va_list args )
+{
+    char buffer [1024];
+    vsnprintf( buffer, sizeof(buffer), psz_string, args );
+    buffer [sizeof(buffer) - 1] = '\0';
+    p_log( p_log_param, b_debug, buffer );
+}
+
 /*****************************************************************************
  * Error messages
  *****************************************************************************/
 void print_error( dvdcss_t dvdcss, const char *psz_string, ... )
 {
-    if( dvdcss->b_errors )
+    if( dvdcss->p_log )
+    {
+        va_list args;
+
+        va_start( args, psz_string );
+        log_message(dvdcss->p_log, dvdcss->p_log_param, 0, psz_string, args);
+        va_end( args );
+    }
+    else if( dvdcss->b_errors )
     {
         va_list args;
 
@@ -55,7 +73,15 @@ void print_error( dvdcss_t dvdcss, const char *psz_string, ... )
  *****************************************************************************/
 void print_debug( const dvdcss_t dvdcss, const char *psz_string, ... )
 {
-    if( dvdcss->b_debug )
+    if( dvdcss->p_log )
+    {
+        va_list args;
+
+        va_start( args, psz_string );
+        log_message(dvdcss->p_log, dvdcss->p_log_param, 1, psz_string, args);
+        va_end( args );
+    }
+    else if( dvdcss->b_debug )
     {
         va_list args;
 

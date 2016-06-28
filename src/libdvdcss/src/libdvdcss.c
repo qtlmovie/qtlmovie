@@ -145,23 +145,21 @@
 
 
 static dvdcss_t dvdcss_open_common ( const char *psz_target, void *p_stream,
-                                     dvdcss_stream_cb *p_stream_cb );
-static void set_verbosity( dvdcss_t dvdcss )
+                                     dvdcss_stream_cb *p_stream_cb,
+                                     dvdcss_log p_log, void *p_log_param, int verbosity ); /* TL: Extended error log */
+static void set_verbosity( dvdcss_t dvdcss, int verbosity )
 {
     const char *psz_verbose = getenv( "DVDCSS_VERBOSE" );
 
     dvdcss->b_debug  = 0;
     dvdcss->b_errors = 0;
 
-    if( psz_verbose != NULL )
-    {
-        int i = atoi( psz_verbose );
+    int i = psz_verbose != NULL ? atoi( psz_verbose ) : verbosity;
 
-        if( i >= 2 )
-            dvdcss->b_debug  = 1;
-        if( i >= 1 )
-            dvdcss->b_errors = 1;
-    }
+    if( i >= 2 )
+        dvdcss->b_debug  = 1;
+    if( i >= 1 )
+        dvdcss->b_errors = 1;
 }
 
 static int set_access_method( dvdcss_t dvdcss )
@@ -473,7 +471,13 @@ static void init_cache( dvdcss_t dvdcss )
  */
 LIBDVDCSS_EXPORT dvdcss_t dvdcss_open ( const char *psz_target )
 {
-    return dvdcss_open_common( psz_target, NULL, NULL );
+    return dvdcss_open_common( psz_target, NULL, NULL, NULL, NULL, 0 );
+}
+
+/* TL: Extended error log */
+LIBDVDCSS_EXPORT dvdcss_t dvdcss_open_log ( const char *psz_target, dvdcss_log p_log, void *p_log_param, int verbosity )
+{
+    return dvdcss_open_common( psz_target, NULL, NULL, p_log, p_log_param, verbosity );
 }
 
 /**
@@ -488,11 +492,12 @@ LIBDVDCSS_EXPORT dvdcss_t dvdcss_open ( const char *psz_target )
 LIBDVDCSS_EXPORT dvdcss_t dvdcss_open_stream ( void *p_stream,
                                                dvdcss_stream_cb *p_stream_cb )
 {
-    return dvdcss_open_common( NULL, p_stream, p_stream_cb );
+    return dvdcss_open_common( NULL, p_stream, p_stream_cb, NULL, NULL, 0 );
 }
 
 static dvdcss_t dvdcss_open_common ( const char *psz_target, void *p_stream,
-                                     dvdcss_stream_cb *p_stream_cb )
+                                     dvdcss_stream_cb *p_stream_cb,
+                                     dvdcss_log p_log, void *p_log_param, int verbosity ) /* TL: Extended error log */
 {
     int i_ret;
 
@@ -521,8 +526,12 @@ static dvdcss_t dvdcss_open_common ( const char *psz_target, void *p_stream,
     dvdcss->p_stream = p_stream;
     dvdcss->p_stream_cb = p_stream_cb;
 
+    /* TL: Extended error log */
+    dvdcss->p_log = p_log;
+    dvdcss->p_log_param = p_log_param;
+
     /* Set library verbosity from DVDCSS_VERBOSE environment variable. */
-    set_verbosity( dvdcss );
+    set_verbosity( dvdcss, verbosity );
 
     /* Set DVD access method from DVDCSS_METHOD environment variable. */
     if( set_access_method( dvdcss ) < 0 )

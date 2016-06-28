@@ -113,6 +113,10 @@ LIBDVDCSS_EXPORT const char *dvdcss_error ( const dvdcss_t );
 
 LIBDVDCSS_EXPORT int      dvdcss_is_scrambled ( dvdcss_t );
 
+/* TL: Extended error log (verbosity value: same as DVDCSS_VERBOSE) */
+typedef void ( *dvdcss_log ) ( void *p_log_param, int b_debug, const char* psz_message );
+LIBDVDCSS_EXPORT dvdcss_t dvdcss_open_log ( const char *psz_target, dvdcss_log p_log, void *p_log_param, int verbosity );
+
 #ifdef __cplusplus
 }
 #endif
