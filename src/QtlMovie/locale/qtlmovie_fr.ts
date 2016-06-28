@@ -215,6 +215,65 @@ Ligne %3, colonne %4</translation>
     </message>
 </context>
 <context>
+    <name>QtlMovieDvdExtraction</name>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="73"/>
+        <source>Internal error: adding a DVD transfer after start</source>
+        <translation>Erreur interne: ajout d&apos;un transfert DVD après le démarrage</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="78"/>
+        <source>Queued file %1, sectors %2 to %3</source>
+        <translation>Fichier %1 mis en file d&apos;attente, secteurs %2 à %3</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="104"/>
+        <source>File %1 already exists.
+Overwrite it?</source>
+        <translation>Le fichier %1 existe déjà.
+Le remplacer?</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="110"/>
+        <source>The following files already exist:
+%1
+Overwrite them?</source>
+        <translation>Les fichiers suivants existent déjà:
+%1
+Les remplacer?</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="119"/>
+        <source>Failed to delete %1</source>
+        <translation>Impossible de supprimer %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="141"/>
+        <source>Error starting DVD extraction</source>
+        <translation>Erreur au démarrage de l&apos;extraction DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="164"/>
+        <source>Extracting %1</source>
+        <translation>Extraction de %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="173"/>
+        <source>Error creating directory %1</source>
+        <translation>Impossible de créer le répertoire %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="180"/>
+        <source>Error creating %1</source>
+        <translation>Impossible de créer %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtraction.cpp" line="191"/>
+        <source>Error starting data transfer to %1</source>
+        <translation>Erreur au démarrage du transfert vers %1</translation>
+    </message>
+</context>
+<context>
     <name>QtlMovieDvdRipWindow</name>
     <message>
         <location filename="../QtlMovieDvdRipWindow.ui" line="14"/>
@@ -270,14 +329,14 @@ Ligne %3, colonne %4</translation>
     <message>
         <location filename="../QtlMovieDvdRipWindow.ui" line="217"/>
         <location filename="../QtlMovieDvdRipWindow.ui" line="333"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="198"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="202"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="185"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="189"/>
         <source>Start ...</source>
         <translation>Démarrer ...</translation>
     </message>
     <message>
         <location filename="../QtlMovieDvdRipWindow.ui" line="272"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="75"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="82"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
@@ -413,34 +472,74 @@ Ligne %3, colonne %4</translation>
         <translation>Actualiser ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="69"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="76"/>
         <source>VTS</source>
         <translation>VTS</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="70"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="77"/>
         <source>Duration</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="71"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="76"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="78"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="83"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="189"/>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="193"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="176"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="180"/>
         <source>Cancel ...</source>
         <translation>Annuler ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.cpp" line="362"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="316"/>
+        <source>Cannot open video title set %1</source>
+        <translation>Impossible d&apos;ouvrir le film vidéo (VTS) %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="392"/>
+        <source>Internal error, DVD extraction already created.</source>
+        <translation>Erreur interne, extraction DVD déjà créée</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="399"/>
+        <source>No DVD found, try to refresh</source>
+        <translation>Aucun DVD trouvé, essayez d&apos;actualiser</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="452"/>
+        <source>Internal error, wrong tab index %1</source>
+        <translation>Erreur interne, index d&apos;onglet incorrect: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="459"/>
+        <source>Nothing to extract</source>
+        <translation>Rien à extraire</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="468"/>
+        <source>Overwritting output files denied</source>
+        <translation>Le remplacement des fichiers de sortie a été refusé</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="496"/>
+        <source>File %1 not found on DVD</source>
+        <translation>Fichier %1 non trouvé sur le DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="572"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdRipWindow.h" line="110"/>
+        <location filename="../QtlMovieDvdRipWindow.cpp" line="632"/>
+        <source>Do you want to abort the current DVD extraction ?</source>
+        <translation>Voulez-vous annuler l&apos;extraction DVD en cours ?</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdRipWindow.h" line="107"/>
         <source>DVD extraction directory</source>
         <translation>Répertoire d&apos;extraction DVD</translation>
     </message>
@@ -1625,19 +1724,19 @@ Ligne %3, colonne %4</translation>
         <translation>Voulez-vous annuler le transcodage en cours ?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="401"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="414"/>
         <source>DVD Decrypter not found, install it or set explicit path in settings.</source>
         <translation>DVD Decrypter introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="438"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="451"/>
         <source>These settings will be applied when the application restarts.
 Restart now?</source>
         <translation>Ces options seront appliquées au redémarrage de l&apos;application.
 Redémarrer maintenant?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.cpp" line="416"/>
+        <location filename="../QtlMovieMainWindow.cpp" line="429"/>
         <source>Switching mode needs the application to restart.
 Restart now?</source>
         <translation>Changer de mode nécessite un redémarrage de l&apos;application.
@@ -1647,32 +1746,32 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieMainWindowBase</name>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="217"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="220"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="266"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="269"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="276"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="279"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="277"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="280"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="292"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="295"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="308"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="311"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>

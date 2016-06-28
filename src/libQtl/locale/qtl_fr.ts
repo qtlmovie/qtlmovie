@@ -2289,42 +2289,42 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDvdMedia</name>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="166"/>
+        <location filename="../QtlDvdMedia.cpp" line="169"/>
         <source>Device name not found for %1</source>
         <translation>Nom de périphérique introuvable pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="194"/>
+        <location filename="../QtlDvdMedia.cpp" line="197"/>
         <source>Cannot initialize libdvdcss on %1</source>
         <translation>Impossible d&apos;initialiser libdvdcss sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="220"/>
+        <location filename="../QtlDvdMedia.cpp" line="223"/>
         <source>Invalid DVD volume descriptor &quot;%1&quot; instead of &quot;%2&quot;</source>
         <translation>Descripteur de volume DVD invalide: %1 au lieu de %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="249"/>
+        <location filename="../QtlDvdMedia.cpp" line="252"/>
         <source>Cannot locate root directory on %1</source>
         <translation>Impossible de trouver le répertoire racine pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="283"/>
+        <location filename="../QtlDvdMedia.cpp" line="286"/>
         <source>Error seeking DVD to sector %1, seek returned %2</source>
         <translation>Erreur de positionnement du DVD au secteur %1, seek a renvoyé %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="324"/>
+        <location filename="../QtlDvdMedia.cpp" line="327"/>
         <source>Error reading sector %1 on DVD media in %2</source>
         <translation>Erreur de lecture au secteur %1 du DVD dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="346"/>
+        <location filename="../QtlDvdMedia.cpp" line="349"/>
         <source>Too many directory levels in DVD structure, probably incorrect media</source>
         <translation>Trop de niveaux de répertoires sur le DVD, média probablement incorrect</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="354"/>
+        <location filename="../QtlDvdMedia.cpp" line="357"/>
         <source>Error reading DVD directory information at sector %1</source>
         <translation>Erreur de lecture de répertoire au secteur %1</translation>
     </message>
@@ -2332,62 +2332,62 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDvdTitleSet</name>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="165"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="171"/>
         <source>Cannot find start sector for %1 on %2</source>
         <translation>Impossible de trouver le premier secteur de %1 sur %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="208"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="214"/>
         <source>%1 is not a valid DVD title set file</source>
         <translation>%1 n&apos;est pas un fichier vidéo DVD valide</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="240"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="246"/>
         <source>No VOB file for %1</source>
         <translation>Pas de fichier VOB pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="248"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="254"/>
         <source>DVD IFO file not found: %1</source>
         <translation>Pas de fichier IFO DVD: %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="265"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="271"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="279"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="285"/>
         <source>%1 is not a valid VTS IFO</source>
         <translation>%1 n&apos;est pas un fichier IFO valid</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="342"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="348"/>
         <source>Unknown video standard value %1 in DVD IFO file</source>
         <translation>Valeur de standard vidéo inconnue %1 dans le fichier IFO</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="363"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="369"/>
         <source>IFO: %1 audio streams</source>
         <translation>IFO: %1 flux vidéo</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="416"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="422"/>
         <source>IFO: %1 subtitle streams</source>
         <translation>IFO: %1 flux de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="506"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="512"/>
         <source>Error reading Program Chain Table (PGC) from %1</source>
         <translation>Erreur de lecture de la Program Chain Table (PGC) dans %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="533"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="539"/>
         <source>Palette conversion: palette size is %1 bytes, not a multiple of 4</source>
         <translation>Conversion de palette de couleur: la taille de la palette est %1 octets, pas un mulitple de 4</translation>
     </message>
     <message>
-        <location filename="../QtlDvdTitleSet.cpp" line="557"/>
+        <location filename="../QtlDvdTitleSet.cpp" line="563"/>
         <source>Palette conversion: unexpected value 0x%1, should be 0</source>
         <translation>Conversion de palette de couleurs: valeur %1 inattendue, aurait dû être 0</translation>
     </message>
