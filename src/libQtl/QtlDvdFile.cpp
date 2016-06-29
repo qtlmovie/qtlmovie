@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlDvdFile.h"
+#include "QtlDvdMedia.h"
 
 
 //----------------------------------------------------------------------------
@@ -50,7 +51,7 @@ QtlDvdFile::~QtlDvdFile()
 
 
 //----------------------------------------------------------------------------
-// Get the file name, without directory.
+// Get the file characteristics.
 //----------------------------------------------------------------------------
 
 QString QtlDvdFile::name() const
@@ -58,10 +59,16 @@ QString QtlDvdFile::name() const
     return _path.isEmpty() ? QString() : QFileInfo(_path).fileName();
 }
 
+QString QtlDvdFile::description() const
+{
+    return _path.isEmpty() ? "metadata" : _path;
+}
 
-//----------------------------------------------------------------------------
-// Check if the file is a VOB one, possibly encrypted.
-//----------------------------------------------------------------------------
+int QtlDvdFile::sectorCount() const
+{
+    return _size / QtlDvdMedia::DVD_SECTOR_SIZE + int(_size % QtlDvdMedia::DVD_SECTOR_SIZE > 0);
+}
+
 
 bool QtlDvdFile::isVob() const
 {

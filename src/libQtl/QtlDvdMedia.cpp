@@ -332,8 +332,9 @@ bool QtlDvdMedia::seekSector(int position)
     int seekFlags = DVDCSS_NOFLAGS;
     QList<QtlDvdFilePtr>::ConstIterator file(_allFiles.end());
 
-    // If not yet fully open, we are still reading the file structure and no NOFLAGS is ok.
+    // If not yet fully open, we are still reading the file structure and NOFLAGS is ok.
     if (_isOpen) {
+
         // Look for the file corresponding to position.
         for (file = _allFiles.begin(); file != _allFiles.end(); ++file) {
             if ((*file)->startSector() <= position && position < (*file)->endSector()) {
@@ -344,9 +345,12 @@ bool QtlDvdMedia::seekSector(int position)
             _log->line(tr("Error seeking DVD to sector %1, not found in media layout").arg(position));
             return false;
         }
+        _log->debug(tr("Switching to %1 on DVD").arg((*file)->description()));
+
         // If this is a VOB file, decrypt.
         if ((*file)->isVob()) {
-            seekFlags = DVDCSS_SEEK_MPEG;
+            // Use SEEK_KEY when changing file to force a key search.
+            seekFlags = file == _currentFile ? DVDCSS_SEEK_MPEG : DVDCSS_SEEK_KEY;
         }
     }
 
@@ -409,15 +413,15 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBad
             // If current file is a VOB, we need to decrypt.
             if ((*_currentFile)->isVob()) {
                 readFlags = DVDCSS_READ_DECRYPT;
-                seekFlags = DVDCSS_SEEK_MPEG;
+                seekFlags = DVDCSS_SEEK_KEY;
             }
 
             // If we changed, do an explicit seek.
             // Not sure it is necessary but enforce an encrypted<=>clear or key switch.
             if (changed) {
-                _log->debug(tr("Switching to file %1 on DVD").arg((*_currentFile)->path()));
+                _log->debug(tr("Switching to %1 on DVD").arg((*_currentFile)->description()));
                 if (dvdcss_seek(_dvdcss, _nextSector, seekFlags) < 0) {
-                    _log->line(tr("Error seeking at first sector of %1").arg((*_currentFile)->path()));
+                    _log->line(tr("Error seeking at first sector of %1").arg((*_currentFile)->description()));
                     return result > 0 ? result : -1;
                 }
             }
@@ -432,7 +436,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBad
         if (got > 0) {
             // dvdcss_read successful, reset bad sector count.
             if (badSectorMax < DVD_BAD_SECTOR_RETRY) {
-                _log->line(tr("Skipped %1 bad sectors in %2").arg(DVD_BAD_SECTOR_RETRY - badSectorMax).arg((*_currentFile)->path()));
+                _log->line(tr("Skipped %1 bad sectors in %2").arg(DVD_BAD_SECTOR_RETRY - badSectorMax).arg((*_currentFile)->description()));
                 badSectorMax = DVD_BAD_SECTOR_RETRY;
             }
         }
@@ -643,9 +647,9 @@ bool QtlDvdMedia::loadAllEncryptionKeys()
         // We seek on first VOB's.
         const QString name(file->name());
         if (name.endsWith("_TS.VOB", Qt::CaseInsensitive) || name.endsWith("_0.VOB", Qt::CaseInsensitive) || name.endsWith("_1.VOB", Qt::CaseInsensitive)) {
-            _log->debug(tr("Getting CSS key for %1").arg(file->path()));
+            _log->debug(tr("Getting CSS key for %1").arg(file->description()));
             if (dvdcss_seek(_dvdcss, file->startSector(), DVDCSS_SEEK_KEY) < 0) {
-                _log->line(tr("Error getting CSS key for %1").arg(file->path()));
+                _log->line(tr("Error getting CSS key for %1").arg(file->description()));
                 success = false;
             }
         }

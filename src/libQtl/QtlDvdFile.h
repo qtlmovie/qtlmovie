@@ -86,6 +86,13 @@ public:
     }
 
     //!
+    //! Get the file description.
+    //! If the file name is empty, this is the description of a metadata area on DVD.
+    //! @return The file description.
+    //!
+    QString description() const;
+
+    //!
     //! Get the file name, without directory.
     //! @return The file name, without directory.
     //!
@@ -131,11 +138,7 @@ public:
     //! Get the file size in sectors.
     //! @return The file size in sectors.
     //!
-    int sectorCount() const
-    {
-        // Cannot use QtlDvdMedia::DVD_SECTOR_SIZE here because of header inclusion order.
-        return _size / 2048 + int(_size % 2048 > 0);
-    }
+    int sectorCount() const;
 
     //!
     //! Check if the file is a VOB one, possibly encrypted.

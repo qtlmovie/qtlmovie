@@ -140,8 +140,7 @@ int QtlTestDvd::run(const QStringList& args)
     // Display DVD file layout.
     out << "File layout:" << endl;
     foreach (const QtlDvdFilePtr& file, dvd.allFiles()) {
-        const QString name(file->path());
-        out << "    " << (name.isEmpty() ? "(metadata)" : name) << ", LBA " << file->startSector() << "-" << (file->endSector() - 1) << endl;
+        out << "    " << file->description() << ", LBA " << file->startSector() << "-" << (file->endSector() - 1) << endl;
     }
     out << endl;
 

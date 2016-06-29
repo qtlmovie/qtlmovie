@@ -148,13 +148,13 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
 
     // Let the subclass initialize the transfer.
     if (initializeTransfer()) {
-        _log->debug(tr("DataPull: Data transfer started, %1 devices, max size: %2").arg(_devices.size()).arg(_maxIn));
+        _log->debug(tr("Data transfer started"));
         emit started();
         processNewStateLater();
         return true;
     }
     else {
-        _log->debug(tr("DataPull: Data transfer failed to start"));
+        _log->debug(tr("Data transfer failed to start"));
         _devices.clear();
         // If auto-delete is on, delete later when back in event loop.
         if (_autoDelete) {
@@ -171,8 +171,6 @@ bool QtlDataPull::start(const QList<QIODevice*>& devices)
 
 void QtlDataPull::stop()
 {
-    _log->debug(tr("DataPull: stop requested, %1 devices").arg(_devices.size()));
-
     // Mark all devices as aborting.
     if (!_devices.isEmpty()) {
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
@@ -197,8 +195,6 @@ void QtlDataPull::stopCaller()
 void QtlDataPull::stopDevice(QIODevice* device)
 {
     if (device != 0) {
-        _log->debug(tr("DataPull: stop requested on one device"));
-
         // Search the context for the device.
         for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
             if (ctx->device == device) {
@@ -319,7 +315,7 @@ void QtlDataPull::deviceDestroyed(QObject* object)
             ctx->device = 0;
             // Abort the transfer if was in progress.
             if (ctx->running) {
-                _log->debug(tr("DataPull: Data transfer destination destroyed"));
+                _log->debug(tr("Data transfer destination destroyed before completion"));
                 ctx->running = false;
                 processNewStateLater();
             }
@@ -407,7 +403,6 @@ void QtlDataPull::processNewState()
     if (needMoreData()) {
         if (!needTransfer(_maxIn < 0 ? -1 : qMax<qint64>(0, _maxIn - _totalIn))) {
             // The subclass returned false, abort everything.
-            _log->debug(tr("DataPull: subclass returned an error on needTransfer"));
             for (QList<Context>::Iterator ctx = _devices.begin(); ctx != _devices.end(); ++ctx) {
                 ctx->running = false;
             }
@@ -416,7 +411,6 @@ void QtlDataPull::processNewState()
 
     // If maximum size is reached, do a proper close.
     if (_maxIn >= 0 && _totalIn >= _maxIn) {
-        _log->debug(tr("DataPull: reached maximum size: %1/%2 bytes").arg(_totalIn).arg(_maxIn));
         _closed = true;
     }
 
@@ -449,7 +443,7 @@ void QtlDataPull::processNewState()
         // Report a full debug message.
         const int ms = _startTime.elapsed();
         const qint64 bps = ms <= 0 ? 0 : (qint64(_totalIn) * 8 * 1000) / ms;
-        _log->debug(tr("DataPull: Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s")
+        _log->debug(tr("Data transfer %1, read %2 bytes, time: %3 ms, bandwidth: %4 b/s, %5 B/s")
                     .arg(_closed ? tr("completed") : tr("aborted"))
                     .arg(_totalIn)
                     .arg(ms)
