@@ -275,6 +275,16 @@
     <addaction name="actionStart"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionClearLog"/>
+    <addaction name="actionLogDebug"/>
+    <addaction name="actionSaveLog"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
@@ -286,16 +296,6 @@
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
-   </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <addaction name="actionClearLog"/>
-    <addaction name="actionLogDebug"/>
-    <addaction name="actionSaveLog"/>
-    <addaction name="separator"/>
-    <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -336,34 +336,12 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-  <action name="actionTranscode">
-   <property name="text">
-    <string>Transcode ...</string>
-   </property>
-   <property name="shortcut">
-    <string>F5</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
   <action name="actionSettings">
    <property name="text">
     <string>Settings ...</string>
    </property>
    <property name="menuRole">
     <enum>QAction::PreferencesRole</enum>
-   </property>
-  </action>
-  <action name="actionInputFileProperties">
-   <property name="text">
-    <string>Input File Properties ...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+I</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionClearLog">
@@ -377,33 +355,6 @@
   <action name="actionSaveLog">
    <property name="text">
     <string>Save Log ...</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionTestAudio">
-   <property name="text">
-    <string>Test Audio ...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+T</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionAboutMediaTools">
-   <property name="text">
-    <string>About Media Tools</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionDvdDecrypter">
-   <property name="text">
-    <string>DVD Decrypter ...</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -439,33 +390,6 @@
   <action name="actionReleaseNotes">
    <property name="text">
     <string>Release Notes ...</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionNewTask">
-   <property name="text">
-    <string>New Task ...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionPurgeCompleted">
-   <property name="text">
-    <string>Purge Completed Tasks</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionSwitchMode">
-   <property name="text">
-    <string>Switch Mode</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

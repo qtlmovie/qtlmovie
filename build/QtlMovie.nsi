@@ -169,6 +169,8 @@ Section "Install"
     RMDir  "$INSTDIR\plugins"
     Delete "$INSTDIR\wintools\telxcc.exe"
     Delete "$INSTDIR\wintools\telxcc.txt"
+    Delete "$INSTDIR\wintools\dvddecrypter.exe"
+    Delete "$INSTDIR\wintools\dvddecrypter.txt"
 
     ; Install product files.
     SetOutPath "$INSTDIR"
@@ -207,8 +209,6 @@ Section "Install"
     File "${RootDir}\wintools\mkisofs.txt"
     File "${RootDir}\wintools\growisofs.exe"
     File "${RootDir}\wintools\growisofs.txt"
-    File "${RootDir}\wintools\dvddecrypter.exe"
-    File "${RootDir}\wintools\dvddecrypter.txt"
 
     ; Create a shortcut in start menu.
     CreateShortCut "$SMPROGRAMS\QtlMovie.lnk" "$INSTDIR\QtlMovie.exe"
@@ -252,8 +252,6 @@ Section "Uninstall"
     Delete "$INSTDIR\wintools\growisofs.txt"
     Delete "$INSTDIR\wintools\ccextractor.exe"
     Delete "$INSTDIR\wintools\ccextractor.txt"
-    Delete "$INSTDIR\wintools\dvddecrypter.exe"
-    Delete "$INSTDIR\wintools\dvddecrypter.txt"
     RMDir  "$INSTDIR\wintools"
 
     RMDir /r "$INSTDIR\translations"

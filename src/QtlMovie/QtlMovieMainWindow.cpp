@@ -56,13 +56,6 @@ QtlMovieMainWindow::QtlMovieMainWindow(QWidget *parent, const QStringList& initi
     // Load settings and finish up base class part of user interface.
     setupUserInterface(_ui.log, _ui.actionAboutQt);
 
-    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
-#if !defined(Q_OS_WIN)
-    if (!settings()->dvddecrypter()->isSet()) {
-        _ui.actionDvdDecrypter->setVisible(false);
-    }
-#endif
-
     // Adjust UI for single file mode or batch mode.
     _batchMode = settings()->useBatchMode();
     if (_batchMode) {
@@ -398,24 +391,6 @@ void QtlMovieMainWindow::startDvdExtraction()
 
     // Start the process.
     QProcess::startDetached(QApplication::applicationFilePath(), args);
-}
-
-
-
-//-----------------------------------------------------------------------------
-// Invoked by the "DVD Decrypter..." button.
-//-----------------------------------------------------------------------------
-
-void QtlMovieMainWindow::startDvdDecrypter()
-{
-    // DVD Decrypter executable file.
-    const QString exec(settings()->dvddecrypter()->fileName());
-    if (exec.isEmpty()) {
-        qtlError(this, tr("DVD Decrypter not found, install it or set explicit path in settings."));
-    }
-    else {
-        QProcess::startDetached(exec);
-    }
 }
 
 

@@ -229,8 +229,6 @@ if (-not $NoStandalone) {
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "growisofs.txt")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.exe")) $TempWintools
         Copy-Item (Join-MultiPath @($RootDir, "wintools", "ccextractor.txt")) $TempWintools
-        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvddecrypter.exe")) $TempWintools
-        Copy-Item (Join-MultiPath @($RootDir, "wintools", "dvddecrypter.txt")) $TempWintools
 
         # Create the 32-bit standalone zip file.
         Get-ChildItem -Recurse $TempDir | New-ZipFile (Join-Path $InstallerDir "${ProductName}-Win32-Standalone-${Version}.zip") -Force -Root $TempDir

@@ -3,5 +3,4 @@ DVD Decrypter is no longer supported and the domain dvddecrypter.com is no longe
 Download from http://www.videohelp.com/tools/DVD-Decrypter:
   http://www.videohelp.com/download/SetupDVDDecrypter_3.5.4.0.exe
 
-Install and copy from C:\Program Files (x86)\DVD Decrypter to here:
-  dvddecrypter.exe
+C:\Program Files (x86)\DVD Decrypter\dvddecrypter.exe can be used as a standalone program.

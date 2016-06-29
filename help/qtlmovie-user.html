@@ -153,7 +153,7 @@
 
       <h3><a id="dvdin">DVD input</a></h3>
 
-      <p>QtlMovie is typically ideal to rip DVD and create iPad/iPhone/Android movies, a typical task when you own
+      <p>QtlMovie is ideal to rip DVD and create iPad/iPhone/Android movies, a typical task when you own
         an iPad and many DVD's.</p>
       <p>A DVD is a standard file system. All video contents are in a top-level directory named VIDEO_TS.
         Inside VIDEO_TS, there are several <i>title sets</i>.
@@ -162,6 +162,7 @@
         The title set "nn" is composed of several files named
         VTS_nn_0.IFO, VTS_nn_0.VOB (optional), VTS_nn_1.VOB, etc.
         The video content starts in VTS_nn_1.VOB and extends to other VOB's.
+        The optional VTS_nn_0.VOB is typically an introduction and is not part of the film.
         Each VOB has a maximum size of 1 GB.
         Finding the main film of the DVD is usually easy, this is the largest video content (sum of all
         the VTS_nn_*.VOB).</p>
@@ -173,17 +174,8 @@
         file for the film. Otherwise, the audio and subtitle tracks will appear without language and
         you will be unable to decide which one to select. Also, without the .IFO file, the subtitles
         appear in dirty colors and are barely watchable.</p>
-      <p>If your DVD is not copy-protected, QtlMovie can work directly on the DVD medium since this
-        is a regular file system.
-        For a copy-protected DVD that you legitimately own, you need a tool like <i>DVD Decrypter</i>
-        to rip it and copy the movie files to your hard drive. Do not forget to rip the VTS_nn_0.IFO
-        with the corresponding VOB files.</p>
-      <p>It is unclear if DVD Decrypter is available on platforms other than Windows but similar
-        tools exist on Linux. On Windows platforms, DVD Decrypter comes pre-packaged with the
-        binary installer of QtlMovie. You can launch it from QtlMovie from the Tools menu.
-        Then, you can rip the film out of the DVD media. In a future version, QtlMovie
-        may automatically invoke DVD Decrypter as part of the transcoding process when the DVD
-        is copy-protected. This is possible since DVD Decrypter has a command line mode.</p>
+      <p>QtlMovie can work directly on the DVD medium since this is a regular file system.
+        Copy-protected DVD's are automatically decrypted on the fly upstream from the transcoding process.</p>
       <hr/>
 
       <h2><a id="outfiles">Output files</a></h2>
@@ -435,7 +427,6 @@
         <li>mkisofs</li>
         <li>growisofs</li>
         <li>CCExtractor</li>
-        <li>DVD Decrypter (Windows)</li>
       </ul>
       <p>For each tool, the "Default" value is the location where QtlMovie has found the corresponding executable.
         The way QtlMovie locates the media tools depends on the operating system.

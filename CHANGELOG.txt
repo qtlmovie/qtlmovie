@@ -9,9 +9,15 @@ Version 1.9
   encrypted DVD's. This means that transcoding from encrypted DVD's is possible
   on all platforms and that the decryption keys are shared with all other tools
   using libdvdcss such as the VLC media player.
+- A new "DVD Extraction" option is available from the "Tools" menu. This new
+  tool can extract DVD content, either as a complete ISO image, by Video Title
+  Set (VTS) or individual files. This embedded tool is available on all platforms
+  and can replace third-party platform-dependent DVD ripping tools.
 - Bug fix: When clicking in the log window, the color of the subsequent messages
   could be incorrect. This is fixed.
 - Precompiled Windows and Mac binaries uses Qt 5.7.0.
+- Precompiled Windows binaries now longer include the third party tool "DVD
+  Decrypter". It is now replaced by the embedded tool "DVD Extraction".
 
 Version 1.8
 - Improved US Closed Captions (EIA-608, CEA-708) detection and processing

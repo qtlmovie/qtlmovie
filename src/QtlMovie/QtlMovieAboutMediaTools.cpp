@@ -63,19 +63,6 @@ QtlMovieAboutMediaTools::QtlMovieAboutMediaTools(QtlMovieSettings* settings, QWi
 
     _ui.ccextractorTitle->setText(title(settings->ccextractor()));
     _ui.ccextractorDescription->setText(settings->ccextractor()->htmlDescription());
-
-    _ui.dvddecrypterTitle->setText(title(settings->dvddecrypter()));
-    _ui.dvddecrypterDescription->setText(settings->dvddecrypter()->htmlDescription());
-
-    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
-#if !defined(Q_OS_WIN)
-    if (!settings->dvddecrypter()->isSet()) {
-        const int index = _ui.tab->indexOf(_ui.tabDvdDecrypter);
-        if (index >= 0) {
-            _ui.tab->removeTab(index);
-        }
-    }
-#endif
 }
 
 

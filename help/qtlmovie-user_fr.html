@@ -169,6 +169,7 @@
         L'ensemble de titres "nn" est composé de plusieurs fichiers nommés
         VTS_nn_0.IFO, VTS_nn_0.VOB (en option), VTS_nn_1.VOB, etc.
         Le contenu vidéo débute par VTS_nn_1.VOB et se continue sur les autres fichiers VOB.
+        Le fichier optionnel VTS_nn_0.VOB est en général une introduction et ne fait pas partie du film.
         Chaque fichier VOB a une taille maximum de 1 GB.
         Trouver le film principal du DVD est généralement simple, c'est le plus gros
         contenu vidéo (somme de toutes les tailles des fichiers VTS_nn_*.VOB).</p>
@@ -182,18 +183,8 @@
         .IFO du film. Sinon, les pistes audio et sous-titres apparaitront sans information de
         langue et vous ne saurez plus laquelle choisir. De plus, sans le fichier .IFO, les
         sous-titres apparaitront avec des couleurs étranges et seront difficilement regardables.</p>
-      <p>Si votre DVD n'est pas protégé contre la copie, QtlMovie peut travailler directement sur
-        le disque puisque c'est un volume de fichiers comme les autres. Pour un DVD protégé contre
-        la copie que vous possédez légalement, vous devez d'abord utiliser un outil comme <i>DVD Decrypter</i>
-        pour extraire les fichiers du film vers votre disque dur. N'oubliez pas d'extraire le fichier
-        VTS_nn_0.IFO avec les fichiers VOB correspondants.</p>
-      <p>Il n'est pas certain que DVD Decrypter soit disponible sur d'autres plates-formes que
-        Windows mais des outils similaires existent sur Linux. Sur les plates-formes Windows,
-        DVD Decrypter est livré pré-packagé dans l'installeur binaire de QtlMovie. Vous pouvez
-        le lancer depuis QtlMovie dans le menu "Outils". Vous pourrez alors extraire les fichiers
-        du DVD. Dans une future version, QtlMovie pourra peut-être invoquer automatiquement
-        DVD Decrypter pendant le processus de transcodage quand le DVD est protégé contre la copie.
-        Ceci est rendu possible car DVD Decrypter possède également un mode ligne de commande.</p>
+      <p>QtlMovie peut travailler directement sur le DVD puisque c'est un volume de fichiers comme les autres.
+        Les DVD protégés contre la copie sont automatiquement décryptés à la volée en amont du transcodage.</p>
 
       <hr/>
       <h2><a id="outfiles">Fichiers de sortie</a></h2>
@@ -465,7 +456,6 @@
         <li>mkisofs</li>
         <li>growisofs</li>
         <li>CCExtractor</li>
-        <li>DVD Decrypter (Windows)</li>
       </ul>
       <p>Pour chaque outil, le nom par défaut est l'emplacement où QtlMovie a trouvé l'exécutable
         correspondant. La manière dont QtlMovie recherche ces exécutables

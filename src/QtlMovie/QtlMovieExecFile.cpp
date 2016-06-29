@@ -115,9 +115,7 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
 #if defined(Q_OS_WIN)
     // On Windows, add various standard locations for media tools.
     dirs << "C:\\Program Files\\FFmpeg\\bin"
-         << "C:\\Program Files (x86)\\FFmpeg\\bin"
-         << "C:\\Program Files\\DVD Decrypter"
-         << "C:\\Program Files (x86)\\DVD Decrypter";
+         << "C:\\Program Files (x86)\\FFmpeg\\bin";
 #endif
 
     // End up with the standard executable search path.

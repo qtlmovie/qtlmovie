@@ -229,7 +229,6 @@ public:
     QTLMOVIE_SETTINGS_EXEC(mkisofs, Mkisofs)
     QTLMOVIE_SETTINGS_EXEC(growisofs, Growisofs)
     QTLMOVIE_SETTINGS_EXEC(ccextractor, CCextractor)
-    QTLMOVIE_SETTINGS_EXEC(dvddecrypter, DvdDecrypter)
 
 private:
     QtlLogger*        _log;                   //!< Where to log errors.
@@ -245,8 +244,6 @@ private:
     QtlMovieExecFile* _growisofsExplicit;     //!< Growisofs explicit executable description.
     QtlMovieExecFile* _ccextractorDefault;    //!< CCExtractor default executable description.
     QtlMovieExecFile* _ccextractorExplicit;   //!< CCExtractor explicit executable description.
-    QtlMovieExecFile* _dvddecrypterDefault;   //!< DvdDecrypter default executable description.
-    QtlMovieExecFile* _dvddecrypterExplicit;  //!< DvdDecrypter explicit executable description.
 
     //!
     //! "Normalize" a string list: lower case, sorted.

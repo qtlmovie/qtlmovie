@@ -214,7 +214,6 @@
     <addaction name="actionInputFileProperties"/>
     <addaction name="actionTestAudio"/>
     <addaction name="actionDvdExtraction"/>
-    <addaction name="actionDvdDecrypter"/>
     <addaction name="separator"/>
     <addaction name="actionClearLog"/>
     <addaction name="actionLogDebug"/>
@@ -326,14 +325,6 @@
   <action name="actionAboutMediaTools">
    <property name="text">
     <string>About Media Tools</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionDvdDecrypter">
-   <property name="text">
-    <string>DVD Decrypter ...</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -549,22 +540,6 @@
    <signal>triggered()</signal>
    <receiver>QtlMovieMainWindow</receiver>
    <slot>aboutMediaTools()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>339</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionDvdDecrypter</sender>
-   <signal>triggered()</signal>
-   <receiver>QtlMovieMainWindow</receiver>
-   <slot>startDvdDecrypter()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -834,7 +809,6 @@
   </connection>
  </connections>
  <slots>
-  <slot>startDvdDecrypter()</slot>
   <slot>transcodingStarted()</slot>
   <slot>transcodingStopped(bool)</slot>
   <slot>transcodingProgress(QString,int,int,int,int)</slot>

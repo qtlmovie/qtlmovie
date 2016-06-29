@@ -105,17 +105,7 @@ QtlMovieSettings::QtlMovieSettings(QtlLogger* log, QObject* parent) :
                                              "----",
                                              log,
                                              this)),
-    _ccextractorExplicit(new QtlMovieExecFile(*_ccextractorDefault, "", this)),
-    _dvddecrypterDefault(new QtlMovieExecFile("DVD Decrypter",
-                                              "http://www.videohelp.com/tools/DVD-Decrypter",
-                                              "http://www.videohelp.com/download/SetupDVDDecrypter_3.5.4.0.exe",
-                                              "dvddecrypter",
-                                              QStringList(),
-                                              QString(),
-                                              QString(),
-                                              log,
-                                              this)),
-    _dvddecrypterExplicit(new QtlMovieExecFile(*_dvddecrypterDefault, "", this))
+    _ccextractorExplicit(new QtlMovieExecFile(*_ccextractorDefault, "", this))
 {
     Q_ASSERT(log != 0);
 
@@ -248,13 +238,6 @@ void QtlMovieSettings::reportMissingTools() const
     if (!ccextractor()->isSet()) {
         _log->line(tr("Error searching for CCExtractor, install it or set explicit path in settings."));
     }
-
-    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users.
-#if defined(Q_OS_WIN)
-    if (!dvddecrypter()->isSet()) {
-        _log->line(tr("Error searching for DVD Decrypter, install it or set explicit path in settings."));
-    }
-#endif
 }
 
 
@@ -280,4 +263,3 @@ QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvdauthor, DvdAuthor)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(mkisofs, Mkisofs)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(growisofs, Growisofs)
 QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(ccextractor, CCextractor)
-QTLMOVIE_SETTINGS_EXEC_DEFINITIONS(dvddecrypter, DvdDecrypter)

@@ -86,10 +86,6 @@ private slots:
     //!
     void startDvdExtraction();
     //!
-    //! Invoked by the "DVD Decrypter..." button.
-    //!
-    void startDvdDecrypter();
-    //!
     //! Invoked by the "Switch to {Single File|Batch} Mode" button.
     //!
     void switchMode();

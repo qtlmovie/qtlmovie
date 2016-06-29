@@ -119,14 +119,6 @@ private slots:
     }
 
     //!
-    //! Invoked by the "Browse..." button for the DvdDecrypter executable.
-    //!
-    void browseDvdDecrypter()
-    {
-        qtlBrowseFile(this, _ui.editDvdDecrypter, tr("Locate DvdDecrypter executable"));
-    }
-
-    //!
     //! Invoked by the "Browse..." button for the default input directory.
     //!
     void browseInputDir()

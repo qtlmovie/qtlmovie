@@ -63,7 +63,6 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setDefaultExecutable("mkisofs", _ui.defaultMkisofs, _settings->mkisofsDefaultExecutable());
     setDefaultExecutable("growisofs", _ui.defaultGrowisofs, _settings->growisofsDefaultExecutable());
     setDefaultExecutable("CCExtractor", _ui.defaultCcextractor, _settings->ccextractorDefaultExecutable());
-    setDefaultExecutable("DVD Decrypter", _ui.defaultDvdDecrypter, _settings->dvddecrypterDefaultExecutable());
 
     // Create one line per output type for default output directory selection.
     // Add new widgets just before last row in group box layout.
@@ -130,16 +129,6 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setModelScreenSizes(_ui.boxIpadSize, QtlMovieDeviceProfile::iPadModels);
     setModelScreenSizes(_ui.boxIphoneSize, QtlMovieDeviceProfile::iPhoneModels);
     setModelScreenSizes(_ui.boxAndroidSize, QtlMovieDeviceProfile::androidModels);
-
-    // DVD Decrypter is usually present on Windows only, so don't annoy other OS' users if not present.
-#if !defined(Q_OS_WIN)
-    if (!_settings->dvddecrypter()->isSet()) {
-        _ui.labelDvdDecrypter->setVisible(false);
-        _ui.defaultDvdDecrypter->setVisible(false);
-        _ui.editDvdDecrypter->setVisible(false);
-        _ui.buttonBrowseDvdDecrypter->setVisible(false);
-    }
-#endif
 
     // Load the initial values from the settings object.
     resetValues();
@@ -212,7 +201,6 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.editMkisofs->setText(_settings->mkisofsExplicitExecutable());
     _ui.editGrowisofs->setText(_settings->growisofsExplicitExecutable());
     _ui.editCcextractor->setText(_settings->ccextractorExplicitExecutable());
-    _ui.editDvdDecrypter->setText(_settings->dvddecrypterExplicitExecutable());
     _ui.editInputDir->setText(_settings->initialInputDir());
     _ui.editDvdExtraction->setText(_settings->defaultDvdExtractionDir());
     _ui.checkBoxSameAsInput->setChecked(_settings->defaultOutputDirIsInput());
@@ -333,7 +321,6 @@ void QtlMovieEditSettings::applySettings()
     _settings->setMkisofsExplicitExecutable(_ui.editMkisofs->text());
     _settings->setGrowisofsExplicitExecutable(_ui.editGrowisofs->text());
     _settings->setCCextractorExplicitExecutable(_ui.editCcextractor->text());
-    _settings->setDvdDecrypterExplicitExecutable(_ui.editDvdDecrypter->text());
     _settings->setInitialInputDir(_ui.editInputDir->text());
     _settings->setDefaultDvdExtractionDir(_ui.editDvdExtraction->text());
     _settings->setDefaultOutputDirIsInput(_ui.checkBoxSameAsInput->isChecked());

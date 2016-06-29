@@ -165,158 +165,24 @@
        <string>Media Tools</string>
       </attribute>
       <layout class="QGridLayout" name="layoutTools">
-       <item row="10" column="2">
-        <widget class="QPushButton" name="buttonBrowseCcextractor">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelFFprobe">
-         <property name="text">
-          <string>FFprobe :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QtlLineEdit" name="editGrowisofs"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="defaultFFmpeg">
+       <item row="11" column="1">
+        <widget class="QLabel" name="defaultCcextractor">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelFFmpeg">
+       <item row="10" column="0">
+        <widget class="QLabel" name="labelCcextractor">
          <property name="text">
-          <string>FFmpeg :</string>
+          <string>CCExtractor :</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QtlLineEdit" name="editFFprobe"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="defaultDvdAuthor">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLabel" name="defaultMkisofs">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QtlLineEdit" name="editDvdAuthor"/>
-       </item>
-       <item row="0" column="1">
-        <widget class="QtlLineEdit" name="editFFmpeg"/>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="buttonBrowseFFmpeg">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="labelDvdDecrypter">
-         <property name="text">
-          <string>DVD Decrypter :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QtlLineEdit" name="editMkisofs"/>
-       </item>
-       <item row="6" column="2">
-        <widget class="QPushButton" name="buttonBrowseMkisofs">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="labelGrowisofs">
-         <property name="text">
-          <string>growisofs :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="buttonBrowseDvdAuthor">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="labelMkisofs">
-         <property name="text">
-          <string>mkisofs :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelDvdAuthor">
-         <property name="text">
-          <string>DVD Author :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="buttonBrowseFFprobe">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="defaultFFprobe">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QLabel" name="defaultGrowisofs">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QPushButton" name="buttonBrowseGrowisofs">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="1">
-        <widget class="QLabel" name="defaultDvdDecrypter">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+       <item row="10" column="1">
+        <widget class="QtlLineEdit" name="editCcextractor"/>
        </item>
        <item row="12" column="1">
-        <widget class="QtlLineEdit" name="editDvdDecrypter"/>
-       </item>
-       <item row="12" column="2">
-        <widget class="QPushButton" name="buttonBrowseDvdDecrypter">
-         <property name="text">
-          <string>Browse ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="1">
         <spacer name="spacerMediaTools">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -329,18 +195,128 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="1">
-        <widget class="QtlLineEdit" name="editCcextractor"/>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="labelCcextractor">
+       <item row="8" column="2">
+        <widget class="QPushButton" name="buttonBrowseGrowisofs">
          <property name="text">
-          <string>CCExtractor :</string>
+          <string>Browse ...</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="1">
-        <widget class="QLabel" name="defaultCcextractor">
+       <item row="9" column="1">
+        <widget class="QLabel" name="defaultGrowisofs">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="defaultFFprobe">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="buttonBrowseFFprobe">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelDvdAuthor">
+         <property name="text">
+          <string>DVD Author :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelMkisofs">
+         <property name="text">
+          <string>mkisofs :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QtlLineEdit" name="editGrowisofs"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelFFprobe">
+         <property name="text">
+          <string>FFprobe :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QPushButton" name="buttonBrowseCcextractor">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="buttonBrowseDvdAuthor">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="labelGrowisofs">
+         <property name="text">
+          <string>growisofs :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelFFmpeg">
+         <property name="text">
+          <string>FFmpeg :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QPushButton" name="buttonBrowseMkisofs">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QtlLineEdit" name="editMkisofs"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="buttonBrowseFFmpeg">
+         <property name="text">
+          <string>Browse ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QtlLineEdit" name="editFFmpeg"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QtlLineEdit" name="editDvdAuthor"/>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLabel" name="defaultMkisofs">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLabel" name="defaultDvdAuthor">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QtlLineEdit" name="editFFprobe"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="defaultFFmpeg">
          <property name="text">
           <string/>
          </property>
@@ -1766,22 +1742,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBrowseDvdDecrypter</sender>
-   <signal>clicked()</signal>
-   <receiver>QtlMovieEditSettings</receiver>
-   <slot>browseDvdDecrypter()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>497</x>
-     <y>229</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>283</x>
-     <y>267</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>buttonBrowseDvdBurner</sender>
    <signal>clicked()</signal>
    <receiver>QtlMovieEditSettings</receiver>
@@ -1933,7 +1893,6 @@
   <slot>browseDvdAuthor()</slot>
   <slot>browseMkisofs()</slot>
   <slot>browseGrowisofs()</slot>
-  <slot>browseDvdDecrypter()</slot>
   <slot>browseInputDir()</slot>
   <slot>setDefaultOutputDirSelectable(bool)</slot>
   <slot>newAudienceLanguage()</slot>
