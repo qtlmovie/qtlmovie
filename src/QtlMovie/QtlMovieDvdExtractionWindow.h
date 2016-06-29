@@ -26,26 +26,26 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieDvdRipWindow.h
+//! @file QtlMovieDvdExtractionWindow.h
 //!
-//! Declare the class QtlMovieDvdRipWindow, an instance of the UI for the
-//! DVD Ripper in QtlMovie application.
+//! Declare the class QtlMovieDvdExtractionWindow, an instance of
+//! the UI for the DVD Ripper in QtlMovie application.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEDVDRIPWINDOW_H
-#define QTLMOVIEDVDRIPWINDOW_H
+#ifndef QTLMOVIEDVDEXTRACTIONWINDOW_H
+#define QTLMOVIEDVDEXTRACTIONWINDOW_H
 
-#include "ui_QtlMovieDvdRipWindow.h"
+#include "ui_QtlMovieDvdExtractionWindow.h"
 #include "QtlMovieMainWindowBase.h"
-#include "QtlMovieDvdExtraction.h"
+#include "QtlMovieDvdExtractionSession.h"
 #include "QtlFileDialogUtils.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the DVD Ripper application.
 //! The design of the UI is done using Qt Designer.
 //!
-class QtlMovieDvdRipWindow : public QtlMovieMainWindowBase
+class QtlMovieDvdExtractionWindow : public QtlMovieMainWindowBase
 {
     Q_OBJECT
 
@@ -55,7 +55,7 @@ public:
     //! @param [in] parent Optional parent widget.
     //! @param [in] logDebug If true, set initial log mode to debug.
     //!
-    explicit QtlMovieDvdRipWindow(QWidget *parent = 0, bool logDebug = false);
+    explicit QtlMovieDvdExtractionWindow(QWidget *parent = 0, bool logDebug = false);
 
 private slots:
     //!
@@ -131,7 +131,7 @@ private:
     //!
     //! Apply the settings which affect the UI.
     //!
-    void applyUserInterfaceSettings();
+    virtual void applyUserInterfaceSettings() Q_DECL_OVERRIDE;
 
     //!
     //! Update the UI when extraction starts or stops.
@@ -172,12 +172,12 @@ private:
     //!
     void addDirectoryTree(const QtlDvdDirectory& dir);
 
-    Ui::QtlMovieDvdRipWindow _ui;          //!< UI from Qt Designer.
-    QList<QtlDvdMediaPtr>    _dvdList;     //!< List of detected DVD's.
-    QtlMovieDvdExtraction*   _extraction;  //!< Current extraction.
+    Ui::QtlMovieDvdExtractionWindow _ui;          //!< UI from Qt Designer.
+    QList<QtlDvdMediaPtr>           _dvdList;     //!< List of detected DVD's.
+    QtlMovieDvdExtractionSession*   _extraction;  //!< Current extraction.
 
     // Unaccessible operations.
-    Q_DISABLE_COPY(QtlMovieDvdRipWindow)
+    Q_DISABLE_COPY(QtlMovieDvdExtractionWindow)
 };
 
-#endif // QTLMOVIEDVDRIPWINDOW_H
+#endif // QTLMOVIEDVDEXTRACTIONWINDOW_H

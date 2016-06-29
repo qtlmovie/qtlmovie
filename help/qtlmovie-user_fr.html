@@ -41,6 +41,7 @@
             <li><a href="#logwin">La fenêtre de journal (log)</a></li>
             <li><a href="#fileprop">Propriétés du fichier d'entrée</a></li>
             <li><a href="#audiotest">Test audio</a></li>
+            <li><a href="#dvdextract">Extraction DVD</a></li>
           </ul>
         </li>
         <li><a href="#settings">Options</a>
@@ -415,6 +416,33 @@
         "Tester les pistes audio" n'est pas dans le menu "Outils" car il peut
         y avoir plusieurs fichiers d'entrée. Elle est accessible par le bouton
         "Test Audio" dans l'éditeur de tâche.</p>
+
+      <h3><a id="dvdextract">Extraction DVD</a></h3>
+
+      <p>L'option "Extraction DVD" du menu "Outils" ouvre une application indépendante
+        pour extraire le contenu de DVD protégés contre la copie. C'est un outil indépendant
+        qui n'est pas nécessaire pour transcoder des DVD. Depuis la version 1.9, QtlMovie
+        peut directement transcoder des DVD protégés contre la copie sans passer par une
+        phase initiale de copie ("rip") sur un disque dur.</p>
+      <p>Tous les DVD disponibles sur la machine sont listés dans une liste déroulante
+        nommée "DVD d'entrée". Le premier est automatiquement sélectionné. Si des DVD
+        sont éjectés ou insérés entre temps, cliquer sur "Actualiser" pour mettre à jour le contenu
+        de la fenêtre.</p>
+      <p>L'outil "Extraction DVD" a trois onglets, un pour chaque mode de fonctionnement.
+        Dans tous les cas, les fichiers seront créés dans le "Répertoire de destination"
+        sélectionné.</p>
+      <ul>
+        <li>Onglet "ISO": Quand cet onglet est sélectionné, le contenu complet du DVD
+          est extrait dans un gros fichier ISO.</li>
+        <li>Onglet "Film vidéo (VTS)": Quand cet onglet est sélectionné, chaque film
+          (ou "ensemble de titres" ou encore VTS) sur le DVD peut être sélectivement extrait.
+          Quand un VTS est sélectionné, tous ses fichiers principaux sont extraits, c'est
+          à dire VTS_nn_0.IFO, VTS_nn_1.VOB et suivants. Voir la rubrique
+          <a href="#dvdin">"DVD en entrée"</a> pour une explication des VTS.</li>
+        <li>Onglet "Fichiers": Quand cet onglet est sélectionné, chaque fichier du DVD peut
+          être sélectivement extrait.</li>
+      </ul>
+
       <hr/>
 
       <h2><a id="settings">Options</a></h2>
@@ -433,6 +461,9 @@
       <p>Si l'option "identique au répertoire du fichier d'entrée" est cochée, le répertoire par défaut
         du fichier de sortie est le répertoire du fichier d'entrée. Autrement, un répertoire par
         défaut peut être sélectionné par type de sortie.</p>
+      <p>Le répertoires de sortie par défaut pour l'extraction DVD est utilisé uniquement par
+        l'outil <a href="#dvdextract">"Extraction DVD"</a>. Il ne peut jamais être identique au répertoire du fichier d'entrée
+        car dans ce cas l'entrée est un DVD qui est en lecture seule par définition.</p>
       <p>Le "graveur DVD" désigne le lecteur pour graver les DVD.
         Sur Windows, cela doit être une lettre de périphérique comme "D:" ou "E:".
         Sur Linux, ce doit être un nom de périphérique comme "/dev/dvd".
@@ -686,6 +717,11 @@
           </ul>
         </li>
       </ul>
+      <p>Dans le groupe "Extraction DVD", l'option "Recréer l'arborescence des répertoires lors de l'extraction"
+        est utilisée lors de l'extraction de fichiers ou d'ensemble de titres (VTS) par l'outil
+        <a href="#dvdextract">"Extraction DVD"</a>. Lorsque cette option est cochée, la structure de répertoires du DVD
+        est recréée sous le répertoire de sortie. Dans le cas contraire, tous les fichiers sont
+        directement extraits dans le répertoire de sortie.</p>
       <p>L'option "taille max" de la fenêtre de journal indique le nombre maximum de 
         lignes de texte à garder dans cette fenêtre. Au-delà, les lignes les plus
         anciennes sont effacées.
@@ -709,12 +745,15 @@
       <p>Toutefois, quelques options sont acceptées sur la ligne de commande.
         La syntaxe est la suivante:</p>
       <div class="sample">
-        <p>QtlMovie [-l <i>locale</i>] [-d] [<i>inputfile ...</i>]</p>
+        <p>QtlMovie [-l <i>locale</i>] [-d] [-e] [<i>inputfile ...</i>]</p>
       </div>
       <p>Le paramètre <i>locale</i> spécifie une autre langue pour l'interface graphique, comme "en" ou "fr_FR".
         Par défaut, la langue du système est utilisée.</p>
       <p>L'option "-d" active les messages de debug dans la fenêtre de journal. C'est équivalent
         au menu "Outils" => "Activer le debug".</p>
+      <p>L'option "-e" ouvre directement l'outil <a href="#dvdextract">"Extraction DVD"</a>
+        sans passer par la fenêtre principale de QtlMovie.
+        C'est équivalent au menu "Outils" => "Extraction DVD" suivi de "Fichier" => "Quitter".</p>
       <p>Les paramètres <i>inputfile ...</i> spécifient des fichiers vidéo à ouvrir automatiquement
         au lancement. Spécifier plus d'un fichier n'est utile qu'en
         <a href="#batchmode">mode multi-fichiers (batch)</a>.</p>

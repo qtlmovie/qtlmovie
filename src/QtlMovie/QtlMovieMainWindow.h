@@ -122,7 +122,7 @@ private:
     //!
     //! Apply the settings which affect the UI.
     //!
-    void applyUserInterfaceSettings();
+    virtual void applyUserInterfaceSettings() Q_DECL_OVERRIDE;
 
     //!
     //! Update the UI when transcoding starts or stops.

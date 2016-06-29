@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieMainWindow.h"
-#include "QtlMovieDvdRipWindow.h"
+#include "QtlMovieDvdExtractionWindow.h"
 #include "QtlTranslator.h"
 #include "QtsTsPacket.h"
 #include <QtCore>
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     // Run the application GUI.
     if (useDvdRip) {
-        QtlMovieDvdRipWindow win(0, logDebug);
+        QtlMovieDvdExtractionWindow win(0, logDebug);
         win.show();
         return QCoreApplication::exec();
     }

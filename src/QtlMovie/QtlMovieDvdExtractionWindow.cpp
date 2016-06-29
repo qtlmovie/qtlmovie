@@ -30,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieDvdRipWindow.h"
+#include "QtlMovieDvdExtractionWindow.h"
 #include "QtlMovie.h"
 #include "QtlFile.h"
 #include "QtlProcess.h"
@@ -51,7 +51,7 @@
 // Constructor.
 //-----------------------------------------------------------------------------
 
-QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
+QtlMovieDvdExtractionWindow::QtlMovieDvdExtractionWindow(QWidget *parent, bool logDebug) :
     QtlMovieMainWindowBase(parent, logDebug),
     _dvdList(),
     _extraction(0)
@@ -95,7 +95,7 @@ QtlMovieDvdRipWindow::QtlMovieDvdRipWindow(QWidget *parent, bool logDebug) :
 // Event handler to handle window close.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::closeEvent(QCloseEvent* event)
+void QtlMovieDvdExtractionWindow::closeEvent(QCloseEvent* event)
 {
     // Let the superclass handle the event.
     QtlMovieMainWindowBase::closeEvent(event);
@@ -112,7 +112,7 @@ void QtlMovieDvdRipWindow::closeEvent(QCloseEvent* event)
 // Common setup for the VTS and Files tables.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::setupTable(QTableWidget* table)
+void QtlMovieDvdExtractionWindow::setupTable(QTableWidget* table)
 {
     // Use a table header with a checkbox in first column.
     table->setHorizontalHeader(new QtlCheckableHeaderView(table));
@@ -138,7 +138,7 @@ void QtlMovieDvdRipWindow::setupTable(QTableWidget* table)
 // Apply the settings which affect the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::applyUserInterfaceSettings()
+void QtlMovieDvdExtractionWindow::applyUserInterfaceSettings()
 {
     _ui.log->setMaximumBlockCount(settings()->maxLogLines());
     if (_ui.editDestination->text().isEmpty()) {
@@ -151,7 +151,7 @@ void QtlMovieDvdRipWindow::applyUserInterfaceSettings()
 // Update the label containing the ISO full path.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::updateIsoFullPath()
+void QtlMovieDvdExtractionWindow::updateIsoFullPath()
 {
     QString path(_ui.editDestination->text());
     if (!path.isEmpty()) {
@@ -169,27 +169,27 @@ void QtlMovieDvdRipWindow::updateIsoFullPath()
 // Update the UI when extraction starts or stops.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
+void QtlMovieDvdExtractionWindow::extractionUpdateUi(bool started)
 {
     // Toggle start/cancel labels in buttons.
     // Change their target slot to start/cancel extraction.
     if (started) {
         _ui.actionStart->setText(tr("Cancel ..."));
-        disconnect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdRipWindow::startExtraction);
-        connect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdRipWindow::cancelExtraction);
+        disconnect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdExtractionWindow::startExtraction);
+        connect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdExtractionWindow::cancelExtraction);
 
         _ui.buttonStart->setText(tr("Cancel ..."));
-        disconnect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::startExtraction);
-        connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::cancelExtraction);
+        disconnect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdExtractionWindow::startExtraction);
+        connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdExtractionWindow::cancelExtraction);
     }
     else {
         _ui.actionStart->setText(tr("Start ..."));
-        disconnect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdRipWindow::cancelExtraction);
-        connect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdRipWindow::startExtraction);
+        disconnect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdExtractionWindow::cancelExtraction);
+        connect(_ui.actionStart, &QAction::triggered, this, &QtlMovieDvdExtractionWindow::startExtraction);
 
         _ui.buttonStart->setText(tr("Start ..."));
-        disconnect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::cancelExtraction);
-        connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdRipWindow::startExtraction);
+        disconnect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdExtractionWindow::cancelExtraction);
+        connect(_ui.buttonStart, &QPushButton::clicked, this, &QtlMovieDvdExtractionWindow::startExtraction);
     }
 
     // Enable / disable other widgets.
@@ -214,7 +214,7 @@ void QtlMovieDvdRipWindow::extractionUpdateUi(bool started)
 // Get the currently selected DVD.
 //-----------------------------------------------------------------------------
 
-QtlDvdMediaPtr QtlMovieDvdRipWindow::currentDvd() const
+QtlDvdMediaPtr QtlMovieDvdExtractionWindow::currentDvd() const
 {
     return _ui.comboDvd->count() > 0 ? _ui.comboDvd->currentData().value<QtlDvdMediaPtr>() : QtlDvdMediaPtr();
 }
@@ -224,7 +224,7 @@ QtlDvdMediaPtr QtlMovieDvdRipWindow::currentDvd() const
 // Invoked by the "Refresh ..." buttons.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::refresh()
+void QtlMovieDvdExtractionWindow::refresh()
 {
     refreshDvdList();
     refreshVtsList();
@@ -236,9 +236,10 @@ void QtlMovieDvdRipWindow::refresh()
 // Refresh the list of DVD's.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::refreshDvdList()
+void QtlMovieDvdExtractionWindow::refreshDvdList()
 {
     // Get currently selected DVD. Used to check if it is still there after refresh.
+    const QString previousIsoFile(_ui.editIsoFile->text());
     const QString previousSelected(_ui.comboDvd->currentText());
     int indexToPreviousSelected = -1;
 
@@ -279,6 +280,7 @@ void QtlMovieDvdRipWindow::refreshDvdList()
     if (indexToPreviousSelected >= 0) {
         // Reselect same DVD, but possibly at a different index.
         _ui.comboDvd->setCurrentIndex(indexToPreviousSelected);
+        _ui.editIsoFile->setText(previousIsoFile);
     }
     else if (_ui.comboDvd->count() > 0) {
         // Otherwise, select the first DVD.
@@ -296,7 +298,7 @@ void QtlMovieDvdRipWindow::refreshDvdList()
 // Refresh the list of video title sets.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::refreshVtsList()
+void QtlMovieDvdExtractionWindow::refreshVtsList()
 {
     // Clear the previous content of the table.
     _ui.tableTitleSets->setRowCount(0);
@@ -334,7 +336,7 @@ void QtlMovieDvdRipWindow::refreshVtsList()
 // Refresh the list of files.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::refreshFilesList()
+void QtlMovieDvdExtractionWindow::refreshFilesList()
 {
     // Clear the previous content of the table.
     _ui.tableFiles->setRowCount(0);
@@ -354,7 +356,7 @@ void QtlMovieDvdRipWindow::refreshFilesList()
 // Add a tree of files and directories in the table of files.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::addDirectoryTree(const QtlDvdDirectory& dir)
+void QtlMovieDvdExtractionWindow::addDirectoryTree(const QtlDvdDirectory& dir)
 {
     // First, add local files in current directory.
     foreach (const QtlDvdFilePtr& file, dir.files()) {
@@ -384,7 +386,7 @@ void QtlMovieDvdRipWindow::addDirectoryTree(const QtlDvdDirectory& dir)
 // Invoked by the "Start ..." buttons.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::startExtraction()
+void QtlMovieDvdExtractionWindow::startExtraction()
 {
     // Fool-proof check.
     if (_extraction != 0) {
@@ -400,7 +402,7 @@ void QtlMovieDvdRipWindow::startExtraction()
     }
 
     // Create a DVD extraction object.
-    _extraction = new QtlMovieDvdExtraction(dvd->deviceName(), settings(), log(), this);
+    _extraction = new QtlMovieDvdExtractionSession(dvd->deviceName(), settings(), log(), this);
 
     // Select the various extraction. This depends on the mode, extraction of ISO, VTS or files.
     switch (_ui.tabDvd->currentIndex()) {
@@ -469,9 +471,9 @@ void QtlMovieDvdRipWindow::startExtraction()
     }
 
     // Get notifications from the extraction object.
-    connect(_extraction, &QtlMovieDvdExtraction::started, this, &QtlMovieDvdRipWindow::extractionStarted);
-    connect(_extraction, &QtlMovieDvdExtraction::progress, this, &QtlMovieDvdRipWindow::extractionProgress);
-    connect(_extraction, &QtlMovieDvdExtraction::completed, this, &QtlMovieDvdRipWindow::extractionStopped);
+    connect(_extraction, &QtlMovieDvdExtractionSession::started, this, &QtlMovieDvdExtractionWindow::extractionStarted);
+    connect(_extraction, &QtlMovieDvdExtractionSession::progress, this, &QtlMovieDvdExtractionWindow::extractionProgress);
+    connect(_extraction, &QtlMovieDvdExtractionSession::completed, this, &QtlMovieDvdExtractionWindow::extractionStopped);
 
     // Start the job.
     if (!_extraction->start()) {
@@ -486,7 +488,7 @@ void QtlMovieDvdRipWindow::startExtraction()
 // Add a file in the current extraction.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdFile& file)
+void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtlDvdFile& file)
 {
     // Check the validity of the file.
     if (file.startSector() < 0) {
@@ -517,7 +519,7 @@ void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdFile& file)
 // Invoked by the "Cancel ..." buttons.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::cancelExtraction()
+void QtlMovieDvdExtractionWindow::cancelExtraction()
 {
     // Ask the user to confirm the cancelation of the current extraction.
     proposeToCancel();
@@ -528,7 +530,7 @@ void QtlMovieDvdRipWindow::cancelExtraction()
 // Invoked when extraction starts.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::extractionStarted()
+void QtlMovieDvdExtractionWindow::extractionStarted()
 {
     // Clear the log if required.
     if (settings()->clearLogBeforeTranscode()) {
@@ -544,7 +546,7 @@ void QtlMovieDvdRipWindow::extractionStarted()
 // Invoked when some progress is made in the extraction process.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds)
+void QtlMovieDvdExtractionWindow::extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds)
 {
     Q_UNUSED(elapsedSeconds);
 
@@ -589,7 +591,7 @@ void QtlMovieDvdRipWindow::extractionProgress(const QString& description, int cu
 // Invoked when extraction stops.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::extractionStopped(bool success)
+void QtlMovieDvdExtractionWindow::extractionStopped(bool success)
 {
     // Check if a extraction job was actually in progress.
     if (_extraction != 0) {
@@ -618,7 +620,7 @@ void QtlMovieDvdRipWindow::extractionStopped(bool success)
 // Check if an extraction is currently in progress. Propose to abort.
 //-----------------------------------------------------------------------------
 
-QtlMovieDvdRipWindow::CancelStatus QtlMovieDvdRipWindow::proposeToCancel()
+QtlMovieDvdExtractionWindow::CancelStatus QtlMovieDvdExtractionWindow::proposeToCancel()
 {
     // If there is nothing to cancel now, no need to ask.
     if (_extraction == 0) {
@@ -649,7 +651,7 @@ QtlMovieDvdRipWindow::CancelStatus QtlMovieDvdRipWindow::proposeToCancel()
 // Abort the extraction, using a slot to defer the abort when back in the event loop.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::deferredAbort()
+void QtlMovieDvdExtractionWindow::deferredAbort()
 {
     if (_extraction != 0) {
         _extraction->abort();

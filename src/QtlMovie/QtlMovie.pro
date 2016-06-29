@@ -75,8 +75,8 @@ SOURCES += main.cpp \
     QtlMovieDeviceProfile.cpp \
     QtlMovieTeletextExtract.cpp \
     QtlMovieMainWindowBase.cpp \
-    QtlMovieDvdRipWindow.cpp \
-    QtlMovieDvdExtraction.cpp
+    QtlMovieDvdExtractionSession.cpp \
+    QtlMovieDvdExtractionWindow.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -113,8 +113,8 @@ HEADERS += \
     QtlMovieDeviceProfile.h \
     QtlMovieTeletextExtract.h \
     QtlMovieMainWindowBase.h \
-    QtlMovieDvdRipWindow.h \
-    QtlMovieDvdExtraction.h
+    QtlMovieDvdExtractionSession.h \
+    QtlMovieDvdExtractionWindow.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \
@@ -122,7 +122,7 @@ FORMS += QtlMovieMainWindow.ui \
     QtlMovieAudioTestDialog.ui \
     QtlMovieAboutMediaTools.ui \
     QtlMovieEditTask.ui \
-    QtlMovieDvdRipWindow.ui
+    QtlMovieDvdExtractionWindow.ui
 
 RESOURCES += QtlMovie.qrc
 

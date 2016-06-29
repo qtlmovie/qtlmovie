@@ -41,6 +41,7 @@
             <li><a href="#logwin">The log window</a></li>
             <li><a href="#fileprop">Input file properties</a></li>
             <li><a href="#audiotest">Audio test</a></li>
+            <li><a href="#dvdextract">DVD extraction</a></li>
           </ul>
         </li>
         <li><a href="#settings">Settings and options</a>
@@ -389,6 +390,29 @@
       <p>In <a href="#batchmode">multi-file batch mode</a>, the "Test Audio" option is
         not in the "Tools" menu since there are possibly more than one input file.
         Instead, use the "Test Audio" button in the task editor.</p>
+
+      <h3><a id="dvdextract">DVD extraction</a></h3>
+
+      <p>The "DVD extraction" option in the "Tools" menu opens an independent application
+        for extracting the content of copy-protected DVD's. This is an independent tool
+        which is not required to transcode DVD's. Since version 1.9, QtlMovie can directly
+        transcode the content of copy-protected DVD's without initially ripping the DVD
+        and transfering its content on a hard drive.</p>
+      <p>All currently mounted DVD's are listed in the combox box "Input DVD".
+        The first one is automatically selected. If DVD media are ejected or inserted
+        in the meantime, press "Refresh" to update the content of the window.</p>
+      <p>The "DVD extraction" tool has three tabs, one per mode of operation.
+        In all cases, the output files are created in the selected "Destination directory".</p>
+      <ul>
+        <li>Tab "ISO": When this tab is selected, the complete content of the DVD is
+          extracted as one large ISO file.</li>
+        <li>Tab "Video Title Sets" (or VTS): When this tab is selected, each VTS in the
+          DVD can be selectively extracted. When a VTS is selected, all its main files
+          are extracted, that is VTS_nn_0.IFO, VTS_nn_1.VOB and following.
+          See the topic <a href="#dvdin">"DVD input"</a> for an explanation of title sets.</li>
+        <li>Tab "Files": When this tab is selected, each file in the DVD can be selectively extracted.</li>
+      </ul>
+
       <hr/>
 
       <h2><a id="settings">Settings and options</a></h2>
@@ -406,6 +430,9 @@
       <p>If the option "Same as input directory" is checked, the default location for the output
         file is the same as the input file. Otherwise, a specific directory can be selected for
         each output type.</p>
+      <p>The default output directory for DVD extraction is used by the tool <a href="#dvdextract">"DVD Extraction"</a>
+        only. If can never be the same as input directory since in that case the input is a DVD
+        which is read-only by definition.</p>
       <p>The "DVD burning device" designates the device name for the DVD burner.
         On Windows, it shall be a device letter like "D:" or "E:".
         On Unix systems, it shall be a device path such as "/dev/dvd".
@@ -631,6 +658,10 @@
           </ul>
         </li>
       </ul>
+      <p>In the group "DVD extraction", the option "Recreate directory tree when extracting DVD"
+        is used when extracting files and Video Title Sets (VTS) from a DVD using the tool
+        <a href="#dvdextract">"DVD Extraction"</a>. When this option is set, the directory structure of the DVD is recreated
+        under the output directory. Otherwise, all files are directly extracted in the output directory.</p>
       <p>The "Max log" option indicates the number of text lines to retain in the log window.
         When this threshold is reached, the first lines are deleted.
         When "Clear log before transcoding" is checked, the log window is automatically cleared
@@ -650,12 +681,15 @@
       <p>However, a few options can be provided on the command line.
         The syntax is the following:</p>
       <div class="sample">
-        <p>QtlMovie [-l <i>locale</i>] [-d] [<i>inputfile ...</i>]</p>
+        <p>QtlMovie [-l <i>locale</i>] [-d] [-e] [<i>inputfile ...</i>]</p>
       </div>
       <p>The <i>locale</i> specifies an alternate locale such as "en" or "fr_FR".
         By default, the system locale is used.</p>
       <p>The option "-d" activates the debug messages in the log. This is equivalent
         to the menu entry "Tools" => "Log Debug".</p>
+      <p>The option "-e" directly opens the <a href="#dvdextract">"DVD Extraction"</a> tool, without the standard
+        QtlMovie main window. This is equivalent to the menu entry "Tools" => "DVD Extraction"
+        followed by "File" => "Quit".</p>
       <p>The <i>inputfile ...</i> specifies video input files which are automatically open
         when QtlMovie starts. Specifying more that one input is useful only in
         <a href="#batchmode">multi-file batch mode</a>.</p>

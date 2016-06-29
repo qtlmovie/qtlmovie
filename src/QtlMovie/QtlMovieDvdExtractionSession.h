@@ -26,14 +26,14 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieDvdExtraction.h
+//! @file QtlMovieDvdExtractionSession.h
 //!
-//! Declare the class QtlMovieDvdExtraction.
+//! Declare the class QtlMovieDvdExtractionSession.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEDVDEXTRACTION_H
-#define QTLMOVIEDVDEXTRACTION_H
+#ifndef QTLMOVIEDVDEXTRACTIONSESSION_H
+#define QTLMOVIEDVDEXTRACTIONSESSION_H
 
 #include "QtlMovieAction.h"
 #include "QtlDvdDataPull.h"
@@ -42,7 +42,7 @@
 //!
 //! A complete DVD extraction session.
 //!
-class QtlMovieDvdExtraction : public QtlMovieAction
+class QtlMovieDvdExtractionSession : public QtlMovieAction
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
     //! @param [in] log Message logger.
     //! @param [in] parent Optional parent object.
     //!
-    QtlMovieDvdExtraction(const QString& dvdDeviceName, const QtlMovieSettings* settings, QtlLogger* log, QObject *parent = 0);
+    QtlMovieDvdExtractionSession(const QString& dvdDeviceName, const QtlMovieSettings* settings, QtlLogger* log, QObject *parent = 0);
 
     //!
     //! Add a slice of DVD to extract in a file.
@@ -153,8 +153,8 @@ private:
     bool startNextExtraction();
 
     // Unaccessible operations.
-    QtlMovieDvdExtraction() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlMovieDvdExtraction)
+    QtlMovieDvdExtractionSession() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtlMovieDvdExtractionSession)
 };
 
-#endif // QTLMOVIEDVDEXTRACTION_H
+#endif // QTLMOVIEDVDEXTRACTIONSESSION_H

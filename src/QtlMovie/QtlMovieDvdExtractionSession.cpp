@@ -26,11 +26,11 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlMovieDvdExtraction.
+// Define the class QtlMovieDvdExtractionSession.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieDvdExtraction.h"
+#include "QtlMovieDvdExtractionSession.h"
 #include "QtlMessageBoxUtils.h"
 
 
@@ -38,7 +38,7 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieDvdExtraction::QtlMovieDvdExtraction(const QString& dvdDeviceName, const QtlMovieSettings* settings, QtlLogger* log, QObject* parent) :
+QtlMovieDvdExtractionSession::QtlMovieDvdExtractionSession(const QString& dvdDeviceName, const QtlMovieSettings* settings, QtlLogger* log, QObject* parent) :
     QtlMovieAction(settings, log, parent),
     _dvdDeviceName(dvdDeviceName),
     _totalSectors(0),
@@ -54,7 +54,7 @@ QtlMovieDvdExtraction::QtlMovieDvdExtraction(const QString& dvdDeviceName, const
 // Constructor of inner private class describing one transfer.
 //----------------------------------------------------------------------------
 
-QtlMovieDvdExtraction::OutputFile::OutputFile(const QString& outputFileName, const QString& dvdDeviceName, int startSector, int sectorCount, QtlLogger* log) :
+QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileName, const QString& dvdDeviceName, int startSector, int sectorCount, QtlLogger* log) :
     totalSectors(sectorCount),
     file(outputFileName),
     dataPull(dvdDeviceName, startSector, sectorCount, true, QtlDvdDataPull::DEFAULT_TRANSFER_SIZE, QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE, log)
@@ -66,7 +66,7 @@ QtlMovieDvdExtraction::OutputFile::OutputFile(const QString& outputFileName, con
 // Add a slice of DVD to extract in a file.
 //----------------------------------------------------------------------------
 
-void QtlMovieDvdExtraction::addFile(const QString& outputFileName, int startSector, int sectorCount)
+void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName, int startSector, int sectorCount)
 {
     // Cannot of that after start.
     if (isStarted()) {
@@ -88,7 +88,7 @@ void QtlMovieDvdExtraction::addFile(const QString& outputFileName, int startSect
 // Ask the user if the output files may be overwritten.
 //----------------------------------------------------------------------------
 
-bool QtlMovieDvdExtraction::askOverwriteOutput()
+bool QtlMovieDvdExtractionSession::askOverwriteOutput()
 {
     // Get the list of files which already exist.
     QStringList existing;
@@ -129,7 +129,7 @@ bool QtlMovieDvdExtraction::askOverwriteOutput()
 // Start the extraction.
 //----------------------------------------------------------------------------
 
-bool QtlMovieDvdExtraction::start()
+bool QtlMovieDvdExtractionSession::start()
 {
     // Do not start twice.
     if (!QtlMovieAction::start()) {
@@ -149,7 +149,7 @@ bool QtlMovieDvdExtraction::start()
 // Start the next extraction in the list.
 //----------------------------------------------------------------------------
 
-bool QtlMovieDvdExtraction::startNextExtraction()
+bool QtlMovieDvdExtractionSession::startNextExtraction()
 {
     // If list is empty, the extraction is completed.
     if (_transferList.isEmpty()) {
@@ -183,12 +183,12 @@ bool QtlMovieDvdExtraction::startNextExtraction()
     }
 
     // Get notified of the transfer progress.
-    connect(&out->dataPull, &QtlDataPull::progress, this, &QtlMovieDvdExtraction::dataPullProgressed);
+    connect(&out->dataPull, &QtlDataPull::progress, this, &QtlMovieDvdExtractionSession::dataPullProgressed);
 
     // Get notified of the transfer progress. Important: We need a queued connection, not a direct one.
     // Our slot dataPullCompleted() will destroy the QtlDataPull instance, we cannot do this inside a
     // direct call from the object to destroy.
-    connect(&out->dataPull, &QtlDataPull::completed, this, &QtlMovieDvdExtraction::dataPullCompleted, Qt::QueuedConnection);
+    connect(&out->dataPull, &QtlDataPull::completed, this, &QtlMovieDvdExtractionSession::dataPullCompleted, Qt::QueuedConnection);
 
     // Start the transfer.
     if (!out->dataPull.start(&out->file)) {
@@ -205,7 +205,7 @@ bool QtlMovieDvdExtraction::startNextExtraction()
 // Abort the extraction.
 //----------------------------------------------------------------------------
 
-void QtlMovieDvdExtraction::abort()
+void QtlMovieDvdExtractionSession::abort()
 {
     // Is there anything to abort?
     if (!isStarted() || _transferList.isEmpty()) {
@@ -233,7 +233,7 @@ void QtlMovieDvdExtraction::abort()
 // Invoked when some progress in the current data transfer is available.
 //----------------------------------------------------------------------------
 
-void QtlMovieDvdExtraction::dataPullProgressed(qint64 current, qint64 maximum)
+void QtlMovieDvdExtractionSession::dataPullProgressed(qint64 current, qint64 maximum)
 {
     // Number of sectors from previous transfers plus sectors in current transfer.
     emitProgress(_completedSectors + int(current / QtlDvdMedia::DVD_SECTOR_SIZE), _totalSectors);
@@ -244,7 +244,7 @@ void QtlMovieDvdExtraction::dataPullProgressed(qint64 current, qint64 maximum)
 // Invoked each time a transfer completes.
 //----------------------------------------------------------------------------
 
-void QtlMovieDvdExtraction::dataPullCompleted(bool success)
+void QtlMovieDvdExtractionSession::dataPullCompleted(bool success)
 {
     // Cleanup terminated extraction.
     Q_ASSERT(!_transferList.isEmpty());
