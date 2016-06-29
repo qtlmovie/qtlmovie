@@ -55,6 +55,7 @@ QtlDataPull::QtlDataPull(int minBufferSize, QtlLogger* log, QObject* parent) :
     _progressNext(-1),
     _totalIn(0),
     _devices(),
+    _newStatePosted(false),
     _processingState(0)
 {
 }
@@ -358,6 +359,21 @@ bool QtlDataPull::needMoreData() const
 
 
 //----------------------------------------------------------------------------
+// Invoked processNewState() later. The appropriate processing of the new
+// state will be performed later, after returning in the event loop.
+//----------------------------------------------------------------------------
+
+void QtlDataPull::processNewStateLater()
+{
+    // Don't queue it several times.
+    if (!_newStatePosted) {
+        QMetaObject::invokeMethod(this, "processNewState", Qt::QueuedConnection);
+        _newStatePosted = true;
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Invoked from the event loop to process a new state.
 //----------------------------------------------------------------------------
 
@@ -372,6 +388,9 @@ void QtlDataPull::processNewState()
     if (_processingState > 1) {
         return;
     }
+
+    // Clear posted state.
+    _newStatePosted = false;
 
     // Filter outdated calls.
     if (_devices.isEmpty()) {
@@ -409,14 +428,14 @@ void QtlDataPull::processNewState()
             // Found a terminating device.
             // The device is zero when the device object has been destroyed.
             if (ctx.device != 0) {
-                // Notify application.
-                emit deviceCompleted(ctx.device, _closed);
-
                 // Disconnect from this device's signals.
                 disconnect(ctx.device, 0, this, 0);
 
                 // Device-specific operations to notify the termination.
                 deviceSpecificCleanup(ctx.device, _closed && ctx.running);
+
+                // Notify application.
+                emit deviceCompleted(ctx.device, _closed);
             }
             // Remove this device from the list.
             _devices.removeAt(index);
@@ -443,9 +462,8 @@ void QtlDataPull::processNewState()
         // Notify clients
         emit completed(_closed);
     }
-
-    // If some devices need data and none are busy, ask for more data to the subclass.
-    if (needMoreData()) {
+    else if (needMoreData()) {
+        // Not completed. If some devices need data and none are busy, ask for more data to the subclass.
         processNewStateLater();
     }
 }

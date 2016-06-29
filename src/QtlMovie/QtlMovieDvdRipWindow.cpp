@@ -36,6 +36,7 @@
 #include "QtlProcess.h"
 #include "QtlStringList.h"
 #include "QtlStringUtils.h"
+#include "QtlDvdTitleSet.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlTableWidgetUtils.h"
 #include "QtlCheckableHeaderView.h"
@@ -345,7 +346,7 @@ void QtlMovieDvdRipWindow::refreshFilesList()
     }
 
     // Create one row per file.
-    addDirectoryTree("", dvd->rootDirectory());
+    addDirectoryTree(dvd->rootDirectory());
 }
 
 
@@ -353,30 +354,28 @@ void QtlMovieDvdRipWindow::refreshFilesList()
 // Add a tree of files and directories in the table of files.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::addDirectoryTree(const QString& path, const QtlDvdDirectory& dir)
+void QtlMovieDvdRipWindow::addDirectoryTree(const QtlDvdDirectory& dir)
 {
-    // Build path to local files.
-    QString parent(path);
-    if (!dir.name().isEmpty()) {
-        parent.append(dir.name());
-        parent.append(QDir::separator());
-    }
-
     // First, add local files in current directory.
-    foreach (const QtlDvdFile& file, dir.files()) {
-        // Items: check box, file path, file size.
-        const QtlStringList texts("", parent + file.name(), qtlSizeToString(file.sizeInBytes(), 2));
+    foreach (const QtlDvdFilePtr& file, dir.files()) {
+        if (!file.isNull()) {
 
-        // Create the row, use header text alignment, set checkbox in column zero.
-        const int row = qtlSetTableRow(_ui.tableFiles, _ui.tableFiles->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
+            // Items: check box, file path, file size.
+            const QtlStringList texts("", file->path(), qtlSizeToString(file->sizeInBytes(), 2));
 
-        // The first cell is used to store the file description.
-        _ui.tableFiles->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(file));
+            // Create the row, use header text alignment, set checkbox in column zero.
+            const int row = qtlSetTableRow(_ui.tableFiles, _ui.tableFiles->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
+
+            // The first cell is used to store the file description.
+            _ui.tableFiles->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(file));
+        }
     }
 
     // Then, add subdirectory trees.
-    foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
-        addDirectoryTree(parent, subdir);
+    foreach (const QtlDvdDirectoryPtr& subdir, dir.subDirectories()) {
+        if (!subdir.isNull()) {
+            addDirectoryTree(*subdir);
+        }
     }
 }
 
@@ -414,7 +413,7 @@ void QtlMovieDvdRipWindow::startExtraction()
             // Loop on all rows in the title set table.
             for (int row = 0; row < _ui.tableTitleSets->rowCount(); ++ row) {
                 // Get cell in first column and see if it is checked.
-                // The second cell contains the file path with directory.
+                // The second cell contains the VTS number.
                 QTableWidgetItem* item1 = _ui.tableTitleSets->item(row, 0);
                 QTableWidgetItem* item2 = _ui.tableTitleSets->item(row, 1);
                 if (item1 != 0 && item1->checkState() == Qt::Checked && item2 != 0) {
@@ -423,9 +422,9 @@ void QtlMovieDvdRipWindow::startExtraction()
                     const QtlDvdTitleSetPtr vts(item1->data(Qt::UserRole).value<QtlDvdTitleSetPtr>());
                     const int vtsNumber = qtlToInt(item2->text());
                     if (!vts.isNull() && vtsNumber > 0) {
-                        addFileForExtraction(*dvd, dvd->vtsInformationFile(vtsNumber));
+                        addFileForExtraction(dvd->vtsInformationFile(vtsNumber));
                         for (int vob = 1; vob <= vts->vobCount(); ++ vob) {
-                            addFileForExtraction(*dvd, dvd->vtsVideoFile(vtsNumber, vob));
+                            addFileForExtraction(dvd->vtsVideoFile(vtsNumber, vob));
                         }
                     }
                 }
@@ -436,14 +435,12 @@ void QtlMovieDvdRipWindow::startExtraction()
             // Loop on all rows in the file table.
             for (int row = 0; row < _ui.tableFiles->rowCount(); ++ row) {
                 // Get cell in first column and see if it is checked.
-                // The second cell contains the file path with directory.
                 QTableWidgetItem* item1 = _ui.tableFiles->item(row, 0);
-                QTableWidgetItem* item2 = _ui.tableFiles->item(row, 1);
-                if (item1 != 0 && item1->checkState() == Qt::Checked && item2 != 0) {
+                if (item1 != 0 && item1->checkState() == Qt::Checked) {
                     // We need to extract this file.
                     // The first cell is used to store the file description.
-                    const QtlDvdFile file(item1->data(Qt::UserRole).value<QtlDvdFile>());
-                    addFileForExtraction(*dvd, file, item2->text());
+                    const QtlDvdFilePtr file(item1->data(Qt::UserRole).value<QtlDvdFilePtr>());
+                    addFileForExtraction(*file);
                 }
             }
             break;
@@ -489,11 +486,11 @@ void QtlMovieDvdRipWindow::startExtraction()
 // Add a file in the current extraction.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdMedia& dvd, const QtlDvdFile& file, const QString& fullPath)
+void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdFile& file)
 {
     // Check the validity of the file.
     if (file.startSector() < 0) {
-        log()->line(tr("File %1 not found on DVD").arg(fullPath));
+        log()->line(tr("File %1 not found on DVD").arg(file.path()));
         return;
     }
 
@@ -502,8 +499,8 @@ void QtlMovieDvdRipWindow::addFileForExtraction(const QtlDvdMedia& dvd, const Qt
     if (!outputPath.isEmpty()) {
         outputPath.append(QDir::separator());
     }
-    if (settings()->dvdExtractDirTree() && !fullPath.isEmpty()) {
-        outputPath.append(fullPath);
+    if (settings()->dvdExtractDirTree()) {
+        outputPath.append(file.path());
     }
     else {
         outputPath.append(file.name());

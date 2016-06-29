@@ -26,81 +26,72 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdDirectory.
+// Define the class QtlDvdFile.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdDirectory.h"
+#include "QtlDvdFile.h"
 
 
 //----------------------------------------------------------------------------
 // Constructor and destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdDirectory::QtlDvdDirectory(const QString& path, int startSector, int sizeInBytes) :
-    QtlDvdFile(path, startSector, sizeInBytes),
-    _subDirectories(),
-    _files()
+QtlDvdFile::QtlDvdFile(const QString& path, int startSector, int sizeInBytes) :
+    _path(path),
+    _sector(startSector),
+    _size(sizeInBytes)
 {
 }
 
-QtlDvdDirectory::~QtlDvdDirectory()
+QtlDvdFile::~QtlDvdFile()
 {
-}
-
-
-//----------------------------------------------------------------------------
-// Clear object content.
-//----------------------------------------------------------------------------
-
-void QtlDvdDirectory::clear()
-{
-    QtlDvdFile::clear();
-    _subDirectories.clear();
-    _files.clear();
 }
 
 
 //----------------------------------------------------------------------------
-// Search files and directories.
+// Get the file name, without directory.
 //----------------------------------------------------------------------------
 
-QtlDvdFile QtlDvdDirectory::searchFile(const QString& fileName, Qt::CaseSensitivity cs) const
+QString QtlDvdFile::name() const
 {
-    foreach (const QtlDvdFilePtr& file, _files) {
-        if (!file.isNull() && fileName.compare(file->name(), cs) == 0) {
-            return *file;
-        }
-    }
-    return QtlDvdFile(fileName);
+    return _path.isEmpty() ? QString() : QFileInfo(_path).fileName();
 }
 
-QtlDvdFile QtlDvdDirectory::searchPath(const QString& path, Qt::CaseSensitivity cs) const
+
+//----------------------------------------------------------------------------
+// Check if the file is a VOB one, possibly encrypted.
+//----------------------------------------------------------------------------
+
+bool QtlDvdFile::isVob() const
 {
-    return searchPath(path.split(QRegExp("[\\\\/]+"), QString::SkipEmptyParts), cs);
+    return _path.endsWith(".VOB", Qt::CaseInsensitive);
 }
 
-QtlDvdFile QtlDvdDirectory::searchPath(const QStringList& path, Qt::CaseSensitivity cs) const
+
+//----------------------------------------------------------------------------
+// Clear the content of this object.
+//----------------------------------------------------------------------------
+
+void QtlDvdFile::clear()
 {
-    return searchPath(path.begin(), path.end(), cs);
+    _path.clear();
+    _sector = -1;
+    _size = 0;
 }
 
-QtlDvdFile QtlDvdDirectory::searchPath(QStringList::ConstIterator begin, QStringList::ConstIterator end, Qt::CaseSensitivity cs) const
+
+//----------------------------------------------------------------------------
+// Operator "less than" on QtlDvdFilePtr to sort files.
+//----------------------------------------------------------------------------
+
+bool operator<(const QtlDvdFilePtr& f1, const QtlDvdFilePtr& f2)
 {
-    if (begin == end) {
-        // Empty path, no file.
-        return QtlDvdFile();
+    // Null pointers preceeds everything.
+    if (!f1.isNull() && !f2.isNull()) {
+        return *f1 < *f2;
     }
-    const QStringList::ConstIterator next(begin + 1);
-    if (next == end) {
-        // We are at the end of the path, search a file.
-        return searchFile(*begin, cs);
+    else {
+        return !f2.isNull();
     }
-    foreach (const QtlDvdDirectoryPtr& dir, _subDirectories) {
-        if (!dir.isNull() && begin->compare(dir->name(), cs) == 0) {
-            return dir->searchPath(next, end, cs);
-        }
-    }
-    // Not found
-    return QtlDvdFile(*(end - 1));
 }

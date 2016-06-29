@@ -76,13 +76,13 @@ bool QtlDvdDataPull::initializeTransfer()
         return false;
     }
 
-    // Initialize DVD access. Do not load file structure, we won't need it.
-    if (!_dvd.openFromDevice(_deviceName, false)) {
+    // Initialize DVD access.
+    if (!_dvd.openFromDevice(_deviceName)) {
         return false;
     }
 
     // Seek to start sector.
-    if (!_dvd.seekSector(_startSector, true)) {
+    if (!_dvd.seekSector(_startSector)) {
         _dvd.close();
         return false;
     }
@@ -112,8 +112,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     }
 
     // Read and write sectors.
-
-    if ((count = _dvd.readSectors(_buffer.data(), count, -1, true, _skipBadSectors)) <= 0) {
+    if ((count = _dvd.readSectors(_buffer.data(), count, -1, _skipBadSectors)) <= 0) {
         return false;
     }
     else {

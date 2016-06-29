@@ -40,7 +40,6 @@
 #include "QtlMovieMainWindowBase.h"
 #include "QtlMovieDvdExtraction.h"
 #include "QtlFileDialogUtils.h"
-#include "QtlDvdMetaTypes.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the DVD Ripper application.
@@ -163,18 +162,15 @@ private:
 
     //!
     //! Add a file in the current extraction.
-    //! @param [in] dvd DVD media.
     //! @param [in] file File description.
-    //! @param [in] fullPath Full path of the file from DVD root. If omitted, use simple file name.
     //!
-    void addFileForExtraction(const QtlDvdMedia& dvd, const QtlDvdFile& file, const QString& fullPath = QString());
+    void addFileForExtraction(const QtlDvdFile& file);
 
     //!
     //! Add a tree of files and directories in the table of files.
-    //! @param [in] path Parent path.
     //! @param [in] dir Directory description.
     //!
-    void addDirectoryTree(const QString& path, const QtlDvdDirectory& dir);
+    void addDirectoryTree(const QtlDvdDirectory& dir);
 
     Ui::QtlMovieDvdRipWindow _ui;          //!< UI from Qt Designer.
     QList<QtlDvdMediaPtr>    _dvdList;     //!< List of detected DVD's.

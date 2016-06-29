@@ -37,6 +37,25 @@
 #define QTLDVDFILE_H
 
 #include "QtlCore.h"
+#include "QtlSmartPointer.h"
+
+class QtlDvdFile;
+
+//!
+//! Smart pointer to QtlDvdFile, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdFile,QtlNullMutexLocker> QtlDvdFilePtr;
+Q_DECLARE_METATYPE(QtlDvdFilePtr)
+
+//!
+//! Operator "less than" on QtlDvdFilePtr to sort files.
+//! The sort criteria is the placement on the DVD media.
+//! @param [in] f1 First instance to compare.
+//! @param [in] f2 Second instance to compare.
+//! @return True if @a f1 is logically less than @a f2, meaning that
+//! @a f1 physically preceeds @a f2 on the DVD media.
+//!
+bool operator<(const QtlDvdFilePtr& f1, const QtlDvdFilePtr& f2);
 
 //!
 //! A class which describes a file on DVD.
@@ -46,30 +65,41 @@ class QtlDvdFile
 public:
     //!
     //! Constructor.
-    //! @param [in] name File name, without directory.
+    //! @param [in] path File name with directory from DVD root.
     //! @param [in] startSector First sector on DVD media.
     //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlDvdFile(const QString& name = QString(), int startSector = -1, int sizeInBytes = 0) :
-        _name(name),
-        _sector(startSector),
-        _size(sizeInBytes)
-    {
-    }
+    QtlDvdFile(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
+
     //!
     //! Virtual destructor.
     //!
-    virtual ~QtlDvdFile()
-    {
-    }
+    virtual ~QtlDvdFile();
+
     //!
-    //! Get the file name.
+    //! Check if this object contains a valid file description.
+    //! @return True if this object contains a valid file description.
+    //!
+    bool isValid() const
+    {
+        return _sector >= 0;
+    }
+
+    //!
+    //! Get the file name, without directory.
     //! @return The file name, without directory.
     //!
-    QString name() const
+    QString name() const;
+
+    //!
+    //! Get the file path with directory from DVD root.
+    //! @return The file path, with directory.
+    //!
+    QString path() const
     {
-        return _name;
+        return _path;
     }
+
     //!
     //! Get the first sector on DVD media.
     //! @return The first sector on DVD media.
@@ -78,6 +108,16 @@ public:
     {
         return _sector;
     }
+
+    //!
+    //! Get the end sector (the one after the last sector) on DVD media.
+    //! @return The end sector on DVD media.
+    //!
+    int endSector() const
+    {
+        return _sector + sectorCount();
+    }
+
     //!
     //! Get the file size in bytes.
     //! @return The file size in bytes.
@@ -86,6 +126,7 @@ public:
     {
         return _size;
     }
+
     //!
     //! Get the file size in sectors.
     //! @return The file size in sectors.
@@ -95,19 +136,34 @@ public:
         // Cannot use QtlDvdMedia::DVD_SECTOR_SIZE here because of header inclusion order.
         return _size / 2048 + int(_size % 2048 > 0);
     }
-protected:
-    QString _name;    //!< File name.
-    int     _sector;  //!< First sector on DVD media.
-    int     _size;    //!< Size in bytes.
+
+    //!
+    //! Check if the file is a VOB one, possibly encrypted.
+    //! @return True if the file is a VOB.
+    //!
+    bool isVob() const;
+
     //!
     //! Clear the content of this object.
     //!
-    virtual void clear()
+    virtual void clear();
+
+    //!
+    //! Operator "less than" to sort files.
+    //! The sort criteria is the placement on the DVD media.
+    //! @param [in] other Another instance to compare.
+    //! @return True if @a this is logically less than @a other, meaning that
+    //! @a this physically preceeds @a other on the DVD media.
+    //!
+    bool operator<(const QtlDvdFile& other)
     {
-        _name.clear();
-        _sector = -1;
-        _size = 0;
+        return _sector < other._sector;
     }
+
+protected:
+    QString _path;    //!< File name with directory from DVD root.
+    int     _sector;  //!< First sector on DVD media.
+    int     _size;    //!< Size in bytes.
 };
 
 #endif // QTLDVDFILE_H

@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlTestCommand.h"
-#include "dvdcss.h"
+#include "QtlDvdMedia.h"
 
 class QtlTestDvdRead : public QtlTestCommand
 {
@@ -50,19 +50,21 @@ int QtlTestDvdRead::run(const QStringList& args)
     if (args.size() != 1) {
         return syntaxError();
     }
+    const QString deviceName(args[0]);
 
     // Open libdvdcss
-    const QByteArray deviceName(args[0].toUtf8());
-    dvdcss_t dvd = dvdcss_open_log(deviceName.data(), 0, 0, 2);
-    if (dvd == 0) {
+    QtlDvdMedia dvd(QString(), &log);
+    if (!dvd.openFromDevice(deviceName)) {
         out << "Cannot initialize libdvdcss on " << deviceName << endl;
         return EXIT_FAILURE;
     }
 
+    // Load all CSS keys
+    dvd.loadAllEncryptionKeys();
+
     // Seek to start of DVD.
-    int count = dvdcss_seek(dvd, 0, DVDCSS_SEEK_MPEG);
-    if (count < 0) {
-        out << "error: dvdcss_seek returns " << count << endl;
+    if (!dvd.seekSector(0)) {
+        out << "error seeking to sector 0" << endl;
         return EXIT_FAILURE;
     }
 
@@ -73,12 +75,13 @@ int QtlTestDvdRead::run(const QStringList& args)
     const int sectorsPerRead = 256;
     const int reportInterval = 100000;
 
-    char buffer[sectorsPerRead * DVDCSS_BLOCK_SIZE];
+    char buffer[sectorsPerRead * QtlDvdMedia::DVD_SECTOR_SIZE];
     int nextReport = reportInterval;
     int currentSector = 0;
+    int count = 0;
 
     do {
-        count = dvdcss_read(dvd, buffer, sectorsPerRead, DVDCSS_READ_DECRYPT);
+        count = dvd.readSectors(buffer, sectorsPerRead);
         if (count > 0) {
             currentSector += count;
         }
@@ -103,7 +106,7 @@ void QtlTestDvdRead::displayBandwidth(const QTime& time, int sectorCount)
 {
     const int milliSec = time.elapsed();
     if (milliSec > 0) {
-        const qint64 bps = (qint64(sectorCount) * DVDCSS_BLOCK_SIZE * 8 * 1000) / milliSec;
+        const qint64 bps = (qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE * 8 * 1000) / milliSec;
         out << "Transfer bandwidth: " << bps << " b/s, " << (bps / 8) << " B/s after " << sectorCount << " sectors" << endl;
     }
 }

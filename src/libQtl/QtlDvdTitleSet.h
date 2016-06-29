@@ -317,4 +317,10 @@ private:
     bool readVtsIfo();
 };
 
+//!
+//! Smart pointer to QtlDvdTitleSet, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdTitleSet,QtlNullMutexLocker> QtlDvdTitleSetPtr;
+Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
+
 #endif // QTLDVDTITLESET_H

@@ -308,10 +308,7 @@ private:
     //!
     //! The appropriate processing of the new state will be performed later, after returning in the event loop.
     //!
-    void processNewStateLater()
-    {
-        QMetaObject::invokeMethod(this, "processNewState", Qt::QueuedConnection);
-    }
+    void processNewStateLater();
 
     //!
     //! Invoked when a device has written data.
@@ -368,6 +365,7 @@ private:
     qint64         _progressNext;      //!< Emit next progress() at this input size.
     qint64         _totalIn;           //!< Total data transfered by write().
     QList<Context> _devices;           //!< Active output devices.
+    bool           _newStatePosted;    //!< processNewState() is posted for execution.
     int            _processingState;   //!< A counter to protect processNewState().
 
     // Unaccessible operations.

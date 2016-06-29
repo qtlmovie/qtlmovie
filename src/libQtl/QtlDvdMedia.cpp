@@ -83,7 +83,9 @@ QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* paren
     _vtsCount(0),
     _dvdcss(0),
     _nextSector(0),
-    _rootDirectory()
+    _rootDirectory(),
+    _allFiles(),
+    _currentFile(_allFiles.end())
 {
     if (!fileName.isEmpty()) {
         openFromFile(fileName);
@@ -110,6 +112,8 @@ void QtlDvdMedia::close()
     _volumeSize = 0;
     _nextSector = 0;
     _rootDirectory.clear();
+    _allFiles.clear();
+    _currentFile = _allFiles.end();
 
     if (_dvdcss != 0) {
         dvdcss_close(_dvdcss);
@@ -191,7 +195,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName)
     }
 
     // Open the device.
-    if (!openFromDevice(deviceName, true)) {
+    if (!openFromDevice(deviceName)) {
         return false;
     }
 
@@ -205,7 +209,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName)
 // Open and load the description of a DVD media starting from its device name.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructure)
+bool QtlDvdMedia::openFromDevice(const QString& deviceName)
 {
     // Close previous media if necessary.
     close();
@@ -228,12 +232,12 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructu
 
     // Read primary volume descriptor.
     // ECMA-119, section 6.7.1: The volume descriptor set starts at sector 16.
-    if (seekSector(DVD_VOLUME_DESCRIPTORS_SECTOR, false)) {
+    if (seekSector(DVD_VOLUME_DESCRIPTORS_SECTOR)) {
         // Each volume descriptor uses one sector. There must be one primary volume
         // descriptor and the list is terminated by one volume descriptor set terminator.
         // Here, we do not read more than 8 sectors (not standard, but highly probable).
         QtlByteBlock data(DVD_SECTOR_SIZE);
-        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, false, false) == 1; --count) {
+        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, false) == 1; --count) {
             // Volume descriptor type is in first byte.
             const int type = data[0];
             // Volume descriptor standard identified is in the next 5 bytes.
@@ -264,26 +268,50 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructu
         }
     }
 
-    // Load the file structure if requested.
-    if (loadFileStructure) {
+    // Check the detection of the root directory.
+    if (rootDirSector < 0 || rootDirSize < 0) {
+        _log->debug(tr("Cannot locate root directory on %1").arg(_deviceName));
+        close();
+        return false;
+    }
 
-        // Check the detection of the root directory.
-        if (rootDirSector < 0 || rootDirSize < 0) {
-            _log->debug(tr("Cannot locate root directory on %1").arg(_deviceName));
-            close();
-            return false;
-        }
+    // Read the complete file structure.
+    _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
+    if (!readDirectoryStructure(_rootDirectory, 0, true, false)) {
+        close();
+        return false;
+    }
 
-        // Read the complete file structure.
-        _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
-        if (!readDirectoryStructure(_rootDirectory, 0, true, false)) {
-            close();
-            return false;
+    // The list of all file has been built by readDirectoryStructure.
+    // Sort the files according to physical placement on DVD.
+    qSort(_allFiles);
+
+    // Walk through the list of files and insert placeholders on non-file space.
+    int lastSector = 0;
+    for (QList<QtlDvdFilePtr>::Iterator iter = _allFiles.begin(); iter != _allFiles.end(); ++iter) {
+        if ((*iter)->startSector() > lastSector) {
+            // There is a hole here, fill it with a placeholder.
+            QtlDvdFilePtr ph(new QtlDvdFile(QString(), lastSector, ((*iter)->startSector() - lastSector) * DVD_SECTOR_SIZE));
+            // Insert placeholder before current element.
+            iter = _allFiles.insert(iter, ph); // iter now points to inserted element
+            ++iter; // iter now points back to original current element
         }
+        lastSector = (*iter)->endSector();
+    }
+
+    // Add placeholder at the end if necessary.
+    if (lastSector < _volumeSize) {
+        _allFiles << QtlDvdFilePtr(new QtlDvdFile(QString(), lastSector, (_volumeSize - lastSector) * DVD_SECTOR_SIZE));
+    }
+
+    // Position the current sector at beginning of media.
+    _isOpen = true;
+    if (!seekSector(0)) {
+        close();
+        return false;
     }
 
     // DVD media now successfully open.
-    _isOpen = true;
     emit newMedia(_volumeId);
     return true;
 }
@@ -293,20 +321,43 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool loadFileStructu
 // Set the position of the next sector to read.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::seekSector(int position, bool vobContent)
+bool QtlDvdMedia::seekSector(int position)
 {
     // Check that the device is at least partially open.
     if (_dvdcss == 0 || position < 0 || (_isOpen && position >= _volumeSize)) {
         return false;
     }
 
+    // Get flags for libdvdcss.
+    int seekFlags = DVDCSS_NOFLAGS;
+    QList<QtlDvdFilePtr>::ConstIterator file(_allFiles.end());
+
+    // If not yet fully open, we are still reading the file structure and no NOFLAGS is ok.
+    if (_isOpen) {
+        // Look for the file corresponding to position.
+        for (file = _allFiles.begin(); file != _allFiles.end(); ++file) {
+            if ((*file)->startSector() <= position && position < (*file)->endSector()) {
+                break;
+            }
+        }
+        if (file == _allFiles.end()) {
+            _log->line(tr("Error seeking DVD to sector %1, not found in media layout").arg(position));
+            return false;
+        }
+        // If this is a VOB file, decrypt.
+        if ((*file)->isVob()) {
+            seekFlags = DVDCSS_SEEK_MPEG;
+        }
+    }
+
     // Let libdvdcss do the job.
-    const int count = dvdcss_seek(_dvdcss, position, vobContent ? DVDCSS_SEEK_MPEG : DVDCSS_NOFLAGS);
+    const int count = dvdcss_seek(_dvdcss, position, seekFlags);
     if (count < 0) {
-        _log->line(tr("Error seeking DVD to sector %1, seek returned %2").arg(position).arg(count));
+        _log->line(tr("Error seeking DVD to sector %1, dvdcss_seek returned %2").arg(position).arg(count));
         return false;
     }
 
+    _currentFile = file;
     _nextSector = position;
     return true;
 }
@@ -316,40 +367,93 @@ bool QtlDvdMedia::seekSector(int position, bool vobContent)
 // Read a given number of sectors from the DVD media.
 //----------------------------------------------------------------------------
 
-int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool vobContent, bool skipBadSectors)
+int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBadSectors)
 {
     // Check that the device is at least partially open.
-    if (_dvdcss == 0 || (position >= 0 && !seekSector(position, vobContent))) {
+    // Seek if requested.
+    if (_dvdcss == 0 || (position >= 0 && !seekSector(position))) {
         return -1;
+    }
+
+    // If the media is fully open, do not read more than the media size.
+    if (_isOpen && _nextSector + count > _volumeSize) {
+        count = _volumeSize - _nextSector;
     }
 
     // Loop on sectors read.
     char* buf = reinterpret_cast<char*>(buffer);
     int result = 0;
+    int badSectorMax = DVD_BAD_SECTOR_RETRY;
     while (count > 0) {
 
-        // Try to read all requested sectors.
-        int got = dvdcss_read(_dvdcss, buf, count, vobContent ? DVDCSS_READ_DECRYPT : DVDCSS_NOFLAGS);
+        // See how many sectors we can read in the current file.
+        int readFlags = DVDCSS_NOFLAGS;
+        int seekFlags = DVDCSS_NOFLAGS;
+        int readCount = count;
 
-        if (got <= 0 && skipBadSectors) {
-            // In case of read error, this may be an intentional bad sector, used to fool copy programs.
-            // We try to skip this one and try next one, etc.
-            const int lastRetry = _nextSector + DVD_BAD_SECTOR_RETRY;
-            while (got < 0 && _nextSector <= lastRetry) {
-                if (dvdcss_seek(_dvdcss, ++_nextSector, vobContent ? DVDCSS_SEEK_MPEG : DVDCSS_NOFLAGS) > 0) {
-                    got = dvdcss_read(_dvdcss, buf, 1, vobContent ? DVDCSS_READ_DECRYPT : DVDCSS_NOFLAGS);
+        // If not yet fully open, we are still reading the file structure.
+        // Otherwise, check where we are in the list of files.
+        if (_isOpen && _currentFile != _allFiles.end()) {
+
+            // See if we need to change file.
+            bool changed = false;
+            while (_currentFile != _allFiles.end() && _nextSector >= (*_currentFile)->endSector()) {
+                ++_currentFile;
+                changed = true;
+            }
+            if (_currentFile == _allFiles.end()) {
+                // Reached the end of media, exit the read loop.
+                break;
+            }
+
+            // If current file is a VOB, we need to decrypt.
+            if ((*_currentFile)->isVob()) {
+                readFlags = DVDCSS_READ_DECRYPT;
+                seekFlags = DVDCSS_SEEK_MPEG;
+            }
+
+            // If we changed, do an explicit seek.
+            // Not sure it is necessary but enforce an encrypted<=>clear or key switch.
+            if (changed) {
+                _log->debug(tr("Switching to file %1 on DVD").arg((*_currentFile)->path()));
+                if (dvdcss_seek(_dvdcss, _nextSector, seekFlags) < 0) {
+                    _log->line(tr("Error seeking at first sector of %1").arg((*_currentFile)->path()));
+                    return result > 0 ? result : -1;
                 }
+            }
+
+            // Do not read more than available in current file.
+            readCount = qMin(readCount, (*_currentFile)->endSector() - _nextSector);
+        }
+
+        // Try to read all requested sectors.
+        int got = dvdcss_read(_dvdcss, buf, readCount, readFlags);
+
+        if (got > 0) {
+            // dvdcss_read successful, reset bad sector count.
+            if (badSectorMax < DVD_BAD_SECTOR_RETRY) {
+                _log->line(tr("Skipped %1 bad sectors in %2").arg(DVD_BAD_SECTOR_RETRY - badSectorMax).arg((*_currentFile)->path()));
+                badSectorMax = DVD_BAD_SECTOR_RETRY;
+            }
+        }
+        else if (skipBadSectors && badSectorMax > 0) {
+            // In case of read error, this may be an intentional bad sector, used to fool copy programs.
+            // Let's pretend we could read one sector of zeroes if we can explicitly seek to next sector.
+            if (dvdcss_seek(_dvdcss, _nextSector + 1, seekFlags) > 0) {
+                got = 1;
+                ::memset(buf, 0, DVD_SECTOR_SIZE);
+                badSectorMax--;
             }
         }
 
-        if (got <= 0) {
+        if (got < 0) {
             // Unrecoverable error.
             _log->line(tr("Error reading sector %1 on DVD media in %2").arg(_nextSector).arg(_deviceName));
             return result > 0 ? result : -1;
         }
 
-        result += got;
         _nextSector += got;
+        result += got;
         count -= got;
         buf += got * DVD_SECTOR_SIZE;
     }
@@ -370,10 +474,16 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
         return false;
     }
 
+    // Prefix for child objects.
+    QString parent(dir.path());
+    if (!parent.isEmpty()) {
+        parent.append(QDir::separator());
+    }
+
     // Read directory content.
     const int dirSectorCount = dir.sizeInBytes() / DVD_SECTOR_SIZE + int(dir.sizeInBytes() % DVD_SECTOR_SIZE != 0);
     QtlByteBlock data(dirSectorCount * DVD_SECTOR_SIZE);
-    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), false, false)) {
+    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), false)) {
         _log->line(tr("Error reading DVD directory information at sector %1").arg(dir.startSector()));
         return false;
     }
@@ -405,17 +515,20 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
 
         if (isDirectory) {
             // Add a directory entry.
-            dir._subDirectories.append(QtlDvdDirectory(name, entrySector, entrySize));
+            QtlDvdDirectoryPtr subdir(new QtlDvdDirectory(parent + name, entrySector, entrySize));
+            dir._subDirectories.append(subdir);
             // Is this directory the root VIDEO_TS?
             const bool vts = inRoot && name.compare("VIDEO_TS", Qt::CaseInsensitive) == 0;
             // Explore subdirectory tree.
-            if (!readDirectoryStructure(dir._subDirectories.last(), depth + 1, false, vts)) {
+            if (!readDirectoryStructure(*subdir, depth + 1, false, vts)) {
                 return false;
             }
         }
         else {
             // Add a file entry.
-            dir._files.append(QtlDvdFile(name, entrySector, entrySize));
+            QtlDvdFilePtr file(new QtlDvdFile(parent + name, entrySector, entrySize));
+            dir._files.append(file);
+            _allFiles.append(file);
             // Is this a video title set? Must be VTS_nn_0.IFO.
             if (inVideoTs && vtsInformationFileNumber(name) >= 0) {
                 ++_vtsCount;
@@ -509,4 +622,33 @@ int QtlDvdMedia::vtsInformationFileNumber(const QString& fileName)
         vts = qtlToInt(name.mid(4, 2)); // -1 if incorrect
     }
     return vts;
+}
+
+
+//----------------------------------------------------------------------------
+// Load all encryption keys into the cache of libdvdcss.
+//----------------------------------------------------------------------------
+
+bool QtlDvdMedia::loadAllEncryptionKeys()
+{
+    // We need to be able to locate all encryption keys.
+    if (_dvdcss == 0 || _allFiles.isEmpty()) {
+        _log->line(tr("DVD media is not open or its file structure has not been read"));
+        return false;
+    }
+
+    // Loop on all files.
+    bool success = true;
+    foreach (const QtlDvdFilePtr& file, _allFiles) {
+        // We seek on first VOB's.
+        const QString name(file->name());
+        if (name.endsWith("_TS.VOB", Qt::CaseInsensitive) || name.endsWith("_0.VOB", Qt::CaseInsensitive) || name.endsWith("_1.VOB", Qt::CaseInsensitive)) {
+            _log->debug(tr("Getting CSS key for %1").arg(file->path()));
+            if (dvdcss_seek(_dvdcss, file->startSector(), DVDCSS_SEEK_KEY) < 0) {
+                _log->line(tr("Error getting CSS key for %1").arg(file->path()));
+                success = false;
+            }
+        }
+    }
+    return success;
 }

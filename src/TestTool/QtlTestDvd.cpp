@@ -84,18 +84,22 @@ void QtlTestDvd::displayFile(const QString& indent, const QtlDvdFile& file)
 {
     out << indent << file.name()
         << ", " << file.sizeInBytes() << " bytes"
-        << ", LBA " << file.startSector() << "-" << (file.startSector() + (file.sizeInBytes() - 1) / QtlDvdMedia::DVD_SECTOR_SIZE)
+        << ", LBA " << file.startSector() << "-" << (file.endSector() - 1)
         << endl;
 }
 
 void QtlTestDvd::displayDirectory(const QString& indent, const QtlDvdDirectory& dir)
 {
     displayFile(indent + "Directory: ", dir);
-    foreach (const QtlDvdFile& file, dir.files()) {
-        displayFile(indent + "    File: ", file);
+    foreach (const QtlDvdFilePtr& file, dir.files()) {
+        if (!file.isNull()) {
+            displayFile(indent + "    File: ", *file);
+        }
     }
-    foreach (const QtlDvdDirectory& subdir, dir.subDirectories()) {
-        displayDirectory(indent + "    ", subdir);
+    foreach (const QtlDvdDirectoryPtr& subdir, dir.subDirectories()) {
+        if (!subdir.isNull()) {
+            displayDirectory(indent + "    ", *subdir);
+        }
     }
 }
 
@@ -114,6 +118,7 @@ int QtlTestDvd::run(const QStringList& args)
 
     // Load DVD media description.
     QtlDvdMedia dvd(input, &log);
+    dvd.loadAllEncryptionKeys();
 
     // Display DVD information.
     out << "Input file: " << input << endl
@@ -130,6 +135,14 @@ int QtlTestDvd::run(const QStringList& args)
     }
     out << "File structure:" << endl;
     displayDirectory("", dvd.rootDirectory());
+    out << endl;
+
+    // Display DVD file layout.
+    out << "File layout:" << endl;
+    foreach (const QtlDvdFilePtr& file, dvd.allFiles()) {
+        const QString name(file->path());
+        out << "    " << (name.isEmpty() ? "(metadata)" : name) << ", LBA " << file->startSector() << "-" << (file->endSector() - 1) << endl;
+    }
     out << endl;
 
     // Load VTS description.

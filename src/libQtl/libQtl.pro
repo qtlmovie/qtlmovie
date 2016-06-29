@@ -86,7 +86,8 @@ SOURCES += \
     QtlDvdDirectory.cpp \
     QtlLayoutUtils.cpp \
     QtlCheckableHeaderView.cpp \
-    QtlFileDialogUtils.cpp
+    QtlFileDialogUtils.cpp \
+    QtlDvdFile.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -158,8 +159,7 @@ HEADERS += \
     QtlDvdDirectory.h \
     QtlLayoutUtils.h \
     QtlCheckableHeaderView.h \
-    QtlFileDialogUtils.h \
-    QtlDvdMetaTypes.h
+    QtlFileDialogUtils.h
 
 FORMS += \
     QtlBrowserDialog.ui \

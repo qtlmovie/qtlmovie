@@ -85,10 +85,9 @@ public:
     //!
     //! Open and load the description of a DVD media starting from its device name.
     //! @param [in] deviceName Name of the device containing the DVD media.
-    //! @param [in] loadFileStructure If true (the default), load the file structure of the DVD.
     //! @return True on success, false on error.
     //!
-    bool openFromDevice(const QString& deviceName, bool loadFileStructure = true);
+    bool openFromDevice(const QString& deviceName);
 
     //!
     //! Close a DVD media.
@@ -152,11 +151,9 @@ public:
     //! Set the position of the next sector to read.
     //! @param [in] position Index of the next sector to read.
     //! Valid values are in the range 0 to volumeSizeInSectors()-1.
-    //! @param [in] vobContent If true, seek into possibly encrypted VOB data.
-    //! In case of doubt, specify @c true, the default.
     //! @return True on success, false on error.
     //!
-    bool seekSector(int position, bool vobContent = true);
+    bool seekSector(int position);
 
     //!
     //! Get the position of the next sector to read.
@@ -173,20 +170,17 @@ public:
     //! @param [in] count Number of sectors to read.
     //! @param [in] position Index of the sector where to seek first. Read at current sector if negative.
     //! Valid values are in the range 0 to volumeSizeInSectors()-1.
-    //! @param [in] vobContent If true, read possibly encrypted VOB data, otherwise read unencrypted data.
-    //! In case of doubt, specify @c true, the default.
-    //! @param [in] skipBadSectors If true, ignore and skip bad sectors which may be used as "protection".
-    //! Note that if bad sectors are skipped, the current position moves past the number of requested
-    //! sector. Do not assume that the next position is nextSector() + @a count, check nextSector().
+    //! @param [in] skipBadSectors If true, ignore bad sectors which may be used as "protection".
+    //! Bad sectors are read as all zeroes.
     //! @return Number of sectors read. Always read as many sectors as possible. If the returned value
-    //! is less than @a count, then either an error or the end of media occured.
+    //! is less than @a count, then either an error or the end of media occured. Specifically, if
+    //! the returned value is 0 then the end of media was already reached and if the returned value
+    //! is negative then there was an error before anything could be read.
     //!
-    int readSectors(void *buffer, int count, int position = -1, bool vobContent = true, bool skipBadSectors = true);
+    int readSectors(void *buffer, int count, int position = -1, bool skipBadSectors = true);
 
     //!
     //! Get the number of Video Title Sets (VTS) on the DVD.
-    //! This information is not available if the DVD was open using openFromDevice()
-    //! with @a loadFileStructure set to @c false.
     //! @return The number of Video Title Sets (VTS) on the DVD.
     //!
     int vtsCount() const
@@ -197,8 +191,6 @@ public:
     //!
     //! Get a description of the root directory.
     //! Can be used to describe the complete file system on DVD.
-    //! This information is not available if the DVD was open using openFromDevice()
-    //! with @a loadFileStructure set to @c false.
     //! @return A description of the root directory.
     //!
     QtlDvdDirectory rootDirectory() const
@@ -208,8 +200,6 @@ public:
 
     //!
     //! Locate a file in the DVD.
-    //! This operation will fail if the DVD was open using openFromDevice()
-    //! with @a loadFileStructure set to @c false.
     //! @param [in] fileName Name of the file to locate. It the absolute path name of the file
     //! starts with the mount point of the DVD, then only the relative part is used. Otherwise,
     //! the @a fileName must be a path relative to the DVD root directory.
@@ -259,6 +249,24 @@ public:
     //!
     static int vtsInformationFileNumber(const QString& fileName);
 
+    //!
+    //! Get the list of all files on the DVD media.
+    //! The list is sorted by physical placement of files on the media.
+    //! Non-file space (meta-data, directories, unused space) is represented
+    //! by "place holders", ie. QtlDvdFile with an empty file name.
+    //! @return The list of all files on the DVD media.
+    //!
+    QList<QtlDvdFilePtr> allFiles() const
+    {
+        return _allFiles;
+    }
+
+    //!
+    //! Load all encryption keys into the cache of libdvdcss.
+    //! @return True on success, false on error.
+    //!
+    bool loadAllEncryptionKeys();
+
 signals:
     //!
     //! Emitted when a new DVD media is open.
@@ -282,7 +290,9 @@ private:
     int              _vtsCount;      //!< Number of video title sets.
     struct dvdcss_s* _dvdcss;        //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
     int              _nextSector;    //!< Next sector to read.
-    QtlDvdDirectory  _rootDirectory; //!< Description of root directory
+    QtlDvdDirectory  _rootDirectory; //!< Description of root directory.
+    QList<QtlDvdFilePtr> _allFiles;  //!< List of all files on DVD.
+    QList<QtlDvdFilePtr>::ConstIterator _currentFile; //!< File area where _nextSector is.
 
     //!
     //! Read the file structure under the specified directory.
@@ -297,5 +307,11 @@ private:
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDvdMedia)
 };
+
+//!
+//! Smart pointer to QtlDvdMedia, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdMedia,QtlNullMutexLocker> QtlDvdMediaPtr;
+Q_DECLARE_METATYPE(QtlDvdMediaPtr)
 
 #endif // QTLDVDMEDIA_H

@@ -182,9 +182,13 @@ bool QtlMovieDvdExtraction::startNextExtraction()
         return false;
     }
 
-    // Get notified of the transfer events.
+    // Get notified of the transfer progress.
     connect(&out->dataPull, &QtlDataPull::progress, this, &QtlMovieDvdExtraction::dataPullProgressed);
-    connect(&out->dataPull, &QtlDataPull::completed, this, &QtlMovieDvdExtraction::dataPullCompleted);
+
+    // Get notified of the transfer progress. Important: We need a queued connection, not a direct one.
+    // Our slot dataPullCompleted() will destroy the QtlDataPull instance, we cannot do this inside a
+    // direct call from the object to destroy.
+    connect(&out->dataPull, &QtlDataPull::completed, this, &QtlMovieDvdExtraction::dataPullCompleted, Qt::QueuedConnection);
 
     // Start the transfer.
     if (!out->dataPull.start(&out->file)) {

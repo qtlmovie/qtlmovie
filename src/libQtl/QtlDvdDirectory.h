@@ -38,6 +38,14 @@
 
 #include "QtlDvdFile.h"
 
+class QtlDvdDirectory;
+
+//!
+//! Smart pointer to QtlDvdDirectory, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdDirectory,QtlNullMutexLocker> QtlDvdDirectoryPtr;
+Q_DECLARE_METATYPE(QtlDvdDirectoryPtr)
+
 //!
 //! A class which describes a directory on DVD.
 //!
@@ -46,24 +54,22 @@ class QtlDvdDirectory : public QtlDvdFile
 public:
     //!
     //! Constructor.
-    //! @param [in] name File name, without directory.
+    //! @param [in] path File name with directory from DVD root.
     //! @param [in] startSector First sector on DVD media.
     //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlDvdDirectory(const QString& name = QString(), int startSector = -1, int sizeInBytes = 0);
+    QtlDvdDirectory(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
 
     //!
     //! Virtual destructor.
     //!
-    virtual ~QtlDvdDirectory()
-    {
-    }
+    virtual ~QtlDvdDirectory();
 
     //!
     //! Get the list of all subdirectories in this directory.
     //! @return The list of all subdirectories in this directory.
     //!
-    QList<QtlDvdDirectory> subDirectories() const
+    QList<QtlDvdDirectoryPtr> subDirectories() const
     {
         return _subDirectories;
     }
@@ -72,7 +78,7 @@ public:
     //! Get the list of all files in this directory.
     //! @return The list of all files in this directory.
     //!
-    QList<QtlDvdFile> files() const
+    QList<QtlDvdFilePtr> files() const
     {
         return _files;
     }
@@ -110,14 +116,15 @@ public:
     //!
     QtlDvdFile searchPath(QStringList::ConstIterator begin, QStringList::ConstIterator end, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
-private:
-    friend class QtlDvdMedia;
-    QList<QtlDvdDirectory> _subDirectories;  //!< All subdirectories in this directory.
-    QList<QtlDvdFile>      _files;           //!< All files in this directory.
     //!
     //! Clear the content of this object.
     //!
     virtual void clear();
+
+private:
+    friend class QtlDvdMedia;
+    QList<QtlDvdDirectoryPtr> _subDirectories;  //!< All subdirectories in this directory.
+    QList<QtlDvdFilePtr>      _files;           //!< All files in this directory.
 };
 
 #endif // QTLDVDDIRECTORY_H
