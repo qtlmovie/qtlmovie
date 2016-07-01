@@ -85,7 +85,7 @@ void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName,
                                            int sectorCount,
                                            QtlDvdMedia::BadSectorPolicy badSectorPolicy)
 {
-    // Cannot of that after start.
+    // Cannot do that after start.
     if (isStarted()) {
         line(tr("Internal error: adding a DVD transfer after start"));
     }

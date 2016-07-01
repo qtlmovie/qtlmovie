@@ -42,12 +42,12 @@
 //! Select a directory and set a QLineEdit with the selected value.
 //! Typically invoked by "Browse..." buttons for a directory.
 //!
-//! @param [in,out] edit Line edit to read and write.
-//! @param [in] title Browse window title.
-//! @param [in] title Default directory to start from if @a edit is empty.
-//! The user's home directory by default.
 //! @param [in] parent Optional parent widget.
 //! If not 0, the dialog will be shown centered over the parent widget.
+//! @param [in,out] edit Line edit to read and write.
+//! @param [in] title Browse window title.
+//! @param [in] defaultInitial Default directory to start from if @a edit is empty.
+//! The user's home directory by default.
 //!
 void qtlBrowseDirectory(QWidget* parent,
                         QLineEdit* edit,
@@ -57,13 +57,14 @@ void qtlBrowseDirectory(QWidget* parent,
 //!
 //! Select an existing file and set a QLineEdit with the selected value.
 //! Typically invoked by "Browse..." buttons for a file.
-//! @param [in,out] edit Line edit to read and write.
-//! @param [in] title Browse window title.
-//! @param [in] title Default file path to start from if @a edit is empty.
-//! The user's home directory by default.
-//! @param [in] filters File filters, see the documentation of QFileDialog::getOpenFileName().
+//!
 //! @param [in] parent Optional parent widget.
 //! If not 0, the dialog will be shown centered over the parent widget.
+//! @param [in,out] edit Line edit to read and write.
+//! @param [in] title Browse window title.
+//! @param [in] defaultInitial Default file path to start from if @a edit is empty.
+//! The user's home directory by default.
+//! @param [in] filters File filters, see the documentation of QFileDialog::getOpenFileName().
 //!
 void qtlBrowseFile(QWidget* parent,
                    QLineEdit* edit,
