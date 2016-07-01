@@ -41,7 +41,7 @@
 QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
                                int startSector,
                                int sectorCount,
-                               bool skipBadSectors,
+                               QtlDvdMedia::BadSectorPolicy badSectorPolicy,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
@@ -50,10 +50,10 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     _deviceName(deviceName),
     _startSector(startSector),
     _endSector(startSector + sectorCount),
-    _skipBadSectors(skipBadSectors),
     _sectorChunk(qMax(1, transferSize / QtlDvdMedia::DVD_SECTOR_SIZE)),
     _buffer(_sectorChunk * QtlDvdMedia::DVD_SECTOR_SIZE),
-    _dvd(QString(), log)
+    _dvd(QString(), log),
+    _badSectorPolicy(badSectorPolicy)
 {
     // Set total transfer size in bytes. In case of ignored bad sectors, the
     // total size will be slightly smaller, but this is just a hint.
@@ -112,7 +112,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     }
 
     // Read and write sectors.
-    if ((count = _dvd.readSectors(_buffer.data(), count, -1, _skipBadSectors)) <= 0) {
+    if ((count = _dvd.readSectors(_buffer.data(), count, -1, _badSectorPolicy)) <= 0) {
         return false;
     }
     else {

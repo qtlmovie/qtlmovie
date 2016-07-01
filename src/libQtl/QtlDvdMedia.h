@@ -165,19 +165,39 @@ public:
     }
 
     //!
+    //! Management policy of bad or corrupted sectors.
+    //!
+    //! Some DVD may intentionally include bad sectors as "protection" in the hope
+    //! that copy programs will fail when encountering read errors.
+    //!
+    //! Note that if bad sectors are skipped, the current position on DVD moves past
+    //! the number of requested sectors. Do not assume that the next position after
+    //! readSectors() is nextSector() + @a count, check nextSector().
+    //!
+    //! Consequently, when reading the complete content of a DVD to create an ISO image,
+    //! use ReadBadSectorsAsZero, do not use SkipBadSectors since this would change the
+    //! layout of the media and corrupt the file structure.
+    //!
+    enum BadSectorPolicy {
+        ErrorOnBadSectors,     //!< Stop and return an error when reading a bad sector.
+        SkipBadSectors,        //!< Skip bad sectors, ignore them, do not include them in returned data.
+        ReadBadSectorsAsZero   //!< Return bad sectors as if they contained all zeroes.
+    };
+
+    //!
     //! Read a given number of sectors from the DVD media.
     //! @param [out] buffer Where to read sectors into. Must be at least as large as 2048 x @a count bytes.
     //! @param [in] count Number of sectors to read.
     //! @param [in] position Index of the sector where to seek first. Read at current sector if negative.
     //! Valid values are in the range 0 to volumeSizeInSectors()-1.
-    //! @param [in] skipBadSectors If true, ignore bad sectors which may be used as "protection".
-    //! Bad sectors are read as all zeroes.
+    //! @param [in] badSectorPolicy How to handle bad sectors.
     //! @return Number of sectors read. Always read as many sectors as possible. If the returned value
     //! is less than @a count, then either an error or the end of media occured. Specifically, if
     //! the returned value is 0 then the end of media was already reached and if the returned value
     //! is negative then there was an error before anything could be read.
+    //! @see BadSectorPolicy
     //!
-    int readSectors(void *buffer, int count, int position = -1, bool skipBadSectors = true);
+    int readSectors(void *buffer, int count, int position = -1, BadSectorPolicy badSectorPolicy = SkipBadSectors);
 
     //!
     //! Get the number of Video Title Sets (VTS) on the DVD.

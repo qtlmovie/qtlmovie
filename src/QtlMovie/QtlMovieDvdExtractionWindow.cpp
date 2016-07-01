@@ -408,7 +408,8 @@ void QtlMovieDvdExtractionWindow::startExtraction()
     switch (_ui.tabDvd->currentIndex()) {
         case QTL_TAB_ISO: {
             // Only one big file to extract.
-            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors());
+            // We replace bad sectors by zeroes to preserve the media layout.
+            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors(), QtlDvdMedia::ReadBadSectorsAsZero);
             break;
         }
         case QTL_TAB_VTS: {
@@ -510,7 +511,8 @@ void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtlDvdFile& file)
 
     // Add the file.
     if (_extraction != 0) {
-        _extraction->addFile(outputPath, file.startSector(), file.sectorCount());
+        // When ripping files, we skip bad sectors.
+        _extraction->addFile(outputPath, file.startSector(), file.sectorCount(), QtlDvdMedia::SkipBadSectors);
     }
 }
 

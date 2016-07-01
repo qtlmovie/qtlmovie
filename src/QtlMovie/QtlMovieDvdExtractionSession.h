@@ -62,8 +62,10 @@ public:
     //! @param [in] outputFileName Output file name.
     //! @param [in] startSector First sector to read.
     //! @param [in] sectorCount Total number of sectors to read.
+    //! @param [in] badSectorPolicy How to handle bad sectors.
+    //! @see QtlDvdMedia::BadSectorPolicy
     //!
-    void addFile(const QString& outputFileName, int startSector, int sectorCount);
+    void addFile(const QString& outputFileName, int startSector, int sectorCount, QtlDvdMedia::BadSectorPolicy badSectorPolicy);
 
     //!
     //! Get the number of remaining transfers, including the current one.
@@ -137,12 +139,14 @@ private:
         //! @param [in] dvdDeviceName DVD device name.
         //! @param [in] startSector First sector to read.
         //! @param [in] sectorCount Total number of sectors to read.
+        //! @param [in] badSectorPolicy How to handle bad sectors.
         //! @param [in] log Message logger.
         //!
         OutputFile(const QString& outputFileName,
                    const QString& dvdDeviceName,
                    int startSector,
                    int sectorCount,
+                   QtlDvdMedia::BadSectorPolicy badSectorPolicy,
                    QtlLogger* log);
     };
 

@@ -60,20 +60,19 @@ public:
     //! @param [in] deviceName DVD device name.
     //! @param [in] startSector First sector to read.
     //! @param [in] sectorCount Total number of sectors to read.
-    //! @param [in] skipBadSectors If true, ignore and skip bad sectors which may be used as "protection".
-    //! Ignored bad sectors are included in @a sectorCount. Consequently, at the end of a successful data
-    //! transfer, the total number of transferted sectors can be less than @a sectorCount.
+    //! @param [in] badSectorPolicy How to handle bad sectors.
     //! @param [in] transferSize Data transfer size in bytes.
     //! @param [in] minBufferSize The minimum buffer size is the lower limit of the
     //! buffered data. When the amount of data not yet written to the device is lower
     //! than this size, new data is pulled from the DVD.
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
+    //! @see QtlDvdMedia::BadSectorPolicy
     //!
     explicit QtlDvdDataPull(const QString& deviceName,
                             int startSector,
                             int sectorCount,
-                            bool skipBadSectors = true,
+                            QtlDvdMedia::BadSectorPolicy badSectorPolicy = QtlDvdMedia::SkipBadSectors,
                             int transferSize = DEFAULT_TRANSFER_SIZE,
                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                             QtlLogger* log = 0,
@@ -106,11 +105,10 @@ private:
     QString      _deviceName;     //!< DVD device name.
     int          _startSector;    //!< First sector to transfer.
     int          _endSector;      //!< Last sector + 1 to transfer.
-    bool         _skipBadSectors; //!< If true, ignore and skip bad sectors which may be used as "protection".
     int          _sectorChunk;    //!< Number of sectors per transfer.
     QtlByteBlock _buffer;         //!< Transfer buffer.
     QtlDvdMedia  _dvd;            //!< Access to DVD media.
-
+    QtlDvdMedia::BadSectorPolicy _badSectorPolicy; //!< How to handle bad sectors.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDvdDataPull)

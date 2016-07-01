@@ -618,10 +618,11 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent) const
     QtlDataPull* writer;
 
     if (_isEncrypted) {
+        // When ripping files, we skip bad sectors.
         writer = new QtlDvdDataPull(_deviceName,
                                     _vobStartSector,
                                     vobSectorCount(),
-                                    true, // skipBadSectors
+                                    QtlDvdMedia::SkipBadSectors,
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     log,

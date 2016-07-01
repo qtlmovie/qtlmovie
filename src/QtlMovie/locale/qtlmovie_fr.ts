@@ -212,24 +212,24 @@ Ligne %3, colonne %4</translation>
 <context>
     <name>QtlMovieDvdExtractionSession</name>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="73"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="89"/>
         <source>Internal error: adding a DVD transfer after start</source>
         <translation>Erreur interne: ajout d&apos;un transfert DVD après le démarrage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="78"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="94"/>
         <source>Queued file %1, sectors %2 to %3</source>
         <translation>Fichier %1 mis en file d&apos;attente, secteurs %2 à %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="104"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="120"/>
         <source>File %1 already exists.
 Overwrite it?</source>
         <translation>Le fichier %1 existe déjà.
 Le remplacer?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="110"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="126"/>
         <source>The following files already exist:
 %1
 Overwrite them?</source>
@@ -238,32 +238,32 @@ Overwrite them?</source>
 Les remplacer?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="119"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="135"/>
         <source>Failed to delete %1</source>
         <translation>Impossible de supprimer %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="141"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="157"/>
         <source>Error starting DVD extraction</source>
         <translation>Erreur au démarrage de l&apos;extraction DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="164"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="180"/>
         <source>Extracting %1</source>
         <translation>Extraction de %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="173"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="189"/>
         <source>Error creating directory %1</source>
         <translation>Impossible de créer le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="180"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="196"/>
         <source>Error creating %1</source>
         <translation>Impossible de créer %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="195"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="211"/>
         <source>Error starting data transfer to %1</source>
         <translation>Erreur au démarrage du transfert vers %1</translation>
     </message>
@@ -447,32 +447,32 @@ Les remplacer?</translation>
         <translation>Aucun DVD trouvé, essayez d&apos;actualiser</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="451"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="452"/>
         <source>Internal error, wrong tab index %1</source>
         <translation>Erreur interne, index d&apos;onglet incorrect: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="458"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="459"/>
         <source>Nothing to extract</source>
         <translation>Rien à extraire</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="467"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="468"/>
         <source>Overwritting output files denied</source>
         <translation>Le remplacement des fichiers de sortie a été refusé</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="495"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="496"/>
         <source>File %1 not found on DVD</source>
         <translation>Fichier %1 non trouvé sur le DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="571"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="573"/>
         <source>%1%2Remaining time: %3</source>
         <translation>%1%2Temps restant: %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="631"/>
+        <location filename="../QtlMovieDvdExtractionWindow.cpp" line="633"/>
         <source>Do you want to abort the current DVD extraction ?</source>
         <translation>Voulez-vous annuler l&apos;extraction DVD en cours ?</translation>
     </message>

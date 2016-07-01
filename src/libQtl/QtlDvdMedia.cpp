@@ -236,8 +236,9 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName)
         // Each volume descriptor uses one sector. There must be one primary volume
         // descriptor and the list is terminated by one volume descriptor set terminator.
         // Here, we do not read more than 8 sectors (not standard, but highly probable).
+        // We do not skip bad sectors in this part of the media.
         QtlByteBlock data(DVD_SECTOR_SIZE);
-        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, false) == 1; --count) {
+        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, ErrorOnBadSectors) == 1; --count) {
             // Volume descriptor type is in first byte.
             const int type = data[0];
             // Volume descriptor standard identified is in the next 5 bytes.
@@ -371,7 +372,7 @@ bool QtlDvdMedia::seekSector(int position)
 // Read a given number of sectors from the DVD media.
 //----------------------------------------------------------------------------
 
-int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBadSectors)
+int QtlDvdMedia::readSectors(void* buffer, int count, int position, BadSectorPolicy badSectorPolicy)
 {
     // Check that the device is at least partially open.
     // Seek if requested.
@@ -380,15 +381,19 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBad
     }
 
     // If the media is fully open, do not read more than the media size.
-    if (_isOpen && _nextSector + count > _volumeSize) {
-        count = _volumeSize - _nextSector;
+    int endSector = _nextSector + count;
+    if (_isOpen && endSector > _volumeSize) {
+        endSector = _volumeSize;
     }
 
     // Loop on sectors read.
     char* buf = reinterpret_cast<char*>(buffer);
     int result = 0;
     int badSectorMax = DVD_BAD_SECTOR_RETRY;
-    while (count > 0) {
+
+    // We need both checks below if the bad sector policy is "skip" since
+    // count and _nextSector may not identically advance.
+    while (count > 0 && _nextSector < endSector) {
 
         // See how many sectors we can read in the current file.
         int readFlags = DVDCSS_NOFLAGS;
@@ -440,13 +445,24 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, bool skipBad
                 badSectorMax = DVD_BAD_SECTOR_RETRY;
             }
         }
-        else if (skipBadSectors && badSectorMax > 0) {
+        else if (badSectorPolicy != ErrorOnBadSectors && badSectorMax > 0) {
             // In case of read error, this may be an intentional bad sector, used to fool copy programs.
-            // Let's pretend we could read one sector of zeroes if we can explicitly seek to next sector.
+            // Let's ignore it if we can explicitly seek to next sector.
             if (dvdcss_seek(_dvdcss, _nextSector + 1, seekFlags) > 0) {
-                got = 1;
-                ::memset(buf, 0, DVD_SECTOR_SIZE);
                 badSectorMax--;
+                switch (badSectorPolicy) {
+                    case SkipBadSectors:
+                        got = 0;
+                        ++_nextSector;
+                        break;
+                    case ReadBadSectorsAsZero:
+                        got = 1;
+                        ::memset(buf, 0, DVD_SECTOR_SIZE);
+                        break;
+                    default:
+                        _log->line(tr("Internal error, invalid bad sector policy"));
+                        break;
+                }
             }
         }
 
@@ -487,7 +503,7 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
     // Read directory content.
     const int dirSectorCount = dir.sizeInBytes() / DVD_SECTOR_SIZE + int(dir.sizeInBytes() % DVD_SECTOR_SIZE != 0);
     QtlByteBlock data(dirSectorCount * DVD_SECTOR_SIZE);
-    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), false)) {
+    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), ErrorOnBadSectors)) {
         _log->line(tr("Error reading DVD directory information at sector %1").arg(dir.startSector()));
         return false;
     }

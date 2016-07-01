@@ -38,7 +38,10 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieDvdExtractionSession::QtlMovieDvdExtractionSession(const QString& dvdDeviceName, const QtlMovieSettings* settings, QtlLogger* log, QObject* parent) :
+QtlMovieDvdExtractionSession::QtlMovieDvdExtractionSession(const QString& dvdDeviceName,
+                                                           const QtlMovieSettings* settings,
+                                                           QtlLogger* log,
+                                                           QObject* parent) :
     QtlMovieAction(settings, log, parent),
     _dvdDeviceName(dvdDeviceName),
     _totalSectors(0),
@@ -54,10 +57,21 @@ QtlMovieDvdExtractionSession::QtlMovieDvdExtractionSession(const QString& dvdDev
 // Constructor of inner private class describing one transfer.
 //----------------------------------------------------------------------------
 
-QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileName, const QString& dvdDeviceName, int startSector, int sectorCount, QtlLogger* log) :
+QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileName,
+                                                     const QString& dvdDeviceName,
+                                                     int startSector,
+                                                     int sectorCount,
+                                                     QtlDvdMedia::BadSectorPolicy badSectorPolicy,
+                                                     QtlLogger* log) :
     totalSectors(sectorCount),
     file(outputFileName),
-    dataPull(dvdDeviceName, startSector, sectorCount, true, QtlDvdDataPull::DEFAULT_TRANSFER_SIZE, QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE, log)
+    dataPull(dvdDeviceName,
+             startSector,
+             sectorCount,
+             badSectorPolicy,
+             QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
+             QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
+             log)
 {
 }
 
@@ -66,7 +80,10 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
 // Add a slice of DVD to extract in a file.
 //----------------------------------------------------------------------------
 
-void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName, int startSector, int sectorCount)
+void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName,
+                                           int startSector,
+                                           int sectorCount,
+                                           QtlDvdMedia::BadSectorPolicy badSectorPolicy)
 {
     // Cannot of that after start.
     if (isStarted()) {
@@ -74,7 +91,7 @@ void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName, int st
     }
     else {
         // Add a new transfer in the list.
-        _transferList << OutputFilePtr(new OutputFile(outputFileName, _dvdDeviceName, startSector, sectorCount, this));
+        _transferList << OutputFilePtr(new OutputFile(outputFileName, _dvdDeviceName, startSector, sectorCount, badSectorPolicy, this));
         debug(tr("Queued file %1, sectors %2 to %3").arg(outputFileName).arg(startSector).arg(startSector + sectorCount - 1));
 
         // Accumulate total transfer size.
