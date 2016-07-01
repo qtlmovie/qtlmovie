@@ -73,6 +73,12 @@ public:
                           QObject *parent = 0,
                           QtlDataPull* dataPull = 0);
 
+    //!
+    //! Start the process.
+    //! @return False if already started. True otherwise.
+    //!
+    virtual bool start();
+
 protected:
     //!
     //! Process one text line from standard error.

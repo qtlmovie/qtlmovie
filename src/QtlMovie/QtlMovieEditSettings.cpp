@@ -549,11 +549,4 @@ void QtlMovieEditSettings::updateMaxBitRate(QLabel* labelMaxBitRate, const QSpin
     const int bitRate = QtlMovieDeviceProfile::videoBitRate(spinBoxQuality->value(), width, height, frameRate);
     const QString bitRateString(qtlStringSpace(QString::number(bitRate), 3, Qt::RightToLeft, " "));
     labelMaxBitRate->setText(tr("%1 bit / second for %2x%3 @%4").arg(bitRateString).arg(width).arg(height).arg(frameRate));
-
-    _settings->log()->debug(tr("%1: video quality: %2, width: %3, height: %4, frameRate: %5, bitrate: %6")
-                            .arg(labelMaxBitRate->objectName())
-                            .arg(spinBoxQuality->value())
-                            .arg(width)
-                            .arg(height)
-                            .arg(frameRate, 0, 'f', 2).arg(bitRate));
 }

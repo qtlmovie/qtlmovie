@@ -212,24 +212,24 @@ Ligne %3, colonne %4</translation>
 <context>
     <name>QtlMovieDvdExtractionSession</name>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="89"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="90"/>
         <source>Internal error: adding a DVD transfer after start</source>
         <translation>Erreur interne: ajout d&apos;un transfert DVD après le démarrage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="94"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="95"/>
         <source>Queued file %1, sectors %2 to %3</source>
         <translation>Fichier %1 mis en file d&apos;attente, secteurs %2 à %3</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="120"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="121"/>
         <source>File %1 already exists.
 Overwrite it?</source>
         <translation>Le fichier %1 existe déjà.
 Le remplacer?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="126"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="127"/>
         <source>The following files already exist:
 %1
 Overwrite them?</source>
@@ -238,32 +238,32 @@ Overwrite them?</source>
 Les remplacer?</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="135"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="136"/>
         <source>Failed to delete %1</source>
         <translation>Impossible de supprimer %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="157"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="158"/>
         <source>Error starting DVD extraction</source>
         <translation>Erreur au démarrage de l&apos;extraction DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="180"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="181"/>
         <source>Extracting %1</source>
         <translation>Extraction de %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="189"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="190"/>
         <source>Error creating directory %1</source>
         <translation>Impossible de créer le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="196"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="197"/>
         <source>Error creating %1</source>
         <translation>Impossible de créer %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionSession.cpp" line="211"/>
+        <location filename="../QtlMovieDvdExtractionSession.cpp" line="212"/>
         <source>Error starting data transfer to %1</source>
         <translation>Erreur au démarrage du transfert vers %1</translation>
     </message>
@@ -956,11 +956,6 @@ Les remplacer?</translation>
         <translation>%1 bit / seconde pour %2x%3 @%4</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="553"/>
-        <source>%1: video quality: %2, width: %3, height: %4, frameRate: %5, bitrate: %6</source>
-        <translation>%1: qualité vidéo: %2, largeur: %3, hauteur: %4, débit d&apos;images: %5, débit binaire: %6</translation>
-    </message>
-    <message>
         <location filename="../QtlMovieEditSettings.h" line="78"/>
         <source>Locate FFmpeg executable</source>
         <translation>Recherche de l&apos;exécutable FFmpeg</translation>
@@ -1134,22 +1129,27 @@ Les remplacer?</translation>
 <context>
     <name>QtlMovieFFmpegProcess</name>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="93"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="80"/>
+        <source>Starting ffmpeg transcode, playback duration: %1 seconds (%2)</source>
+        <translation>Démarrage de transcodage ffmpeg: durée de visionnage: %1 secondes (%2)</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="105"/>
         <source>Cannot find %1, may be a problem to insert subtitles</source>
         <translation>%1 introuvable, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="96"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="108"/>
         <source>Cannot create %1, no temporary directory defined, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, pas de répertoire temporaire défini, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="117"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="129"/>
         <source>Cannot open %1, may be a problem to insert subtitles</source>
         <translation>Impossible d&apos;ouvrir %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="121"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="133"/>
         <source>Cannot create %1, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
