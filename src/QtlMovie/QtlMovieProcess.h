@@ -125,6 +125,23 @@ public:
         return _hasBinaryOutput ? _process : 0;
     }
 
+    //!
+    //! Use the progress report from the QtlDataPull when possible.
+    //! This is possible only when the QtlDataPull is non zero and its reporting is available.
+    //! @param [in] on True to use the progress report from the QtlDataPull.
+    //! @return The new state.
+    //!
+    bool useDataPullProgressReport(bool on);
+
+    //!
+    //! Check if progress report from the QtlDataPull is active.
+    //! @return True when progress report from the QtlDataPull is active.
+    //!
+    bool useDataPullProgressReport() const
+    {
+        return _dpProgress;
+    }
+
 signals:
     //!
     //! Emitted when some binary data are available from standard output.
@@ -181,6 +198,13 @@ private slots:
     //!
     void processError(QProcess::ProcessError error);
 
+    //!
+    //! Invoked when some progress in the QtlDataPull is available.
+    //! @param [in] current Current number of input bytes.
+    //! @param [in] maximum Total size of the data transfer.
+    //!
+    void dataPullProgressed(qint64 current, qint64 maximum);
+
 private:
     QProcess*               _process;         //!< Process instance.
     const QtlMovieExecFile* _execFile;        //!< Process executable file.
@@ -189,6 +213,7 @@ private:
     QtlDataPull*            _dataPull;        //!< Process input.
     QString                 _stdOutput;       //!< Standard error buffer.
     QString                 _stdError;        //!< Standard error buffer.
+    bool                    _dpProgress;      //!< True if dataPullProgressed() was successfully set.
 
     //!
     //! Process the termination of the process.

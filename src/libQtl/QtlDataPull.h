@@ -126,6 +126,15 @@ public:
     }
 
     //!
+    //! Check if progress report is meaningful.
+    //! @return True if progress interval and maximum hint are both set, false otherwise.
+    //!
+    bool progressAvailable() const
+    {
+        return _progressInterval > 0 && _progressMaxHint > 0;
+    }
+
+    //!
     //! Check if the data transfer is started.
     //! @return True if the transfer is started.
     //!

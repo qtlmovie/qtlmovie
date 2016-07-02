@@ -433,6 +433,9 @@ void QtlMovieInputFile::newMediaInfo()
 {
     // Notify the new media information when no more operation in progress.
     if (_teletextSearch == 0) {
+        if (_ffprobeCount <= 0 && _pipeInput) {
+            _log->line(tr("Searching for audio and subtitles tracks completed"), QColor("green"));
+        }
         selectDefaultStreams(_settings->audienceLanguages());
         emit mediaInfoChanged();
     }
@@ -497,6 +500,20 @@ QtlMediaStreamInfoPtr QtlMovieInputFile::streamInfo(int streamIndex) const
 
 float QtlMovieInputFile::durationInSeconds() const
 {
+    // If this is a DVD title set, get the title set duration.
+    // This information is read from the IFO file, not evaluated by ffprobe
+    // but is usually more reliable. First, if the input file is on an encrypted DVD,
+    // ffprobe only reads its standard input pipe, it has no global view on the file
+    // and cannot evaluate its duration. Second, even on ripped VOB files, ffprobe only
+    // reads the last time stamps of the last VOB. But when the VOB files come from
+    // a multi-layer DVD, the time stamps are reset at the beginning of each layer.
+    // So, the last time stamp of the last file is the duration of the last layer,
+    // not the duration of the movie.
+    const int dvdDuration = _dvdTitleSet.durationInSeconds();
+    if (dvdDuration > 0) {
+        return float(dvdDuration);
+    }
+
     // Try duration of file.
     float duration = _ffInfo.floatValue("format.duration");
 
@@ -504,15 +521,6 @@ float QtlMovieInputFile::durationInSeconds() const
     const int count = _ffInfo.intValue("format.nb_streams");
     for (int si = 0; qtlFloatZero(duration) && si < count; ++si) {
         duration = _ffInfo.floatValueOfStream(si, "duration");
-    }
-
-    // If this is a DVD title set, get the title set duration as a last resort.
-    // This information is read from the IFO file, not evaluated by ffprobe.
-    // However, when the input file is on an encrypted DVD, ffprobe only
-    // reads its standard input pipe, it has no global view on the file and
-    // cannot evaluate its duration.
-    if (qtlFloatZero(duration)) {
-        duration = _dvdTitleSet.durationInSeconds();
     }
 
     return duration;

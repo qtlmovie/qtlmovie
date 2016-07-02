@@ -106,17 +106,11 @@ public:
     void setIconTaskBarVisible(bool visible);
 
     //!
-    //! Get the maximum value of the task bar in the application's icon.
-    //! @return The maximum value of the task bar in the application's icon.
-    //!
-    int iconTaskBarMaximumValue() const;
-
-    //!
     //! Set the value of the task bar in the application's icon.
-    //! @param [in] value The value to set, between zero and iconTaskBarMaximumValue().
-    //! @param [in] maximum If positive, then also set the maximum value.
+    //! @param [in] value The value to set, between zero and @a maximum.
+    //! @param [in] maximum Maximum value.
     //!
-    void setIconTaskBarValue(int value, int maximum = -1);
+    void setIconTaskBarValue(int value, int maximum);
 
 public slots:
     //!

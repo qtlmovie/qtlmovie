@@ -186,6 +186,33 @@
         sous-titres apparaitront avec des couleurs étranges et seront difficilement regardables.</p>
       <p>QtlMovie peut travailler directement sur le DVD puisque c'est un volume de fichiers comme les autres.
         Les DVD protégés contre la copie sont automatiquement décryptés à la volée en amont du transcodage.</p>
+      <p><b>Attention:</b> Un lecteur DVD est un périphérique lent. Quand un fichier est sélectionné sur
+        un média DVD, les différentes pistes audio et sous-titres peuvent ne pas apparaitre immédiatement.
+        FFmpeg découvre les pistes audio et sous-titres uniquement quand elles apparaissent pour la première
+        fois dans le film. Quand un fichier est sélectionné, ffprobe lit le début du fichier jusqu'à ce
+        que toutes les pistes soient trouvées. Sur un disque dur, c'est une opération très rapide. Mais sur
+        un lecteur DVD les pistes de sous-titres n'apparaissent souvent qu'après plusieurs minutes de film
+        et il peut se passer jusqu'à une minute avant qu'elles n'apparaissent dans QtlMovie sur un lecteur
+        DVD un peu lent.</p>
+      <p>Il faut également faire attention à comportement étrange de ffmpeg sur certains DVD.
+        Quand le film est long, typiquement deux heures ou plus, the DVD est à "double couche".
+        La première moitié des fichiers VOB est sur une couche et la deuxième moitié sur l'autre couche.
+        On a pu remarquer que l'horodatage ("time stamps") vidéo redémarrait à zéro au début de
+        la deuxième couche. Cela peut créer des problèmes avec ffmpeg.
+        En fait, le transcodage est effectué correctement mais la manière dont ffmpeg se comporte peut être déconcertante.
+        Soit au milieu (fichiers sur disque dur), soit à la fin du film (fichiers sur DVD), QtlMovie a l'air de se figer.
+        En fait, il ne l'est pas. FFmpeg continue le transcodage mais arrête de
+        rendre compte de l'avancement. C'est pourquoi le transcodage <i>apparait</i> figé.
+        Mais il ne faut pas interrompre le travail en cours.
+        Après plusieurs minutes, parfois jusqu'à 40 minutes dans certains cas, ffmpeg
+        reprend la mise à jour de la progression et le transcodage se poursuit normalement.
+        Pendant la période de suspension apparente, l'utilisation mémoire de ffmpeg augmente
+        dangereusement, parfois jusqu'à 3 GO. Ensuite, l'espace mémoire de ffmpeg rediminue
+        graduellement jusqu'à retrouver sa taille d'origine. Cela peut créer des problèmes
+        sur des ordinateurs avec une mémoire de petite taille. En cas de problème, vous
+        pouvez essayer d'augmenter la taille du fichier de pagination ou de la partition de swap.
+        Vous pouvez également essayer d'extraire d'abord les fichiers du DVD et retenter le
+        transcodage à partir du disque dur.</p>
 
       <hr/>
       <h2><a id="outfiles">Fichiers de sortie</a></h2>

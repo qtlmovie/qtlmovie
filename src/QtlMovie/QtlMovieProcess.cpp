@@ -52,7 +52,8 @@ QtlMovieProcess::QtlMovieProcess(const QtlMovieExecFile* execFile,
     _hasBinaryOutput(hasBinaryOutput),
     _dataPull(dataPull),
     _stdOutput(),
-    _stdError()
+    _stdError(),
+    _dpProgress(false)
 {
     Q_ASSERT(execFile != 0);
 }
@@ -307,4 +308,40 @@ QStringList QtlMovieProcess::getJobVariable(const QString& name) const
     // Get the parent job, if any.
     QtlMovieJob* job = qobject_cast<QtlMovieJob*>(parent());
     return job == 0 ? QStringList() : job->getVariable(name);
+}
+
+
+//----------------------------------------------------------------------------
+// Use the progress report from the QtlDataPull when possible.
+//----------------------------------------------------------------------------
+
+bool QtlMovieProcess::useDataPullProgressReport(bool on)
+{
+    const bool wasSet = _dpProgress;
+    _dpProgress = on && _dataPull != 0 && _dataPull->progressAvailable();
+    if (_dpProgress && !wasSet) {
+        connect(_dataPull, &QtlDataPull::progress, this, &QtlMovieProcess::dataPullProgressed);
+    }
+    else if (wasSet && !_dpProgress && _dataPull != 0) {
+        disconnect(_dataPull, &QtlDataPull::progress, this, &QtlMovieProcess::dataPullProgressed);
+    }
+    return _dpProgress;
+}
+
+
+//----------------------------------------------------------------------------
+// Invoked when some progress in the QtlDataPull is available.
+//----------------------------------------------------------------------------
+
+void QtlMovieProcess::dataPullProgressed(qint64 current, qint64 maximum)
+{
+    // A data pull can extract gigabytes of data and sizes are qint64.
+    // But QtlMovieAction uses int's. So, we may need to reduce the scale.
+    const qint64 maxInt = std::numeric_limits<int>::max();
+    while (maximum > maxInt) {
+        maximum = maximum / 1000;
+        current = current / 1000;
+    }
+
+    emitProgress(int(current), int(maximum));
 }

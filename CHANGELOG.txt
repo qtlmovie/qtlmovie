@@ -15,7 +15,8 @@ Version 1.9
   and can replace third-party platform-dependent DVD ripping tools.
 - Bug fix: When clicking in the log window, the color of the subsequent messages
   could be incorrect. This is fixed.
-- Precompiled Windows and Mac binaries uses Qt 5.7.0.
+- Precompiled Windows and Mac binaries use Qt 5.7.0.
+- Precompiled Windows and Mac binaries use recent snapshot versions of ffmpeg.
 - Precompiled Windows binaries now longer include the third party tool "DVD
   Decrypter". It is now replaced by the embedded tool "DVD Extraction".
 

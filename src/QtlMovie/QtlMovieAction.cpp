@@ -136,7 +136,8 @@ void QtlMovieAction::emitProgress(int current, int maximum, int remainingSeconds
 
     // Compute remaining time if necessary and possible (assume strictly linear).
     if (remainingSeconds < 0 && elapsed > 0 && current > 0 && maximum >= current) {
-        remainingSeconds = ((elapsed * maximum) / current) - elapsed;
+        // Take care that elapsed * maximum may overflow int max, use qint64.
+        remainingSeconds = int(((qint64(elapsed) * qint64(maximum)) / current) - elapsed);
     }
 
     // Emit the signal.

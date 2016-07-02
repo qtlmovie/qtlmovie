@@ -177,8 +177,32 @@
         appear in dirty colors and are barely watchable.</p>
       <p>QtlMovie can work directly on the DVD medium since this is a regular file system.
         Copy-protected DVD's are automatically decrypted on the fly upstream from the transcoding process.</p>
-      <hr/>
+      <p><b>Warnings:</b> A DVD reader is a slow device. When selecting a file on a DVD medium, the various
+        audio and subtitle tracks may not appear immediately. FFmpeg discovers audio and subtitle tracks
+        only when they appear. When an input file is selected, ffprobe reads the beginning of the file until
+        all tracks are found. On a hard disk, this is a very fast operation. But on a DVD drive, subtitle
+        tracks usually appear several minutes of playback after the beginning of the movie and it may take up to one
+        minute to discover them in QtlMovie on a slow DVD reader.</p>
+      <p>Also pay attention to a weird behavior of ffmpeg on some DVD's. When the movie is long, typically
+        two hours or more, the DVD is "dual-layered". Half of the VOB files are on one layer and the other
+        half is on the other layer. It has been noted that the time stamps of the video restart at zero
+        at the beginning of the second layer. This creates some problems with ffmpeg.
+        In fact, the transcoding is done correctly but the way ffmpeg behaves can be disconcerting.
+        Either in the middle (ripped files on hard drive) or at the end of the movie (files on DVD),
+        QtlMovie appears to freeze.
+        In fact, it does not.
+        FFmpeg continues the transcoding but no longer reports its progress.
+        This is why the transcoding <i>appears</i> to freeze.
+        But do not interrupt the transcoding.
+        After several minutes, up to 40 minutes in some cases,
+        ffmpeg restarts the reporting of its progress and the transcoding continues normally.
+        During the period of pseudo-freeze, the memory space of ffmpeg increases, possibly up to 3 GB.
+        Then, the memory space of ffmpeg gradually decreases back to its original size.
+        This may cause some trouble on computers with a small memory. In case of problem, you may try
+        to increase the size of the paging file or swap partition. You may also try to first extract the
+        files from the DVD and retry the transcoding from a hard disk.</p>
 
+      <hr/>
       <h2><a id="outfiles">Output files</a></h2>
 
       <h3><a id="dvdout">DVD output</a></h3>

@@ -76,8 +76,13 @@ QtlMovieFFmpegProcess::QtlMovieFFmpegProcess(const QStringList& ffmpegArguments,
 
 bool QtlMovieFFmpegProcess::start()
 {
-    // Simply log a debug message and invoke the superclass.
     debug(tr("Starting ffmpeg transcode, playback duration: %1 seconds (%2)").arg(_inputDurationInSeconds).arg(qtlSecondsToString(_inputDurationInSeconds)));
+
+    // Try to get reporting from the QtlDataPull instead of the ffmpeg process.
+    // This avoid a disconcerting freeze when transcoding from a DVD (see QtlMovie user guide).
+    useDataPullProgressReport(true);
+
+    // Continue in the superclass.
     return QtlMovieProcess::start();
 }
 
@@ -197,8 +202,10 @@ void QtlMovieFFmpegProcess::processOutputLine(QProcess::ProcessChannel channel, 
         QtlMovieProcess::processOutputLine(channel, line);
     }
     else {
-        // Report progression.
-        emitProgress(timeInSeconds, _inputDurationInSeconds);
+        // Report progression if not done in QtlDataPull.
+        if (!useDataPullProgressReport()) {
+            emitProgress(timeInSeconds, _inputDurationInSeconds);
+        }
         debug(line);
     }
 }

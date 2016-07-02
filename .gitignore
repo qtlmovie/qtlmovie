@@ -19,6 +19,7 @@ build-*-[Dd]ebug-[Ss]tatic
 *.deb
 *.dmg
 *.zip
+*.7z
 *.tgz
 *.gz
 *.bz2
