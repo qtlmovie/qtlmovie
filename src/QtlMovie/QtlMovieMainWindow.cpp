@@ -288,7 +288,7 @@ void QtlMovieMainWindow::transcodingProgress(const QString& description, int cur
 
     // Update the Windows task bar button.
     if (_job != 0) {
-        setIconTaskBarValue(current, maximum);
+        setIconTaskBarValue(_job->currentProgress(current, maximum, 1000), 1000);
     }
 }
 
