@@ -78,7 +78,7 @@ protected:
     //! @param [in,out] event The event to process.
     //! @return True if the event was recognized and processed.
     //!
-    virtual bool event(QEvent* event);
+    virtual bool event(QEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QtlGeometrySettingsInterface* _geometrySettings;  //! Where to save and restore the dialog geometry.

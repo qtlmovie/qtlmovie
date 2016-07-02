@@ -161,21 +161,21 @@ public:
     //! Reimplemented from QWidget.
     //! @return The recommended minimum size.
     //!
-    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     //!
     //! Return the widget size hint.
     //! Reimplemented from QWidget.
     //! @return The size hint.
     //!
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
     //!
     //! Check if the preferred height of the widget depends on its width.
     //! Reimplemented from QWidget.
     //! @return True.
     //!
-    virtual bool hasHeightForWidth() const
+    virtual bool hasHeightForWidth() const Q_DECL_OVERRIDE
     {
         return true;
     }
@@ -186,7 +186,7 @@ public:
     //! @param [in] width The proposed width for the widget.
     //! @return The corresponding height.
     //!
-    virtual int	heightForWidth(int width) const;
+    virtual int	heightForWidth(int width) const Q_DECL_OVERRIDE;
 
 protected:
     //!
@@ -195,21 +195,21 @@ protected:
     //! @param event Event.
     //! @return True if the event was recognized and processed.
     //!
-    virtual bool event(QEvent* event);
+    virtual bool event(QEvent* event) Q_DECL_OVERRIDE;
 
     //!
     //! Invoked when a child is added, polished or removed.
     //! Reimplemented from QObject.
     //! @param [in] event The event to intercept.
     //!
-    virtual void childEvent(QChildEvent* event);
+    virtual void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
 
     //!
     //! Invoked when the widget is resized.
     //! Reimplemented from QWidget.
     //! @param [in] event The event to intercept.
     //!
-    virtual void resizeEvent(QResizeEvent* event);
+    virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
 private:
     //!

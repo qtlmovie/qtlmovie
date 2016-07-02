@@ -47,7 +47,7 @@ class QtlTestDvd : public QtlTestCommand
 
 public:
     QtlTestDvd() : QtlTestCommand("dvd", "ifo-or-vob-file [out-file [sector-count]]") {}
-    virtual int run(const QStringList& args);
+    virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
 private:
     void displayFile(const QString& indent, const QtlDvdFile& file);

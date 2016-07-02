@@ -77,7 +77,7 @@ public:
     //! If also signals completed().
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
 private:
     QStringList _files; //!< Files to delete.

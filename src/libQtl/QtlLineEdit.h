@@ -72,12 +72,12 @@ protected:
     //! Invoked when a drag operation enters the widget.
     //! @param [in,out] event The notified event.
     //!
-    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
     //!
     //! Invoked when a drop operation is performed.
     //! @param [in,out] event The notified event.
     //!
-    virtual void dropEvent(QDropEvent* event);
+    virtual void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 };
 
 #endif // QTLLINEEDIT_H

@@ -89,13 +89,13 @@ public:
     //! Start the extraction.
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
     //!
     //! Abort the extraction.
     //! If the extraction was started, the signal completed() will be emitted when it actually terminates.
     //!
-    virtual void abort();
+    virtual void abort() Q_DECL_OVERRIDE;
 
 private slots:
     //!

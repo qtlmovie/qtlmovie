@@ -65,7 +65,7 @@ protected:
     //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
     //! @param [in] line Text line.
     //!
-    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line);
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line) Q_DECL_OVERRIDE;
 
 private:
     // Unaccessible operations.

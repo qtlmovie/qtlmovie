@@ -71,14 +71,14 @@ public:
     //! Implementation of QtlGeometrySettingsInterface.
     //! @param [in] widget The widget to save the geometry of.
     //!
-    virtual void saveGeometry(const QWidget* widget);
+    virtual void saveGeometry(const QWidget* widget) Q_DECL_OVERRIDE;
 
     //!
     //! Restore the geometry of a widget.
     //! Implementation of QtlGeometrySettingsInterface.
     //! @param [in,out] widget The widget to restore the geometry of.
     //!
-    virtual void restoreGeometry(QWidget* widget);
+    virtual void restoreGeometry(QWidget* widget) Q_DECL_OVERRIDE;
 
     //!
     //! Save the "state" of a widget, for widget classes implementing save/restore state.

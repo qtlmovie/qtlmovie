@@ -152,7 +152,7 @@ public:
     //! Implementation of QtlLogger.
     //! @param [in] text Text to log.
     //!
-    virtual void text(const QString& text);
+    virtual void text(const QString& text) Q_DECL_OVERRIDE;
 
     //!
     //! Log a line of text.
@@ -160,7 +160,7 @@ public:
     //! @param [in] line Line to log. No need to contain a trailing new-line character.
     //! @param [in] color When a valid color is passed, try to display the text in this color.
     //!
-    virtual void line(const QString& line, const QColor& color = QColor());
+    virtual void line(const QString& line, const QColor& color = QColor()) Q_DECL_OVERRIDE;
 
     //!
     //! Log a line of debug text.
@@ -168,7 +168,7 @@ public:
     //! @param [in] line Line to log. No need to contain a trailing new-line character.
     //! @param [in] color When a valid color is passed, try to display the text in this color.
     //!
-    virtual void debug(const QString& line, const QColor& color = QColor());
+    virtual void debug(const QString& line, const QColor& color = QColor()) Q_DECL_OVERRIDE;
 
 signals:
     //!

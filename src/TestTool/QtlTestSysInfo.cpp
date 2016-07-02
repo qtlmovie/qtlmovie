@@ -38,7 +38,7 @@ class QtlTestSysInfo : public QtlTestCommand
     Q_OBJECT
 public:
     QtlTestSysInfo() : QtlTestCommand("sysinfo") {}
-    virtual int run(const QStringList& args);
+    virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
 //----------------------------------------------------------------------------

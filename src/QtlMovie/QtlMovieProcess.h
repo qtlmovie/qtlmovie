@@ -83,13 +83,13 @@ public:
     //! Start the process.
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
     //!
     //! Abort process execution.
     //! If the process was started, the signal completed() will be emitted when the process actually terminates.
     //!
-    virtual void abort();
+    virtual void abort() Q_DECL_OVERRIDE;
 
     //!
     //! Get the command executable file.

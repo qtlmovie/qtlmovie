@@ -75,7 +75,7 @@ protected:
     //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
     //! @param [in] textLine Text line.
     //!
-    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& textLine);
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& textLine) Q_DECL_OVERRIDE;
 
     //!
     //! Emit the completed() signal.
@@ -83,7 +83,7 @@ protected:
     //! @param [in] success True when the action completed successfully, false otherwise.
     //! @param [in] message Optional error message to log.
     //!
-    virtual void emitCompleted(bool success, const QString& message = QString());
+    virtual void emitCompleted(bool success, const QString& message = QString()) Q_DECL_OVERRIDE;
 
 private:
     QString _fileName;  //!< Input file name.

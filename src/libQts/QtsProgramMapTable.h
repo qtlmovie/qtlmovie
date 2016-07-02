@@ -122,7 +122,7 @@ public:
     //! @param [out] table Replaced with a binary representation of this object.
     //! @return True on success, false on error (invalid table, data too large, etc.)
     //!
-    virtual bool serialize(QtsTable& table) const;
+    virtual bool serialize(QtsTable& table) const Q_DECL_OVERRIDE;
 
     //!
     //! This abstract method deserializes a binary table.
@@ -130,7 +130,7 @@ public:
     //! @param [out] table Binary table to deserialize.
     //! @return True on success, false on error (invalid data, etc.)
     //!
-    virtual bool deserialize(const QtsTable& table);
+    virtual bool deserialize(const QtsTable& table) Q_DECL_OVERRIDE;
 };
 
 #endif // QTSPROGRAMMAPTABLE_H

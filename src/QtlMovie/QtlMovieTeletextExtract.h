@@ -70,7 +70,7 @@ public:
     //! Reimplemented from QtlMovieTsDemux.
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
 protected:
     //!
@@ -79,14 +79,14 @@ protected:
     //! @param [in] success True when the action completed successfully, false otherwise.
     //! @param [in] message Optional error message to log.
     //!
-    virtual void emitCompleted(bool success, const QString& message = QString());
+    virtual void emitCompleted(bool success, const QString& message = QString()) Q_DECL_OVERRIDE;
 
     //!
     //! Get the demux.
     //! Reimplemented from QtlMovieTsDemux.
     //! @return The current demux. Cannot be null.
     //!
-    virtual QtsDemux* demux()
+    virtual QtsDemux* demux() Q_DECL_OVERRIDE
     {
         return &_demux;
     }
@@ -104,7 +104,7 @@ private:
     //! @param [in,out] demux The Teletext demux.
     //! @param [in] frame Teletext frame.
     //!
-    virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame);
+    virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame) Q_DECL_OVERRIDE;
 
     // Unaccessible operations.
     QtlMovieTeletextExtract() Q_DECL_EQ_DELETE;

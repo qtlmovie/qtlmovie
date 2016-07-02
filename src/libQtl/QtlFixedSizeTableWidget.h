@@ -66,7 +66,7 @@ public:
     //! Reimplemented from QWidget to always provide the exact size of all rows and columns.
     //! @return The size hint.
     //!
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
     //!
@@ -74,7 +74,7 @@ protected:
     //! Reimplemented from QWidget.
     //! @param event Show event.
     //!
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent* event) Q_DECL_OVERRIDE;
 
 private slots:
     //!

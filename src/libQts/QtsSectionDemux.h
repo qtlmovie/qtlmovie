@@ -91,13 +91,13 @@ public:
     //! Useful when the transport stream changes.
     //! The PID filter and the handlers are not modified.
     //!
-    virtual void reset();
+    virtual void reset() Q_DECL_OVERRIDE;
 
     //!
     //! Reset the analysis context for one single PID.
     //! @param [in] pid PID to reset.
     //!
-    virtual void resetPid(QtsPid pid);
+    virtual void resetPid(QtsPid pid) Q_DECL_OVERRIDE;
 
     //!
     //! Demux status information
@@ -203,7 +203,7 @@ private:
     //! Feed the demux with a TS packet (PID already filtered).
     //! @param [in] packet The TS packet to process.
     //!
-    void processTsPacket(const QtsTsPacket& packet);
+    void processTsPacket(const QtsTsPacket& packet) Q_DECL_OVERRIDE;
 
     // Private members:
     QtsTableHandlerInterface*   _tableHandler;   //!< Handler to invoke for each new table.

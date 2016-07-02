@@ -73,7 +73,7 @@ protected:
     //! Reimplemented from QtlMovieTsDemux.
     //! @return The current demux. Cannot be null.
     //!
-    virtual QtsDemux* demux()
+    virtual QtsDemux* demux() Q_DECL_OVERRIDE
     {
         return &_demux;
     }
@@ -87,7 +87,7 @@ private:
     //! @param [in,out] demux The section demux.
     //! @param [in] table The table.
     //!
-    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table);
+    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table) Q_DECL_OVERRIDE;
 
     // Unaccessible operations.
     QtlMovieTeletextSearch() Q_DECL_EQ_DELETE;

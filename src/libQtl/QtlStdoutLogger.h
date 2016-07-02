@@ -60,7 +60,7 @@ public:
     //! Log text.
     //! @param [in] text Text to log.
     //!
-    virtual void text(const QString& text)
+    virtual void text(const QString& text) Q_DECL_OVERRIDE
     {
         _out << text;
     }
@@ -71,7 +71,7 @@ public:
     //! @param [in] color When a valid color is passed, try to display the text in this color.
     //! Present by contract from QtlLogger but ignored.
     //!
-    virtual void line(const QString& line, const QColor& color = QColor())
+    virtual void line(const QString& line, const QColor& color = QColor()) Q_DECL_OVERRIDE
     {
         _out << line << endl;
     }
@@ -82,7 +82,7 @@ public:
     //! @param [in] color When a valid color is passed, try to display the text in this color.
     //! Present by contract from QtlLogger but ignored.
     //!
-    virtual void debug(const QString& line, const QColor& color = QColor())
+    virtual void debug(const QString& line, const QColor& color = QColor()) Q_DECL_OVERRIDE
     {
         if (_debug) {
             _out << "[debug] " << line << endl;

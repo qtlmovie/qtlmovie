@@ -38,7 +38,7 @@ class QtlTestDvdRead : public QtlTestCommand
     Q_OBJECT
 public:
     QtlTestDvdRead() : QtlTestCommand("dvdread", "device-name") {}
-    virtual int run(const QStringList& args);
+    virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 private:
     void displayBandwidth(const QTime& time, int sectorCount);
 };

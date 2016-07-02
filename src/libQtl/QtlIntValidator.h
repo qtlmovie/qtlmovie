@@ -113,7 +113,7 @@ public:
     //! Reimplemented from QValidator::fixup().
     //! @param [in,out] input Input string.
     //!
-    virtual void fixup(QString& input) const
+    virtual void fixup(QString& input) const Q_DECL_OVERRIDE
     {
     }
 
@@ -123,7 +123,7 @@ public:
     //! @param [in,out] pos Cursor position.
     //! @return Either Invalid, Intermediate or Acceptable.
     //!
-    virtual State validate(QString& input, int& pos) const;
+    virtual State validate(QString& input, int& pos) const Q_DECL_OVERRIDE;
 
 private:
     static const QRegExp _hexaRegExp;  //!< A regular expression matching all hexadecimal strings.

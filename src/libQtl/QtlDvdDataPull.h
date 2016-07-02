@@ -84,7 +84,7 @@ protected:
     //! Reimplemented from QtlDataPull.
     //! @return True on success, false on error.
     //!
-    virtual bool initializeTransfer();
+    virtual bool initializeTransfer() Q_DECL_OVERRIDE;
 
     //!
     //! Invoked when more data is needed.
@@ -92,14 +92,14 @@ protected:
     //! @param [in] maxSize Maximum size in bytes of the requested transfer.
     //! @return True on success, false on error.
     //!
-    virtual bool needTransfer(qint64 maxSize);
+    virtual bool needTransfer(qint64 maxSize) Q_DECL_OVERRIDE;
 
     //!
     //! Cleanup the transfer.
     //! Reimplemented from QtlDataPull.
     //! @param [in] clean If true, this is a clean termination.
     //!
-    virtual void cleanupTransfer(bool clean);
+    virtual void cleanupTransfer(bool clean) Q_DECL_OVERRIDE;
 
 private:
     QString      _deviceName;     //!< DVD device name.

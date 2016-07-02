@@ -68,7 +68,7 @@ namespace {
         //! @param [in] index Index in the data model.
         //! @return The new editor widget.
         //!
-        virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex &index) const
+        virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex &index) const Q_DECL_OVERRIDE
         {
             QtlNamedIntComboBox* combo = new QtlNamedIntComboBox(parent);
             combo->setNames(_tagNames);
@@ -81,7 +81,7 @@ namespace {
         //! @param [in] editor The editor widget.
         //! @param [in] index Index in the data model.
         //!
-        virtual void setEditorData(QWidget* editor, const QModelIndex& index) const
+        virtual void setEditorData(QWidget* editor, const QModelIndex& index) const Q_DECL_OVERRIDE
         {
             QtlNamedIntComboBox* combo = qobject_cast<QtlNamedIntComboBox*>(editor);
             if (combo == 0) {
@@ -100,7 +100,7 @@ namespace {
         //! @param [in] model The data model.
         //! @param [in] index Index in the data model.
         //!
-        virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+        virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const Q_DECL_OVERRIDE
         {
             QtlNamedIntComboBox* combo = qobject_cast<QtlNamedIntComboBox*>(editor);
             if (combo == 0) {
@@ -148,7 +148,7 @@ namespace {
         //! @param [in] index Index in the data model.
         //! @return The new editor widget.
         //!
-        virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex &index) const
+        virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex &index) const Q_DECL_OVERRIDE
         {
             // Create an editor for hexadecimal content.
             return new QtlPlainTextEdit(parent, QtlPlainTextEdit::Monospace | QtlPlainTextEdit::ToUpper | QtlPlainTextEdit::Spaces | QtlPlainTextEdit::Hexa);
@@ -159,7 +159,7 @@ namespace {
         //! @param [in] editor The editor widget.
         //! @param [in] index Index in the data model.
         //!
-        virtual void setEditorData(QWidget* editor, const QModelIndex& index) const
+        virtual void setEditorData(QWidget* editor, const QModelIndex& index) const Q_DECL_OVERRIDE
         {
             QtlPlainTextEdit* edit = qobject_cast<QtlPlainTextEdit*>(editor);
             if (edit == 0) {
@@ -178,7 +178,7 @@ namespace {
         //! @param [in] model The data model.
         //! @param [in] index Index in the data model.
         //!
-        virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+        virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const Q_DECL_OVERRIDE
         {
             QtlPlainTextEdit* edit = qobject_cast<QtlPlainTextEdit*>(editor);
             if (edit == 0) {

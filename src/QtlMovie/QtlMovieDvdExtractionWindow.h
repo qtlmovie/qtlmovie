@@ -111,7 +111,7 @@ protected:
     //! Event handler to handle window close.
     //! @param event Notified event.
     //!
-    virtual void closeEvent(QCloseEvent* event);
+    virtual void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
 private:
     //!
@@ -120,7 +120,7 @@ private:
     //! of the cancelation will be notified later by extractionStopped().
     //! @return Cancel status.
     //!
-    virtual CancelStatus proposeToCancel();
+    virtual CancelStatus proposeToCancel() Q_DECL_OVERRIDE;
 
     //!
     //! Common setup for the VTS and Files tables.

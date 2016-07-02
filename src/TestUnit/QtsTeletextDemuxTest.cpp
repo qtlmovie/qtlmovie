@@ -52,8 +52,8 @@ private:
     QStringList::ConstIterator _refIterator;
     QtsTsFile                  _file;
 
-    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table);
-    virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame);
+    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table) Q_DECL_OVERRIDE;
+    virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame) Q_DECL_OVERRIDE;
 };
 
 #include "QtsTeletextDemuxTest.moc"

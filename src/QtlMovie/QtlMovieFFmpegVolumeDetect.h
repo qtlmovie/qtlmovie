@@ -77,14 +77,14 @@ protected:
     //! @param [in] channel Origin of the line (QProcess::StandardOutput or QProcess::StandardError).
     //! @param [in] line Text line.
     //!
-    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line);
+    virtual void processOutputLine(QProcess::ProcessChannel channel, const QString& line) Q_DECL_OVERRIDE;
 
     //!
     //! Emit the completed() signal.
     //! @param [in] success True when the action completed successfully, false otherwise.
     //! @param [in] message Optional error message to log.
     //!
-    virtual void emitCompleted(bool success, const QString& message = QString());
+    virtual void emitCompleted(bool success, const QString& message = QString()) Q_DECL_OVERRIDE;
 
 private:
     qreal _meanLevel;  //!< Measured audio mean level in dBFS.

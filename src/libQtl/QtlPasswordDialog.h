@@ -69,7 +69,7 @@ public slots:
     //! Invoked when OK is clicked.
     //! Reimplemented from QDialog.
     //!
-    virtual void accept();
+    virtual void accept() Q_DECL_OVERRIDE;
 
 protected:
     //!
@@ -77,13 +77,13 @@ protected:
     //! Reimplemented from superclass.
     //! @param [in] event The show event.
     //!
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent* event) Q_DECL_OVERRIDE;
     //!
     //! Invoked when a key is pressed.
     //! Reimplemented from superclass.
     //! @param [in] event The key event.
     //!
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private:
     bool       _emptyAllowed;  //!< If true, an empty password is allowed.

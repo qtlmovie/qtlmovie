@@ -145,7 +145,7 @@ public:
     //! @param [in] fileName File path.
     //! @return True if the file name was modified, false if it was the same file name.
     //!
-    virtual bool setFileName(const QString& fileName);
+    virtual bool setFileName(const QString& fileName) Q_DECL_OVERRIDE;
 
     //!
     //! Build the search path of QtlMovie utilities.

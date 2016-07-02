@@ -119,7 +119,7 @@ public:
     //!
     //! Clear the content of this object.
     //!
-    virtual void clear();
+    virtual void clear() Q_DECL_OVERRIDE;
 
 private:
     friend class QtlDvdMedia;

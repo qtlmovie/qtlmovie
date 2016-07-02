@@ -106,13 +106,13 @@ public:
     //! Useful when the transport stream changes.
     //! The PID filter and the handlers are not modified.
     //!
-    virtual void reset();
+    virtual void reset() Q_DECL_OVERRIDE;
 
     //!
     //! Reset the analysis context for one single PID.
     //! @param [in] pid PID to reset.
     //!
-    virtual void resetPid(QtsPid pid);
+    virtual void resetPid(QtsPid pid) Q_DECL_OVERRIDE;
 
 protected:
     //!
@@ -120,7 +120,7 @@ protected:
     //! Overloaded from QtsPesDemux.
     //! @param [in] packet The PES packet.
     //!
-    virtual void handlePesPacket(const QtsPesPacket& packet);
+    virtual void handlePesPacket(const QtsPesPacket& packet) Q_DECL_OVERRIDE;
 
 private:
     //!

@@ -77,7 +77,7 @@ public:
     //! @param [in] mode The mode into which the file shall been open.
     //! @return True on success, false on error.
     //!
-    virtual bool open(OpenMode mode = ReadOnly);
+    virtual bool open(OpenMode mode = ReadOnly) Q_DECL_OVERRIDE;
 
     //!
     //! Read as many TS packets as possible from the file.

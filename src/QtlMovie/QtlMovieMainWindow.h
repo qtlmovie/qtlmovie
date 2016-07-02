@@ -117,7 +117,7 @@ private:
     //! of the cancelation will be notified later by transcodingStopped().
     //! @return Cancel status.
     //!
-    virtual CancelStatus proposeToCancel();
+    virtual CancelStatus proposeToCancel() Q_DECL_OVERRIDE;
 
     //!
     //! Apply the settings which affect the UI.

@@ -65,7 +65,7 @@ public:
     //! @param [in] option The style to use. Typically gives the geometry of the item.
     //! @param [in] index The index of the item.
     //!
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 private:
     const QColor           _color; //!< Color of the rectangle.

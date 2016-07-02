@@ -70,14 +70,14 @@ public:
     //! Reimplemented from QtlMovieAction.
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
     //!
     //! Abort analysis.
     //! Reimplemented from QtlMovieAction.
     //! If the analysis is in progress(), the signal completed() will be emitted.
     //!
-    virtual void abort();
+    virtual void abort() Q_DECL_OVERRIDE;
 
     //!
     //! Check if the input file has M2TS format.
@@ -96,7 +96,7 @@ protected:
     //! @param [in] success True when the action completed successfully, false otherwise.
     //! @param [in] message Optional error message to log.
     //!
-    virtual void emitCompleted(bool success, const QString& message = QString());
+    virtual void emitCompleted(bool success, const QString& message = QString()) Q_DECL_OVERRIDE;
 
     //!
     //! Get the demux.
@@ -109,7 +109,7 @@ protected:
     //! Event handler to handle timer.
     //! @param event Notified event.
     //!
-    virtual void timerEvent(QTimerEvent* event);
+    virtual void timerEvent(QTimerEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QtsTsFile _file;            //!< TS file.

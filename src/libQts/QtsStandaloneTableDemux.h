@@ -75,14 +75,14 @@ public:
     //! The PID filter and the handlers are not modified.
     //! Inherited from QtsSectionDemux
     //!
-    virtual void reset();
+    virtual void reset() Q_DECL_OVERRIDE;
 
     //!
     //! Reset the analysis context for one single PID.
     //! Inherited from QtsSectionDemux
     //! @param [in] pid PID to reset.
     //!
-    virtual void resetPid(QtsPid pid);
+    virtual void resetPid(QtsPid pid) Q_DECL_OVERRIDE;
 
 private:
     QtsTablePtrVector _tables; //!< Demuxed tables.
@@ -93,7 +93,7 @@ private:
     //! @param [in,out] demux The section demux.
     //! @param [in] table The table.
     //!
-    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table);
+    virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table) Q_DECL_OVERRIDE;
 
     // Make these methods inaccessible
     void setTableHandler(QtsTableHandlerInterface* handler);

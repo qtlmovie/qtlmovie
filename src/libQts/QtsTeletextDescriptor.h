@@ -60,7 +60,7 @@ public:
     //! @param [out] descriptor Replaced with a binary representation of this object.
     //! @return True on success, false on error (invalid descriptor, data too large, etc.)
     //!
-    virtual bool serialize(QtsDescriptor& descriptor) const;
+    virtual bool serialize(QtsDescriptor& descriptor) const Q_DECL_OVERRIDE;
 
     //!
     //! This abstract method deserializes a binary descriptor.
@@ -68,7 +68,7 @@ public:
     //! @param [in] descriptor Binary descriptor to deserialize.
     //! @return True on success, false on error (invalid data, etc.)
     //!
-    virtual bool deserialize(const QtsDescriptor& descriptor);
+    virtual bool deserialize(const QtsDescriptor& descriptor) Q_DECL_OVERRIDE;
 
     //!
     //! Describe a teletext entry in the descriptor.

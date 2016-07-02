@@ -164,17 +164,17 @@ protected:
     //! Invoked when a drag operation enters the widget.
     //! @param [in,out] event The notified event.
     //!
-    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
     //!
     //! Invoked when a drag operation is in progress and the cursor moves.
     //! @param [in,out] event The notified event.
     //!
-    virtual void dragMoveEvent(QDragMoveEvent* event);
+    virtual void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
     //!
     //! Invoked when a drop operation is performed.
     //! @param [in,out] event The notified event.
     //!
-    virtual void dropEvent(QDropEvent* event);
+    virtual void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QtlMovieSettings* _settings;    //!< Application settings.

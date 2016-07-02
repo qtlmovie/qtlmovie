@@ -114,7 +114,7 @@ protected:
     //! Reimplemented from QObject.
     //! @param [in] event The event to intercept.
     //!
-    virtual void childEvent(QChildEvent* event);
+    virtual void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QButtonGroup* _buttonGroup; //!< The button group.

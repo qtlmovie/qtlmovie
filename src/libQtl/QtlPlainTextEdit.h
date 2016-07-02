@@ -105,13 +105,13 @@ protected:
     //! Reimplemented from superclass.
     //! @param [in,out] event The event to process.
     //!
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
     //!
     //! Insert MIME data into the widget.
     //! Reimplemented from QPlainTextEdit.
     //! @param [in] source Source data to check.
     //!
-    virtual void insertFromMimeData(const QMimeData *source);
+    virtual void insertFromMimeData(const QMimeData *source) Q_DECL_OVERRIDE;
 
 private:
     const QFont _standardFont;   //!< Standard font for QPlainTextEdit.

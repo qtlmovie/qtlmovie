@@ -61,13 +61,13 @@ public:
     //! Start the transcoding job.
     //! @return False if already started. True otherwise.
     //!
-    virtual bool start();
+    virtual bool start() Q_DECL_OVERRIDE;
 
     //!
     //! Abort the transcoding job.
     //! If the job was started, the signal completed() will be emitted when all actions actually terminate.
     //!
-    virtual void abort();
+    virtual void abort() Q_DECL_OVERRIDE;
 
     //!
     //! Get the task to process.
@@ -146,7 +146,7 @@ protected:
     //! @param [in] success True when the action completed successfully, false otherwise.
     //! @param [in] message Optional error message to log.
     //!
-    virtual void emitCompleted(bool success, const QString& message = QString());
+    virtual void emitCompleted(bool success, const QString& message = QString()) Q_DECL_OVERRIDE;
 
 private slots:
     //!

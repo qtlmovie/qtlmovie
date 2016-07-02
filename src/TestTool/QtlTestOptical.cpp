@@ -38,7 +38,7 @@ class QtlTestOptical : public QtlTestCommand
     Q_OBJECT
 public:
     QtlTestOptical() : QtlTestCommand("optical") {}
-    virtual int run(const QStringList& args);
+    virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
 //----------------------------------------------------------------------------
