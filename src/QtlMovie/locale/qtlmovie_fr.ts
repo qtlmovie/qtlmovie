@@ -1129,27 +1129,27 @@ Les remplacer?</translation>
 <context>
     <name>QtlMovieFFmpegProcess</name>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="80"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="79"/>
         <source>Starting ffmpeg transcode, playback duration: %1 seconds (%2)</source>
         <translation>Démarrage de transcodage ffmpeg: durée de visionnage: %1 secondes (%2)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="105"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="110"/>
         <source>Cannot find %1, may be a problem to insert subtitles</source>
         <translation>%1 introuvable, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="108"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="113"/>
         <source>Cannot create %1, no temporary directory defined, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, pas de répertoire temporaire défini, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="129"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="134"/>
         <source>Cannot open %1, may be a problem to insert subtitles</source>
         <translation>Impossible d&apos;ouvrir %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="133"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="138"/>
         <source>Cannot create %1, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
@@ -1203,6 +1203,11 @@ Les remplacer?</translation>
         <location filename="../QtlMovieInputFile.cpp" line="394"/>
         <source>Search for Teletext subtitles completed</source>
         <translation>Recherche de sous-titres Teletext terminée</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieInputFile.cpp" line="437"/>
+        <source>Searching for audio and subtitles tracks completed</source>
+        <translation>Fin de recherche des pistes audio et sous-titres</translation>
     </message>
 </context>
 <context>
@@ -1663,32 +1668,32 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieMainWindowBase</name>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="216"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="204"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="265"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="253"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="275"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="263"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="276"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="264"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="291"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="279"/>
         <source>QtlMovie Help</source>
         <translation>Aide de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="307"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="295"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
     </message>
@@ -1739,28 +1744,28 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieProcess</name>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="87"/>
+        <location filename="../QtlMovieProcess.cpp" line="88"/>
         <source>%1 not found, install it or set explicit path in settings.</source>
         <translation>%1 introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="176"/>
+        <location filename="../QtlMovieProcess.cpp" line="177"/>
         <source>%1 completed with status %2</source>
         <translation>%1 terminé avec le code %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="179"/>
-        <location filename="../QtlMovieProcess.cpp" line="195"/>
+        <location filename="../QtlMovieProcess.cpp" line="180"/>
+        <location filename="../QtlMovieProcess.cpp" line="196"/>
         <source>%1 process crashed</source>
         <translation>Le processus %1 a été interrompu</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="192"/>
+        <location filename="../QtlMovieProcess.cpp" line="193"/>
         <source>Failed to start %1 process</source>
         <translation>Impossible de démarrer le processus %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="198"/>
+        <location filename="../QtlMovieProcess.cpp" line="199"/>
         <source>%1 failed, unknown process error</source>
         <translation>%1 a échoué, erreur de processus inconnue</translation>
     </message>
