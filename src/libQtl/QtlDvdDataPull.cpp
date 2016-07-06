@@ -55,6 +55,10 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     _maxReadSpeed(useMaxReadSpeed),
     _buffer(_sectorChunk * QtlDvdMedia::DVD_SECTOR_SIZE),
     _dvd(QString(), log),
+    _timeAverage(),
+    _timeInstant(),
+    _reportInterval(30000), // 30 seconds
+    _reportSector(0),
     _badSectorPolicy(badSectorPolicy)
 {
     // Set total transfer size in bytes. In case of ignored bad sectors, the
@@ -88,6 +92,12 @@ bool QtlDvdDataPull::initializeTransfer()
         _dvd.close();
         return false;
     }
+
+    // Start timers.
+    _timeAverage.start();
+    _timeInstant.start();
+    _reportSector = _startSector;
+
     return true;
 }
 
@@ -113,13 +123,18 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
         return true;
     }
 
-    // Read and write sectors.
+    // Read sectors.
     if ((count = _dvd.readSectors(_buffer.data(), count, -1, _badSectorPolicy)) <= 0) {
         return false;
     }
-    else {
-        return write(_buffer.data(), count * QtlDvdMedia::DVD_SECTOR_SIZE);
+
+    // Report bandwidth.
+    if (_timeInstant.elapsed() >= _reportInterval) {
+        reportBandwidth();
     }
+
+    // Write sectors.
+    return write(_buffer.data(), count * QtlDvdMedia::DVD_SECTOR_SIZE);
 }
 
 
@@ -129,5 +144,37 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 
 void QtlDvdDataPull::cleanupTransfer(bool clean)
 {
+    reportBandwidth();
     _dvd.close();
+}
+
+
+//----------------------------------------------------------------------------
+// Report bandwidth.
+//----------------------------------------------------------------------------
+
+void QtlDvdDataPull::reportBandwidth()
+{
+    const int nextSector = _dvd.nextSector();
+    const int msAverage = _timeAverage.elapsed();
+    const int msInstant = _timeInstant.restart();
+    const qint64 totalBytes = qint64(nextSector - _startSector) * QtlDvdMedia::DVD_SECTOR_SIZE;
+    const qint64 instantBytes = qint64(nextSector - _reportSector) * QtlDvdMedia::DVD_SECTOR_SIZE;
+
+    const QtlDvdMedia::TransferRateFlags flags(QtlDvdMedia::TransferDvdBase | QtlDvdMedia::TransferKiloBytes);
+    const QString averageRate(QtlDvdMedia::transferRateToString(totalBytes, msAverage, flags));
+    const QString instantRate(QtlDvdMedia::transferRateToString(instantBytes, msInstant, flags));
+
+    if (msAverage > 0) {
+        QString line(tr("Transfer bandwidth after %1 sectors: ").arg(nextSector - _startSector));
+        if (msInstant > 0) {
+            line.append(instantRate);
+            line.append(", ");
+        }
+        line.append(tr("average: "));
+        line.append(averageRate);
+        log()->line(line);
+    }
+
+    _reportSector = nextSector;
 }

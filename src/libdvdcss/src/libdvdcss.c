@@ -850,5 +850,7 @@ LIBDVDCSS_EXPORT int dvdcss_is_scrambled ( dvdcss_t dvdcss )
  */
 LIBDVDCSS_EXPORT int dvdcss_set_max_speed ( dvdcss_t dvdcss )
 {
-    return dvdcss->pf_maxspeed ? dvdcss->pf_maxspeed( dvdcss ) : -1;
+    int res = dvdcss->pf_maxspeed ? dvdcss->pf_maxspeed( dvdcss ) : -1;
+    print_debug( dvdcss, "setting DVD max read speed %s", res ? "failed" : "succeeded" );
+    return res;
 }

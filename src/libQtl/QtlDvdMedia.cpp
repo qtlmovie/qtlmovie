@@ -686,7 +686,7 @@ bool QtlDvdMedia::loadAllEncryptionKeys()
 QString QtlDvdMedia::transferRateToString(qint64 bytes, qint64 milliSeconds, TransferRateFlags flags)
 {
     QString result;
-    if (milliSeconds != 0) {
+    if (milliSeconds > 0) {
         const QString separator(QStringLiteral(", "));
         if (flags & TransferDvdBase) {
             result = qtlFractionToString(bytes * 1000, milliSeconds * DVD_TRANSFER_RATE, 1) + "x";

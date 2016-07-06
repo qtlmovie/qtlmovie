@@ -2272,6 +2272,19 @@ L&apos;application va s&apos;arrêter</translation>
     </message>
 </context>
 <context>
+    <name>QtlDvdDataPull</name>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="169"/>
+        <source>Transfer bandwidth after %1 sectors: </source>
+        <translation>Débit du transfert après %1 secteurs: </translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="174"/>
+        <source>average: </source>
+        <translation>moyenne: </translation>
+    </message>
+</context>
+<context>
     <name>QtlDvdMedia</name>
     <message>
         <location filename="../QtlDvdMedia.cpp" line="193"/>

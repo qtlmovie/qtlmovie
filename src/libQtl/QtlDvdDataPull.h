@@ -103,15 +103,24 @@ protected:
     //!
     virtual void cleanupTransfer(bool clean) Q_DECL_OVERRIDE;
 
+    //!
+    //! Report bandwidth.
+    //!
+    void reportBandwidth();
+
 private:
-    QString      _deviceName;     //!< DVD device name.
-    int          _startSector;    //!< First sector to transfer.
-    int          _endSector;      //!< Last sector + 1 to transfer.
-    int          _sectorChunk;    //!< Number of sectors per transfer.
-    bool         _maxReadSpeed;   //!< Set the DVD reader to maximum speed.
-    QtlByteBlock _buffer;         //!< Transfer buffer.
-    QtlDvdMedia  _dvd;            //!< Access to DVD media.
-    QtlDvdMedia::BadSectorPolicy _badSectorPolicy; //!< How to handle bad sectors.
+    const QString _deviceName;     //!< DVD device name.
+    const int     _startSector;    //!< First sector to transfer.
+    const int     _endSector;      //!< Last sector + 1 to transfer.
+    const int     _sectorChunk;    //!< Number of sectors per transfer.
+    const bool    _maxReadSpeed;   //!< Set the DVD reader to maximum speed.
+    QtlByteBlock  _buffer;         //!< Transfer buffer.
+    QtlDvdMedia   _dvd;            //!< Access to DVD media.
+    QTime         _timeAverage;    //!< Timer for average bandwidth reporting.
+    QTime         _timeInstant;    //!< Timer for instant bandwidth reporting.
+    const int     _reportInterval; //!< Interval in milli-seconds between bandwidth reporting.
+    int           _reportSector;   //!< Current sector during last report interval.
+    const QtlDvdMedia::BadSectorPolicy _badSectorPolicy; //!< How to handle bad sectors.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlDvdDataPull)
