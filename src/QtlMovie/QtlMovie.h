@@ -76,6 +76,7 @@
 #define QTL_SELECT_TARGET_SUBTITLES         true  //!< Automatically select subtitles for the target language.
 #define QTL_CAPITALIZE_CC                  false  //!< Capitalize US Closed Captions (suppress ALL CAPS).
 #define QTL_DVD_EXTRACT_DIR_TREE            true  //!< Recreate directory tree when extracting DVD.
+#define QTL_DVD_MAX_SPEED                   true  //!< Set DVD read speed to maximum.
 
 //
 // Transcoding presets.

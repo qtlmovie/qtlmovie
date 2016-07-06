@@ -891,37 +891,42 @@ Les remplacer?</translation>
         <translation>Recréer l&apos;arborescence des répertoires lors de l&apos;extraction</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1407"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1404"/>
+        <source>Use DVD maximum read speed (may create read errors, may not be supported on all drives)</source>
+        <translation>Utiliser la vitesse de lecture maximum du DVD (peut engendrer des erreurs ou ne pas être supporté)</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="1417"/>
         <source>Log panel</source>
         <translation>Fenêtre de journal (log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1419"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1429"/>
         <source>Max log :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1432"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1442"/>
         <source> lines</source>
         <translation> lignes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1451"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1461"/>
         <source>Clear log before transcoding</source>
         <translation>Effacer le journal avant de transcoder</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1458"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1468"/>
         <source>Save log after transcoding (same name as output file with extension .log)</source>
         <translation>Sauvegarder le journal après le transcodage (même nom que le fichier de sortie avec l&apos;extension .log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1468"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1478"/>
         <source>Version check</source>
         <translation>Recherche de version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1474"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1484"/>
         <source>Automatically search for a new version on startup</source>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
@@ -936,22 +941,22 @@ Les remplacer?</translation>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="310"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="311"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="412"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="414"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="425"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="427"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="551"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="553"/>
         <source>%1 bit / second for %2x%3 @%4</source>
         <translation>%1 bit / seconde pour %2x%3 @%4</translation>
     </message>

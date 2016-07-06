@@ -1398,6 +1398,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="checkDvdUseMaxSpeed">
+            <property name="text">
+             <string>Use DVD maximum read speed (may create read errors, may not be supported on all drives)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
