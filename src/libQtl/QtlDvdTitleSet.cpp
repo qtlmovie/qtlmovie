@@ -610,7 +610,7 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 // Create a QtlDataPull to transfer of the video content of the title set.
 //----------------------------------------------------------------------------
 
-QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent) const
+QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useMaxReadSpeed) const
 {
     // Create an object that will write the VTS in the background.
     // If the DVD is encrypted, use QtlDvdDataPull.
@@ -626,7 +626,8 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent) const
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     log,
-                                    parent);
+                                    parent,
+                                    useMaxReadSpeed);
     }
     else {
         writer = new QtlFileDataPull(_vobFileNames,

@@ -58,6 +58,8 @@ typedef struct dvdcss_stream_cb
     int ( *pf_read )  ( void *p_stream, void *buffer, int i_read);
     /** custom vectored read callback */
     int ( *pf_readv ) ( void *p_stream, const void *p_iovec, int i_blocks);
+    /** custom vectored read callback */
+    int ( *pf_maxspeed ) ( void *p_stream);
 } dvdcss_stream_cb;
 
 
@@ -116,6 +118,7 @@ LIBDVDCSS_EXPORT int      dvdcss_is_scrambled ( dvdcss_t );
 /* TL: Extended error log (verbosity value: same as DVDCSS_VERBOSE) */
 typedef void ( *dvdcss_log ) ( void *p_log_param, int b_debug, const char* psz_message );
 LIBDVDCSS_EXPORT dvdcss_t dvdcss_open_log ( const char *psz_target, dvdcss_log p_log, void *p_log_param, int verbosity );
+LIBDVDCSS_EXPORT int dvdcss_set_max_speed ( dvdcss_t );
 
 #ifdef __cplusplus
 }

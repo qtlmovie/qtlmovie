@@ -139,6 +139,7 @@ private:
         //! @param [in] dvdDeviceName DVD device name.
         //! @param [in] startSector First sector to read.
         //! @param [in] sectorCount Total number of sectors to read.
+        //! @param [in] useMaxReadSpeed Set the DVD reader to maximum speed.
         //! @param [in] badSectorPolicy How to handle bad sectors.
         //! @param [in] log Message logger.
         //!
@@ -146,6 +147,7 @@ private:
                    const QString& dvdDeviceName,
                    int startSector,
                    int sectorCount,
+                   bool useMaxReadSpeed,
                    QtlDvdMedia::BadSectorPolicy badSectorPolicy,
                    QtlLogger* log);
     };

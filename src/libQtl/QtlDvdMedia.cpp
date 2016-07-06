@@ -71,7 +71,7 @@
 // Constructor & destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* parent) :
+QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* parent, bool useMaxReadSpeed) :
     QObject(parent),
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
@@ -88,7 +88,7 @@ QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* paren
     _currentFile(_allFiles.end())
 {
     if (!fileName.isEmpty()) {
-        openFromFile(fileName);
+        openFromFile(fileName, useMaxReadSpeed);
     }
 }
 
@@ -160,7 +160,7 @@ bool QtlDvdMedia::isEncrypted() const
 // Open and load the description of a DVD media starting from a file.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::openFromFile(const QString& fileName)
+bool QtlDvdMedia::openFromFile(const QString& fileName, bool useMaxReadSpeed)
 {
     // Close previous media if necessary.
     close();
@@ -195,7 +195,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName)
     }
 
     // Open the device.
-    if (!openFromDevice(deviceName)) {
+    if (!openFromDevice(deviceName), useMaxReadSpeed) {
         return false;
     }
 
@@ -209,7 +209,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName)
 // Open and load the description of a DVD media starting from its device name.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::openFromDevice(const QString& deviceName)
+bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed)
 {
     // Close previous media if necessary.
     close();
@@ -303,6 +303,11 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName)
     // Add placeholder at the end if necessary.
     if (lastSector < _volumeSize) {
         _allFiles << QtlDvdFilePtr(new QtlDvdFile(QString(), lastSector, (_volumeSize - lastSector) * DVD_SECTOR_SIZE));
+    }
+
+    // Set the reader at maximum read speed only now.
+    if (useMaxReadSpeed && dvdcss_set_max_speed(_dvdcss) < 0) {
+        _log->debug(tr("Failed to set DVD to maximum read speed, using default speed"));
     }
 
     // Position the current sector at beginning of media.

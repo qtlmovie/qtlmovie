@@ -255,11 +255,13 @@ public:
     //! Create a QtlDataPull to transfer of the video content of the title set to a device.
     //! @param [in] log Where to log errors.
     //! @param parent Optional parent object of the QtlDataPull instance.
+    //! @param [in] useMaxReadSpeed If true and the title set is on a DVD media,
+    //! try to set the DVD reader to maximum speed.
     //! @return An instance of QtlDataPull which can transfer the content of
     //! the title set. The QtlDataPull is created but not started. This object will
     //! delete itself at the end of the transfer.
     //!
-    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0) const;
+    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false) const;
 
     //!
     //! Check if a file is a .IFO or .VOB.

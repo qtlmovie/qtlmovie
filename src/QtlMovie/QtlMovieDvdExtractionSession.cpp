@@ -61,6 +61,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
                                                      const QString& dvdDeviceName,
                                                      int startSector,
                                                      int sectorCount,
+                                                     bool useMaxReadSpeed,
                                                      QtlDvdMedia::BadSectorPolicy badSectorPolicy,
                                                      QtlLogger* log) :
     totalSectors(sectorCount),
@@ -71,7 +72,9 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
              badSectorPolicy,
              QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
              QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
-             log)
+             log,
+             0,
+             useMaxReadSpeed)
 {
 }
 
@@ -91,7 +94,7 @@ void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName,
     }
     else {
         // Add a new transfer in the list.
-        _transferList << OutputFilePtr(new OutputFile(outputFileName, _dvdDeviceName, startSector, sectorCount, badSectorPolicy, this));
+        _transferList << OutputFilePtr(new OutputFile(outputFileName, _dvdDeviceName, startSector, sectorCount, settings()->dvdUseMaxSpeed(), badSectorPolicy, this));
         debug(tr("Queued file %1, sectors %2 to %3").arg(outputFileName).arg(startSector).arg(startSector + sectorCount - 1));
 
         // Accumulate total transfer size.

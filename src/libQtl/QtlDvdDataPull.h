@@ -67,6 +67,7 @@ public:
     //! than this size, new data is pulled from the DVD.
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
+    //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //! @see QtlDvdMedia::BadSectorPolicy
     //!
     explicit QtlDvdDataPull(const QString& deviceName,
@@ -76,7 +77,8 @@ public:
                             int transferSize = DEFAULT_TRANSFER_SIZE,
                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                             QtlLogger* log = 0,
-                            QObject* parent = 0);
+                            QObject* parent = 0,
+                            bool useMaxReadSpeed = false);
 
 protected:
     //!
@@ -106,6 +108,7 @@ private:
     int          _startSector;    //!< First sector to transfer.
     int          _endSector;      //!< Last sector + 1 to transfer.
     int          _sectorChunk;    //!< Number of sectors per transfer.
+    bool         _maxReadSpeed;   //!< Set the DVD reader to maximum speed.
     QtlByteBlock _buffer;         //!< Transfer buffer.
     QtlDvdMedia  _dvd;            //!< Access to DVD media.
     QtlDvdMedia::BadSectorPolicy _badSectorPolicy; //!< How to handle bad sectors.

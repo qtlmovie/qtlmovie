@@ -52,6 +52,7 @@ struct dvdcss_s
     int ( * pf_seek )  ( dvdcss_t, int );
     int ( * pf_read )  ( dvdcss_t, void *, int );
     int ( * pf_readv ) ( dvdcss_t, const struct iovec *, int );
+    int ( * pf_maxspeed ) ( dvdcss_t );
 
     /* Decryption stuff */
     enum dvdcss_method i_method;

@@ -54,7 +54,7 @@ int QtlTestDvdRead::run(const QStringList& args)
 
     // Open libdvdcss
     QtlDvdMedia dvd(QString(), &log);
-    if (!dvd.openFromDevice(deviceName)) {
+    if (!dvd.openFromDevice(deviceName, true)) {
         out << "Cannot initialize libdvdcss on " << deviceName << endl;
         return EXIT_FAILURE;
     }

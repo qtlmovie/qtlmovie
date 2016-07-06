@@ -841,3 +841,14 @@ LIBDVDCSS_EXPORT int dvdcss_is_scrambled ( dvdcss_t dvdcss )
 {
     return dvdcss->b_scrambled;
 }
+
+/**
+ * \brief Set the DVD reader to maximum read speed.
+ *
+ * \param dvdcss a \e libdvdcss instance
+ * \return zero in case of success, a negative value otherwise.
+ */
+LIBDVDCSS_EXPORT int dvdcss_set_max_speed ( dvdcss_t dvdcss )
+{
+    return dvdcss->pf_maxspeed ? dvdcss->pf_maxspeed( dvdcss ) : -1;
+}

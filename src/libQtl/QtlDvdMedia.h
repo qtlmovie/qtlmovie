@@ -62,8 +62,9 @@ public:
     //! @param [in] fileName Name of a file or directory anywhere on the DVD media.
     //! @param [in] log Where to log errors.
     //! @param [in] parent Optional parent widget.
+    //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //!
-    QtlDvdMedia(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0);
+    QtlDvdMedia(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false);
 
     //!
     //! Destructor.
@@ -83,16 +84,18 @@ public:
     //! Open and load the description of a DVD media starting from a file on the DVD.
     //! The description of the file structure is also loaded.
     //! @param [in] fileName Name of a file or directory anywhere on the DVD media.
+    //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //! @return True on success, false on error.
     //!
-    bool openFromFile(const QString& fileName);
+    bool openFromFile(const QString& fileName, bool useMaxReadSpeed = false);
 
     //!
     //! Open and load the description of a DVD media starting from its device name.
     //! @param [in] deviceName Name of the device containing the DVD media.
+    //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //! @return True on success, false on error.
     //!
-    bool openFromDevice(const QString& deviceName);
+    bool openFromDevice(const QString& deviceName, bool useMaxReadSpeed = false);
 
     //!
     //! Close a DVD media.

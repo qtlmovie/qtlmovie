@@ -45,12 +45,14 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
-                               QObject* parent) :
+                               QObject* parent,
+                               bool useMaxReadSpeed) :
     QtlDataPull(minBufferSize, log, parent),
     _deviceName(deviceName),
     _startSector(startSector),
     _endSector(startSector + sectorCount),
     _sectorChunk(qMax(1, transferSize / QtlDvdMedia::DVD_SECTOR_SIZE)),
+    _maxReadSpeed(useMaxReadSpeed),
     _buffer(_sectorChunk * QtlDvdMedia::DVD_SECTOR_SIZE),
     _dvd(QString(), log),
     _badSectorPolicy(badSectorPolicy)
@@ -77,7 +79,7 @@ bool QtlDvdDataPull::initializeTransfer()
     }
 
     // Initialize DVD access.
-    if (!_dvd.openFromDevice(_deviceName)) {
+    if (!_dvd.openFromDevice(_deviceName, _maxReadSpeed)) {
         return false;
     }
 

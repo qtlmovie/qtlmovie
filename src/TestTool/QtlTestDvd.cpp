@@ -213,7 +213,7 @@ int QtlTestDvd::run(const QStringList& args)
         time.start();
 
         // Transfer the file using a wrapper test class.
-        QtlDataPull* dataPull = vts.dataPull(&log, &vts);
+        QtlDataPull* dataPull = vts.dataPull(&log, &vts, true);
         if (sectorCount > 0) {
             dataPull->setMaxPulledSize(qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE);
         }
