@@ -2219,6 +2219,11 @@ L&apos;application va s&apos;arrêter</translation>
         <source>DAR %1</source>
         <translation>DAR %1</translation>
     </message>
+    <message>
+        <location filename="../QtlStringUtils.h" line="210"/>
+        <source>infinite</source>
+        <translation>infini</translation>
+    </message>
 </context>
 <context>
     <name>QtlBrowserDialog</name>

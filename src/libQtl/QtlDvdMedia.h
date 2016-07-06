@@ -53,6 +53,11 @@ public:
     static const int DVD_SECTOR_SIZE = 2048;
 
     //!
+    //! Reference DVD transfer rate in bytes / second (aka "1x").
+    //!
+    static const int DVD_TRANSFER_RATE = 1385000;
+
+    //!
     //! Constructor
     //! @param [in] fileName Name of a file or directory anywhere on the DVD media.
     //! @param [in] log Where to log errors.
@@ -287,6 +292,27 @@ public:
     //!
     bool loadAllEncryptionKeys();
 
+    //!
+    //! Flags for transferRateToString().
+    //!
+    enum TransferRateFlag {
+        TransferDvdBase   = 0x0001,  //!< Include "Nx" using DVD base transfer rate.
+        TransferBytes     = 0x0002,  //!< Include bytes per second.
+        TransferKiloBytes = 0x0004,  //!< Include kilo-bytes per second.
+        TransferKibiBytes = 0x0008,  //!< Include kibi-bytes (base 1024) per second.
+        TransferBits      = 0x0010,  //!< Include bits per second.
+    };
+    Q_DECLARE_FLAGS(TransferRateFlags, TransferRateFlag)
+
+    //!
+    //! Build a human-readable string for DVD transfer rate.
+    //! @param [in] bytes Number of bytes transfered.
+    //! @param [in] milliSeconds Number of milliseconds to transfer @a bytes.
+    //! @param [in] flags A set of flags to specify the format.
+    //! @return A human readable string.
+    //!
+    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, TransferRateFlags flags = TransferDvdBase);
+
 signals:
     //!
     //! Emitted when a new DVD media is open.
@@ -332,6 +358,11 @@ private:
 //! Smart pointer to QtlDvdMedia, non thread-safe.
 //!
 typedef QtlSmartPointer<QtlDvdMedia,QtlNullMutexLocker> QtlDvdMediaPtr;
+
+//
+// Qt type system insertions.
+//
+Q_DECLARE_OPERATORS_FOR_FLAGS(QtlDvdMedia::TransferRateFlags)
 Q_DECLARE_METATYPE(QtlDvdMediaPtr)
 
 #endif // QTLDVDMEDIA_H

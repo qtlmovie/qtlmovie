@@ -205,24 +205,29 @@ QString qtlSizeToString(qlonglong value, int maxDecimalDigits, bool useBinaryUni
     bool actualBinary = false;
 
     // Loop on all big units in increasing order.
-    qlonglong divider = 1;
+    qlonglong divisor = 1;
     for (const char* const* pref = prefixes; *pref != 0; ++pref) {
 
         // Stop loop when we find a number of
-        const qlonglong units = value / divider;
+        const qlonglong units = value / divisor;
         if (units < chunk || pref[1] == 0) {
 
             // Format the number, remove useless trailing zeroes.
-            QString number(QStringLiteral("%1").arg(double(value) / double(divider), 0, 'f', qMax(0, maxDecimalDigits)));
+            QString number(QStringLiteral("%1").arg(double(value) / double(divisor), 0, 'f', qMax(0, maxDecimalDigits)));
             number.remove(QRegExp("0*$"));
             number.remove(QRegExp("\\.$"));
 
             // Now we have everything we need, return the full string.
-            return QStringLiteral("%1%2 %3%4%5").arg(sign).arg(number).arg(*pref).arg(actualBinary ? "i" : "").arg(unitName);
+            return QStringLiteral("%1%2 %3%4%5")
+                    .arg(sign)
+                    .arg(qtlFractionToString(value, divisor, maxDecimalDigits))
+                    .arg(*pref)
+                    .arg(actualBinary ? "i" : "")
+                    .arg(unitName);
         }
 
         // Now try next larger unit.
-        divider *= chunk;
+        divisor *= chunk;
 
         // After the initial unit, always use the requested decimal/binary unit mode.
         actualBinary = useBinaryUnits;

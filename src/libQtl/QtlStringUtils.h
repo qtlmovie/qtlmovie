@@ -194,6 +194,31 @@ QString qtlSizeToString(qlonglong value,
                         const QString& unitName = "B");
 
 //!
+//! Format a fraction @a numerator / @a divisor as a packed string.
+//! @tparam INT Any numerical type.
+//! @param [in] numerator Numerator of the fraction.
+//! @param [in] divisor Divisor of the fraction.
+//! @param [in] maxDecimalDigits Maximum number of decimal digits. Valid values are 0 to 3.
+//! In the result, useless trailing zeroes and decimal dot are removed.
+//! @return The formatted string.
+//!
+template<typename INT>
+QString qtlFractionToString(INT numerator, INT divisor = INT(1), int maxDecimalDigits = 3)
+{
+    const double div = double(divisor);
+    if (div == 0.0) {
+        return QObject::tr("infinite");
+    }
+    else {
+        // Format the number, remove useless trailing zeroes and dots.
+        QString number(QStringLiteral("%1").arg(double(numerator) / div, 0, 'f', qMax(0, maxDecimalDigits)));
+        number.remove(QRegExp("0*$"));
+        number.remove(QRegExp("\\.$"));
+        return number;
+    }
+}
+
+//!
 //! Build an HTML string containing a link to a URL.
 //! @param [in] link Target URL.
 //! @param [in] text Text of the link. If empty (the default), @a link is also used as text.

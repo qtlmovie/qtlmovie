@@ -672,3 +672,44 @@ bool QtlDvdMedia::loadAllEncryptionKeys()
     }
     return success;
 }
+
+
+//----------------------------------------------------------------------------
+// Build a human-readable string for DVD transfer rate.
+//----------------------------------------------------------------------------
+
+QString QtlDvdMedia::transferRateToString(qint64 bytes, qint64 milliSeconds, TransferRateFlags flags)
+{
+    QString result;
+    if (milliSeconds != 0) {
+        const QString separator(QStringLiteral(", "));
+        if (flags & TransferDvdBase) {
+            result = qtlFractionToString(bytes * 1000, milliSeconds * DVD_TRANSFER_RATE, 1) + "x";
+        }
+        if (flags & TransferBytes) {
+            if (!result.isEmpty()) {
+                result.append(separator);
+            }
+            result.append(QStringLiteral("%1 B/s").arg(bytes * 1000 / milliSeconds));
+        }
+        if (flags & TransferKiloBytes) {
+            if (!result.isEmpty()) {
+                result.append(separator);
+            }
+            result.append(QStringLiteral("%1 kB/s").arg(bytes / milliSeconds));
+        }
+        if (flags & TransferKibiBytes) {
+            if (!result.isEmpty()) {
+                result.append(separator);
+            }
+            result.append(QStringLiteral("%1 kiB/s").arg(bytes * 1000 / milliSeconds * 1024));
+        }
+        if (flags & TransferBits) {
+            if (!result.isEmpty()) {
+                result.append(separator);
+            }
+            result.append(QStringLiteral("%1 b/s").arg(bytes * 8000 / milliSeconds));
+        }
+    }
+    return result;
+}
