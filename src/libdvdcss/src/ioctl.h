@@ -36,6 +36,7 @@ int ioctl_InvalidateAgid    ( int, int * );
 int ioctl_SendChallenge     ( int, const int *, const uint8_t * );
 int ioctl_SendKey2          ( int, const int *, const uint8_t * );
 int ioctl_ReportRPC         ( int, int *, int *, int * );
+int ioctl_SetMaxSpeed       ( int );
 
 #define DVD_DISCKEY_SIZE 2048
 
@@ -137,6 +138,7 @@ typedef union dvd_authinfo dvd_authinfo;
 #define IOCTL_DVD_SEND_KEY2             CTL_CODE(FILE_DEVICE_DVD, 0x0406, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_DVD_READ_STRUCTURE        CTL_CODE(FILE_DEVICE_DVD, 0x0450, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_SCSI_PASS_THROUGH_DIRECT  CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0405, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_CDROM_SET_SPEED           CTL_CODE(IOCTL_CDROM_BASE, 0x0018, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define DVD_CHALLENGE_KEY_LENGTH        (12 + sizeof(DVD_COPY_PROTECT_KEY))
 #define DVD_BUS_KEY_LENGTH              (8 + sizeof(DVD_COPY_PROTECT_KEY))
@@ -244,6 +246,26 @@ typedef struct SCSI_PASS_THROUGH_DIRECT
     ULONG SenseInfoOffset;
     UCHAR Cdb[16];
 } SCSI_PASS_THROUGH_DIRECT, *PSCSI_PASS_THROUGH_DIRECT;
+
+typedef enum
+{
+    CdromSetSpeed,
+    CdromSetStreaming
+} CDROM_SPEED_REQUEST, *PCDROM_SPEED_REQUEST;
+
+typedef enum
+{
+    CdromDefaultRotation,
+    CdromCAVRotation
+} WRITE_ROTATION, *PWRITE_ROTATION;
+
+typedef struct
+{
+    CDROM_SPEED_REQUEST RequestType; // Request type for setting speed
+    USHORT ReadSpeed;                // Drive read speed in KB/sec.
+    USHORT WriteSpeed;               // Drive write speed in KB/sec.
+    WRITE_ROTATION RotationControl;  // Drive rotation control for write
+} CDROM_SET_SPEED, *PCDROM_SET_SPEED;
 
 #endif /* defined( _WIN32 ) */
 

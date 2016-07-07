@@ -1561,3 +1561,79 @@ static void OS2InitSDC( struct OS2_ExecSCSICmd *p_sdc, int i_type )
     p_sdc->cmd_length   = 12;
 }
 #endif /* defined( __OS2__ ) */
+
+
+/*****************************************************************************
+ * ioctl_SetMaxSpeed: set drive to maximum read speed
+ *****************************************************************************/
+int ioctl_SetMaxSpeed( int i_fd )
+{
+    int i_ret = -1; /* default: error if not implemented */
+
+#if defined( HAVE_LINUX_CDROM_H )
+
+    /*
+     * First try to send a SET_STREAMING generic SCSI command.
+     * If it fails, use the buggy Linux CDROM_SELECT_SPEED ioctl.
+     */
+    struct cdrom_generic_command cgc;
+    struct request_sense sense;
+    uint8_t desc[28]; /* Performance descriptor, Type=0 */
+
+    memset( &cgc,   0, sizeof( cgc ));
+    memset( &sense, 0, sizeof( sense ));
+    memset( &desc,  0, sizeof( desc ));
+
+    cgc.cmd[0] = GPCMD_SET_STREAMING;
+    cgc.cmd[10] = sizeof( desc );
+    cgc.buffer = desc;
+    cgc.buflen = sizeof( desc );
+    cgc.sense = &sense;
+    cgc.data_direction = CGC_DATA_WRITE;
+    cgc.timeout = 5; /* seconds */
+    cgc.quiet = 1;
+
+    /*
+     * Fill the Performance Descriptor. Here, we set the RDD flag (Restore
+     * Drive Defaults, meaning "max speed") and all other fields are ignored.
+     *
+     * For the record, if RDD=0, the following fields are used, with all
+     * data in MSB representation. Typical sample values:
+     *
+     * Bytes 4-7: End LBA = 0xFFFFFFFF
+     * Bytes 8-11: End LBA = 0xFFFFFFFF
+     * Bytes 12-15:: Read size = number of kilo bytes per second
+     * Bytes 16-19:: Read time in milliseconds = 1000 = 0x03E8
+     * Bytes 20-23:: Write size = number of kilo bytes per second
+     * Bytes 24-27:: Write time in milliseconds = 1000 = 0x03E8
+     */
+    desc[0] = 0x04; /* RDD flag: Restore Drive Defaults */
+
+    i_ret = ioctl( i_fd, CDROM_SEND_PACKET, &cgc );
+    if ( i_ret < 0 )
+    {
+        /* SET_STREAMING generic SCSI command failed */
+        i_ret = ioctl( i_fd, CDROM_SELECT_SPEED, 0 );
+    }
+
+#elif defined( _WIN32 )
+
+    CDROM_SET_SPEED setSpeed;
+    memset( &setSpeed, 0, sizeof(setSpeed) );
+    setSpeed.RequestType = CdromSetSpeed;
+    setSpeed.ReadSpeed  = 0xFFFF; /* mean "optimal", ie. maximum */
+    setSpeed.WriteSpeed = 0xFFFF; /* mean "optimal", but unused here */
+    setSpeed.RotationControl = CdromDefaultRotation;
+
+    DWORD retSize = 0;
+    BOOL ok = DeviceIoControl( (HANDLE) i_fd, IOCTL_CDROM_SET_SPEED,
+                               &setSpeed, sizeof(setSpeed),
+                               NULL, 0,
+                               &retSize, NULL);
+
+    i_ret = ok ? 0 : -1;
+
+#endif
+
+    return i_ret;
+}

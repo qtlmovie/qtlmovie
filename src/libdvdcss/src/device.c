@@ -63,30 +63,6 @@
 #   include <fcntl.h>                                           /* O_BINARY  */
 #endif
 
-#ifdef _WIN32
-#include <windows.h>
-#include <ntddcdrm.h>
-#ifndef IOCTL_CDROM_SET_SPEED
-#define IOCTL_CDROM_SET_SPEED CTL_CODE(IOCTL_CDROM_BASE, 0x0018, METHOD_BUFFERED, FILE_READ_ACCESS)
-typedef enum _CDROM_SPEED_REQUEST {
-    CdromSetSpeed,
-    CdromSetStreaming
-} CDROM_SPEED_REQUEST, *PCDROM_SPEED_REQUEST;
-
-typedef enum _WRITE_ROTATION {
-    CdromDefaultRotation,
-    CdromCAVRotation
-} WRITE_ROTATION, *PWRITE_ROTATION;
-
-typedef struct _CDROM_SET_SPEED {
-    CDROM_SPEED_REQUEST RequestType; // Request type for setting speed
-    USHORT ReadSpeed;                // Drive read speed in KB/sec.
-    USHORT WriteSpeed;               // Drive write speed in KB/sec.
-    WRITE_ROTATION RotationControl;  // Drive rotation control for write
-} CDROM_SET_SPEED, *PCDROM_SET_SPEED;
-#endif
-#endif /* _WIN32 */
-
 #include "dvdcss.h"
 
 #include "common.h"
@@ -900,8 +876,7 @@ static int win2k_readv ( dvdcss_t dvdcss, const struct iovec *p_iovec,
  *****************************************************************************/
 static int libc_maxspeed( dvdcss_t dvdcss )
 {
-    /* To be completed */
-    return -1;
+    return ioctl_SetMaxSpeed( dvdcss->i_fd );
 }
 
 static int stream_maxspeed( dvdcss_t dvdcss )
@@ -912,19 +887,6 @@ static int stream_maxspeed( dvdcss_t dvdcss )
 #if defined( _WIN32 )
 static int win2k_maxspeed( dvdcss_t dvdcss )
 {
-    CDROM_SET_SPEED setSpeed;
-    memset( &setSpeed, 0, sizeof(setSpeed) );
-    setSpeed.RequestType = CdromSetSpeed;
-    setSpeed.ReadSpeed  = 0xFFFF; // mean "optimal", ie. maximum
-    setSpeed.WriteSpeed = 0xFFFF; // mean "optimal", but unused here
-    setSpeed.RotationControl = CdromDefaultRotation;
-
-    DWORD retSize = 0;
-    BOOL ok = DeviceIoControl( (HANDLE) dvdcss->i_fd, IOCTL_CDROM_SET_SPEED,
-                               &setSpeed, sizeof(setSpeed),
-                               NULL, 0,
-                               &retSize, NULL);
-
-    return ok ? 0 : -1;
+    return ioctl_SetMaxSpeed( dvdcss->i_fd );
 }
 #endif /* defined( _WIN32 ) */
