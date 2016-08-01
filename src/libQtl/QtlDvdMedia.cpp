@@ -195,7 +195,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName, bool useMaxReadSpeed)
     }
 
     // Open the device.
-    if (!openFromDevice(deviceName), useMaxReadSpeed) {
+    if (!openFromDevice(deviceName, useMaxReadSpeed)) {
         return false;
     }
 

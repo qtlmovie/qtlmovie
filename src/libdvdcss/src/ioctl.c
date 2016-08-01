@@ -1633,6 +1633,11 @@ int ioctl_SetMaxSpeed( int i_fd )
 
     i_ret = ok ? 0 : -1;
 
+#elif defined( DARWIN_DVD_IOCTL )
+
+    uint16_t val = 0xFFFF;
+    i_ret = ioctl( i_fd, DKIOCDVDSETSPEED, &val );
+
 #endif
 
     return i_ret;
