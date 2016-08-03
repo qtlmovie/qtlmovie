@@ -282,9 +282,13 @@ void QtlMovieTaskList::updateRow(int row)
     if (task != 0 && task->inputFile() != 0 && task->outputFile() != 0) {
         // The columns contain the output type, input file name, input file directory.
         const QString inFile(task->inputFile()->fileName());
-        qtlSetTableRow(this, row, QtlStringList(QtlMovieOutputFile::outputTypeName(task->outputFile()->outputType()),
-                                                inFile.isEmpty() ? "" : QFileInfo(inFile).fileName(),
-                                                inFile.isEmpty() ? "" : QtlFile::parentPath(inFile)));
+        qtlSetTableRow(this,
+                       row,
+                       QtlStringList(QtlMovieOutputFile::outputTypeName(task->outputFile()->outputType()),
+                                     inFile.isEmpty() ? "" : QFileInfo(inFile).fileName(),
+                                     inFile.isEmpty() ? "" : QtlFile::parentPath(inFile)),
+                       false, // copyHeaderTextAlignment
+                       Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     }
 }
 
