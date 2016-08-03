@@ -13,6 +13,8 @@ Version 1.9
   tool can extract DVD content, either as a complete ISO image, by Video Title
   Set (VTS) or individual files. This embedded tool is available on all platforms
   and can replace third-party platform-dependent DVD ripping tools.
+- Limit the initial search of Closed Captions to the ffprobe duration. This was
+  the previous behavior before V1.8.
 - Bug fix: When clicking in the log window, the color of the subsequent messages
   could be incorrect. This is fixed.
 - Precompiled Windows and Mac binaries use Qt 5.7.0.

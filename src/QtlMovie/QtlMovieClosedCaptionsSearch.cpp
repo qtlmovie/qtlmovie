@@ -62,8 +62,13 @@ QtlMovieClosedCaptionsSearch::QtlMovieClosedCaptionsSearch(const QString& fileNa
     // No need to report in search phase.
     setSilent(true);
 
-    // Build CCExtractor command line..
-    setArguments(QtlStringList("-out=report", fileName));
+    // Build CCExtractor command line.
+    // The analysis duration is identical to the ffmpeg probe duration.
+    QStringList args;
+    args << "-out=report"
+         << QtlMovieCcExtractorProcess::durationOptions(settings->ffmpegProbeSeconds())
+         << fileName;
+    setArguments(args);
 }
 
 
