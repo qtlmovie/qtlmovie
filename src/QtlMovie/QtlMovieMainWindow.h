@@ -121,8 +121,9 @@ private:
 
     //!
     //! Apply the settings which affect the UI.
+    //! @param [in] initial If true, the object is being constructed.
     //!
-    virtual void applyUserInterfaceSettings() Q_DECL_OVERRIDE;
+    virtual void applyUserInterfaceSettings(bool initial) Q_DECL_OVERRIDE;
 
     //!
     //! Update the UI when transcoding starts or stops.

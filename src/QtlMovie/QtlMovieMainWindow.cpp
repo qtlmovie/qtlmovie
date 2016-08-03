@@ -415,13 +415,13 @@ void QtlMovieMainWindow::switchMode()
 // Apply the settings which affect the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieMainWindow::applyUserInterfaceSettings()
+void QtlMovieMainWindow::applyUserInterfaceSettings(bool initial)
 {
     _ui.log->setMaximumBlockCount(settings()->maxLogLines());
 
     // Check if the application needs a restart.
     // Currently, the single file vs. batch mode option is the only cause for a restart.
-    _restartRequested = int(_batchMode) ^ int(settings()->useBatchMode());
+    _restartRequested = !initial && bool(int(_batchMode) ^ int(settings()->useBatchMode()));
 
     if (_restartRequested && qtlConfirm(this, tr("These settings will be applied when the application restarts.\nRestart now?"))) {
         close();

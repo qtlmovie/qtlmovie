@@ -98,7 +98,7 @@ void QtlMovieMainWindowBase::setupUserInterface(QtlLogger* log, QAction* aboutQt
     _settings->restoreState(this);
 
     // Let the subclass finish up settings-dependent configuration of the UI.
-    applyUserInterfaceSettings();
+    applyUserInterfaceSettings(true);
 
     // Start a search for a new version online.
     if (_settings->newVersionCheck()) {
@@ -227,7 +227,7 @@ void QtlMovieMainWindowBase::editSettings()
     if (edit.exec() == QDialog::Accepted) {
         // Button "OK" has been selected, update settings from the values in the dialog box.
         edit.applySettings();
-        applyUserInterfaceSettings();
+        applyUserInterfaceSettings(false);
     }
 }
 

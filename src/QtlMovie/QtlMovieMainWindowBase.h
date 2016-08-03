@@ -152,8 +152,10 @@ protected:
     //! Apply the settings which affect the UI.
     //! Invoked when the settings are loaded or changed.
     //! Should be reimplemented by subclasses.
+    //! @param [in] initial If true, the object is being constructed.
+    //! If false, this is typically following the edition of settings.
     //!
-    virtual void applyUserInterfaceSettings()
+    virtual void applyUserInterfaceSettings(bool initial)
     {
     }
 

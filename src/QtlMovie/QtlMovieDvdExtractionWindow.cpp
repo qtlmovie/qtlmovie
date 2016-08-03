@@ -138,7 +138,7 @@ void QtlMovieDvdExtractionWindow::setupTable(QTableWidget* table)
 // Apply the settings which affect the UI.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdExtractionWindow::applyUserInterfaceSettings()
+void QtlMovieDvdExtractionWindow::applyUserInterfaceSettings(bool initial)
 {
     _ui.log->setMaximumBlockCount(settings()->maxLogLines());
     if (_ui.editDestination->text().isEmpty()) {
