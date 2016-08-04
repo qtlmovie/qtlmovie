@@ -530,6 +530,23 @@ public:
     static QString fileExtension(SubtitleType type);
 
     //!
+    //! Check if subtitles files are text files.
+    //! @param [in] type Subtitle type to check.
+    //! @return True if subtitle files for the given @a type are text files, false if they are binary files.
+    //!
+    static bool isTextFile(SubtitleType type);
+
+    //!
+    //! Check if subtitles files are text files.
+    //! @param [in] fileName Subtitle file name. The file name extension is used to determine the subtitle type.
+    //! @return True if subtitle files for the given file are text files, false if they are binary files.
+    //!
+    static inline bool isTextFile(const QString& fileName)
+    {
+        return isTextFile(subtitleType(fileName, false));
+    }
+
+    //!
     //! Merge two lists of stream informations.
     //! @param [in,out] destination All existing streams in this list are merged
     //! with their counterpart in @a source. For each stream in @a destination, if

@@ -477,7 +477,7 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Do we need to add a pass to cleanup the subtitles?
-    if (settings()->cleanupSubtitles() && !inputForTranscoding->externalSubtitleFileName().isEmpty()) {
+    if (settings()->cleanupSubtitles() && QtlMediaStreamInfo::isTextFile(inputForTranscoding->externalSubtitleFileName())) {
 
         // Cleanup subtitles into an intermediate file with same suffix.
         const QString subtitleSuffix(QFileInfo(inputForTranscoding->externalSubtitleFileName()).suffix());

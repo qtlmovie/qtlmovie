@@ -134,21 +134,48 @@ QtlMediaStreamInfo::SubtitleType QtlMediaStreamInfo::subtitleType(const QString&
 QString QtlMediaStreamInfo::fileExtension(SubtitleType type)
 {
     switch (type) {
-    case SubRip:
-        return ".srt";
-    case SubSsa:
-        return ".ssa";
-    case SubAss:
-        return ".ass";
-    case SubDvd:
-        return ".sub"; // there is also an associated ".idx" file.
-    case SubDvb:
-    case SubTeletext:
-    case SubCc:
-    case SubOther:
-    case SubNone:
-    default:
-        return "";
+        case SubRip:
+            return ".srt";
+        case SubSsa:
+            return ".ssa";
+        case SubAss:
+            return ".ass";
+        case SubDvd:
+            return ".sub"; // there is also an associated ".idx" file.
+        case SubDvb:
+        case SubTeletext:
+        case SubCc:
+        case SubOther:
+        case SubNone:
+        default:
+            return "";
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Check if subtitles files are text files.
+//----------------------------------------------------------------------------
+
+bool QtlMediaStreamInfo::isTextFile(QtlMediaStreamInfo::SubtitleType type)
+{
+    // Remember that we indicate the _file_ format, not the subtitles format.
+    // Thus, while Teletext, Closed Captions and some DVB subtitles are texts,
+    // they are encoded as binary data. Only SRT/SSA/ASS are plain text files.
+
+    switch (type) {
+        case SubRip:
+        case SubSsa:
+        case SubAss:
+            return true;
+        case SubDvd:
+        case SubDvb:
+        case SubTeletext:
+        case SubCc:
+        case SubOther:
+        case SubNone:
+        default:
+            return false;
     }
 }
 
