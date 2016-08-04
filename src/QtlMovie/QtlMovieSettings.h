@@ -212,6 +212,7 @@ public:
     QTL_SETTINGS_STRING(defaultDvdExtractionDir, setDefaultDvdExtractionDir, "")
     QTL_SETTINGS_BOOL(dvdExtractDirTree, setDvdExtractDirTree, QTL_DVD_EXTRACT_DIR_TREE)
     QTL_SETTINGS_BOOL(dvdUseMaxSpeed, setDvdUseMaxSpeed, QTL_DVD_MAX_SPEED)
+    QTL_SETTINGS_BOOL(cleanupSubtitles, setCleanupSubtitles, QTL_CLEANUP_SUBTITLES)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

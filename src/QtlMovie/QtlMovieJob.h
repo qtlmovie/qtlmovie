@@ -309,6 +309,15 @@ private:
     //!
     bool addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName);
 
+    //!
+    //! Change the name of the external subtitle file.
+    //! @param [in,out] inputFile A pointer to the input file. The pointer value is updated
+    //! it previously contains a pointer to the original input file. In that case, a new
+    //! input file object is created. It will be deleted with this job instance.
+    //! @param [in] subtitleFile The new subtitle file name. Ignored if empty.
+    //!
+    void setExternalSubtitleFileName(QtlMovieInputFile*& inputFile, const QString& subtitleFile);
+
     // Unaccessible operations.
     QtlMovieJob() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlMovieJob)

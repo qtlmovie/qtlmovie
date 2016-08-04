@@ -554,6 +554,18 @@
         que cela produit parfois des tailles de caractères étrange. C'est pourquoi
         cette option n'est pas sélectionnée par défaut. Vous pouvez essayer de
         l'activer pour vérifier et décider ensuite si elle est utile ou non.</p>
+      <p>L'option "Nettoyage des fichiers SRT/SSA/ASS avant insertion" est utilisée pour
+        supprimer tous les caractères nuls invalides des fichiers de sous-titres.
+        Il a été observé sur certains fichiers MKV des sous-titres au format ASS
+        dont les méta-données contiennent un caractère nul final. Ce caractère
+        invalide empêche <i>ffmpeg</i> d'insérer correctement les sous-titres.
+        Utiliser cette option corrige le problème en supprimant les caractères
+        invalides des fichiers de sous-titres.</p>
+      <p>Certaines chaines de télévision américaines diffusent des sous-titres
+        <i>Closed Captions</i> entièrement EN MAJUSCULES, ce qui peut être fatigant
+        à lire. L'option "Capitalisation des Closed Captions" est directement passée
+        à <i>CCExtractor</i> qui va alors tenter de reformatter les sous-titres de
+        manière plus agréable à lire.</p>
       <p>L'option "Garder les fichiers intermédiaires" indique que tous les fichiers
         intermédiaires créés lors du processus de transcodage doivent étre conservés
         à la fin de l'opération. Ces fichiers sont créés dans un répertoire temporaire

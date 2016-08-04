@@ -41,6 +41,7 @@
 #include "QtlMovieGrowisofsProcess.h"
 #include "QtlMovieCcExtractorProcess.h"
 #include "QtlMovieTeletextExtract.h"
+#include "QtlMovieCleanupSubtitles.h"
 #include "QtlOpticalDrive.h"
 #include "QtlStringList.h"
 #include "QtlSysInfo.h"
@@ -396,14 +397,32 @@ bool QtlMovieJob::canInsertSubtitles(const QString& subtitleFileName)
 
 
 //----------------------------------------------------------------------------
+// Change the name of the external subtitle file.
+//----------------------------------------------------------------------------
+
+void QtlMovieJob::setExternalSubtitleFileName(QtlMovieInputFile*& inputFile, const QString& subtitleFile)
+{
+    if (!subtitleFile.isEmpty()) {
+        // Clone the object if it is the original input file.
+        if (inputFile == _task->inputFile()) {
+            inputFile = new QtlMovieInputFile(*inputFile, this);
+        }
+        inputFile->setExternalSubtitleFileName(subtitleFile);
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Build the list of processes to execute to perform the job.
 //----------------------------------------------------------------------------
 
 bool QtlMovieJob::buildScenario()
 {
     // Duration of the input file in seconds.
-    const int maxSeconds = settings()->transcodeComplete() ? 0 : settings()->transcodeSeconds();
     const int totalSeconds = qRound(_task->inputFile()->durationInSeconds());
+
+    // Duration of output file in seconds.
+    const int maxSeconds = settings()->transcodeComplete() ? 0 : settings()->transcodeSeconds();
     _outSeconds = maxSeconds > 0 && maxSeconds < totalSeconds ? maxSeconds : totalSeconds;
 
     // Main output file type.
@@ -416,10 +435,10 @@ bool QtlMovieJob::buildScenario()
 
     // The input file which will be used for media transcoding.
     // Initially, this is the input file but we may insert intermediate steps later.
-    const QtlMovieInputFile* inputForTranscoding = _task->inputFile();
+    QtlMovieInputFile* inputForTranscoding = _task->inputFile();
 
     // External subtitle file.
-    if (!_task->inputFile()->externalSubtitleFileName().isEmpty()) {
+    if (!inputForTranscoding->externalSubtitleFileName().isEmpty()) {
         switch (QtlMediaStreamInfo::subtitleType(_task->inputFile()->externalSubtitleFileName(), true)) {
             case QtlMediaStreamInfo::SubAss:
             case QtlMediaStreamInfo::SubSsa:
@@ -432,7 +451,7 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Subtitle stream in input file.
-    const QtlMediaStreamInfoPtr subtitleStream(_task->inputFile()->selectedSubtitleStreamInfo());
+    const QtlMediaStreamInfoPtr subtitleStream(inputForTranscoding->selectedSubtitleStreamInfo());
 
     // Do we need to add an initial pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
@@ -448,17 +467,35 @@ bool QtlMovieJob::buildScenario()
         // Do not provide a suffix, addExtractSubtitle() will update it for us.
         QString subtitleFile(_tempDir + QDir::separator() + "subtitles");
 
-        // Create a process for subtitle extraction.
-        if (!addExtractSubtitle(_task->inputFile(), subtitleFile)) {
+        // Create a process for subtitle extraction. File suffix is updated.
+        if (!addExtractSubtitle(inputForTranscoding, subtitleFile)) {
             return false;
         }
 
-        // The input file for transcoding has different subtitle characteristics
-        // (external subtitle file instead of internal subtitle stream).
-        // The new input file object will be deleted with the job instance.
-        QtlMovieInputFile* next = new QtlMovieInputFile(*_task->inputFile(), this);
-        next->setExternalSubtitleFileName(subtitleFile);
-        inputForTranscoding = next;
+        // Clone the input file with different subtitle characteristics.
+        setExternalSubtitleFileName(inputForTranscoding, subtitleFile);
+    }
+
+    // Do we need to add a pass to cleanup the subtitles?
+    if (settings()->cleanupSubtitles() && !inputForTranscoding->externalSubtitleFileName().isEmpty()) {
+
+        // Cleanup subtitles into an intermediate file with same suffix.
+        const QString subtitleSuffix(QFileInfo(inputForTranscoding->externalSubtitleFileName()).suffix());
+        const QString cleanSubtitleFile(_tempDir + QDir::separator() + "clean-subtitles." + subtitleSuffix);
+
+        // Create a phase to cleanup the subtitles.
+        QtlMovieCleanupSubtitles* action =
+                new QtlMovieCleanupSubtitles(inputForTranscoding->externalSubtitleFileName(),
+                                             cleanSubtitleFile,
+                                             settings(),
+                                             this,
+                                             this);
+        action->setDescription(tr("Cleanup subtitles file"));
+        _actionList.append(action);
+
+        // So now the transcoding should use the cleaned file.
+        // Clone the input file with different subtitle characteristics.
+        setExternalSubtitleFileName(inputForTranscoding, cleanSubtitleFile);
     }
 
     // Selected audio stream in input file.
@@ -470,14 +507,14 @@ bool QtlMovieJob::buildScenario()
 
         // Add an initial pass to evaluate the audio volume.
         QtlMovieFFmpegVolumeDetect* process =
-                new QtlMovieFFmpegVolumeDetect(_task->inputFile()->ffmpegInputFileSpecification(),
+                new QtlMovieFFmpegVolumeDetect(inputForTranscoding->ffmpegInputFileSpecification(),
                                                audioStream->ffSpecifier(),
                                                _outSeconds,
                                                _tempDir,
                                                settings(),
                                                this,
                                                this,
-                                               _task->inputFile()->dataPull(this));
+                                               inputForTranscoding->dataPull(this));
         process->setDescription(tr("Evaluate audio level"));
         _actionList.append(process);
     }
@@ -522,8 +559,9 @@ bool QtlMovieJob::buildScenario()
             success = addExtractSubtitle(inputForTranscoding, subtitleFile);
             break;
         }
-        default:
+        default: {
             return abortStart(tr("Unexpected output type %1").arg(outputType));
+        }
     }
 
     // If more than one process is defined, give them a number.

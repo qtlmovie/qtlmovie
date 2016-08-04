@@ -15,6 +15,11 @@ Version 1.9
   and can replace third-party platform-dependent DVD ripping tools.
 - Limit the initial search of Closed Captions to the ffprobe duration. This was
   the previous behavior before V1.8.
+- Added an option (enabled by default) to cleanup SRT/SSA/ASS subtitles files.
+  This removes all invalid nul characters inside these files. It has been
+  observed that some MKV files had ASS subtitles using metadata containing
+  a trailing zero character. This invalid character broke ffmpeg and the
+  subtitles were not burned into the video. This new option fixes this issue.
 - Bug fix: When clicking in the log window, the color of the subsequent messages
   could be incorrect. This is fixed.
 - Precompiled Windows and Mac binaries use Qt 5.7.0.

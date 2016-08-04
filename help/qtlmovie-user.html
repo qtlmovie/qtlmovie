@@ -515,6 +515,15 @@
         recommends to use it but the experience shows that sometimes it produces
         a strange characters size. This is why it is unchecked by default. You may
         try to check it and decide whether it is useful or not.</p>
+      <p>The option "Cleanup SRT/SSA/ASS files before insertion" is used to remove
+        all invalid nul characters from the subtitles files. It has been observed
+        that some MKV files had ASS subtitles using metadata containing
+        a trailing nul character. This invalid character broke <i>ffmpeg</i> and the
+        subtitles were not burned into the video. Checking this option fixes this issue.</p>
+      <p>Some US TV channels broadcast all Closed Captions in UPPERCASE.
+        If you find that annoying, check the option "Capitalize US Closed Captions".
+        This option is directly passed to <i>CCExtractor</i> which formats the subtitles
+        in a nicer looking way.</p>
       <p>The "Keep intermediate files" option indicates that all intermediate files which were created
         in the transcoding process shall not be deleted after completion.
         These files are created in a temporary directory with the same name as the output file and

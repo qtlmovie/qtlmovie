@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>669</width>
-    <height>587</height>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -415,6 +415,13 @@
            <widget class="QCheckBox" name="checkBoxSrtUseVideoSize">
             <property name="text">
              <string>Use original video size as a hint for SRT/SSA/ASS character shape</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxCleanupSubtitles">
+            <property name="text">
+             <string>Cleanup SRT/SSA/ASS files before insertion</string>
             </property>
            </widget>
           </item>

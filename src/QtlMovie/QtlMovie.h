@@ -77,6 +77,7 @@
 #define QTL_CAPITALIZE_CC                  false  //!< Capitalize US Closed Captions (suppress ALL CAPS).
 #define QTL_DVD_EXTRACT_DIR_TREE            true  //!< Recreate directory tree when extracting DVD.
 #define QTL_DVD_MAX_SPEED                   true  //!< Set DVD read speed to maximum.
+#define QTL_CLEANUP_SUBTITLES               true  //!< Cleanup SRT/SSA/ASS subtitles files before burning.
 
 //
 // Transcoding presets.
@@ -155,6 +156,11 @@
 //! searching for Teletext subtitles.
 //!
 #define QTL_TS_PACKETS_CHUNK 100
+
+//!
+//! Number of bytes to read at a time when processing files in event loop.
+//!
+#define QTL_FILE_CHUNK (16 * 1024)
 
 //!
 //! Name of the "Job Variable" (see @link QtlMovieJob::setVariable() @endlink) for audio filter.
