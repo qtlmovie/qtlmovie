@@ -95,6 +95,14 @@ DEV=$(echo $DEVS | cut -f 1 -d ' ')
 # Copy application structure inside disk image.
 tar -C $(dirname "$APPDIR") -c -p -f - $(basename "$APPDIR") | tar -C "/Volumes/$VOLUME" -x -p -f -
 
+# Create a symbolic link to /Applications to facilitate the drag & drop.
+ln -sf /Applications "/Volumes/$VOLUME/Applications"
+
+# Add a drive icon
+cp "$SRCDIR/QtlMovie/images/qtlmovie-drive.icns" "/Volumes/$VOLUME/.VolumeIcon.icns"
+SetFile -c icnC "/Volumes/$VOLUME/.VolumeIcon.icns"
+SetFile -a C "/Volumes/$VOLUME"
+
 # Format the appearance of the DMG in Finder when opened.
 mkdir -p "/Volumes/$VOLUME/.background"
 cp $ROOTDIR/build/dmg-background.png "/Volumes/$VOLUME/.background/background.png"
@@ -110,7 +118,6 @@ echo '
            set arrangement of theViewOptions to not arranged
            set icon size of theViewOptions to 128
            set background picture of theViewOptions to file ".background:background.png"
-           make new alias file at container window to POSIX file "/Applications" with properties {name:"Applications"}
            set position of item "QtlMovie" of container window to {100, 100}
            set position of item "Applications" of container window to {375, 100}
            update without registering applications
