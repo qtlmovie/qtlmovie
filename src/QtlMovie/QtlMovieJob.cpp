@@ -453,6 +453,9 @@ bool QtlMovieJob::buildScenario()
     // Subtitle stream in input file.
     const QtlMediaStreamInfoPtr subtitleStream(inputForTranscoding->selectedSubtitleStreamInfo());
 
+    // This boolean will be true when the subtitle file is created by QtlMovie internal code.
+    bool internallyCreatedSubtitles = false;
+
     // Do we need to add an initial pass to extract subtitles? Yes if:
     // - A subtitle stream is selected in input file.
     // - Not DVD or DVB subtitles. These are directly processed by FFmpeg from the input file.
@@ -468,7 +471,7 @@ bool QtlMovieJob::buildScenario()
         QString subtitleFile(_tempDir + QDir::separator() + "subtitles");
 
         // Create a process for subtitle extraction. File suffix is updated.
-        if (!addExtractSubtitle(inputForTranscoding, subtitleFile)) {
+        if (!addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreatedSubtitles)) {
             return false;
         }
 
@@ -477,8 +480,12 @@ bool QtlMovieJob::buildScenario()
     }
 
     // Do we need to add a pass to cleanup the subtitles?
-    if (settings()->cleanupSubtitles() && QtlMediaStreamInfo::isTextFile(inputForTranscoding->externalSubtitleFileName())) {
-
+    // Note that if the subtitles are created internally, by our code, we trust the output
+    // and there is no need to cleanup the subtitles.
+    if (!internallyCreatedSubtitles &&
+        settings()->cleanupSubtitles() &&
+        QtlMediaStreamInfo::isTextFile(inputForTranscoding->externalSubtitleFileName()))
+    {
         // Cleanup subtitles into an intermediate file with same suffix.
         const QString subtitleSuffix(QFileInfo(inputForTranscoding->externalSubtitleFileName()).suffix());
         const QString cleanSubtitleFile(_tempDir + QDir::separator() + "clean-subtitles." + subtitleSuffix);
@@ -556,7 +563,8 @@ bool QtlMovieJob::buildScenario()
         }
         case QtlMovieOutputFile::SubRip: {
             QString subtitleFile(_task->outputFile()->fileName());
-            success = addExtractSubtitle(inputForTranscoding, subtitleFile);
+            bool internallyCreated = false; // unused
+            success = addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreated);
             break;
         }
         default: {
@@ -1250,8 +1258,11 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
 // Add a process for extracting subtitles into an SRT file.
 //----------------------------------------------------------------------------
 
-bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName)
+bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName, bool& internallyCreated)
 {
+    // By default, we do not create the subtitles file.
+    internallyCreated = false;
+
     // There must be one selected subtitle track.
     const QtlMediaStreamInfoPtr stream(inputFile->selectedSubtitleStreamInfo());
     if (stream.isNull()) {
@@ -1289,6 +1300,8 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
     // Build the extraction command.
     if (inputFile->isTsFile() && inType == QtlMediaStreamInfo::SubTeletext) {
         // Teletext subtitles are extracted from TS files using internal code, not ffmpeg.
+        internallyCreated = true;
+
         if (outType != QtlMediaStreamInfo::SubRip) {
             return abortStart(tr("Teletext subtitles can be extracted as SRT only"));
         }

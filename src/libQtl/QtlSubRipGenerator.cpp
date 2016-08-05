@@ -70,7 +70,7 @@ bool QtlSubRipGenerator::open(const QString& fileName)
 {
     close();
     _outputFile.setFileName(fileName);
-    const bool ok = _outputFile.open(QFile::WriteOnly);
+    const bool ok = !fileName.isEmpty() && _outputFile.open(QFile::WriteOnly);
     if (ok) {
         _outputStream.reset();
         _outputStream.resetStatus();

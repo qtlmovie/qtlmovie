@@ -305,9 +305,12 @@ private:
     //! @param [in,out] outputFileName The output subtitle file name. Its suffix, when present,
     //! is used to determine the output subtitle format. Without suffix, the appropriate
     //! type is automatically selected and the file name is updated.
+    //! @param [out] internallyCreated Returned as true if the subtitles file is internally
+    //! created, using code from this application. Returned as false when the subtitles files
+    //! is created by some external tool such as ffmpeg or ccextractor.
     //! @return True on success, false on error (unsupported subtitle type for instance).
     //!
-    bool addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName);
+    bool addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName, bool& internallyCreated);
 
     //!
     //! Change the name of the external subtitle file.
