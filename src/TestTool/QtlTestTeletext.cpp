@@ -39,59 +39,10 @@
 #include "QtsProgramMapTable.h"
 #include "QtsTsFile.h"
 #include "QtlSmartPointer.h"
+#include "QtlSubRipGenerator.h"
 
-
-//----------------------------------------------------------------------------
-// Description of an SRT output file.
-//----------------------------------------------------------------------------
-
-class OutputFile
-{
-public:
-    OutputFile(QtsPid pid, int page, const QString& outputPrefix, QtlLogger* log);
-    ~OutputFile() {close();}
-    bool isOpen() const {return _file.isOpen();}
-    QtsPid pid() const {return _pid;}
-    int page() const {return _page;}
-    QTextStream& stream() {return _stream;}
-    void close();
-
-private:
-    QtsPid      _pid;
-    int         _page;
-    QString     _fileName;
-    QFile       _file;
-    QTextStream _stream;
-};
-
-typedef QtlSmartPointer<OutputFile,QtlNullMutexLocker> OutputFilePtr;
-typedef QList<OutputFilePtr> OutputFileList;
-
-OutputFile::OutputFile(QtsPid pid, int page, const QString& outputPrefix, QtlLogger* log) :
-    _pid(pid),
-    _page(page),
-    _fileName(QStringLiteral("%1_%2_%3.srt").arg(outputPrefix).arg(pid).arg(page)),
-    _file(_fileName),
-    _stream(&_file)
-{
-    _stream.setCodec("UTF-8");
-    _stream.setGenerateByteOrderMark(true);
-
-    if (_file.open(QFile::WriteOnly)) {
-        log->line(QStringLiteral("Created %1").arg(_fileName));
-    }
-    else {
-        log->line(QStringLiteral("*** Error creating %1").arg(_fileName));
-    }
-}
-
-void OutputFile::close()
-{
-    if (_file.isOpen()) {
-        _stream.flush();
-        _file.close();
-    }
-}
+typedef QtlSmartPointer<QtlSubRipGenerator,QtlNullMutexLocker> QtlSubRipGeneratorPtr;
+typedef QMap<int,QtlSubRipGeneratorPtr> SubRipMap;
 
 
 //----------------------------------------------------------------------------
@@ -119,7 +70,7 @@ private:
     QString          _outputPrefix;
     QtsTeletextDemux _teletextDemux;
     QtsTsFile        _input;
-    OutputFileList   _outputs;
+    SubRipMap        _outputs;
     int              _frameCount;
 
     bool locateStreams();
@@ -237,22 +188,30 @@ bool QtlTestTeletext::extractStreams()
 void QtlTestTeletext::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
     // Search an existing output file.
-    OutputFilePtr out;
-    for (OutputFileList::ConstIterator it = _outputs.begin(); out.isNull() && it != _outputs.end(); ++it) {
-        if (!it->isNull() && (*it)->pid() == frame.pid() && (*it)->page() == frame.page()) {
-            out = *it;
+    // The index in the map is made of pid and page.
+    const int index = (frame.pid() << 16) | (frame.page() & 0xFFFF);
+    const SubRipMap::ConstIterator it = _outputs.find(index);
+    QtlSubRipGeneratorPtr subrip;
+
+    // Create a file if not found.
+    if (it != _outputs.end()) {
+        subrip = it.value();
+    }
+    else {
+        const QString fileName(QStringLiteral("%1_%2_%3.srt").arg(_outputPrefix).arg(frame.pid()).arg(frame.page()));
+        subrip = new QtlSubRipGenerator(fileName);
+        if (subrip->isOpen()) {
+            out << "Created " << fileName << endl;
+            _outputs.insert(index, subrip);
+        }
+        else {
+            err << "*** Error creating " << fileName << endl;
         }
     }
 
-    // Create a file if not found.
-    if (out.isNull()) {
-        out = new OutputFile(frame.pid(), frame.page(), _outputPrefix, &log);
-        _outputs << out;
-    }
-
     // Write SRT frame in output file.
-    if (!out.isNull() && out->isOpen()) {
-        out->stream() << frame.srtFrame();
+    if (!subrip.isNull() && subrip->isOpen()) {
+        subrip->addFrame(frame.showTimestamp(), frame.hideTimestamp(), frame.lines());
     }
     _frameCount++;
 }

@@ -49,8 +49,8 @@ QtlMovieTeletextExtract::QtlMovieTeletextExtract(const QString& inputFileName,
                                                  QObject* parent) :
     QtlMovieTsDemux(inputFileName, settings, log, parent),
     _demux(this),
-    _output(outputFileName),
-    _stream(&_output),
+    _subrip(),
+    _outputFileName(outputFileName),
     _pid(pid),
     _page(teletextPage)
 {
@@ -71,10 +71,8 @@ bool QtlMovieTeletextExtract::start()
     }
 
     // Create the output file.
-    _stream.setCodec("UTF-8");
-    _stream.setGenerateByteOrderMark(true);
-    if (!_output.open(QFile::WriteOnly)) {
-        emitCompleted(false, tr("Error creating %1").arg(_output.fileName()));
+    if (!_subrip.open(_outputFileName)) {
+        emitCompleted(false, tr("Error creating %1").arg(_outputFileName));
         return true; // true = started (and completed as well in that case).
     }
 
@@ -88,14 +86,13 @@ bool QtlMovieTeletextExtract::start()
 
 void QtlMovieTeletextExtract::emitCompleted(bool success, const QString& message)
 {
-    if (_output.isOpen()) {
+    if (_subrip.isOpen()) {
 
         // Flush pending Teletext messages.
         _demux.flushTeletext();
 
         // Close the output file.
-        _stream.flush();
-        _output.close();
+        _subrip.close();
     }
 
     // Cleanup the demux.
@@ -112,7 +109,7 @@ void QtlMovieTeletextExtract::emitCompleted(bool success, const QString& message
 
 void QtlMovieTeletextExtract::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
-    if (frame.pid() == _pid && frame.page() == _page && _output.isOpen()) {
-        _stream << frame.srtFrame();
+    if (frame.pid() == _pid && frame.page() == _page && _subrip.isOpen()) {
+        _subrip.addFrame(frame.showTimestamp(), frame.hideTimestamp(), frame.lines());
     }
 }

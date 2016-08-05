@@ -38,6 +38,7 @@
 #include <QtCore>
 #include "QtlMovieTsDemux.h"
 #include "QtsTeletextDemux.h"
+#include "QtlSubRipGenerator.h"
 
 //!
 //! This class extracts one Teletext subtitle stream from an MPEG-TS file into an SRT file.
@@ -92,11 +93,11 @@ protected:
     }
 
 private:
-    QtsTeletextDemux _demux;   //!< Extract the Teletext frames from the file.
-    QFile            _output;  //!< Output file descriptor.
-    QTextStream      _stream;  //!< Output text stream.
-    QtsPid           _pid;     //!< PID containing Teletext to extract.
-    int              _page;    //!< Teletext page.
+    QtsTeletextDemux   _demux;          //!< Extract the Teletext frames from the file.
+    QtlSubRipGenerator _subrip;         //!< SRT file generator.
+    QString            _outputFileName; //!< Output SRT file name.
+    QtsPid             _pid;            //!< PID containing Teletext to extract.
+    int                _page;           //!< Teletext page.
 
     //!
     //! Invoked when a complete Teletext message is available.

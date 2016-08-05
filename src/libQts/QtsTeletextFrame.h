@@ -53,13 +53,12 @@ public:
     //! @param [in] hideTimestamp Hide frame at this timestamp (in ms from start of stream)
     //! @param [in] lines Text lines.
     //!
-    QtsTeletextFrame(
-            QtsPid      pid           = 0,
-            int         page          = 0,
-            int         frameCount    = 0,
-            quint64     showTimestamp = 0,
-            quint64     hideTimestamp = 0,
-            QStringList lines         = QStringList());
+    QtsTeletextFrame(QtsPid             pid           = 0,
+                     int                page          = 0,
+                     int                frameCount    = 0,
+                     quint64            showTimestamp = 0,
+                     quint64            hideTimestamp = 0,
+                     const QStringList& lines         = QStringList());
 
     //!
     //! Get the text lines. May contain embedded HTML tags.
@@ -116,15 +115,6 @@ public:
     }
 
     //!
-    //! Get the "show" timestamp in SRT format.
-    //! @return The "show" timestamp in SRT format.
-    //!
-    QString srtShowTimestamp() const
-    {
-        return toSrtTime(_showTimestamp);
-    }
-
-    //!
     //! Get the "hide" timestamp in ms from start of stream.
     //! @return The "hide" timestamp in ms from start of stream.
     //!
@@ -132,34 +122,6 @@ public:
     {
         return _hideTimestamp;
     }
-
-    //!
-    //! Get the "hide" timestamp in SRT format.
-    //! @return The "hide" timestamp in SRT format.
-    //!
-    QString srtHideTimestamp() const
-    {
-        return toSrtTime(_hideTimestamp);
-    }
-
-    //!
-    //! Get the frame duration in SRT format.
-    //! @return The frame duration in SRT format.
-    //!
-    QString srtDuration() const;
-
-    //!
-    //! Get the complete frame in SRT format.
-    //! @return The complete frame in SRT format.
-    //!
-    QString srtFrame() const;
-
-    //!
-    //! Format a timestamp as SRT time.
-    //! @param [in] timestamp Timestamp in milliseconds.
-    //! @return SRT formatted time.
-    //!
-    static QString toSrtTime(quint64 timestamp);
 
 private:
     QtsPid      _pid;            //!< PID number.

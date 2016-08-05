@@ -43,7 +43,7 @@ QtsTeletextFrame::QtsTeletextFrame(QtsPid pid,
                                    int frameCount,
                                    quint64 showTimestamp,
                                    quint64 hideTimestamp,
-                                   QStringList lines) :
+                                   const QStringList& lines) :
     _pid(pid),
     _page(page),
     _frameCount(frameCount),
@@ -51,32 +51,4 @@ QtsTeletextFrame::QtsTeletextFrame(QtsPid pid,
     _hideTimestamp(hideTimestamp),
     _lines(lines)
 {
-}
-
-
-//----------------------------------------------------------------------------
-// Format a timestamp as SRT time.
-//----------------------------------------------------------------------------
-
-QString QtsTeletextFrame::toSrtTime(quint64 timestamp)
-{
-    const int h = timestamp / 3600000;
-    const int m = timestamp / 60000 - 60 * h;
-    const int s = timestamp / 1000 - 3600 * h - 60 * m;
-    const int u = timestamp - 3600000 * h - 60000 * m - 1000 * s;
-    return QStringLiteral("%1:%2:%3,%4")
-            .arg(h, 2, 10, QLatin1Char('0'))
-            .arg(m, 2, 10, QLatin1Char('0'))
-            .arg(s, 2, 10, QLatin1Char('0'))
-            .arg(u, 3, 10, QLatin1Char('0'));
-}
-
-QString QtsTeletextFrame::srtDuration() const
-{
-    return srtShowTimestamp() + " --> " + srtHideTimestamp();
-}
-
-QString QtsTeletextFrame::srtFrame() const
-{
-    return QStringLiteral("%1\n%2 --> %3\n%4\n\n").arg(_frameCount).arg(srtShowTimestamp()).arg(srtHideTimestamp()).arg(_lines.join('\n'));
 }

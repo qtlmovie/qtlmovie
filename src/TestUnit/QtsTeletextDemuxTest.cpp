@@ -38,6 +38,7 @@
 #include "QtsProgramAssociationTable.h"
 #include "QtsProgramMapTable.h"
 #include "QtsTsFile.h"
+#include "QtlSubRipGenerator.h"
 #include "QtlFile.h"
 
 class QtsTeletextDemuxTest : public QObject, private QtsTableHandlerInterface, private QtsTeletextHandlerInterface
@@ -48,9 +49,10 @@ public:
 private slots:
     void testReferenceTeletext();
 private:
-    const QStringList          _refLines;
-    QStringList::ConstIterator _refIterator;
-    QtsTsFile                  _file;
+    QString            _genString;
+    QTextStream        _genStream;
+    QtlSubRipGenerator _subrip;
+    QtsTsFile          _file;
 
     virtual void handleTable(QtsSectionDemux& demux, const QtsTable& table) Q_DECL_OVERRIDE;
     virtual void handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame) Q_DECL_OVERRIDE;
@@ -65,8 +67,9 @@ QTL_TEST_CLASS(QtsTeletextDemuxTest);
 //----------------------------------------------------------------------------
 
 QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
-    _refLines(QtlFile::readTextLinesFile(":/test/test-teletext.srt")),
-    _refIterator(_refLines.begin()),
+    _genString(),
+    _genStream(&_genString, QIODevice::WriteOnly),
+    _subrip(&_genStream),
     _file(":/test/test-teletext.stream")
 {
 }
@@ -78,14 +81,14 @@ QtsTeletextDemuxTest::QtsTeletextDemuxTest() :
 
 void QtsTeletextDemuxTest::testReferenceTeletext()
 {
-    QVERIFY(_refLines.size() == 45);
+    QVERIFY(_subrip.isOpen());
 
     QtsSectionDemux sectionDemux(this);
     sectionDemux.addPid(QTS_PID_PAT);
     sectionDemux.addPid(160); // known PMT PID for test stream
 
     QtsTeletextDemux teletextDemux(this);
-    teletextDemux.addPid(1068);        // know Teletext PID for test stream
+    teletextDemux.addPid(1068);        // known Teletext PID for test stream
     // teletextDemux.setAddColors(true);  // add font color HTML tags
 
     QVERIFY(_file.open(QFile::ReadOnly));
@@ -96,8 +99,8 @@ void QtsTeletextDemuxTest::testReferenceTeletext()
     }
     teletextDemux.flushTeletext();
     _file.close();
+    _subrip.close();
 
-    QVERIFY(_refIterator == _refLines.end());
     QVERIFY(sectionDemux.packetCount() == 1987);
     QVERIFY(teletextDemux.packetCount() == 1987);
     QVERIFY(teletextDemux.frameCount(889, 1068) == 9);
@@ -105,6 +108,16 @@ void QtsTeletextDemuxTest::testReferenceTeletext()
     QVERIFY(teletextDemux.frameCount(889) == 9);
     QVERIFY(teletextDemux.frameCount(888) == 0);
     QVERIFY(teletextDemux.frameCount(777) == 0);
+
+    QStringList refLines(QtlFile::readTextLinesFile(":/test/test-teletext.srt"));
+    QVERIFY(refLines.size() == 45);
+
+    // As a side effect of split, the trailing \n generates an additional line.
+    QStringList genLines(_genString.split(QRegExp("\\r*\\n")));
+    QVERIFY(genLines.size() == 46);
+    genLines.removeLast();
+
+    QVERIFY(genLines == refLines);
 }
 
 
@@ -153,20 +166,7 @@ void QtsTeletextDemuxTest::handleTable(QtsSectionDemux& demux, const QtsTable& t
 
 void QtsTeletextDemuxTest::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
-    const QString srt(frame.srtFrame());
-    QStringList srtLines(srt.split(QChar('\n')));
-
-    // Remove last line (trailing \n causes an additional line to be added by split()).
-    QVERIFY(!srtLines.isEmpty());
-    QVERIFY(srtLines.last().isEmpty());
-    srtLines.removeLast();
-
     QVERIFY(frame.pid() == 1068);
     QVERIFY(frame.page() == 889);
-
-    foreach (const QString& line, srtLines) {
-        QVERIFY(_refIterator != _refLines.end());
-        QVERIFY(line == *_refIterator);
-        ++_refIterator;
-    }
+    _subrip.addFrame(frame.showTimestamp(), frame.hideTimestamp(), frame.lines());
 }
