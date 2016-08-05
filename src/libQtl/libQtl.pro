@@ -88,7 +88,10 @@ SOURCES += \
     QtlCheckableHeaderView.cpp \
     QtlFileDialogUtils.cpp \
     QtlDvdFile.cpp \
-    QtlSubRipGenerator.cpp
+    QtlSubRipGenerator.cpp \
+    QtlSubStationAlphaParser.cpp \
+    QtlSubStationAlphaStyle.cpp \
+    QtlSubStationAlphaFrame.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -161,7 +164,10 @@ HEADERS += \
     QtlLayoutUtils.h \
     QtlCheckableHeaderView.h \
     QtlFileDialogUtils.h \
-    QtlSubRipGenerator.h
+    QtlSubRipGenerator.h \
+    QtlSubStationAlphaParser.h \
+    QtlSubStationAlphaStyle.h \
+    QtlSubStationAlphaFrame.h
 
 FORMS += \
     QtlBrowserDialog.ui \

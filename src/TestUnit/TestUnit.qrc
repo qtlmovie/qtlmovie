@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file alias="test/test-teletext.srt">QtsData/test-teletext.srt</file>
         <file alias="test/test-teletext.stream">QtsData/test-teletext.stream</file>
+        <file alias="test/test-substationalpha.ass">QtsData/test-substationalpha.ass</file>
     </qresource>
 </RCC>

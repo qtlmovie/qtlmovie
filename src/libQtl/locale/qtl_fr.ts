@@ -2099,123 +2099,123 @@ L&apos;application va s&apos;arrêter</translation>
         <translation>Expression &quot;valeur=nom&quot; invalide: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="275"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="302"/>
         <source>#%1</source>
         <translation>#%1</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="282"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="309"/>
         <source>%1x%2</source>
         <translation>%1x%2</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="289"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="316"/>
         <source>%1 degrees</source>
         <translation>%1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="292"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="319"/>
         <source>rotate %1 degrees</source>
         <translation>rotation de %1 degrés</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="297"/>
-        <location filename="../QtlMediaStreamInfo.cpp" line="316"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="324"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="343"/>
         <source>%1 b/s</source>
         <translation>%1 b/s</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="301"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="328"/>
         <source>%1 f/s</source>
         <translation>%1 i/s</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="308"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="335"/>
         <source>forced</source>
         <translation>forcé</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="323"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="350"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="326"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="353"/>
         <source>stereo</source>
         <translation>stéréo</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="329"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="356"/>
         <source>%1 channels</source>
         <translation>%1 canaux</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="334"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="361"/>
         <source>@%1 Hz</source>
         <translation>@%1 Hz</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="345"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="372"/>
         <source>commentary</source>
         <translation>commentaires</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="348"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="375"/>
         <source>visual impaired</source>
         <translation>malvoyants</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="352"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="379"/>
         <source>Teletext %1%2</source>
         <translation>Teletext %1%2</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="352"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="379"/>
         <source>page </source>
         <translation>page </translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="355"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="382"/>
         <source>Closed Captions</source>
         <translation>Closed Captions</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="357"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="384"/>
         <source>service %1</source>
         <translation>service %1</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="360"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="387"/>
         <source>channel 2</source>
         <translation>canal 2</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="363"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="390"/>
         <source>field 2</source>
         <translation>champ 2</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="367"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="394"/>
         <source>hearing impaired</source>
         <translation>malentendants</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="447"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="474"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="450"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="477"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="453"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="480"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../QtlMediaStreamInfo.cpp" line="456"/>
+        <location filename="../QtlMediaStreamInfo.cpp" line="483"/>
         <source>DAR %1</source>
         <translation>DAR %1</translation>
     </message>
@@ -2670,6 +2670,14 @@ L&apos;application va s&apos;arrêter</translation>
         <location filename="../QtlSimpleWebRequest.cpp" line="245"/>
         <source>End of download of %1</source>
         <translation>Fin de téléchargement de %1</translation>
+    </message>
+</context>
+<context>
+    <name>QtlSubStationAlphaParser</name>
+    <message>
+        <location filename="../QtlSubStationAlphaParser.cpp" line="112"/>
+        <source>Error opening %1</source>
+        <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
 </context>
 <context>
