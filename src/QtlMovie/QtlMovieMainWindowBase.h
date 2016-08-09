@@ -138,6 +138,14 @@ public slots:
     //! @param [in] silent Do not report errors or no new version.
     //!
     void searchNewVersion(bool silent = false);
+    //!
+    //! Invoked by the "Home Page" button.
+    //!
+    void openHomePage();
+    //!
+    //! Invoked by the "Support & Bug Report" button.
+    //!
+    void openSupportPage();
 
 protected:
     //!

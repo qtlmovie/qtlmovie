@@ -313,3 +313,18 @@ void QtlMovieMainWindowBase::searchNewVersion(bool silent)
                                           _log,
                                           this);
 }
+
+
+//-----------------------------------------------------------------------------
+// Open external links.
+//-----------------------------------------------------------------------------
+
+void QtlMovieMainWindowBase::openHomePage()
+{
+    QDesktopServices::openUrl(QUrl(WEBREF_QTLMOVIE));
+}
+
+void QtlMovieMainWindowBase::openSupportPage()
+{
+    QDesktopServices::openUrl(QUrl(WEBREF_QTLMOVIE_SUPPORT));
+}

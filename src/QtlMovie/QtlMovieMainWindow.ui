@@ -201,6 +201,8 @@
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
     <addaction name="actionReleaseNotes"/>
+    <addaction name="actionHomePage"/>
+    <addaction name="actionSupportPage"/>
     <addaction name="actionSearchNewVersion"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
@@ -365,6 +367,22 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="actionHomePage">
+   <property name="text">
+    <string>Home Page</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSupportPage">
+   <property name="text">
+    <string>Support and Bug Report</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
   <action name="actionNewTask">
    <property name="text">
     <string>New Task ...</string>
@@ -412,6 +430,8 @@
     <slot>showHelp()</slot>
     <slot>showReleaseNotes()</slot>
     <slot>searchNewVersion()</slot>
+    <slot>openHomePage()</slot>
+    <slot>openSupportPage()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -422,6 +442,7 @@
     <slot>saveToFile()</slot>
     <slot>setDebugMode(bool)</slot>
     <slot>save()</slot>
+    <slot>saveToFile(QString)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -796,6 +817,38 @@
    <signal>triggered()</signal>
    <receiver>QtlMovieMainWindow</receiver>
    <slot>startDvdExtraction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHomePage</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>openHomePage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSupportPage</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieMainWindow</receiver>
+   <slot>openSupportPage()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

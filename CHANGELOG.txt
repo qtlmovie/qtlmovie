@@ -29,6 +29,8 @@ Version 1.9
 - Precompiled Windows and Mac binaries use recent snapshot versions of ffmpeg.
 - Precompiled Windows binaries now longer include the third party tool "DVD
   Decrypter". It is now replaced by the embedded tool "DVD Extraction".
+- The support page has moved to the GitHub issue tracker at
+  https://github.com/qtlmovie/qtlmovie/issues
 
 Version 1.8
 - Improved US Closed Captions (EIA-608, CEA-708) detection and processing

@@ -388,7 +388,7 @@ Les remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieDvdExtractionWindow.ui" line="217"/>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="333"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="335"/>
         <location filename="../QtlMovieDvdExtractionWindow.cpp" line="186"/>
         <location filename="../QtlMovieDvdExtractionWindow.cpp" line="190"/>
         <source>Start ...</source>
@@ -411,67 +411,79 @@ Les remplacer?</translation>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="306"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="308"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="314"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="316"/>
         <source>About Qt</source>
         <translation>A propos de Qt</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="322"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="324"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="325"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="327"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="403"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="430"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="341"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="343"/>
         <source>Settings ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="349"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="351"/>
         <source>Clear Log</source>
         <translation>Effacer le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="357"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="359"/>
         <source>Save Log ...</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="365"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="367"/>
         <source>Help ...</source>
         <translation>Aide ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="376"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="378"/>
         <source>Log Debug</source>
         <translation>Activer le debug</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="384"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="386"/>
         <source>Search New Version</source>
         <translation>Rechercher une nouvelle version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="392"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="394"/>
         <source>Release Notes ...</source>
         <translation>Historique des versions</translation>
     </message>
     <message>
-        <location filename="../QtlMovieDvdExtractionWindow.ui" line="400"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="403"/>
+        <source>Home Page</source>
+        <translation>Site Web</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="411"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="414"/>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="417"/>
+        <source>Support and Bug Report</source>
+        <translation>Support et Problèmes</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieDvdExtractionWindow.ui" line="427"/>
         <source>Refresh ...</source>
         <translation>Actualiser ...</translation>
     </message>
@@ -1600,133 +1612,145 @@ Les remplacer?</translation>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="212"/>
+        <location filename="../QtlMovieMainWindow.ui" line="214"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="232"/>
+        <location filename="../QtlMovieMainWindow.ui" line="234"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="240"/>
+        <location filename="../QtlMovieMainWindow.ui" line="242"/>
         <source>About Qt</source>
         <translation>A propos de Qt</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="248"/>
+        <location filename="../QtlMovieMainWindow.ui" line="250"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="251"/>
+        <location filename="../QtlMovieMainWindow.ui" line="253"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="259"/>
+        <location filename="../QtlMovieMainWindow.ui" line="261"/>
         <source>Open ...</source>
         <translation>Ouvrir ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="262"/>
+        <location filename="../QtlMovieMainWindow.ui" line="264"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="270"/>
+        <location filename="../QtlMovieMainWindow.ui" line="272"/>
         <location filename="../QtlMovieMainWindow.cpp" line="132"/>
         <source>Transcode ...</source>
         <translation>Transcoder ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="273"/>
+        <location filename="../QtlMovieMainWindow.ui" line="275"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="281"/>
+        <location filename="../QtlMovieMainWindow.ui" line="283"/>
         <source>Settings ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="289"/>
+        <location filename="../QtlMovieMainWindow.ui" line="291"/>
         <source>Input File Properties ...</source>
         <translation>Propriétés du fichier d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="292"/>
+        <location filename="../QtlMovieMainWindow.ui" line="294"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="300"/>
+        <location filename="../QtlMovieMainWindow.ui" line="302"/>
         <source>Clear Log</source>
         <translation>Effacer le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="308"/>
+        <location filename="../QtlMovieMainWindow.ui" line="310"/>
         <source>Save Log ...</source>
         <translation>Sauvegarder le journal</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="316"/>
+        <location filename="../QtlMovieMainWindow.ui" line="318"/>
         <source>Test Audio ...</source>
         <translation>Tester les pistes audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="319"/>
+        <location filename="../QtlMovieMainWindow.ui" line="321"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="327"/>
+        <location filename="../QtlMovieMainWindow.ui" line="329"/>
         <source>About Media Tools</source>
         <translation>A propos des outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="335"/>
+        <location filename="../QtlMovieMainWindow.ui" line="337"/>
         <source>Help ...</source>
         <translation>Aide ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="346"/>
+        <location filename="../QtlMovieMainWindow.ui" line="348"/>
         <source>Log Debug</source>
         <translation>Activer le debug</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="354"/>
+        <location filename="../QtlMovieMainWindow.ui" line="356"/>
         <source>Search New Version</source>
         <translation>Rechercher une nouvelle version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="362"/>
+        <location filename="../QtlMovieMainWindow.ui" line="364"/>
         <source>Release Notes ...</source>
         <translation>Historique des versions</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="370"/>
+        <location filename="../QtlMovieMainWindow.ui" line="372"/>
+        <source>Home Page</source>
+        <translation>Site Web</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieMainWindow.ui" line="380"/>
+        <location filename="../QtlMovieMainWindow.ui" line="383"/>
+        <location filename="../QtlMovieMainWindow.ui" line="386"/>
+        <source>Support and Bug Report</source>
+        <translation>Support et Problèmes</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieMainWindow.ui" line="394"/>
         <source>New Task ...</source>
         <translation>Nouveau ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="373"/>
+        <location filename="../QtlMovieMainWindow.ui" line="397"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="381"/>
+        <location filename="../QtlMovieMainWindow.ui" line="405"/>
         <source>Purge Completed Tasks</source>
         <translation>Purger les tâches terminées</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="389"/>
+        <location filename="../QtlMovieMainWindow.ui" line="413"/>
         <source>Switch Mode</source>
         <translation>Changer de mode</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindow.ui" line="397"/>
+        <location filename="../QtlMovieMainWindow.ui" line="421"/>
         <source>DVD Extraction ...</source>
         <translation>Extraction de DVD</translation>
     </message>

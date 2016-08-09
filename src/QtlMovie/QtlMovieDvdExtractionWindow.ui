@@ -292,6 +292,8 @@
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
     <addaction name="actionReleaseNotes"/>
+    <addaction name="actionHomePage"/>
+    <addaction name="actionSupportPage"/>
     <addaction name="actionSearchNewVersion"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
@@ -395,6 +397,25 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+
+  <action name="actionHomePage">
+   <property name="text">
+    <string>Home Page</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSupportPage">
+   <property name="text">
+    <string>Support and Bug Report</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+
+
   <action name="actionRefresh">
    <property name="text">
     <string>Refresh ...</string>
@@ -421,6 +442,8 @@
     <slot>showHelp()</slot>
     <slot>showReleaseNotes()</slot>
     <slot>searchNewVersion()</slot>
+    <slot>openHomePage()</slot>
+    <slot>openSupportPage()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -572,6 +595,7 @@
     </hint>
    </hints>
   </connection>
+
   <connection>
    <sender>actionReleaseNotes</sender>
    <signal>triggered()</signal>
@@ -588,6 +612,20 @@
     </hint>
    </hints>
   </connection>
+
+  <connection>
+   <sender>actionHomePage</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieDvdExtractionWindow</receiver>
+   <slot>openHomePage()</slot>
+  </connection>
+  <connection>
+   <sender>actionSupportPage</sender>
+   <signal>triggered()</signal>
+   <receiver>QtlMovieDvdExtractionWindow</receiver>
+   <slot>openSupportPage()</slot>
+  </connection>
+
   <connection>
    <sender>actionRefresh</sender>
    <signal>triggered()</signal>
