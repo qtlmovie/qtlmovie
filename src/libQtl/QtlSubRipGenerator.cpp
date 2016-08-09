@@ -125,12 +125,29 @@ void QtlSubRipGenerator::close()
 
 void QtlSubRipGenerator::addFrame(quint64 showTimestamp, quint64 hideTimestamp, const QStringList& lines)
 {
-    if (_stream != 0) {
+    // Empty lines are illegal in SRT. Make sure we have at least one non-empty line.
+    bool notEmpty = false;
+    foreach (const QString& line, lines) {
+        if (!line.isEmpty()) {
+            notEmpty = true;
+            break;
+        }
+    }
+
+    // Generate the frame only when it is possible to do so.
+    if (notEmpty && _stream != 0) {
+        // First line: Frame count, starting at 1.
+        // Second line: Start and end timestamps.
         *_stream << ++_frameCount << endl
                  << formatDuration(showTimestamp, hideTimestamp) << endl;
+        // Subsequent lines: Subtitle text.
         foreach (const QString& line, lines) {
-            *_stream << line << endl;
+            // Empty lines are illegal in SRT, skip them.
+            if (!line.isEmpty()) {
+                *_stream << line << endl;
+            }
         }
+        // Trailing empty line to mark the end of frame.
         *_stream << endl;
     }
 }
