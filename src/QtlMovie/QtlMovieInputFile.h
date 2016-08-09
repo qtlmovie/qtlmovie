@@ -183,6 +183,17 @@ public:
     }
 
     //!
+    //! Check if the input file is a pure subtitle file.
+    //! This means that the file is for instance a .srt or .ass file,
+    //! not included into some container file format.
+    //! @return True if the input file is a pure subtitle file.
+    //!
+    bool isSubtitleFile() const
+    {
+        return _isSubtitle;
+    }
+
+    //!
     //! Check if the input file content must be piped from QtlMovie.
     //!
     //! Some input files cannot be read directly from the file system.
@@ -394,6 +405,7 @@ private:
     QString _externalSubtitleFileName;           //!< Subtitle file name, can be empty.
     bool    _isTs;                               //!< File is a transport stream (TS or M2TS format).
     bool    _isM2ts;                             //!< File has M2TS format.
+    bool    _isSubtitle;                         //!< File is a pure subtitle file, no container format.
     bool    _pipeInput;                          //!< Input file content shall be piped from QtlMovie.
 
     //!

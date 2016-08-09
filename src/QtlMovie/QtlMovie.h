@@ -56,7 +56,7 @@
 #define QTL_FFMPEG_PROBE_SECONDS             200  //!< Initial probe size in media playout seconds for ffprobe / ffmpeg.
 #define QTL_FFPROBE_DVD_DIVISOR_2              5  //!< On DVD's, a second shorter ffprobe is run.
 #define QTL_FFPROBE_DVD_DIVISOR_3             20  //!< On DVD's, a third shorter ffprobe is run.
-#define QTL_SRT_USE_VIDEO_SIZE_HINT         true  //!< Check if the insertion of SRT/SSA/ASS subtitles shall use the original video size as a hint.
+#define QTL_SRT_USE_VIDEO_SIZE_HINT        false  //!< Check if the insertion of SRT/SSA/ASS subtitles shall use the original video size as a hint.
 #define QTL_CHAPTER_MINUTES                    5  //!< Duration of chapters to create.
 #define QTL_DVD_REMUX_AFTER_TRANSCODE       true  //!< If audio/video must be remuxed after transcode for DVD output.
 #define QTL_CREATE_PAL_DVD                  true  //!< If the format of created DVD is PAL or NTSC.
@@ -78,6 +78,8 @@
 #define QTL_DVD_EXTRACT_DIR_TREE            true  //!< Recreate directory tree when extracting DVD.
 #define QTL_DVD_MAX_SPEED                   true  //!< Set DVD read speed to maximum.
 #define QTL_CLEANUP_SUBTITLES               true  //!< Cleanup SRT/SSA/ASS subtitles files before burning.
+#define QTL_SRT_HTML_TAGS                   true  //!< Add HTML tags in SRT subtitles when converting from SSA/ASS.
+#define QTL_DOWNGRADE_SSA_TO_SRT           false  //!< Downgrade SSA/ASS subtitles to SRT before burning?
 
 //
 // Transcoding presets.

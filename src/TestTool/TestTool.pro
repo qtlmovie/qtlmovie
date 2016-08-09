@@ -48,7 +48,8 @@ SOURCES += \
     QtlTestOptical.cpp \
     QtlTestSysInfo.cpp \
     QtlTestMkdir.cpp \
-    QtlTestDvdRead.cpp
+    QtlTestDvdRead.cpp \
+    QtlTestSsa.cpp
 
 HEADERS += \
     QtlTestCommand.h

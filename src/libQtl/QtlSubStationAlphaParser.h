@@ -75,9 +75,11 @@ public:
     //!
     //! Provide a complete input file.
     //! @param [in] fileName Name of an ASS/SSA file.
+    //! @param [in] codecName Codec name for the file. Default is UTF-8.
     //! @return True on success, false on error (file not found, etc.)
+    //! @see QTextStream::setCodec()
     //!
-    bool addFile(const QString& fileName);
+    bool addFile(const QString& fileName, const char* codecName = "UTF-8");
 
     //!
     //! Get the current section name.
@@ -144,7 +146,7 @@ private:
     QString               _sectionNormalized;   //!< Current section name.
     QStringList           _formatList;          //!< Current list of formats, in normalized form.
     QMap<QString,QString> _infoMap;             //!< Map of script info, using normalized type names as keys.
-    QMap<QString,QtlSubStationAlphaStylePtr> _styles;  //!< Mof styles, using normalized names as keys.
+    QtlSubStationAlphaStyleMap _styles;         //!< Map of styles, using normalized names as keys.
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlSubStationAlphaParser)

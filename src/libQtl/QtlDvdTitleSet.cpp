@@ -243,7 +243,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 
     // There must be at least one VOB file, otherwise there is no video.
     if (_vobFileNames.isEmpty()) {
-        _log->line(tr("No VOB file for %1").arg(fileName), QColor("red"));
+        _log->line(tr("No VOB file for %1").arg(fileName), QColor(Qt::red));
         return false;
     }
 

@@ -121,7 +121,7 @@ bool QtlMovieProcess::start()
     }
 
     // Display the command in the log window.
-    line(exec + " " + _arguments.join(" "), QColor("blue"));
+    line(exec + " " + _arguments.join(" "), QColor(Qt::blue));
     line("");
 
     // Differenciate standard error and standard output channels.

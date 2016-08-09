@@ -65,7 +65,7 @@ bool QtlMovieDeleteAction::start()
         line(tr("Deleting %1").arg(file));
         if ((info.isDir() && !QDir(file).removeRecursively()) || (info.isFile() && !QFile(file).remove())) {
             success = false;
-            line(tr("Error deleting %1").arg(file), QColor("red"));
+            line(tr("Error deleting %1").arg(file), QColor(Qt::red));
         }
     }
 

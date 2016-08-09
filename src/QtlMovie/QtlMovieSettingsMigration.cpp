@@ -56,7 +56,7 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
     // Open the old configuration file.
     QFile oldFile(oldFileName);
     if (!oldFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        log->line(QObject::tr("Error opening %1, migration not done, old settings are ignored").arg(oldFileName), QColor("red"));
+        log->line(QObject::tr("Error opening %1, migration not done, old settings are ignored").arg(oldFileName), QColor(Qt::red));
         return;
     }
 
@@ -124,7 +124,7 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
                   .arg(_xml.errorString())
                   .arg(_xml.lineNumber())
                   .arg(_xml.columnNumber()),
-                  QColor("red"));
+                  QColor(Qt::red));
         return;
     }
 
@@ -134,7 +134,7 @@ QtlMovieSettingsMigration::QtlMovieSettingsMigration(QtlMovieSettings* settings,
         log->line(QObject::tr("Old settings file was saved as %1 but you may remove it").arg(newFileName));
     }
     else {
-        log->line(QObject::tr("Error renaming the old settings file %1 but you may remove it").arg(oldFileName), QColor("red"));
+        log->line(QObject::tr("Error renaming the old settings file %1 but you may remove it").arg(oldFileName), QColor(Qt::red));
     }
 }
 

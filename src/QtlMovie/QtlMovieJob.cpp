@@ -42,6 +42,7 @@
 #include "QtlMovieCcExtractorProcess.h"
 #include "QtlMovieTeletextExtract.h"
 #include "QtlMovieCleanupSubtitles.h"
+#include "QtlMovieConvertSubStationAlpha.h"
 #include "QtlOpticalDrive.h"
 #include "QtlStringList.h"
 #include "QtlSysInfo.h"
@@ -156,10 +157,12 @@ bool QtlMovieJob::start()
     _actionCount = _actionList.size();
 
     // Start the first action.
-    if (!startNextAction()) {
+    if (_actionList.isEmpty()) {
+        emitCompleted(false, tr("Nothing to do"));
+    }
+    else if (!startNextAction()) {
         emitCompleted(false, tr("Error starting process"));
     }
-
     return true;
 }
 
@@ -227,6 +230,9 @@ void QtlMovieJob::emitCompleted(bool success, const QString& message)
 
     // Notify superclass.
     QtlMovieAction::emitCompleted(success, message);
+
+    // Final message in the log.
+    line(tr("Job completed"), QColor(Qt::darkGreen));
 }
 
 
@@ -471,7 +477,8 @@ bool QtlMovieJob::buildScenario()
         QString subtitleFile(_tempDir + QDir::separator() + "subtitles");
 
         // Create a process for subtitle extraction. File suffix is updated.
-        if (!addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreatedSubtitles)) {
+        // SSA/ASS are converted to SRT if specified in the settings.
+        if (!addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreatedSubtitles, settings()->downgradeSsaToSrt(), false)) {
             return false;
         }
 
@@ -564,7 +571,8 @@ bool QtlMovieJob::buildScenario()
         case QtlMovieOutputFile::SubRip: {
             QString subtitleFile(_task->outputFile()->fileName());
             bool internallyCreated = false; // unused
-            success = addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreated);
+            // Convert SSA/ASS to SRT is all cases, fail if cannot be converted to SRT.
+            success = addExtractSubtitle(inputForTranscoding, subtitleFile, internallyCreated, true, true);
             break;
         }
         default: {
@@ -1258,7 +1266,11 @@ bool QtlMovieJob::addTranscodeToAvi(const QtlMovieInputFile* inputFile, const QS
 // Add a process for extracting subtitles into an SRT file.
 //----------------------------------------------------------------------------
 
-bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName, bool& internallyCreated)
+bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile,
+                                     QString& outputFileName,
+                                     bool& internallyCreated,
+                                     bool convertToSubRip,
+                                     bool srtMandatory)
 {
     // By default, we do not create the subtitles file.
     internallyCreated = false;
@@ -1279,7 +1291,8 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         // Use same as input type, except a few cases.
         switch (inType) {
             case QtlMediaStreamInfo::SubSsa:
-                outType = QtlMediaStreamInfo::SubAss;
+            case QtlMediaStreamInfo::SubAss:
+                outType = convertToSubRip ? QtlMediaStreamInfo::SubRip : QtlMediaStreamInfo::SubAss;
                 break;
             case QtlMediaStreamInfo::SubTeletext:
             case QtlMediaStreamInfo::SubCc:
@@ -1295,6 +1308,11 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
     else {
         // A file suffix is provided, used corresponding subtitle type.
         outType = QtlMediaStreamInfo::subtitleType(outputFileName);
+    }
+
+    // If mandatory conversion to SRT, error if we cannot.
+    if (srtMandatory && outType != QtlMediaStreamInfo::SubRip) {
+        return abortStart(tr("This subtitle type cannot be converted to SRT"));
     }
 
     // Build the extraction command.
@@ -1366,31 +1384,57 @@ bool QtlMovieJob::addExtractSubtitle(const QtlMovieInputFile* inputFile, QString
         return true;
     }
     else {
-        // Other types of subtitles are extracted using ffmpeg.
+        // Other types of subtitles are extracted using ffmpeg (unless the input file is already a pure subtitle file).
         // Determine codec type and output file format.
-        QString codecName, fileFormat;
-        switch (outType) {
+        QString codecName;
+        QString fileFormat;
+        QString ffmpegOutputFile(outputFileName);
+        switch (inType) {
             case QtlMediaStreamInfo::SubRip:
                 codecName = "srt";
                 fileFormat = "srt";
+                convertToSubRip = false; // no need to convert, already SRT
                 break;
+            case QtlMediaStreamInfo::SubSsa:
             case QtlMediaStreamInfo::SubAss:
                 codecName = "ass";
                 fileFormat = "ass";
+                if (convertToSubRip) {
+                    // Will be converted to SRT later, use an intermediate file.
+                    ffmpegOutputFile = _tempDir + QDir::separator() + "subtitles.ass";
+                    // The final subtitle file will be internally created.
+                    internallyCreated = true;
+                }
                 break;
             default:
                 return abortStart(tr("This type of subtitles cannot be extracted by ffmpeg"));
         }
 
-        // Build FFmpeg options to extract one subtitle track to SRT.
-        QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile));
-        args << "-vn"   // Suppress video streams.
-             << "-an"   // Suppress audio streams.
-             << "-codec:s" << codecName
-             << "-map" << stream->ffSpecifier()
-             << QtlMovieFFmpeg::outputArguments(settings(), outputFileName, fileFormat);
+        if (inputFile->isSubtitleFile()) {
+            // No need to extract, already a subtitle file.
+            ffmpegOutputFile = inputFile->fileName();
+        }
+        else {
+            // Build FFmpeg options to extract one subtitle track to SRT.
+            QStringList args(QtlMovieFFmpeg::inputArguments(settings(), inputFile));
+            args << "-vn"   // Suppress video streams.
+                 << "-an"   // Suppress audio streams.
+                 << "-codec:s" << codecName
+                 << "-map" << stream->ffSpecifier()
+                 << QtlMovieFFmpeg::outputArguments(settings(), ffmpegOutputFile, fileFormat);
 
-        // Add the FFmpeg process.
-        return addFFmpeg(tr("Extracting subtitles"), args, true);
+            // Add the FFmpeg process.
+            if (!addFFmpeg(tr("Extracting subtitles"), args, true)) {
+                return false;
+            }
+        }
+
+        // If SSA/ASS to SRT conversion is required, add a pass to do this.
+        if (convertToSubRip) {
+            QtlMovieConvertSubStationAlpha * action = new QtlMovieConvertSubStationAlpha(ffmpegOutputFile, outputFileName, settings(), this, this);
+            action->setDescription(tr("Convert subtitles to SRT"));
+            _actionList.append(action);
+        }
+        return true;
     }
 }

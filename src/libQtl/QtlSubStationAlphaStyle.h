@@ -48,6 +48,13 @@ typedef QtlSmartPointer<QtlSubStationAlphaStyle,QtlNullMutexLocker> QtlSubStatio
 Q_DECLARE_METATYPE(QtlSubStationAlphaStylePtr)
 
 //!
+//! Map of styles, using normalized names as keys.
+//! @see QtlSubStationAlphaParser::normalized()
+//!
+typedef QMap<QString,QtlSubStationAlphaStylePtr> QtlSubStationAlphaStyleMap;
+Q_DECLARE_METATYPE(QtlSubStationAlphaStyleMap)
+
+//!
 //! Description of a style of Sub Station Alpha (SSA/ASS) subtitles.
 //!
 class QtlSubStationAlphaStyle
@@ -56,7 +63,7 @@ public:
     //!
     //! Constructor.
     //! @param [in] definition Definition the style as in a "Style:" line in a SSA/ASS file.
-    //! @param [in] format List of style fields, as in a "Format:" line.
+    //! @param [in] format List of style fields, as in a "Format:" line, with normalized names.
     //!
     QtlSubStationAlphaStyle(const QString& definition = QString(), const QStringList& format = QStringList());
 
@@ -94,6 +101,15 @@ public:
     bool isUnderline() const
     {
         return _isUnderline;
+    }
+
+    //!
+    //! Get the font color in RGB format.
+    //! @return The font color in RGB format.
+    //!
+    quint32 color() const
+    {
+        return _color;
     }
 
     //!

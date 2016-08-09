@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
+    <width>714</width>
     <height>602</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <normaloff>:/images/qtlmovie-64.png</normaloff>:/images/qtlmovie-64.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0">
+   <item row="2" column="0">
     <widget class="QTabWidget" name="tab">
      <property name="currentIndex">
       <number>0</number>
@@ -328,13 +328,13 @@
       <attribute name="title">
        <string>Transcoding</string>
       </attribute>
-      <layout class="QVBoxLayout" name="layoutTranscoding_2">
+      <layout class="QVBoxLayout" name="layoutTranscoding">
        <item>
         <widget class="QGroupBox" name="groupBoxTranscodingDuration">
          <property name="title">
           <string>Transcoding duration</string>
          </property>
-         <layout class="QGridLayout" name="layoutTranscoding">
+         <layout class="QGridLayout" name="layoutTranscodingDuration">
           <item row="0" column="0" colspan="2">
            <widget class="QRadioButton" name="radioButtonComplete">
             <property name="text">
@@ -399,36 +399,6 @@
             </property>
             <property name="checked">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBoxSubtitles">
-         <property name="title">
-          <string>Subtitles insertion</string>
-         </property>
-         <layout class="QVBoxLayout" name="layoutSubtitles">
-          <item>
-           <widget class="QCheckBox" name="checkBoxSrtUseVideoSize">
-            <property name="text">
-             <string>Use original video size as a hint for SRT/SSA/ASS character shape</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBoxCleanupSubtitles">
-            <property name="text">
-             <string>Cleanup SRT/SSA/ASS files before insertion</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBoxCapitalizeCc">
-            <property name="text">
-             <string>Capitalize US Closed Captions (suppress ALL CAPS)</string>
             </property>
            </widget>
           </item>
@@ -1302,6 +1272,79 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabSubtitles">
+      <attribute name="title">
+       <string>Subtitles</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutSubtitles">
+       <item>
+        <widget class="QGroupBox" name="groupBoxSubtitlesPreprocessing">
+         <property name="title">
+          <string>Subtitles pre-processing</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutSubtitlesPreprocessing">
+          <item>
+           <widget class="QCheckBox" name="checkBoxCleanupSubtitles">
+            <property name="text">
+             <string>Cleanup SRT/SSA/ASS files before insertion</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxDowngradeSsaToSrt">
+            <property name="text">
+             <string>Downgrade SSA/ASS subtitles to SRT</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxUseHtmlInSrt">
+            <property name="text">
+             <string>Use HTML tags in SRT subtitles</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxCapitalizeCc">
+            <property name="text">
+             <string>Capitalize US Closed Captions (suppress ALL CAPS)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxSubtitlesInsertion">
+         <property name="title">
+          <string>Subtitles insertion</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutSubtitlesInsertion">
+          <item>
+           <widget class="QCheckBox" name="checkBoxSrtUseVideoSize">
+            <property name="text">
+             <string>Use original video size as a hint for SRT/SSA/ASS character shape</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabMisc">
       <attribute name="title">
        <string>Miscellaneous</string>
@@ -1515,7 +1558,7 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="3" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

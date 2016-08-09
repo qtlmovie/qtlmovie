@@ -2675,7 +2675,7 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlSubStationAlphaParser</name>
     <message>
-        <location filename="../QtlSubStationAlphaParser.cpp" line="112"/>
+        <location filename="../QtlSubStationAlphaParser.cpp" line="113"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>

@@ -26,11 +26,11 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlMovieCleanupSubtitles.
+// Define the class QtlMovieConvertSubStationAlpha.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlMovieCleanupSubtitles.h"
+#include "QtlMovieConvertSubStationAlpha.h"
 #include "QtlMovie.h"
 
 
@@ -38,20 +38,31 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlMovieCleanupSubtitles::QtlMovieCleanupSubtitles(const QString& inputFileName,
-                                                   const QString& outputFileName,
-                                                   const QtlMovieSettings* settings,
-                                                   QtlLogger* log,
-                                                   QObject* parent) :
+QtlMovieConvertSubStationAlpha::QtlMovieConvertSubStationAlpha(const QString& inputFileName,
+                                                               const QString& outputFileName,
+                                                               const QtlMovieSettings* settings,
+                                                               QtlLogger* log,
+                                                               QObject* parent) :
     QtlMovieAction(settings, log, parent),
     _inputFile(inputFileName),
-    _outputFile(outputFileName),
+    _inputStream(&_inputFile),
+    _inputParser(log),
+    _outputFile(),
+    _outputFileName(outputFileName),
+    _useHtml(settings->useSrtHtmlTags()),
     _timerId(-1),
     _totalSize(0),
-    _readSize(0),
     _reportInterval(0),
     _nextReport(0)
 {
+    // Always assume that SSA/ASS files are UTF-8. Is this true?
+    // Most SSA/ASS files seen so far are UTF-8 without BOM. Because of the
+    // lack of BOM, not specifying UTF-8 explicitely fails to correctly
+    // interpret the file content.
+    _inputStream.setCodec("UTF-8");
+
+    // Each time the SSA/ASS parser finds a frame, get notified in this object.
+    connect(&_inputParser, &QtlSubStationAlphaParser::subtitleFrame, this, &QtlMovieConvertSubStationAlpha::processSubtitleFrame);
 }
 
 
@@ -59,16 +70,16 @@ QtlMovieCleanupSubtitles::QtlMovieCleanupSubtitles(const QString& inputFileName,
 // Start the analysis.
 //----------------------------------------------------------------------------
 
-bool QtlMovieCleanupSubtitles::start()
+bool QtlMovieConvertSubStationAlpha::start()
 {
     // Do not start twice.
     if (!QtlMovieAction::start()) {
         return false;
     }
 
-    debug(tr("Starting subtitle file cleanup"));
+    debug(tr("Starting SSA/ASS to SRT conversion"));
     debug(tr("Input file: %1").arg(_inputFile.fileName()));
-    debug(tr("Output file: %1").arg(_outputFile.fileName()));
+    debug(tr("Output file: %1").arg(_outputFileName));
 
     // Open the input file.
     if (!_inputFile.open(QFile::ReadOnly)) {
@@ -77,9 +88,9 @@ bool QtlMovieCleanupSubtitles::start()
     }
 
     // Create the output file.
-    if (!_outputFile.open(QFile::WriteOnly)) {
+    if (!_outputFile.open(_outputFileName)) {
         _inputFile.close();
-        emitCompleted(false, tr("Error creating %1").arg(_outputFile.fileName()));
+        emitCompleted(false, tr("Error creating %1").arg(_outputFileName));
         return true; // true = started (and completed as well in that case).
     }
 
@@ -100,7 +111,7 @@ bool QtlMovieCleanupSubtitles::start()
 // Abort analysis.
 //----------------------------------------------------------------------------
 
-void QtlMovieCleanupSubtitles::abort()
+void QtlMovieConvertSubStationAlpha::abort()
 {
     // Declare the completion with error status but no message.
     emitCompleted(false);
@@ -111,7 +122,7 @@ void QtlMovieCleanupSubtitles::abort()
 // Emit the completed() signal.
 //----------------------------------------------------------------------------
 
-void QtlMovieCleanupSubtitles::emitCompleted(bool success, const QString& message)
+void QtlMovieConvertSubStationAlpha::emitCompleted(bool success, const QString& message)
 {
     // Stop our polling for the file.
     killTimer(_timerId);
@@ -130,7 +141,7 @@ void QtlMovieCleanupSubtitles::emitCompleted(bool success, const QString& messag
 // Event handler to handle timer.
 //-----------------------------------------------------------------------------
 
-void QtlMovieCleanupSubtitles::timerEvent(QTimerEvent* event)
+void QtlMovieConvertSubStationAlpha::timerEvent(QTimerEvent* event)
 {
     // This handler is invoked for all timer, make sure it is ours.
     if (event == 0 || _timerId < 0 || event->timerId() != _timerId) {
@@ -140,38 +151,38 @@ void QtlMovieCleanupSubtitles::timerEvent(QTimerEvent* event)
     }
 
     // Read a chunk of the input file.
-    char buffer[QTL_FILE_CHUNK];
-    const qint64 inCount = _inputFile.read(buffer, sizeof(buffer));
+    qint64 current = _inputFile.pos();
+    const qint64 endChunk = current + QTL_FILE_CHUNK;
+    QString line;
+    while (current < endChunk) {
 
-    if (inCount < 0) {
-        // File error.
-        emitCompleted(false, tr("Error reading %1").arg(_inputFile.fileName()));
-    }
-    else if (inCount == 0) {
-        // End of file.
-        emitCompleted(true);
-    }
-    else {
-        // Count total input bytes.
-        _readSize += inCount;
-
-        // Cleanup the buffer, remove nul bytes.
-        char* wr = buffer;
-        for (const char* rd = buffer; rd < buffer + inCount; ++rd) {
-            if (*rd != 0) {
-                *wr++ = *rd;
-            }
+        // Read one line of input text.
+        if (!_inputStream.readLineInto(&line)) {
+            // End of file (or maybe read error).
+            emitCompleted(true);
+            break;
         }
-        const qint64 outCount = wr - buffer;
 
-        // Write the clean buffer to output file.
-        if (_outputFile.write(buffer, outCount) < outCount) {
-            emitCompleted(false, tr("Error writing %1").arg(_outputFile.fileName()));
-        }
-        else if (_readSize >= _nextReport) {
-            // Report progress in the file.
-            emitProgress(int(_readSize), int(_totalSize));
+        // Submit it to the SSA/ASS parser.
+        _inputParser.addLine(line);
+
+        // Report progress in the file.
+        current = _inputFile.pos();
+        if (current >= _nextReport) {
+            emitProgress(int(current), int(_totalSize));
             _nextReport += _reportInterval;
         }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when a subtitle frame is available.
+//-----------------------------------------------------------------------------
+
+void QtlMovieConvertSubStationAlpha::processSubtitleFrame(const QtlSubStationAlphaFramePtr& frame)
+{
+    if (!frame.isNull()) {
+        _outputFile.addFrame(frame->showTimestamp(), frame->hideTimestamp(), frame->toSubRip(_useHtml));
     }
 }

@@ -308,9 +308,15 @@ private:
     //! @param [out] internallyCreated Returned as true if the subtitles file is internally
     //! created, using code from this application. Returned as false when the subtitles files
     //! is created by some external tool such as ffmpeg or ccextractor.
+    //! @param [in] convertSsaToSrt If true, the SSA/ASS subtitles are converted to SRT.
+    //! @param [in] srtMandatory If true, the output format must be SRT, otherwise fails.
     //! @return True on success, false on error (unsupported subtitle type for instance).
     //!
-    bool addExtractSubtitle(const QtlMovieInputFile* inputFile, QString& outputFileName, bool& internallyCreated);
+    bool addExtractSubtitle(const QtlMovieInputFile* inputFile,
+                            QString& outputFileName,
+                            bool& internallyCreated,
+                            bool convertSsaToSrt,
+                            bool srtMandatory);
 
     //!
     //! Change the name of the external subtitle file.

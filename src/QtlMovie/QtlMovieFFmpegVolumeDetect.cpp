@@ -154,7 +154,7 @@ void QtlMovieFFmpegVolumeDetect::buildAudioFilter()
 
     // Check configuration consistency.
     if (outPeak <= outMean) {
-        line(tr("Inconsistent audio normalization settings, max peak level (%1 dBFS) must be greater than mean level (%2 dBFS)").arg(outPeak).arg(outMean), QColor("red"));
+        line(tr("Inconsistent audio normalization settings, max peak level (%1 dBFS) must be greater than mean level (%2 dBFS)").arg(outPeak).arg(outMean), QColor(Qt::red));
         return;
     }
 

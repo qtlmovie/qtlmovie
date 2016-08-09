@@ -38,6 +38,7 @@
 
 #include "QtlCore.h"
 #include "QtlSmartPointer.h"
+#include "QtlSubStationAlphaStyle.h"
 
 class QtlSubStationAlphaFrame;
 
@@ -56,9 +57,12 @@ public:
     //!
     //! Constructor.
     //! @param [in] definition Definition the frame as in a "Dialogue:" line in a SSA/ASS file.
-    //! @param [in] format List of style fields, as in a "Format:" line.
+    //! @param [in] format List of style fields, as in a "Format:" line, with normalized names.
+    //! @param [in] styles Map of style definitions, using normalized names as key.
     //!
-    QtlSubStationAlphaFrame(const QString& definition = QString(), const QStringList& format = QStringList());
+    QtlSubStationAlphaFrame(const QString& definition = QString(),
+                            const QStringList& format = QStringList(),
+                            const QtlSubStationAlphaStyleMap& styles = QtlSubStationAlphaStyleMap());
 
     //!
     //! Get one field of the dialog.
@@ -68,8 +72,61 @@ public:
     //!
     QString getInfo(const QString& name, const QString& defaultValue = QString()) const;
 
+    //!
+    //! Show frame at this timestamp (in ms from start of stream).
+    //! @return The start time in milliseconds.
+    //!
+    quint64 showTimestamp() const
+    {
+        return _start;
+    }
+
+    //!
+    //! Hide frame at this timestamp (in ms from start of stream).
+    //! @return The end time in milliseconds.
+    //!
+    quint64 hideTimestamp() const
+    {
+        return _end;
+    }
+
+    //!
+    //! The text of this subtitle frame in SSA/ASS format.
+    //! @return The text of this subtitle frame in SSA/ASS format.
+    //!
+    QString text() const
+    {
+        return _text;
+    }
+
+    //!
+    //! Convert the text of this subtitle frame in SubRip format.
+    //! @param [in] useHtmlTags If true, add the HTML SubRip extensions.
+    //! @return The text of this subtitle frame in SubRip format.
+    //! Never empty, there is at least one string.
+    //!
+    QStringList toSubRip(bool useHtmlTags = true) const;
+
 private:
-    QMap<QString,QString> _info;  //!< Map of info, using normalized names as keys.
+    QString                    _text;  //!< Subtitle text, in SSA/ASS format.
+    QtlSubStationAlphaStylePtr _style; //!< Style to apply to _text.
+    quint64                    _start; //!< Show frame at this timestamp (in ms from start of stream).
+    quint64                    _end;   //!< Hide frame at this timestamp (in ms from start of stream).
+    QMap<QString,QString>      _info;  //!< Map of info, using normalized names as keys.
+
+    //!
+    //! Convert an SSA/ASS timestamp specification to a value in milliseconds.
+    //! @param [in] value SSA/ASS timestamp specification.
+    //! @return Value in milliseconds or 0 if incorrect.
+    //!
+    static quint64 toTimestamp(const QString& value);
+
+    //!
+    //! Convert a color code in RGB format into a SubRip color specification.
+    //! @param [in] color Color code in RGB format.
+    //! @return Corresponding SubRip color specification.
+    //!
+    static QString rgbToSubRip(quint32 color);
 };
 
 #endif // QTLSUBSTATIONALPHAFRAME_H

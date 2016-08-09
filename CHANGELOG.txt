@@ -20,6 +20,9 @@ Version 1.9
   observed that some MKV files had ASS subtitles using metadata containing
   a trailing zero character. This invalid character broke ffmpeg and the
   subtitles were not burned into the video. This new option fixes this issue.
+- Added an option (disabled by default) to downgrade SSA/ASS subtitles to SRT
+  before insertion in the video. For SSA/ASS subtitles with weird presentation,
+  this option removes the formatting.
 - Bug fix: When clicking in the log window, the color of the subsequent messages
   could be incorrect. This is fixed.
 - Precompiled Windows and Mac binaries use Qt 5.7.0.

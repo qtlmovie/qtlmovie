@@ -55,6 +55,7 @@
             <li><a href="#androidsettings">"Android" tab</a></li>
             <li><a href="#avisettings">"AVI" tab</a></li>
             <li><a href="#audiosettings">"Audio" tab</a></li>
+            <li><a href="#subtitlesettings">"Subtitles" tab</a></li>
             <li><a href="#miscsettings">"Miscellaneous" tab</a></li>
           </ul>
         </li>
@@ -508,22 +509,6 @@
         stored in private metadata but the video file has a fixed orientation. Such video files
         are correctly played on Apple video players such as QuickTime but not on standard video
         players. This option fixes this.</p>
-      <p>The "Subtitles insertion" area is used only when inserting subtitles.
-        The option "Use original video size as a hint for SRT/SSA/ASS character shape"
-        is somewhat cryptic. If checked, the original size of the video is used to
-        alter the character size of text-based subtitles. The FFmpeg documentation
-        recommends to use it but the experience shows that sometimes it produces
-        a strange characters size. This is why it is unchecked by default. You may
-        try to check it and decide whether it is useful or not.</p>
-      <p>The option "Cleanup SRT/SSA/ASS files before insertion" is used to remove
-        all invalid nul characters from the subtitles files. It has been observed
-        that some MKV files had ASS subtitles using metadata containing
-        a trailing nul character. This invalid character broke <i>ffmpeg</i> and the
-        subtitles were not burned into the video. Checking this option fixes this issue.</p>
-      <p>Some US TV channels broadcast all Closed Captions in UPPERCASE.
-        If you find that annoying, check the option "Capitalize US Closed Captions".
-        This option is directly passed to <i>CCExtractor</i> which formats the subtitles
-        in a nicer looking way.</p>
       <p>The "Keep intermediate files" option indicates that all intermediate files which were created
         in the transcoding process shall not be deleted after completion.
         These files are created in a temporary directory with the same name as the output file and
@@ -632,6 +617,37 @@
           compression is performed. But the highest sounds are clipped and this may
           introduced nasty sound effects.</li>
       </ul>
+
+      <h3><a id="subtitlesettings">"Subtitles" tab</a></h3>
+
+      <p>This tab groups all the settings which affect the processing of subtitles.</p>
+      <p>The option "Cleanup SRT/SSA/ASS files before insertion" is used to remove
+        all invalid nul characters from the subtitles files. It has been observed
+        that some MKV files had ASS subtitles using metadata containing
+        a trailing nul character. This invalid character broke <i>ffmpeg</i> and the
+        subtitles were not burned into the video. Checking this option fixes this issue.</p>
+      <p>The option "Downgrade SSA/ASS subtitles to SRT" is used to force a conversion
+        of SubStation Alpha subtitles (SSA/ASS) to SubRip (SRT) before burning them
+        in the video. This can be useful to remove the formatting of SSA/ASS subtitles
+        when their presentation is too weird.</p>
+      <p>When converting SSA/ASS subtitles to SRT, the option "Use HTML tags in SRT subtitles"
+        is used to replicate some basic formatting from the SSA/ASS subtitles into SRT using HTML tags.
+        However, the HTML tags are defined as an extension of the SRT format and are not
+        supported by all tools. Uncheck this option to prevent the use of HTML tags in the
+        generated SRT subtitles. FFmpeg correctly interprets HTML tags in SRT, so you should
+        leave this option activated unless you need the extracted SRT files for some other
+        usage.</p>
+      <p>Some US TV channels broadcast all Closed Captions in UPPERCASE.
+        If you find that annoying, check the option "Capitalize US Closed Captions".
+        This option is directly passed to <i>CCExtractor</i> which formats the subtitles
+        in a nicer looking way.</p>
+      <p>The option "Use original video size as a hint for SRT/SSA/ASS character shape" is somewhat cryptic.
+        If checked, the original size of the video is used to alter the character size of text-based subtitles
+        so that the subtitles are scaled the same way as the video.
+        This means that, if you convert an HD content to DVD, significantly reducing the video size,
+        the subtitles will appear much smaller than on a normal DVD.
+        This is why it is unchecked by default.
+        You may try to check it and decide whether it is useful or not.</p>
 
       <h3><a id="miscsettings">"Miscellaneous" tab</a></h3>
 

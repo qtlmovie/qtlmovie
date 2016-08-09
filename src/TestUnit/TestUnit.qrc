@@ -3,5 +3,7 @@
         <file alias="test/test-teletext.srt">QtsData/test-teletext.srt</file>
         <file alias="test/test-teletext.stream">QtsData/test-teletext.stream</file>
         <file alias="test/test-substationalpha.ass">QtsData/test-substationalpha.ass</file>
+        <file alias="test/test-substationalpha-html.srt">QtsData/test-substationalpha-html.srt</file>
+        <file alias="test/test-substationalpha-nohtml.srt">QtsData/test-substationalpha-nohtml.srt</file>
     </qresource>
 </RCC>

@@ -95,7 +95,7 @@ QString QtlSubStationAlphaParser::getScriptInfo(const QString& name, const QStri
 // Provide a complete input file.
 //----------------------------------------------------------------------------
 
-bool QtlSubStationAlphaParser::addFile(const QString& fileName)
+bool QtlSubStationAlphaParser::addFile(const QString& fileName, const char* codecName)
 {
     // Open the file. Note: the ~QFile() destructor will close it.
     QFile file(fileName);
@@ -103,6 +103,7 @@ bool QtlSubStationAlphaParser::addFile(const QString& fileName)
     if (ok) {
         // Read the file line by line.
         QTextStream text(&file);
+        text.setCodec(codecName);
         QString line;
         while (text.readLineInto(&line)) {
             addLine(line);
@@ -182,7 +183,7 @@ void QtlSubStationAlphaParser::addLine(const QString& line)
         // The [Events] section contains the actual subtitles.
         if (type == QTL_SSA_DIALOGUE) {
             // This is a subtitle frame.
-            const QtlSubStationAlphaFramePtr frame(new QtlSubStationAlphaFrame(value, _formatList));
+            const QtlSubStationAlphaFramePtr frame(new QtlSubStationAlphaFrame(value, _formatList, _styles));
             if (!frame.isNull()) {
                 emit subtitleFrame(frame);
             }

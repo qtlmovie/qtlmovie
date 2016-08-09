@@ -66,6 +66,7 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _externalSubtitleFileName(),
     _isTs(false),
     _isM2ts(false),
+    _isSubtitle(false),
     _pipeInput(false)
 {
     Q_ASSERT(log != 0);
@@ -99,6 +100,7 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _externalSubtitleFileName(other._externalSubtitleFileName),
     _isTs(other._isTs),
     _isM2ts(other._isM2ts),
+    _isSubtitle(other._isSubtitle),
     _pipeInput(other._pipeInput)
 {
     // Update media info when the file name is changed.
@@ -232,7 +234,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
             QList<QIODevice*> processInputs;
             processInputs << process->inputDevice() << process2->inputDevice() << process3->inputDevice();
             dataPull(this)->start(processInputs);
-            _log->line(tr("Searching audio and subtitles tracks on DVD, please be patient..."), QColor("green"));
+            _log->line(tr("Searching audio and subtitles tracks on DVD, please be patient..."), QColor(Qt::darkGreen));
         }
     }
     else {
@@ -285,7 +287,12 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
         qSort(_streams.begin(), _streams.end(), QtlDvdTitleSet::lessThan);
     }
 
-    // Is the file a transport stream?
+    // Is the file a transport stream, a pure subtitle file?
+    const QString fileFormat(_ffInfo.value("format.format_name").toLower());
+    _isTs = fileFormat == "mpegts";
+    _isSubtitle = fileFormat == "srt" || fileFormat == "ass";
+
+    // Is the file?
     _isTs = _ffInfo.value("format.format_name").toLower() == "mpegts";
 
     // If Teletext subtitles are detected, ffprobe does not report the Teletext page value
@@ -434,7 +441,7 @@ void QtlMovieInputFile::newMediaInfo()
     // Notify the new media information when no more operation in progress.
     if (_teletextSearch == 0) {
         if (_ffprobeCount <= 0 && _pipeInput) {
-            _log->line(tr("Searching for audio and subtitles tracks completed"), QColor("green"));
+            _log->line(tr("Searching for audio and subtitles tracks completed"), QColor(Qt::darkGreen));
         }
         selectDefaultStreams(_settings->audienceLanguages());
         emit mediaInfoChanged();
@@ -594,15 +601,17 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     int defaultAudioStreamIndex = -1;
     int defaultSubtitleStreamIndex = -1;
 
-    int highestFrameSize = -1;  // Largest video frame size (width x height).
-    int firstAudio = -1;        // First audio stream index.
-    int originalAudio = -1;     // First original audio stream index (and not impaired).
-    int notAudienceAudio = -1;  // First audio stream index not in intended audience languages (and not impaired).
-    int notImpairedAudio = -1;  // First audio stream index not for hearing/visual impaired.
-    int firstSubtitle = -1;     // First subtitles in intended audience languages.
-    int completeSubtitle = -1;  // First complete subtitles in intended audience languages.
-    int forcedSubtitle = -1;    // First forced subtitles in intended audience languages.
-    int impairedSubtitle = -1;  // First subtitles for impaired in intended audience languages.
+    int firstVideo = -1;             // First video stream index.
+    int highestFrameSize = -1;       // Largest video frame size (width x height).
+    int firstAudio = -1;             // First audio stream index.
+    int originalAudio = -1;          // First original audio stream index (and not impaired).
+    int notAudienceAudio = -1;       // First audio stream index not in intended audience languages (and not impaired).
+    int notImpairedAudio = -1;       // First audio stream index not for hearing/visual impaired.
+    int firstSubtitle = -1;          // First subtitles stream.
+    int firstAudienceSubtitle = -1;  // First subtitles in intended audience languages.
+    int completeSubtitle = -1;       // First complete subtitles in intended audience languages.
+    int forcedSubtitle = -1;         // First forced subtitles in intended audience languages.
+    int impairedSubtitle = -1;       // First subtitles for impaired in intended audience languages.
 
     // Loop on all streams.
     const int streamMax = streamCount();
@@ -616,63 +625,73 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
 
         // Type-specific processing.
         switch (stream->streamType()) {
-        case QtlMediaStreamInfo::Video: {
-            // Compute video frame size (width x height). Zero if width or height undefined.
-            const int frameSize = stream->width() * stream->height();
-            if (frameSize > highestFrameSize) {
-                // Largest frame size so far or first video stream, keep it.
-                defaultVideoStreamIndex = streamIndex;
-                highestFrameSize = frameSize;
-            }
-            break;
-        }
 
-        case QtlMediaStreamInfo::Audio: {
-            if (firstAudio < 0) {
-                // Found first audio track.
-                firstAudio = streamIndex;
+            case QtlMediaStreamInfo::Video: {
+                if (firstVideo < 0) {
+                    // Found first video track.
+                    firstVideo = streamIndex;
+                }
+                // Compute video frame size (width x height). Zero if width or height undefined.
+                const int frameSize = stream->width() * stream->height();
+                if (frameSize > highestFrameSize) {
+                    // Largest frame size so far or first video stream, keep it.
+                    defaultVideoStreamIndex = streamIndex;
+                    highestFrameSize = frameSize;
+                }
+                break;
             }
-            if (originalAudio < 0 && !stream->impaired() && stream->isOriginalAudio() && !stream->isDubbedAudio()) {
-                // Found the first original audio track.
-                originalAudio = streamIndex;
-            }
-            if (notAudienceAudio < 0 && !stream->impaired() && !inAudienceLanguages) {
-                // Found the first audio track not in the audience languages.
-                notAudienceAudio = streamIndex;
-            }
-            if (notImpairedAudio < 0 && !stream->impaired()) {
-                // Found the first audio track for non-impaired.
-                notImpairedAudio = streamIndex;
-            }
-            break;
-        }
 
-        case QtlMediaStreamInfo::Subtitle: {
-            if (inAudienceLanguages) {
-                // Keep only subtitles for intended audience.
+            case QtlMediaStreamInfo::Audio: {
+                if (firstAudio < 0) {
+                    // Found first audio track.
+                    firstAudio = streamIndex;
+                }
+                if (originalAudio < 0 && !stream->impaired() && stream->isOriginalAudio() && !stream->isDubbedAudio()) {
+                    // Found the first original audio track.
+                    originalAudio = streamIndex;
+                }
+                if (notAudienceAudio < 0 && !stream->impaired() && !inAudienceLanguages) {
+                    // Found the first audio track not in the audience languages.
+                    notAudienceAudio = streamIndex;
+                }
+                if (notImpairedAudio < 0 && !stream->impaired()) {
+                    // Found the first audio track for non-impaired.
+                    notImpairedAudio = streamIndex;
+                }
+                break;
+            }
+
+            case QtlMediaStreamInfo::Subtitle: {
                 if (firstSubtitle < 0) {
                     // Found first subtitles.
                     firstSubtitle = streamIndex;
                 }
-                if (forcedSubtitle < 0 && stream->forced()) {
-                    // Found first forced subtitle.
-                    forcedSubtitle = streamIndex;
+                if (inAudienceLanguages) {
+                    // Keep only subtitles for intended audience.
+                    if (firstAudienceSubtitle < 0) {
+                        // Found first subtitles for audience language.
+                        firstAudienceSubtitle = streamIndex;
+                    }
+                    if (forcedSubtitle < 0 && stream->forced()) {
+                        // Found first forced subtitle.
+                        forcedSubtitle = streamIndex;
+                    }
+                    if (impairedSubtitle < 0 && stream->impaired()) {
+                        // Found first subtitle stream for visual/hearing impaired.
+                        impairedSubtitle = streamIndex;
+                    }
+                    if (completeSubtitle < 0 && !stream->forced() && !stream->impaired()) {
+                        // Found first complete subtitle.
+                        completeSubtitle = streamIndex;
+                    }
                 }
-                if (impairedSubtitle < 0 && stream->impaired()) {
-                    // Found first subtitle stream for visual/hearing impaired.
-                    impairedSubtitle = streamIndex;
-                }
-                if (completeSubtitle < 0 && !stream->forced() && !stream->impaired()) {
-                    // Found first complete subtitle.
-                    completeSubtitle = streamIndex;
-                }
+                break;
             }
-            break;
-        }
 
-        default:
-            // Other stream, ignore it.
-            break;
+            default: {
+                // Other stream, ignore it.
+                break;
+            }
         }
     }
 
@@ -723,7 +742,13 @@ void QtlMovieInputFile::selectDefaultStreams(const QStringList& audienceLanguage
     }
     else {
         // Use first subtitles stream (if any).
-        defaultSubtitleStreamIndex = firstSubtitle;
+        defaultSubtitleStreamIndex = firstAudienceSubtitle;
+    }
+
+    // If the input has no audio and no video, automatically select a subtitle stream.
+    if (firstVideo < 0 && firstAudio < 0 && defaultSubtitleStreamIndex < 0) {
+        // Use first subtitles stream (if any).
+        defaultSubtitleStreamIndex = firstAudienceSubtitle < 0 ? firstSubtitle : firstAudienceSubtitle;
     }
 
     // Now set the default streams as selected if not already explicitly selected.

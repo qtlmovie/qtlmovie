@@ -77,7 +77,8 @@ SOURCES += main.cpp \
     QtlMovieMainWindowBase.cpp \
     QtlMovieDvdExtractionSession.cpp \
     QtlMovieDvdExtractionWindow.cpp \
-    QtlMovieCleanupSubtitles.cpp
+    QtlMovieCleanupSubtitles.cpp \
+    QtlMovieConvertSubStationAlpha.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -116,7 +117,8 @@ HEADERS += \
     QtlMovieMainWindowBase.h \
     QtlMovieDvdExtractionSession.h \
     QtlMovieDvdExtractionWindow.h \
-    QtlMovieCleanupSubtitles.h
+    QtlMovieCleanupSubtitles.h \
+    QtlMovieConvertSubStationAlpha.h
 
 FORMS += QtlMovieMainWindow.ui \
     QtlMovieEditSettings.ui \

@@ -55,6 +55,7 @@
             <li><a href="#androidsettings">Onglet "Android"</a></li>
             <li><a href="#avisettings">Onglet "AVI"</a></li>
             <li><a href="#audiosettings">Onglet "Audio"</a></li>
+            <li><a href="#subtitlesettings">Onglet "Sous-titres"</a></li>
             <li><a href="#miscsettings">Onglet "Divers"</a></li>
           </ul>
         </li>
@@ -546,26 +547,6 @@
         les méta-données du fichier mais la vidéo garde toujours la même orientation fixe.
         De tels fichiers vidéos sont correctement affichés par les logiciels Apple tels que
         QuickTime mais pas avec les lecteurs vidéo standards. Cette option corrige ce problème.</p>
-      <p>La zone "Insertion de sous-titres" est utilisée pour l'insertion de sous-titres.
-        L'option "Utiliser la taille vidéo originale pour ajuster la taille des caractères SRT/SSA/ASS"
-        est un peu étrange. Quand elle est sélectionnée, la taille originale de la vidéo
-        est utilisée pour influer sur la taille des sous-titres en mode texte.
-        La documentation FFmpeg recommande de l'utiliser mais l'expérience montre
-        que cela produit parfois des tailles de caractères étrange. C'est pourquoi
-        cette option n'est pas sélectionnée par défaut. Vous pouvez essayer de
-        l'activer pour vérifier et décider ensuite si elle est utile ou non.</p>
-      <p>L'option "Nettoyage des fichiers SRT/SSA/ASS avant insertion" est utilisée pour
-        supprimer tous les caractères nuls invalides des fichiers de sous-titres.
-        Il a été observé sur certains fichiers MKV des sous-titres au format ASS
-        dont les méta-données contiennent un caractère nul final. Ce caractère
-        invalide empêche <i>ffmpeg</i> d'insérer correctement les sous-titres.
-        Utiliser cette option corrige le problème en supprimant les caractères
-        invalides des fichiers de sous-titres.</p>
-      <p>Certaines chaines de télévision américaines diffusent des sous-titres
-        <i>Closed Captions</i> entièrement EN MAJUSCULES, ce qui peut être fatigant
-        à lire. L'option "Capitalisation des Closed Captions" est directement passée
-        à <i>CCExtractor</i> qui va alors tenter de reformatter les sous-titres de
-        manière plus agréable à lire.</p>
       <p>L'option "Garder les fichiers intermédiaires" indique que tous les fichiers
         intermédiaires créés lors du processus de transcodage doivent étre conservés
         à la fin de l'opération. Ces fichiers sont créés dans un répertoire temporaire
@@ -687,6 +668,47 @@
           et aucune compression de dynamique n'est effectuée. Mais les sons les plus
           forts sont écrêtés, ce qui peut introduire des effets sonores désagréables.</li>
       </ul>
+
+      <h3><a id="subtitlesettings">Onglet "Sous-titres"</a></h3>
+
+      <p>Cet onglet regroupe les paramètres qui affectent le traitement des sous-titres.</p>
+      <p>L'option "Nettoyage des fichiers SRT/SSA/ASS avant insertion" est utilisée pour
+        supprimer tous les caractères nuls invalides des fichiers de sous-titres.
+        Il a été observé sur certains fichiers MKV des sous-titres au format ASS
+        dont les méta-données contiennent un caractère nul final. Ce caractère
+        invalide empêche <i>ffmpeg</i> d'insérer correctement les sous-titres.
+        Utiliser cette option corrige le problème en supprimant les caractères
+        invalides des fichiers de sous-titres.</p>
+      <p>L'option "Réduire les sous-titres SSA/ASS au format SRT" est utilisée pour
+        forcer une conversion des sous-titres SubStation Alpha (SSA/ASS) au format
+        SubRip (SRT) avant l'insertion des sous-titres dans la vidéo.
+        Cela peut être utile pour enlever le formattage de sous-titres SSA/ASS
+        quand leur présentation est trop déconcertante.</p>
+      <p>Lors de la conversion de sous-titres SSA/ASS en SRT, l'option
+        "Utiliser les balises HTML dans les sous-titres SRT" est utilisée pour
+        transposer un formattage de base des sous-titres SSA/ASS en SRT en
+        utilisant des balises HTML. Cependant, les balises HTML sont définies
+        comme une extension du format SRT et ne sont pas prises en charge
+        correctement pas tous les outils. Décochez cette option pour empêcher
+        l'insertion de balises HTML dans les fichiers SRT générés.
+        FFmpeg interprète correctement les balises HTML dans les SRT,
+        il est donc préférable de laisser cette option activée,
+        sauf si vous utilisez les fichiers SRT ainsi extraits pour un autre
+        usage.</p>
+      <p>Certaines chaines de télévision américaines diffusent des sous-titres
+        <i>Closed Captions</i> entièrement EN MAJUSCULES, ce qui peut être fatigant
+        à lire. L'option "Capitalisation des Closed Captions" est directement passée
+        à <i>CCExtractor</i> qui va alors tenter de reformatter les sous-titres de
+        manière plus agréable à lire.</p>
+      <p>L'option "Utiliser la taille vidéo originale pour ajuster la taille des caractères SRT/SSA/ASS"
+        est un peu étrange. Quand elle est sélectionnée, la taille originale de la vidéo
+        est utilisée pour changer la taille des sous-titres en mode texte de telle sorte que
+        les sous-titres sont retaillés à la même échelle que la vidéo.
+        Cela veut dire, par exemple, que si vous convertissez un contenu HD en DVD,
+        réduisant donc significativement la taille de la vidéo, les sous-titres vont
+        apparaitre beaucoup plus petits que sur un DVD normal.
+        C'est pourquoi cette option n'est pas sélectionnée par défaut. Vous pouvez essayer de
+        l'activer pour vérifier et décider ensuite si elle est utile ou non.</p>
 
       <h3><a id="miscsettings">Onglet "Divers"</a></h3>
 

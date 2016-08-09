@@ -1,0 +1,52 @@
+﻿1
+00:00:03,910 --> 00:00:07,080
+<font color="#ffffff">On dirait qu'on me traîne
+devant une cour martiale...</font>
+
+2
+00:00:07,740 --> 00:00:10,490
+<font color="#ffffff">ou qu'on va me buter.
+Pas le droit de parler ?</font>
+
+3
+00:00:10,750 --> 00:00:11,500
+<font color="#ffffff">Forrest ?</font>
+
+4
+00:00:11,790 --> 00:00:12,870
+<font color="#ffffff">On a le droit.</font>
+
+5
+00:00:14,000 --> 00:00:15,040
+<font color="#ffffff">Vous me faites la gueule ?</font>
+
+6
+00:00:15,630 --> 00:00:16,750
+<font color="#ffffff">Vous les intimidez.</font>
+
+7
+00:00:17,050 --> 00:00:19,840
+<font color="#ffffff"><b>Une femme !
+J'aurais pas deviné.</b></font>
+
+8
+00:00:20,130 --> 00:00:22,090
+<font color="#ffffff">C'est <i>voulu</i>, non ?</font>
+
+9
+00:00:22,680 --> 00:00:23,840
+<font color="#ffffff">Je voyais un <u>soldat</u>.</font>
+
+10
+00:00:24,140 --> 00:00:24,930
+<font color="#ffffff">De l'Air Force.</font>
+
+11
+00:00:25,470 --> 00:00:28,430
+<font color="#ffffff">Vous avez une superbe ossature.
+J'ai du mal à...</font>
+
+12
+00:00:28,680 --> 00:00:30,600
+<font color="#ffffff">ne pas vous regarder.</font>
+

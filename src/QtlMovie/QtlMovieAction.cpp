@@ -156,7 +156,7 @@ void QtlMovieAction::emitCompleted(bool success, const QString& message)
 {
     // Log optional error message.
     if (!message.isEmpty()) {
-        line(message, success ? QColor() : QColor("red"));
+        line(message, success ? QColor() : QColor(Qt::red));
     }
 
     // Emit completed() only once.

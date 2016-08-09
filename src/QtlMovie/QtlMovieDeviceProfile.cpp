@@ -37,6 +37,8 @@
 
 //----------------------------------------------------------------------------
 // Predefined families of devices.
+// Always add new models at the end of the lists.
+//
 //----------------------------------------------------------------------------
 
 const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPadModels
@@ -62,15 +64,15 @@ const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::iPhoneModels
 
 const QVector<QtlMovieDeviceProfile> QtlMovieDeviceProfile::androidModels
 ({
-     // Model                           Width  Height  Frame/s  Au.bitrate  Au.sampling
-     //-------------------------------  -----  ------  -------  ----------  -----------
-     {"Samsung Galaxy S, S2, S3 mini",    800,    480,      30,     128000,       48000},
-     {"Samsung Galaxy S3, Note 2",       1280,    720,      30,     128000,       48000},
-     {"Samsung Galaxy Note",             1280,    800,      30,     128000,       48000},
-     {"Samsung Galaxy S4 mini",           960,    540,      30,     128000,       48000},
-     {"Samsung Galaxy S4, S5",           1920,   1080,      30,     128000,       48000},
-     {"Samsung Galaxy S5 mini",          1280,    720,      30,     128000,       48000},
-     {"Samsung Galaxy S6, S7",           2560,   1440,      30,     128000,       48000},
+     // Model                               Width  Height  Frame/s  Au.bitrate  Au.sampling
+     //-----------------------------------  -----  ------  -------  ----------  -----------
+     {"Samsung Galaxy S, S2, S3 mini, A4",    800,    480,      30,     128000,       48000},
+     {"Samsung Galaxy S3, Note 2, A5",       1280,    720,      30,     128000,       48000},
+     {"Samsung Galaxy Note",                 1280,    800,      30,     128000,       48000},
+     {"Samsung Galaxy S4 mini",               960,    540,      30,     128000,       48000},
+     {"Samsung Galaxy S4, S5, A6, A7, A8",   1920,   1080,      30,     128000,       48000},
+     {"Samsung Galaxy S5 mini",              1280,    720,      30,     128000,       48000},
+     {"Samsung Galaxy S6, S7",               2560,   1440,      30,     128000,       48000},
  });
 
 

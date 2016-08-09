@@ -190,14 +190,14 @@ bool QtlMovieDvdExtractionSession::startNextExtraction()
     // Create the parent directory of the output file is necessary.
     const QString dir(QtlFile::parentPath(out->file.fileName()));
     if (!QtlFile::createDirectory(dir)) {
-        line(tr("Error creating directory %1").arg(dir), QColor("red"));
+        line(tr("Error creating directory %1").arg(dir), QColor(Qt::red));
         dataPullCompleted(false);
         return false;
     }
 
     // Open the output file.
     if (!out->file.open(QFile::WriteOnly)) {
-        line(tr("Error creating %1").arg(out->file.fileName()), QColor("red"));
+        line(tr("Error creating %1").arg(out->file.fileName()), QColor(Qt::red));
         dataPullCompleted(false);
         return false;
     }
@@ -212,7 +212,7 @@ bool QtlMovieDvdExtractionSession::startNextExtraction()
 
     // Start the transfer.
     if (!out->dataPull.start(&out->file)) {
-        line(tr("Error starting data transfer to %1").arg(out->file.fileName()), QColor("red"));
+        line(tr("Error starting data transfer to %1").arg(out->file.fileName()), QColor(Qt::red));
         dataPullCompleted(false);
         return false;
     }
