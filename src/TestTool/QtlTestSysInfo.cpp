@@ -56,7 +56,9 @@ int QtlTestSysInfo::run(const QStringList& args)
         << "QSysInfo::kernelVersion() = " << QSysInfo::kernelVersion() << endl
         << "QSysInfo::MacintoshVersion = " << QSysInfo::MacintoshVersion << endl
         << "QSysInfo::macVersion() = " << QSysInfo::macVersion() << endl
+#if QT_VERSION >= QT_VERSION_CHECK(5,6,0)
         << "QSysInfo::machineHostName() = " << QSysInfo::machineHostName() << endl
+#endif
         << "QSysInfo::prettyProductName() = " << QSysInfo::prettyProductName() << endl
         << "QSysInfo::productType() = " << QSysInfo::productType() << endl
         << "QSysInfo::productVersion() = " << QSysInfo::productVersion() << endl
@@ -73,7 +75,9 @@ int QtlTestSysInfo::run(const QStringList& args)
             << "displayName() = " << si.displayName() << endl
             << "fileSystemType() = " << QString(si.fileSystemType()) << endl
             << "rootPath() = " << si.rootPath() << endl
+#if QT_VERSION >= QT_VERSION_CHECK(5,6,0)
             << "blockSize() = " << si.blockSize() << endl
+#endif
             << "bytesAvailable() = " << si.bytesAvailable() << endl
             << "bytesFree() = " << si.bytesFree() << endl
             << "bytesTotal() = " << si.bytesTotal() << endl
