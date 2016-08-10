@@ -39,3 +39,10 @@ COPYING   text
 # - MPEG transport streams (binary), use .stream instead for test files
 *.stream binary
 *_??.ts text
+
+# GitHub's linguist has some trouble with header files
+src/QtlMovie/*.h    linguist-language=C++
+src/libQtl/*.h      linguist-language=C++
+src/libQtl/*/*.h    linguist-language=C++
+src/libQts/*.h      linguist-language=C++
+src/libdvdcss/*/*.h linguist-language=C
