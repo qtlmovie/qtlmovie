@@ -36,7 +36,6 @@
 #include "QtlMovieEditSettings.h"
 #include "QtlMovieAboutMediaTools.h"
 #include "QtlNewVersionCheckerJson.h"
-#include "QtlBrowserDialog.h"
 #include "QtlTextFileViewer.h"
 #include "QtlTranslator.h"
 #include "QtlSysInfo.h"
@@ -274,13 +273,39 @@ void QtlMovieMainWindowBase::about()
 
 void QtlMovieMainWindowBase::showHelp()
 {
-    QtlBrowserDialog box(this,
-                         "qrc" + QtlTranslator::searchLocaleFile(":/help/qtlmovie.html"),
-                         tr("QtlMovie Help"),
-                         ":/images/qtlmovie-64.png");
-    box.setObjectName("QtlMovieHelpViewer");
-    box.setGeometrySettings(_settings, true);
-    box.exec();
+    // Search the directory where help files are stored.
+    // Start with the application directory.
+    const QString appDir(QtlFile::absoluteNativeFilePath(QCoreApplication::applicationDirPath()));
+    QStringList dirs(appDir);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
+    // On Windows and Mac, add the local help subdirectory.
+    // When running the application from the build tree, also add the help
+    // subdirectory from some level upward from the application executable.
+    const QString toolPath(QtlFile::searchParentSubdirectory(appDir, "help"));
+    if (!toolPath.isEmpty()) {
+        dirs << toolPath;
+    }
+#endif
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+    // On UNIX, add various standard locations for help files.
+    dirs << "/usr/share/doc/qtlmovie"
+         << "/usr/share/help/qtlmovie"
+         << "/usr/local/doc/qtlmovie"
+         << "/usr/local/help/qtlmovie";
+#endif
+
+    // Now search the QtlMovie help file there.
+    QString htmlFile(QtlFile::search("qtlmovie.html", dirs));
+    if (htmlFile.isEmpty()) {
+        // File not found.
+        qtlError(this, tr("Cannot find help files.\nTry to reinstall QtlMovie."));
+    }
+    else {
+        // Open the HTML or a locale variant if it exists.
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QtlTranslator::searchLocaleFile(htmlFile)));
+    }
 }
 
 

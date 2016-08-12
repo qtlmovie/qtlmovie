@@ -39,6 +39,7 @@ error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
 ROOTDIR=$(dirname $SCRIPTDIR)
 SRCDIR=$ROOTDIR/src
+HELPDIR=$ROOTDIR/help
 BUILDDIR=$ROOTDIR/build-QtlMovie-Desktop-Release
 
 # QtlMovie version is extracted from QtlMovieVersion.h
@@ -55,7 +56,8 @@ mkdir -p -m 0755 \
     $TMPDIR/DEBIAN \
     $TMPDIR/usr/bin \
     $TMPDIR/usr/share/qt5/translations \
-    $TMPDIR/usr/share/applications
+    $TMPDIR/usr/share/applications \
+    $TMPDIR/usr/share/doc/qtlmovie
 for sz in $ICON_SIZES; do
     mkdir -p -m 0755 $TMPDIR/usr/share/icons/hicolor/${sz}x${sz}/apps
 done
@@ -74,6 +76,7 @@ install -m 0644 $SCRIPTDIR/QtlMovie.desktop $TMPDIR/usr/share/applications
 for sz in $ICON_SIZES; do
     install -m 0644 $SRCDIR/QtlMovie/images/qtlmovie-${sz}.png $TMPDIR/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
 done
+install -m 0644 $HELPDIR/* $TMPDIR/usr/share/doc/qtlmovie
 
 # Build the binary package
 dpkg --build $TMPDIR $ROOTDIR/installers

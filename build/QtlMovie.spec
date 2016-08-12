@@ -56,7 +56,8 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p \
     $RPM_BUILD_ROOT/usr/bin \
     $RPM_BUILD_ROOT/usr/share/qt5/translations \
-    $RPM_BUILD_ROOT/usr/share/applications
+    $RPM_BUILD_ROOT/usr/share/applications \
+    $RPM_BUILD_ROOT/usr/share/doc/qtlmovie
 cp build-QtlMovie-Desktop-Release/QtlMovie/QtlMovie $RPM_BUILD_ROOT/usr/bin
 strip $RPM_BUILD_ROOT/usr/bin/QtlMovie
 cp build-QtlMovie-Desktop-Release/libQtl/locale/qtl_fr.qm \
@@ -69,6 +70,22 @@ for sz in $ICON_SIZES; do
     mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps
     cp src/QtlMovie/images/qtlmovie-${sz}.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
 done
+cp help/default.css \
+   help/fontawesome.css \
+   help/fontawesome-webfont.eot \
+   help/fontawesome-webfont.svg \
+   help/fontawesome-webfont.ttf \
+   help/fontawesome-webfont.woff \
+   help/fontawesome-webfont.woff2 \
+   help/functions.js \
+   help/qtlmovie.html \
+   help/qtlmovie.png \
+   help/qtlmovie_fr.html \
+   help/qtlmovie-build.html \
+   help/qtlmovie-build_fr.html \
+   help/qtlmovie-user.html \
+   help/qtlmovie-user_fr.html \
+   $RPM_BUILD_ROOT/usr/share/doc/qtlmovie
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -90,4 +107,19 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/icons/hicolor/128x128/apps/qtlmovie.png
 /usr/share/icons/hicolor/256x256/apps/qtlmovie.png
 /usr/share/icons/hicolor/512x512/apps/qtlmovie.png
+/usr/share/doc/qtlmoviedefault.css
+/usr/share/doc/qtlmoviefontawesome.css
+/usr/share/doc/qtlmoviefontawesome-webfont.eot
+/usr/share/doc/qtlmoviefontawesome-webfont.svg
+/usr/share/doc/qtlmoviefontawesome-webfont.ttf
+/usr/share/doc/qtlmoviefontawesome-webfont.woff
+/usr/share/doc/qtlmoviefontawesome-webfont.woff2
+/usr/share/doc/qtlmoviefunctions.js
+/usr/share/doc/qtlmovieqtlmovie.html
+/usr/share/doc/qtlmovieqtlmovie.png
+/usr/share/doc/qtlmovieqtlmovie_fr.html
+/usr/share/doc/qtlmovieqtlmovie-build.html
+/usr/share/doc/qtlmovieqtlmovie-build_fr.html
+/usr/share/doc/qtlmovieqtlmovie-user.html
+/usr/share/doc/qtlmovieqtlmovie-user_fr.html
 %doc CHANGELOG.txt LICENSE.txt TODO.txt

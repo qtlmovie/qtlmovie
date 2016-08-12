@@ -178,7 +178,7 @@ QString QtlFile::search(const QString& baseName,
         fileName.append(extension);
     }
 
-    // If fileName contains a directory separator, do not seach in other directories.
+    // If fileName contains a directory separator, do not search in other directories.
     if (fileName.contains(QChar('/')) || fileName.contains(QChar('\\'))) {
         return absoluteNativeFilePath(fileName);
     }

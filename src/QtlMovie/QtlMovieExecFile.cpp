@@ -105,7 +105,7 @@ QStringList QtlMovieExecFile::movieExecSearchPath()
 #if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
     // On Windows and Mac, add the local tools subdirectory.
     // When running the application from the build tree, also add the tools
-    // sudirectory from some level upward from the application executable.
+    // subdirectory from some level upward from the application executable.
     const QString toolPath(QtlFile::searchParentSubdirectory(appDir, toolDir));
     if (!toolPath.isEmpty()) {
         dirs << toolPath;

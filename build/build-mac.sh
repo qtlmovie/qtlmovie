@@ -74,6 +74,13 @@ cp $ROOTDIR/fonts/fonts.conf.template $ROOTDIR/fonts/subfont.ttf $APPFONTS
 chmod 755 $APPFONTS
 chmod 644 $APPFONTS/*
 
+# Copy help files in the bundle.
+APPHELP=$APPDIR/Contents/MacOS/help
+mkdir -p $APPHELP
+cp $ROOTDIR/help/* $APPHELP
+chmod 755 $APPHELP
+chmod 644 $APPHELP/*
+
 # Deploy Qt requirements in the bundle.
 macdeployqt $BUILDDIR/QtlMovie/QtlMovie.app -verbose=1 -always-overwrite || exit 1
 

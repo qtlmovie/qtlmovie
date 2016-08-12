@@ -5,13 +5,6 @@
         <file>images/dvd-logo.png</file>
         <file>images/ccextractor-logo.png</file>
         <file alias="changelog.txt">../../CHANGELOG.txt</file>
-        <file alias="help/default.css">../../help/default.css</file>
-        <file alias="help/qtlmovie.html">../../help/qtlmovie.html</file>
-        <file alias="help/qtlmovie-user.html">../../help/qtlmovie-user.html</file>
-        <file alias="help/qtlmovie-build.html">../../help/qtlmovie-build.html</file>
-        <file alias="help/qtlmovie_fr.html">../../help/qtlmovie_fr.html</file>
-        <file alias="help/qtlmovie-user_fr.html">../../help/qtlmovie-user_fr.html</file>
-        <file alias="help/qtlmovie-build_fr.html">../../help/qtlmovie-build_fr.html</file>
         <file>sounds/completion.wav</file>
         <file>images/qtlmovie-16.png</file>
         <file>images/qtlmovie-24.png</file>
