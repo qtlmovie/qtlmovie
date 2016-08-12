@@ -4,6 +4,7 @@
 *.c     text
 *.cpp   text
 *.dox   text
+*.eot   binary
 *.exe   binary
 *.h     text
 *.html  text eol=lf
@@ -23,12 +24,15 @@
 *.sh    text eol=lf
 *.sln   text eol=crlf
 *.srt   text
+*.svg   text
 *.ttf   binary
 *.txt   text
 *.ui    text
 *.vcxproj text eol=crlf
 *.vcxproj.filters text eol=crlf
 *.wav   binary
+*.woff   binary
+*.woff2  binary
 
 Makefile* text eol=lf
 AUTHORS   text

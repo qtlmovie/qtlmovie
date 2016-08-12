@@ -1,279 +1,284 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Construction de QtlMovie</title>
-    <link type="text/css" href="default.css" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="default.css"/>
+    <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
+    <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
+    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
+      <a href="qtlmovie.html" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
+      <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
+      <a href="#" class="w3-light-grey w3-medium">Home</a>
+      <a href="#overview">Overview</a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-linux')" href="javascript:void(0)">Construire sur Linux <i class="fa fa-caret-down"></i></a>
+        <div id="menu-linux" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#linreq">Pré-requis</a>
+          <a href="#linmanbuild">Construire manuellement</a>
+          <a href="#linqtcreator">Construire avec Qt Creator</a>
+          <a href="#fcbuild">Construire le package RPM pour Fedora</a>
+          <a href="#ubbuild">Construire le package DEB pour Ubuntu</a>
+          <a href="#lincleanup">Construction multi-platformes</a>
+          <a href="#lindoxy">Construire la documentation Doxygen</a>
+          <a href="#rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-windows')" href="javascript:void(0)">Construire sur Windows <i class="fa fa-caret-down"></i></a>
+        <div id="menu-windows" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#winreq">Pré-requis</a>
+          <a href="#winqt">Version de Qt</a>
+          <a href="#winps1">Windows PowerShell</a>
+          <a href="#winmanbuild">Construire manuellement</a>
+          <a href="#winqtcreator">Construire avec Qt Creator</a>
+          <a href="#wincleanup">Construction multi-platformes</a>
+          <a href="#windoxy">Construire la documentation Doxygen</a>
+          <a href="#winexec">Executer des applications Qt</a>
+          <a href="#wininstaller">Construire l'installeur binaire pour Windows</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-macosx')" href="javascript:void(0)">Construire sur Mac OS X <i class="fa fa-caret-down"></i></a>
+        <div id="menu-macosx" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#macreq">Pré-requis</a>
+          <a href="#macmanbuild">Construire manuellement</a>
+          <a href="#macqtcreator">Construire avec Qt Creator</a>
+          <a href="#macdoxy">Construire la documentation Doxygen</a>
+          <a href="#macinstaller">Construire le package DMG pour Mac OS X</a>
+        </div>
+      </div>
+    </nav>
+    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+    <div class="w3-main" style="margin-left:250px;">
+      <div id="myTop" class="w3-top w3-container w3-padding-16 w3-theme w3-large">
+        <i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right" onclick="w3_open()"></i>
+        <span id="myIntro" class="w3-hide">Guide de Construction</span>
+      </div>
+      <header class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
+        <h1 class="w3-xxxlarge w3-padding-16">Construction de QtlMovie</h1>
+      </header>
+      <div class="w3-container w3-padding-32" style="padding-left:32px">
 
-    <h1><a id="top">Construction de QtlMovie</a></h1>
+        <h2><a id="linux">Construire QtlMovie sur Linux</a></h2>
 
-    <div class="toc">
-      <h2>Table des Matières</h2>
-      <ul>
-        <li>Retour à la <a href="qtlmovie_fr.html">documentation de QtlMovie</a></li>
-        <li><a href="#linux">Construire QtlMovie sur Linux</a>
-          <ul>
-            <li><a href="#linreq">Pré-requis</a></li>
-            <li><a href="#linmanbuild">Construire QtlMovie manuellement</a></li>
-            <li><a href="#linqtcreator">Construire QtlMovie avec Qt Creator</a></li>
-            <li><a href="#fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></li>
-            <li><a href="#ubbuild">Construire le package DEB de QtlMovie pour Ubuntu</a></li>
-            <li><a href="#lincleanup">Construction multi-platformes</a></li>
-            <li><a href="#lindoxy">Construire la documentation Doxygen</a></li>
-            <li><a href="#rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a>
-              <ul>
-                <li><a href="#rhqt510build">Compiler et installer Qt 5.1.0 sur RHEL 6</a></li>
-                <li><a href="#rhqt510user">Utiliser Qt 5.1.0 sur RHEL 6</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#windows">Construire QtlMovie sur Windows</a>
-          <ul>
-            <li><a href="#winreq">Pré-requis</a></li>
-            <li><a href="#winqt">Version de Qt</a></li>
-            <li><a href="#winps1">Windows PowerShell</a></li>
-            <li><a href="#winmanbuild">Construire QtlMovie manuellement</a></li>
-            <li><a href="#winqtcreator">Construire QtlMovie avec Qt Creator</a></li>
-            <li><a href="#wincleanup">Construction multi-platformes</a></li>
-            <li><a href="#windoxy">Construire la documentation Doxygen</a></li>
-            <li><a href="#winexec">Executer des applications Qt</a></li>
-            <li><a href="#wininstaller">Construire l'installeur binaire de QtlMovie pour Windows</a></li>
-          </ul>
-        </li>
-        <li><a href="#macosx">Construire QtlMovie sur Mac OS X</a>
-          <ul>
-            <li><a href="#macreq">Pré-requis</a></li>
-            <li><a href="#macmanbuild">Construire QtlMovie manuellement</a></li>
-            <li><a href="#macqtcreator">Construire QtlMovie avec Qt Creator</a></li>
-            <li><a href="#macdoxy">Construire la documentation Doxygen</a></li>
-            <li><a href="#macinstaller">Construire le package DMG de QtlMovie pour Mac OS X</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="content">
-      <hr/>
+        <h3><a id="linreq">Pré-requis</a></h3>
 
-      <h2><a id="linux">Construire QtlMovie sur Linux</a></h2>
+        <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.
+          Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
+        <p>L'utilisation de Qt Creator n'est pas obligatoire.
+          S'il est utilisé, Qt Creator version 2.7 ou plus requis.
+          Qt Creator est recommandé pour éditer ou modifier le projet.
+          Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
+        <p>Si Red Hat Entreprise Linux 6 (RHEL 6), ou un de ses clones CentOS et
+          Scientific Linux, est utilisé voir <a href="#rhbuild">ci-dessous</a> pour plus de détails.</p>
+        <p>Qt peut être installé dans les répertoires système (<i>/usr/bin</i> ou équivalent)
+          avec les packages standards de la distribution Linux ou en utilisant les installeurs binaires
+          de <a href="http://qt-project.org/">http://qt-project.org/</a>.
+          Dans ce dernier cas, Qt est installé dans <i>/usr/local</i>.
+          Le script <i>build/QtSetEnvironment.rc</i> recherche
+          l'installation de Qt la plus récente dans <i>/usr/local</i> et ajoute les répertoires
+          nécessaires dans le PATH.
+          <i>QtSetEnvironment.rc</i> est automatiquement invoqué par tous les scripts de construction.</p>
 
-      <h3><a id="linreq">Pré-requis</a></h3>
+        <h3><a id="linmanbuild">Construire QtlMovie manuellement</a></h3>
 
-      <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.
-        Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
-      <p>L'utilisation de Qt Creator n'est pas obligatoire.
-        S'il est utilisé, Qt Creator version 2.7 ou plus requis.
-        Qt Creator est recommandé pour éditer ou modifier le projet.
-        Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
-      <p>Si Red Hat Entreprise Linux 6 (RHEL 6), ou un de ses clones CentOS et
-        Scientific Linux, est utilisé voir <a href="#rhbuild">ci-dessous</a> pour plus de détails.</p>
-      <p>Qt peut être installé dans les répertoires système (<code>/usr/bin</code> ou équivalent)
-        avec les packages standards de la distribution Linux ou en utilisant les installeurs binaires
-        de <a href="http://qt-project.org/">http://qt-project.org/</a>.
-        Dans ce dernier cas, Qt est installé dans <code>/usr/local</code>.
-        Le script <code>build/QtSetEnvironment.rc</code> recherche
-        l'installation de Qt la plus récente dans <code>/usr/local</code> et ajoute les répertoires
-        nécessaires dans le PATH.
-        <code>QtSetEnvironment.rc</code> est automatiquement invoqué par tous les scripts de construction.</p>
+        <p>Exécuter le script <i>build/build.sh</i>.</p>
 
-      <h3><a id="linmanbuild">Construire QtlMovie manuellement</a></h3>
+        <h3><a id="linqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
 
-      <p>Exécuter le script <code>build/build.sh</code>.</p>
+        <p>Qt Creator doit être lancé par le script <i>build/QtCreator.sh</i>.
+          Ce script positionne l'environnement nécessaire pour la dernière version de Qt.
+          Le projet QtlMovie est automatiquement ouvert.</p>
+        <p>La première fois que Qt Creator est lancé, accepter toutes les options
+          par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
 
-      <h3><a id="linqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
+        <h3><a id="fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></h3>
 
-      <p>Qt Creator doit être lancé par le script <code>build/QtCreator.sh</code>.
-        Ce script positionne l'environnement nécessaire pour la dernière version de Qt.
-        Le projet QtlMovie est automatiquement ouvert.</p>
-      <p>La première fois que Qt Creator est lancé, accepter toutes les options
-        par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
+        <p>Exécuter le script <i>build/build-rpm.sh</i>.
+          Le package RPM est construit dans le répertoire <i>installers</i>.
+          Le package RPM se nomme <i>qtlmovie-1.6-0.fc19.x86_64.rpm</i> par exemple,
+          où "1.6" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
+        <p>Suivant les règles habituelles de gestion de package, le package RPM ne contient que QtlMovie.
+          Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
+          Noter les points suivants sur les packages non-standards:</p>
+        <ul>
+          <li>Le package <i>ffmpeg</i> est disponible via RPMfusion mais pas dans les dépots standards de Fedora.
+            Voir sur <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> pour une description de la
+            manière de configurer RPMfusion dans les dépots par défaut de votre système.</li>
+          <li>Le package <i>ccextractor</i> n'est pas disponible dans les divers dépots
+            standards de Fedora. Ce package doit être reconstruit manuellement en utilisant le script
+            <i>linuxtools/ccextractor-rpmbuild.sh</i>.
+            Ce script télécharge la dernière version des sources en ligne et reconstruit le package.</li>
+        </ul>
 
-      <h3><a id="fcbuild">Construire le package RPM de QtlMovie pour Fedora</a></h3>
+        <h3><a id="ubbuild">Construire le package DEB de QtlMovie pour Ubuntu</a></h3>
 
-      <p>Exécuter le script <code>build/build-rpm.sh</code>.
-        Le package RPM est construit dans le répertoire <code>installers</code>.
-        Le package RPM se nomme <code>qtlmovie-1.6-0.fc19.x86_64.rpm</code> par exemple,
-        où "1.6" est la version de QtlMovie, "19" est la version de Fedora et "x86_64" est la plate-forme.</p>
-      <p>Suivant les règles habituelles de gestion de package, le package RPM ne contient que QtlMovie.
-        Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
-        Noter les points suivants sur les packages non-standards:</p>
-      <ul>
-        <li>Le package <i>ffmpeg</i> est disponible via RPMfusion mais pas dans les dépots standards de Fedora.
-          Voir sur <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> pour une description de la
-          manière de configurer RPMfusion dans les dépots par défaut de votre système.</li>
-        <li>Le package <i>ccextractor</i> n'est pas disponible dans les divers dépots
-          standards de Fedora. Ce package doit être reconstruit manuellement en utilisant le script
-          <code>linuxtools/ccextractor-rpmbuild.sh</code>.
-          Ce script télécharge la dernière version des sources en ligne et reconstruit le package.</li>
-      </ul>
+        <p>Exécuter le script <i>build/build-deb.sh</i>.
+          Le package DEB est construit dans le répertoire <i>installers</i>.
+          Le package DEB se nomme <i>qtlmovie_1.2.16_amd64.deb</i> par exemple,
+          où "1.2.16" est la version de QtlMovie et "amd64" est la plate-forme.</p>
+        <p>Suivant les règles habituelles de gestion de package, le package DEB ne contient que QtlMovie.
+          Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
+          Noter les points suivants sur les packages non-standards:</p>
+        <ul>
+          <li>Sur Ubuntu version 15 ou supérieure, le package <i>ffmpeg</i> est disponible dans
+            les dépots standards d'Ubuntu.</li>
+          <li>Avant la version 15 d'Ubuntu, le package <i>ffmpeg</i> était disponible via le
+            <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">PPA de Jon Severinsson</a>
+            mais pas dans les dépots standards d'Ubuntu.
+            Voir le <a href="qtlmovie-user.html#ubuntu">guide de l'utilisateur de QtlMovie</a>
+            pour une description de la manière de configurer ce PPA dans les dépots par défaut de votre système.</li>
+          <li>Le package <i>ccextractor</i> n'est pas disponible dans les divers dépots
+            standards d'Ubuntu. Ce package doit être reconstruit manuellement en utilisant le script
+            <i>linuxtools/ccextractor-debbuild.sh</i>.
+            Ce script télécharge la dernière version des sources en ligne et reconstruit le package.</li>
+        </ul>
 
-      <h3><a id="ubbuild">Construire le package DEB de QtlMovie pour Ubuntu</a></h3>
+        <h3><a id="lincleanup">Construction multi-platformes</a></h3>
 
-      <p>Exécuter le script <code>build/build-deb.sh</code>.
-        Le package DEB est construit dans le répertoire <code>installers</code>.
-        Le package DEB se nomme <code>qtlmovie_1.2.16_amd64.deb</code> par exemple,
-        où "1.2.16" est la version de QtlMovie et "amd64" est la plate-forme.</p>
-      <p>Suivant les règles habituelles de gestion de package, le package DEB ne contient que QtlMovie.
-        Il contient des dépendances sur les packages des divers outils media qui doivent être installés séparement.
-        Noter les points suivants sur les packages non-standards:</p>
-      <ul>
-        <li>Sur Ubuntu version 15 ou supérieure, le package <i>ffmpeg</i> est disponible dans
-          les dépots standards d'Ubuntu.</li>
-        <li>Avant la version 15 d'Ubuntu, le package <i>ffmpeg</i> était disponible via le
-          <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">PPA de Jon Severinsson</a>
-          mais pas dans les dépots standards d'Ubuntu.
-          Voir le <a href="qtlmovie-user.html#ubuntu">guide de l'utilisateur de QtlMovie</a>
-          pour une description de la manière de configurer ce PPA dans les dépots par défaut de votre système.</li>
-        <li>Le package <i>ccextractor</i> n'est pas disponible dans les divers dépots
-          standards d'Ubuntu. Ce package doit être reconstruit manuellement en utilisant le script
-          <code>linuxtools/ccextractor-debbuild.sh</code>.
-          Ce script télécharge la dernière version des sources en ligne et reconstruit le package.</li>
-      </ul>
+        <p>Quand les répertoires du projet ont été précédement utilisés pour construire QtlMovie
+          pour une autre plate-forme (soit depuis un disque partagé ou après une copie de fichiers),
+          nettoyer d'abord l'arborescence de fichiers avec le script <i>build/cleanup.sh</i>.</p>
+        <p>Ce script détruit tous les fichiers précédement générés, y compris les fichiers de
+          configuration spécifiques <i>.pro.user</i>.</p>
 
-      <h3><a id="lincleanup">Construction multi-platformes</a></h3>
+        <h3><a id="lindoxy">Construire la documentation Doxygen</a></h3>
 
-      <p>Quand les répertoires du projet ont été précédement utilisés pour construire QtlMovie
-        pour une autre plate-forme (soit depuis un disque partagé ou après une copie de fichiers),
-        nettoyer d'abord l'arborescence de fichiers avec le script <code>build/cleanup.sh</code>.</p>
-      <p>Ce script détruit tous les fichiers précédement générés, y compris les fichiers de
-        configuration spécifiques <i>.pro.user</i>.</p>
+        <p>Exécuter le script <i>build/build-doc.sh</i>.</p>
 
-      <h3><a id="lindoxy">Construire la documentation Doxygen</a></h3>
+        <h3><a id="rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a></h3>
 
-      <p>Exécuter le script <code>build/build-doc.sh</code>.</p>
+        <p>RHEL 6 et ses clones CentOS et Scientific Linux sont livrés avec Qt 4.6.
+          Il n'y a pas de package pour Qt 5 dans les dépots standards.</p>
+        <p>Des installeurs binaires de Qt 5 pour Linux sont disponibles sur le site
+          <a href="http://qt-project.org/">http://qt-project.org/</a>.
+          L'installeur Qt 5.0.2 ne peut pas être installé sur RHEL 6 car il dépend
+          de versions plus récentes des libraires standards GCC. Cela a été partiellement
+          corrigé avec Qt 5.1.0: l'installeur lui-même s'exécute correctement mais pas
+          la version installée de Qt. Elle dépend encore de versions plus récentes des
+          librairies GCC.</p>
+        <p>La seule solution restante est de recompiler Qt 5 sur RHEL 6.</p>
 
-      <h3><a id="rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a></h3>
+        <h4><a id="rhqt510build">Compiler et installer Qt 5.1.0 sur RHEL 6</a></h4>
 
-      <p>RHEL 6 et ses clones CentOS et Scientific Linux sont livrés avec Qt 4.6.
-        Il n'y a pas de package pour Qt 5 dans les dépots standards.</p>
-      <p>Des installeurs binaires de Qt 5 pour Linux sont disponibles sur le site
-        <a href="http://qt-project.org/">http://qt-project.org/</a>.
-        L'installeur Qt 5.0.2 ne peut pas être installé sur RHEL 6 car il dépend
-        de versions plus récentes des libraires standards GCC. Cela a été partiellement
-        corrigé avec Qt 5.1.0: l'installeur lui-même s'exécute correctement mais pas
-        la version installée de Qt. Elle dépend encore de versions plus récentes des
-        librairies GCC.</p>
-      <p>La seule solution restante est de recompiler Qt 5 sur RHEL 6.</p>
-
-      <h4><a id="rhqt510build">Compiler et installer Qt 5.1.0 sur RHEL 6</a></h4>
-
-      <p>Télécharger depuis <a href="http://qt-project.org/">http://qt-project.org/</a>
-        les archives sources. Les fichiers suivants ont été utilisés avec succès:</p>
-      <ul>
-        <li><a href="http://download.qt-project.org/archive/qt/5.1/5.1.0/single/qt-everywhere-opensource-src-5.1.0.tar.gz">
-            qt-everywhere-opensource-src-5.1.0.tar.gz</a></li>
-        <li><a href="http://download.qt-project.org/official_releases/qtcreator/2.7/2.7.2/qt-creator-2.7.2-src.tar.gz">
-            qt-creator-2.7.2-src.tar.gz</a></li>
-      </ul>
-      <p>Pré-requis: Installer au moins les packages suivants depuis les dépots standards de RHEL / CentOS / SL.</p>
-      <p>Il s'agit simplement d'une liste de dépendances potentielles déterminées sur un système sur lequel
-        la procédure a été testée avec succès. Certains autres packages sont peut-être nécessaires,
-        présents sur le système testé mais non listés. A l'inverse, certains d'entre eux ne sont
-        peut-être pas nécessaires. En particulier, tous les packages <code>-devel</code> du système
-        testé ont été listés. Tous ces packages de développement ne sont peut-être pas nécessaires
-        pour reconstruire Qt ou Qt Creator mais il est difficile de déterminer lesquels pourraient
-        éventuellement être exclus. Donc, utilisez la commande <code>yum install</code> suivante
-        et essayez.</p>
+        <p>Télécharger depuis <a href="http://qt-project.org/">http://qt-project.org/</a>
+          les archives sources. Les fichiers suivants ont été utilisés avec succès:</p>
+        <ul>
+          <li><a href="http://download.qt-project.org/archive/qt/5.1/5.1.0/single/qt-everywhere-opensource-src-5.1.0.tar.gz">
+              qt-everywhere-opensource-src-5.1.0.tar.gz</a></li>
+          <li><a href="http://download.qt-project.org/official_releases/qtcreator/2.7/2.7.2/qt-creator-2.7.2-src.tar.gz">
+              qt-creator-2.7.2-src.tar.gz</a></li>
+        </ul>
+        <p>Pré-requis: Installer au moins les packages suivants depuis les dépots standards de RHEL / CentOS / SL.</p>
+        <p>Il s'agit simplement d'une liste de dépendances potentielles déterminées sur un système sur lequel
+          la procédure a été testée avec succès. Certains autres packages sont peut-être nécessaires,
+          présents sur le système testé mais non listés. A l'inverse, certains d'entre eux ne sont
+          peut-être pas nécessaires. En particulier, tous les packages <i>-devel</i> du système
+          testé ont été listés. Tous ces packages de développement ne sont peut-être pas nécessaires
+          pour reconstruire Qt ou Qt Creator mais il est difficile de déterminer lesquels pourraient
+          éventuellement être exclus. Donc, utilisez la commande <i>yum install</i> suivante
+          et essayez.</p>
 <pre>
 sudo yum install \
-     make gcc gcc-c++ bison python ruby libtool autoconf \
-     alsa-lib-devel atk-devel audiofile-devel boost-devel bzip2-devel \
-     cairo-devel check-devel cryptopp-devel cups-devel dbus-devel \
-     dbus-glib-devel enchant-devel esound-devel ffmpeg-spice-devel \
-     fontconfig-devel freetype-devel gamin-devel GConf2-devel geoclue-devel \
-     gettext-devel giflib-devel glib2-devel glibc-devel glib-devel gmp-devel \
-     gnome-desktop-devel gnome gnome-libs-devel gnome-menus-devel \
-     gnome-utils-devel gnome-vfs2-devel gnutls-devel gstreamer-devel \
-     gstreamer-plugins-base-devel gtk2-devel gtk+-devel hal-devel imlib-devel \
-     jasper-devel java-1.6.0-openjdk-devel kernel-devel keyutils-libs-devel \
-     krb5-devel lcms-devel libao-devel libart_lgpl-devel libbonobo-devel \
-     libbonoboui-devel libcom_err-devel libdrm-devel libffi-devel \
-     libgcrypt-devel libglade2-devel libgnomecanvas-devel libgnome-devel \
-     libgnomeui-devel libgpg-error-devel libICE-devel libicu-devel \
-     libIDL-devel libjpeg-turbo-devel libmcrypto-devel libmnetutil-devel \
-     libmng-devel libmutil-devel libpaper-devel libpng-devel libselinux-devel \
-     libsepol-devel libSM-devel libsoup-devel libstdc++-devel \
-     libtiff-devellibX11-devel libXau-devel libxcb-devel libXcomposite-devel \
-     libXcursor-devel libXdamage-devel libXdmcp-devel libXext-devel \
-     libXfixes-devel libXft-devel libXi-devel libXinerama-devel libxml2-devel \
-     libXmu-devel libXp-devel libXpm-devel libXrandr-devel libXrender-devel \
-     libxslt-devel libXt-devel libXxf86vm-devel mesa-libGL-devel \
-     mesa-libGLU-devel mysql-devel NetworkManager-devel opencryptoki-devel \
-     openmotif-devel openssl-devel ORBit2-devel ORBit-devel pango-devel \
-     pcre-devel pcsc-lite-devel perl-devel pixman-devel popt-devel \
-     postgresql-devel pygobject2-devel python-devel sip-devel sqlite-devel \
-     startup-notification-devel t1lib-devel unixODBC-devel webkitgtk-devel \
-     xcb-util-devel xorg-x11-proto-devel zlib-devel
+  make gcc gcc-c++ bison python ruby libtool autoconf \
+  alsa-lib-devel atk-devel audiofile-devel boost-devel bzip2-devel \
+  cairo-devel check-devel cryptopp-devel cups-devel dbus-devel \
+  dbus-glib-devel enchant-devel esound-devel ffmpeg-spice-devel \
+  fontconfig-devel freetype-devel gamin-devel GConf2-devel geoclue-devel \
+  gettext-devel giflib-devel glib2-devel glibc-devel glib-devel gmp-devel \
+  gnome-desktop-devel gnome gnome-libs-devel gnome-menus-devel \
+  gnome-utils-devel gnome-vfs2-devel gnutls-devel gstreamer-devel \
+  gstreamer-plugins-base-devel gtk2-devel gtk+-devel hal-devel imlib-devel \
+  jasper-devel java-1.6.0-openjdk-devel kernel-devel keyutils-libs-devel \
+  krb5-devel lcms-devel libao-devel libart_lgpl-devel libbonobo-devel \
+  libbonoboui-devel libcom_err-devel libdrm-devel libffi-devel \
+  libgcrypt-devel libglade2-devel libgnomecanvas-devel libgnome-devel \
+  libgnomeui-devel libgpg-error-devel libICE-devel libicu-devel \
+  libIDL-devel libjpeg-turbo-devel libmcrypto-devel libmnetutil-devel \
+  libmng-devel libmutil-devel libpaper-devel libpng-devel libselinux-devel \
+  libsepol-devel libSM-devel libsoup-devel libstdc++-devel \
+  libtiff-devellibX11-devel libXau-devel libxcb-devel libXcomposite-devel \
+  libXcursor-devel libXdamage-devel libXdmcp-devel libXext-devel \
+  libXfixes-devel libXft-devel libXi-devel libXinerama-devel libxml2-devel \
+  libXmu-devel libXp-devel libXpm-devel libXrandr-devel libXrender-devel \
+  libxslt-devel libXt-devel libXxf86vm-devel mesa-libGL-devel \
+  mesa-libGLU-devel mysql-devel NetworkManager-devel opencryptoki-devel \
+  openmotif-devel openssl-devel ORBit2-devel ORBit-devel pango-devel \
+  pcre-devel pcsc-lite-devel perl-devel pixman-devel popt-devel \
+  postgresql-devel pygobject2-devel python-devel sip-devel sqlite-devel \
+  startup-notification-devel t1lib-devel unixODBC-devel webkitgtk-devel \
+  xcb-util-devel xorg-x11-proto-devel zlib-devel
 </pre>
-      <p>Le script <code>build/redhat-build-qt510.sh</code> construit et installe
-        Qt-5.1.0 sur RHEL 6. Qt et Qt Creator sont installés dans <code>/usr/local</code>
-        et n'interfèrent pas avec l'installation standard de Qt 4 sur RHEL 6.</p>
+        <p>Le script <i>build/redhat-build-qt510.sh</i> construit et installe
+          Qt-5.1.0 sur RHEL 6. Qt et Qt Creator sont installés dans <i>/usr/local</i>
+          et n'interfèrent pas avec l'installation standard de Qt 4 sur RHEL 6.</p>
 
-      <h4><a id="rhqt510user">Utiliser Qt 5.1.0 sur RHEL 6</a></h4>
+        <h4><a id="rhqt510user">Utiliser Qt 5.1.0 sur RHEL 6</a></h4>
 
-      <p>Les variables d'environnement PATH et LD_LIBRARY_PATH doivent être positionnées
-        pour inclure la dernière version de Qt et Qt Creator dans <code>/usr/local</code>.
-        Le fichier <code>build/QtSetEnvironment.rc</code> doit être inclus
-        (commande <code>source</code> ou <code>.</code> dans les scripts bash avant
-        d'utiliser les applications Qt 5.</p>
-      <hr/>
+        <p>Les variables d'environnement PATH et LD_LIBRARY_PATH doivent être positionnées
+          pour inclure la dernière version de Qt et Qt Creator dans <i>/usr/local</i>.
+          Le fichier <i>build/QtSetEnvironment.rc</i> doit être inclus
+          (commande <i>source</i> ou <i>.</i> dans les scripts bash avant
+          d'utiliser les applications Qt 5.</p>
 
-      <h2><a id="windows">Construire QtlMovie sur Windows</a></h2>
+        <h2><a id="windows">Construire QtlMovie sur Windows</a></h2>
 
-      <p>Il y a probablement plusieurs façons différents de construire QtlMovie sur les
-        plates-formes Windows. Ce chapitre décrit une manière qui a prouvé son
-        efficacité mais vous pouvez en expérimenter d'autres...</p>
+        <p>Il y a probablement plusieurs façons différents de construire QtlMovie sur les
+          plates-formes Windows. Ce chapitre décrit une manière qui a prouvé son
+          efficacité mais vous pouvez en expérimenter d'autres...</p>
 
-      <h3><a id="winreq">Pré-requis</a></h3>
+        <h3><a id="winreq">Pré-requis</a></h3>
 
-      <p>Les produits suivants doivent être installés avant de reconstruire QtlMovie.
-        Les numéros de version minimum sont indiqués mais des versions supérieures
-        fonctionnent probablement.</p>
-      <ul>
-        <li>Qt 5.0 (avec environnement MinGW)</li>
-        <li>NullSoft Scriptable Install System (NSIS) 2.46</li>
-        <li>Windows PowerShell 3.0</li>
-        <li>Microsoft .NET Framework 4.5</li>
-      </ul>
+        <p>Les produits suivants doivent être installés avant de reconstruire QtlMovie.
+          Les numéros de version minimum sont indiqués mais des versions supérieures
+          fonctionnent probablement.</p>
+        <ul>
+          <li>Qt 5.0 (avec environnement MinGW)</li>
+          <li>NullSoft Scriptable Install System (NSIS) 2.46</li>
+          <li>Windows PowerShell 3.0</li>
+          <li>Microsoft .NET Framework 4.5</li>
+        </ul>
 
-      <h3><a id="winqt">Version de Qt</a></h3>
+        <h3><a id="winqt">Version de Qt</a></h3>
 
-      <p>QtlMovie peut être reconstruit sur n'importe quelle version de Windows supportant Qt 5.
-        La version MinGW est recommandée. Utiliser Qt avec Visual Studio fonctionne certainement
-        mais n'a pas été testé..</p>
-      <p>L'utilisation de Qt Creator n'est pas obligatoire.
-        S'il est utilisé, Qt Creator version 2.7 ou plus requis.
-        Qt Creator est recommandé pour éditer ou modifier le projet.
-        Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
-      <p>Qt peut être installé en utilisant les installeurs binaires disponibles sur
-        <a href="http://qt-project.org/">http://qt-project.org/</a>.
-        Utiliser l'installation par défaut dans <code>C:\Qt</code>.
-        A titre d'exemple, l'installeur binaire pour Qt 5.1.1 est
-        <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
-          qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
-      <p>La version de Qt qui vient avec l'installeur binaire utilise des librairies dynamiques (DLL).
-        C'est suffisant pour le développement et les tests mais cela pose des problèmes de déploiement
-        sur les autres machines. L'installeur binaire de QtlMovie amène une version statique de QtlMovie,
-        sans librairies partagées. Pour construire cet exécutable, il est nécessaire d'utiliser une
-        version spéciale de Qt, avec des librairies statiques et non dynamiques. Il n'existe
-        pas d'installeur pour cela. Il faut télécharger l'archive des sources de Qt et le recompiler
-        statiquement. C'est ce que fait le script <code>build\windows-build-qt-static.ps1</code>.
-        Il télécharge la dernière version identifiée de Qt (éditer le paramètre par défaut pour en changer),
-        recompile et installe une version statique de Qt.</p>
-      <p>Cette version statique est complémentaire par rapport à la version dynamique installée
-        par défaut, elle ne la remplace pas. Il faut d'abord installer l'installeur binaire
-        de Qt. Il crée <code>C:\Qt</code> et installe MinGW. Ensuite, la version statique est
-        construite et installée dans <code>C:\Qt\Static</code>. La version dynamique est utilisée
-        pour le développement et les tests, notamment avec Qt Creator. La version statique est
-        utilisée pour construire l'installeur binaire de QtlMovie.</p>
+        <p>QtlMovie peut être reconstruit sur n'importe quelle version de Windows supportant Qt 5.
+          La version MinGW est recommandée. Utiliser Qt avec Visual Studio fonctionne certainement
+          mais n'a pas été testé..</p>
+        <p>L'utilisation de Qt Creator n'est pas obligatoire.
+          S'il est utilisé, Qt Creator version 2.7 ou plus requis.
+          Qt Creator est recommandé pour éditer ou modifier le projet.
+          Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
+        <p>Qt peut être installé en utilisant les installeurs binaires disponibles sur
+          <a href="http://qt-project.org/">http://qt-project.org/</a>.
+          Utiliser l'installation par défaut dans <i>C:\Qt</i>.
+          A titre d'exemple, l'installeur binaire pour Qt 5.1.1 est
+          <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
+            qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
+        <p>La version de Qt qui vient avec l'installeur binaire utilise des librairies dynamiques (DLL).
+          C'est suffisant pour le développement et les tests mais cela pose des problèmes de déploiement
+          sur les autres machines. L'installeur binaire de QtlMovie amène une version statique de QtlMovie,
+          sans librairies partagées. Pour construire cet exécutable, il est nécessaire d'utiliser une
+          version spéciale de Qt, avec des librairies statiques et non dynamiques. Il n'existe
+          pas d'installeur pour cela. Il faut télécharger l'archive des sources de Qt et le recompiler
+          statiquement. C'est ce que fait le script <i>build\windows-build-qt-static.ps1</i>.
+          Il télécharge la dernière version identifiée de Qt (éditer le paramètre par défaut pour en changer),
+          recompile et installe une version statique de Qt.</p>
+        <p>Cette version statique est complémentaire par rapport à la version dynamique installée
+          par défaut, elle ne la remplace pas. Il faut d'abord installer l'installeur binaire
+          de Qt. Il crée <i>C:\Qt</i> et installe MinGW. Ensuite, la version statique est
+          construite et installée dans <i>C:\Qt\Static</i>. La version dynamique est utilisée
+          pour le développement et les tests, notamment avec Qt Creator. La version statique est
+          utilisée pour construire l'installeur binaire de QtlMovie.</p>
 
-      <h3><a id="winps1">Windows PowerShell</a></h3>
+        <h3><a id="winps1">Windows PowerShell</a></h3>
 
-      <p>Tous les scripts  Windows dans le répertoire <code>build</code> utilisent Windows PowerShell.
-        La version minimum requise est PowerShell 3.0.</p>
-      <p>Pour afficher la version courante, ouvrez une fenêtre de commande PowerShell et tapez la
-        commande suivante (une version 3.0 dans ce cas):</p>
+        <p>Tous les scripts  Windows dans le répertoire <i>build</i> utilisent Windows PowerShell.
+          La version minimum requise est PowerShell 3.0.</p>
+        <p>Pour afficher la version courante, ouvrez une fenêtre de commande PowerShell et tapez la
+          commande suivante (une version 3.0 dans ce cas):</p>
 <pre>
 PS> $PSVersionTable.PSVersion
 
@@ -281,107 +286,110 @@ Major  Minor  Build  Revision
 -----  -----  -----  --------
 3      0      -1     -1
 </pre>
-      <p>PowerShell 3.0 est installé avec Windows 8. Sur Windows 7, téléchargez et installez
-        <a href="http://www.microsoft.com/en-us/download/details.aspx?id=34595">PowerShell 3.0</a>.</p>
-      <p>Avant d'installer PowerShell 3.0, téléchargez et installez Microsoft
-        <a href="http://www.microsoft.com/en-us/download/details.aspx?id=30653">.NET Framework 4.5</a>
-        (ou utilisez le lien direct
-        <a href="http://go.microsoft.com/fwlink/?LinkId=225702">dotnetfx45_full_x86_x64.exe</a>
-        pour les systèmes 64-bit).
-      <p>Après avoir installé .NET 4.5 and PowerShell 3.0, n'oubliez pas de lancer Windows Update
-        car quelques mises à jour de sécurité seront probablement disponibles. Il faut également
-        s'attendre à quelques reboots.</p>
-      <p>Un script Windows PowerShell a une extension <i>.ps1</i>.
-        L'action par défaut de Windows sur un double-clic est d'éditer le fichier script avec <i>notepad</i>.
-        Ce n'est pas très pratique. Le fichier de registre <code>build\WindowsPowerShellTools.reg</code>
-        modifie ce comportement par défaut de telle sorte qu'un script soit exécuté sur un double-clic.</p>
-      <p>Si un double-clic sur un fichier <i>.ps1</i> n'exécute pas le script, activez
-        <code>build\WindowsPowerShellTools.reg</code> (double-clic puis accepter les modifications).
-        L'effet est permanent.</p>
+        <p>PowerShell 3.0 est installé avec Windows 8. Sur Windows 7, téléchargez et installez
+          <a href="http://www.microsoft.com/en-us/download/details.aspx?id=34595">PowerShell 3.0</a>.</p>
+        <p>Avant d'installer PowerShell 3.0, téléchargez et installez Microsoft
+          <a href="http://www.microsoft.com/en-us/download/details.aspx?id=30653">.NET Framework 4.5</a>
+          (ou utilisez le lien direct
+          <a href="http://go.microsoft.com/fwlink/?LinkId=225702">dotnetfx45_full_x86_x64.exe</a>
+          pour les systèmes 64-bit).
+        <p>Après avoir installé .NET 4.5 and PowerShell 3.0, n'oubliez pas de lancer Windows Update
+          car quelques mises à jour de sécurité seront probablement disponibles. Il faut également
+          s'attendre à quelques reboots.</p>
+        <p>Un script Windows PowerShell a une extension <i>.ps1</i>.
+          L'action par défaut de Windows sur un double-clic est d'éditer le fichier script avec <i>notepad</i>.
+          Ce n'est pas très pratique. Le fichier de registre <i>build\WindowsPowerShellTools.reg</i>
+          modifie ce comportement par défaut de telle sorte qu'un script soit exécuté sur un double-clic.</p>
+        <p>Si un double-clic sur un fichier <i>.ps1</i> n'exécute pas le script, activez
+          <i>build\WindowsPowerShellTools.reg</i> (double-clic puis accepter les modifications).
+          L'effet est permanent.</p>
 
-      <h3><a id="winmanbuild">Construire QtlMovie manuellement</a></h3>
+        <h3><a id="winmanbuild">Construire QtlMovie manuellement</a></h3>
 
-      <p>Exécuter le script <code>build\build.ps1</code>.</p>
-      <p>Par défaut, QtlMovie est construit en utilisant la version dynamique de Qt.
-        Spécifier le paramètre <code>-Static</code> pour construire QtlMovie avec la version statique de Qt.</p>
+        <p>Exécuter le script <i>build\build.ps1</i>.</p>
+        <p>Par défaut, QtlMovie est construit en utilisant la version dynamique de Qt.
+          Spécifier le paramètre <i>-Static</i> pour construire QtlMovie avec la version statique de Qt.</p>
 
-      <h3><a id="winqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
+        <h3><a id="winqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
 
-      <p>Qt Creator doit être lancé par le script <code>build\QtCreator.ps1</code>.
-        Ce script positionne l'environnement nécessaire pour la dernière version de Qt.
-        Le projet QtlMovie est automatiquement ouvert.</p>
-      <p>La première fois que Qt Creator est lancé, accepter toutes les options
-        par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
+        <p>Qt Creator doit être lancé par le script <i>build\QtCreator.ps1</i>.
+          Ce script positionne l'environnement nécessaire pour la dernière version de Qt.
+          Le projet QtlMovie est automatiquement ouvert.</p>
+        <p>La première fois que Qt Creator est lancé, accepter toutes les options
+          par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
 
-      <h3><a id="wincleanup">Construction multi-platformes</a></h3>
+        <h3><a id="wincleanup">Construction multi-platformes</a></h3>
 
-      <p>Quand les répertoires du projet ont été précédement utilisés pour construire QtlMovie
-        pour une autre plate-forme (soit depuis un disque partagé ou après une copie de fichiers),
-        nettoyer d'abord l'arborescence de fichiers avec le script <code>build\cleanup.ps1</code>.</p>
-      <p>Ce script détruit tous les fichiers précédement générés, y compris les fichiers de
-        configuration spécifiques <i>.pro.user</i>.</p>
+        <p>Quand les répertoires du projet ont été précédement utilisés pour construire QtlMovie
+          pour une autre plate-forme (soit depuis un disque partagé ou après une copie de fichiers),
+          nettoyer d'abord l'arborescence de fichiers avec le script <i>build\cleanup.ps1</i>.</p>
+        <p>Ce script détruit tous les fichiers précédement générés, y compris les fichiers de
+          configuration spécifiques <i>.pro.user</i>.</p>
 
-      <h3><a id="windoxy">Construire la documentation Doxygen</a></h3>
+        <h3><a id="windoxy">Construire la documentation Doxygen</a></h3>
 
-      <p>Exécuter le script <code>build\build-doc.ps1</code>.</p>
+        <p>Exécuter le script <i>build\build-doc.ps1</i>.</p>
 
-      <h3><a id="winexec">Exécuter des applications Qt</a></h3>
+        <h3><a id="winexec">Exécuter des applications Qt</a></h3>
 
-      <p>Pour exécuter manuellement des applications Qt, il faut d'abort positionner
-        l'environnement approprié. Exécuter le script <code>build\QtCommandLine.ps1</code>
-        pour créer une fenêtre de commande PowerShell avec l'environnement
-        approprié pour exécuter des application Qt comme le <code>QtlMovie.exe</code>
-        que vous venez de compiler.</p>
+        <p>Pour exécuter manuellement des applications Qt, il faut d'abort positionner
+          l'environnement approprié. Exécuter le script <i>build\QtCommandLine.ps1</i>
+          pour créer une fenêtre de commande PowerShell avec l'environnement
+          approprié pour exécuter des application Qt comme le <i>QtlMovie.exe</i>
+          que vous venez de compiler.</p>
 
-      <h3><a id="wininstaller">Construire l'installeur binaire de QtlMovie pour Windows</a></h3>
+        <h3><a id="wininstaller">Construire l'installeur binaire de QtlMovie pour Windows</a></h3>
 
-      <p>L'installeur binaire de QtlMovie est créé par NSIS (NullSoft Scriptable Install System).
-        NSIS est un logiciel libre disponible en téléchargement sur le site
-        <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
-        NSIS version 2.46 a été utilisé pour QtlMovie.</p>
-      <p>Pour construire l'installeur binaire de QtlMovie, exécuter le script
-        <code>build\build-installer.ps1</code>.
-        Ce script construit QtlMovie en utilisant la version statique de Qt.
-        Assurez vous d'avoir <a href="#winqt">construit et installé</a> cette version statique au préalable.</p>
-      <p>Ce script construit également l'archive "standalone", une alternative pour
-        les utilisateurs sans privilège administrateur qui ne peuvent pas exécuter
-        l'installeur standard.</p>
-      <hr/>
+        <p>L'installeur binaire de QtlMovie est créé par NSIS (NullSoft Scriptable Install System).
+          NSIS est un logiciel libre disponible en téléchargement sur le site
+          <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
+          NSIS version 2.46 a été utilisé pour QtlMovie.</p>
+        <p>Pour construire l'installeur binaire de QtlMovie, exécuter le script
+          <i>build\build-installer.ps1</i>.
+          Ce script construit QtlMovie en utilisant la version statique de Qt.
+          Assurez vous d'avoir <a href="#winqt">construit et installé</a> cette version statique au préalable.</p>
+        <p>Ce script construit également l'archive "standalone", une alternative pour
+          les utilisateurs sans privilège administrateur qui ne peuvent pas exécuter
+          l'installeur standard.</p>
 
-      <h2><a id="macosx">Construire QtlMovie sur Mac OS X</a></h2>
+        <h2><a id="macosx">Construire QtlMovie sur Mac OS X</a></h2>
 
-      <h3><a id="macreq">Pré-requis</a></h3>
+        <h3><a id="macreq">Pré-requis</a></h3>
 
-      <p>QtlMovie peut être construit sur n'importe quelle plate-forme Mac OS X supportant Qt 5.
-        Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
-      <p>L'utilisation de Qt Creator n'est pas obligatoire.
-        S'il est utilisé, Qt Creator version 2.7 ou plus requis.
-        Qt Creator est recommandé pour éditer ou modifier le projet.
-        Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
+        <p>QtlMovie peut être construit sur n'importe quelle plate-forme Mac OS X supportant Qt 5.
+          Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
+        <p>L'utilisation de Qt Creator n'est pas obligatoire.
+          S'il est utilisé, Qt Creator version 2.7 ou plus requis.
+          Qt Creator est recommandé pour éditer ou modifier le projet.
+          Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
 
-      <h3><a id="macmanbuild">Construire QtlMovie manuellement</a></h3>
+        <h3><a id="macmanbuild">Construire QtlMovie manuellement</a></h3>
 
-      <p>Exécuter le script <code>build/build.sh</code>.</p>
+        <p>Exécuter le script <i>build/build.sh</i>.</p>
 
-      <h3><a id="macqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
+        <h3><a id="macqtcreator">Construire QtlMovie avec Qt Creator</a></h3>
 
-      <p>Qt Creator doit être lancé via le Launcher de Mac OS X.
-        La première fois que Qt Creator est lancé, accepter toutes les options
-        par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
+        <p>Qt Creator doit être lancé via le Launcher de Mac OS X.
+          La première fois que Qt Creator est lancé, accepter toutes les options
+          par défaut du projet, notamment la configuration de <i>shadow build</i>.</p>
 
-      <h3><a id="macdoxy">Construire la documentation Doxygen</a></h3>
+        <h3><a id="macdoxy">Construire la documentation Doxygen</a></h3>
 
-      <p>Exécuter le script <code>build/build-doc.sh</code>.</p>
+        <p>Exécuter le script <i>build/build-doc.sh</i>.</p>
 
-      <h3><a id="macinstaller">Construire le package DMG de QtlMovie pour Mac OS X</a></h3>
+        <h3><a id="macinstaller">Construire le package DMG de QtlMovie pour Mac OS X</a></h3>
 
-      <p>Exécuter le script <code>build/build-mac.sh</code>.
-        Le package DMG est construit dans le répertoire <code>installers</code>.
-        Le package DMG se nomme <code>QtlMovie-1.6.dmg</code> par exemple,
-        où "1.6" est la version de QtlMovie.</p>
-      
-      <hr/>
-      <p>[<i><a href="#top">Retour en haut de page</a></i>]</p>
+        <p>Exécuter le script <i>build/build-mac.sh</i>.
+          Le package DMG est construit dans le répertoire <i>installers</i>.
+          Le package DMG se nomme <i>QtlMovie-1.6.dmg</i> par exemple,
+          où "1.6" est la version de QtlMovie.</p>
+        
+      </div>
+      <footer class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
+        <p>QtlMovie is Free and Open Source |
+          <a href="http://qtlmovie.sourceforge.net/" target="_blank">Web Site</a> |
+          <a href="https://github.com/qtlmovie/qtlmovie/issues" target="_blank">Report a problem</a></p>
+      </footer>
     </div>
   </body>
-</html>
+</html> 
