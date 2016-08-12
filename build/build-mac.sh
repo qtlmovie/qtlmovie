@@ -35,6 +35,9 @@
 SCRIPT=$(basename $BASH_SOURCE)
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
+# Uncompressed DMG size.
+DMGSIZE=128m
+
 # Various directories.
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
 ROOTDIR=$(dirname $SCRIPTDIR)
@@ -91,8 +94,8 @@ cp $BUILDDIR/*/locale/*_fr.qm $(find $QTDIR -name 'qt*_fr.qm') $APPTRANS
 chmod 755 $APPTRANS
 chmod 644 $APPTRANS/*
 
-# Create an initial disk image (96 MB)
-hdiutil create -size 96m -fs HFS+ -volname "$VOLUME" "$DMGTMP"
+# Create an initial disk image
+hdiutil create -size $DMGSIZE -fs HFS+ -volname "$VOLUME" "$DMGTMP"
 
 # Mount the disk image
 hdiutil attach "$DMGTMP"
