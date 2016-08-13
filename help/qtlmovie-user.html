@@ -81,7 +81,7 @@
       </header>
       <div class="w3-container w3-padding-32" style="padding-left:32px">
 
-        <h2><a id="overview">Overview</a></h2>
+        <div class="anchor" id="overview"><h2>Overview</h2></div>
 
         <p>QtlMovie is a simple Qt front-end to ffmpeg and other media tools.</p>
         <p>QtlMovie does not pretend to be the next most wanted GUI for ffmpeg.
@@ -115,7 +115,7 @@
           for Fedora and Ubuntu. In this case, the corresponding custom packages are provided on
           the QtlMovie distribution site.</p>
 
-        <h2><a id="infiles">Input files</a></h2>
+        <div class="anchor" id="infiles"><h2>Input files</h2></div>
 
         <p>When a file is open, all available video, audio and subtitle streams are displayed
           using a compact grid of radio buttons which allow the selection of the output streams.
@@ -126,7 +126,7 @@
           the button to get more details. You may also have a precise technical description
           of all streams using the <a href="#fileprop">Input file properties</a> dialog.</p>
 
-        <h3><a id="avin">Audio/video input</a></h3>
+        <div class="anchor" id="avin"><h3>Audio/video input</h3></div>
 
         <p>Input files can be any type of multimedia file which is accepted as input by ffmpeg.
           This include the container file format (MPG, AVI, MKV, TS, M2TS, etc.), the video format
@@ -134,7 +134,7 @@
         <p>Multiple video, audio and subtitle streams can be present. The QtlMovie graphical interface
           requests the user to select exactly one video and one audio stream.</p>
 
-        <h3><a id="subin">Subtitle input</a></h3>
+        <div class="anchor" id="subin"><h3>Subtitle input</h3></div>
 
         <p>At most one subtitle source can be specified. This can be a stream of the input file or an external subtitle file.</p>
         <p>The following subtitles formats are supported.
@@ -155,7 +155,7 @@
         <p>Important: The subtitles are always hardcoded ("<i>burnt</i>") into the video by QtlMovie.
           The output file never contains independent subtitle streams.</p>
 
-        <h3><a id="dvdin">DVD input</a></h3>
+        <div class="anchor" id="dvdin"><h3>DVD input</h3></div>
 
         <p>QtlMovie is ideal to rip DVD and create iPad/iPhone/Android movies, a typical task when you own
           an iPad and many DVD's.</p>
@@ -205,9 +205,9 @@
           to increase the size of the paging file or swap partition. You may also try to first extract the
           files from the DVD and retry the transcoding from a hard disk.</p>
 
-        <h2><a id="outfiles">Output files</a></h2>
+        <div class="anchor" id="outfiles"><h2>Output files</h2></div>
 
-        <h3><a id="dvdout">DVD output</a></h3>
+        <div class="anchor" id="dvdout"><h3>DVD output</h3></div>
 
         <p>QtlMovie always produces DVD with the following characteristics:</p>
         <ul>
@@ -243,7 +243,7 @@
           designates the ISO image in fact. The default DVD burning device shall be selected in the settings menu.
           The ISO image is never deleted and can be reused to burn additional media.</p>
 
-        <h4><a id="dvdouttv">Creating a DVD from a TV recording</a></h4>
+        <div class="anchor" id="dvdouttv"><h4>Creating a DVD from a TV recording</h4></div>
 
         <p>When creating a DVD from a TV recording, some editing is usually required. Typically, there is some
           extra content to delete at the beginning and end. If the recorded program contains ads, you may want
@@ -275,7 +275,7 @@
           Editing a video file without re-encoding requires to cut on intra-frames only
           and MPEG-2 files are easier to edit than AVC / H.264 for instance.</p>
 
-        <h3><a id="ipadout">iPad output</a></h3>
+        <div class="anchor" id="ipadout"><h3>iPad output</h3></div>
 
         <p>QtlMovie always produces iPad files with the following characteristics:</p>
         <ul>
@@ -293,7 +293,7 @@
           video quality indicator. The default video quality for iPad is 11 bits / pixel / 100 frames,
           giving a bitrate of 2.6 Mb/s for a full-size iPad 2 video (1024x768).</p>
 
-        <h3><a id="iphoneout">iPhone output</a></h3>
+        <div class="anchor" id="iphoneout"><h3>iPhone output</h3></div>
 
         <p>QtlMovie always produces iPhone files with the following characteristics:</p>
         <ul>
@@ -310,7 +310,7 @@
           The default quality for iPhone is 11 bits / pixel / 100 frames,
           giving a bitrate of 2.4 Mb/s for a full-size iPhone 5 video (1136x640).</p>
 
-        <h3><a id="androidout">Android output</a></h3>
+        <div class="anchor" id="androidout"><h3>Android output</h3></div>
 
         <p>QtlMovie always produces files for Android devices with the following characteristics:</p>
         <ul>
@@ -327,7 +327,7 @@
           The default quality for Android is 11 bits / pixel / 100 frames,
           giving a bitrate of 6.8 Mb/s for a full-size Samsung Galaxy S5 video (1920x1080).</p>
 
-        <h3><a id="aviout">AVI output</a></h3>
+        <div class="anchor" id="aviout"><h3>AVI output</h3></div>
 
         <p>QtlMovie always produces AVI files with the following characteristics:</p>
         <ul>
@@ -345,14 +345,14 @@
           The default quality for AVI is 18 bits / pixel / 100 frames,
           giving a bitrate of 1.3 Mb/s for the default resolution (880x352).</p>
 
-        <h3><a id="subout">Subtitle extraction</a></h3>
+        <div class="anchor" id="subout"><h3>Subtitle extraction</h3></div>
 
         <p>QtlMovie can also be used to extract subtitle streams from the input files.
           The subtitle format must be text (SRT, SSA, ASS, Teletext or Closed Captions).
           Bitmap subtitles such as DVD or DVB subtitles cannot currently be extracted.
           The output subtitle file format is SRT.</p>
 
-        <h3><a id="forcedar">Forcing the display aspect ratio</a></h3>
+        <div class="anchor" id="forcedar"><h3>Forcing the display aspect ratio</h3></div>
 
         <p>A common problem in video files is the setting of an incorrect display aspect ratio.
           For instance, you may get a file which is marked with a 4:3 aspect ratio but, when you
@@ -362,7 +362,7 @@
         <p>This is the purpose of the "Force display aspect ratio" option. When it is checked,
           the manually entered aspect ratio is used instead of the one from the input file.</p>
 
-        <h2><a id="batchmode">Single-file mode vs. multi-file batch mode</a></h2>
+        <div class="anchor" id="batchmode"><h2>Single-file mode vs. multi-file batch mode</h2></div>
 
         <p>By default, QtlMovie transcodes one file at a time. The main window contains all
           information for one transcoding in an easy one-click way. This is the default
@@ -381,9 +381,9 @@
           option in the "Tools" menu. Note that switching mode requires the application to
           restart. You may also set the preferred mode in the <a href="#miscsettings">settings</a>.</p>
 
-        <h2><a id="miscfeat">Miscellaneous features</a></h2>
+        <div class="anchor" id="miscfeat"><h2>Miscellaneous features</h2></div>
 
-        <h3><a id="logwin">The log window</a></h3>
+        <div class="anchor" id="logwin"><h3>The log window</h3></div>
 
         <p>The log window is the bottom part of the QtlMovie main window.
           All external commands are displayed there, with their output and error messages.
@@ -394,7 +394,7 @@
           activate the debug, perform the operations which exhibit the problem, save the log
           into a text file and attach this text file to the problem report.</p>
 
-        <h3><a id="fileprop">Input file properties</a></h3>
+        <div class="anchor" id="fileprop"><h3>Input file properties</h3></div>
 
         <p>The "Input File Properties" option in the "Tools" menu displays all properties of
           the input file as reported by <i>ffprobe</i>.
@@ -404,7 +404,7 @@
           option is not in the "Tools" menu since there are possibly more than one input
           file. Instead, use the "Properties" button in the task editor.</p>
 
-        <h3><a id="audiotest">Audio test</a></h3>
+        <div class="anchor" id="audiotest"><h3>Audio test</h3></div>
 
         <p>The "Test Audio" option in the "Tools" menu opens a dialog box for testing the
           audio streams in the input file. This is useful when the languages of the audio
@@ -415,7 +415,7 @@
           not in the "Tools" menu since there are possibly more than one input file.
           Instead, use the "Test Audio" button in the task editor.</p>
 
-        <h3><a id="dvdextract">DVD extraction</a></h3>
+        <div class="anchor" id="dvdextract"><h3>DVD extraction</h3></div>
 
         <p>The "DVD extraction" option in the "Tools" menu opens an independent application
           for extracting the content of copy-protected DVD's. This is an independent tool
@@ -437,12 +437,12 @@
           <li>Tab "Files": When this tab is selected, each file in the DVD can be selectively extracted.</li>
         </ul>
 
-        <h2><a id="settings">Settings and options</a></h2>
+        <div class="anchor" id="settings"><h2>Settings and options</h2></div>
 
         <p>The QtlMovie settings are accessible using the "Tools" menu.</p>
         <p>On Mac, the settings are accessible using the "Preferences" entry in the "QtlMovie" application menu.</p>
 
-        <h3><a id="dirsettings">"Directories" tab</a></h3>
+        <div class="anchor" id="dirsettings"><h3>"Directories" tab</h3></div>
 
         <p>The "Default input directory" is where the "Browse" button is initially set when no input
           file is currently selected. By default, this is the user's home directory.</p>
@@ -466,7 +466,7 @@
           output directories for output types "DVD ISO Image" and "Burn DVD" since images of the later type
           are typically created in a temporary directory that the user wants to clean up on a regular basis.</p>
 
-        <h3><a id="toolssettings">"Media Tools" tab</a></h3>
+        <div class="anchor" id="toolssettings"><h3>"Media Tools" tab</h3></div>
 
         <p>This tab specifies the location of the executable files for the external media tools which are used by QtlMovie:</p>
         <ul>
@@ -487,7 +487,7 @@
         <p>For each tool, a specific alternate executable can be selected in the corresponding edit box
           or using the corresponding "Browse" button.</p>
 
-        <h3><a id="transcsettings">"Transcoding" tab</a></h3>
+        <div class="anchor" id="transcsettings"><h3>"Transcoding" tab</h3></div>
 
         <p>This tab groups all the settings which affect the audio and video transcoding.</p>
         <p>The "Transcoding duration" indicates whether the entire input file shall be transcoded
@@ -526,7 +526,7 @@
         <p>The "Play sound on completion" option indicates that a sound will be played
           each time a transcoding process completes.</p>
 
-        <h3><a id="dvdsettings">"DVD" tab</a></h3>
+        <div class="anchor" id="dvdsettings"><h3>"DVD" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of DVD's.</p>
         <p>The PAL vs. NTSC options indicate the format of all created DVD's.</p>
@@ -545,7 +545,7 @@
           does what it says... This can be useful to force a transcoding when the
           file seems DVD-compliant but is not really (too large for instance).</p>
 
-        <h3><a id="ipadsettings">"iPad" tab</a></h3>
+        <div class="anchor" id="ipadsettings"><h3>"iPad" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for the iPad.</p>
         <p>The "Screen size" options specify the type of iPad to target.
@@ -555,7 +555,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected iPad model is also displayed.</p>
 
-        <h3><a id="iphonesettings">"iPhone" tab</a></h3>
+        <div class="anchor" id="iphonesettings"><h3>"iPhone" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for the iPhone.</p>
         <p>The "Screen size" options specify the type of iPhone to target.
@@ -565,7 +565,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected iPhone model is also displayed.</p>
 
-        <h3><a id="androidsettings">"Android" tab</a></h3>
+        <div class="anchor" id="androidsettings"><h3>"Android" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for Android devices.</p>
         <p>The "Screen size" options specify the type of device to target.
@@ -575,7 +575,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected device model is also displayed.</p>
 
-        <h3><a id="avisettings">"AVI" tab</a></h3>
+        <div class="anchor" id="avisettings"><h3>"AVI" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of AVI files.</p>
         <p>The "Max size" options specify the maximum resolution of the output video.
@@ -584,7 +584,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected maximum resolution is also displayed.</p>
 
-        <h3><a id="audiosettings">"Audio" tab</a></h3>
+        <div class="anchor" id="audiosettings"><h3>"Audio" tab</h3></div>
 
         <p>This tab groups all the settings which affect the audio transcoding.
           Note that most audio transcoding options like bit rate, sample rate or number of channels
@@ -615,7 +615,7 @@
             introduced nasty sound effects.</li>
         </ul>
 
-        <h3><a id="subtitlesettings">"Subtitles" tab</a></h3>
+        <div class="anchor" id="subtitlesettings"><h3>"Subtitles" tab</h3></div>
 
         <p>This tab groups all the settings which affect the processing of subtitles.</p>
         <p>The option "Cleanup SRT/SSA/ASS files before insertion" is used to remove
@@ -646,7 +646,7 @@
           This is why it is unchecked by default.
           You may try to check it and decide whether it is useful or not.</p>
 
-        <h3><a id="miscsettings">"Miscellaneous" tab</a></h3>
+        <div class="anchor" id="miscsettings"><h3>"Miscellaneous" tab</h3></div>
 
         <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
         <p>The "File processing mode" options describe how QtlMovie processes multiple input
@@ -722,7 +722,7 @@
           version of QtlMovie is searched online each time the application starts. When disabled, it
           is possible to manually search for a new version using the menu "Help" / "Search New Version".</p>
 
-        <h2><a id="cmdline">Command line syntax</a></h2>
+        <div class="anchor" id="cmdline"><h2>Command line syntax</h2></div>
 
         <p>QtlMovie is normally started from the desktop menu without command line argument.
           This is sufficient for normal usage.</p>
@@ -748,9 +748,9 @@
           <p>QtlMovie -l en</p>
         </div>
 
-        <h2><a id="platforms">Platforms notes</a></h2>
+        <div class="anchor" id="platforms"><h2>Platforms notes</h2></div>
 
-        <h3><a id="windows">Windows</a></h3>
+        <div class="anchor" id="windows"><h3>Windows</h3></div>
 
         <p>QtlMovie is primarily developed on Windows. The binary installer for QtlMovie includes
           all required media tools. Running the QtlMovie binary installer is sufficient to get
@@ -765,7 +765,7 @@
           on the system. For users without such privileges, use the "standalone"
           archive. Unzip it anywhere at simply run QtlMovie.exe.</p>
 
-        <h3><a id="macosx">Mac OS X</a></h3>
+        <div class="anchor" id="macosx"><h3>Mac OS X</h3></div>
 
         <p>QtlMovie has been tested on Mac OS X 10.11 ("El Capitan") and proved to work correctly.</p>
         <p>The package QtlMovie-<i>version</i>.dmg is installed the same way as most Mac
@@ -777,7 +777,7 @@
         <p>The media tools are installed in the same directory tree as QtlMovie but you may
           select alternate versions of these tools in the settings menu.</p>
 
-        <h3><a id="linux">Linux</a></h3>
+        <div class="anchor" id="linux"><h3>Linux</h3></div>
 
         <p>QtlMovie has been tested on Fedora and Ubuntu Linux systems and proved to work correctly.</p>
         <p>FFmpeg needs to be available in version 1.2 or higher. On several systems, the standard version
@@ -787,7 +787,7 @@
           download them from the QtlMovie download area (see below).</p>
         <p>All media tools are searched by QtlMovie in <i>$PATH</i>.</p>
 
-        <h4><a id="fedora">Fedora and Red Hat Entreprise Linux</a></h4>
+        <div class="anchor" id="fedora"><h4>Fedora and Red Hat Entreprise Linux</h4></div>
 
         <p>Binary RPM packages for Fedora on x86_64 architecture are available on the 
           <a href="https://sourceforge.net/projects/qtlmovie/files/fedora/">QtlMovie distribution size for Fedora on SourceForge</a>
@@ -796,7 +796,7 @@
           See <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> for the way to configure RPMfusion as
           a default repository for your system.</p>
 
-        <h4><a id="ubuntu">Ubuntu and Debian</a></h4>
+        <div class="anchor" id="ubuntu"><h4>Ubuntu and Debian</h4></div>
 
         <p>Binary DEB packages for Ubuntu on amd64 architecture are available on the 
           <a href="https://sourceforge.net/projects/qtlmovie/files/ubuntu/">QtlMovie distribution site for Ubuntu on SourceForge</a>
@@ -824,7 +824,7 @@ apt-get update
 apt-get install ffmpeg
 </pre>
 
-        <h3><a id="otherpf">Other platforms</a></h3>
+        <div class="anchor" id="otherpf"><h3>Other platforms</h3></div>
 
         <p>QtlMovie should compile and properly function on any other platform which is supported by
           the Qt framework version 5.5 or higher. However, QtlMovie is useless without ffmpeg.
