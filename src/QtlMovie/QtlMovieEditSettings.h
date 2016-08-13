@@ -71,6 +71,11 @@ private slots:
     void resetValues(QAbstractButton* button = 0);
 
     //!
+    //! Invoked by the "Help" button.
+    //!
+    void help();
+
+    //!
     //! Invoked by the "Browse..." button for the FFmpeg executable.
     //!
     void browseFFmpeg()

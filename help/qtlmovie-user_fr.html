@@ -46,17 +46,17 @@
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-settings')" href="javascript:void(0)">Options <i class="fa fa-caret-down"></i></a>
         <div id="menu-settings" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="#dirsettings">Onglet "Répertoires"</a>
-          <a href="#toolssettings">Onglet "Outils Media"</a>
-          <a href="#transcsettings">Onglet "Transcodage"</a>
-          <a href="#dvdsettings">Onglet "DVD"</a>
-          <a href="#ipadsettings">Onglet "iPad"</a>
-          <a href="#iphonesettings">Onglet "iPhone"</a>
-          <a href="#androidsettings">Onglet "Android"</a>
-          <a href="#avisettings">Onglet "AVI"</a>
-          <a href="#audiosettings">Onglet "Audio"</a>
-          <a href="#subtitlesettings">Onglet "Sous-titres"</a>
-          <a href="#miscsettings">Onglet "Divers"</a>
+          <a href="#tabDirectories">Onglet "Répertoires"</a>
+          <a href="#tabTools">Onglet "Outils Media"</a>
+          <a href="#tabTranscoding">Onglet "Transcodage"</a>
+          <a href="#tabDvd">Onglet "DVD"</a>
+          <a href="#tabIpad">Onglet "iPad"</a>
+          <a href="#tabIphone">Onglet "iPhone"</a>
+          <a href="#tabAndroid">Onglet "Android"</a>
+          <a href="#tabAvi">Onglet "AVI"</a>
+          <a href="#tabAudio">Onglet "Audio"</a>
+          <a href="#tabSubtitles">Onglet "Sous-titres"</a>
+          <a href="#tabMisc">Onglet "Divers"</a>
         </div>
       </div>
       <a href="#cmdline">Syntaxe de la ligne de commande</a>
@@ -406,7 +406,7 @@
         <p>Pour passer du "mode fichier unique" au "mode multi-fichiers" et vice-versa, utiliser
           l'option de changement de mode dans le menu "Outils". Notez que le changement de mode
           nécessite un redémarrage de l'application. Vous pouvez également choisir le mode de
-          traitement dans le menu des <a href="#miscsettings">options</a>.</p>
+          traitement dans le menu des <a href="#tabMisc">options</a>.</p>
 
         <div class="anchor" id="miscfeat"><h2>Autres fonctionnalités</h2></div>
 
@@ -475,7 +475,7 @@
         <p>Le paramétrage des options de QtlMovie est accessible par le menu "Outils".</p>
         <p>Sur Mac, les options sont accessibles via l'option "Préférences" dans le menu d'application "QtlMovie".</p>
 
-        <div class="anchor" id="dirsettings"><h3>Onglet "Répertoires"</h3></div>
+        <div class="anchor" id="tabDirectories"><h3>Onglet "Répertoires"</h3></div>
 
         <p>Le "répertoire d'entrée par défaut" est là où le bouton "Chercher" ira quand aucun
           fichier d'entrée n'est précédemment sélectionné. Par défaut, c'est le répertoire de
@@ -502,7 +502,7 @@
           "Gravage DVD" puisque les images de ce dernier type sont typiquement créées dans un
           espace temporaire que l'utilisateur voudra nettoyer régulièrement.</p>
 
-        <div class="anchor" id="toolssettings"><h3>Onglet "Outils Media"</h3></div>
+        <div class="anchor" id="tabTools"><h3>Onglet "Outils Media"</h3></div>
 
         <p>Cet onglet spécifie les emplacement des exécutables des différents outils media utilisés par  QtlMovie:</p>
         <ul>
@@ -525,7 +525,7 @@
         <p>Pour chaque outil, un exécutable spécifique peut être sélectionné dans la 
           zone d'édition ou en utilisant le bouton "Chercher" correspondant.</p>
 
-        <div class="anchor" id="transcsettings"><h3>Onglet "Transcodage"</h3></div>
+        <div class="anchor" id="tabTranscoding"><h3>Onglet "Transcodage"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent le transcodage audio et vidéo.</p>
         <p>La "Durée de transcodage" indique si tout le fichier doit être transcodé
@@ -567,7 +567,7 @@
         <p>L'option "Alerte sonore en fin de transcodage" indique que la fin de chaque
           session de transcodage sera signalée par une alerte sonore.</p>
 
-        <div class="anchor" id="dvdsettings"><h3>Onglet "DVD"</h3></div>
+        <div class="anchor" id="tabDvd"><h3>Onglet "DVD"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent la création de DVD.</p>
         <p>L'option PAL / NTSC définit le format des DVD créés.</p>
@@ -587,7 +587,7 @@
           fait ce qu'elle dit... Cela peut être utile pour forcer le transcodage quand le
           fichier semble compatible DVD mais ne l'est pas vraiment (trop grand par exemple).</p>
 
-        <div class="anchor" id="ipadsettings"><h3>Onglet "iPad"</h3></div>
+        <div class="anchor" id="tabIpad"><h3>Onglet "iPad"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent la création de fichiers vidéo pour iPad.</p>
         <p>L'option "Taille d'écran" spécifie le type d'iPad cible.
@@ -598,7 +598,7 @@
           le débit binaire vidéo maximum correspondant au modèle d'iPad sélectionné est
           également affiché.</p>
 
-        <div class="anchor" id="iphonesettings"><h3>Onglet "iPhone"</h3></div>
+        <div class="anchor" id="tabIphone"><h3>Onglet "iPhone"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent la création de fichiers vidéo pour iPhone.</p>
         <p>L'option "Taille d'écran" spécifie le type d'iPhone cible.
@@ -609,7 +609,7 @@
           le débit binaire vidéo maximum correspondant au modèle d'iPhone sélectionné est
           également affiché.</p>
 
-        <div class="anchor" id="androidsettings"><h3>Onglet "Android"</h3></div>
+        <div class="anchor" id="tabAndroid"><h3>Onglet "Android"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent la création de fichiers vidéo pour appareils Android.</p>
         <p>L'option "Taille d'écran" spécifie le type d'appareil cible.
@@ -620,7 +620,7 @@
           le débit binaire vidéo maximum correspondant au modèle d'appareil sélectionné est
           également affiché.</p>
 
-        <div class="anchor" id="avisettings"><h3>Onglet "AVI"</h3></div>
+        <div class="anchor" id="tabAvi"><h3>Onglet "AVI"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent la création de fichiers AVI.</p>
         <p>L'option "Taille max" spécifie la résolution vidéo maximum.
@@ -630,7 +630,7 @@
           le débit binaire vidéo maximum correspondant à la résolution sélectionnée est
           également affiché.</p>
 
-        <div class="anchor" id="audiosettings"><h3>Onglet "Audio"</h3></div>
+        <div class="anchor" id="tabAudio"><h3>Onglet "Audio"</h3></div>
 
         <p>Cet onglet regroupe les options qui affectent le transcodage audio.
           Il est à noter que les principales options de transcodage audio comme le
@@ -666,7 +666,7 @@
             forts sont écrêtés, ce qui peut introduire des effets sonores désagréables.</li>
         </ul>
 
-        <div class="anchor" id="subtitlesettings"><h3>Onglet "Sous-titres"</h3></div>
+        <div class="anchor" id="tabSubtitles"><h3>Onglet "Sous-titres"</h3></div>
 
         <p>Cet onglet regroupe les paramètres qui affectent le traitement des sous-titres.</p>
         <p>L'option "Nettoyage des fichiers SRT/SSA/ASS avant insertion" est utilisée pour
@@ -707,7 +707,7 @@
           C'est pourquoi cette option n'est pas sélectionnée par défaut. Vous pouvez essayer de
           l'activer pour vérifier et décider ensuite si elle est utile ou non.</p>
 
-        <div class="anchor" id="miscsettings"><h3>Onglet "Divers"</h3></div>
+        <div class="anchor" id="tabMisc"><h3>Onglet "Divers"</h3></div>
 
         <p>Comme son nom l'indique, cet onglet regroupe les options qui n'ont pas trouvé leur place ailleurs.</p>
         <p>Les options de "mode de traitement des fichiers" décrivent la manière dont

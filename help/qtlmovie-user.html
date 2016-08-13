@@ -46,17 +46,17 @@
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-settings')" href="javascript:void(0)">Settings and options <i class="fa fa-caret-down"></i></a>
         <div id="menu-settings" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="#dirsettings">"Directories" tab</a>
-          <a href="#toolssettings">"Media Tools" tab</a>
-          <a href="#transcsettings">"Transcoding" tab</a>
-          <a href="#dvdsettings">"DVD" tab</a>
-          <a href="#ipadsettings">"iPad" tab</a>
-          <a href="#iphonesettings">"iPhone" tab</a>
-          <a href="#androidsettings">"Android" tab</a>
-          <a href="#avisettings">"AVI" tab</a>
-          <a href="#audiosettings">"Audio" tab</a>
-          <a href="#subtitlesettings">"Subtitles" tab</a>
-          <a href="#miscsettings">"Miscellaneous" tab</a>
+          <a href="#tabDirectories">"Directories" tab</a>
+          <a href="#tabTools">"Media Tools" tab</a>
+          <a href="#tabTranscoding">"Transcoding" tab</a>
+          <a href="#tabDvd">"DVD" tab</a>
+          <a href="#tabIpad">"iPad" tab</a>
+          <a href="#tabIphone">"iPhone" tab</a>
+          <a href="#tabAndroid">"Android" tab</a>
+          <a href="#tabAvi">"AVI" tab</a>
+          <a href="#tabAudio">"Audio" tab</a>
+          <a href="#tabSubtitles">"Subtitles" tab</a>
+          <a href="#tabMisc">"Miscellaneous" tab</a>
         </div>
       </div>
       <a href="#cmdline">Command line syntax</a>
@@ -379,7 +379,7 @@
           into the file list windows.</p>
         <p>To switch between "single-file mode" and "multi-file batch mode", use the switch
           option in the "Tools" menu. Note that switching mode requires the application to
-          restart. You may also set the preferred mode in the <a href="#miscsettings">settings</a>.</p>
+          restart. You may also set the preferred mode in the <a href="#tabMisc">settings</a>.</p>
 
         <div class="anchor" id="miscfeat"><h2>Miscellaneous features</h2></div>
 
@@ -442,7 +442,7 @@
         <p>The QtlMovie settings are accessible using the "Tools" menu.</p>
         <p>On Mac, the settings are accessible using the "Preferences" entry in the "QtlMovie" application menu.</p>
 
-        <div class="anchor" id="dirsettings"><h3>"Directories" tab</h3></div>
+        <div class="anchor" id="tabDirectories"><h3>"Directories" tab</h3></div>
 
         <p>The "Default input directory" is where the "Browse" button is initially set when no input
           file is currently selected. By default, this is the user's home directory.</p>
@@ -466,7 +466,7 @@
           output directories for output types "DVD ISO Image" and "Burn DVD" since images of the later type
           are typically created in a temporary directory that the user wants to clean up on a regular basis.</p>
 
-        <div class="anchor" id="toolssettings"><h3>"Media Tools" tab</h3></div>
+        <div class="anchor" id="tabTools"><h3>"Media Tools" tab</h3></div>
 
         <p>This tab specifies the location of the executable files for the external media tools which are used by QtlMovie:</p>
         <ul>
@@ -487,7 +487,7 @@
         <p>For each tool, a specific alternate executable can be selected in the corresponding edit box
           or using the corresponding "Browse" button.</p>
 
-        <div class="anchor" id="transcsettings"><h3>"Transcoding" tab</h3></div>
+        <div class="anchor" id="tabTranscoding"><h3>"Transcoding" tab</h3></div>
 
         <p>This tab groups all the settings which affect the audio and video transcoding.</p>
         <p>The "Transcoding duration" indicates whether the entire input file shall be transcoded
@@ -526,7 +526,7 @@
         <p>The "Play sound on completion" option indicates that a sound will be played
           each time a transcoding process completes.</p>
 
-        <div class="anchor" id="dvdsettings"><h3>"DVD" tab</h3></div>
+        <div class="anchor" id="tabDvd"><h3>"DVD" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of DVD's.</p>
         <p>The PAL vs. NTSC options indicate the format of all created DVD's.</p>
@@ -545,7 +545,7 @@
           does what it says... This can be useful to force a transcoding when the
           file seems DVD-compliant but is not really (too large for instance).</p>
 
-        <div class="anchor" id="ipadsettings"><h3>"iPad" tab</h3></div>
+        <div class="anchor" id="tabIpad"><h3>"iPad" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for the iPad.</p>
         <p>The "Screen size" options specify the type of iPad to target.
@@ -555,7 +555,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected iPad model is also displayed.</p>
 
-        <div class="anchor" id="iphonesettings"><h3>"iPhone" tab</h3></div>
+        <div class="anchor" id="tabIphone"><h3>"iPhone" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for the iPhone.</p>
         <p>The "Screen size" options specify the type of iPhone to target.
@@ -565,7 +565,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected iPhone model is also displayed.</p>
 
-        <div class="anchor" id="androidsettings"><h3>"Android" tab</h3></div>
+        <div class="anchor" id="tabAndroid"><h3>"Android" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of video files for Android devices.</p>
         <p>The "Screen size" options specify the type of device to target.
@@ -575,7 +575,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected device model is also displayed.</p>
 
-        <div class="anchor" id="avisettings"><h3>"AVI" tab</h3></div>
+        <div class="anchor" id="tabAvi"><h3>"AVI" tab</h3></div>
 
         <p>This tab groups all the settings which affect the generation of AVI files.</p>
         <p>The "Max size" options specify the maximum resolution of the output video.
@@ -584,7 +584,7 @@
           the section about <a href="#ipadout">iPad output</a>. For information, the corresponding
           maximum video bitrate for the selected maximum resolution is also displayed.</p>
 
-        <div class="anchor" id="audiosettings"><h3>"Audio" tab</h3></div>
+        <div class="anchor" id="tabAudio"><h3>"Audio" tab</h3></div>
 
         <p>This tab groups all the settings which affect the audio transcoding.
           Note that most audio transcoding options like bit rate, sample rate or number of channels
@@ -615,7 +615,7 @@
             introduced nasty sound effects.</li>
         </ul>
 
-        <div class="anchor" id="subtitlesettings"><h3>"Subtitles" tab</h3></div>
+        <div class="anchor" id="tabSubtitles"><h3>"Subtitles" tab</h3></div>
 
         <p>This tab groups all the settings which affect the processing of subtitles.</p>
         <p>The option "Cleanup SRT/SSA/ASS files before insertion" is used to remove
@@ -646,7 +646,7 @@
           This is why it is unchecked by default.
           You may try to check it and decide whether it is useful or not.</p>
 
-        <div class="anchor" id="miscsettings"><h3>"Miscellaneous" tab</h3></div>
+        <div class="anchor" id="tabMisc"><h3>"Miscellaneous" tab</h3></div>
 
         <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
         <p>The "File processing mode" options describe how QtlMovie processes multiple input

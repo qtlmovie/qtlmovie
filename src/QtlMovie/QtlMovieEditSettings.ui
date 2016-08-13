@@ -1564,7 +1564,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
      </property>
     </widget>
    </item>
@@ -1945,6 +1945,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>helpRequested()</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>help()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>356</x>
+     <y>581</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>356</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>resetValues(QAbstractButton*)</slot>
@@ -1964,5 +1980,6 @@
   <slot>setNormalizeAudioSelectable(bool)</slot>
   <slot>updateMaxBitRates()</slot>
   <slot>browseDvdExtractionDir()</slot>
+  <slot>help()</slot>
  </slots>
 </ui>

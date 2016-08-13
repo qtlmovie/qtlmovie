@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieEditSettings.h"
+#include "QtlMovieHelp.h"
 #include "QtlLineEdit.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
@@ -288,6 +289,20 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
 
     // Make default output directories selectable or not.
     setDefaultOutputDirSelectable(_settings->defaultOutputDirIsInput());
+}
+
+//-----------------------------------------------------------------------------
+// Invoked by the "Help" button.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::help()
+{
+    // Find help for the current tab.
+    QWidget* current = _ui.tab->currentWidget();
+    if (current != 0) {
+        // Use the object name of the tab as URL fragment (example: "#tabDirectories").
+        QtlMovieHelp::showHelp(this, QtlMovieHelp::User, current->objectName());
+    }
 }
 
 
