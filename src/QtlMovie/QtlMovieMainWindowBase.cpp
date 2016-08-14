@@ -35,7 +35,6 @@
 #include "QtlMovie.h"
 #include "QtlMovieEditSettings.h"
 #include "QtlMovieAboutMediaTools.h"
-#include "QtlMovieHelp.h"
 #include "QtlNewVersionCheckerJson.h"
 #include "QtlTextFileViewer.h"
 #include "QtlTranslator.h"
@@ -58,6 +57,7 @@ QtlMovieMainWindowBase::QtlMovieMainWindowBase(QWidget *parent, bool logDebug) :
     _defaultLog(stderr, logDebug),
     _log(&_defaultLog),
     _sound(),
+    _help(),
     _closePending(false)
 {
 }
@@ -223,7 +223,7 @@ void QtlMovieMainWindowBase::closeEvent(QCloseEvent* event)
 void QtlMovieMainWindowBase::editSettings()
 {
     // Open an edition dialog with the current settings.
-    QtlMovieEditSettings edit(_settings, this);
+    QtlMovieEditSettings edit(_settings, &_help, this);
     if (edit.exec() == QDialog::Accepted) {
         // Button "OK" has been selected, update settings from the values in the dialog box.
         edit.applySettings();
@@ -274,7 +274,7 @@ void QtlMovieMainWindowBase::about()
 
 void QtlMovieMainWindowBase::showHelp()
 {
-    QtlMovieHelp::showHelp(this, QtlMovieHelp::Home);
+    _help.showHelp(this, QtlMovieHelp::Home);
 }
 
 

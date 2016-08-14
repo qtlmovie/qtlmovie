@@ -37,10 +37,44 @@
 
 
 //----------------------------------------------------------------------------
+// Constructor and destructor.
+//----------------------------------------------------------------------------
+
+QtlMovieHelp::QtlMovieHelp() :
+    _tempDir(0)
+{
+}
+
+QtlMovieHelp::~QtlMovieHelp()
+{
+    // Cleanup temporary files.
+    if (_tempDir != 0) {
+        _tempDir->remove();
+        delete _tempDir;
+        _tempDir = 0;
+    }
+}
+
+
+//----------------------------------------------------------------------------
 // Display a help HTML file in the external browser.
 //----------------------------------------------------------------------------
 
 void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, const QString& fragment)
+{
+    // Open the file in the external browser.
+    const QUrl url(urlOf(parent, type, fragment));
+    if (url.isValid() && !QDesktopServices::openUrl(url)) {
+        qtlError(parent, QObject::tr("Error opening browser.\nSee %1").arg(url.toString()));
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Build the URL for a help HTML file.
+//----------------------------------------------------------------------------
+
+QUrl QtlMovieHelp::urlOf(QObject* parent, QtlMovieHelp::HelpFileType type, const QString& fragment)
 {
     // Name of the main help file.
     QString fileName;
@@ -56,7 +90,7 @@ void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, co
             break;
         default:
             qtlError(parent, QObject::tr("Invalid help file"));
-            return;
+            return QUrl();
     }
 
     // Search the directory where help files are stored.
@@ -87,7 +121,7 @@ void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, co
     if (htmlFile.isEmpty()) {
         // File not found.
         qtlError(parent, QObject::tr("Cannot find help files.\nTry to reinstall QtlMovie."));
-        return;
+        return QUrl();
     }
 
     // Find a locale variant if it exists.
@@ -95,12 +129,68 @@ void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, co
 
     // Build URL.
     QUrl url(QUrl::fromLocalFile(htmlFile));
-    if (!fragment.isEmpty()) {
-        url.setFragment(fragment);
+    if (fragment.isEmpty()) {
+        // No "#fragment", URL is complete.
+        return url;
     }
 
-    // Open the file in the external browser.
-    if (!QDesktopServices::openUrl(url)) {
-        qtlError(parent, QObject::tr("Error opening browser.\nSee %1").arg(url.toString()));
+    // Set the "#fragment" part of the URL.
+    url.setFragment(fragment);
+
+#if QT_VERSION < QT_VERSION_CHECK(5,7,2)
+
+    // Warning: Qt bug #55300 (https://bugreports.qt.io/browse/QTBUG-55300)
+    // When there is a fragment in a file:// URL, QDesktopServices::openUrl()
+    // fails to set the fragment in the actual URL. This bug has been reported
+    // for Qt 5.7.0. We do not know yet when this bug is fixed. Currently, we
+    // assume it will be fixed in 5.7.2, if this version ever exists.
+
+    // Workaround for Qt bug: We create a temporary HTML file containing
+    // a redirect directive to the target URL. In case of error, we simply
+    // return the URL as we built it, directly on the final target file.
+    // Because of the Qt bug, the anchor will be ignored and the HTML file
+    // will be opened at the beginning, which is better than nothing.
+
+    // Create a temporary directory for temporary HTML files.
+    if (_tempDir == 0) {
+        _tempDir = new QTemporaryDir();
     }
+
+    // Does the temporary directory exist?
+    if (!_tempDir->isValid()) {
+        // Cannot create temporary files.
+        return url;
+    }
+
+    // Temporary file name to create.
+    const QString tempFile(_tempDir->path() +
+                           QDir::separator() +
+                           QFileInfo(htmlFile).completeBaseName() +
+                           QStringLiteral("-anchor-") +
+                           fragment +
+                           ".html");
+
+    // The file may already exist if we already accessed this page.
+    // Create the file only if it does not exists.
+    if (!QFile(tempFile).exists()) {
+        // File content: HTTP redirection to target file and anchor.
+        QStringList lines;
+        lines << "<html><head>"
+              << ("<meta http-equiv=\"refresh\" content=\"0;URL='" + url.toString() + "'\"/> ")
+              << "</head><body><p>"
+              << ("Click <a href=\"" + url.toString() + "\">here</a>.")
+              << "</p></body></html>";
+
+        if (!QtlFile::writeTextLinesFile(tempFile, lines)) {
+            // Error while creating the temporary file.
+            return url;
+        }
+    }
+
+    // Replace the URL content with the temporary file, without fragment.
+    url = QUrl::fromLocalFile(tempFile);
+
+#endif
+
+    return url;
 }

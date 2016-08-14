@@ -31,7 +31,6 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieEditSettings.h"
-#include "QtlMovieHelp.h"
 #include "QtlLineEdit.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlListWidgetUtils.h"
@@ -45,9 +44,10 @@
 // Constructor.
 //-----------------------------------------------------------------------------
 
-QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* parent) :
+QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QtlMovieHelp* help, QWidget* parent) :
     QtlDialog(parent),
     _settings(settings),
+    _help(help),
     _outDirs(),
     _useDvdBurnerCombo(false)
 {
@@ -130,6 +130,15 @@ QtlMovieEditSettings::QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* 
     setModelScreenSizes(_ui.boxIpadSize, QtlMovieDeviceProfile::iPadModels);
     setModelScreenSizes(_ui.boxIphoneSize, QtlMovieDeviceProfile::iPhoneModels);
     setModelScreenSizes(_ui.boxAndroidSize, QtlMovieDeviceProfile::androidModels);
+
+    // Remove help button if no help provided.
+    if (_help == 0) {
+        QAbstractButton* b = _ui.buttonBox->button(QDialogButtonBox::Help);
+        if (b != 0) {
+            _ui.buttonBox->removeButton(b);
+            delete b;
+        }
+    }
 
     // Load the initial values from the settings object.
     resetValues();
@@ -299,9 +308,9 @@ void QtlMovieEditSettings::help()
 {
     // Find help for the current tab.
     QWidget* current = _ui.tab->currentWidget();
-    if (current != 0) {
+    if (current != 0 && _help != 0) {
         // Use the object name of the tab as URL fragment (example: "#tabDirectories").
-        QtlMovieHelp::showHelp(this, QtlMovieHelp::User, current->objectName());
+        _help->showHelp(this, QtlMovieHelp::User, current->objectName());
     }
 }
 

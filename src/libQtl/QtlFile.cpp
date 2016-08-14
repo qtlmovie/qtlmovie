@@ -578,6 +578,43 @@ QString QtlFile::readTextFile(const QString& fileName)
 
 
 //-----------------------------------------------------------------------------
+// Write the content of a text file.
+//-----------------------------------------------------------------------------
+
+bool QtlFile::writeTextLinesFile(const QString& fileName, const QStringList& lines)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly)) {
+        return false;
+    }
+    else {
+        QTextStream stream(&file);
+        foreach (const QString& line, lines) {
+            stream << line << endl;
+        }
+        stream.flush();
+        file.close();
+        return true;
+    }
+}
+
+bool QtlFile::writeTextFile(const QString& fileName, const QString& text)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly)) {
+        return false;
+    }
+    else {
+        QTextStream stream(&file);
+        stream << text;
+        stream.flush();
+        file.close();
+        return true;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
 // Read a portion of a binary file at a given position.
 //-----------------------------------------------------------------------------
 

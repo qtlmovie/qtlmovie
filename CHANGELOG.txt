@@ -4,7 +4,8 @@ QtlMovie Change Log
 
 Version 1.9.1
 - The help system now uses the external browser. The style of the help files has
-  been reworked in a more modern way.
+  been reworked in a more modern way. In the settings, each tab now has a "Help"
+  button to get help on options on this tab.
 
 Version 1.9
 - Transcoding is now possible directly from an encrypted DVD. Previously,

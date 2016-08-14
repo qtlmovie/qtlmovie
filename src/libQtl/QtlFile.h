@@ -374,6 +374,46 @@ public:
     }
 
     //!
+    //! Write the content of a text file.
+    //! Error reporting is minimal.
+    //! @param [in] fileName Name of file to write.
+    //! @param [in] lines A list of strings containing the text lines of the file.
+    //! @return True on success, false on error.
+    //!
+    static bool writeTextLinesFile(const QString& fileName, const QStringList& lines);
+
+    //!
+    //! Write the text content of the file.
+    //! Error reporting is minimal.
+    //! @param [in] lines A list of strings containing the text lines of the file.
+    //! @return True on success, false on error.
+    //!
+    bool writeTextLines(const QStringList& lines)
+    {
+        return writeTextLinesFile(_fileName, lines);
+    }
+
+    //!
+    //! Write the content of a text file.
+    //! Error reporting is minimal.
+    //! @param [in] fileName Name of file to write.
+    //! @param [in] text The text content of the file.
+    //! @return True on success, false on error.
+    //!
+    static bool writeTextFile(const QString& fileName, const QString& text);
+
+    //!
+    //! Write the text content of the file.
+    //! Error reporting is minimal.
+    //! @param [in] text The text content of the file.
+    //! @return True on success, false on error.
+    //!
+    bool writeText(const QString& text)
+    {
+        return writeTextFile(_fileName, text);
+    }
+
+    //!
     //! Read a portion of a binary file at the current position.
     //! @param [in,out] device I/O device to read.
     //! @param [out] data Returned byte array containing the read data.

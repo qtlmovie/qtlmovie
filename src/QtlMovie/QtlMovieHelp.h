@@ -28,7 +28,7 @@
 //!
 //! @file QltMovieHelp.h
 //!
-//! Helper functions for displaying help.
+//! Declare the class QtlMovieHelp.
 //!
 //----------------------------------------------------------------------------
 
@@ -38,11 +38,21 @@
 #include "QtlCore.h"
 
 //!
-//! A class to enclose help functions.
+//! A class to display help files in an external browser.
 //!
 class QtlMovieHelp
 {
 public:
+    //!
+    //! Constructor.
+    //!
+    QtlMovieHelp();
+
+    //!
+    //! Virtual destructor.
+    //!
+    virtual ~QtlMovieHelp();
+
     //!
     //! The help file to open.
     //!
@@ -54,11 +64,25 @@ public:
 
     //!
     //! Display a help HTML file in the external browser.
-    //! @param [in] parent Parent object/widget. If not a widget, find first widget in its hierarchy.
+    //! @param [in] parent Parent object/widget for error messages. If not a widget, find first widget in its hierarchy.
     //! @param [in] type File type to open.
     //! @param [in] fragment Option fragment inside the help file (trailing "#fragment" in URL).
     //!
-    static void showHelp(QObject* parent, HelpFileType type, const QString& fragment = QString());
+    void showHelp(QObject* parent, HelpFileType type, const QString& fragment = QString());
+
+    //!
+    //! Build the URL for a help HTML file.
+    //! @param [in] parent Parent object/widget for error messages. If not a widget, find first widget in its hierarchy.
+    //! @param [in] type File type to open.
+    //! @param [in] fragment Option fragment inside the help file (trailing "#fragment" in URL).
+    //!
+    QUrl urlOf(QObject* parent, HelpFileType type, const QString& fragment = QString());
+
+private:
+    QTemporaryDir* _tempDir;  //!< Directory for temporary files.
+
+    // Unaccessible operations.
+    Q_DISABLE_COPY(QtlMovieHelp)
 };
 
 #endif // QLTMOVIEHELP_H

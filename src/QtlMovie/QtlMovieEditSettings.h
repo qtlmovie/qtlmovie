@@ -40,6 +40,7 @@
 #include "QtlMovieSettings.h"
 #include "QtlMovieOutputFile.h"
 #include "QtlMovieDeviceProfile.h"
+#include "QtlMovieHelp.h"
 #include "QtlFileDialogUtils.h"
 
 //!
@@ -54,9 +55,10 @@ public:
     //!
     //! Constructor.
     //! @param [in] settings The settings from which to load the initial values.
+    //! @param [in] help Object to display help.
     //! @param [in] parent Optional parent widget.
     //!
-    explicit QtlMovieEditSettings(QtlMovieSettings* settings, QWidget* parent = 0);
+    explicit QtlMovieEditSettings(QtlMovieSettings* settings, QtlMovieHelp* help, QWidget* parent = 0);
 
     //!
     //! Apply the settings values from the dialog box to the QtlTestSettings instance.
@@ -208,6 +210,7 @@ private:
     // Private fields.
     Ui::QtlMovieEditSettings _ui;                //!< UI from Qt Designer.
     QtlMovieSettings*        _settings;          //!< Associated QtlMovieSettings object.
+    QtlMovieHelp*            _help;              //!< Object to display help.
     OutputDirectoryMap       _outDirs;           //!< Output directories settings.
     bool                     _useDvdBurnerCombo; //!< Alternate combo box for DVD burner selection.
 

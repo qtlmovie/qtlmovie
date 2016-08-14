@@ -37,6 +37,7 @@
 
 #include "QtlStdoutLogger.h"
 #include "QtlMovieSettings.h"
+#include "QtlMovieHelp.h"
 #include <QSoundEffect>
 
 #if defined(QTL_WINEXTRAS)
@@ -198,6 +199,7 @@ private:
     QtlStdoutLogger      _defaultLog;      //!< Default logger, until set by application.
     QtlLogger*           _log;             //!< Application logger, typically a text window.
     QSoundEffect         _sound;           //!< Sound player for notification.
+    QtlMovieHelp         _help;            //!< To display help.
     bool                 _closePending;    //!< Close the application as soon as possible.
 
     // Unaccessible operations.
