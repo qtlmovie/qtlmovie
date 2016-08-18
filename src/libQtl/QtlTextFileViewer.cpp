@@ -32,7 +32,6 @@
 //----------------------------------------------------------------------------
 
 #include "QtlTextFileViewer.h"
-#include "ui_QtlTextFileViewer.h"
 #include "QtlFile.h"
 
 
@@ -45,31 +44,38 @@ QtlTextFileViewer::QtlTextFileViewer(QWidget* parent,
                                      const QString& title,
                                      const QString& icon) :
     QtlDialog(parent),
-    _ui(new Ui::QtlTextFileViewer)
+    _text(0)
 {
-    // Build the UI as defined in Qt Designer.
-    _ui->setupUi(this);
+    // Dialog layout.
+    resize(650, 500);
+    QVBoxLayout* layout = new QVBoxLayout(this);
 
-    // The defaut font for the text window is console-like.
-    _ui->text->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    // Text display.
+    _text = new QPlainTextEdit(this);
+    _text->setReadOnly(true);
+    _text->setAcceptDrops(false);
+    _text->setLineWrapMode(QPlainTextEdit::NoWrap);
+    _text->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    _text->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    layout->addWidget(_text);
+
+    // Button box.
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Close);
+    layout->addWidget(buttonBox);
+
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QtlTextFileViewer::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QtlTextFileViewer::reject);
 
     // Set the user-defined properties.
     setWindowTitle(title);
     if (!icon.isEmpty()) {
         setWindowIcon(QIcon(icon));
     }
-    setTextFile(fileName);
-}
-
-
-//----------------------------------------------------------------------------
-// Destructor.
-//----------------------------------------------------------------------------
-
-QtlTextFileViewer::~QtlTextFileViewer()
-{
-    delete _ui;
-    _ui = 0;
+    if (!fileName.isEmpty()) {
+        setTextFile(fileName);
+    }
 }
 
 
@@ -79,15 +85,20 @@ QtlTextFileViewer::~QtlTextFileViewer()
 
 void QtlTextFileViewer::setTextFile(const QString& fileName)
 {
-    _ui->text->setPlainText(QtlFile::readTextFile(fileName));
+    _text->setPlainText(QtlFile::readTextFile(fileName));
+}
+
+void QtlTextFileViewer::setText(const QString& text)
+{
+    _text->setPlainText(text);
 }
 
 QString QtlTextFileViewer::text() const
 {
-    return _ui->text->toPlainText();
+    return _text->toPlainText();
 }
 
 void QtlTextFileViewer::clear()
 {
-    _ui->text->setPlainText(QString());
+    _text->setPlainText(QString());
 }

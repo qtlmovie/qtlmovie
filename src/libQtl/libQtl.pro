@@ -54,8 +54,6 @@ SOURCES += \
     QtlAutoGrid.cpp \
     QtlTranslator.cpp \
     QtlVersion.cpp \
-    QtlNewVersionChecker.cpp \
-    QtlNewVersionCheckerJson.cpp \
     QtlSimpleWebRequest.cpp \
     QtlTextFileViewer.cpp \
     QtlSysInfo.cpp \
@@ -120,8 +118,6 @@ HEADERS += \
     QtlAutoGrid.h \
     QtlTranslator.h \
     QtlVersion.h \
-    QtlNewVersionChecker.h \
-    QtlNewVersionCheckerJson.h \
     QtlSimpleWebRequest.h \
     QtlTextFileViewer.h \
     QtlSysInfo.h \
@@ -168,10 +164,6 @@ HEADERS += \
     QtlSubStationAlphaParser.h \
     QtlSubStationAlphaStyle.h \
     QtlSubStationAlphaFrame.h
-
-FORMS += \
-    QtlBrowserDialog.ui \
-    QtlTextFileViewer.ui
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

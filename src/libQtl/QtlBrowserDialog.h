@@ -38,14 +38,8 @@
 #include "QtlCore.h"
 #include "QtlDialog.h"
 
-// UI from Qt Designer.
-namespace Ui {
-    class QtlBrowserDialog;
-}
-
 //!
 //! A subclass of QtlDialog which implements a browser.
-//! The design of the UI is done using Qt Designer.
 //!
 class QtlBrowserDialog : public QtlDialog
 {
@@ -64,11 +58,6 @@ public:
     explicit QtlBrowserDialog(QWidget *parent = 0, const QString& url = QString(), const QString& title = QString(), const QString& icon = QString());
 
     //!
-    //! Destructor.
-    //!
-    virtual ~QtlBrowserDialog();
-
-    //!
     //! Set the home URL.
     //! @param [in] url Source URL. When the HTML file is in the
     //! application's resources, use a syntax like "qrc:/help/index.html".
@@ -76,7 +65,7 @@ public:
     void setUrl(const QString& url);
 
 private:
-    Ui::QtlBrowserDialog* _ui; //!< UI from Qt Designer.
+    QTextBrowser* _text;  //!< HTML display.
 
     // Unaccessible operations.
     QtlBrowserDialog() Q_DECL_EQ_DELETE;

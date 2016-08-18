@@ -54,6 +54,8 @@ void QtlVersionTest::testConstructors()
     QVERIFY(v1.elementCount() == 0);
     QVERIFY(v1.values().isEmpty());
     QVERIFY(v1.text().isEmpty());
+    QVERIFY(!v1.isBeta());
+    QVERIFY(v1.betaIndex() == -1);
 
     QList<int> values;
     values << 3 << 1 << 27;
@@ -64,6 +66,8 @@ void QtlVersionTest::testConstructors()
     QVERIFY(v2.values().size() == 3);
     QVERIFY(v2.values() == values);
     QVERIFY(v2.text() == "3.1.27");
+    QVERIFY(!v2.isBeta());
+    QVERIFY(v2.betaIndex() == -1);
 
     QtlVersion v3("1.34-56.1");
     QVERIFY(v3.isValid());
@@ -74,6 +78,8 @@ void QtlVersionTest::testConstructors()
     QVERIFY(v3.values()[2] == 56);
     QVERIFY(v3.values()[3] == 1);
     QVERIFY(v3.text() == "1.34-56.1");
+    QVERIFY(!v3.isBeta());
+    QVERIFY(v3.betaIndex() == -1);
 
     QtlVersion v4(v3);
     QVERIFY(v4.isValid());
@@ -84,7 +90,29 @@ void QtlVersionTest::testConstructors()
     QVERIFY(v4.values()[2] == 56);
     QVERIFY(v4.values()[3] == 1);
     QVERIFY(v4.text() == "1.34-56.1");
+    QVERIFY(!v4.isBeta());
+    QVERIFY(v4.betaIndex() == -1);
     QVERIFY(v4 == v3);
+
+    QtlVersion v5("1.3.17.beta456");
+    QVERIFY(v5.isValid());
+    QVERIFY(v5.elementCount() == 3);
+    QVERIFY(v5.values().size() == 3);
+    QVERIFY(v5.values()[0] == 1);
+    QVERIFY(v5.values()[1] == 3);
+    QVERIFY(v5.values()[2] == 17);
+    QVERIFY(v5.text() == "1.3.17.beta456");
+    QVERIFY(v5.isBeta());
+    QVERIFY(v5.betaIndex() == 456);
+
+    QtlVersion v6(values, 2);
+    QVERIFY(v6.isValid());
+    QVERIFY(v6.elementCount() == 3);
+    QVERIFY(v6.values().size() == 3);
+    QVERIFY(v6.values() == values);
+    QVERIFY(v6.text() == "3.1.27-rc2");
+    QVERIFY(v6.isBeta());
+    QVERIFY(v6.betaIndex() == 2);
 }
 
 // Test case: basic operations.
@@ -135,4 +163,10 @@ void QtlVersionTest::testOperations()
     QVERIFY(QtlVersion("1.3.4") > QtlVersion("1.3"));
     QVERIFY(QtlVersion("1.2") > QtlVersion("1.1.34"));
     QVERIFY(QtlVersion("1.3.1") < QtlVersion("1.3.2"));
+    QVERIFY(QtlVersion("1.3-beta2") < QtlVersion("1.3"));
+    QVERIFY(QtlVersion("1.3-beta2") < QtlVersion("1.3-1"));
+    QVERIFY(QtlVersion("1.3-beta2") != QtlVersion("1.3-2"));
+    QVERIFY(QtlVersion("1.3-beta2") == QtlVersion("1.3-rc2"));
+    QVERIFY(QtlVersion("1.3-beta3") > QtlVersion("1.3-rc2"));
+    QVERIFY(QtlVersion("1.3-beta2") < QtlVersion("1.3-rc3"));
 }

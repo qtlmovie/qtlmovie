@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2015, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,68 +25,21 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//!
-//! @file QtlTextFileViewer.h
-//!
-//! Declare the class QtlTextFileViewer.
-//!
+//
+// Get the version of the product.
+//
 //----------------------------------------------------------------------------
 
-#ifndef QTLTEXTFILEVIEWER_H
-#define QTLTEXTFILEVIEWER_H
+#include "QtlMovieVersion.h"
 
-#include "QtlCore.h"
-#include "QtlDialog.h"
 
-//!
-//! A subclass of QtlDialog which displays the content of a text file.
-//!
-class QtlTextFileViewer : public QtlDialog
+//----------------------------------------------------------------------------
+// Get the actual version of the product.
+//----------------------------------------------------------------------------
+
+QString qtlMovieVersion()
 {
-    Q_OBJECT
-
-public:
-    //!
-    //! Constructor.
-    //! @param [in] parent Optional parent widget.
-    //! @param [in] fileName Optional text file name.
-    //! @param [in] title Optional dialog window title.
-    //! @param [in] icon Optional icon file name.
-    //!
-    explicit QtlTextFileViewer(QWidget *parent = 0,
-                               const QString& fileName = QString(),
-                               const QString& title = QString(),
-                               const QString& icon = QString());
-
-    //!
-    //! Load a new text file to display in the box.
-    //! @param [in] fileName Text file name.
-    //!
-    void setTextFile(const QString& fileName);
-
-    //!
-    //! Set a new text to display in the box.
-    //! @param [in] text Text content.
-    //!
-    void setText(const QString& text);
-
-    //!
-    //! Get the text content of the viewer.
-    //! @return The text content of the viewer.
-    //!
-    QString text() const;
-
-    //!
-    //! Clear the text content.
-    //!
-    void clear();
-
-private:
-    QPlainTextEdit* _text;  //!< Text viewer.
-
-    // Unaccessible operations.
-    QtlTextFileViewer() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlTextFileViewer)
-};
-
-#endif // QTLTEXTFILEVIEWER_H
+    // For debug purpose, the environment variable QTLMOVIE_VERSION_DEBUG can be set to an alternate value.
+    const QString alternateVersion(qgetenv("QTLMOVIE_VERSION_DEBUG"));
+    return alternateVersion.isEmpty() ? QStringLiteral(QTLMOVIE_VERSION) : alternateVersion;
+}

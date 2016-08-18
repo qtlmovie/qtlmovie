@@ -63,19 +63,19 @@ Ligne %3, colonne %4</translation>
         <translation>Valeur entière %1 invalide dans l&apos;élément &lt;%2&gt;</translation>
     </message>
     <message>
-        <location filename="../QtlMovieHelp.cpp" line="58"/>
+        <location filename="../QtlMovieHelp.cpp" line="92"/>
         <source>Invalid help file</source>
         <translation>Fichier d&apos;aide invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieHelp.cpp" line="89"/>
+        <location filename="../QtlMovieHelp.cpp" line="123"/>
         <source>Cannot find help files.
 Try to reinstall QtlMovie.</source>
         <translation>Impossible de trouver les fichiers d&apos;aide.
 Essayer de réinstaller QtlMovie.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieHelp.cpp" line="104"/>
+        <location filename="../QtlMovieHelp.cpp" line="68"/>
         <source>Error opening browser.
 See %1</source>
         <translation>Erreur de lancement du navigateur.
@@ -591,7 +591,7 @@ Les remplacer?</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="34"/>
-        <location filename="../QtlMovieEditSettings.h" line="131"/>
+        <location filename="../QtlMovieEditSettings.h" line="133"/>
         <source>Default input directory</source>
         <translation>Répertoire d&apos;entrée par défaut</translation>
     </message>
@@ -1051,67 +1051,67 @@ Les remplacer?</translation>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="161"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="170"/>
         <source>No default %1 found</source>
         <translation>Pas trouvé de %1 par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="164"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="173"/>
         <source>Default: %1</source>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="329"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="338"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="435"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="444"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="448"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="457"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="574"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="583"/>
         <source>%1 bit / second for %2x%3 @%4</source>
         <translation>%1 bit / seconde pour %2x%3 @%4</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="83"/>
+        <location filename="../QtlMovieEditSettings.h" line="85"/>
         <source>Locate FFmpeg executable</source>
         <translation>Recherche de l&apos;exécutable FFmpeg</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="91"/>
+        <location filename="../QtlMovieEditSettings.h" line="93"/>
         <source>Locate FFprobe executable</source>
         <translation>Recherche de l&apos;exécutable FFprobe</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="99"/>
+        <location filename="../QtlMovieEditSettings.h" line="101"/>
         <source>Locate DvdAuthor executable</source>
         <translation>Recherche de l&apos;exécutable  DVD Author</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="107"/>
+        <location filename="../QtlMovieEditSettings.h" line="109"/>
         <source>Locate Mkisofs executable</source>
         <translation>Recherche de l&apos;exécutable mkisofs</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="115"/>
+        <location filename="../QtlMovieEditSettings.h" line="117"/>
         <source>Locate Growisofs executable</source>
         <translation>Recherche de l&apos;exécutable growisofs</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="123"/>
+        <location filename="../QtlMovieEditSettings.h" line="125"/>
         <source>Locate CCExtractor executable</source>
         <translation>Recherche de l&apos;exécutable CCExtractor</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.h" line="139"/>
+        <location filename="../QtlMovieEditSettings.h" line="141"/>
         <source>Default DVD extraction directory</source>
         <translation>Répertoire de sortie par défaut pour l&apos;extraction DVD</translation>
     </message>
@@ -1828,29 +1828,102 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieMainWindowBase</name>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="204"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="203"/>
         <source>Internal error, invalid cancel state</source>
         <translation>Erreur interne, état d&apos;annulation invalide</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="253"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="252"/>
         <source>About QtlMovie</source>
         <translation>A propos de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="263"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="262"/>
         <source>A specialized Qt front-end for&lt;br/&gt;FFmpeg and other free media tools</source>
         <translation>Une interface Qt spécialisée pour &lt;br/&gt;FFmpeg et autres outils media</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="264"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="263"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieMainWindowBase.cpp" line="289"/>
+        <location filename="../QtlMovieMainWindowBase.cpp" line="288"/>
         <source>QtlMovie Release Notes</source>
         <translation>Historique des versions de QtlMovie</translation>
+    </message>
+</context>
+<context>
+    <name>QtlMovieNewVersion</name>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="112"/>
+        <source>End of search in %1</source>
+        <translation>Fin de recherche sur %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="121"/>
+        <source>Server response: %1</source>
+        <translation>Réponse du serveur: %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="138"/>
+        <source>Invalid response from server</source>
+        <translation>Réponse du serveur invalide</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="146"/>
+        <source>A new version of QtlMovie is available</source>
+        <translation>Une nouvelle version de QtlMovie est disponible</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="147"/>
+        <source>Your version is %1, latest version is %2</source>
+        <translation>Votre version est %1, la dernière est %2</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="319"/>
+        <source>&lt;p&gt;Download latest version %1&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Télécharger la dernière version %1&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="319"/>
+        <source>here</source>
+        <translation>ici</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="343"/>
+        <source>QtlMovie New Version</source>
+        <translation>Nouvelle Version de QtlMovie</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="358"/>
+        <source>New features :</source>
+        <translation>Nouveautés :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="380"/>
+        <source>Download QtlMovie %1</source>
+        <translation>Télécharger QtlMovie %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="392"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="150"/>
+        <source>You are using the latest version of QtlMovie</source>
+        <translation>Vous utilisez la version la plus à jour de QtlMovie</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="153"/>
+        <source>Your version of QtlMovie is %1&lt;br/&gt;More recent than %2, the latest available online</source>
+        <translation>Votre version de QtlMovie est la %1&lt;br/&gt;Plus récente que la %2, la plus récente en ligne</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieNewVersion.cpp" line="314"/>
+        <source>No new version found, this: %1, latest: %2</source>
+        <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
     </message>
 </context>
 <context>

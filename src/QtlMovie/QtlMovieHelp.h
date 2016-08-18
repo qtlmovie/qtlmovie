@@ -26,14 +26,14 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QltMovieHelp.h
+//! @file QtlMovieHelp.h
 //!
 //! Declare the class QtlMovieHelp.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QLTMOVIEHELP_H
-#define QLTMOVIEHELP_H
+#ifndef QTLMOVIEHELP_H
+#define QTLMOVIEHELP_H
 
 #include "QtlCore.h"
 
@@ -85,4 +85,4 @@ private:
     Q_DISABLE_COPY(QtlMovieHelp)
 };
 
-#endif // QLTMOVIEHELP_H
+#endif // QTLMOVIEHELP_H

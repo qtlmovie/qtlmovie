@@ -2228,7 +2228,7 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlBrowserDialog</name>
     <message>
-        <location filename="../QtlBrowserDialog.ui" line="33"/>
+        <location filename="../QtlBrowserDialog.cpp" line="70"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -2450,82 +2450,6 @@ L&apos;application va s&apos;arrêter</translation>
     </message>
 </context>
 <context>
-    <name>QtlNewVersionChecker</name>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="131"/>
-        <source>Found version %1 at %2</source>
-        <translation>Version %1 trouvée dans %2</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="142"/>
-        <source>End of search in %1</source>
-        <translation>Fin de recherche dans %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="149"/>
-        <source>A new version of %1 is available&lt;br/&gt;Your version is %2&lt;br/&gt;Version %3 is available online at:&lt;br/&gt;%4</source>
-        <translation>Une nouvelle version de %1 est disponible&lt;br/&gt;Votre version est la %2&lt;br/&gt;La version %3 est disponible en ligne sur:&lt;br/&gt;%4</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="160"/>
-        <source>Unable to find any version of %1 online</source>
-        <translation>Impossible de trouver une quelconque version de %1 en ligne</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="163"/>
-        <source>You are using the latest version of %1</source>
-        <translation>Vous utilisez la version la plus à jour de %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="168"/>
-        <source>Your version of %1 is %2&lt;br/&gt;More recent than %3, the latest available online</source>
-        <translation>Votre version de %1 est la %2&lt;br/&gt;Plus récente que la %3, la plus récente en ligne</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionChecker.cpp" line="157"/>
-        <source>No new version found, this: %1, latest: %2</source>
-        <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
-    </message>
-</context>
-<context>
-    <name>QtlNewVersionCheckerJson</name>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="121"/>
-        <source>Server response: %1</source>
-        <translation>Réponse du serveur: %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="138"/>
-        <source>Invalid response from server</source>
-        <translation>Réponse invalide du serveur</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="157"/>
-        <source>End of search in %1</source>
-        <translation>Fin de recherche dans %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="166"/>
-        <source>A new version of %1 is available&lt;br/&gt;Your version is %2&lt;br/&gt;Version %3 is available online at:&lt;br/&gt;%4</source>
-        <translation>Une nouvelle version de %1 est disponible&lt;br/&gt;Votre version est la %2&lt;br/&gt;La version %3 est disponible en ligne sur:&lt;br/&gt;%4</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="174"/>
-        <source>No new version found, this: %1, latest: %2</source>
-        <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="177"/>
-        <source>You are using the latest version of %1</source>
-        <translation>Vous utilisez la version la plus à jour de %1</translation>
-    </message>
-    <message>
-        <location filename="../QtlNewVersionCheckerJson.cpp" line="182"/>
-        <source>Your version of %1 is %2&lt;br/&gt;More recent than %3, the latest available online</source>
-        <translation>Votre version de %1 est la %2&lt;br/&gt;Plus récente que la %3, la plus récente en ligne</translation>
-    </message>
-</context>
-<context>
     <name>QtlPasswordDialog</name>
     <message>
         <location filename="../QtlPasswordDialog.cpp" line="48"/>
@@ -2637,39 +2561,39 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlSimpleWebRequest</name>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="129"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="133"/>
         <source>Found %1 proxies, using proxy %2:%3</source>
         <translation>%1 proxies détectés, utilisation du proxy %2:%3</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="156"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="160"/>
         <source>Fetching %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="160"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="164"/>
         <source>Error browsing %1</source>
         <translation>Erreur de recherche sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="207"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="216"/>
         <source>Maximum response size exceeded from %1</source>
         <translation>Taille maximum de réponse dépassée pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="230"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="246"/>
         <source>Download failed: %1</source>
         <translation>Erreur de téléchargement: %1</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="236"/>
+        <location filename="../QtlSimpleWebRequest.cpp" line="252"/>
         <source>Too many redirections on %1</source>
         <translation>Trop de redirections sur %1</translation>
     </message>
     <message>
-        <location filename="../QtlSimpleWebRequest.cpp" line="245"/>
-        <source>End of download of %1</source>
-        <translation>Fin de téléchargement de %1</translation>
+        <location filename="../QtlSimpleWebRequest.cpp" line="261"/>
+        <source>End of download of %1, content type: %2</source>
+        <translation>Fin de téléchargement de %1, type du contenu: %2</translation>
     </message>
 </context>
 <context>

@@ -1,0 +1,90 @@
+QtlMovie checks the availability of a new version using the following scenario:
+
+1. QtlMovie sends a request to http://qtlmovie.sourceforge.net/newversion/
+
+2. The HTTP requests contains a cookie named "target". Its content is a
+   Base64-encoded JSON structure containing the current version of QtlMovie
+   and a description of the target system, mainly the operating system and
+   CPU architecture.
+
+3. The request is served by a PHP script. The source of this script is
+   sourceforge/web/newversion/index.php.
+
+4. The PHP script searches the latest version of QtlMovie for the target
+   operating system and CPU architecture and returns a response in JSON format.
+   The returned JSON structure contains a status indicating whether or not
+   a new version is available. It also contains the URL of the latest version
+   for the target and the URL of the release notes.
+
+This process is triggeded by "Help" => "Search new version" or automatically
+on application startup if the option "Automatically search for a new version
+on startup" is checked.
+
+Currently, the distribution files for QtlMovie are hosted by SourceForge at
+http://sourceforge.net/projects/qtlmovie/files (with subdirectories win32,
+win64, mac, fedora, ubuntu and src as fallback). This is where the PHP script
+is looking for new versions.
+
+If the distribution location is changed, update the PHP script index.php at 
+http://qtlmovie.sourceforge.net/newversion/. This is sufficient. All QtlMovie
+instances will receive a response with the new location.
+
+Debuging the PHP script
+-----------------------
+Do not debug on SourceForge, this is where the installed QtlMovie are looking
+at and you would break or confuse them!
+
+Suggested method:
+
+- Install a WAMP or LAMP system on the development system.
+
+- Configure an alias pointing to sourceforge/web/newversion in the source tree.
+  Sample configuration of the alias:
+
+  Alias /qtlnewversion/ "/Path/to/QtlMovie/sourceforge/web/newversion/" 
+
+  <Directory "/Path/to/QtlMovie/sourceforge/web/newversion/">
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride all
+      Order allow,deny
+    Allow from all
+    Require local
+  </Directory>
+
+- If the development system uses a proxy to access the Internet, update the
+  PHP configuration file the following way. This example is based on a WAMP
+  installation, adapt to your configuration.
+
+  Create a file C:\wamp\setProxy.php containing;
+
+  <?php
+  $default_opts = array('http'=>array('proxy'=>"tcp://ip-address:port"));
+  $default = stream_context_set_default($default_opts);
+  ?>
+
+  Of course, replace ip-address:port by the proxy address and port.
+
+  Locate the _actual_ php.ini configuration file. Warning, several php.ini
+  may exist. You have to locate the right one. In case of doubt, use phpinfo().
+  In a WAMP installation, this will be C:\wamp\bin\apache\apache2.4.9\bin\php.ini.
+  In php.ini, update the auto_prepend_file directive (note the forward slashes
+  in the file name):
+
+  auto_prepend_file = "C:/wamp/setProxy.php"
+
+  This way, the file C:\wamp\setProxy.php will be executed before all PHP
+  scripts and the proxy will be set all the time.
+
+- Before running QtlMovie, define the following environment variable:
+
+  QTLMOVIE_NEWVERSION_URL=http://localhost/qtlnewversion/
+
+  This overrides the default http://qtlmovie.sourceforge.net/newversion/
+
+- For the purpose of debugging, if you need to override the current version to
+  something specific, define the following environment variable:
+
+  QTLMOVIE_VERSION_DEBUG=1.6-rc2
+
+  This overrides the default built-in version and QtlMovie will behave as if it
+  was version 1.6-rc2 in the search for a new version.

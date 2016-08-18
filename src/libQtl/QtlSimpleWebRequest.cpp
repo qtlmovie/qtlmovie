@@ -57,6 +57,7 @@ QtlSimpleWebRequest::QtlSimpleWebRequest(const QString& url, QObject* parent, Qt
     _netwManager(),
     _reply(0),
     _text(),
+    _contentType(),
     _redirected(0)
 {
 }
@@ -122,6 +123,9 @@ void QtlSimpleWebRequest::startRequest(const QUrl& url)
     // Keep track of current URL.
     _url = url;
 
+    // Reset previous content (in case of redirection).
+    _text.clear();
+
     // If a list of proxies is defined in the system, use the first one.
     const QList<QNetworkProxy> proxies(QNetworkProxyFactory::systemProxyForQuery(QNetworkProxyQuery(url)));
     if (!proxies.empty()) {
@@ -179,7 +183,12 @@ void QtlSimpleWebRequest::emitCompleted(const QString& error)
 
         // Emit the signal for clients.
         const bool success = error.isEmpty();
-        emit completed(success, _url, success ? _text : error);
+        if (success) {
+            emit completed(success, _url, _text, _contentType);
+        }
+        else {
+            emit completed(success, _url, error, QString());
+        }
 
         // If a reply was in progress, delete it asap.
         if (_reply != 0) {
@@ -225,6 +234,13 @@ void QtlSimpleWebRequest::httpFinished()
     const QNetworkReply::NetworkError error = _reply->error();
     const QUrl redirection(_reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
 
+    // Get response mime type.
+    _contentType = _reply->header(QNetworkRequest::ContentTypeHeader).toString();
+
+    // Keep only the actual mime type.
+    _contentType.remove(QRegExp(";.*"));
+    _contentType = _contentType.trimmed();
+
     if (error != QNetworkReply::NoError) {
         // Network error.
         emitCompleted(tr("Download failed: %1").arg(_reply->errorString()));
@@ -242,7 +258,7 @@ void QtlSimpleWebRequest::httpFinished()
     }
     else {
         // End of search.
-        _log->debug(tr("End of download of %1").arg(_url.toString()));
+        _log->debug(tr("End of download of %1, content type: %2").arg(_url.toString()).arg(_contentType));
         emitCompleted("");
     }
 }

@@ -70,15 +70,24 @@ public:
     //!
     //! Set the URL of the request.
     //! Must be called before start(). Ignored otherwise.
-    //! @param url URL of the request.
+    //! @param [in] url URL of the request.
     //!
     void setUrl(const QString& url);
 
     //!
+    //! Get the URL of the request.
+    //! @return URL of the request.
+    //!
+    QUrl url() const
+    {
+        return _url;
+    }
+
+    //!
     //! Add a cookie for the request.
     //! Must be called before start(). Ignored otherwise.
-    //! @param name Cookie name.
-    //! @param value Cookie value.
+    //! @param [in] name Cookie name.
+    //! @param [in] value Cookie value.
     //!
     void addCookie(const QString& name, const QString& value);
 
@@ -115,8 +124,10 @@ signals:
     //! URL is some redirection occured.
     //! @param [in] response If @a success is true, contains the text of the response.
     //! If @a status is false, contains an error message.
+    //! @param [in] mimeType If @a success is true, contains the MIME type of the response.
+    //! Examples: "text/html", "text/plain", "application/json".
     //!
-    void completed(bool success, const QUrl& url, const QString& response);
+    void completed(bool success, const QUrl& url, const QString& response, const QString& mimeType);
 
 private slots:
     //!
@@ -139,6 +150,7 @@ private:
     QNetworkAccessManager _netwManager;     //!< Network manager for all requests.
     QNetworkReply*        _reply;           //!< HTTP reply.
     QString               _text;            //!< Returned text.
+    QString               _contentType;     //!< MIME content type.
     int                   _redirected;      //!< Number of redirections.
 
     //!

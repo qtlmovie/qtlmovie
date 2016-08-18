@@ -43,7 +43,13 @@
 //!
 //! A version is typically a list of integers.
 //! The text representation is the list of integers, separated by dots or dashes.
+//!
 //! Examples: "1", "1.3.0", "1.2-45".
+//!
+//! If the last field starts with letters and ends with digits, it is considered
+//! as a "beta" or "early" version, preceeding the official release.
+//!
+//! Examples: "1.2-beta1", "4.3.7-rc2".
 //!
 class QtlVersion
 {
@@ -52,29 +58,22 @@ public:
     //! Default constructor.
     //! The version is invalid.
     //!
-    QtlVersion()
-    {
-    }
+    QtlVersion();
 
     //!
     //! Constructor.
     //! @param [in] text Text representation of the version.
     //! The version is invalid if the syntax of @a text is incorrect.
     //!
-    QtlVersion(const QString& text)
-    {
-        setText(text);
-    }
+    QtlVersion(const QString& text);
 
     //!
     //! Constructor.
     //! @param [in] values List of integer values.
+    //! @param [in] beta Beta release index. Ignored if negative (the default).
     //! The version is invalid if the list is empty or any value is negative.
     //!
-    QtlVersion(const QList<int> values)
-    {
-        setValues(values);
-    }
+    QtlVersion(const QList<int>& values, int beta = -1);
 
     //!
     //! Get the version as a list of integer values.
@@ -86,11 +85,30 @@ public:
     }
 
     //!
+    //! Check if this is a beta release.
+    //! @return True for beta release, false for official release.
+    //!
+    bool isBeta() const
+    {
+        return _beta >= 0;
+    }
+
+    //!
+    //! Get the beta release index.
+    //! @return Beta release index, -1 for official release.
+    //!
+    int betaIndex() const
+    {
+        return _beta;
+    }
+
+    //!
     //! Set the version from a list of integer values.
     //! @param [in] values List of integer values.
+    //! @param [in] beta Beta release index. Ignored if negative (the default).
     //! The version is invalid if the list is empty or any value is negative.
     //!
-    void setValues(const QList<int>& values);
+    void setValues(const QList<int>& values, int beta = -1);
 
     //!
     //! Get the textual representation of the version.
@@ -113,10 +131,7 @@ public:
     //! @return True if this instance is equal to @a other.
     //! False otherwise.
     //!
-    bool operator==(const QtlVersion& other) const
-    {
-        return _values == other._values;
-    }
+    bool operator==(const QtlVersion& other) const;
 
     //!
     //! Comparison operator.
@@ -126,7 +141,7 @@ public:
     //!
     bool operator!=(const QtlVersion& other) const
     {
-        return _values != other._values;
+        return !(*this == other);
     }
 
     //!
@@ -193,14 +208,11 @@ public:
     //!
     //! Invalidate the version content.
     //!
-    void clear()
-    {
-        _values.clear();
-        _text.clear();
-    }
+    void clear();
 
 private:
     QList<int> _values; //!< The list of integer values.
+    int        _beta;   //!< Beta release index, negative for release versions.
     QString    _text;   //!< Original textual representation.
 };
 

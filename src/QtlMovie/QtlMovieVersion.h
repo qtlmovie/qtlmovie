@@ -35,9 +35,17 @@
 #ifndef QTLMOVIEVERSION_H
 #define QTLMOVIEVERSION_H
 
+#include <QString>
+
 //!
 //! Version of the product.
 //!
-#define QTLMOVIE_VERSION "1.9.1"
+#define QTLMOVIE_VERSION "1.9.1-rc1"
+
+//!
+//! Get the actual version of the product.
+//! @return Actual version of the product.
+//!
+QString qtlMovieVersion();
 
 #endif // QTLMOVIEVERSION_H

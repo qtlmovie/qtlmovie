@@ -79,7 +79,9 @@ SOURCES += main.cpp \
     QtlMovieDvdExtractionWindow.cpp \
     QtlMovieCleanupSubtitles.cpp \
     QtlMovieConvertSubStationAlpha.cpp \
-    QtlMovieHelp.cpp
+    QtlMovieNewVersion.cpp \
+    QtlMovieHelp.cpp \
+    QtlMovieVersion.cpp
 
 HEADERS += \
     QtlMovieMainWindow.h \
@@ -120,6 +122,7 @@ HEADERS += \
     QtlMovieDvdExtractionWindow.h \
     QtlMovieCleanupSubtitles.h \
     QtlMovieConvertSubStationAlpha.h \
+    QtlMovieNewVersion.h \
     QtlMovieHelp.h
 
 FORMS += QtlMovieMainWindow.ui \
@@ -134,12 +137,6 @@ RESOURCES += QtlMovie.qrc
 
 win32:RC_FILE += QtlMovie.rc
 mac:ICON = images/qtlmovie.icns
-
-OTHER_FILES += \
-    help/qtlmovie.html \
-    help/qtlmovie-user.html \
-    help/qtlmovie-build.html \
-    help/default.css
 
 TRANSLATIONS += \
     locale/qtlmovie_fr.ts

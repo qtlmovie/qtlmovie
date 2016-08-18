@@ -40,11 +40,12 @@
 //
 // Web references.
 //
-#define WEBREF_QTLMOVIE         "http://qtlmovie.sourceforge.net"
-#define WEBREF_QTLMOVIE_SUPPORT "http://github.com/qtlmovie/qtlmovie/issues"
-#define WEBREF_TELXCC           "http://github.com/petrkutalek/telxcc"
-#define WEBREF_LIBDVDCSS        "http://www.videolan.org/developers/libdvdcss.html"
-#define WEBREF_DESIGNBOLT       "http://www.designbolts.com"
+#define WEBREF_QTLMOVIE_HOME       "http://qtlmovie.sourceforge.net"
+#define WEBREF_QTLMOVIE_NEWVERSION "http://qtlmovie.sourceforge.net/newversion/"
+#define WEBREF_QTLMOVIE_SUPPORT    "http://github.com/qtlmovie/qtlmovie/issues"
+#define WEBREF_TELXCC              "http://github.com/petrkutalek/telxcc"
+#define WEBREF_LIBDVDCSS           "http://www.videolan.org/developers/libdvdcss.html"
+#define WEBREF_DESIGNBOLT          "http://www.designbolts.com"
 
 //
 // Default values for general options.

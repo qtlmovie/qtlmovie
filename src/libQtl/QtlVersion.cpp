@@ -36,24 +36,55 @@
 
 
 //----------------------------------------------------------------------------
+// Constructors and destructors.
+//----------------------------------------------------------------------------
+
+QtlVersion::QtlVersion() :
+    _values(),
+    _beta(-1),
+    _text()
+{
+}
+
+QtlVersion::QtlVersion(const QString& text)
+{
+    setText(text);
+}
+
+QtlVersion::QtlVersion(const QList<int>& values, int beta)
+{
+    setValues(values, beta);
+}
+
+void QtlVersion::clear()
+{
+    _values.clear();
+    _beta = -1;
+    _text.clear();
+}
+
+
+//----------------------------------------------------------------------------
 // Set the version from a list of integer values.
 //----------------------------------------------------------------------------
 
-void QtlVersion::setValues(const QList<int>& values)
+void QtlVersion::setValues(const QList<int>& values, int beta)
 {
     // There is not original text representation.
-    _text.clear();
+    clear();
 
     // Check that no value is negative.
     foreach (int i, values) {
         if (i < 0) {
-            _values.clear();
             return;
         }
     }
 
     // All values are correct.
     _values = values;
+
+    // Make sure that beta has no other negative value than -1.
+    _beta = beta < 0 ? -1 : beta;
 }
 
 
@@ -72,6 +103,11 @@ QString QtlVersion::text() const
             }
             text.append(QString::number(i));
         }
+        if (_beta >= 0) {
+            // Default "beta" prefix is "rc" (release candidate).
+            text.append("-rc");
+            text.append(QString::number(_beta));
+        }
         return text;
     }
     else {
@@ -88,37 +124,57 @@ QString QtlVersion::text() const
 void QtlVersion::setText(const QString& text)
 {
     // Clear the content.
-    _values.clear();
-    _text.clear();
+    clear();
+
+    // Keep the original representation.
+    _text = text;
 
     // Cut the version string.
-    const QStringList fields(text.split(QRegExp("[-\\.]"), QString::SkipEmptyParts));
+    QStringList fields(text.split(QRegExp("[-\\.]"), QString::SkipEmptyParts));
+
+    // If the last field starts with a letter, this is beta version.
+    if (!fields.isEmpty() && !fields.last().isEmpty() && fields.last().at(0).isLetter()) {
+        // Remove last field.
+        QString s(fields.takeLast());
+        // Remove all leading non-digit characters.
+        s.remove(QRegExp("^\\D*"));
+        // Interpret the rest as a positive number.
+        _beta = qtlToInt(s, -1, 0);
+        if (_beta < 0) {
+            clear();
+            return;
+        }
+    }
 
     // Build the list of integers.
     foreach (const QString& s, fields) {
         const int i = qtlToInt(s, -1, 0);
         if (i < 0) {
-            _values.clear();
+            clear();
             return;
         }
         _values << i;
     }
-
-    // Keep the original representation.
-    _text = text;
 }
 
 
 //----------------------------------------------------------------------------
-// Comparison operator.
+// Comparison operators.
 //----------------------------------------------------------------------------
+
+bool QtlVersion::operator==(const QtlVersion& other) const
+{
+    return _values == other._values && _beta == other._beta;
+}
 
 bool QtlVersion::operator <(const QtlVersion& other) const
 {
     // Compare field by field.
     for (int i = 0; i < _values.size(); ++i) {
         if (i >= other._values.size()) {
-            // This instance has more fields, it is greater than other.
+            // This instance has more fields than other and all previous fields were identical.
+            // This instance is greater than other.
+            // Example: "1.2.3.1" > "1.2.3"
             return false;
         }
         if (_values[i] != other._values[i]) {
@@ -127,6 +183,23 @@ bool QtlVersion::operator <(const QtlVersion& other) const
         }
     }
 
-    // Other has at least as much components as this and are all identical.
-    return _values.size() < other._values.size();
+    // Other has at least as many components as this and are all identical.
+    if (_values.size() < other._values.size()) {
+        // This instance has less fields than other and all previous fields were identical.
+        // This instance is lower than other.
+        // Example: "1.2.3" < "1.2.3.1"
+        return true;
+    }
+    else if (isBeta() == other.isBeta()) {
+        // All values are identical. This instance and other are either both beta
+        // releases or both official releases. If they are both official releases,
+        // they are equal and we must return false.
+        return _beta < other._beta;
+    }
+    else {
+        // All values are identical. One of this instance and other is beta and
+        // the other one is an official releases. The beta version preceeds the
+        // official version.
+        return _beta >= 0;
+    }
 }

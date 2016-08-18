@@ -38,6 +38,7 @@
 #include "QtlStdoutLogger.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieHelp.h"
+#include "QtlMovieNewVersion.h"
 #include <QSoundEffect>
 
 #if defined(QTL_WINEXTRAS)

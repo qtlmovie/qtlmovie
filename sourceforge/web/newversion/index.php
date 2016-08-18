@@ -2,31 +2,78 @@
 // PHP script for http://qtlmovie.sourceforge.net/newversion/
 
 //----------------------------------------------------------------------------
+// Analyze a version string.
+// Return an array with two elements:
+// 'values' => array of integers.
+// 'beta' => beta index (such as in -rc1 or -beta2), -1 if no beta index.
+//----------------------------------------------------------------------------
+
+function analyzeVersion($v)
+{
+    $result = array('values' => array(), 'beta' => -1);
+
+    // Split version string in fields.
+    $fields = preg_split("/[-\\.]+/", $v, -1, PREG_SPLIT_NO_EMPTY);
+
+    // Extract beta information from last field if it starts with a letter.
+    if (count($fields) > 0 && preg_match("/^[A-Za-z]/", end($fields))) {
+        // Remove last element from $fields, remove all letters.
+        $last = preg_replace("/[A-Za-z]*/", "", array_pop($fields));
+        $result['beta'] = (int)$last;
+    }
+
+    // Convert all fields to integer.
+    foreach ($fields as $f) {
+        array_push($result['values'], (int)$f);
+    }
+
+    return $result;
+}
+
+
+//----------------------------------------------------------------------------
 // Compare two version strings.
 // Return -1, 0, 1 if $v1 is lower than, equal to, greater than $v2.
 //----------------------------------------------------------------------------
 
 function compareVersions($v1, $v2)
 {
-    // Split version strings in integer fields, all other characters are separators.
-    $f1 = preg_split("/[^0-9]+/", $v1, -1, PREG_SPLIT_NO_EMPTY);
-    $f2 = preg_split("/[^0-9]+/", $v2, -1, PREG_SPLIT_NO_EMPTY);
+    $a1 = analyzeVersion($v1);
+    $a2 = analyzeVersion($v2);
+
+    $c1 = count($a1['values']);
+    $c2 = count($a2['values']);
 
     // Compare the integer fields in sequence.
-    for ($i = 0; $i < count($f1); $i++) {
-        if ($i >= count($f2)) {
+    for ($i = 0; $i < $c1; $i++) {
+        if ($i >= $c2) {
             // $v1 has more fields than $v2 and are all identical so far.
             return 1;
         }
-        $i1 = (int)$f1[$i];
-        $i2 = (int)$f2[$i];
+        $i1 = $a1['values'][$i];
+        $i2 = $a2['values'][$i];
         if ($i1 != $i2) {
             // Both versions differ at this point.
             return $i1 < $i2 ? -1 : 1;
         }
     }
+
     // $v2 has at least as many components as $v1 and are all identical so far.
-    return count($f1) < count($f2) ? -1 : 0;
+    if (count($a1['values']) < count($a2['values'])) {
+        return -1; // $v1 has less fields than $v2
+    }
+    elseif ($a1['beta'] == $a2['beta']) {
+        return 0; // both are beta or official, but identical.
+    }
+    elseif ($a1['beta'] < 0 && $a2['beta'] >= 0) {
+        return 1; // $v1 is official, $v2 is beta.
+    }
+    elseif ($a1['beta'] >= 0 && $a2['beta'] < 0) {
+        return -1; // $v1 is beta, $v2 is official.
+    }
+    else {
+        return $a1['beta'] < $a2['beta'] ? -1 : 1; // both are beta and different.
+    }
 }
 
 
@@ -82,6 +129,7 @@ function generateOutput($appVersion, $osName, $cpuArch)
 {
     // By default, get source files.
     $url = 'http://sourceforge.net/projects/qtlmovie/files';
+    $relnotes = 'http://sourceforge.net/p/qtlmovie/code/ci/master/tree/CHANGELOG.txt?format=raw';
     $dir = 'src';
     $prefix = 'QtlMovie-';
     $suffix = '-src.zip';
@@ -89,39 +137,35 @@ function generateOutput($appVersion, $osName, $cpuArch)
 
     // Depending on OS name and version, check if we can find a binary version.
     switch ($osName . '|' . $cpuArch) {
-
-    case 'windows|x86_64':
-        $dir = 'win64';
-        $prefix = 'QtlMovie-Win64-';
-        $suffix = '.exe';
-        break;
-
-    case 'windows|x86':
-    case 'windows|i386':
-        $dir = 'win32';
-        $prefix = 'QtlMovie-Win32-';
-        $suffix = '.exe';
-        break;
-
-    case 'osx|x86_64':
-    case 'mac|x86_64':
-    case 'macosx|x86_64':
-        $dir = 'mac';
-        $prefix = 'QtlMovie-';
-        $suffix = '.dmg';
-        break;
-
-    case 'ubuntu|x86_64':
-        $dir = 'ubuntu';
-        $prefix = 'qtlmovie_';
-        $suffix = '_amd64.deb';
-        break;
-
-    case 'fedora|x86_64':
-        $dir = 'fedora';
-        $prefix = 'qtlmovie-';
-        $suffix = '-0.fc#.x86_64.rpm';
-        break;
+        case 'windows|x86_64':
+            $dir = 'win64';
+            $prefix = 'QtlMovie-Win64-';
+            $suffix = '.exe';
+            break;
+        case 'windows|x86':
+        case 'windows|i386':
+            $dir = 'win32';
+            $prefix = 'QtlMovie-Win32-';
+            $suffix = '.exe';
+            break;
+        case 'osx|x86_64':
+        case 'mac|x86_64':
+        case 'macos|x86_64':
+        case 'macosx|x86_64':
+            $dir = 'mac';
+            $prefix = 'QtlMovie-';
+            $suffix = '.dmg';
+            break;
+        case 'ubuntu|x86_64':
+            $dir = 'ubuntu';
+            $prefix = 'qtlmovie_';
+            $suffix = '_amd64.deb';
+            break;
+        case 'fedora|x86_64':
+            $dir = 'fedora';
+            $prefix = 'qtlmovie-';
+            $suffix = '-0.fc#.x86_64.rpm';
+            break;
     }
 
     // Now get the lastest version.
@@ -132,18 +176,21 @@ function generateOutput($appVersion, $osName, $cpuArch)
     // Instruct what the application should do.
     if (array_key_exists('version', $result)) {
         switch (compareVersions($appVersion, $result['version'])) {
-        case -1:
-            $result['status'] = 'new';
-            break;
-        case 0:
-            $result['status'] = 'same';
-            break;
-        case 1:
-            $result['status'] = 'old';
-            break;
+            case -1:
+                $result['status'] = 'new';
+                break;
+            case 0:
+                $result['status'] = 'same';
+                break;
+            case 1:
+                $result['status'] = 'old';
+                break;
         }
     }
-    
+
+    // Add the URL of the release notes.
+    $result['relnotes'] = $relnotes;
+
     // Result is always a JSON structure.
     header('Content-type: application/json; charset=utf-8');
     echo json_encode($result);
@@ -162,7 +209,8 @@ if (!isset($_COOKIE) ||
     ($target = json_decode($target, TRUE)) === NULL ||
     !array_key_exists('appVersion', $target) ||
     !array_key_exists('osName', $target) ||
-    !array_key_exists('cpuArch', $target)) {
+    !array_key_exists('cpuArch', $target))
+{
     // The cookie is absent or incorrect, not a valid request, assume generic platform.
     generateOutput("0", "generic", "generic");
 }

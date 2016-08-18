@@ -35,7 +35,6 @@
 #include "QtlMovie.h"
 #include "QtlMovieEditSettings.h"
 #include "QtlMovieAboutMediaTools.h"
-#include "QtlNewVersionCheckerJson.h"
 #include "QtlTextFileViewer.h"
 #include "QtlTranslator.h"
 #include "QtlSysInfo.h"
@@ -259,10 +258,10 @@ void QtlMovieMainWindowBase::about()
                            "<p>Teletext code from Petr Kutalek's Telxcc.<br/>"
                            "Libdvdcss by St&eacute;phane Borel, Sam Hocevar et al.<br/>"
                            "QtlMovie logo by %6.</p>")
-                       .arg(qtlHtmlLink(WEBREF_QTLMOVIE, "QtlMovie"))
+                       .arg(qtlHtmlLink(WEBREF_QTLMOVIE_HOME, "QtlMovie"))
                        .arg(tr("A specialized Qt front-end for<br/>FFmpeg and other free media tools"))
                        .arg(tr("Version"))
-                       .arg(QTLMOVIE_VERSION)
+                       .arg(qtlMovieVersion())
                        .arg(__DATE__)
                        .arg(qtlHtmlLink(WEBREF_DESIGNBOLT, "DesignBolts")));
 }
@@ -300,12 +299,7 @@ void QtlMovieMainWindowBase::showReleaseNotes()
 
 void QtlMovieMainWindowBase::searchNewVersion(bool silent)
 {
-    // Start searching for new versions.
-    QtlNewVersionCheckerJson::newInstance(QtlVersion(QTLMOVIE_VERSION),
-                                          "http://qtlmovie.sourceforge.net/newversion/",
-                                          silent,
-                                          _log,
-                                          this);
+    new QtlMovieNewVersion(silent, true, _settings, _log, this);
 }
 
 
@@ -315,7 +309,7 @@ void QtlMovieMainWindowBase::searchNewVersion(bool silent)
 
 void QtlMovieMainWindowBase::openHomePage()
 {
-    QDesktopServices::openUrl(QUrl(WEBREF_QTLMOVIE));
+    QDesktopServices::openUrl(QUrl(WEBREF_QTLMOVIE_HOME));
 }
 
 void QtlMovieMainWindowBase::openSupportPage()
