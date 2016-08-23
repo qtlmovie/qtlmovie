@@ -257,6 +257,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkBoxCleanupSubtitles->setChecked(_settings->cleanupSubtitles());
     _ui.checkBoxUseHtmlInSrt->setChecked(_settings->useSrtHtmlTags());
     _ui.checkBoxDowngradeSsaToSrt->setChecked(_settings->downgradeSsaToSrt());
+    _ui.spinDvdProgramChain->setValue(_settings->dvdProgramChain());
 
     // Update max bit rates according to video qualities.
     updateMaxBitRates();
@@ -401,6 +402,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setCleanupSubtitles(_ui.checkBoxCleanupSubtitles->isChecked());
     _settings->setUseSrtHtmlTags(_ui.checkBoxUseHtmlInSrt->isChecked());
     _settings->setDowngradeSsaToSrt(_ui.checkBoxDowngradeSsaToSrt->isChecked());
+    _settings->setDvdProgramChain(_ui.spinDvdProgramChain->value());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

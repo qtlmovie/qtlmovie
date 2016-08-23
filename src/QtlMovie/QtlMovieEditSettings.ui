@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>714</width>
-    <height>602</height>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -535,126 +535,179 @@
       <attribute name="title">
        <string>DVD</string>
       </attribute>
-      <layout class="QGridLayout" name="layoutDvdOutput">
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="checkCreateChapters">
-         <property name="text">
-          <string>Create chapters :</string>
+      <layout class="QVBoxLayout" name="layoutDvdTab">
+       <item>
+        <widget class="QGroupBox" name="boxReadingDvd">
+         <property name="title">
+          <string>Reading DVD (input)</string>
          </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
+         <layout class="QGridLayout" name="layoutDvdInput">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelDvdProgramChain">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Program Chain (PGC) :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
+           <widget class="QSpinBox" name="spinDvdProgramChain">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>256</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelDvdBitrate">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item>
+        <widget class="QGroupBox" name="boxCreatingDvd">
+         <property name="title">
+          <string>Creating DVD (output)</string>
          </property>
-         <property name="text">
-          <string>Video bitrate :</string>
-         </property>
+         <layout class="QGridLayout" name="layoutDvdOutput">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelFormat">
+            <property name="text">
+             <string>Format :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="radioPal">
+            <property name="text">
+             <string>PAL</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="radioNtsc">
+            <property name="text">
+             <string>NTSC</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelDvdBitrate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Video bitrate :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="3">
+           <widget class="QSpinBox" name="spinDvdBitrate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="suffix">
+             <string> kb/s</string>
+            </property>
+            <property name="minimum">
+             <number>500</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>4000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="checkCreateChapters">
+            <property name="text">
+             <string>Create chapters :</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="3">
+           <widget class="QSpinBox" name="spinChapterMinutes">
+            <property name="suffix">
+             <string> minutes</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="4">
+           <widget class="QCheckBox" name="checkDvdRemuxAfterTranscode">
+            <property name="text">
+             <string>Remux audio/video after transcode (remove potential synchronization errors with DVD Author)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="4">
+           <widget class="QCheckBox" name="checkForceDvdTranscode">
+            <property name="text">
+             <string>Force transcoding even if the input file or video is DVD-compliant</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioPal">
-         <property name="text">
-          <string>PAL</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="radioNtsc">
-         <property name="text">
-          <string>NTSC</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelFormat">
-         <property name="text">
-          <string>Format :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="3">
-        <widget class="QSpinBox" name="spinChapterMinutes">
-         <property name="suffix">
-          <string> minutes</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>999</number>
-         </property>
-         <property name="value">
-          <number>5</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="3">
-        <widget class="QSpinBox" name="spinDvdBitrate">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="suffix">
-          <string> kb/s</string>
-         </property>
-         <property name="minimum">
-          <number>500</number>
-         </property>
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-         <property name="singleStep">
-          <number>100</number>
-         </property>
-         <property name="value">
-          <number>4000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0" colspan="4">
-        <widget class="QCheckBox" name="checkDvdRemuxAfterTranscode">
-         <property name="text">
-          <string>Remux audio/video after transcode (remove potential synchronization errors with DVD Author)</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="4">
-        <widget class="QCheckBox" name="checkForceDvdTranscode">
-         <property name="text">
-          <string>Force transcoding even if the input file or video is DVD-compliant</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
+       <item>
         <spacer name="spacerDvd">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

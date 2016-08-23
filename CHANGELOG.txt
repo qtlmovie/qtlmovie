@@ -2,7 +2,9 @@
 QtlMovie Change Log
 ===================
 
-Version 1.9.1
+Version 1.10
+- Added an option to select the "program chain" or "PGC" to extract when reading
+  DVD content as input file.
 - The help system now uses the external browser. The style of the help files has
   been reworked in a more modern way. In the settings, each tab now has a "Help"
   button to get help on options on this tab.

@@ -569,8 +569,20 @@
 
         <div class="anchor" id="tabDvd"><h3>Onglet "DVD"</h3></div>
 
-        <p>Cet onglet regroupe les options qui affectent la création de DVD.</p>
-        <p>L'option PAL / NTSC définit le format des DVD créés.</p>
+        <p>Cet onglet est divisé en deux groupes.
+          Le premier groupe d'options contient celles qui sont utilisées lors de la lecture
+          de contenu DVD en tant que fichier d'entrée.
+          Le second groupe contient les options qui affectent la création de DVD.</p>
+        <p>Dans le groupe d'options concernant la lecture de contenu DVD,
+          le numéro de "Chaîne de programme (PGC)" indique quel PGC doit être extrait
+          de l'ensemble de titres (VTS) sélectionné. La plupart des VTS contiennent
+          une seule chaîne de programme ou "PGC". Mais certains VTS en contiennent
+          plusieurs, chacun étant une vue distincte du film. Dans ce cas, les différents
+          PGC sont numérotés séquentiellement à partir de 1. Cette option permet de
+          sélectionner le PGC qui sera extrait du contenu DVD. La plupart du temps,
+          la valeur par défaut 1 est appropriée.</p>
+        <p>Dans le groupe d'options sur la génération de DVD,
+          l'option PAL / NTSC définit le format des DVD créés.</p>
         <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.
           Toutefois, QtlMovie s'assure que l'image de sortie tienne sur un media standard de 4.7 GB
           et réduit le débit au besoin.</p>
