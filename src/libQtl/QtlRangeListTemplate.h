@@ -26,79 +26,60 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdFile.
+// Qtl, Qt utility library.
+// Template methods for class QtlRangeList.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdFile.h"
-#include "QtlDvdMedia.h"
+#ifndef QTLRANGELISTTEMPLATE_H
+#define QTLRANGELISTTEMPLATE_H
 
 
 //----------------------------------------------------------------------------
-// Constructor and destructor.
+// Merge all overlapping or adjacent segments.
 //----------------------------------------------------------------------------
 
-QtlDvdFile::QtlDvdFile(const QString& path, int startSector, int sizeInBytes) :
-    _path(path),
-    _sector(startSector),
-    _size(sizeInBytes)
+template<typename INT>
+void QtlRangeList<INT>::merge(Qtl::MergeRangeFlags flags)
 {
-}
+    // Sort the list first if required.
+    if (flags & Qtl::Sorted) {
+        this->sort();
+    }
 
-QtlDvdFile::~QtlDvdFile()
-{
-}
+    typename SuperClass::Iterator it(this->begin());
+    if (flags & Qtl::NoDuplicate) {
+        // Remove duplicates, merge overlapped ranges.
+        while (it != this->end()) {
+            typename SuperClass::Iterator next(it + 1);
+            if (next != this->end() && (it->overlap(*next) || it->adjacent(*next))) {
+                it->merge(*next);
+                it = this->erase(next) - 1;
+                // If not sorted, the merge may have set the first value at iterator backward.
+                // We may need to merge backward.
+                if (!(flags & Qtl::Sorted) && it != this->begin()) {
+                    --it;
+                }
+            }
+            else {
+                it = next;
+            }
 
-
-//----------------------------------------------------------------------------
-// Get the file characteristics.
-//----------------------------------------------------------------------------
-
-QString QtlDvdFile::name() const
-{
-    return _path.isEmpty() ? QString() : QFileInfo(_path).fileName();
-}
-
-QString QtlDvdFile::description() const
-{
-    return _path.isEmpty() ? "metadata" : _path;
-}
-
-int QtlDvdFile::sectorCount() const
-{
-    return _size / Qtl::DVD_SECTOR_SIZE + int(_size % Qtl::DVD_SECTOR_SIZE > 0);
-}
-
-
-bool QtlDvdFile::isVob() const
-{
-    return _path.endsWith(".VOB", Qt::CaseInsensitive);
-}
-
-
-//----------------------------------------------------------------------------
-// Clear the content of this object.
-//----------------------------------------------------------------------------
-
-void QtlDvdFile::clear()
-{
-    _path.clear();
-    _sector = -1;
-    _size = 0;
-}
-
-
-//----------------------------------------------------------------------------
-// Operator "less than" on QtlDvdFilePtr to sort files.
-//----------------------------------------------------------------------------
-
-bool operator<(const QtlDvdFilePtr& f1, const QtlDvdFilePtr& f2)
-{
-    // Null pointers preceeds everything.
-    if (!f1.isNull() && !f2.isNull()) {
-        return *f1 < *f2;
+        }
     }
     else {
-        return !f2.isNull();
+        // Only merge exactly adjacent ranges.
+        while (it != this->end()) {
+            typename SuperClass::Iterator next(it + 1);
+            if (next != this->end() && it->adjacent(*next, Qtl::AdjacentBefore)) {
+                it->merge(*next);
+                it = this->erase(next) - 1;
+            }
+            else {
+                it = next;
+            }
+        }
     }
 }
+
+#endif // QTLRANGELISTTEMPLATE_H

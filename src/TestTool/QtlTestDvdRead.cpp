@@ -77,7 +77,7 @@ int QtlTestDvdRead::run(const QStringList& args)
     const int sectorsPerRead = 256;
     const int reportInterval = 50000;
 
-    char buffer[sectorsPerRead * QtlDvdMedia::DVD_SECTOR_SIZE];
+    char buffer[sectorsPerRead * Qtl::DVD_SECTOR_SIZE];
     int nextReport = reportInterval;
     int currentSector = 0;
     int lastInstantSector = 0;
@@ -111,15 +111,15 @@ void QtlTestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& tim
 {
     const int msAverage = timeAverage.elapsed();
     const int msInstant = timeInstant.elapsed();
-    const qint64 totalBytes = qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE;
-    const qint64 instantBytes = qint64(instantSectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE;
+    const qint64 totalBytes = qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 instantBytes = qint64(instantSectorCount) * Qtl::DVD_SECTOR_SIZE;
 
     if (msAverage > 0) {
         out << "Transfer bandwidth after " << sectorCount << " sectors: ";
         if (msInstant > 0) {
-            out << QtlDvdMedia::transferRateToString(instantBytes, msInstant, QtlDvdMedia::TransferDvdBase | QtlDvdMedia::TransferKiloBytes) << ", ";
+            out << QtlDvdMedia::transferRateToString(instantBytes, msInstant, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << ", ";
         }
-        out << "average: " << QtlDvdMedia::transferRateToString(totalBytes, msAverage, QtlDvdMedia::TransferDvdBase | QtlDvdMedia::TransferKiloBytes) << endl;
+        out << "average: " << QtlDvdMedia::transferRateToString(totalBytes, msAverage, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << endl;
     }
 }
 

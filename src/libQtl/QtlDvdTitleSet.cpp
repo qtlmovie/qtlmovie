@@ -462,14 +462,14 @@ bool QtlDvdTitleSet::readVtsIfo()
     quint16 pgcCount = 0;
     quint32 pgcLastByte = 0;
     valid = QtlFile::readBigEndianAt(ifo, DVD_IFO_VTS_PGCI_OFFSET, pgci) &&
-            pgci < (ifoSize / QtlDvdMedia::DVD_SECTOR_SIZE) &&
-            QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + 0, pgcCount) &&
+            pgci < (ifoSize / Qtl::DVD_SECTOR_SIZE) &&
+            QtlFile::readBigEndianAt(ifo, (Qtl::DVD_SECTOR_SIZE * pgci) + 0, pgcCount) &&
             pgcCount > 0 &&
-            QtlFile::readBigEndianAt(ifo, (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + 4, pgcLastByte) &&
-            (QtlDvdMedia::DVD_SECTOR_SIZE * pgci) + pgcLastByte < ifoSize;
+            QtlFile::readBigEndianAt(ifo, (Qtl::DVD_SECTOR_SIZE * pgci) + 4, pgcLastByte) &&
+            (Qtl::DVD_SECTOR_SIZE * pgci) + pgcLastByte < ifoSize;
 
     // Make pgci a byte offset from the beginning of the file.
-    pgci = pgci * QtlDvdMedia::DVD_SECTOR_SIZE;
+    pgci = pgci * Qtl::DVD_SECTOR_SIZE;
 
     // Size of the color palette in bytes.
     const int paletteSize = DVD_IFO_PALETTE_ENTRY_SIZE * DVD_IFO_PALETTE_ENTRY_COUNT;

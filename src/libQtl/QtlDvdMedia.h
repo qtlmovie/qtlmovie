@@ -40,13 +40,9 @@
 #include "QtlDvdDirectory.h"
 
 //!
-//! Description of a DVD media.
+//! Qtl namespace.
 //!
-class QtlDvdMedia : public QObject
-{
-    Q_OBJECT
-
-public:
+namespace Qtl {
     //!
     //! Size in bytes of a DVD sector.
     //!
@@ -57,6 +53,28 @@ public:
     //!
     static const int DVD_TRANSFER_RATE = 1385000;
 
+    //!
+    //! Flags for QtlDvdMedia::transferRateToString().
+    //!
+    enum TransferRateFlag {
+        TransferDvdBase   = 0x0001,  //!< Include "Nx" using DVD base transfer rate.
+        TransferBytes     = 0x0002,  //!< Include bytes per second.
+        TransferKiloBytes = 0x0004,  //!< Include kilo-bytes per second.
+        TransferKibiBytes = 0x0008,  //!< Include kibi-bytes (base 1024) per second.
+        TransferBits      = 0x0010,  //!< Include bits per second.
+    };
+    Q_DECLARE_FLAGS(TransferRateFlags, TransferRateFlag)
+}
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qtl::TransferRateFlags)
+
+//!
+//! Description of a DVD media.
+//!
+class QtlDvdMedia : public QObject
+{
+    Q_OBJECT
+
+public:
     //!
     //! Constructor
     //! @param [in] fileName Name of a file or directory anywhere on the DVD media.
@@ -296,25 +314,13 @@ public:
     bool loadAllEncryptionKeys();
 
     //!
-    //! Flags for transferRateToString().
-    //!
-    enum TransferRateFlag {
-        TransferDvdBase   = 0x0001,  //!< Include "Nx" using DVD base transfer rate.
-        TransferBytes     = 0x0002,  //!< Include bytes per second.
-        TransferKiloBytes = 0x0004,  //!< Include kilo-bytes per second.
-        TransferKibiBytes = 0x0008,  //!< Include kibi-bytes (base 1024) per second.
-        TransferBits      = 0x0010,  //!< Include bits per second.
-    };
-    Q_DECLARE_FLAGS(TransferRateFlags, TransferRateFlag)
-
-    //!
     //! Build a human-readable string for DVD transfer rate.
     //! @param [in] bytes Number of bytes transfered.
     //! @param [in] milliSeconds Number of milliseconds to transfer @a bytes.
     //! @param [in] flags A set of flags to specify the format.
     //! @return A human readable string.
     //!
-    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, TransferRateFlags flags = TransferDvdBase);
+    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, Qtl::TransferRateFlags flags = Qtl::TransferDvdBase);
 
 signals:
     //!
@@ -361,11 +367,6 @@ private:
 //! Smart pointer to QtlDvdMedia, non thread-safe.
 //!
 typedef QtlSmartPointer<QtlDvdMedia,QtlNullMutexLocker> QtlDvdMediaPtr;
-
-//
-// Qt type system insertions.
-//
-Q_DECLARE_OPERATORS_FOR_FLAGS(QtlDvdMedia::TransferRateFlags)
 Q_DECLARE_METATYPE(QtlDvdMediaPtr)
 
 #endif // QTLDVDMEDIA_H

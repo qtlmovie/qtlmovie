@@ -59,7 +59,8 @@ SOURCES += \
     QtlOpticalDriveTest.cpp \
     QtlStringUtilsTest.cpp \
     QtsTeletextDemuxTest.cpp \
-    QtlSubStationAlphaParserTest.cpp
+    QtlSubStationAlphaParserTest.cpp \
+    QtlRangeTest.cpp
 
 HEADERS += \
     QtlTest.h \

@@ -256,7 +256,7 @@ void QtlMovieDvdExtractionSession::abort()
 void QtlMovieDvdExtractionSession::dataPullProgressed(qint64 current, qint64 maximum)
 {
     // Number of sectors from previous transfers plus sectors in current transfer.
-    emitProgress(_completedSectors + int(current / QtlDvdMedia::DVD_SECTOR_SIZE), _totalSectors);
+    emitProgress(_completedSectors + int(current / Qtl::DVD_SECTOR_SIZE), _totalSectors);
 }
 
 

@@ -237,7 +237,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
         // descriptor and the list is terminated by one volume descriptor set terminator.
         // Here, we do not read more than 8 sectors (not standard, but highly probable).
         // We do not skip bad sectors in this part of the media.
-        QtlByteBlock data(DVD_SECTOR_SIZE);
+        QtlByteBlock data(Qtl::DVD_SECTOR_SIZE);
         for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, ErrorOnBadSectors) == 1; --count) {
             // Volume descriptor type is in first byte.
             const int type = data[0];
@@ -292,7 +292,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
     for (QList<QtlDvdFilePtr>::Iterator iter = _allFiles.begin(); iter != _allFiles.end(); ++iter) {
         if ((*iter)->startSector() > lastSector) {
             // There is a hole here, fill it with a placeholder.
-            QtlDvdFilePtr ph(new QtlDvdFile(QString(), lastSector, ((*iter)->startSector() - lastSector) * DVD_SECTOR_SIZE));
+            QtlDvdFilePtr ph(new QtlDvdFile(QString(), lastSector, ((*iter)->startSector() - lastSector) * Qtl::DVD_SECTOR_SIZE));
             // Insert placeholder before current element.
             iter = _allFiles.insert(iter, ph); // iter now points to inserted element
             ++iter; // iter now points back to original current element
@@ -302,7 +302,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
 
     // Add placeholder at the end if necessary.
     if (lastSector < _volumeSize) {
-        _allFiles << QtlDvdFilePtr(new QtlDvdFile(QString(), lastSector, (_volumeSize - lastSector) * DVD_SECTOR_SIZE));
+        _allFiles << QtlDvdFilePtr(new QtlDvdFile(QString(), lastSector, (_volumeSize - lastSector) * Qtl::DVD_SECTOR_SIZE));
     }
 
     // Set the reader at maximum read speed only now.
@@ -462,7 +462,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, BadSectorPol
                         break;
                     case ReadBadSectorsAsZero:
                         got = 1;
-                        ::memset(buf, 0, DVD_SECTOR_SIZE);
+                        ::memset(buf, 0, Qtl::DVD_SECTOR_SIZE);
                         break;
                     default:
                         _log->line(tr("Internal error, invalid bad sector policy"));
@@ -480,7 +480,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, BadSectorPol
         _nextSector += got;
         result += got;
         count -= got;
-        buf += got * DVD_SECTOR_SIZE;
+        buf += got * Qtl::DVD_SECTOR_SIZE;
     }
 
     return result;
@@ -506,8 +506,8 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
     }
 
     // Read directory content.
-    const int dirSectorCount = dir.sizeInBytes() / DVD_SECTOR_SIZE + int(dir.sizeInBytes() % DVD_SECTOR_SIZE != 0);
-    QtlByteBlock data(dirSectorCount * DVD_SECTOR_SIZE);
+    const int dirSectorCount = dir.sizeInBytes() / Qtl::DVD_SECTOR_SIZE + int(dir.sizeInBytes() % Qtl::DVD_SECTOR_SIZE != 0);
+    QtlByteBlock data(dirSectorCount * Qtl::DVD_SECTOR_SIZE);
     if (!readSectors(data.data(), dirSectorCount, dir.startSector(), ErrorOnBadSectors)) {
         _log->line(tr("Error reading DVD directory information at sector %1").arg(dir.startSector()));
         return false;
@@ -683,33 +683,33 @@ bool QtlDvdMedia::loadAllEncryptionKeys()
 // Build a human-readable string for DVD transfer rate.
 //----------------------------------------------------------------------------
 
-QString QtlDvdMedia::transferRateToString(qint64 bytes, qint64 milliSeconds, TransferRateFlags flags)
+QString QtlDvdMedia::transferRateToString(qint64 bytes, qint64 milliSeconds, Qtl::TransferRateFlags flags)
 {
     QString result;
     if (milliSeconds > 0) {
         const QString separator(QStringLiteral(", "));
-        if (flags & TransferDvdBase) {
-            result = qtlFractionToString(bytes * 1000, milliSeconds * DVD_TRANSFER_RATE, 1) + "x";
+        if (flags & Qtl::TransferDvdBase) {
+            result = qtlFractionToString(bytes * 1000, milliSeconds * Qtl::DVD_TRANSFER_RATE, 1) + "x";
         }
-        if (flags & TransferBytes) {
+        if (flags & Qtl::TransferBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 B/s").arg(bytes * 1000 / milliSeconds));
         }
-        if (flags & TransferKiloBytes) {
+        if (flags & Qtl::TransferKiloBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 kB/s").arg(bytes / milliSeconds));
         }
-        if (flags & TransferKibiBytes) {
+        if (flags & Qtl::TransferKibiBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 kiB/s").arg(bytes * 1000 / milliSeconds * 1024));
         }
-        if (flags & TransferBits) {
+        if (flags & Qtl::TransferBits) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }

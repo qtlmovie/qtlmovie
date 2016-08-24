@@ -163,7 +163,11 @@ HEADERS += \
     QtlSubRipGenerator.h \
     QtlSubStationAlphaParser.h \
     QtlSubStationAlphaStyle.h \
-    QtlSubStationAlphaFrame.h
+    QtlSubStationAlphaFrame.h \
+    QtlRange.h \
+    QtlRangeList.h \
+    QtlRangeListTemplate.h \
+    QtlRangeTemplate.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

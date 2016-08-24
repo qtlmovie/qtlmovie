@@ -51,9 +51,9 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     _deviceName(deviceName),
     _startSector(startSector),
     _endSector(startSector + sectorCount),
-    _sectorChunk(qMax(1, transferSize / QtlDvdMedia::DVD_SECTOR_SIZE)),
+    _sectorChunk(qMax(1, transferSize / Qtl::DVD_SECTOR_SIZE)),
     _maxReadSpeed(useMaxReadSpeed),
-    _buffer(_sectorChunk * QtlDvdMedia::DVD_SECTOR_SIZE),
+    _buffer(_sectorChunk * Qtl::DVD_SECTOR_SIZE),
     _dvd(QString(), log),
     _timeAverage(),
     _timeInstant(),
@@ -63,7 +63,7 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
 {
     // Set total transfer size in bytes. In case of ignored bad sectors, the
     // total size will be slightly smaller, but this is just a hint.
-    const qint64 total = qint64(sectorCount) * QtlDvdMedia::DVD_SECTOR_SIZE;
+    const qint64 total = qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE;
     setProgressMaxHint(total);
 
     // Set progress interval: every 1 MB.
@@ -117,7 +117,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     // Compute maximum number of sectors to read.
     int count = qMin(_sectorChunk, _endSector - _dvd.nextSector());
     if (maxSize >= 0) {
-        count = qMin(count, int(maxSize / QtlDvdMedia::DVD_SECTOR_SIZE));
+        count = qMin(count, int(maxSize / Qtl::DVD_SECTOR_SIZE));
     }
     if (count <= 0) {
         return true;
@@ -134,7 +134,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     }
 
     // Write sectors.
-    return write(_buffer.data(), count * QtlDvdMedia::DVD_SECTOR_SIZE);
+    return write(_buffer.data(), count * Qtl::DVD_SECTOR_SIZE);
 }
 
 
@@ -158,10 +158,10 @@ void QtlDvdDataPull::reportBandwidth()
     const int nextSector = _dvd.nextSector();
     const int msAverage = _timeAverage.elapsed();
     const int msInstant = _timeInstant.restart();
-    const qint64 totalBytes = qint64(nextSector - _startSector) * QtlDvdMedia::DVD_SECTOR_SIZE;
-    const qint64 instantBytes = qint64(nextSector - _reportSector) * QtlDvdMedia::DVD_SECTOR_SIZE;
+    const qint64 totalBytes = qint64(nextSector - _startSector) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 instantBytes = qint64(nextSector - _reportSector) * Qtl::DVD_SECTOR_SIZE;
 
-    const QtlDvdMedia::TransferRateFlags flags(QtlDvdMedia::TransferDvdBase | QtlDvdMedia::TransferKiloBytes);
+    const Qtl::TransferRateFlags flags(Qtl::TransferDvdBase | Qtl::TransferKiloBytes);
     const QString averageRate(QtlDvdMedia::transferRateToString(totalBytes, msAverage, flags));
     const QString instantRate(QtlDvdMedia::transferRateToString(instantBytes, msInstant, flags));
 

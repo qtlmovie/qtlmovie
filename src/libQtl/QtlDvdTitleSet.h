@@ -213,7 +213,7 @@ public:
     //!
     int vobSectorCount() const
     {
-        return int(_vobSizeInBytes / QtlDvdMedia::DVD_SECTOR_SIZE);
+        return int(_vobSizeInBytes / Qtl::DVD_SECTOR_SIZE);
     }
 
     //!
