@@ -156,8 +156,9 @@ int QtlTestDvd::run(const QStringList& args)
         << "VOB size: " << vts.vobSizeInBytes() << " bytes" << endl
         << "Is encrypted: " << vts.isEncrypted() << endl
         << "VTS number: " << vts.vtsNumber() << endl
-        << "Duration: " << vts.durationInSeconds() << " seconds"
-        << " (" << qtlSecondsToString(vts.durationInSeconds()) << ")" << endl
+        << "Title count: " << vts.titleCount() << " PGC" << endl
+        << "Longest duration: " << vts.longestDurationInSeconds() << " seconds"
+        << " (" << qtlSecondsToString(vts.longestDurationInSeconds()) << ")" << endl
         << "VOB count: " << vts.vobCount() << endl
         << "VOB files: " << endl << "    " << vts.vobFileNames().join("\n    ") << endl
         << "DVD device name: " << vts.deviceName() << endl
@@ -189,6 +190,23 @@ int QtlTestDvd::run(const QStringList& args)
         }
     }
 
+    // Display PGC information.
+    for (int i = 1; i <= vts.titleCount(); ++i) {
+        const QtlDvdProgramChainPtr pgc(vts.title(i));
+        if (pgc.isNull()) {
+            out << "PGC #" << i << " has a null pointer" << endl;
+            continue;
+        }
+        out << "PGC #" << i << ": current:" << pgc->titleNumber()
+            << ", previous:" << pgc->previousTitleNumber()
+            << ", next:" << pgc->nextTitleNumber()
+            << ", parent:" << pgc->parentTitleNumber() << endl
+            << "    Duration: " << pgc->durationInSeconds() << " seconds (" << qtlSecondsToString(pgc->durationInSeconds()) << ")" << endl
+            << "    Sectors:" << pgc->sectors().toString() << endl
+            << "    YUV palette: " << QtlDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
+            << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl;
+    }
+
     // Extract and decrypt VTS content if required.
     if (output.isEmpty()) {
         // Nothing to do.
@@ -213,11 +231,12 @@ int QtlTestDvd::run(const QStringList& args)
         time.start();
 
         // Transfer the file using a wrapper test class.
-        QtlDataPull* dataPull = vts.dataPull(&log, &vts, true);
+        QtlDataPull* dataPull = vts.dataPull(&log, 0, true);
         if (sectorCount > 0) {
             dataPull->setMaxPulledSize(qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE);
         }
         QtlDataPullWrapper wrapper(dataPull, &file);
+        dataPull->setParent(&wrapper);
 
         // Report transfer bandwidth.
         const int milliSec = time.elapsed();

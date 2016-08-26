@@ -313,7 +313,7 @@ void QtlMovieDvdExtractionWindow::refreshVtsList()
     for (int vtsNumber = 1; vtsNumber <= dvd->vtsCount(); ++vtsNumber) {
 
         // Get the description of the VTS.
-        QtlDvdTitleSetPtr vts(new QtlDvdTitleSet(QString(), log(), this));
+        QtlDvdTitleSetPtr vts(new QtlDvdTitleSet(QString(), log()));
         if (!vts->load(dvd->vtsInformationFileName(vtsNumber), &*dvd)) {
             // Cannot open VTS, strange, skip it.
             log()->line(tr("Cannot open video title set %1").arg(vtsNumber));
@@ -321,7 +321,7 @@ void QtlMovieDvdExtractionWindow::refreshVtsList()
         }
 
         // Items: check box, VTS number, VTS duration, size of the VOB files.
-        const QtlStringList texts("", QString::number(vtsNumber), qtlSecondsToString(vts->durationInSeconds()), qtlSizeToString(vts->vobSizeInBytes(), 2));
+        const QtlStringList texts("", QString::number(vtsNumber), qtlSecondsToString(vts->longestDurationInSeconds()), qtlSizeToString(vts->vobSizeInBytes(), 2));
 
         // Create the row, use header text alignment, set checkbox in column zero.
         const int row = qtlSetTableRow(_ui.tableTitleSets, _ui.tableTitleSets->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
@@ -409,7 +409,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
         case QTL_TAB_ISO: {
             // Only one big file to extract.
             // We replace bad sectors by zeroes to preserve the media layout.
-            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors(), QtlDvdMedia::ReadBadSectorsAsZero);
+            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors(), Qtl::ReadBadSectorsAsZero);
             break;
         }
         case QTL_TAB_VTS: {
@@ -512,7 +512,7 @@ void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtlDvdFile& file)
     // Add the file.
     if (_extraction != 0) {
         // When ripping files, we skip bad sectors.
-        _extraction->addFile(outputPath, file.startSector(), file.sectorCount(), QtlDvdMedia::SkipBadSectors);
+        _extraction->addFile(outputPath, file.startSector(), file.sectorCount(), Qtl::SkipBadSectors);
     }
 }
 

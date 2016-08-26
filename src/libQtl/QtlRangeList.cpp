@@ -27,102 +27,120 @@
 //----------------------------------------------------------------------------
 //
 // Qtl, Qt utility library.
-// Template methods for class QtlRange.
+// Define the class QtlRangeList.
 //
 //----------------------------------------------------------------------------
 
-#ifndef QTLRANGETEMPLATE_H
-#define QTLRANGETEMPLATE_H
+#include "QtlRangeList.h"
 
 
 //----------------------------------------------------------------------------
-// Change the first value in the range.
+// Get the total number of values in all ranges.
 //----------------------------------------------------------------------------
 
-template<typename INT>
-void QtlRange<INT>::setFirst(INT first)
+quint64 QtlRangeList::totalValueCount() const
 {
-    if (first != _first) {
-        if (first < _first) {
-            _count += _first - first;
-        }
-        else { // first > _first
-            const quint64 less = static_cast<quint64>(first - _first);
-            _count = _count < less ? 0 : _count - less;
-        }
-        _first = first;
+    quint64 result = 0;
+    for (ConstIterator it(begin()); it != end(); ++it) {
+        result += it->count();
     }
+    return result;
 }
 
 
 //----------------------------------------------------------------------------
-// Get the last value in the range.
+// Add a given offset to first and last value of all elements.
 //----------------------------------------------------------------------------
 
-template<typename INT>
-INT QtlRange<INT>::last() const
+QtlRangeList& QtlRangeList::add(qint64 offset)
 {
-    if (_count == 0) {
-        return _first == std::numeric_limits<INT>::min() ? _first : _first - 1;
+    for (Iterator it(begin()); it != end(); ++it) {
+        it->add(offset);
     }
-    else if (std::numeric_limits<INT>::is_signed) {
-        return static_cast<INT>(static_cast<qint64>(_first) + (_count - 1));
+    return *this;
+}
+
+
+//----------------------------------------------------------------------------
+// Merge all overlapping or adjacent segments.
+//----------------------------------------------------------------------------
+
+QtlRangeList& QtlRangeList::merge(Qtl::MergeRangeFlags flags)
+{
+    // Sort the list first if required.
+    if (flags & Qtl::Sorted) {
+        this->sort();
+    }
+
+    Iterator it(begin());
+    if (flags & Qtl::NoDuplicate) {
+        // Remove duplicates, merge overlapped ranges.
+        while (it != this->end()) {
+            Iterator next(it + 1);
+            if (next != end() && (it->overlap(*next) || it->adjacent(*next))) {
+                it->merge(*next);
+                it = erase(next) - 1;
+                // If not sorted, the merge may have set the first value at iterator backward.
+                // We may need to merge backward.
+                if (!(flags & Qtl::Sorted) && it != begin()) {
+                    --it;
+                }
+            }
+            else {
+                it = next;
+            }
+        }
     }
     else {
-        return static_cast<INT>(static_cast<quint64>(_first) + (_count - 1));
+        // Only merge exactly adjacent ranges.
+        while (it != this->end()) {
+            Iterator next(it + 1);
+            if (next != end() && it->adjacent(*next, Qtl::AdjacentBefore)) {
+                it->merge(*next);
+                it = erase(next) - 1;
+            }
+            else {
+                it = next;
+            }
+        }
     }
+
+    return *this;
 }
 
 
 //----------------------------------------------------------------------------
-// Check if two objects have at least one element in common.
+// Remove values outside the given range.
 //----------------------------------------------------------------------------
 
-template<typename INT>
-bool QtlRange<INT>::overlap(const QtlRange<INT>& other) const
+QtlRangeList& QtlRangeList::clip(const QtlRange& range)
 {
-    if (_first <= other._first) {
-        return static_cast<quint64>(other._first - _first) < _count;
+    Iterator it(begin());
+    while (it != end()) {
+        it->clip(range);
+        if (it->isEmpty()) {
+            it = erase(it);
+        }
+        else {
+            ++it;
+        }
     }
-    else { // other._first > _first
-        return static_cast<quint64>(_first - other._first) < other._count;
-    }
+    return *this;
 }
 
 
 //----------------------------------------------------------------------------
-// Check if two objects are exactly adjacent.
+// Convert the range to a string.
 //----------------------------------------------------------------------------
 
-template<typename INT>
-bool QtlRange<INT>::adjacent(const QtlRange<INT>& other, Qtl::AdjacentFlags flags) const
+QString QtlRangeList::toString() const
 {
-    if (_first == other._first) {
-        return (_count == 0 && (flags & Qtl::AdjacentBefore)) || (other._count == 0 && (flags & Qtl::AdjacentAfter));
+    QString result;
+    foreach (const QtlRange& range, *this) {
+        if (!result.isEmpty()) {
+            result.append(QChar(' '));
+        }
+        result.append(range.toString());
     }
-    else if (_first < other._first) {
-        return (flags & Qtl::AdjacentBefore) && static_cast<quint64>(other._first - _first) == _count;
-    }
-    else { // other._first > _first
-        return (flags & Qtl::AdjacentAfter) && static_cast<quint64>(_first - other._first) == other._count;
-    }
+    return result;
 }
-
-
-//----------------------------------------------------------------------------
-// Merge the content of another object into this one.
-//----------------------------------------------------------------------------
-
-template<typename INT>
-void QtlRange<INT>::merge(const QtlRange<INT>& other)
-{
-    if (_first <= other._first) {
-        _count = qMax(_count, static_cast<quint64>(other._first - _first) + other._count);
-    }
-    else { // other._first < _first
-        _count = qMax(other._count, static_cast<quint64>(_first - other._first) + _count);
-        _first = other._first;
-    }
-}
-
-#endif // QTLRANGETEMPLATE_H

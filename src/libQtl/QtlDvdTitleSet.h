@@ -41,6 +41,15 @@
 #include "QtlDvdMedia.h"
 #include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
+#include "QtlDvdProgramChain.h"
+
+class QtlDvdTitleSet;
+
+//!
+//! Smart pointer to QtlDvdTitleSet, non thread-safe.
+//!
+typedef QtlSmartPointer<QtlDvdTitleSet,QtlNullMutexLocker> QtlDvdTitleSetPtr;
+Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
 
 //!
 //! Description of a "Title Set" in a DVD.
@@ -62,25 +71,21 @@
 //! The content of a VTS is physically contiguous on the DVD, starting from
 //! VTS_nn_0.VOB, VTS_nn_1.VOB, etc., ending with the VTS_nn_0.BUP.
 //!
-class QtlDvdTitleSet : public QObject
+class QtlDvdTitleSet
 {
-    Q_OBJECT
-
 public:
     //!
     //! Constructor
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
     //! @param [in] log Where to log errors.
-    //! @param [in] parent Optional parent widget.
     //!
-    QtlDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0);
+    QtlDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0);
 
     //!
     //! Copy constructor.
     //! @param [in] other Other instance to copy (except parent).
-    //! @param [in] parent Optional parent widget.
     //!
-    explicit QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent = 0);
+    explicit QtlDvdTitleSet(const QtlDvdTitleSet& other);
 
     //!
     //! Load the description of a title set.
@@ -115,13 +120,44 @@ public:
     }
 
     //!
-    //! Get the title set playback duration in seconds.
-    //! @return The title set playback duration in seconds.
+    //! Get the number of titles (or program chains, or PGC) in the title set.
+    //! @return The number of titles in the title set.
     //!
-    int durationInSeconds() const
+    int titleCount() const
     {
-        return _duration;
+        return _pgcs.size();
     }
+
+    //!
+    //! Get the description of a given title (or program chain, or PGC) in the title set.
+    //! @param [in] titleNumber The title number to get. The first title in the VTS is #1.
+    //! @return A smart pointer to the description of the title. Return a null pointer if
+    //! @a titleNumber is invalid or if the description of the title was invalid.
+    //!
+    QtlDvdProgramChainPtr title(int titleNumber) const
+    {
+        return titleNumber < 1 || titleNumber > _pgcs.size() ? QtlDvdProgramChainPtr() : _pgcs.at(titleNumber - 1);
+    }
+
+    //!
+    //! Get the description of all sequential titles (or program chain, or PGC) in the title set.
+    //! Sometimes, a PGC is not viewed alone, it can have a previous or next PCG to play in sequence.
+    //! While title() returns only the description of a given title, allTitles() returns the list
+    //! of all PGC's that should be played in sequence.
+    //!
+    //! @param [in] titleNumber A title number to get. The first title in the VTS is #1.
+    //! @return A list of smart pointers to the description of all titles in the chain containing
+    //! the specified @a titleNumber. Return an empty list if @a titleNumber is invalid or if the
+    //! description of the title was invalid. When the list is not empty, all pointers are not null.
+    //!
+    QtlDvdProgramChainPtrList allTitles(int titleNumber) const;
+
+    //!
+    //! Get the longest duration of all sets of sequential titles in the title set.
+    //! For each title, we consider the full sequence, using its previous and next title.
+    //! @return The longest duration in seconds.
+    //!
+    int longestDurationInSeconds() const;
 
     //!
     //! Get the full absolute file name of the IFO file for the title set.
@@ -217,23 +253,6 @@ public:
     }
 
     //!
-    //! Get the color palette of the title set in YUV format.
-    //! Typically used to render subtitles.
-    //! @return The palette in YUV format. Each entry contains 4 bytes: (0, Y, Cr, Cb).
-    //!
-    QtlByteBlock yuvPalette() const
-    {
-        return _palette;
-    }
-
-    //!
-    //! Get the color palette of the title set in RGB format.
-    //! Typically used to render subtitles.
-    //! @return The palette in RGB format. Each entry contains 4 bytes: (0, R, G, B).
-    //!
-    QtlByteBlock rgbPalette() const;
-
-    //!
     //! Get the number of video, audio and subtitle streams in the title set.
     //! @return The number of video, audio and subtitle streams in the title set.
     //!
@@ -271,15 +290,6 @@ public:
     static bool isDvdTitleSetFileName(const QString& fileName);
 
     //!
-    //! Convert a YUV palette into RGB.
-    //! @param [in,out] palette Palette to modify.
-    //! On input, each entry contains 4 bytes: (0, Y, Cr, Cb).
-    //! On output, each entry contains 4 bytes: (0, R, G, B).
-    //! @param [in] log Where to log errors.
-    //!
-    static void convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log);
-
-    //!
     //! Compare two QtlMediaStreamInfoPtr for DVD stream ordering.
     //! We reorder stream in "DVD order" for user convenience.
     //! @param [in] p1 First pointer.
@@ -296,13 +306,12 @@ private:
     int           _volumeSectors;  //!< Volume size in sectors.
     bool          _isEncrypted;    //!< DVD is encrypted, need libdvdcss.
     int           _vtsNumber;      //!< Title set number.
-    int           _duration;       //!< Title set duration in seconds.
     QString       _ifoFileName;    //!< IFO file name.
     QStringList   _vobFileNames;   //!< List of VOB files.
     qint64        _vobSizeInBytes; //!< Total size in bytes of all VOB's.
     int           _vobStartSector; //!< First sector of VOB files on DVD media.
-    QtlByteBlock  _palette;        //!< VTS color palette in YUV format.
     QtlMediaStreamInfoPtrVector _streams; //!< List of streams in the VTS.
+    QtlDvdProgramChainPtrList   _pgcs;    //!< List program chains in the VTS.
 
     //!
     //! Build the IFO and VOB file names for the VTS.
@@ -318,11 +327,5 @@ private:
     //!
     bool readVtsIfo();
 };
-
-//!
-//! Smart pointer to QtlDvdTitleSet, non thread-safe.
-//!
-typedef QtlSmartPointer<QtlDvdTitleSet,QtlNullMutexLocker> QtlDvdTitleSetPtr;
-Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
 
 #endif // QTLDVDTITLESET_H

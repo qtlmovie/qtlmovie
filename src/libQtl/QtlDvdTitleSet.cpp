@@ -46,16 +46,10 @@
 // Layout of IFO file for title sets (VTS_nn_0.IFO).
 // See http://dvd.sourceforge.net/dvdinfo/ifo.html
 //
-#define DVD_IFO_START_VALUE     "DVDVIDEO-VTS"
 #define DVD_IFO_HEADER_SIZE             0x03D8
 #define DVD_IFO_LAST_SECTOR             0x000C
 #define DVD_IFO_START_SECTOR            0x00C4
 #define DVD_IFO_VTS_PGCI_OFFSET         0x00CC
-#define DVD_IFO_VTS_PGC_OFFSET_IN_PGCI  0x000C
-#define DVD_IFO_PLAYBACK_OFFSET_IN_PGC  0x0004
-#define DVD_IFO_PALETTE_OFFSET_IN_PGC   0x00A4
-#define DVD_IFO_PALETTE_ENTRY_SIZE           4
-#define DVD_IFO_PALETTE_ENTRY_COUNT         16
 #define DVD_IFO_VIDEO_ATTR_OFFSET       0x0200
 #define DVD_IFO_AUDIO_COUNT_OFFSET      0x0202
 #define DVD_IFO_AUDIO_ATTR_OFFSET       0x0204
@@ -71,8 +65,7 @@
 // Constructor & destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject* parent) :
-    QObject(parent),
+QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log) :
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
     _deviceName(),
@@ -80,21 +73,19 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log, QObject*
     _volumeSectors(0),
     _isEncrypted(false),
     _vtsNumber(-1),
-    _duration(0),
     _ifoFileName(),
     _vobFileNames(),
     _vobSizeInBytes(0),
     _vobStartSector(-1),
-    _palette(),
-    _streams()
+    _streams(),
+    _pgcs()
 {
     if (!fileName.isEmpty()) {
         load(fileName);
     }
 }
 
-QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
-    QObject(parent),
+QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other) :
     _nullLog(),
     _log(other._log != 0 && other._log != &other._nullLog ? other._log : &_nullLog),
     _deviceName(other._deviceName),
@@ -102,13 +93,12 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QtlDvdTitleSet& other, QObject* parent) :
     _volumeSectors(other._volumeSectors),
     _isEncrypted(other._isEncrypted),
     _vtsNumber(other._vtsNumber),
-    _duration(other._duration),
     _ifoFileName(other._ifoFileName),
     _vobFileNames(other._vobFileNames),
     _vobSizeInBytes(other._vobSizeInBytes),
     _vobStartSector(other._vobStartSector),
-    _palette(other._palette),
-    _streams(other._streams)
+    _streams(other._streams),
+    _pgcs(other._pgcs)
 {
 }
 
@@ -128,8 +118,8 @@ void QtlDvdTitleSet::clear()
     _vobFileNames.clear();
     _vobSizeInBytes = 0;
     _vobStartSector = -1;
-    _palette.clear();
     _streams.clear();
+    _pgcs.clear();
 }
 
 
@@ -168,7 +158,7 @@ bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
         const QtlDvdFile vob(dvd->searchFile(_vobFileNames.first()));
         _vobStartSector = vob.startSector();
         if (_vobStartSector < 0) {
-            _log->line(tr("Cannot find start sector for %1 on %2").arg(_vobFileNames.first()).arg(_deviceName));
+            _log->line(QObject::tr("Cannot find start sector for %1 on %2").arg(_vobFileNames.first()).arg(_deviceName));
             clear();
             return false;
         }
@@ -211,7 +201,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 {
     // Only .IFO and .VOB are DVD structures.
     if (!isDvdTitleSetFileName(fileName)) {
-        _log->debug(tr("%1 is not a valid DVD title set file").arg(fileName));
+        _log->debug(QObject::tr("%1 is not a valid DVD title set file").arg(fileName));
         return false;
     }
 
@@ -243,7 +233,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 
     // There must be at least one VOB file, otherwise there is no video.
     if (_vobFileNames.isEmpty()) {
-        _log->line(tr("No VOB file for %1").arg(fileName), QColor(Qt::red));
+        _log->line(QObject::tr("No VOB file for %1").arg(fileName), QColor(Qt::red));
         return false;
     }
 
@@ -251,7 +241,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
     _ifoFileName = dir + QDir::separator() + name + "_0.IFO";
     if (!QFile(_ifoFileName).exists()) {
         // No IFO file: not an error but no language info available.
-        _log->line(tr("DVD IFO file not found: %1").arg(_ifoFileName));
+        _log->line(QObject::tr("DVD IFO file not found: %1").arg(_ifoFileName));
         return false;
     }
 
@@ -265,24 +255,17 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 
 bool QtlDvdTitleSet::readVtsIfo()
 {
-    // Open IFO file. Will be closed by destructor.
-    QFile ifo(_ifoFileName);
-    if (!ifo.open(QFile::ReadOnly)) {
-        _log->line(tr("Error opening %1").arg(_ifoFileName));
+    // Read IFO file.
+    QtlByteBlock ifo(QtlFile::readBinaryFile(_ifoFileName));
+    if (ifo.isEmpty()) {
+        _log->line(QObject::tr("Error opening %1").arg(_ifoFileName));
         return false;
     }
 
-    // Sizeo of the IFO file.
-    const qint64 ifoSize = ifo.size();
-
-    // Read the IFO header. Must start with "DVDVIDEO-VTS".
-    QtlByteBlock header;
-    bool valid =
-        QtlFile::readBinary(ifo, header, DVD_IFO_HEADER_SIZE) &&
-        header.size() == DVD_IFO_HEADER_SIZE &&
-        ::memcmp(header.data(), DVD_IFO_START_VALUE, ::strlen(DVD_IFO_START_VALUE)) == 0;
+    // IFO header must start with "DVDVIDEO-VTS".
+    bool valid = ifo.size() >= DVD_IFO_HEADER_SIZE && ifo.getLatin1(0, 12) == "DVDVIDEO-VTS";
     if (!valid) {
-        _log->line(tr("%1 is not a valid VTS IFO").arg(_ifoFileName));
+        _log->line(QObject::tr("%1 is not a valid VTS IFO").arg(_ifoFileName));
         return false;
     }
 
@@ -296,9 +279,9 @@ bool QtlDvdTitleSet::readVtsIfo()
 
     // Get video attributes.
     // See http://dvd.sourceforge.net/dvdinfo/ifo.html#vidatt
-    const quint8 videoStandard = (header[DVD_IFO_VIDEO_ATTR_OFFSET] >> 4) & 0x03; // PAL vs. NTSC
-    const quint8 videoDisplayAspectRatio = (header[DVD_IFO_VIDEO_ATTR_OFFSET] >> 2) & 0x03;
-    const quint8 videoResolution = (header[DVD_IFO_VIDEO_ATTR_OFFSET + 1] >> 3) & 0x07;
+    const quint8 videoStandard = (ifo[DVD_IFO_VIDEO_ATTR_OFFSET] >> 4) & 0x03; // PAL vs. NTSC
+    const quint8 videoDisplayAspectRatio = (ifo[DVD_IFO_VIDEO_ATTR_OFFSET] >> 2) & 0x03;
+    const quint8 videoResolution = (ifo[DVD_IFO_VIDEO_ATTR_OFFSET + 1] >> 3) & 0x07;
 
     // Video frame size.
     switch (videoStandard) {
@@ -345,7 +328,7 @@ bool QtlDvdTitleSet::readVtsIfo()
             break;
         }
         default: {
-            _log->line(tr("Unknown video standard value %1 in DVD IFO file").arg(videoStandard));
+            _log->line(QObject::tr("Unknown video standard value %1 in DVD IFO file").arg(videoStandard));
             break;
         }
     }
@@ -365,20 +348,20 @@ bool QtlDvdTitleSet::readVtsIfo()
 
     // Get audio attributes.
     // See http://dvd.sourceforge.net/dvdinfo/ifo.html#audatt
-    const int audioCount = qMin<int>(header.fromBigEndian<quint16>(DVD_IFO_AUDIO_COUNT_OFFSET), DVD_IFO_AUDIO_MAX_COUNT);
-    _log->debug(tr("IFO: %1 audio streams").arg(audioCount));
+    const int audioCount = qMin<int>(ifo.fromBigEndian<quint16>(DVD_IFO_AUDIO_COUNT_OFFSET), DVD_IFO_AUDIO_MAX_COUNT);
+    _log->debug(QObject::tr("IFO: %1 audio streams").arg(audioCount));
 
     for (int i = 0; i < audioCount; ++i) {
 
         // Point to the audio stream description in IFO header.
         const int start = DVD_IFO_AUDIO_ATTR_OFFSET + i * DVD_IFO_AUDIO_ATTR_SIZE;
-        const quint8 codingMode = header[start] >> 5;
-        const int channelCount = int(header[start + 1] & 0x07) + 1;
-        const bool languagePresent = (header[start] & 0x0C) == 0x04;
+        const quint8 codingMode = ifo[start] >> 5;
+        const int channelCount = int(ifo[start + 1] & 0x07) + 1;
+        const bool languagePresent = (ifo[start] & 0x0C) == 0x04;
 
         // Stream type:
         // 0=not specified, 1=normal, 2=for visually impaired, 3=director comments, 4=alternate director comments
-        const quint8 type = header[start + 5];
+        const quint8 type = ifo[start + 5];
 
         // Create the audio stream description.
         QtlMediaStreamInfoPtr audio(new QtlMediaStreamInfo());
@@ -412,25 +395,25 @@ bool QtlDvdTitleSet::readVtsIfo()
         audio->setImpaired(type == 2);
         audio->setCommentary(type == 3 || type == 4);
         if (languagePresent) {
-            audio->setLanguage(header.getLatin1(start + 2, 2));
+            audio->setLanguage(ifo.getLatin1(start + 2, 2));
         }
     }
 
     // Get subpicture (subtitle) attributes.
     // See http://dvd.sourceforge.net/dvdinfo/ifo.html#spatt
-    const int subpicCount = qMin<int>(header.fromBigEndian<quint16>(DVD_IFO_SUBPIC_COUNT_OFFSET), DVD_IFO_SUBPIC_MAX_COUNT);
-    _log->debug(tr("IFO: %1 subtitle streams").arg(subpicCount));
+    const int subpicCount = qMin<int>(ifo.fromBigEndian<quint16>(DVD_IFO_SUBPIC_COUNT_OFFSET), DVD_IFO_SUBPIC_MAX_COUNT);
+    _log->debug(QObject::tr("IFO: %1 subtitle streams").arg(subpicCount));
 
     for (int i = 0; i < subpicCount; ++i) {
 
         // Point to stream description in IFO header.
         const int start = DVD_IFO_SUBPIC_ATTR_OFFSET + i * DVD_IFO_SUBPIC_ATTR_SIZE;
-        const bool languagePresent = (header[start] & 0x03) == 0x01;
+        const bool languagePresent = (ifo[start] & 0x03) == 0x01;
 
         // Stream type:
         // 0=not specified, 1=normal, 2=large, 3=children, 5=normal captions, 6=large captions, 7=childrens captions,
         // 9=forced, 13=director comments, 14=large director comments, 15=director comments for children
-        const quint8 type = header[start + 5];
+        const quint8 type = ifo[start + 5];
 
         // Create the subtitle stream description.
         QtlMediaStreamInfoPtr subtitle(new QtlMediaStreamInfo());
@@ -450,128 +433,107 @@ bool QtlDvdTitleSet::readVtsIfo()
         subtitle->setCommentary(type == 13 || type == 14 || type == 15);
         subtitle->setForced(type == 9);
         if (languagePresent) {
-            subtitle->setLanguage(header.getLatin1(start + 2, 2));
+            subtitle->setLanguage(ifo.getLatin1(start + 2, 2));
         }
     }
 
     // Locate the VTS_PGCI (Title Program Chain table).
-    // - pgci: the relative sector VTS_PGCI.
+    // - pgci: the relative sector VTS_PGCI, make it a byte offset from the beginning of the file.
     // - pgcCount: number of entries in the PGCI.
     // - pgcLastByte: index of last PGC byte, relative to start of PGCI.
-    quint32 pgci = 0;
-    quint16 pgcCount = 0;
-    quint32 pgcLastByte = 0;
-    valid = QtlFile::readBigEndianAt(ifo, DVD_IFO_VTS_PGCI_OFFSET, pgci) &&
-            pgci < (ifoSize / Qtl::DVD_SECTOR_SIZE) &&
-            QtlFile::readBigEndianAt(ifo, (Qtl::DVD_SECTOR_SIZE * pgci) + 0, pgcCount) &&
-            pgcCount > 0 &&
-            QtlFile::readBigEndianAt(ifo, (Qtl::DVD_SECTOR_SIZE * pgci) + 4, pgcLastByte) &&
-            (Qtl::DVD_SECTOR_SIZE * pgci) + pgcLastByte < ifoSize;
+    const int pgci = Qtl::DVD_SECTOR_SIZE * ifo.fromBigEndian<quint32>(DVD_IFO_VTS_PGCI_OFFSET);
+    int pgcCount = 0;
+    int pgcLastByte = 0;
 
-    // Make pgci a byte offset from the beginning of the file.
-    pgci = pgci * Qtl::DVD_SECTOR_SIZE;
+    valid = ifo.size() >= pgci + 8;
+    if (valid) {
+        pgcCount = ifo.fromBigEndian<quint16>(pgci);
+        pgcLastByte = ifo.fromBigEndian<quint32>(pgci + 4);
+        valid = pgcCount > 0 && pgcLastByte > 0 && ifo.size() >= pgci + pgcLastByte && ifo.size() >= pgci + 8 + 8* pgcCount;
+    }
 
-    // Size of the color palette in bytes.
-    const int paletteSize = DVD_IFO_PALETTE_ENTRY_SIZE * DVD_IFO_PALETTE_ENTRY_COUNT;
-
-    // Clear info to collect.
-    _palette.clear();
-    _duration = 0;
-
-    // Read interesting information in each PGC.
-    for (quint16 pgcIndex = 0; valid && pgcIndex < pgcCount; ++pgcIndex) {
-        // Read the starting offset of each PGC, relative to the start of PGCI.
-        // Then, read the playback time in the PGC.
-        quint32 pgcStart = 0;
-        quint32 playbackTime = 0;
-        valid = QtlFile::readBigEndianAt(ifo, pgci + 12 + (pgcIndex * 8), pgcStart) &&
-                pgcStart < pgcLastByte &&
-                QtlFile::readBigEndianAt(ifo, pgci + pgcStart + DVD_IFO_PLAYBACK_OFFSET_IN_PGC, playbackTime);
-        if (!valid) {
-            break;
+    // Analyze all Program Chains.
+    for (int pgcIndex = 0; valid && pgcIndex < pgcCount; ++pgcIndex) {
+        // Check if the PGCI entry is set.
+        const int descIndex = pgci + 8 + 8 * pgcIndex;
+        if ((ifo[descIndex] & 0x80) == 0) {
+            // Entry not set, skip it.
+            continue;
         }
-
-        // The playback time is encoded in BCD as: hh:mm:ss:ff (ff = frame count within second)
-        // With 2 MSBits of ff indicating frame rate: 11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal
-        // We use a number of seconds and ignore the frame count within last second.
-        const int hours   = (((playbackTime >> 28) & 0x0F) * 10) + ((playbackTime >> 24) & 0x0F);
-        const int minutes = (((playbackTime >> 20) & 0x0F) * 10) + ((playbackTime >> 16) & 0x0F);
-        const int seconds = (((playbackTime >> 12) & 0x0F) * 10) + ((playbackTime >>  8) & 0x0F);
-
-        // Add the duration of this PCG in the title set duration.
-        _duration += (hours * 3600) + (minutes * 60) + seconds;
-
-        // We read the palette in the first PGC only. If there are several
-        // PGC's, we hope they all have the same palette.
-        if (_palette.isEmpty()) {
-            valid = QtlFile::readBinaryAt(ifo, pgci + pgcStart + DVD_IFO_PALETTE_OFFSET_IN_PGC, _palette, paletteSize) &&
-                    _palette.size() == paletteSize;
+        // Read the title number. The first title is #1.
+        const int titleNumber = ifo[descIndex] & 0x7F;
+        if (titleNumber < 1 || titleNumber > pgcCount) {
+            _log->line(QObject::tr("incorrect title number %1 in IFO.PGCI, should be in range 1 to %2").arg(titleNumber).arg(pgcCount));
+            continue;
+        }
+        // Read the starting offset of each PGC, relative to the start of PGCI.
+        const int pgcStart = pgci + ifo.fromBigEndian<quint32>(descIndex + 4);
+        QtlDvdProgramChainPtr pgc(new QtlDvdProgramChain(ifo, pgcStart, titleNumber));
+        valid = !pgc.isNull() && pgc->isValid();
+        if (valid) {
+            // Make sure the list is large enough.
+            // Note that titleNumber is less than 128.
+            while (_pgcs.size() < titleNumber) {
+                _pgcs << QtlDvdProgramChainPtr();
+            }
+            // Now set the PGC at the right index.
+            _pgcs.replace(titleNumber - 1, pgc);
         }
     }
     if (!valid) {
-        _log->line(tr("Error reading Program Chain Table (PGC) from %1").arg(_ifoFileName));
-        return false;
+        _log->line(QObject::tr("Error reading Program Chain Table (PGC) from %1").arg(_ifoFileName));
     }
-
     return valid;
 }
 
 
 //----------------------------------------------------------------------------
-// Get the color palette of the title set in RGB format.
+// Get the description of all sequential titles in the title set.
 //----------------------------------------------------------------------------
 
-QtlByteBlock QtlDvdTitleSet::rgbPalette() const
+QtlDvdProgramChainPtrList QtlDvdTitleSet::allTitles(int titleNumber) const
 {
-    QtlByteBlock palette(_palette);
-    convertPaletteYuvToRgb(palette, _log);
-    return palette;
+    // We must not create a loop and add the same title twice, keep track of inserted titles.
+    QSet<int> numbers;
+
+    // Get the "main" title.
+    QtlDvdProgramChainPtr pgc(title(titleNumber));
+
+    // Build the list containing this PGC.
+    QtlDvdProgramChainPtrList result;
+    if (!pgc.isNull()) {
+        const int next = pgc->nextTitleNumber();
+
+        // Prepend main title and all previous titles.
+        while (!pgc.isNull() && !numbers.contains(pgc->titleNumber())) {
+            result.prepend(pgc);
+            numbers.insert(pgc->titleNumber());
+            pgc = title(pgc->previousTitleNumber());
+        }
+
+        // Append all next titles.
+        pgc = title(next);
+        while (!pgc.isNull() && !numbers.contains(pgc->titleNumber())) {
+            result.append(pgc);
+            numbers.insert(pgc->titleNumber());
+            pgc = title(pgc->nextTitleNumber());
+        }
+    }
+    return result;
 }
 
 
 //----------------------------------------------------------------------------
-// Convert a YUV palette into RGB.
+// Get the longest duration of all sets of sequential titles in the title set.
 //----------------------------------------------------------------------------
 
-void QtlDvdTitleSet::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log)
+int QtlDvdTitleSet::longestDurationInSeconds() const
 {
-    if (palette.size() % 4 != 0 && log != 0) {
-        log->line(tr("Palette conversion: palette size is %1 bytes, not a multiple of 4").arg(palette.size()));
+    int longest = 0;
+    for (int i = 1; i <= titleCount(); ++i) {
+        longest = qMax(longest, allTitles(i).totalDurationInSeconds());
     }
-
-    // On input, each entry contains 4 bytes: (0, Y, Cr, Cb).
-    // On output, each entry contains 4 bytes: (0, R, G, B).
-    //
-    // The real formula is the following;
-    //    r = y + 1.402 * (cr - 128)
-    //    g = y - 0.34414 * (cb - 128) - 0.71414 * (cr - 128)
-    //    b = y + 1.722 * (cb - 128)
-    //
-    // The following algorithm is suggested in http://en.wikipedia.org/wiki/YUV.
-    //    cr = cr - 128
-    //    cb = cb - 128
-    //    r = y + cr + (cr >> 2) + (cr >> 3) + (cr >> 5)
-    //    g = y - ((cb >> 2) + (cb >> 4) + (cb >> 5)) - ((cr >> 1) + (cr >> 3) + (cr >> 4) + (cr >> 5))
-    //    b = y + cb + (cb >> 1) + (cb >> 2) + (cb >> 6)
-    // which gives the following values:
-    //    r = y + 1.40625 * (cr - 128)
-    //    g = y - 0.34375 * (cb - 128) - 0.71875 * (cr - 128)
-    //    b = y + 1.765625 * (cb - 128)
-
-    for (int base = 0; base + 4 <= palette.size(); base += 4) {
-        if (palette[base] != 0 && log != 0) {
-            log->line(tr("Palette conversion: unexpected value 0x%1, should be 0").arg(int(palette[base]), 2, 16, QChar('0')));
-        }
-        int y = int(palette[base+1]);
-        int cr = int(palette[base+2]) - 128;
-        int cb = int(palette[base+3]) - 128;
-        int r = y + cr + (cr >> 2) + (cr >> 3) + (cr >> 5);
-        int g = y - ((cb >> 2) + (cb >> 4) + (cb >> 5)) - ((cr >> 1) + (cr >> 3) + (cr >> 4) + (cr >> 5));
-        int b = y + cb + (cb >> 1) + (cb >> 2) + (cb >> 6);
-        palette[base+1] = quint8(qBound(0, r, 255));
-        palette[base+2] = quint8(qBound(0, g, 255));
-        palette[base+3] = quint8(qBound(0, b, 255));
-    }
+    return longest;
 }
 
 
@@ -622,7 +584,7 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useM
         writer = new QtlDvdDataPull(_deviceName,
                                     _vobStartSector,
                                     vobSectorCount(),
-                                    QtlDvdMedia::SkipBadSectors,
+                                    Qtl::SkipBadSectors,
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     log,

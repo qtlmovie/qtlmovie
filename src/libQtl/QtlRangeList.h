@@ -28,7 +28,7 @@
 //!
 //! @file QtlRangeList.h
 //!
-//! Declare the template class QtlRangeList.
+//! Declare the class QtlRangeList.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
@@ -56,21 +56,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Qtl::MergeRangeFlags)
 
 //!
 //! A class which extends a list of QtlRange.
-//! @tparam INT Any integer type, signed or unsigned.
 //!
-template<typename INT>
-class QtlRangeList : public QList< QtlRange<INT> >
+class QtlRangeList : public QList<QtlRange>
 {
 public:
     //!
-    //! Redefine the element type.
-    //!
-    typedef QtlRange<INT> Range;
-
-    //!
     //! Redefine the superclass type.
     //!
-    typedef QList<Range> SuperClass;
+    typedef QList<QtlRange> SuperClass;
 
     //!
     //! Default constructor.
@@ -87,7 +80,7 @@ public:
     //! Constructor from one initial element.
     //! @param [in] e Initial element.
     //!
-    QtlRangeList(const Range& e) :
+    QtlRangeList(const QtlRange& e) :
 #if defined(Q_COMPILER_INITIALIZER_LISTS)
         SuperClass({e}) {}
 #else
@@ -100,24 +93,53 @@ public:
     //! This constructor is only enabled if the compiler supports C++11 initializer lists
     //! @param [in] args List of initial elements.
     //!
-    QtlRangeList(std::initializer_list<Range> args) : SuperClass(args) {}
+    QtlRangeList(std::initializer_list<QtlRange> args) : SuperClass(args) {}
 #endif
 
     //!
-    //! Sort the list.
+    //! Get the total number of values in all ranges.
+    //! @return The number of values in all ranges.
     //!
-    void sort()
+    quint64 totalValueCount() const;
+
+    //!
+    //! Add a given offset to first and last value of all elements in the list.
+    //! There is no overflow, the ranges are bounded by @a qint64.
+    //! @param [in] offset Value to add.
+    //! @return A reference to this object.
+    //!
+    QtlRangeList& add(qint64 offset);
+
+    //!
+    //! Sort the list.
+    //! @return A reference to this object.
+    //!
+    QtlRangeList& sort()
     {
         std::sort(this->begin(), this->end());
+        return *this;
     }
 
     //!
     //! Merge all overlapping or adjacent segments.
     //! @param [in] flags Merge options.
+    //! @return A reference to this object.
     //! @see Qtl::MergeFlags
     //!
-    void merge(Qtl::MergeRangeFlags flags = Qtl::AdjacentOnly);
+    QtlRangeList& merge(Qtl::MergeRangeFlags flags = Qtl::AdjacentOnly);
+
+    //!
+    //! Remove values outside the given range.
+    //! @param [in] range Limit the values within that range.
+    //! @return A reference to this object.
+    //!
+    QtlRangeList& clip(const QtlRange& range);
+
+    //!
+    //! Convert the list of ranges to a string.
+    //! @return A string in format "[first, last] [first, last] ...".
+    //!
+    QString toString() const;
 };
 
-#include "QtlRangeListTemplate.h"
 #endif // QTLRANGELIST_H

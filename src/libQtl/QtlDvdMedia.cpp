@@ -238,7 +238,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
         // Here, we do not read more than 8 sectors (not standard, but highly probable).
         // We do not skip bad sectors in this part of the media.
         QtlByteBlock data(Qtl::DVD_SECTOR_SIZE);
-        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, ErrorOnBadSectors) == 1; --count) {
+        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, Qtl::ErrorOnBadSectors) == 1; --count) {
             // Volume descriptor type is in first byte.
             const int type = data[0];
             // Volume descriptor standard identified is in the next 5 bytes.
@@ -377,7 +377,7 @@ bool QtlDvdMedia::seekSector(int position)
 // Read a given number of sectors from the DVD media.
 //----------------------------------------------------------------------------
 
-int QtlDvdMedia::readSectors(void* buffer, int count, int position, BadSectorPolicy badSectorPolicy)
+int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSectorPolicy badSectorPolicy)
 {
     // Check that the device is at least partially open.
     // Seek if requested.
@@ -450,17 +450,17 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, BadSectorPol
                 badSectorMax = DVD_BAD_SECTOR_RETRY;
             }
         }
-        else if (badSectorPolicy != ErrorOnBadSectors && badSectorMax > 0) {
+        else if (badSectorPolicy != Qtl::ErrorOnBadSectors && badSectorMax > 0) {
             // In case of read error, this may be an intentional bad sector, used to fool copy programs.
             // Let's ignore it if we can explicitly seek to next sector.
             if (dvdcss_seek(_dvdcss, _nextSector + 1, seekFlags) > 0) {
                 badSectorMax--;
                 switch (badSectorPolicy) {
-                    case SkipBadSectors:
+                    case Qtl::SkipBadSectors:
                         got = 0;
                         ++_nextSector;
                         break;
-                    case ReadBadSectorsAsZero:
+                    case Qtl::ReadBadSectorsAsZero:
                         got = 1;
                         ::memset(buf, 0, Qtl::DVD_SECTOR_SIZE);
                         break;
@@ -508,7 +508,7 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
     // Read directory content.
     const int dirSectorCount = dir.sizeInBytes() / Qtl::DVD_SECTOR_SIZE + int(dir.sizeInBytes() % Qtl::DVD_SECTOR_SIZE != 0);
     QtlByteBlock data(dirSectorCount * Qtl::DVD_SECTOR_SIZE);
-    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), ErrorOnBadSectors)) {
+    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), Qtl::ErrorOnBadSectors)) {
         _log->line(tr("Error reading DVD directory information at sector %1").arg(dir.startSector()));
         return false;
     }

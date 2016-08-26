@@ -62,7 +62,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
                                                      int startSector,
                                                      int sectorCount,
                                                      bool useMaxReadSpeed,
-                                                     QtlDvdMedia::BadSectorPolicy badSectorPolicy,
+                                                     Qtl::BadSectorPolicy badSectorPolicy,
                                                      QtlLogger* log) :
     totalSectors(sectorCount),
     file(outputFileName),
@@ -86,7 +86,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
 void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName,
                                            int startSector,
                                            int sectorCount,
-                                           QtlDvdMedia::BadSectorPolicy badSectorPolicy)
+                                           Qtl::BadSectorPolicy badSectorPolicy)
 {
     // Cannot do that after start.
     if (isStarted()) {

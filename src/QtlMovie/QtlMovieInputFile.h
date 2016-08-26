@@ -226,10 +226,7 @@ public:
     //! Get the DVD palette in RGB format.
     //! @return The DVD palette in RGB format or an empty array if the file is not a DVD.
     //!
-    QtlByteBlock palette() const
-    {
-        return _dvdTitleSet.rgbPalette();
-    }
+    QtlByteBlock palette() const;
 
     //!
     //! Get the index of video stream to transcode.
@@ -393,6 +390,8 @@ private:
     QtlMovieFFprobeTags         _ffInfo;         //!< Media info in ffprobe flat format.
     QtlMediaStreamInfoPtrVector _streams;        //!< Stream information.
     QtlDvdTitleSet              _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
+    QtlDvdProgramChainPtr       _dvdPgc;         //!< Smart pointer to PGC inside the DVD VTS.
+    QtlDvdProgramChainPtrList   _dvdPgcSequence; //!< Sequence of all PGC's inside the DVD VTS.
     QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
     int     _ffprobeCount;                       //!< Number of ffprobe in progress.
     int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.

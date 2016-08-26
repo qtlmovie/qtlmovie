@@ -1320,32 +1320,32 @@ Les remplacer?</translation>
 <context>
     <name>QtlMovieInputFile</name>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="237"/>
+        <location filename="../QtlMovieInputFile.cpp" line="254"/>
         <source>Searching audio and subtitles tracks on DVD, please be patient...</source>
         <translation>Recherche de pistes audio et sous-titres sur le DVD, soyez patient...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="269"/>
+        <location filename="../QtlMovieInputFile.cpp" line="286"/>
         <source>FFprobe error: %1</source>
         <translation>Erreur FFprobe: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="331"/>
+        <location filename="../QtlMovieInputFile.cpp" line="348"/>
         <source>Failed to start search for Teletext subtitles</source>
         <translation>Erreur au démarrage de la recherche des sous-titres Teletext</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="349"/>
+        <location filename="../QtlMovieInputFile.cpp" line="366"/>
         <source>Found one Teletext subtitle stream, page %1</source>
         <translation>Flux de sous-titre Teletext en page %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="401"/>
+        <location filename="../QtlMovieInputFile.cpp" line="418"/>
         <source>Search for Teletext subtitles completed</source>
         <translation>Recherche de sous-titres Teletext terminée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieInputFile.cpp" line="444"/>
+        <location filename="../QtlMovieInputFile.cpp" line="461"/>
         <source>Searching for audio and subtitles tracks completed</source>
         <translation>Fin de recherche des pistes audio et sous-titres</translation>
     </message>

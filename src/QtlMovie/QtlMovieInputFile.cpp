@@ -54,6 +54,8 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _ffInfo(),
     _streams(),
     _dvdTitleSet(fileName, log),
+    _dvdPgc(),
+    _dvdPgcSequence(),
     _teletextSearch(0),
     _ffprobeCount(0),
     _ccSearchCount(0),
@@ -88,6 +90,8 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _ffInfo(other._ffInfo),
     _streams(other._streams),
     _dvdTitleSet(other._dvdTitleSet),
+    _dvdPgc(other._dvdPgc),
+    _dvdPgcSequence(other._dvdPgcSequence),
     _teletextSearch(0),  // don't copy
     _ffprobeCount(0),    // don't copy
     _ccSearchCount(0),   // don't copy
@@ -154,6 +158,8 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     _ffmpegInput = fileName;
     _ffmpegFormat.clear();
     _pipeInput = false;
+    _dvdPgc.clear();
+    _dvdPgcSequence.clear();
 
     // Clear all previous media info.
     const bool wasNone = _streams.isEmpty();
@@ -190,6 +196,17 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     // DVD media and file structure requires special treatment.
     int ffprobeTimeout = _settings->ffprobeExecutionTimeout();
     if (isOnDvd) {
+
+        // If the specified PGC in the settings does not exist in this VTS, revert to PGC #1.
+        // This is a safe default since most DVD's have only one PGC.
+        _dvdPgc = _dvdTitleSet.title(_settings->dvdProgramChain());
+        if (_dvdPgc.isNull()) {
+            _dvdPgc = _dvdTitleSet.title(1);
+        }
+        if (!_dvdPgc.isNull()) {
+            // Full sequence, including prevous / next PGC's.
+            _dvdPgcSequence = _dvdTitleSet.allTitles(_dvdPgc->titleNumber());
+        }
 
         // Give a 4 times longer timeout on DVD devices, they are so slow to start.
         ffprobeTimeout *= 4;
@@ -461,6 +478,16 @@ QtlDataPull* QtlMovieInputFile::dataPull(QObject* parent) const
 
 
 //----------------------------------------------------------------------------
+// Get the DVD palette in RGB format.
+//----------------------------------------------------------------------------
+
+QtlByteBlock QtlMovieInputFile::palette() const
+{
+    return _dvdPgc.isNull() ? QtlByteBlock() : _dvdPgc->rgbPalette();
+}
+
+
+//----------------------------------------------------------------------------
 // Get the number of streams in the file matching a given type.
 //----------------------------------------------------------------------------
 
@@ -516,7 +543,7 @@ float QtlMovieInputFile::durationInSeconds() const
     // a multi-layer DVD, the time stamps are reset at the beginning of each layer.
     // So, the last time stamp of the last file is the duration of the last layer,
     // not the duration of the movie.
-    const int dvdDuration = _dvdTitleSet.durationInSeconds();
+    const int dvdDuration = _dvdPgcSequence.totalDurationInSeconds();
     if (dvdDuration > 0) {
         return float(dvdDuration);
     }

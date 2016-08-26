@@ -89,7 +89,10 @@ SOURCES += \
     QtlSubRipGenerator.cpp \
     QtlSubStationAlphaParser.cpp \
     QtlSubStationAlphaStyle.cpp \
-    QtlSubStationAlphaFrame.cpp
+    QtlSubStationAlphaFrame.cpp \
+    QtlRangeList.cpp \
+    QtlRange.cpp \
+    QtlDvdProgramChain.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -166,8 +169,8 @@ HEADERS += \
     QtlSubStationAlphaFrame.h \
     QtlRange.h \
     QtlRangeList.h \
-    QtlRangeListTemplate.h \
-    QtlRangeTemplate.h
+    QtlDvdProgramChain.h \
+    QtlDvd.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

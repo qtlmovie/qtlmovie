@@ -35,13 +35,33 @@
 
 
 //----------------------------------------------------------------------------
-// Constructor and destructor.
+// Constructors.
 //----------------------------------------------------------------------------
 
 QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
                                int startSector,
                                int sectorCount,
-                               QtlDvdMedia::BadSectorPolicy badSectorPolicy,
+                               Qtl::BadSectorPolicy badSectorPolicy,
+                               int transferSize,
+                               int minBufferSize,
+                               QtlLogger* log,
+                               QObject* parent,
+                               bool useMaxReadSpeed) :
+    QtlDvdDataPull(deviceName,
+                   QtlRangeList(QtlRange(startSector, startSector + sectorCount - 1)),
+                   badSectorPolicy,
+                   transferSize,
+                   minBufferSize,
+                   log,
+                   parent,
+                   useMaxReadSpeed)
+{
+}
+
+
+QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
+                               const QtlRangeList sectorList,
+                               Qtl::BadSectorPolicy badSectorPolicy,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
@@ -49,22 +69,23 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
                                bool useMaxReadSpeed) :
     QtlDataPull(minBufferSize, log, parent),
     _deviceName(deviceName),
-    _startSector(startSector),
-    _endSector(startSector + sectorCount),
+    _sectorList(sectorList),
+    _badSectorPolicy(badSectorPolicy),
     _sectorChunk(qMax(1, transferSize / Qtl::DVD_SECTOR_SIZE)),
     _maxReadSpeed(useMaxReadSpeed),
+    _currentRange(_sectorList.begin()),
+    _nextSector(-1),
     _buffer(_sectorChunk * Qtl::DVD_SECTOR_SIZE),
     _dvd(QString(), log),
     _timeAverage(),
     _timeInstant(),
-    _reportInterval(30000), // 30 seconds
-    _reportSector(0),
-    _badSectorPolicy(badSectorPolicy)
+    _countAverage(0),
+    _countInstant(0),
+    _reportInterval(30000) // 30 seconds
 {
     // Set total transfer size in bytes. In case of ignored bad sectors, the
     // total size will be slightly smaller, but this is just a hint.
-    const qint64 total = qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE;
-    setProgressMaxHint(total);
+    setProgressMaxHint(_sectorList.totalValueCount() * Qtl::DVD_SECTOR_SIZE);
 
     // Set progress interval: every 1 MB.
     setProgressIntervalInBytes(1024 * 1024);
@@ -77,26 +98,20 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
 
 bool QtlDvdDataPull::initializeTransfer()
 {
-    // Filter invalid initial parameters.
-    if (_dvd.isOpen() || _deviceName.isEmpty() || _startSector < 0 || _endSector < _startSector) {
-        return false;
-    }
-
-    // Initialize DVD access.
-    if (!_dvd.openFromDevice(_deviceName, _maxReadSpeed)) {
-        return false;
-    }
-
-    // Seek to start sector.
-    if (!_dvd.seekSector(_startSector)) {
-        _dvd.close();
+    // Filter invalid initial parameters and initialize DVD access.
+    if (_dvd.isOpen() || _deviceName.isEmpty() ||!_dvd.openFromDevice(_deviceName, _maxReadSpeed)) {
         return false;
     }
 
     // Start timers.
+    _countAverage = 0;
+    _countInstant = 0;
     _timeAverage.start();
     _timeInstant.start();
-    _reportSector = _startSector;
+
+    // Set position to first sector to read.
+    _currentRange = _sectorList.begin();
+    _nextSector = -1;
 
     return true;
 }
@@ -108,14 +123,38 @@ bool QtlDvdDataPull::initializeTransfer()
 
 bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 {
-    // Transfer completed.
-    if (_dvd.nextSector() >= _endSector) {
+    // Move forward in sector list until we find something to read.
+    while (_currentRange != _sectorList.end()) {
+        if (_currentRange->isEmpty() || _nextSector > _currentRange->last()) {
+            // Empty range or already completely read, look at next one.
+            ++_currentRange;
+        }
+        else if (_nextSector >= 0) {
+            // Currently in the middle of this range of sectors, continue reading.
+            break;
+        }
+        else {
+            // Current range of sectors not yet started, need to seek here.
+            _nextSector = _currentRange->first();
+            if (!_dvd.seekSector(_nextSector)) {
+                return false;
+            }
+            break;
+        }
+    }
+
+    // Is the transfer completed?
+    if (_currentRange == _sectorList.end()) {
         close();
         return true;
     }
 
+    Q_ASSERT(_currentRange->first() <= _currentRange->last());
+    Q_ASSERT(_nextSector >= _currentRange->first());
+    Q_ASSERT(_nextSector <= _currentRange->last());
+
     // Compute maximum number of sectors to read.
-    int count = qMin(_sectorChunk, _endSector - _dvd.nextSector());
+    int count = qMin<int>(_sectorChunk, _currentRange->last() - _nextSector + 1);
     if (maxSize >= 0) {
         count = qMin(count, int(maxSize / Qtl::DVD_SECTOR_SIZE));
     }
@@ -155,18 +194,17 @@ void QtlDvdDataPull::cleanupTransfer(bool clean)
 
 void QtlDvdDataPull::reportBandwidth()
 {
-    const int nextSector = _dvd.nextSector();
     const int msAverage = _timeAverage.elapsed();
     const int msInstant = _timeInstant.restart();
-    const qint64 totalBytes = qint64(nextSector - _startSector) * Qtl::DVD_SECTOR_SIZE;
-    const qint64 instantBytes = qint64(nextSector - _reportSector) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 totalBytes = qint64(_countAverage) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 instantBytes = qint64(_countInstant) * Qtl::DVD_SECTOR_SIZE;
 
     const Qtl::TransferRateFlags flags(Qtl::TransferDvdBase | Qtl::TransferKiloBytes);
     const QString averageRate(QtlDvdMedia::transferRateToString(totalBytes, msAverage, flags));
     const QString instantRate(QtlDvdMedia::transferRateToString(instantBytes, msInstant, flags));
 
     if (msAverage > 0) {
-        QString line(tr("Transfer bandwidth after %1 sectors: ").arg(nextSector - _startSector));
+        QString line(tr("Transfer bandwidth after %1 sectors: ").arg(_countAverage));
         if (msInstant > 0) {
             line.append(instantRate);
             line.append(", ");
@@ -176,5 +214,5 @@ void QtlDvdDataPull::reportBandwidth()
         log()->line(line);
     }
 
-    _reportSector = nextSector;
+    _countInstant = 0;
 }

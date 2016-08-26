@@ -38,34 +38,7 @@
 
 #include "QtlNullLogger.h"
 #include "QtlDvdDirectory.h"
-
-//!
-//! Qtl namespace.
-//!
-namespace Qtl {
-    //!
-    //! Size in bytes of a DVD sector.
-    //!
-    static const int DVD_SECTOR_SIZE = 2048;
-
-    //!
-    //! Reference DVD transfer rate in bytes / second (aka "1x").
-    //!
-    static const int DVD_TRANSFER_RATE = 1385000;
-
-    //!
-    //! Flags for QtlDvdMedia::transferRateToString().
-    //!
-    enum TransferRateFlag {
-        TransferDvdBase   = 0x0001,  //!< Include "Nx" using DVD base transfer rate.
-        TransferBytes     = 0x0002,  //!< Include bytes per second.
-        TransferKiloBytes = 0x0004,  //!< Include kilo-bytes per second.
-        TransferKibiBytes = 0x0008,  //!< Include kibi-bytes (base 1024) per second.
-        TransferBits      = 0x0010,  //!< Include bits per second.
-    };
-    Q_DECLARE_FLAGS(TransferRateFlags, TransferRateFlag)
-}
-Q_DECLARE_OPERATORS_FOR_FLAGS(Qtl::TransferRateFlags)
+#include "QtlDvd.h"
 
 //!
 //! Description of a DVD media.
@@ -191,26 +164,6 @@ public:
     }
 
     //!
-    //! Management policy of bad or corrupted sectors.
-    //!
-    //! Some DVD may intentionally include bad sectors as "protection" in the hope
-    //! that copy programs will fail when encountering read errors.
-    //!
-    //! Note that if bad sectors are skipped, the current position on DVD moves past
-    //! the number of requested sectors. Do not assume that the next position after
-    //! readSectors() is nextSector() + @a count, check nextSector().
-    //!
-    //! Consequently, when reading the complete content of a DVD to create an ISO image,
-    //! use ReadBadSectorsAsZero, do not use SkipBadSectors since this would change the
-    //! layout of the media and corrupt the file structure.
-    //!
-    enum BadSectorPolicy {
-        ErrorOnBadSectors,     //!< Stop and return an error when reading a bad sector.
-        SkipBadSectors,        //!< Skip bad sectors, ignore them, do not include them in returned data.
-        ReadBadSectorsAsZero   //!< Return bad sectors as if they contained all zeroes.
-    };
-
-    //!
     //! Read a given number of sectors from the DVD media.
     //! @param [out] buffer Where to read sectors into. Must be at least as large as 2048 x @a count bytes.
     //! @param [in] count Number of sectors to read.
@@ -223,7 +176,7 @@ public:
     //! is negative then there was an error before anything could be read.
     //! @see BadSectorPolicy
     //!
-    int readSectors(void *buffer, int count, int position = -1, BadSectorPolicy badSectorPolicy = SkipBadSectors);
+    int readSectors(void *buffer, int count, int position = -1, Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors);
 
     //!
     //! Get the number of Video Title Sets (VTS) on the DVD.

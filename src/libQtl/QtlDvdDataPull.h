@@ -73,7 +73,31 @@ public:
     explicit QtlDvdDataPull(const QString& deviceName,
                             int startSector,
                             int sectorCount,
-                            QtlDvdMedia::BadSectorPolicy badSectorPolicy = QtlDvdMedia::SkipBadSectors,
+                            Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors,
+                            int transferSize = DEFAULT_TRANSFER_SIZE,
+                            int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
+                            QtlLogger* log = 0,
+                            QObject* parent = 0,
+                            bool useMaxReadSpeed = false);
+
+    //!
+    //! Constructor.
+    //! Progress reporting is automatically enabled.
+    //! @param [in] deviceName DVD device name.
+    //! @param [in] sectorList List of sectors to read.
+    //! @param [in] badSectorPolicy How to handle bad sectors.
+    //! @param [in] transferSize Data transfer size in bytes.
+    //! @param [in] minBufferSize The minimum buffer size is the lower limit of the
+    //! buffered data. When the amount of data not yet written to the device is lower
+    //! than this size, new data is pulled from the DVD.
+    //! @param [in] log Optional message logger.
+    //! @param [in] parent Optional parent object.
+    //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
+    //! @see QtlDvdMedia::BadSectorPolicy
+    //!
+    explicit QtlDvdDataPull(const QString& deviceName,
+                            const QtlRangeList sectorList,
+                            Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors,
                             int transferSize = DEFAULT_TRANSFER_SIZE,
                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                             QtlLogger* log = 0,
@@ -109,20 +133,23 @@ protected:
     void reportBandwidth();
 
 private:
-    const QString _deviceName;     //!< DVD device name.
-    const int     _startSector;    //!< First sector to transfer.
-    const int     _endSector;      //!< Last sector + 1 to transfer.
-    const int     _sectorChunk;    //!< Number of sectors per transfer.
-    const bool    _maxReadSpeed;   //!< Set the DVD reader to maximum speed.
+    const QString               _deviceName;      //!< DVD device name.
+    const QtlRangeList          _sectorList;      //!< List of sectors to read.
+    const Qtl::BadSectorPolicy  _badSectorPolicy; //!< How to handle bad sectors.
+    const int                   _sectorChunk;     //!< Number of sectors per transfer.
+    const bool                  _maxReadSpeed;    //!< Set the DVD reader to maximum speed.
+    QtlRangeList::ConstIterator _currentRange;    //!< Current pointer in _sectorList.
+    int           _nextSector;     //!< Next sector in _currentRange, -1 means at beginning.
     QtlByteBlock  _buffer;         //!< Transfer buffer.
     QtlDvdMedia   _dvd;            //!< Access to DVD media.
     QTime         _timeAverage;    //!< Timer for average bandwidth reporting.
     QTime         _timeInstant;    //!< Timer for instant bandwidth reporting.
+    int           _countAverage;   //!< Count sectors for average bandwidth reporting.
+    int           _countInstant;   //!< Count sectors for instant bandwidth reporting.
     const int     _reportInterval; //!< Interval in milli-seconds between bandwidth reporting.
-    int           _reportSector;   //!< Current sector during last report interval.
-    const QtlDvdMedia::BadSectorPolicy _badSectorPolicy; //!< How to handle bad sectors.
 
     // Unaccessible operations.
+    QtlDvdDataPull() Q_DECL_EQ_DELETE;
     Q_DISABLE_COPY(QtlDvdDataPull)
 };
 

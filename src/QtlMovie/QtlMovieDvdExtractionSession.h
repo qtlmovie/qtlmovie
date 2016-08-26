@@ -65,7 +65,7 @@ public:
     //! @param [in] badSectorPolicy How to handle bad sectors.
     //! @see QtlDvdMedia::BadSectorPolicy
     //!
-    void addFile(const QString& outputFileName, int startSector, int sectorCount, QtlDvdMedia::BadSectorPolicy badSectorPolicy);
+    void addFile(const QString& outputFileName, int startSector, int sectorCount, Qtl::BadSectorPolicy badSectorPolicy);
 
     //!
     //! Get the number of remaining transfers, including the current one.
@@ -148,7 +148,7 @@ private:
                    int startSector,
                    int sectorCount,
                    bool useMaxReadSpeed,
-                   QtlDvdMedia::BadSectorPolicy badSectorPolicy,
+                   Qtl::BadSectorPolicy badSectorPolicy,
                    QtlLogger* log);
     };
 

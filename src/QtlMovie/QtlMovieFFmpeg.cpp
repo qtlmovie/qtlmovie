@@ -96,17 +96,7 @@ QStringList QtlMovieFFmpeg::inputArguments(const QtlMovieSettings* settings, con
 
     // Build the color palette options. This is typically used for DVD subtitles where the
     // color palette of the subtitles bitmaps is stored outside the video file (in the .IFO).
-    const QtlByteBlock palette(file->palette());
-    QString paletteDescription;
-    for (int base = 0; base + 4 <= palette.size(); base += 4) {
-        const quint8 r = palette[base+1];
-        const quint8 g = palette[base+2];
-        const quint8 b = palette[base+3];
-        if (!paletteDescription.isEmpty()) {
-            paletteDescription.append(",");
-        }
-        paletteDescription.append(QStringLiteral("%1%2%3").arg(r,2,16,QChar('0')).arg(g,2,16,QChar('0')).arg(b,2,16,QChar('0')));
-    }
+    const QString paletteDescription(QtlDvdProgramChain::paletteToString(file->palette()));
     if (!paletteDescription.isEmpty()) {
         args << "-palette" << paletteDescription;
     }
