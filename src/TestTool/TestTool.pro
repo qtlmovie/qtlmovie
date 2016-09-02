@@ -50,7 +50,8 @@ SOURCES += \
     QtlTestMkdir.cpp \
     QtlTestDvdRead.cpp \
     QtlTestSsa.cpp \
-    QtlTestDvdIfo.cpp
+    QtlTestDvdIfo.cpp \
+    QtlTestDvdVts.cpp
 
 HEADERS += \
     QtlTestCommand.h

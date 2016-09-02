@@ -82,7 +82,9 @@
 #define QTL_CLEANUP_SUBTITLES               true  //!< Cleanup SRT/SSA/ASS subtitles files before burning.
 #define QTL_SRT_HTML_TAGS                   true  //!< Add HTML tags in SRT subtitles when converting from SSA/ASS.
 #define QTL_DOWNGRADE_SSA_TO_SRT           false  //!< Downgrade SSA/ASS subtitles to SRT before burning?
-#define QTL_DVD_PROGRAMCHAIN                   1  //!< Default Program Chain (PGC) to extract in a DVD Title Set (VTS)
+#define QTL_DVD_TRANSCODE_RAW_VOB          false  //!< Transcode raw VOB files from DVD (don't extract specific PGC).
+#define QTL_DVD_PROGRAM_CHAIN                  1  //!< Default Program Chain (PGC) to extract in a DVD Title Set (VTS).
+#define QTL_DVD_ANGLE                          1  //!< Default angle to extract in a DVD program chain.
 
 //
 // Transcoding presets.

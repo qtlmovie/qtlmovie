@@ -351,12 +351,14 @@ bool QtlDvdMedia::seekSector(int position)
             _log->line(tr("Error seeking DVD to sector %1, not found in media layout").arg(position));
             return false;
         }
-        _log->debug(tr("Switching to %1 on DVD").arg((*file)->description()));
+        if (file != _currentFile) {
+            _log->debug(tr("Switching to %1 on DVD").arg((*file)->description()));
+        }
 
         // If this is a VOB file, decrypt.
         if ((*file)->isVob()) {
-            // Use SEEK_KEY when changing file to force a key search.
-            seekFlags = file == _currentFile ? DVDCSS_SEEK_MPEG : DVDCSS_SEEK_KEY;
+            // Use SEEK_KEY when changing file on encrypted DVD to force a key search.
+            seekFlags = file == _currentFile || !dvdcss_is_scrambled(_dvdcss) ? DVDCSS_SEEK_MPEG : DVDCSS_SEEK_KEY;
         }
     }
 
@@ -421,7 +423,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSect
             }
 
             // If current file is a VOB, we need to decrypt.
-            if ((*_currentFile)->isVob()) {
+            if ((*_currentFile)->isVob() && dvdcss_is_scrambled(_dvdcss)) {
                 readFlags = DVDCSS_READ_DECRYPT;
                 seekFlags = DVDCSS_SEEK_KEY;
             }

@@ -111,6 +111,13 @@ public:
     QtlRangeList& add(qint64 offset);
 
     //!
+    //! Scale all ranges in the list by a given factor.
+    //! @param [in] factor Scale factor.
+    //! @return A reference to this object.
+    //!
+    QtlRangeList& scale(qint64 factor);
+
+    //!
     //! Sort the list.
     //! @return A reference to this object.
     //!

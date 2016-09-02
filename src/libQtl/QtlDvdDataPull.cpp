@@ -128,6 +128,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
         if (_currentRange->isEmpty() || _nextSector > _currentRange->last()) {
             // Empty range or already completely read, look at next one.
             ++_currentRange;
+            _nextSector = -1;
         }
         else if (_nextSector >= 0) {
             // Currently in the middle of this range of sectors, continue reading.
@@ -135,6 +136,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
         }
         else {
             // Current range of sectors not yet started, need to seek here.
+            log()->debug(tr("Starting transfer of DVD sectors %1").arg(_currentRange->toString()));
             _nextSector = _currentRange->first();
             if (!_dvd.seekSector(_nextSector)) {
                 return false;
@@ -166,6 +168,9 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     if ((count = _dvd.readSectors(_buffer.data(), count, -1, _badSectorPolicy)) <= 0) {
         return false;
     }
+    _nextSector += count;
+    _countAverage += count;
+    _countInstant += count;
 
     // Report bandwidth.
     if (_timeInstant.elapsed() >= _reportInterval) {

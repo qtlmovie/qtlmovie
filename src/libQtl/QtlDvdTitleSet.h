@@ -271,16 +271,31 @@ public:
     }
 
     //!
-    //! Create a QtlDataPull to transfer of the video content of the title set to a device.
+    //! Get the list of sectors for a given PGC, with fallback.
+    //!
+    //! @param [in] titleNumber A title number (PGC) to get. The first title in the VTS is #1.
+    //! When set to zero, extract the complete content of all VOB files. If non-zero and the
+    //! specified title does not exist, use @a fallbackTitleNumber.
+    //! @param [in] fallbackTitleNumber When @a titleNumber is non-zero but the corresponing
+    //! title does not exist, then extract @a fallbackTitleNumber instead. If @a fallbackTitleNumber
+    //! is zero, then extract the complete content of all VOB files. If @a fallbackTitleNumber
+    //! is not zero but the corresponding title does no exist either, then extract nothing.
+    //! @param [in] log Where to log errors.
+    //! @return The list of sectors to extract with 0 as base for first sector of first VOB.
+    //!
+    QtlRangeList titleSectors(int titleNumber = 0, int fallbackTitleNumber = 0, QtlLogger* log = 0) const;
+
+    //!
+    //! Create a QtlDataPull to transfer some video content of the title set to a device.
+    //!
     //! @param [in] log Where to log errors.
     //! @param parent Optional parent object of the QtlDataPull instance.
     //! @param [in] useMaxReadSpeed If true and the title set is on a DVD media,
     //! try to set the DVD reader to maximum speed.
-    //! @return An instance of QtlDataPull which can transfer the content of
-    //! the title set. The QtlDataPull is created but not started. This object will
-    //! delete itself at the end of the transfer.
+    //! @param [in] sectorList The list of sectors to extract with 0 as base for first sector of first VOB.
+    //! @return A pointer to a new QtlDataPull.
     //!
-    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false) const;
+    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false, const QtlRangeList& sectorList = QtlRangeList()) const;
 
     //!
     //! Check if a file is a .IFO or .VOB.

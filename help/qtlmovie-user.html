@@ -531,12 +531,18 @@
         <p>This tab is divided into two groups.
           The first group of settings contains those which are used when reading DVD content as input.
           The second group contains those which affect the generation of DVD's.</p>
-        <p>In the group of settings for reading DVD content, the "Program Chain (PGC)" indicates
-          which PGC is extracted from a DVD title set. Most DVD title sets contain only one
-          program chain or "PGC". But some of them contain several program chains, typically
-          describing different views of the movie. In that case, the various PGC are sequentially numbered
-          for 1 onward. This option selects which PGC shall be used when extracting the DVD content.
-          Most the time, the default value 1 is appropriate.</p>
+        <p>In the group of settings for reading DVD content, checking the option "Transcode raw VOB files"
+          means that FFmpeg will transcode the raw content of all VOB files for a given movie
+          (or "VTS", for "Video Title Set"). This will work for most movies.
+          However, some DVD's have movies with more than one "Program Chain" (PGC) or more than one "Angle".
+          In this case, the various program chains and angles are multiplexed inside the VOB files
+          and FFmpeg is unable to differentiate them. The result of the transcoding is consequently
+          inconsistent. This is why this option is disabled by default.</p>
+        <p>When the option "Transcode raw VOB files" is disabled, QtlMovie will demultiplex the content of the VOB
+          files and provide to FFmpeg only the specified "Program Chain (PGC)" and "Angle".
+          PGC's and angles are numbered starting from 1 onward.
+          The default values 1 and 1 are recommended since they usually refer to the standard playback of the movie.
+          If the specified PGC does not exist, the PGC number 1 will always be used instead.</p>
         <p>In the group of settings for the generation of DVD's,
           the PAL vs. NTSC options indicate the format of all created DVD's.</p>
         <p>The specified video bitrate is used by default as "average bitrate".

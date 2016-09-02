@@ -92,7 +92,9 @@ SOURCES += \
     QtlSubStationAlphaFrame.cpp \
     QtlRangeList.cpp \
     QtlRange.cpp \
-    QtlDvdProgramChain.cpp
+    QtlDvdProgramChain.cpp \
+    QtlFileSlices.cpp \
+    QtlDataPullSynchronousWrapper.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -170,7 +172,9 @@ HEADERS += \
     QtlRange.h \
     QtlRangeList.h \
     QtlDvdProgramChain.h \
-    QtlDvd.h
+    QtlDvd.h \
+    QtlFileSlices.h \
+    QtlDataPullSynchronousWrapper.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

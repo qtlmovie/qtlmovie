@@ -35,7 +35,7 @@
 
 
 //----------------------------------------------------------------------------
-// Constructor and destructor.
+// Constructor.
 //----------------------------------------------------------------------------
 
 QtlFileDataPull::QtlFileDataPull(const QStringList& fileNames,
@@ -43,18 +43,29 @@ QtlFileDataPull::QtlFileDataPull(const QStringList& fileNames,
                                  int minBufferSize,
                                  QtlLogger* log,
                                  QObject* parent) :
+    QtlFileDataPull(toFileSlicesList(fileNames), transferSize, minBufferSize, log, parent)
+{
+}
+
+
+QtlFileDataPull::QtlFileDataPull(const QtlFileSlicesPtrList& files,
+                                 int transferSize,
+                                 int minBufferSize,
+                                 QtlLogger* log,
+                                 QObject* parent) :
     QtlDataPull(minBufferSize, log, parent),
-    _fileNames(fileNames),
-    _input(),
-    _currentIndex(0),
+    _files(files),
+    _current(_files.begin()),
     _buffer(qMax(1024, transferSize))
 {
     // Set total transfer size in bytes.
     qint64 total = 0;
-    foreach (const QString& name, _fileNames) {
-        const qint64 size = QFileInfo(name).size();
-        if (size > 0) {
-            total += size;
+    foreach (const QtlFileSlicesPtr& file, _files) {
+        if (!file.isNull()) {
+            const qint64 size = file->size();
+            if (size > 0) {
+                total += size;
+            }
         }
     }
     setProgressMaxHint(total);
@@ -70,13 +81,15 @@ QtlFileDataPull::QtlFileDataPull(const QStringList& fileNames,
 
 bool QtlFileDataPull::initializeTransfer()
 {
-    // Make sure the current file is closed.
-    if (_input.isOpen()) {
-        _input.close();
+    // Make sure all files are closed.
+    foreach (const QtlFileSlicesPtr& file, _files) {
+        if (!file.isNull() && file->isOpen()) {
+            file->close();
+        }
     }
 
     // Restart at first file.
-    _currentIndex = 0;
+    _current = _files.begin();
     return true;
 }
 
@@ -90,25 +103,22 @@ bool QtlFileDataPull::needTransfer(qint64 maxSize)
     // Loop until something is read.
     for (;;) {
 
-        // Close current file if at end of file.
-        if (_input.isOpen() && _input.atEnd()) {
-            _input.close();
-            _currentIndex++;
+        // Transfer completed after last file.
+        if (_current == _files.end()) {
+            return false;
         }
 
-        // Transfer completed after last file.
-        if (_currentIndex < 0 || _currentIndex >= _fileNames.size()) {
-            close();
-            return true;
+        // Close current file if at end of file.
+        if (!_current->isNull() && (*_current)->isOpen() && (*_current)->atEnd()) {
+            (*_current)->close();
+            ++_current;
+            continue;
         }
 
         // Open next file if none is open.
-        if (!_input.isOpen()) {
-            _input.setFileName(_fileNames.at(_currentIndex));
-            if (!_input.open(QFile::ReadOnly)) {
-                log()->line(tr("Error opening %1").arg(_fileNames.at(_currentIndex)));
-                return false;
-            }
+        if (!(*_current)->isOpen() && !(*_current)->open()) {
+            log()->line(tr("Error opening %1").arg((*_current)->fileName()));
+            return false;
         }
 
         // Maximum size of data to read.
@@ -121,15 +131,15 @@ bool QtlFileDataPull::needTransfer(qint64 maxSize)
         }
 
         // Read some data from the input file.
-        count = _input.read(reinterpret_cast<char*>(_buffer.data()), count);
+        count = (*_current)->read(reinterpret_cast<char*>(_buffer.data()), count);
         if (count == 0) {
             // At end of file, loop on next one.
-            _input.close();
-            _currentIndex++;
+            (*_current)->close();
+            ++_current;
         }
         else if (count < 0) {
             // Read error.
-            log()->line(tr("Error reading %1").arg(_fileNames.at(_currentIndex)));
+            log()->line(tr("Error reading %1").arg((*_current)->fileName()));
             return false;
         }
         else {
@@ -146,8 +156,24 @@ bool QtlFileDataPull::needTransfer(qint64 maxSize)
 
 void QtlFileDataPull::cleanupTransfer(bool clean)
 {
-    // Make sure the current file is closed.
-    if (_input.isOpen()) {
-        _input.close();
+    // Make sure all files are closed.
+    foreach (const QtlFileSlicesPtr& file, _files) {
+        if (!file.isNull() && file->isOpen()) {
+            file->close();
+        }
     }
+}
+
+
+//----------------------------------------------------------------------------
+// Convert a list of file names into a list of file slices.
+//----------------------------------------------------------------------------
+
+QtlFileSlicesPtrList QtlFileDataPull::toFileSlicesList(const QStringList& fileNames)
+{
+    QtlFileSlicesPtrList result;
+    foreach (const QString& name, fileNames) {
+        result << QtlFileSlicesPtr(new QtlFileSlices(name));
+    }
+    return result;
 }

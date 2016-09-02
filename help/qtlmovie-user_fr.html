@@ -574,13 +574,22 @@
           de contenu DVD en tant que fichier d'entrée.
           Le second groupe contient les options qui affectent la création de DVD.</p>
         <p>Dans le groupe d'options concernant la lecture de contenu DVD,
-          le numéro de "Chaîne de programme (PGC)" indique quel PGC doit être extrait
-          de l'ensemble de titres (VTS) sélectionné. La plupart des VTS contiennent
-          une seule chaîne de programme ou "PGC". Mais certains VTS en contiennent
-          plusieurs, chacun étant une vue distincte du film. Dans ce cas, les différents
-          PGC sont numérotés séquentiellement à partir de 1. Cette option permet de
-          sélectionner le PGC qui sera extrait du contenu DVD. La plupart du temps,
-          la valeur par défaut 1 est appropriée.</p>
+          activer l'option "Transcodage des fichiers VOB bruts" signifie que FFmpeg
+          transcodera the contenu brut des fichiers VOB d'un film donné
+          (également appelé "Ensemble de Titres Vidéo" ou "VTS").
+          Cela fonctionne pour la plupart des films.
+          Cependant, certains DVD ont des films contenant plusieurs "chaînes de programme" (ou "PGC")
+          ou plusieurs "angles" de visualisation. Dans ce cas, les différents angles et chaînes
+          de programme sont multiplexés dans les mêmes fichiers VOB et FFmpeg est incapable de
+          les différencier. Le résultat du transcodage est alors incohérent.
+          C'est pourquoi cette option n'est pas active par défaut.</p>
+        <p>Quand l'option "Transcodage des fichiers VOB bruts" est désactivée, QtlMovie
+          va démultiplexer le contenu des fichiers VOB et fournir à FFmpeg uniquement
+          les "Chaîne de programme (PGC)" et "Angle" spécifiés.
+          Les différents PGC et angles sont numérotés séquentiellement à partir de 1.
+          Les valeurs par défaut, 1 et 1, sont donc recommandées car elles correspondent
+          en général à la visualisation standard du film.
+          Si le PGC spécifié n'existe pas, le PGC numéro 1 sera toujours extrait à la place.</p>
         <p>Dans le groupe d'options sur la génération de DVD,
           l'option PAL / NTSC définit le format des DVD créés.</p>
         <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.

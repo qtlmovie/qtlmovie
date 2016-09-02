@@ -2289,6 +2289,41 @@ L&apos;application va s&apos;arrêter</translation>
         <source>Error reading Program Chain Table (PGC) from %1</source>
         <translation>Erreur de lecture de la Program Chain Table (PGC) dans %1</translation>
     </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="590"/>
+        <source>Extracting PGC #%1</source>
+        <translation>Extraction du PGC #%1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="596"/>
+        <source>PGC #%1 not found, extracting all VOB content instead</source>
+        <translation>Impossible de trouver le PGC #%1, extraction du VOB complet</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="604"/>
+        <source>PGC #%1 not found, extracting PGC #%2 instead</source>
+        <translation>Impossible de trouver le PGC #%1, extraction du PGC #%2</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="608"/>
+        <source>PGC #%1 and #%2 (fallback) not found, extracting nothing</source>
+        <translation>Impossible de trouver les PGC #%1 et #%2 (remplacement), aucune extraction possible</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="627"/>
+        <source>Extracting DVD sectors %1</source>
+        <translation>Extraction de %1 secteurs DVD</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="651"/>
+        <source>Error getting size of %1, skipping all subsequent VOB files</source>
+        <translation>Impossible de trouver la taille de %1, tous les fichiers VOB suivants sont ignorés </translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdTitleSet.cpp" line="661"/>
+        <source>Extracting %1 %2</source>
+        <translation>Extraction de %1 %2</translation>
+    </message>
 </context>
 <context>
     <name>QtlBrowserDialog</name>
@@ -2339,12 +2374,17 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlDvdDataPull</name>
     <message>
-        <location filename="../QtlDvdDataPull.cpp" line="207"/>
+        <location filename="../QtlDvdDataPull.cpp" line="139"/>
+        <source>Starting transfer of DVD sectors %1</source>
+        <translation>Démarrage du transfert des secteurs DVD %1</translation>
+    </message>
+    <message>
+        <location filename="../QtlDvdDataPull.cpp" line="212"/>
         <source>Transfer bandwidth after %1 sectors: </source>
         <translation>Débit du transfert après %1 secteurs: </translation>
     </message>
     <message>
-        <location filename="../QtlDvdDataPull.cpp" line="212"/>
+        <location filename="../QtlDvdDataPull.cpp" line="217"/>
         <source>average: </source>
         <translation>moyenne: </translation>
     </message>
@@ -2382,58 +2422,58 @@ L&apos;application va s&apos;arrêter</translation>
         <translation>Erreur de positionnement au secteur %1 du DVD, introuvable dans le plan du média</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="354"/>
-        <location filename="../QtlDvdMedia.cpp" line="432"/>
+        <location filename="../QtlDvdMedia.cpp" line="355"/>
+        <location filename="../QtlDvdMedia.cpp" line="434"/>
         <source>Switching to %1 on DVD</source>
         <translation>Passage au fichier %1 sur le DVD</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="366"/>
+        <location filename="../QtlDvdMedia.cpp" line="368"/>
         <source>Error seeking DVD to sector %1, dvdcss_seek returned %2</source>
         <translation>Erreur de positionnement au secteur %1 du DVD, dvdcss_seek a renvoyé %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="434"/>
+        <location filename="../QtlDvdMedia.cpp" line="436"/>
         <source>Error seeking at first sector of %1</source>
         <translation>Impossible de trouver le premier secteur de %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="449"/>
+        <location filename="../QtlDvdMedia.cpp" line="451"/>
         <source>Skipped %1 bad sectors in %2</source>
         <translation>%1 secteurs corrompus ignorés</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="468"/>
+        <location filename="../QtlDvdMedia.cpp" line="470"/>
         <source>Internal error, invalid bad sector policy</source>
         <translation>Erreur interne: gestion incorrecte des secteurs corrompus</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="661"/>
+        <location filename="../QtlDvdMedia.cpp" line="663"/>
         <source>DVD media is not open or its file structure has not been read</source>
         <translation>Le média DVD n&apos;est pas ouvert ou sa structure de fichiers n&apos;a pas été lue</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="671"/>
+        <location filename="../QtlDvdMedia.cpp" line="673"/>
         <source>Getting CSS key for %1</source>
         <translation>Récupération de la clé CSS pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="673"/>
+        <location filename="../QtlDvdMedia.cpp" line="675"/>
         <source>Error getting CSS key for %1</source>
         <translation>Erreur de récupération de la clé CSS pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="476"/>
+        <location filename="../QtlDvdMedia.cpp" line="478"/>
         <source>Error reading sector %1 on DVD media in %2</source>
         <translation>Erreur de lecture au secteur %1 du DVD dans %2</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="498"/>
+        <location filename="../QtlDvdMedia.cpp" line="500"/>
         <source>Too many directory levels in DVD structure, probably incorrect media</source>
         <translation>Trop de niveaux de répertoires sur le DVD, média probablement incorrect</translation>
     </message>
     <message>
-        <location filename="../QtlDvdMedia.cpp" line="512"/>
+        <location filename="../QtlDvdMedia.cpp" line="514"/>
         <source>Error reading DVD directory information at sector %1</source>
         <translation>Erreur de lecture de répertoire au secteur %1</translation>
     </message>
@@ -2441,12 +2481,12 @@ L&apos;application va s&apos;arrêter</translation>
 <context>
     <name>QtlFileDataPull</name>
     <message>
-        <location filename="../QtlFileDataPull.cpp" line="109"/>
+        <location filename="../QtlFileDataPull.cpp" line="120"/>
         <source>Error opening %1</source>
         <translation>Erreur à l&apos;ouverture de %1</translation>
     </message>
     <message>
-        <location filename="../QtlFileDataPull.cpp" line="132"/>
+        <location filename="../QtlFileDataPull.cpp" line="142"/>
         <source>Error reading %1</source>
         <translation>Erreur de lecture sur %1</translation>
     </message>

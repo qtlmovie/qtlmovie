@@ -38,6 +38,7 @@
 
 #include "QtlDataPull.h"
 #include "QtlByteBlock.h"
+#include "QtlFileSlices.h"
 
 //!
 //! A class to pull data from a list of files into an asynchronous device such as QProcess.
@@ -54,7 +55,7 @@ public:
     static const int DEFAULT_TRANSFER_SIZE = 1024 * 1024;
 
     //!
-    //! Constructor.
+    //! Constructor using a list of files.
     //! Progress reporting is automatically enabled.
     //! @param [in] fileNames List of files to transfer. They are concatenated on the destination.
     //! @param [in] transferSize Data transfer size in bytes.
@@ -64,7 +65,24 @@ public:
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
     //!
-    explicit QtlFileDataPull(const QStringList& fileNames = QStringList(),
+    explicit QtlFileDataPull(const QStringList& fileNames,
+                             int transferSize = DEFAULT_TRANSFER_SIZE,
+                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
+                             QtlLogger* log = 0,
+                             QObject* parent = 0);
+
+    //!
+    //! Constructor using a list of file slices.
+    //! Progress reporting is automatically enabled.
+    //! @param [in] files List of slices of files to transfer. They are concatenated on the destination.
+    //! @param [in] transferSize Data transfer size in bytes.
+    //! @param [in] minBufferSize The minimum buffer size is the lower limit of the
+    //! buffered data. When the amount of data not yet written to the device is lower
+    //! than this size, new data is pulled from the DVD.
+    //! @param [in] log Optional message logger.
+    //! @param [in] parent Optional parent object.
+    //!
+    explicit QtlFileDataPull(const QtlFileSlicesPtrList& files = QtlFileSlicesPtrList(),
                              int transferSize = DEFAULT_TRANSFER_SIZE,
                              int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                              QtlLogger* log = 0,
@@ -94,10 +112,16 @@ protected:
     virtual void cleanupTransfer(bool clean) Q_DECL_OVERRIDE;
 
 private:
-    QStringList  _fileNames;    //!< List of files to transfer.
-    QFile        _input;        //!< Current input file.
-    int          _currentIndex; //!< Current file index.
-    QtlByteBlock _buffer;       //!< Transfer buffer.
+    QtlFileSlicesPtrList                _files;    //!< Input files.
+    QtlFileSlicesPtrList::ConstIterator _current;  //!< Current file.
+    QtlByteBlock                        _buffer;   //!< Transfer buffer.
+
+    //!
+    //! Convert a list of file names into a list of file slices.
+    //! @param [in] fileNames List of file names.
+    //! @return A list of file slices.
+    //!
+    static QtlFileSlicesPtrList toFileSlicesList(const QStringList& fileNames);
 
     // Unaccessible operations.
     Q_DISABLE_COPY(QtlFileDataPull)

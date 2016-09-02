@@ -49,13 +49,21 @@ quint64 QtlRangeList::totalValueCount() const
 
 
 //----------------------------------------------------------------------------
-// Add a given offset to first and last value of all elements.
+// Add or scale all elements.
 //----------------------------------------------------------------------------
 
 QtlRangeList& QtlRangeList::add(qint64 offset)
 {
     for (Iterator it(begin()); it != end(); ++it) {
         it->add(offset);
+    }
+    return *this;
+}
+
+QtlRangeList& QtlRangeList::scale(qint64 factor)
+{
+    for (Iterator it(begin()); it != end(); ++it) {
+        it->scale(factor);
     }
     return *this;
 }

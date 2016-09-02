@@ -569,21 +569,66 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 
 
 //----------------------------------------------------------------------------
+// Get the list of sectors for a given PGC, with fallback.
+//----------------------------------------------------------------------------
+
+QtlRangeList QtlDvdTitleSet::titleSectors(int titleNumber, int fallbackTitleNumber, QtlLogger* log) const
+{
+    // A range of sectors describing all VOB files, using 0 as first sector of first VOB.
+    const QtlRange allSectors(0, vobSectorCount() - 1);
+
+    // Without specific PGC, we extract everything.
+    if (titleNumber <= 0) {
+        // Extract everything.
+        return QtlRangeList(allSectors);
+    }
+
+    // We want to extract a specific PGC.
+    QtlDvdProgramChainPtr pgc(title(titleNumber));
+    if (!pgc.isNull()) {
+        // The PGC is found, use its sector list.
+        log->debug(QObject::tr("Extracting PGC #%1").arg(titleNumber));
+        return pgc->sectors();
+    }
+
+    // If the fallback is unspecified, extract everything.
+    if (fallbackTitleNumber < 1) {
+        log->debug(QObject::tr("PGC #%1 not found, extracting all VOB content instead").arg(titleNumber));
+        return QtlRangeList(allSectors);
+    }
+
+    // Get a specific fallback PGC (maybe does not exist either).
+    pgc = title(fallbackTitleNumber);
+    if (!pgc.isNull()) {
+        // The fallback PGC is found, use its sector list.
+        log->debug(QObject::tr("PGC #%1 not found, extracting PGC #%2 instead").arg(titleNumber).arg(fallbackTitleNumber));
+        return pgc->sectors();
+    }
+
+    log->debug(QObject::tr("PGC #%1 and #%2 (fallback) not found, extracting nothing").arg(titleNumber).arg(fallbackTitleNumber));
+    return QtlRangeList();
+}
+
+
+//----------------------------------------------------------------------------
 // Create a QtlDataPull to transfer of the video content of the title set.
 //----------------------------------------------------------------------------
 
-QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useMaxReadSpeed) const
+QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useMaxReadSpeed, const QtlRangeList& sectorList) const
 {
-    // Create an object that will write the VTS in the background.
-    // If the DVD is encrypted, use QtlDvdDataPull.
-    // Otherwise, we are not sure the media a DVD, so use file transfer.
     QtlDataPull* writer;
+    QtlRangeList sectors(sectorList);
 
     if (_isEncrypted) {
+        // If the DVD is encrypted, use QtlDvdDataPull.
+        // Sector numbering start a beginning of DVD, add the offset of the first VOB.
+        // Remember that all VOB's of a given VTS are contiguous on disk.
+        sectors.add(_vobStartSector);
+        log->debug(QObject::tr("Extracting DVD sectors %1").arg(sectors.toString()));
+
         // When ripping files, we skip bad sectors.
         writer = new QtlDvdDataPull(_deviceName,
-                                    _vobStartSector,
-                                    vobSectorCount(),
+                                    sectors,
                                     Qtl::SkipBadSectors,
                                     QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
                                     QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
@@ -592,14 +637,40 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useM
                                     useMaxReadSpeed);
     }
     else {
-        writer = new QtlFileDataPull(_vobFileNames,
+        // Non-encrypted DVD or not a DVD, use file transfer.
+        // Transform sector ranges into bytes ranges.
+        sectors.scale(Qtl::DVD_SECTOR_SIZE);
+
+        // Build a list of files to read.
+        QtlFileSlicesPtrList files;
+        foreach (const QString& name, _vobFileNames) {
+
+            // Get current file size in bytes.
+            const qint64 size = QFileInfo(name).size();
+            if (size <= 0) {
+                log->line(QObject::tr("Error getting size of %1, skipping all subsequent VOB files").arg(name));
+                break;
+            }
+
+            // Build the file slices within this file.
+            QtlRangeList fileSectors(sectors);
+            fileSectors.clip(QtlRange(0, size - 1));
+
+            // Add the data to extract from this file.
+            files << QtlFileSlicesPtr(new QtlFileSlices(name, fileSectors));
+            log->debug(QObject::tr("Extracting %1 %2").arg(name).arg(fileSectors.toString()));
+
+            // Now shift the complete sector list downward to the beginning of next file.
+            sectors.add(-size);
+        }
+
+        // Build the data pull from the list of files.
+        writer = new QtlFileDataPull(files,
                                      QtlFileDataPull::DEFAULT_TRANSFER_SIZE,
                                      QtlFileDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                      log,
                                      parent);
     }
 
-    // This object will delete itself upon transfer completion.
-    writer->setAutoDelete(true);
     return writer;
 }

@@ -473,6 +473,9 @@ void QtlMovieInputFile::newMediaInfo()
 QtlDataPull* QtlMovieInputFile::dataPull(QObject* parent) const
 {
     // Currently, return a QtlDataPull for encrypted DVD's only.
+    //@@@ Set auto delete on data pull
+    //@@@ Also use a data pull if not all sectors.
+    //@@@ Check usages of this function, any other issue?
     return _pipeInput && _dvdTitleSet.isEncrypted() ? _dvdTitleSet.dataPull(_log, parent, _settings->dvdUseMaxSpeed()) : 0;
 }
 

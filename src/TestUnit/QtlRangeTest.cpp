@@ -48,6 +48,7 @@ private slots:
     void testList();
     void testListTotalValueCount();
     void testListAdd();
+    void testListScale();
     void testListSort();
     void testListMerge();
     void testListClip();
@@ -382,6 +383,28 @@ void QtlRangeTest::testListAdd()
     QCOMPARE(l[1].last(),  Q_INT64_C(170));
     QCOMPARE(l[2].first(), QtlRange::RANGE_MIN);
     QCOMPARE(l[2].last(),  Q_INT64_C(205));
+}
+
+void QtlRangeTest::testListScale()
+{
+    QtlRangeList l;
+
+    l << QtlRange(10, 12)
+      << QtlRange(-10, 12)
+      << QtlRange(5, QtlRange::RANGE_MAX)
+      << QtlRange(QtlRange::RANGE_MAX - 20, QtlRange::RANGE_MAX - 10);
+
+    l.scale(100);
+    QCOMPARE(l.size(), 4);
+
+    QCOMPARE(l[0].first(), Q_INT64_C(1000));
+    QCOMPARE(l[0].last(),  Q_INT64_C(1299));
+    QCOMPARE(l[1].first(), Q_INT64_C(0));
+    QCOMPARE(l[1].last(),  Q_INT64_C(-1));
+    QCOMPARE(l[2].first(), Q_INT64_C(500));
+    QCOMPARE(l[2].last(),  QtlRange::RANGE_MAX);
+    QCOMPARE(l[3].first(), QtlRange::RANGE_MAX);
+    QCOMPARE(l[3].last(),  QtlRange::RANGE_MAX - 1);
 }
 
 void QtlRangeTest::testListSort()

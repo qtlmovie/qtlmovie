@@ -723,7 +723,7 @@ Les remplacer?</translation>
         <translation>Changer l&apos;orientation de la vidéo en fonction des méta-données d&apos;entrée (utile pour les vidéos d&apos;iPhone)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1363"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1393"/>
         <source>Capitalize US Closed Captions (suppress ALL CAPS)</source>
         <translation>Capitalisation des Closed Captions (suppression du TOUT MAJUSCULES)</translation>
     </message>
@@ -748,83 +748,83 @@ Les remplacer?</translation>
         <translation>Alerte sonore en fin de transcodage</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="635"/>
-        <location filename="../QtlMovieEditSettings.ui" line="793"/>
-        <location filename="../QtlMovieEditSettings.ui" line="904"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1013"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1167"/>
+        <location filename="../QtlMovieEditSettings.ui" line="665"/>
+        <location filename="../QtlMovieEditSettings.ui" line="823"/>
+        <location filename="../QtlMovieEditSettings.ui" line="934"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1043"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1197"/>
         <source>Video bitrate :</source>
         <translation>Débit vidéo :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="667"/>
+        <location filename="../QtlMovieEditSettings.ui" line="697"/>
         <source>Create chapters :</source>
         <translation>Création de chapitres :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="609"/>
+        <location filename="../QtlMovieEditSettings.ui" line="639"/>
         <source>NTSC</source>
         <translation>NTSC</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="599"/>
+        <location filename="../QtlMovieEditSettings.ui" line="629"/>
         <source>PAL</source>
         <translation>PAL</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="592"/>
+        <location filename="../QtlMovieEditSettings.ui" line="622"/>
         <source>Format :</source>
         <translation>Format :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="648"/>
+        <location filename="../QtlMovieEditSettings.ui" line="678"/>
         <source> kb/s</source>
         <translation> kb/s</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="677"/>
+        <location filename="../QtlMovieEditSettings.ui" line="707"/>
         <source> minutes</source>
         <translation> minutes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="693"/>
+        <location filename="../QtlMovieEditSettings.ui" line="723"/>
         <source>Remux audio/video after transcode (remove potential synchronization errors with DVD Author)</source>
         <translation>Remultiplexer l&apos;audio et la vidéo après le transcodage (évite des erreurs de synchronisation avec DVD Author)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="703"/>
+        <location filename="../QtlMovieEditSettings.ui" line="733"/>
         <source>Force transcoding even if the input file or video is DVD-compliant</source>
         <translation>Forcer le transcodage même si le fichier ou sa vidéo sont déjà compatibles DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="777"/>
-        <location filename="../QtlMovieEditSettings.ui" line="849"/>
-        <location filename="../QtlMovieEditSettings.ui" line="997"/>
+        <location filename="../QtlMovieEditSettings.ui" line="807"/>
+        <location filename="../QtlMovieEditSettings.ui" line="879"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1027"/>
         <source>Screen size :</source>
         <translation>Taille d&apos;écran :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1109"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1139"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1079"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1109"/>
         <source>Max size :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1373"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1403"/>
         <source>Subtitles insertion</source>
         <translation>Insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1379"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1409"/>
         <source>Use original video size as a hint for SRT/SSA/ASS character shape</source>
         <translation>Utiliser la taille vidéo originale pour ajuster la taille des caractères SRT/SSA/ASS</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1342"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1372"/>
         <source>Cleanup SRT/SSA/ASS files before insertion</source>
         <translation>Nettoyage des fichiers SRT/SSA/ASS avant insertion</translation>
     </message>
@@ -839,154 +839,164 @@ Les remplacer?</translation>
         <translation>DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="542"/>
+        <location filename="../QtlMovieEditSettings.ui" line="548"/>
         <source>Reading DVD (input)</source>
         <translation>Lecture de DVD (en entrée)</translation>
     </message>
     <message>
         <location filename="../QtlMovieEditSettings.ui" line="554"/>
+        <source>Transcode raw VOB files (may create an incorrect movie)</source>
+        <translation>Transcodage des fichiers VOB bruts (peut créer un film incorrect)</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="561"/>
         <source>Program Chain (PGC) :</source>
         <translation>Chaîne de programme (PGC) :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="586"/>
+        <location filename="../QtlMovieEditSettings.ui" line="590"/>
+        <source>Angle :</source>
+        <translation>Angle :</translation>
+    </message>
+    <message>
+        <location filename="../QtlMovieEditSettings.ui" line="616"/>
         <source>Creating DVD (output)</source>
         <translation>Création de DVD (en sortie)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="727"/>
+        <location filename="../QtlMovieEditSettings.ui" line="757"/>
         <source>iPad</source>
         <translation>iPad</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="752"/>
-        <location filename="../QtlMovieEditSettings.ui" line="917"/>
-        <location filename="../QtlMovieEditSettings.ui" line="972"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1148"/>
+        <location filename="../QtlMovieEditSettings.ui" line="782"/>
+        <location filename="../QtlMovieEditSettings.ui" line="947"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1002"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1178"/>
         <source> bit / pixel / 100 frames</source>
         <translation> bit / pixel / 100 images</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="806"/>
-        <location filename="../QtlMovieEditSettings.ui" line="878"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1026"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1086"/>
+        <location filename="../QtlMovieEditSettings.ui" line="836"/>
+        <location filename="../QtlMovieEditSettings.ui" line="908"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1056"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1116"/>
         <source>Video quality :</source>
         <translation>Qualité vidéo :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="947"/>
+        <location filename="../QtlMovieEditSettings.ui" line="977"/>
         <source>Android</source>
         <translation>Android</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1057"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1087"/>
         <source>AVI</source>
         <translation>AVI</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1188"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1218"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1194"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1224"/>
         <source>Audio normalization</source>
         <translation>Normalisation audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1206"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1236"/>
         <source>Mean level :</source>
         <translation>Niveau moyen :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1232"/>
-        <location filename="../QtlMovieEditSettings.ui" line="1297"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1262"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1327"/>
         <source> dBFS</source>
         <translation> dBFS</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1248"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1278"/>
         <source>Normalize audio level</source>
         <translation>Normaliser le niveau audio</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1258"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1288"/>
         <source>When the input dynamic range is too large</source>
         <translation>Quand la dynamique est trop grande</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1264"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1294"/>
         <source>Align to mean level and compress</source>
         <translation>Aligner sur le niveau moyen et compresser</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1274"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1304"/>
         <source>Align to peak level</source>
         <translation>Aligner sur le niveau de pic</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1281"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1311"/>
         <source>Align to mean level and clip</source>
         <translation>Aligner sur le niveau moyen et écrêter</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1330"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1360"/>
         <source>Subtitles</source>
         <translation>Sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1336"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1366"/>
         <source>Subtitles pre-processing</source>
         <translation>Pré-traitement des sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1349"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1379"/>
         <source>Downgrade SSA/ASS subtitles to SRT</source>
         <translation>Réduire les sous-titres SSA/ASS au format SRT</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1356"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1386"/>
         <source>Use HTML tags in SRT subtitles</source>
         <translation>Utiliser les balises HTML dans les sous-titres SRT</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1403"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1433"/>
         <source>Miscellaneous</source>
         <translation>Divers</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1409"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1439"/>
         <source>File processing mode (restart required)</source>
         <translation>Mode de traitement des fichiers (requiert un redémarrage)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1415"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1445"/>
         <source>Single file mode</source>
         <translation>Fichier unique</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1425"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1455"/>
         <source>Multi-file batch mode</source>
         <translation>Multiples fichiers en séquence</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1435"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1465"/>
         <source>Target audience language codes</source>
         <translation>Codes de langues de l&apos;audience ciblée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1441"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1471"/>
         <source>Automatically select the original audio track</source>
         <translation>Sélectionne automatiquement l&apos;audio en version originale</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1451"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1481"/>
         <source>Add ...</source>
         <translation>Ajouter ...</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1458"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1488"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -1001,67 +1011,67 @@ Les remplacer?</translation>
         <translation>Garder les fichiers intermédiaires</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="837"/>
+        <location filename="../QtlMovieEditSettings.ui" line="867"/>
         <source>iPhone</source>
         <translation>iPhone</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1219"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1249"/>
         <source>Max peak level :</source>
         <translation>Niveau de pic max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1478"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1508"/>
         <source>Automatically select the subtitles for the target audience language</source>
         <translation>Sélectionne automatiquement les sous-titres pour les langues de l&apos;audience ciblée</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1491"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1521"/>
         <source>DVD extraction</source>
         <translation>Extraction DVD</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1497"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1527"/>
         <source>Recreate directory tree when extracting DVD</source>
         <translation>Recréer l&apos;arborescence des répertoires lors de l&apos;extraction</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1507"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1537"/>
         <source>Use DVD maximum read speed (may create read errors, may not be supported on all drives)</source>
         <translation>Utiliser la vitesse de lecture maximum du DVD (peut engendrer des erreurs ou ne pas être supporté)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1520"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1550"/>
         <source>Log panel</source>
         <translation>Fenêtre de journal (log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1532"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1562"/>
         <source>Max log :</source>
         <translation>Taille max :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1545"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1575"/>
         <source> lines</source>
         <translation> lignes</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1564"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1594"/>
         <source>Clear log before transcoding</source>
         <translation>Effacer le journal avant de transcoder</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1571"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1601"/>
         <source>Save log after transcoding (same name as output file with extension .log)</source>
         <translation>Sauvegarder le journal après le transcodage (même nom que le fichier de sortie avec l&apos;extension .log)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1581"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1611"/>
         <source>Version check</source>
         <translation>Recherche de version</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.ui" line="1587"/>
+        <location filename="../QtlMovieEditSettings.ui" line="1617"/>
         <source>Automatically search for a new version on startup</source>
         <translation>Rechercher automatiquement une nouvelle version au démarrage</translation>
     </message>
@@ -1076,22 +1086,22 @@ Les remplacer?</translation>
         <translation>Par défaut: %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="339"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="348"/>
         <source>Ignore incorrect DVD burner device %1, must be a drive name</source>
         <translation>Graveur DVD %1 incorrect ignoré, doit être un nom de lecteur</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="446"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="457"/>
         <source>Default output directory for %1</source>
         <translation>Répertoire de sortie par défaut pour %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="459"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="470"/>
         <source>Select DVD Burning Device</source>
         <translation>Sélection du graveur DVD par défaut</translation>
     </message>
     <message>
-        <location filename="../QtlMovieEditSettings.cpp" line="585"/>
+        <location filename="../QtlMovieEditSettings.cpp" line="596"/>
         <source>%1 bit / second for %2x%3 @%4</source>
         <translation>%1 bit / seconde pour %2x%3 @%4</translation>
     </message>

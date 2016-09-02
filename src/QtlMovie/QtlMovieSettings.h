@@ -215,7 +215,9 @@ public:
     QTL_SETTINGS_BOOL(cleanupSubtitles, setCleanupSubtitles, QTL_CLEANUP_SUBTITLES)
     QTL_SETTINGS_BOOL(useSrtHtmlTags, setUseSrtHtmlTags, QTL_SRT_HTML_TAGS)
     QTL_SETTINGS_BOOL(downgradeSsaToSrt, setDowngradeSsaToSrt, QTL_DOWNGRADE_SSA_TO_SRT)
-    QTL_SETTINGS_INT(dvdProgramChain, setDvdProgramChain, QTL_DVD_PROGRAMCHAIN)
+    QTL_SETTINGS_BOOL(dvdTranscodeRawVob, setDvdTranscodeRawVob, QTL_DVD_TRANSCODE_RAW_VOB)
+    QTL_SETTINGS_INT(dvdProgramChain, setDvdProgramChain, QTL_DVD_PROGRAM_CHAIN)
+    QTL_SETTINGS_INT(dvdAngle, setDvdAngle, QTL_DVD_ANGLE)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

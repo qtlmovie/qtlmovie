@@ -37,8 +37,6 @@
 #include "QtlDvdTitleSet.h"
 #include "QtlDvdMedia.h"
 
-#define READ_CHUNK 1000  // Number of sectors per read operation.
-
 //----------------------------------------------------------------------------
 
 class QtlTestDvd : public QtlTestCommand
@@ -46,36 +44,12 @@ class QtlTestDvd : public QtlTestCommand
     Q_OBJECT
 
 public:
-    QtlTestDvd() : QtlTestCommand("dvd", "ifo-or-vob-file [out-file [sector-count]]") {}
+    QtlTestDvd() : QtlTestCommand("dvd", "ifo-or-vob-file") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
 private:
     void displayFile(const QString& indent, const QtlDvdFile& file);
     void displayDirectory(const QString& indent, const QtlDvdDirectory& dir);
-};
-
-//----------------------------------------------------------------------------
-
-// A class which synchronously waits for a QtlDataPull.
-class QtlDataPullWrapper : public QObject
-{
-    Q_OBJECT
-private:
-    QEventLoop _loop;
-private slots:
-    void completed(bool success)
-    {
-        _loop.exit();
-    }
-public:
-    QtlDataPullWrapper(QtlDataPull* dataPull, QIODevice* device)
-    {
-        connect(dataPull, &QtlDataPull::completed, this, &QtlDataPullWrapper::completed);
-        dataPull->start(device);
-        while (dataPull->isStarted()) {
-            _loop.exec();
-        }
-    }
 };
 
 //----------------------------------------------------------------------------
@@ -113,8 +87,6 @@ int QtlTestDvd::run(const QStringList& args)
     }
 
     const QString input(args[0]);
-    const QString output(args.size() < 2 ? "" : (args[1] != "-" ? args[1] : QProcess::nullDevice()));
-    int sectorCount = args.size() < 3 ? -1 : args[2].toInt();
 
     // Load DVD media description.
     QtlDvdMedia dvd(input, &log);
@@ -205,47 +177,6 @@ int QtlTestDvd::run(const QStringList& args)
             << "    Sectors:" << pgc->sectors().toString() << endl
             << "    YUV palette: " << QtlDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
             << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl;
-    }
-
-    // Extract and decrypt VTS content if required.
-    if (output.isEmpty()) {
-        // Nothing to do.
-    }
-    else {
-        // Create binary output file.
-        QFile file(output);
-        if (!file.open(QFile::WriteOnly)) {
-            err << "Error creating " << output << endl;
-            return EXIT_FAILURE;
-        }
-
-        if (sectorCount > 0) {
-            out << "Reading at most " << sectorCount << " VTS sectors in " << output << endl;
-        }
-        else {
-            out << "Reading VTS as " << output << endl;
-        }
-
-        // Measure transfer bandwidth.
-        QTime time;
-        time.start();
-
-        // Transfer the file using a wrapper test class.
-        QtlDataPull* dataPull = vts.dataPull(&log, 0, true);
-        if (sectorCount > 0) {
-            dataPull->setMaxPulledSize(qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE);
-        }
-        QtlDataPullWrapper wrapper(dataPull, &file);
-        dataPull->setParent(&wrapper);
-
-        // Report transfer bandwidth.
-        const int milliSec = time.elapsed();
-        if (milliSec > 0) {
-            const qint64 bps = (dataPull->pulledSize() * 8 * 1000) / milliSec;
-            out << "Transfer bandwidth: " << bps << " b/s, " << (bps / 8) << " B/s" << endl;
-        }
-
-        file.close();
     }
 
     return EXIT_SUCCESS;
