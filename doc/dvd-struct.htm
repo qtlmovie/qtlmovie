@@ -1,0 +1,147 @@
+<HTML>
+<HEAD>
+<TITLE>DVD File Structure Hierarchy</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+<H2>File Structure Hierarchy</H2>
+<P>The DVD is broken into two separate types of information:
+Navigation Data (control) and Presentation (object) data.
+Control data acts as pointers (like an operating system's File
+Allocation Table) to the actual video and audio object data on
+the disc.
+
+<P>In the DVD reference player model, Presentation and Navigation data
+packets are separated at the track buffer.
+<P>
+Control data can be expressed as a series of nested layers:
+<P>
+<table align=left border=1>
+<tr><td>Title<td>
+distinguishes multiple movies or TV episodes on one disc.  Each title
+is one of two types: a single program chain (One_Sequential_PGC_Title)
+or a collection of different program chains (Multi_PGC_Title).</tr>
+
+<tr><td>Program Chain<td>
+A collection of programs with, e.g., a particular theme in common.</tr>
+
+<tr><td>Part_of_Title<td>
+Links to one or more Program (PG) units on the disc. Like PGC, this
+mechanism can be used to create different versions (camera angle,
+ratings, outcomes, etc.) of the same program chain.  POTs can also be
+used to mark scenes.</tr>
+
+<tr><td>Program<td>
+Usually a scene. Consists of multiple cells.</tr>
+
+<tr><td>Cell<td>
+Preceded by a navigation packet, and alternating video and audio packets.
+A cell is typically all the video and audio data associated with an
+integer number of a group of pictures. </tr>
+
+<tr><td>VOBU<td>
+Video Object Unit: nominally a group of pictures (GOP)</tr>
+
+<tr><td>GOP<td>
+1. smallest granularity of random access on disc (Group of pictures being
+with a coded Intra frame)<br>
+2. largest interframe dependent coding unit.
+(Interframe compression is bounded within a GOP)<br>
+Usually 15 display frames of data (0.5 seconds duration)
+for NTSC-rate (525/60) content.</tr>
+
+<tr><td>Packet<td>
+DVD packets are 2048 bytes (sector payload size) large.
+As per MPEG-2 PES/Program streams, they contain data
+from only one data elementary stream (video, audio, etc.)</tr>
+
+<tr><td>NAV packet<td>
+contains the optional Buttom-Command defining the
+playback behaviour of the current cell.</tr>
+</table>
+<br clear=all><br>
+
+<H2>Logical structure of Video Manager and Video Title Set [notes from Hitachi]</H2>
+<P>A disc volume may contain up to 99 different titles, each with an initial
+Navigation Menu allowing the user to select among different versions
+of the title.  The root menu which branches to all titles on the
+disc is coded within the Video Manager.  Each title is organized as a
+Video Tile Set (VTS).
+</P>
+<PRE>
+
+  DVD:   [VM][VTS #1][VTS #2] ..... [VTS #n]       where n<=99
+</PRE>
+
+<P>The VM's VMGI includes: Attributes for the Menu, Tile Search Pointers,
+and the PCGI for the Menu.
+
+<PRE>
+  VM:    [VMGI][VOBS for Menu][Back up for VMGI]
+</PRE>
+
+<P>The Control Data (VTSI) for the title (VTS) includes: attributes for Menu,
+Attributes for Title, Part of Title Search Pointer, Time Map Table,
+PGCI for Menu, and PGCI for Title.  The Video Objects (VOBS) contain
+the actual program chains, Part_of_Tiles, programs, and so forth.
+</P>
+
+<PRE>
+  VTS:   [VTSI][VOBS for Menu][VOBS for Title][Back up for VTSI]
+</PRE>
+
+
+<PRE>
+ Legend:
+  VM    Video Manager: sets up menus for a series of titles (1 through n)
+  VTS   Video Tile Set: a collection of video objects.
+  VMGI  Video Manager Information: 
+  VOBS  Video Object Set
+  PGCI  Program Chain Information
+</PRE>
+
+
+<H2>Structure of Title</H2>
+<P>A title begins with the entry program chain (Entry PGC).
+It can branch to a single program chain (One_Sequential_PGC_Title)
+or multiple program chains (Multi_PGC_Title).  The location
+of the branch is determined by the link condition.
+</P>
+
+<H2>Structure of a Program Chain (PGC)</H2>
+The program chain is broken into two separate entities:
+<LI>program control information (PGCI)
+<LI>video object (VOB)
+
+<P>The PGCI defines the playback order of Programs by acting as
+a table of addresses which point to the sector locations of
+the program cells on the DVD.  A program cell is essentially a
+group of pictures (GOP), spanning multiple sectors, and contains
+the actual interleaved packets of compressed bits for video and
+audio data.
+</P>
+
+<H2>Part_of_Title (PTT)</H2>
+<P>The Part_of_Title divides a title in a maximum of 99 different pieces.
+The intent of the PTT is aid in the construction of multiple versions
+of the same title.  
+
+<P>One_Sequential_PCG_Title: The Part_of_Title and Program numbers
+are synchronized.
+</P>
+<PRE>
+   [ PTT #1  |  PTT #2  | .... | PTT #n  ]    Part_of_Title
+   [ [PG #1] |  [PG #2] | .... | [PG #n] ]    Program Chain (PGC)
+
+
+Multi_PGC_Title:
+
+             branch   PTT #2
+               -->    [PG #1]                            (PGC1)
+                                PTT #3      PTT #m
+    PTT #1     -->    [PG #1]   [PG #j] ... [PG #k]      (PGC2)
+    [PG #1]
+               -->    [PG #1]                            (PGC3)
+</PRE>
+</BODY>
+</HTML>

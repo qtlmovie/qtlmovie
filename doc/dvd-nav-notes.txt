@@ -1,0 +1,292 @@
+Hi list,
+  Here's an updated version of nav_notes.  It has more information
+on the DSI but I don't know how to verify it.
+  The last 4 links are 3 DVD related patents and a paper.
+
+  Yuqing
+
+    DVD navigation packets
+    --------------------------
+
+  0.  Introduction
+  1.  PCI structure
+  2.  DSI structure
+  3.  To do
+  4.  Acknowledgements
+  5.  Reference
+
+0.  Introduction
+
+  Navigation packet is the last big chunk of information
+that we needed to implement a fully functional DVD player
+(I hate to make absolute comments but this time I can't
+help making an exception.).  The information presented
+in this document is based on the vobdump program published by
+Eric Smith in 1999.  What I did was reading the program
+and gathering information on the internet to make sense
+out of the program.
+  Navigation packets are PES packets with a stream id 0xbf, i.e.
+private stream 2.  It's made up of PCI, Presentation Control Information
+and DSI, Data Search Information.
+
+   0      6         7                  0x3d4+0x6 0x3d4+0xb 0x3d4+0xc
+   +------+---------+----------------------+------+---------+-----------------+
+   |Packet|Substream|        PCI           |Packet|Substream|       DSI       |
+   |Header|  ID     |        Data          |Header|   ID    |       Data      |
+   +------+---------+----------------------+------+---------+-----------------+
+
+  The packet head is just a PES packet header, a packet start code, a stream id
+and a packet length.  The first packet lenght is 0x3d4, the length of the PCI data
+plus one.  The second packet length is 0x3fa, the length of DSI data plus one.
+The substream id for PCI packet is 0x00 and 0x01 for DSI.
+
+1.  PCI structure
+
+  Here's the PCI data structure in C syntax:
+
+{
+  pci_gi: // PCI general information
+  {
+        nv_pck_lbn      : 32;  // block length
+        vobu_cat        : 16;  // vobu category
+        reserved        : 16;
+        vobu_uop_ctl    : 32;  // user operation
+        vobu_s_ptm      : 32;  // vobu start time in 90KHz system clock unit
+        vobu_e_ptm      : 32;  // vobu end time
+        vobu_sl_e_ptm   : 32;  // sequence end termiation time
+        e_eltm          : 32;  // cell elapse time
+        vobu_isrc[32]   : 32 * 8;
+   }
+
+   nsml_agli_dsta:  // Non-seamless playback
+   {
+        nsml_agl_c_dsta[9]      : 32 * 9;  // destination address of Angle Cell #
+   }
+
+   hli_gi:
+   {
+        reserved        : 14;
+        hli_ss          : 2;
+        hli_s_ptm       : 32; // highlight start time
+        hli_e_ptm       : 32; // highlight end time
+        btn_sl_e_ptm    : 32; // button select end time
+        reserved        : 2;
+        btngr_ns        : 2;  // number of buttons groups
+        
+        reserved        : 1;
+        btngr0_dsp_ty   : 3;
+        reserved        : 1;
+        btngr1_dsp_ty   : 3;
+        reserved        : 1;
+        btngr2_dsp_ty   : 3;
+        
+        btn_ofn         : 8;
+        reserved        : 2;
+        btn_ns          : 6;  // number of buttons
+        reserved        : 2;
+        nsl_btn_ns      : 6;
+        reserved        : 8;
+        
+        reserved        : 2;
+        fosl_btnn       : 6; // auto selected button number
+        
+        reserved        : 2;
+        foac_btnn       : 6; // auto action button number
+
+        btn_coli_0_sl   : 32;
+        btn_coli_0_ac   : 32;
+        btn_coli_1_sl   : 32;
+        btn_coli_1_ac   : 32;
+        btn_coli_2_sl   : 32;
+        btn_coli_2_ac   : 32;
+  }
+
+  buttons:
+  {
+      for (i = 0; i < btngr_ns; i++) {
+          for (j = 0; j < 36 / btngr_ns; j++) {
+              if (j < btn_ns) {
+                  button();
+              } else {
+                  18 bytes of 0x00;
+              }
+          }
+      }
+  }
+
+  for (i = 0; i < 17; i++) {
+      pci_reci();
+  }
+
+  unknown       : 8;
+}
+
+  pci_reci() {
+        unknown         :1;
+        unknown         :7;
+
+        unknown         :2;
+        unknown         :6;
+
+        unknown         :2;
+        unknown         :6;
+
+        unknown         :2;
+        unknown         :6;
+
+        unknown         :2;
+        unknown         :6;
+
+        unknown         :2;
+        unknown         :6;
+
+        unknown         :4;
+        unknown         :4;
+
+        unknown         :4;
+        unknown         :4;
+
+        unknown         :4;
+        unknown         :4;
+
+        unknown         :4;
+        unknown         :4;
+  }
+
+  button() {
+        btn_coln        : 2; // button color number, selects wich btn_coli apply
+        x_start         : 10;
+        reserved        : 2;
+        x_end           : 10;
+        
+        auto_action_mode : 2;
+        y_start         : 10;
+        resereve        : 2;
+        y_end           : 10;
+
+        reserved        : 2;
+        up              : 6; // up button number, self if non
+        reserved        : 2;
+        down            : 6;
+        reserved        : 2;
+        left            : 6;
+        reserved        : 2;
+        right           : 6;
+
+        btn_command     : 8 * 8;
+   }
+
+   The highlight times, hli_s_ptm, hli_e_ptm and btn_sl_e_ptm,
+satisfy the following constraints:
+   + hli_s_ptm < btn_sl_e_ptm <= hli_e_ptm
+   + hli_s_ptm = PTS of the SPU that associats with it
+   + hli_e_ptm  = start time the DCSQ, where an STP_DSP command exists.
+                = PTS of the next SPU, if there is no STP_DSP command in the SPU.
+                = 0xffffffff, in case of a still frame(e.g. menu file)
+The 32-bit btn_coli_i_sl has the following structure:
+   bit31                     bit0
+     0xc1 c2 c3 c4 b1 b2 b3 b4
+Each of the cx and bx is 4 bits.  c1 and b1 are
+the color index and blend factor when the system time is
+after the hli_e_ptm time.  c2 and b2 are the
+color index and blend factor when the system time is between
+btn_sl_e_ptm and hli_e_ptm or exactly at one of them.
+c3 and b3 are the color index and blend factor
+when the system time is between hli_s_ptm and bts_sl_e_ptm.
+c4 and b4 are used when hli is disabled.
+The box defined in each button tells the SPU decoder
+the hli color should be used when decoding the spu data.
+Detailed description about the highlighting is given
+in the Zoran 36710 chip manual.
+
+Buttons are categorized in to groups.
+There can be 3 groups of buttons correspond
+to different aspect ratios, i.e. wide screan, letter box and pan & scan.
+fosl_btnn defines the auto selected button.  This is
+how the white rabit appears in the Maxtrix.
+foac_btnn defines the auto action button.
+
+2.  DSI structure
+   DSI structure in C syntax
+{
+   dsi_gi:  //DSI general information
+   {
+        nv_pck_scr      : 32;  // system clock reference
+        nv_pck_lbn      : 32;  // start address of the NV pack
+        vobu_ea         : 32;  // End Address for VOB
+        vobu_1stref_ea  : 32;
+        vobu_2ndref_ea  : 32;
+        vobu_3rdref_ea  : 32;
+        vobu_vob_idn    : 16; // vob id
+        reserved        : 8;
+        vobu_c_idn      : 8;    // cell id
+        c_eltm          : 32;
+  }
+
+  sml_pbi: // Seamless playback information
+  {
+        ilvu            : 16; // Interleaved Unit Flag ??
+        ilvu_ea         : 32; // ??
+        nt_ilvu_sa      : 32; // ??
+        u_end           : 16; // Unit END flag ??
+        unknown         : 32;
+        unknown         : 32;
+
+        for (i = 0; i < 8; i++) {
+                vob_a_stp_ptm1  : 32; // ??
+                vob_a_stp_ptm2  : 32; // ??
+                vob_a_gap_len1  : 32; // ??
+                vob_a_gap_len2  : 32; // ??
+        }
+  }
+
+  sml_agli: // Angle information for seamless
+  {
+        for (i = 0; i < 9; i++) {
+                sml_agl_a       : 32;  // address of destination ILVU
+                size            : 16;  // size of destination ILVU
+        }
+  }
+
+  vobu_sri: // VOB unit search information
+  {
+        for (i = 0; i < 42; i++) {
+                unknown         : 32;
+        }
+  }
+
+  synci: // Synchronous information
+  {
+        for (i = 0; i < 8; i++) {
+                a_synca         : 16; // ??
+        }
+        for (i = 0; i < 32; i++) {
+                sp_synca        : 32; // ??
+        }
+  }
+
+  Reserved:
+       for (i = 0; i < 471; i++) {
+                unknown         : 8;
+       }
+}
+
+3.  ToDo
+
+   Fill in the missing info in the DSI data.
+
+4.  Acknowledgements
+
+   Thanks to Eric Smith for publishing vobdump in GPL.
+
+5.  Reference
+
+    vobdump by Eric Smith <eric@brouhaha.com>, original vobdump can be found
+        at http://www.brouhaha.com/~/eric/video/dvd/development
+    Zoran 37610 manual
+    L64021 manual
+    DVD Technical Notes by Chad Fogg at http://www.mpeg.org/MPEG/DVD
+    http://swpat.ffii.org/vreji/pikta/txt/ep/0847/199/
+    http://swpat.ffii.org/vreji/pikta/txt/ep/0847/195/
+    http://swpat.ffii.org/vreji/pikta/txt/ep/0737/980/
+    http://www.eetasia.com/ARTICLES/1999JAN/1999JAN01_ID_DSP_MSD_EMS_TA.PDF

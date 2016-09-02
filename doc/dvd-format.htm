@@ -1,0 +1,457 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Is it easy to understand DVD format</title>
+    <META Name="description" Content="Versatile Logic, Inc. was formed in 1997 to produce DVD Authoring Systems.  The company's products range from entry level to full function tools in DVD authoring business.">
+    <META Name="keywords" Content="DVD, Versatile Logic, Video, Authoring, DVDPRO, DVDLITE, DVDEXPRESS">
+  </head>
+  <body link="#0000FF" vlink="#800080">
+    <p align="left"><a href="http://web.archive.org/web/20011024182535/http://dvdpro.com/dvd.htm"><em>Original archived link</em></a></p>
+    <p align="center"><b>Is it easy to understand DVD format?</b></p>
+    <p>&nbsp;</p>
+    <p>There are more than a dozen decent WEB sites putting pieces of
+      DVD information together up to date. It is no doubt that you may
+      extract more than what you need from the expertise. However it
+      seems we still lack of a simple one describing a fundamental
+      structure of DVD video unit. The following section, we have
+      purposely composed in a form of tables, is to illustrate a basic
+      structure of a DVD stream for the readers, especially for who are
+      doing DVD authoring project. </p>
+    <p>&nbsp;</p>
+    <p>The very basic individual segment written on a disc is called
+      SECTOR. With CD-ROM similarity in mind, each DVD sector contains
+      a total of 2064 bytes of raw data in the sector boundary, see
+      table 1. The usable 2048-byte data size is fixed and located
+      between sector header and Error Detection Code (EDC). This cooked
+      data area actually holds all kinds of DVD stream contents.</p>
+    <p>&nbsp;</p>
+    <p>Physical Sector</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">HEADER</p></td>
+        <td valign="top" width="60%"><p align="center">DATA</p></td>
+        <td valign="top" width="15%"><p align="center">EDC</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">12 Bytes</p></td>
+        <td valign="top" width="60%"><p align="center">2048 Bytes</p></td>
+        <td valign="top" width="15%"><p align="center">4 Bytes</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 1</font></p>
+    <p>&nbsp;</p>
+    <p><font size="2">&nbsp;</font>The data area is also known as
+      Logical Sector or Block. Logical Sectors are recorded or written
+      continuously on the disc. The loaded data must be packed if it is
+      a segment of Video Object stream, see table 2.</p>
+    <p>Logical Sector (Block)</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACK HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACK DATA (PACKETIZED)</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">14 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">2034 Bytes</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 2</font></p>
+    <p>&nbsp;</p>
+    <p>We have also learnt that DVD Video Object consists of four
+      different categories of data type: Video, Audio, Sub-picture and
+      Navigation. To simplify the layout, you may select and pack video
+      stream data into designated Packs called Video Pack. With the
+      same approach, audio stream is packed in Audio Pack, Sub-picture
+      stream is packed in Sub-picture Packs and Navigation stream is
+      packed in Navigation Packs respectively, see table 3.</p>
+    <p><font size="5">&nbsp;&nbsp;</font></p>
+    <p>Video Pack</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACK HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">Packetized Video stream </p></td>
+      </tr>
+    </table>
+    <p>Audio Pack</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACK HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">Packetized Audio stream</p></td>
+      </tr>
+    </table>
+    <p>Sub-picture Pack</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACK HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">Packetized Sub-picture stream</p></td>
+      </tr>
+    </table>
+    <p>Navigation Pack</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACK HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">Packetized Navigation stream</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 3</font></p>
+    <p>&nbsp;</p>
+    <p>You may notice that the data recorded within pack has to be
+      packetized. It is a standard process in the MPEG world to slice
+      the elementary stream to be Packetized Elementary Stream (PES),
+      but it raises a bit of complexity level in the DVD format by
+      using this process. The following tables illustrate the sizes for
+      each type of packets.</p>
+    <p>&nbsp;</p>
+    <p>Video Packet</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACKET HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACKET DATA</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">Up to 29 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">2025 Bytes or less</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 4</font></p>
+    <p>Audio Packet</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACKET HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACKET DATA</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">Up to 24 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">2020 Bytes or less</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 5</font></p>
+    <p>Sub-picture Packet</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACKET HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACKET DATA</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">Up to 24 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">2024 Bytes or less</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 6</font></p>
+    <p>PCI Packet</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACKET HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACKET DATA</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">7 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">Up to 979 Bytes</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 7</font></p>
+    <p>DSI Packet</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="607">
+      <tr>
+        <td valign="top" width="25%"><p align="center">PACKET HEADER</p></td>
+        <td valign="top" width="75%"><p align="center">PACKET DATA</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><p align="center">7 Bytes</p></td>
+        <td valign="top" width="75%"><p align="center">Up to 1017 Bytes</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 8</font></p>
+    <p>&nbsp;</p>
+    <p>The most delicate packet data among five different data types
+      is video. The video data we refer to in the DVD world is MPEG
+      video stream. Before we try to understand the video packet
+      structure, we had better examine the MPEG video specification. In
+      both MPEG 1 and MPEG 2, the video streams consist of a large
+      number of GOP's (Group of pictures). Each GOP holds less than or
+      equal to 16 frames (pictures). According to the encoding process,
+      there is only one I frame in the group. The rest are P frames and
+      B frames. For typical example, a GOP can be constructed like the
+      following sequence:</p>
+    <p><font size="5"><b>I </b>B B<b> P </b>B B<b> P </b>B B<b> P </b>B B<b> P </b>B B </font></p>
+    <p>&nbsp;</p>
+    <p>In the NTSC world we can assure this GOP take 0.5 sec based
+      upon 30 fps standard. </p>
+    <p>The identification for a GOP and its frames is predefined and
+      embedded within video stream during encoding. Therefore the
+      decoder knows to seek and to decode the stream accordingly. The
+      following table lists the start codes for a GOP in MPEG stream
+      <font size="5">.</font></p>
+    <p>&nbsp;</p>
+    <p>MPEG Video Bitstream</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="637">
+      <tr>
+        <td valign="top" width="46%">Sequence</td>
+        <td valign="top" width="54%">Sequence_Header_Code = 0x000001b3</td>
+      </tr>
+      <tr>
+        <td valign="top" width="46%"><p align="center">Group Of Pictures</p></td>
+        <td valign="top" width="54%">Group_Start_Code = 0x000001b8</td>
+      </tr>
+      <tr>
+        <td valign="top" width="46%"><p align="right">I Frame</p></td>
+        <td valign="top" width="54%">Picture_Start_Code = 0x00000100<p>Picture_Code_Type = 001 (3 bits)</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="46%"><p align="right">P Frames</p></td>
+        <td valign="top" width="54%">Picture_Start_Code = 0x00000100<p>Picture_Code_Type = 010 (3 bits)</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="46%"><p align="right">B Frames</p></td>
+        <td valign="top" width="54%">Picture_Start_Code = 0x00000100<p>Picture_Code_Type = 011 (3 bits)</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="46%">Sequence End</td>
+        <td valign="top" width="54%">Sequence_End_Code = 0x000001be</td>
+      </tr>
+    </table>
+    <p><font size="2">Table 9</font></p>
+    <p>&nbsp;</p>
+    <p>Unlike MPEG audio stream, the audio pack in DVD can hold more
+      than one type of audio streams. Today, DVD can accept the
+      following coded audio stream types:</p>
+    <p><font size="2">&nbsp;&nbsp;</font></p>
+    <table border="1" cellpadding="7" cellspacing="1" width="325">
+      <tr>
+        <td valign="top">Linear PCM</td>
+      </tr>
+      <tr>
+        <td valign="top">Dolby AC-3</td>
+      </tr>
+      <tr>
+        <td valign="top">MPEG Audio</td>
+      </tr>
+      <tr>
+        <td valign="top">DTS Audio (Digital Theater) </td>
+      </tr>
+      <tr>
+        <td valign="top">SDDS Audio (Sony Proprietary)</td>
+      </tr>
+    </table>
+    <p><font size="2">Table 10</font></p>
+    <p>&nbsp;</p>
+    <p>The Sub-picture is much well specified in DVD standard. The
+      sub-picture stream stores bitmapped data for sub-titles and
+      navigation menus. The control commands and display duration is
+      basically programmable. Nevertheless, users do not need any
+      special programming skill for defining parameters because the
+      authoring tool itself has to provide a friendly interface.</p>
+    <p>&nbsp;</p>
+    <p>Lastly, both PCI (Presentation Control Information) packet and
+      DSI ( Data Search Information) packet store navigation data for
+      the video object unit in which they are included. </p>
+    <p>&nbsp;</p>
+    <p>Now we have a better picture of what a video object unit may
+      contain, see table 11.</p>
+    <p><font size="5">&nbsp;</font>VOB Unit</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="556">
+      <tr>
+        <td valign="top" width="31%"><p align="center">Pack Types</p></td>
+        <td valign="top" width="31%"><p align="center">Packet
+            Types</p></td>
+        <td valign="top" width="38%"><p align="center">Stream</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="31%">Navigation</td>
+        <td valign="top" width="31%">PCI + DSI </td>
+        <td valign="top" width="38%">PCI stream and DSI stream</td>
+      </tr>
+      <tr>
+        <td valign="top" width="31%">Video</td>
+        <td valign="top" width="31%">Video</td>
+        <td valign="top" width="38%">Only 1 video stream</td>
+      </tr>
+      <tr>
+        <td valign="top" width="31%">Audio</td>
+        <td valign="top" width="31%">Audio</td>
+        <td valign="top" width="38%">Up to 8 audio streams</td>
+      </tr>
+      <tr>
+        <td valign="top" width="31%">Sub-picture</td>
+        <td valign="top" width="31%">Sub-picture</td>
+        <td valign="top" width="38%">Up to 32 sub-picture streams</td>
+      </tr>
+    </table>
+    <p><font size="2">Table 11</font></p>
+    <p>&nbsp;</p>
+    <p>The MPEG system stream also has a 24-byte System Header. The
+      System header has to be located in the navigation pack. The same
+      header data should be used in each VOB unit for the entire VOBS
+      (Video Object Set). Now we have the revised navigation pack
+      structure shown below,</p>
+    <p>&nbsp;</p>
+    <p>The Navigation Pack</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="643">
+      <tr>
+        <td valign="top" width="24%" height="1"><p align="center">Pack Header </p></td>
+        <td valign="top" width="28%" height="1"><p align="center">System Header</p></td>
+        <td valign="top" width="24%" height="1"><p align="center">PCI Packet</p></td>
+        <td valign="top" width="24%" height="1"><p align="center">DSI Packet</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="24%" height="1"><p align="center">14 Bytes</p></td>
+        <td valign="top" width="28%" height="1"><p align="center">24 Bytes</p></td>
+        <td valign="top" width="24%" height="1"><p align="center">986 Bytes</p></td>
+        <td valign="top" width="24%" height="1"><p align="center">1024 Bytes</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 12</font></p>
+    <p><font size="2">&nbsp;&nbsp;</font></p>
+    <p>There is no fixed number of packs within a VOBU, but each VOBU
+      must have at least one Navigation Pack. If there is no video pack
+      or audio pack but sub-picture pack to follow, it must be a static
+      menu. Vice versa a dynamic menu is a menu overlaid on the video.
+      All packs within VOBU have been sequenced. The order of sequence
+      is also the decoding order. Any of missing pack or incorrect pack
+      order can result in corruption. The table 13 shows a chain of
+      pack within VOBU.</p>
+    <p>&nbsp;</p>
+    <p>Video Object Unit </p>
+    <table border="1" cellpadding="7" cellspacing="1" width="624">
+      <tr>
+        <td valign="top" width="32%"><p align="center">Pack Sequence</p></td>
+        <td valign="top" width="18%"><p align="center">Pack Type</p></td>
+        <td valign="top" width="49%"><p align="center">Data In The Packet</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">First Pack</td>
+        <td valign="top" width="18%">Navigation</td>
+        <td valign="top" width="49%">System + PCI + DSI </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">First Video Pack</td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">Sequence Header + GOP Header
+          + I Frame</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">Following Packs For I Frame </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">I Frame</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">P Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">P Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%"><p align="center">...</p></td>
+        <td valign="top" width="18%"><p align="center">...</p></td>
+        <td valign="top" width="49%">...</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">Audio Packs</td>
+        <td valign="top" width="18%">Audio </td>
+        <td valign="top" width="49%">Audio (Up to 8 audio streams)</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%"><p align="center">...</p></td>
+        <td valign="top" width="18%"><p align="center">...</p></td>
+        <td valign="top" width="49%">...</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">P Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">P Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%"><p align="center">...</p></td>
+        <td valign="top" width="18%"><p align="center">...</p></td>
+        <td valign="top" width="49%">...</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">Sub-picture Packs</td>
+        <td valign="top" width="18%">Sub-picture</td>
+        <td valign="top" width="49%">Sub-picture (Up to 32 sub-picture streams)</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%"><p align="center">...</p></td>
+        <td valign="top" width="18%"><p align="center">...</p></td>
+        <td valign="top" width="49%">...</td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">B Frame </td>
+      </tr>
+      <tr>
+        <td valign="top" width="32%">B Frame Packs </td>
+        <td valign="top" width="18%">Video</td>
+        <td valign="top" width="49%">Last B Frame + Sequence_End_Code</td>
+      </tr>
+    </table>
+    <p><font size="2">Table 13</font></p>
+    <p>The upper layer of Video Object Unit is defined as VOB (Video
+      Object). VOB basically is a collection of VOBU's,</p>
+    <p>&nbsp;</p>
+    <p>Video Object</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="650">
+      <tr>
+        <td valign="top" width="22%"><p align="center">VOB Unit (0)</p></td>
+        <td valign="top" width="22%"><p align="center">VOB Unit (1)</p></td>
+        <td valign="top" width="6%"><p align="center">..</p></td>
+        <td valign="top" width="22%"><p align="center">VOB Unit (i)</p></td>
+        <td valign="top" width="6%"><p align="center">..</p></td>
+        <td valign="top" width="22%"><p align="center">VOB Unit (n)</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 14</font></p>
+    <p><font size="2">&nbsp;&nbsp;</font></p>
+    <p>The upper layer of Video Object is defined as VOBS (Video
+      Object Set). VOBS basically is a collection of VOB's,</p>
+    <p><font size="5"><b>&nbsp;</b></font>Video Object Set</p>
+    <table border="1" cellpadding="7" cellspacing="1" width="650">
+      <tr>
+        <td valign="top" width="22%"><p align="center">VOB (0)</p></td>
+        <td valign="top" width="22%"><p align="center">VOB (1)</p></td>
+        <td valign="top" width="6%"><p align="center">..</p></td>
+        <td valign="top" width="22%"><p align="center">VOB (i)</p></td>
+        <td valign="top" width="6%"><p align="center">..</p></td>
+        <td valign="top" width="22%"><p align="center">VOB (n)</p></td>
+      </tr>
+    </table>
+    <p><font size="2">Table 15</font></p>
+    <p>Readers may find further DVD information from the following sites,</p>
+    <p>&nbsp;</p>
+    <p><a href="http://janus.unik.no/~robert/hifi/dvd/">http://janus.unik.no/~robert/hifi/dvd/</a></p>
+    <p><a href="http://www.mpeg.org/~tristan/MPEG/dvd.html">http://www.mpeg.org/~tristan/MPEG/dvd.html</a></p>
+    <p><a href="http://www.ividea.com/">http://www.ividea.com </a></p>
+    <p><a href="http://www.dvdvideogroup.com/">http://www.dvdvideogroup.com</a></p>
+    <p><a href="http://www.microsoft.com/hwdev/devdes/dvdwp.HTM#_Toc376909169">http://www.microsoft.com/hwdev/devdes/dvdwp.HTM#_Toc376909169</a></p>
+  </body>
+</html>
