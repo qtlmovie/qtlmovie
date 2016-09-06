@@ -17,3 +17,16 @@ Contributions:
   Teletext code from Petr Kutalek's Telxcc.
   Libdvdcss by Stéphane Borel, Sam Hocevar et al.
   QtlMovie logo by DesignBolts (http://www.designbolts.com)
+
+Top-level directory structure:
+  build - build scripts and configuration files.
+  fonts - font files used in subtitle insertion.
+  help - QtlMovie documentation in HTML format.
+  installers - destination directory for binary installers.
+  linuxtools - external tools for Linux.
+  mactools - external tools for Mac OS.
+  notes - various useful notes and external information.
+  sourceforge - file hosting structure on SourceForge.
+  src - QtlMovie source code.
+  wintools - external tools for Windows (32 bits).
+  wintools64 - external tools for Windows (64 bits).
