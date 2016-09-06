@@ -103,6 +103,24 @@ public:
     quint64 totalValueCount() const;
 
     //!
+    //! Get the lowest value in all ranges.
+    //! @return The lowest value in all ranges or 0 if the list is empty.
+    //!
+    qint64 first() const;
+
+    //!
+    //! Get the highest value in all ranges.
+    //! @return The highest value in all ranges or -1 if the list is empty.
+    //!
+    qint64 last() const;
+
+    //!
+    //! Get the enclosing range.
+    //! @return The enclosing range, from first() to last().
+    //!
+    QtlRange enclosing() const;
+
+    //!
     //! Add a given offset to first and last value of all elements in the list.
     //! There is no overflow, the ranges are bounded by @a qint64.
     //! @param [in] offset Value to add.
@@ -144,9 +162,21 @@ public:
 
     //!
     //! Convert the list of ranges to a string.
-    //! @return A string in format "[first, last] [first, last] ...".
+    //! @param [in] separator A string to insert between ranges.
+    //! @return A string in format "[first, last]<sep>[first, last]<sep>...".
     //!
-    QString toString() const;
+    QString toString(const QString& separator = " ") const;
 };
+
+//!
+//! Format a QtlRangeList object on a text stream.
+//! @param [in] stream The text stream to write to.
+//! @param [in] object The range list to format.
+//! @return A reference to @a stream.
+//!
+inline QTextStream& operator<<(QTextStream& stream, const QtlRangeList& object)
+{
+    return stream << object.toString();
+}
 
 #endif // QTLRANGELIST_H

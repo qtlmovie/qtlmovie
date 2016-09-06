@@ -66,7 +66,7 @@ int QtlTestDvdVts::run(const QStringList& args)
 
     // Get list of sectors.
     QtlRangeList sectors(vts.titleSectors(pgcNumber, 0, &log));
-    out << "VOB sectors to extract for PGC #" << pgcNumber << ": " << sectors.toString() << endl;
+    out << "VOB sectors to extract for PGC #" << pgcNumber << ": " << sectors << endl;
 
     const quint64 sectorsCount = sectors.totalValueCount();
     out << "Total size: " << sectorsCount << " sectors, " << (sectorsCount * Qtl::DVD_SECTOR_SIZE) << " bytes" << endl;

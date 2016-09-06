@@ -1,0 +1,141 @@
+<html><head><title>Presentation Control Information (PCI) Packet Layout</title></head>
+
+<body bgcolor="f0f0ff">
+<h2>Presentation Control Information (PCI) Packet Layout</h2>
+<table border=1 bgcolor="ffffcc">
+<tr><th colspan=3>Offset</th><th rowspan=2>Label</th><th rowspan=2>size</th><th rowspan=2>Content</th></tr>
+<tr><th>Sector</th><th>Packet</th><th>Table</th></tr>
+<tr><td>026</td><td>---</td><td>---</td><td>---</td><td>4</td><td>00 00 01 bf - Private Stream 2 header</td></tr>
+<tr><td>02a</td><td>---</td><td>---</td><td>---</td><td>2</td><td>03 d4 - length</td></tr>
+<tr><td>02c</td><td>---</td><td>---</td><td>---</td><td>1</td><td>00 - substream ID, 00=PCI</td></tr>
+
+<tr bgcolor="ffccff"><td>02d</td><td>000</td><td>PCI_GI 00</td><td>nv_pck_lbn</td><td>4</td><td>Logical Block Number (sector) of this block</td></tr>
+<tr bgcolor="ffccff"><td>031</td><td>004</td><td>PCI_GI 04</td><td>vobu_cat</td><td>2</td><td>flags, including APS (Analog Protection System)</td></tr>
+<tr bgcolor="ffccff"><td>033</td><td>006</td><td>PCI_GI 06</td><td>---</td><td>2</td><td>reserved</td></tr>
+<tr bgcolor="ffccff"><td>035</td><td>008</td><td>PCI_GI 08</td><td>vobu_uop_ctl</td><td>4</td><td>bitmask for prohibited <a href="#uops">user operations</a></td></tr>
+<tr bgcolor="ffccff"><td>039</td><td>00c</td><td>PCI_GI 0c</td><td>vobu_s_ptm</td><td>4</td><td>Vobu Start Presentation Time (90KHz clk)</td></tr>
+<tr bgcolor="ffccff"><td>03d</td><td>010</td><td>PCI_GI 10</td><td>vobu_e_ptm</td><td>4</td><td>Vobu End Presentation Time (PTM)</td></tr>
+<tr bgcolor="ffccff"><td>041</td><td>014</td><td>PCI_GI 14</td><td>vobu_se_e_ptm</td><td>4</td><td>End PTM of VOBU if Sequence_End_Code</td></tr>
+<tr bgcolor="ffccff"><td>045</td><td>018</td><td>PCI_GI 18</td><td>c_eltm</td><td>4</td><td>cell elapsed time, BCD, hh:mm:ss:ff with bits 7&6 of frame (last) byte indicating frame rate
+	<br>11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal</td></tr>
+<tr bgcolor="ffccff"><td>049</td><td>01c</td><td>PCI_GI 1c</td><td>vobu_isrc</td><td>32</td><td bgcolor="cccccc">International Standard Recording Code (royalty management)<a href="#foot_1">*</a></td></tr>
+
+<tr><td>069</td><td>03c</td><td>NSML_AGLI 00</td><td>nsml_agl_c1_dsta</td><td>4</td><td>non-seamless angle 1 relative offset to VOBU for CURRENT ILVU
+	<br>the msb (bit 31) is used to denote the direction, 0=forward, 1=backward
+	<br>00 00 00 00 indicates the angle does not exist
+	<br>7f ff ff ff indicates no more video for this angle</td></tr>
+<tr><th>:</td><th>:</td><th>:</td><th>:</td><th>:</td><th>:</td></tr>
+<tr><td>089</td><td>05c</td><td>NSML_AGLI 20</td><td>nsml_agl_c9_dsta</td><td>4</td><td>non-seamless angle 9 relative offset to VOBU for CURRENT ILVU</td></tr>
+
+<tr bgcolor="ffccff"><td>08d</td><td>060</td><td>HLI_GI 00</td><td>hli_ss</td><td>2</td><td>Highlight status (lower 2 bits only)
+	<br>00 = No Highlight information for this VOBU
+	<br>01 = All New Highlight information for this VOBU
+	<br>10 = Use Highlight information from previous VOBU
+	<br>11 = Use Highlight information from previous VOBU except commands, which come from this VOBU</td></tr>
+<tr bgcolor="ffccff"><td>08f</td><td>062</td><td>HLI_GI 02</td><td>hli_s_ptm</td><td>4</td><td>Highlight start time</td></tr>
+<tr bgcolor="ffccff"><td>093</td><td>066</td><td>HLI_GI 06</td><td>hli_e_ptm</td><td>4</td><td>Highlight end time</td></tr>
+<tr bgcolor="ffccff"><td>097</td><td>06a</td><td>HLI_GI 0a</td><td>btn_sl_e_ptm</td><td>4</td><td>Button selection end time (ignore user after this)</td></tr>
+<tr bgcolor="ffccff"><td>09b</td><td>06e</td><td>HLI_GI 0e</td><td>btn_md</td><td>2</td><td>4 nibbles which describe the grouping of the buttons, <a href="#btn_md">see below</a></td></tr>
+<tr bgcolor="ffccff"><td>09d</td><td>070</td><td>HLI_GI 10</td><td>btn_sn</td><td>1</td><td>starting button number</td></tr>
+<tr bgcolor="ffccff"><td>09e</td><td>071</td><td>HLI_GI 11</td><td>btn_ns</td><td>1</td><td>number of buttons</td></tr>
+<tr bgcolor="ffccff"><td>09f</td><td>072</td><td>HLI_GI 12</td><td>nsl_btn_ns</td><td>1</td><td>number of numerically selected buttons</td></tr>
+<tr bgcolor="ffccff"><td>0a0</td><td>073</td><td>HLI_GI 13</td><td>---</td><td>1</td><td>reserved</td></tr>
+<tr bgcolor="ffccff"><td>0a1</td><td>074</td><td>HLI_GI 14</td><td>fosl_btnn</td><td>1</td><td>force select button number</td></tr>
+<tr bgcolor="ffccff"><td>0a2</td><td>075</td><td>HLI_GI 15</td><td>foac_btnn</td><td>1</td><td>force action button number</td></tr>
+
+<tr><td>0a3</td><td>076</td><td>SL_COLI 00</td><td>SL_COLI_1</td><td>8</td><td rowspan=3>selection and action color and contrast values
+	<br>each button may be assigned to one of these three schemes
+	<br><a href="#sl_coli">details</a></td></tr>
+<tr><td>0ab</td><td>07e</td><td>SL_COLI 08</td><td>SL_COLI_2</td><td>8</td></tr>
+<tr><td>0b3</td><td>086</td><td>SL_COLI 10</td><td>SL_COLI_3</td><td>8</td></tr>
+
+<tr bgcolor="ffccff"><td>0bb</td><td>08e</td><td>BTN_IT 00</td><td>btn_it[1:36]</td><td>36*18</td><td>color table number, position, auto action flag, adjacent buttons, and command for 36 buttons
+	<br><a href="#btn_it">details</a></td></tr>
+
+<tr><td>343</td><td>316</td><td>RECI 00</td><td>RECI</td><td>??</td><td bgcolor="cccccc">Recording Information (royalty management)<a href="#foot_1">*</a></td></tr>
+</table>
+
+<a name="foot_1">* there are a few references to ISRC and RECI, but no details, and no examples could be found for verification.
+
+<a name="btn_md"><h4>btn_md word</h4>
+<table border=1 bgcolor="ccffcc" cols=9>
+<tr><th>label</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+<tr><td rowspan=2>btn_md<br>btngr_ns<br>btngr1_ty</td><td colspan=2 rowspan=2>reserved</td>
+	<td colspan=2 rowspan=2><nobr>number of button groups</nobr></td>
+	<td rowspan=2>reserved</td><td>PS</td><td>LB</td><td>Normal</td></tr>
+    <tr><td colspan=3><center><nobr>button group 1 type</nobr></td></tr>
+<tr><td rowspan=2>btngr2_ty<br>btngr3_ty</td><td rowspan=2>reserved</td><td>PS</td><td>LB</td><td>Normal</td>
+	<td rowspan=2>reserved</td><td>PS</td><td>LB</td><td>Normal</td></tr>
+    <tr><td colspan=3><center><nobr>button group 2 type</nobr></td><td colspan=3><center><nobr>button group 3 type</nobr></td></tr>
+</table>
+
+<a name="sl_coli"><h4>SL_COLI table</h4>
+<table border=1 bgcolor="ccffcc" cols=9>
+<tr><th>offset</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+<tr><th>0</th><td colspan=4>emphasis 2 (code=3) selection color</td><td colspan=4>emphasis 1 (code=2) selection color</td></tr>
+<tr><th>1</th><td colspan=4>pattern (code=1) selection color</td><td colspan=4>background (code=0) selection color</td></tr>
+<tr><th>2</th><td colspan=4>emphasis 2 (code=3) selection contr</td><td colspan=4>emphasis 1 (code=2) selection contr</td></tr>
+<tr><th>3</th><td colspan=4>pattern (code=1) selection contr</td><td colspan=4>background (code=0) selection contr</td></tr>
+<tr><th>4</th><td colspan=4>emphasis 2 (code=3) action color</td><td colspan=4>emphasis 1 (code=2) action color</td></tr>
+<tr><th>5</th><td colspan=4>pattern (code=1) action color</td><td colspan=4>background (code=0) action color</td></tr>
+<tr><th>6</th><td colspan=4>emphasis 2 (code=3) action contr</td><td colspan=4>emphasis 1 (code=2) action contr</td></tr>
+<tr><th>7</th><td colspan=4>pattern (code=1) action contr</td><td colspan=4>background (code=0) action contr</td></tr>
+</table>
+
+<a name="btn_it"><h4>BTN_IT - Button Information Table</h4>
+<table border=1 bgcolor="ccffcc" cols=9>
+<tr><th>offset</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+<tr><th>00</th><td colspan=2>btn_coln button color table number, 0=none</td><td colspan=6><center>starting X position, upper 6 bits</td></tr>
+<tr><th>01</th><td colspan=4><center>starting X position, lower 4 bits</td><td colspan=2>reserved</td><td colspan=2>ending X position, upper 2 bits</td></tr>
+<tr><th>02</th><td colspan=8><center>ending X position, lower 8 bits</td></tr>
+<tr><th>03</th><td colspan=2>Auto Action flag 0=no, 1=yes</td><td colspan=6><center>starting Y position, upper 6 bits</td></tr>
+<tr><th>04</th><td colspan=4><center>starting Y position, lower 4 bits</td><td colspan=2>reserved</td><td colspan=2>ending Y position, upper 2 bits</td></tr>
+<tr><th>05</th><td colspan=8><center>ending Y position, lower 8 bits</td></tr>
+<tr><th>06</th><td colspan=2>reserved</td><td colspan=6>AJBTN_POSI_UP button number to select if "Up" is pressed</td></tr>
+<tr><th>07</th><td colspan=2>reserved</td><td colspan=6>AJBTN_POSI_DN button number to select if "Down" is pressed</td></tr>
+<tr><th>08</th><td colspan=2>reserved</td><td colspan=6>AJBTN_POSI_LT button number to select if "Left" is pressed</td></tr>
+<tr><th>09</th><td colspan=2>reserved</td><td colspan=6>AJBTN_POSI_RT button number to select if "Right" is pressed</td></tr>
+<tr><th>0a-11</th><td colspan=8><center>one vm command to be executed on "action" of this button</td></tr>
+</table>
+
+<a name="uops"><h4>User Operation Flags (Uops)</h4></a>
+User operation flags appear at three different levels, there is one for the title in
+TT_SRPT (only Uop0 and Uop1, as bits 0 and 1 of Title Type),
+one for each Program Chain, and one in each VOBU in the PCI packet.
+<br>These flags are ORed together, a set bit in any mask inhibits the associated control. 
+
+<table border=1 bgcolor="ffffcc">
+<tr><th>number</th><th>controls affected</th><th align="center">PGC</th><th align="center">VOBU</th></tr>
+<tr><td>0</td><td>Time play or search</td><td align="center">X</td><td>&nbsp</td></tr>
+<tr><td>1</td><td>PTT play or search</td><td align="center">X</td><td>&nbsp</td></tr>
+<tr><td>2</td><td>Title play</td><td align="center">X</td><td>&nbsp</td></tr>
+<tr><td>3</td><td>Stop</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>4</td><td>GoUp</td><td>&nbsp</td><td align="center">X</td></tr>
+<tr><td>5</td><td>Time or PTT search</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>6</td><td>TopPG or PrevPG search</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>7</td><td>NextPG search</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>8</td><td>Forward scan</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>9</td><td>Backward scan</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>10</td><td>Menu call - Title</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>11</td><td>Menu call - Root</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>12</td><td>Menu call - Subpicture</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>13</td><td>Menu call - Audio</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>14</td><td>Menu call - Angle</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>15</td><td>Menu call - PTT</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>16</td><td>Resume</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>17</td><td>Button select or activate</td><td align="center">X</td><td>&nbsp</td></tr>
+<tr><td>18</td><td>Still off</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>19</td><td>Pause on</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>20</td><td>Audio stream change</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>21</td><td>Subpicture stream change</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>22</td><td>Angle change</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>23</td><td>Karaoke audio mix change</td><td align="center">X</td><td align="center">X</td></tr>
+<tr><td>24</td><td>Video presentation mode change</td><td align="center">X</td><td align="center">X</td></tr>
+</table>
+
+<table width=100% border=0>
+<tr><td align=right>Copyright &#169 2001 - 2016 STN Software, all rights reserved.</td></tr>
+</table>
+
+</body>
+</html>

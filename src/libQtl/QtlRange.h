@@ -164,6 +164,13 @@ public:
     }
 
     //!
+    //! Check if a given value is in the range.
+    //! @param [in] value A value to check.
+    //! @return True if @a value is in the range.
+    //!
+    bool contains(qint64 value);
+
+    //!
     //! Add a given offset to first and last value.
     //! There is no overflow, the range is bounded by @a qint64.
     //! @param [in] offset Value to add.
@@ -293,5 +300,16 @@ private:
     qint64  _first;  //!< First value.
     quint64 _count;  //!< Number of values in the range.
 };
+
+//!
+//! Format a QtlRange object on a text stream.
+//! @param [in] stream The text stream to write to.
+//! @param [in] object The range to format.
+//! @return A reference to @a stream.
+//!
+inline QTextStream& operator<<(QTextStream& stream, const QtlRange& object)
+{
+    return stream << object.toString();
+}
 
 #endif // QTLRANGE_H

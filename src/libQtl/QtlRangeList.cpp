@@ -49,6 +49,50 @@ quint64 QtlRangeList::totalValueCount() const
 
 
 //----------------------------------------------------------------------------
+// Get the lowest or highest value in all ranges.
+//----------------------------------------------------------------------------
+
+qint64 QtlRangeList::first() const
+{
+    if (isEmpty()) {
+        return 0;
+    }
+    else {
+        qint64 result = QtlRange::RANGE_MAX;
+        foreach (const QtlRange& range, *this) {
+            const qint64 f = range.first();
+            if (f < result) {
+                result = f;
+            }
+        }
+        return result;
+    }
+}
+
+qint64 QtlRangeList::last() const
+{
+    if (isEmpty()) {
+        return -1;
+    }
+    else {
+        qint64 result = QtlRange::RANGE_MIN;
+        foreach (const QtlRange& range, *this) {
+            const qint64 l = range.last();
+            if (l > result) {
+                result = l;
+            }
+        }
+        return result;
+    }
+}
+
+QtlRange QtlRangeList::enclosing() const
+{
+    return QtlRange(first(), last());
+}
+
+
+//----------------------------------------------------------------------------
 // Add or scale all elements.
 //----------------------------------------------------------------------------
 
@@ -141,12 +185,12 @@ QtlRangeList& QtlRangeList::clip(const QtlRange& range)
 // Convert the range to a string.
 //----------------------------------------------------------------------------
 
-QString QtlRangeList::toString() const
+QString QtlRangeList::toString(const QString& separator) const
 {
     QString result;
     foreach (const QtlRange& range, *this) {
         if (!result.isEmpty()) {
-            result.append(QChar(' '));
+            result.append(separator);
         }
         result.append(range.toString());
     }

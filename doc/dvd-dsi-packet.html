@@ -1,0 +1,175 @@
+<html><head><title>Data Search Information (DSI) Packet Layout</title></head>
+
+<body bgcolor="f0f0ff">
+<h2>Data Search Information (DSI) Packet Layout</h2>
+<table border=1 bgcolor="ffffcc">
+<tr><th colspan=3>Offset</th><th rowspan=2>Label</th><th rowspan=2>size</th><th rowspan=2>Content</th></tr>
+<tr><th>Sector</th><th>Packet</th><th>Table</th></tr>
+<tr><td>400</td><td>---</td><td>---</td><td>---</td><td>4</td><td>00 00 01 bf | Private Stream 2 header</td></tr>
+<tr><td>404</td><td>---</td><td>---</td><td>---</td><td>2</td><td>03 fa | length</td></tr>
+<tr><td>406</td><td>---</td><td>---</td><td>---</td><td>1</td><td>01 | substream ID, 01=DSI</td></tr>
+<tr bgcolor="ffccff"><td>407</td><td>000</td><td>DSI_GI 00</td><td>nv_pck_scr</td><td>4</td><td>system clock reference</td></tr>
+<tr bgcolor="ffccff"><td>40b</td><td>004</td><td>DSI_GI 04</td><td>nv_pck_lbn</td><td>4</td><td>Logical Block Number (sector) of this block</td></tr>
+<tr bgcolor="ffccff"><td>40f</td><td>008</td><td>DSI_GI 08</td><td>vobu_ea</td><td>4</td><td>VOBU end address | relative offset to last sector of VOBU</td></tr>
+<tr bgcolor="ffccff"><td>413</td><td>00c</td><td>DSI_GI 0c</td><td>vobu_1stref_ea</td><td>4</td><td>first reference frame end block, relative | used for fast playing</td></tr>
+<tr bgcolor="ffccff"><td>417</td><td>010</td><td>DSI_GI 10</td><td>vobu_2ndref_ea</td><td>4</td><td>second reference frame end block, relative | used for fast playing</td></tr>
+<tr bgcolor="ffccff"><td>41b</td><td>014</td><td>DSI_GI 14</td><td>vobu_3rdref_ea</td><td>4</td><td>third reference frame end block, relative | used for fast playing</td></tr>
+<tr bgcolor="ffccff"><td>41f</td><td>018</td><td>DSI_GI 18</td><td>vobu_vob_idn</td><td>2</td><td>VOB number</td></tr>
+<tr bgcolor="ffccff"><td>421</td><td>01a</td><td>DSI_GI 1a</td><td>reserved</td><td>1</td><td>00</td></tr>
+<tr bgcolor="ffccff"><td>422</td><td>01b</td><td>DSI_GI 1b</td><td>vobu_c_idn</td><td>1</td><td>CELL number within VOB</td></tr>
+<tr bgcolor="ffccff"><td>423</td><td>01c</td><td>DSI_GI 1c</td><td>c_eltm</td><td>4</td><td>cell elapsed time, BCD, hh:mm:ss:ff with bits 7&6 of frame (last) byte indicating frame rate
+	<br>11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal</td></tr>
+
+<tr><td>427</td><td>020</td><td>SML_PBI 00</td><td>ilvu</td><td>2</td><td><a href=#ilvu>Interleaved Unit flags</a></td></tr>
+<tr><td>429</td><td>022</td><td>SML_PBI 02</td><td>ilvu_ea</td><td>4</td><td>ILVU end address | relative offset to the last sector within this ILVU for this angle or scene.
+	<br> 00 00 00 00 for PREU and non-interleaved blocks</td></tr>
+<tr><td>42d</td><td>026</td><td>SML_PBI 06</td><td>nxt_ilvu_sa</td><td>4</td><td>relative offset to the next ILVU block (not VOBU) for this angle or scene.
+	<br> 00 00 00 00 for PREU and non-interleaved blocks
+	<br> ff ff ff ff for the last interleaved block, indicating the end of interleaving</td></tr>
+<tr><td>431</td><td>02a</td><td>SML_PBI 0a</td><td>nxt_ilvu_sz</td><td>2</td><td>size of the next ILVU block for this angle or scene.
+	<br> 00 00 for PREU and non-interleaved blocks
+	<br> ff ff for the last interleaved block, indicating the end of interleaving</td></tr>
+<tr><td>433</td><td>02c</td><td>SML_PBI 0c</td><td>vob_v_s_ptm</td><td>4</td><td>PTM of first video frame in first GOP of VOB</td></tr>
+<tr><td>437</td><td>030</td><td>SML_PBI 10</td><td>vob_v_e_ptm</td><td>4</td><td>PTM of last video frame in last GOP of VOB</td></tr>
+<tr><td>43b</td><td>034</td><td>SML_PBI 14</td><td>vob_a_stp_ptm1[0]</td><td>4</td><td>PTM of first audio gap in stream 0</td></tr>
+<tr><td>43f</td><td>038</td><td>SML_PBI 18</td><td>vob_a_stp_ptm2[0]</td><td>4</td><td>PTM of second audio gap in stream 0</td></tr>
+<tr><td>443</td><td>03c</td><td>SML_PBI 1c</td><td>vob_a_stp_ptm1[1]</td><td>4</td><td>PTM of first audio gap in stream 1</td></tr>
+<tr><td>447</td><td>040</td><td>SML_PBI 20</td><td>vob_a_stp_ptm2[1]</td><td>4</td><td>PTM of second audio gap in stream 1</td></tr>
+<tr><td>44b</td><td>044</td><td>SML_PBI 24</td><td>vob_a_stp_ptm1[2]</td><td>4</td><td>PTM of first audio gap in stream 2</td></tr>
+<tr><td>44f</td><td>048</td><td>SML_PBI 28</td><td>vob_a_stp_ptm2[2]</td><td>4</td><td>PTM of second audio gap in stream 2</td></tr>
+<tr><td>453</td><td>04c</td><td>SML_PBI 2c</td><td>vob_a_stp_ptm1[3]</td><td>4</td><td>PTM of first audio gap in stream 3</td></tr>
+<tr><td>457</td><td>050</td><td>SML_PBI 30</td><td>vob_a_stp_ptm2[3]</td><td>4</td><td>PTM of second audio gap in stream 3</td></tr>
+<tr><td>45b</td><td>054</td><td>SML_PBI 34</td><td>vob_a_stp_ptm1[4]</td><td>4</td><td>PTM of first audio gap in stream 4</td></tr>
+<tr><td>45f</td><td>058</td><td>SML_PBI 38</td><td>vob_a_stp_ptm2[4]</td><td>4</td><td>PTM of second audio gap in stream 4</td></tr>
+<tr><td>463</td><td>05c</td><td>SML_PBI 3c</td><td>vob_a_stp_ptm1[5]</td><td>4</td><td>PTM of first audio gap in stream 5</td></tr>
+<tr><td>467</td><td>060</td><td>SML_PBI 40</td><td>vob_a_stp_ptm2[5]</td><td>4</td><td>PTM of second audio gap in stream 5</td></tr>
+<tr><td>46b</td><td>064</td><td>SML_PBI 44</td><td>vob_a_stp_ptm1[6]</td><td>4</td><td>PTM of first audio gap in stream 6</td></tr>
+<tr><td>46f</td><td>068</td><td>SML_PBI 48</td><td>vob_a_stp_ptm2[6]</td><td>4</td><td>PTM of second audio gap in stream 6</td></tr>
+<tr><td>473</td><td>06c</td><td>SML_PBI 4c</td><td>vob_a_stp_ptm1[7]</td><td>4</td><td>PTM of first audio gap in stream 7</td></tr>
+<tr><td>477</td><td>070</td><td>SML_PBI 50</td><td>vob_a_stp_ptm2[7]</td><td>4</td><td>PTM of second audio gap in stream 7</td></tr>
+
+<tr><td>47b</td><td>074</td><td>SML_PBI 54</td><td>vob_a_gap_len1[0]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 0</td></tr>
+<tr><td>47f</td><td>078</td><td>SML_PBI 58</td><td>vob_a_gap_len2[0]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 0</td></tr>
+<tr><td>473</td><td>07c</td><td>SML_PBI 5c</td><td>vob_a_gap_len1[1]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 1</td></tr>
+<tr><td>477</td><td>080</td><td>SML_PBI 60</td><td>vob_a_gap_len2[1]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 1</td></tr>
+<tr><td>47b</td><td>084</td><td>SML_PBI 64</td><td>vob_a_gap_len1[2]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 2</td></tr>
+<tr><td>47f</td><td>088</td><td>SML_PBI 68</td><td>vob_a_gap_len2[2]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 2</td></tr>
+<tr><td>473</td><td>08c</td><td>SML_PBI 6c</td><td>vob_a_gap_len1[3]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 3</td></tr>
+<tr><td>477</td><td>090</td><td>SML_PBI 70</td><td>vob_a_gap_len2[3]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 3</td></tr>
+<tr><td>47b</td><td>094</td><td>SML_PBI 74</td><td>vob_a_gap_len1[4]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 4</td></tr>
+<tr><td>47f</td><td>098</td><td>SML_PBI 78</td><td>vob_a_gap_len2[4]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 4</td></tr>
+<tr><td>473</td><td>09c</td><td>SML_PBI 7c</td><td>vob_a_gap_len1[5]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 5</td></tr>
+<tr><td>477</td><td>0a0</td><td>SML_PBI 80</td><td>vob_a_gap_len2[5]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 5</td></tr>
+<tr><td>47b</td><td>0a4</td><td>SML_PBI 84</td><td>vob_a_gap_len1[6]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 6</td></tr>
+<tr><td>47f</td><td>0a8</td><td>SML_PBI 88</td><td>vob_a_gap_len2[6]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 6</td></tr>
+<tr><td>4b3</td><td>0ac</td><td>SML_PBI 8c</td><td>vob_a_gap_len1[7]</td><td>4</td><td>duration, in 90KHz clocks, of first audio gap in stream 7</td></tr>
+<tr><td>4b7</td><td>0b0</td><td>SML_PBI 90</td><td>vob_a_gap_len2[7]</td><td>4</td><td>duration, in 90KHz clocks, of second audio gap in stream 7</td></tr>
+
+<tr bgcolor="ffccff"><td>4bb</td><td>0b4</td><td>SML_AGLI 00</td><td>sml_agl_c1_dsta</td><td>4</td><td>seamless angle 1 relative offset to NEXT ILVU
+	<br>the msb (bit 31) is used to denote the direction, 0=forward, 1=backward
+	<br>00 00 00 00 indicates the angle does not exist
+	<br>7f ff ff ff indicates no more video for this angle</td></tr>
+<tr bgcolor="ffccff"><td>4bf</td><td>0b8</td><td>SML_AGLI 04</td><td>sml_agl_c1_sz</td><td>2</td><td>seamless angle 1 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4c1</td><td>0ba</td><td>SML_AGLI 06</td><td>sml_agl_c2_dsta</td><td>4</td><td>seamless angle 2 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4c5</td><td>0be</td><td>SML_AGLI 0a</td><td>sml_agl_c2_sz</td><td>2</td><td>seamless angle 2 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4c7</td><td>0c0</td><td>SML_AGLI 0c</td><td>sml_agl_c3_dsta</td><td>4</td><td>seamless angle 3 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4cb</td><td>0c4</td><td>SML_AGLI 10</td><td>sml_agl_c3_sz</td><td>2</td><td>seamless angle 3 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4cd</td><td>0c6</td><td>SML_AGLI 12</td><td>sml_agl_c4_dsta</td><td>4</td><td>seamless angle 4 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4d1</td><td>0ca</td><td>SML_AGLI 16</td><td>sml_agl_c4_sz</td><td>2</td><td>seamless angle 4 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4d3</td><td>0cc</td><td>SML_AGLI 18</td><td>sml_agl_c5_dsta</td><td>4</td><td>seamless angle 5 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4d7</td><td>0d0</td><td>SML_AGLI 1c</td><td>sml_agl_c5_sz</td><td>2</td><td>seamless angle 5 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4d9</td><td>0d2</td><td>SML_AGLI 1e</td><td>sml_agl_c6_dsta</td><td>4</td><td>seamless angle 6 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4dd</td><td>0d6</td><td>SML_AGLI 22</td><td>sml_agl_c6_sz</td><td>2</td><td>seamless angle 6 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4df</td><td>0d8</td><td>SML_AGLI 24</td><td>sml_agl_c7_dsta</td><td>4</td><td>seamless angle 7 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4e3</td><td>0dc</td><td>SML_AGLI 28</td><td>sml_agl_c7_sz</td><td>2</td><td>seamless angle 7 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4e5</td><td>0de</td><td>SML_AGLI 2a</td><td>sml_agl_c8_dsta</td><td>4</td><td>seamless angle 8 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4e9</td><td>0e2</td><td>SML_AGLI 2e</td><td>sml_agl_c8_sz</td><td>2</td><td>seamless angle 8 ILVU size in sectors</td></tr>
+<tr bgcolor="ffccff"><td>4eb</td><td>0e4</td><td>SML_AGLI 30</td><td>sml_agl_c9_dsta</td><td>4</td><td>seamless angle 9 relative offset to NEXT ILVU</td></tr>
+<tr bgcolor="ffccff"><td>4ef</td><td>0e8</td><td>SML_AGLI 34</td><td>sml_agl_c9_sz</td><td>2</td><td>seamless angle 9 ILVU size in sectors</td></tr>
+
+
+<tr><td>4f1</td><td>0ea</td><td>VOBU_SRI 00</td><td>sri_nvwv</td><td>4</td><td>offset to the next VOBU with video
+	<br>this pointer is always forward
+	<br>bit 31 is set since there is video
+	<br>bf ff ff ff indicates no following VOBU contains video</td></tr>
+<tr><td>4f5</td><td>0ee</td><td>VOBU_SRI 04</td><td>sri_fwda240</td><td>4</td><td rowspan=7>offset to VOBU 120, 60, 30, 10, 7.5, 7.0, 6.5, 6.0,
+                             5.5, 5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5 seconds forward.</font>
+	<br><ul>
+	<li>this pointer is always forward
+	<li>bit 31 is set if the referenced VOBU contains video
+	<li>bit 30 is set to indicate one or more VOBU are present between this reference and the reference closer to the current VOBU.
+	<li>3f ff ff ff indicates no VOBU within the cell for this span
+	<li>labels refer to the nominal VOBU span, which will be correct for .5 second VOBUs only.</font>
+	</ul></td></tr>
+<tr><td>4f9</td><td>0f2</td><td>VOBU_SRI 08</td><td>sri_fwda120</td><td>4</td></tr>
+<tr><td>4fd</td><td>0f6</td><td>VOBU_SRI 0c</td><td>sri_fwda60</td><td>4</td></tr>
+<tr><td>501</td><td>0fa</td><td>VOBU_SRI 10</td><td>sri_fwda20</td><td>4</td></tr>
+<tr><td>505</td><td>0fe</td><td>VOBU_SRI 14</td><td>sri_fwda15</td><td>4</td></tr>
+<tr><th>:</td><th>:</td><th>:</td><th>:</td><th>:</td></tr>
+<tr><td>53d</td><td>136</td><td>VOBU_SRI 4c</td><td>sri_fwda1</td><td>4</td></tr>
+<tr><td>541</td><td>13a</td><td>VOBU_SRI 50</td><td>sri_nv</td><td>4</td><td>offset to the next VOBU
+	<br>this pointer is always forward
+	<br>bit 31 is set if the next VOBU contains video
+	<br>3f ff ff ff indicates there is no VOBU following this</td></tr>
+<tr><td>545</td><td>13e</td><td>VOBU_SRI 54</td><td>sri_pv</td><td>4</td><td>offset to the previous VOBU
+	<br>this pointer is always backward
+	<br>bit 31 is set if the previous VOBU contains video
+	<br>3f ff ff ff indicates there is no VOBU preceeding this</td></tr>
+<tr><td>549</td><td>142</td><td>VOBU_SRI 58</td><td>sri_bwda1</td><td>4</td><td rowspan=7>offset to VOBU 120, 60, 30, 10, 7.5, 7.0, 6.5, 6.0,
+                             5.5, 5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5 seconds preceeding.</font>
+	<br><ul>
+	<li>this pointer is always backward
+	<li>bit 31 is set if the referenced VOBU contains video
+	<li>bit 30 is set to indicate one or more VOBU are present between this reference and the reference closer to the current VOBU.
+	<li>3f ff ff ff indicates no VOBU within the cell for this span
+	<li>labels refer to the nominal VOBU span, which will be correct for .5 second VOBUs only.</font>
+	</ul></td></tr>
+<tr><th>:</td><th>:</td><th>:</td><th>:</td><th>:</td></tr>
+<tr><td>581</td><td>17a</td><td>VOBU_SRI 90</td><td>sri_bwda15</td><td>4</td></tr>
+<tr><td>585</td><td>17e</td><td>VOBU_SRI 94</td><td>sri_bwda20</td><td>4</td></tr>
+<tr><td>589</td><td>182</td><td>VOBU_SRI 98</td><td>sri_bwda60</td><td>4</td></tr>
+<tr><td>58d</td><td>186</td><td>VOBU_SRI 9c</td><td>sri_bwda120</td><td>4</td></tr>
+<tr><td>591</td><td>18a</td><td>VOBU_SRI a0</td><td>sri_bwda240</td><td>4</td></tr>
+<tr><td>595</td><td>18e</td><td>VOBU_SRI a4</td><td>sri_pvwv</td><td>4</td><td>offset to the previous VOBU with video
+	<br>this pointer is always backward
+	<br>bit 31 is set since there is video
+	<br>bf ff ff ff indicates no preceeding VOBU contains video</td></tr>
+
+
+<tr bgcolor="ffccff"><td>599</td><td>192</td><td>SYNCI 00</td><td>a_synca[0:7]</td><td>8*2</td><td>relative offset to 1st audio packet for this VOBU
+	<br>the msb (bit 15) is used to denote the direction, 0=forward, 1=backward
+	<br>00 00 indicates this audio stream does not exist
+	<br>3f ff indicates no more audio for this stream</td></tr>
+<tr bgcolor="ffccff"><td>5a9</td><td>1a2</td><td>SYNCI 10</td><td>sp_synca[0:31]</td><td>32*4</td><td>relative offset to VOBU (NAV pack) containing subpicture data for this VOBU
+	<br>the msb (bit 31) is used to denote the direction, 0=forward, 1=backward
+	<br>note: forward references are not used for subpictures, if the direction bit == 0 the offset should be 0x7fffffff
+	<p>00 00 00 00 indicates this subpicture stream does not exist
+	<br>7f ff ff ff indicates the next subpicture data, if any, is contained within this or a later VOBU</td></tr>
+
+<tr><td>629</td><td>222</td><td colspan=4>reserved</td></tr>
+
+</table>
+
+
+<p><a name="ilvu">
+<table border=1 bgcolor="ccffcc">
+<tr><td colspan=3><center>Only 4 of the bits of the ILVU flag word are used, the top 4 of the first byte.
+	They are:</td></tr>
+<tr><td>bit 15</td><td>PREU flag</td><td>set during the last 3 VOBU preceeding an interleaved
+	block.
+	<br>note: the 3rd preceeding has the Unit_Start bit set for a value of a0, the 2nd
+	preceeding has only the PREU bit set for a value of 80, and the 1st preceeding has the
+	Unit_End bit set for a value of 90</td></tr>
+<tr><td>bit 14</td><td>ILVU flag</td><td>set for all VOBU in an interleaved block</td></tr>
+<tr><td>bit 13</td><td>Unit_Start flag</td><td>set for the first VOBU for a given angle or scene within a ILVU,
+	or the first VOBU in the preparation (PREU) sequence</td></tr>
+<tr><td>bit 12</td><td>Unit_End flag</td><td>set for the last VOBU for a given angle or scene within a ILVU,
+	or the last VOBU in the preparation (PREU) sequence</td></tr>
+</table>
+
+<table width=100% border=0>
+<tr><td align=right>Copyright &#169 2001 - 2016STN Software, all rights reserved.</td></tr>
+</table>
+
+</body>
+</html>

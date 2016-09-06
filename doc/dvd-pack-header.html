@@ -1,0 +1,78 @@
+<html>
+<head><title>Pack Header</title>
+</head>
+
+<body bgcolor="f0f0ff">
+<h2>MPEG-2 Pack Header</h2>
+<table border=1>
+<tr><th colspan=8><center>byte 0</th><th colspan=8><center>byte 1</th>
+    <th colspan=8><center>byte 2</th><th colspan=8><center>byte 3</th></tr>
+<tr><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+</tr>
+<tr><th bgcolor="9999ff" colspan=24>0000 0000 0000 0000 0000 0001<br>start code</th>
+    <td bgcolor="66ff66" colspan=8>1011 1010<br>PACK identifier</td>
+</tr>
+</table>
+
+<table border=1>
+<tr><th colspan=8><center>byte 4</th><th colspan=8><center>byte 5</th>
+    <th colspan=8><center>byte 6</th><th colspan=8><center>byte 7</th>
+    <th colspan=8><center>byte 8</th><th colspan=8><center>byte 9</th></tr>
+<tr><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+</tr>
+<tr><th bgcolor="9999ff" colspan=2>01</th>
+    <td bgcolor="66ff66" colspan=3><center>SCR 32..30</td>
+    <th bgcolor="9999ff" colspan=1>1</th>
+    <td bgcolor="66ff66" colspan=15><center>SCR 29..15</td>
+    <th bgcolor="9999ff" colspan=1>1</th>
+    <td bgcolor="66ff66" colspan=15><center>SCR 14..00</td>
+    <th bgcolor="9999ff" colspan=1>1</th>
+    <td bgcolor="66ff66" colspan=9><center>SCR_ext</td>
+    <th bgcolor="9999ff" colspan=1>1</th>
+</tr>
+</table>
+
+<table border=1>
+<tr><th colspan=8><center>byte 10</th><th colspan=8><center>byte 11</th>
+    <th colspan=8><center>byte 12</th><th colspan=8><center>byte 13</th></tr>
+<tr><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+    <th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+</tr>
+<tr><td bgcolor="66ff66" colspan=22><center>Program_Mux_Rate</td>
+    <th bgcolor="9999ff" colspan=1>1</th>
+    <th bgcolor="9999ff" colspan=1>1</th>
+    <td bgcolor="66ff66" colspan=5><center>reserved</td>
+    <td bgcolor="66ff66" colspan=3>pack_stuffing_length</td>
+</tr>
+</table>
+PACK identifier -- 0xBA
+<ul>
+<li>SCR and SCR_ext together are the System Clock Reference, a counter driven at 27MHz, used as
+    a reference to synchronize streams. The clock is divided by 300 (to match the 90KHz clocks
+    such as PTS/DTS), the quotient is SCR (33 bits), the remainder is SCR_ext (9 bits)
+<li>Program_Mux_Rate -- This is a 22 bit integer specifying the rate at which the program stream
+    target decoder receives the Program Stream during the pack in which it is included. The
+    value of program_mux_rate is measured in units of 50 bytes/second. The value 0 is forbidden.
+<li>pack_stuffing_length -- A 3 bit integer specifying the number of stuffing bytes which follow
+    this field.
+<li>stuffing byte  -- This is a fixed 8-bit value equal to '1111 1111' that can be inserted by
+    the encoder, for example to meet the requirements of the channel.  It is discarded by the
+    decoder.
+</ul>
+
+<table width=100% border=0>
+<tr><td align=right>Copyright &#169 2001 - 2016 STN Software, all rights reserved.</td></tr>
+</table>
+
+</body>
+</html>

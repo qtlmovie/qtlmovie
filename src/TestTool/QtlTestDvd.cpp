@@ -174,7 +174,7 @@ int QtlTestDvd::run(const QStringList& args)
             << ", next:" << pgc->nextTitleNumber()
             << ", parent:" << pgc->parentTitleNumber() << endl
             << "    Duration: " << pgc->durationInSeconds() << " seconds (" << qtlSecondsToString(pgc->durationInSeconds()) << ")" << endl
-            << "    Sectors:" << pgc->sectors().toString() << endl
+            << "    Sectors:" << pgc->sectors() << endl
             << "    YUV palette: " << QtlDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
             << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl;
     }
