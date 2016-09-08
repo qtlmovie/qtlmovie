@@ -605,13 +605,11 @@ bool QtlMovieJob::addFFmpeg(const QString& description, const QStringList ffmpeg
         return abortStart(tr("Internal error, no FFmpeg option"));
     }
     else {
-        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments,
-                                                                   _outSeconds,
-                                                                   _tempDir,
-                                                                   settings(),
-                                                                   this,
-                                                                   this,
-                                                                   originalInput ? task()->inputFile()->dataPull(this) : 0);
+        // If the FFmpeg input file is the original input file, then use the QtlDataPull is necessary.
+        // But if the input file is some intermediate file, always use the file.
+        QtlDataPull* dataPull = originalInput ? task()->inputFile()->dataPull(this) : 0;
+
+        QtlMovieFFmpegProcess* process = new QtlMovieFFmpegProcess(ffmpegArguments, _outSeconds, _tempDir, settings(), this, this, dataPull);
         process->setDescription(description);
         _actionList.append(process);
         return true;

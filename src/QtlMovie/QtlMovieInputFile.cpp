@@ -36,6 +36,9 @@
 #include "QtlMovieClosedCaptionsSearch.h"
 #include "QtlMovie.h"
 #include "QtlNumUtils.h"
+#include "QtlFileDataPull.h"
+#include "QtsDvdDataPull.h"
+#include "QtsDvdProgramChainDemux.h"
 
 
 //----------------------------------------------------------------------------
@@ -68,7 +71,10 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _isTs(false),
     _isM2ts(false),
     _isSubtitle(false),
-    _pipeInput(false)
+    _pipeInput(false),
+    _dvdTranscodeRawVob(settings->dvdTranscodeRawVob()),
+    _dvdProgramChain(settings->dvdProgramChain()),
+    _dvdAngle(settings->dvdAngle())
 {
     Q_ASSERT(log != 0);
     Q_ASSERT(settings != 0);
@@ -103,7 +109,10 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _isTs(other._isTs),
     _isM2ts(other._isM2ts),
     _isSubtitle(other._isSubtitle),
-    _pipeInput(other._pipeInput)
+    _pipeInput(other._pipeInput),
+    _dvdTranscodeRawVob(other._dvdTranscodeRawVob),
+    _dvdProgramChain(other._dvdProgramChain),
+    _dvdAngle(other._dvdAngle)
 {
     // Update media info when the file name is changed.
     connect(this, &QtlMovieInputFile::fileNameChanged, this, &QtlMovieInputFile::updateMediaInfo);
@@ -190,13 +199,22 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     const bool isOnDvd = _dvdTitleSet.load(fileName);
     const bool isOnEncryptedDvd = isOnDvd && _dvdTitleSet.isEncrypted();
 
+    // Collect and save DVD demultiplexing options. Depending on these options, the DVD content
+    // which will be sent to FFmpeg can be different. If the user changes the settings
+    // between the analysis of the input (now) and the transcoding (later), the stream
+    // information could be inconsistent in the two operations. To avoid this, we need
+    // to use the same demux options in both cases.
+    _dvdTranscodeRawVob = _settings->dvdTranscodeRawVob();
+    _dvdProgramChain = _settings->dvdProgramChain();
+    _dvdAngle = _settings->dvdAngle();
+
     // DVD media and file structure requires special treatment.
     int ffprobeTimeout = _settings->ffprobeExecutionTimeout();
     if (isOnDvd) {
 
         // If the specified PGC in the settings does not exist in this VTS, revert to PGC #1.
         // This is a safe default since most DVD's have only one PGC.
-        _dvdPgc = _dvdTitleSet.title(_settings->dvdProgramChain());
+        _dvdPgc = _dvdTitleSet.title(_dvdProgramChain);
         if (_dvdPgc.isNull()) {
             _dvdPgc = _dvdTitleSet.title(1);
         }
@@ -204,8 +222,8 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
         // Give a 4 times longer timeout on DVD devices, they are so slow to start.
         ffprobeTimeout *= 4;
 
-        if (isOnEncryptedDvd) {
-            // Encrypted DVD's shall be read from stdin.
+        if (isOnEncryptedDvd || !_dvdTranscodeRawVob) {
+            // Encrypted and/or demuxed DVD's shall be read from stdin.
             // We need to specify the file format for ffmpeg.
             _ffmpegInput = "-";
             _ffmpegFormat = "mpeg";
@@ -465,11 +483,53 @@ void QtlMovieInputFile::newMediaInfo()
 
 QtlDataPull* QtlMovieInputFile::dataPull(QObject* parent) const
 {
-    // Currently, return a QtlDataPull for encrypted DVD's only.
-    //@@@ Set auto delete on data pull
-    //@@@ Also use a data pull if not all sectors.
-    //@@@ Check usages of this function, any other issue?
-    return _pipeInput && _dvdTitleSet.isEncrypted() ? _dvdTitleSet.dataPull(_log, parent, _settings->dvdUseMaxSpeed()) : 0;
+    // If the input is not piped into FFmpeg, no need for a QtlDataPull.
+    if (!_pipeInput) {
+        return 0;
+    }
+
+    QtlDataPull* dp = 0;
+    if (!_dvdTranscodeRawVob) {
+        // We need to demultiplex one program chain from the VOB files.
+        // We have a specific class for that.
+        dp = new QtsDvdProgramChainDemux(_dvdTitleSet,
+                                         _dvdProgramChain,     // the PGC to demux
+                                         _dvdAngle,            // the angle to demux in the PGC
+                                         1,                    // fallback PGC number
+                                         QTS_DEFAULT_DVD_TRANSFER_SIZE,
+                                         QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
+                                         Qts::NavPacksRemoved, // Navigation packs are useless to FFmpeg
+                                         _log,
+                                         parent,
+                                         _settings->dvdUseMaxSpeed());
+    }
+    else if (_dvdTitleSet.isEncrypted()) {
+        // Read the raw VOB content from an encrypted DVD.
+        // When ripping files, we skip bad sectors.
+        dp = new QtsDvdDataPull(_dvdTitleSet.deviceName(),
+                                _dvdTitleSet.vobStartSector(),
+                                _dvdTitleSet.vobSectorCount(),
+                                Qts::SkipBadSectors,
+                                QTS_DEFAULT_DVD_TRANSFER_SIZE,
+                                QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
+                                _log,
+                                parent,
+                                _settings->dvdUseMaxSpeed());
+    }
+    else {
+        // Read the raw VOB content from a non-encrypted file system.
+        // Normally, this never happens because it is better handled
+        // directly by FFmpeg on the file system.
+        dp = new QtlFileDataPull(_dvdTitleSet.vobFileNames(),
+                                 QtlFileDataPull::DEFAULT_TRANSFER_SIZE,
+                                 QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
+                                 _log,
+                                 parent);
+    }
+
+    // Make sure the object deletes itself after completion.
+    dp->setAutoDelete(true);
+    return dp;
 }
 
 
@@ -540,7 +600,7 @@ float QtlMovieInputFile::durationInSeconds() const
     // So, the last time stamp of the last file is the duration of the last layer,
     // not the duration of the movie.
     if (_dvdTitleSet.isLoaded() && !_dvdPgc.isNull()) {
-        int dvdDuration = _dvdTitleSet.allTitlesDurationInSeconds(_dvdPgc->titleNumber());
+        int dvdDuration = _dvdPgc->durationInSeconds();
         if (dvdDuration > 0) {
             return float(dvdDuration);
         }

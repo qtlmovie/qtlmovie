@@ -206,6 +206,7 @@ void QtlMovieFFmpegProcess::processOutputLine(QProcess::ProcessChannel channel, 
         if (!useDataPullProgressReport()) {
             emitProgress(timeInSeconds, _inputDurationInSeconds);
         }
-        debug(line);
+        // Uncomment this to log FFmpeg frame indicators (but this is a lot of output).
+        // debug(line);
     }
 }

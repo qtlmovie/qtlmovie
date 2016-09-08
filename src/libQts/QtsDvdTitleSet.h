@@ -38,9 +38,8 @@
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
-#include "QtsDvdMedia.h"
-#include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
+#include "QtsDvdMedia.h"
 #include "QtsDvdProgramChain.h"
 #include "QtsDvdOriginalCell.h"
 #include "QtsDvd.h"
@@ -298,18 +297,6 @@ public:
     {
         return _originalCells;
     }
-
-    //!
-    //! Create a QtlDataPull to transfer some video content of the title set to a device.
-    //!
-    //! @param [in] log Where to log errors.
-    //! @param parent Optional parent object of the QtlDataPull instance.
-    //! @param [in] useMaxReadSpeed If true and the title set is on a DVD media,
-    //! try to set the DVD reader to maximum speed.
-    //! @param [in] sectorList The list of sectors to extract with 0 as base for first sector of first VOB.
-    //! @return A pointer to a new QtlDataPull.
-    //!
-    QtlDataPull* dataPull(QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false, const QtlRangeList& sectorList = QtlRangeList()) const;
 
     //!
     //! Check if a file is a .IFO or .VOB.

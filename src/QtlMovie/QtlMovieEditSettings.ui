@@ -548,21 +548,21 @@
           <string>Reading DVD (input)</string>
          </property>
          <layout class="QGridLayout" name="layoutDvdInput">
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelDvdProgramChain">
+            <property name="text">
+             <string>PGC :</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkTranscodeRawVob">
+           <widget class="QRadioButton" name="radioTranscodeRawVob">
             <property name="text">
              <string>Transcode raw VOB files (may create an incorrect movie)</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelDvdProgramChain">
-            <property name="text">
-             <string>Program Chain (PGC) :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="spinDvdProgramChain">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -584,14 +584,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="labelDvdAngle">
             <property name="text">
              <string>Angle :</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QSpinBox" name="spinDvdAngle">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -604,6 +604,13 @@
             </property>
             <property name="maximum">
              <number>256</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QRadioButton" name="radioDemuxProgramChain">
+            <property name="text">
+             <string>Demultiplex one specific Program Chain (PGC) and angle</string>
             </property>
            </widget>
           </item>
@@ -2061,7 +2068,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkTranscodeRawVob</sender>
+   <sender>radioTranscodeRawVob</sender>
    <signal>toggled(bool)</signal>
    <receiver>labelDvdProgramChain</receiver>
    <slot>setDisabled(bool)</slot>
@@ -2077,7 +2084,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkTranscodeRawVob</sender>
+   <sender>radioTranscodeRawVob</sender>
    <signal>toggled(bool)</signal>
    <receiver>spinDvdProgramChain</receiver>
    <slot>setDisabled(bool)</slot>
@@ -2093,7 +2100,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkTranscodeRawVob</sender>
+   <sender>radioTranscodeRawVob</sender>
    <signal>toggled(bool)</signal>
    <receiver>labelDvdAngle</receiver>
    <slot>setDisabled(bool)</slot>
@@ -2109,7 +2116,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkTranscodeRawVob</sender>
+   <sender>radioTranscodeRawVob</sender>
    <signal>toggled(bool)</signal>
    <receiver>spinDvdAngle</receiver>
    <slot>setDisabled(bool)</slot>

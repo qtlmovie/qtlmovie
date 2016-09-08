@@ -405,6 +405,9 @@ private:
     bool    _isM2ts;                             //!< File has M2TS format.
     bool    _isSubtitle;                         //!< File is a pure subtitle file, no container format.
     bool    _pipeInput;                          //!< Input file content shall be piped from QtlMovie.
+    bool    _dvdTranscodeRawVob;                 //!< On DVD, transcode raw VOB files, don't demux.
+    int     _dvdProgramChain;                    //!< PGC number when demuxing DVD content.
+    int     _dvdAngle;                           //!< Angle number when demuxing DVD content.
 
     //!
     //! Report that new media info has been found.

@@ -257,7 +257,8 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.checkBoxCleanupSubtitles->setChecked(_settings->cleanupSubtitles());
     _ui.checkBoxUseHtmlInSrt->setChecked(_settings->useSrtHtmlTags());
     _ui.checkBoxDowngradeSsaToSrt->setChecked(_settings->downgradeSsaToSrt());
-    _ui.checkTranscodeRawVob->setChecked(_settings->dvdTranscodeRawVob());
+    _ui.radioTranscodeRawVob->setChecked(_settings->dvdTranscodeRawVob());
+    _ui.radioDemuxProgramChain->setChecked(!_settings->dvdTranscodeRawVob());
     _ui.spinDvdProgramChain->setValue(_settings->dvdProgramChain());
     _ui.spinDvdAngle->setValue(_settings->dvdAngle());
 
@@ -304,10 +305,10 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
 
     // Set a few other widgets selectable or not.
     _ui.spinMaxTranscode->setEnabled(_ui.radioButtonPartial->isChecked());
-    _ui.labelDvdProgramChain->setDisabled(_ui.checkTranscodeRawVob->isChecked());
-    _ui.spinDvdProgramChain->setDisabled(_ui.checkTranscodeRawVob->isChecked());
-    _ui.labelDvdAngle->setDisabled(_ui.checkTranscodeRawVob->isChecked());
-    _ui.spinDvdAngle->setDisabled(_ui.checkTranscodeRawVob->isChecked());
+    _ui.labelDvdProgramChain->setDisabled(_ui.radioTranscodeRawVob->isChecked());
+    _ui.spinDvdProgramChain->setDisabled(_ui.radioTranscodeRawVob->isChecked());
+    _ui.labelDvdAngle->setDisabled(_ui.radioTranscodeRawVob->isChecked());
+    _ui.spinDvdAngle->setDisabled(_ui.radioTranscodeRawVob->isChecked());
 }
 
 //-----------------------------------------------------------------------------
@@ -411,7 +412,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setCleanupSubtitles(_ui.checkBoxCleanupSubtitles->isChecked());
     _settings->setUseSrtHtmlTags(_ui.checkBoxUseHtmlInSrt->isChecked());
     _settings->setDowngradeSsaToSrt(_ui.checkBoxDowngradeSsaToSrt->isChecked());
-    _settings->setDvdTranscodeRawVob(_ui.checkTranscodeRawVob->isChecked());
+    _settings->setDvdTranscodeRawVob(_ui.radioTranscodeRawVob->isChecked());
     _settings->setDvdProgramChain(_ui.spinDvdProgramChain->value());
     _settings->setDvdAngle(_ui.spinDvdAngle->value());
 

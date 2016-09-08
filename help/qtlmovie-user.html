@@ -538,8 +538,8 @@
           In this case, the various program chains and angles are multiplexed inside the VOB files
           and FFmpeg is unable to differentiate them. The result of the transcoding is consequently
           inconsistent. This is why this option is disabled by default.</p>
-        <p>When the option "Transcode raw VOB files" is disabled, QtlMovie will demultiplex the content of the VOB
-          files and provide to FFmpeg only the specified "Program Chain (PGC)" and "Angle".
+        <p>When the option "Demultiplex one specific Program Chain" is enabled, QtlMovie will demultiplex the content of the VOB
+          files and provide to FFmpeg only the specified "PGC" and "Angle".
           PGC's and angles are numbered starting from 1 onward.
           The default values 1 and 1 are recommended since they usually refer to the standard playback of the movie.
           If the specified PGC does not exist, the PGC number 1 will always be used instead.</p>

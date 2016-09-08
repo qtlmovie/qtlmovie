@@ -83,21 +83,6 @@
         <source>Error reading Program Chain Table (PGC) from %1</source>
         <translation>Erreur de lecture de la Program Chain Table (PGC) de %1</translation>
     </message>
-    <message>
-        <location filename="../QtsDvdTitleSet.cpp" line="641"/>
-        <source>Extracting DVD sectors %1</source>
-        <translation>Extraction des secteurs DVD %1</translation>
-    </message>
-    <message>
-        <location filename="../QtsDvdTitleSet.cpp" line="665"/>
-        <source>Error getting size of %1, skipping all subsequent VOB files</source>
-        <translation>Impossible de connaitre la taille de %1, les fichiers VOB suivants seront ignorés</translation>
-    </message>
-    <message>
-        <location filename="../QtsDvdTitleSet.cpp" line="675"/>
-        <source>Extracting %1 %2</source>
-        <translation>Extraction de %1 %2</translation>
-    </message>
 </context>
 <context>
     <name>QtsDvdDataPull</name>
