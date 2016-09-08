@@ -38,7 +38,9 @@
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
-#include "QtlSmartPointer.h"
+#include "QtlDvdProgramChapter.h"
+#include "QtlDvdProgramCell.h"
+#include "QtlDvdOriginalCell.h"
 #include "QtlDvd.h"
 
 class QtlDvdProgramChain;
@@ -50,7 +52,13 @@ typedef QtlSmartPointer<QtlDvdProgramChain,QtlNullMutexLocker> QtlDvdProgramChai
 Q_DECLARE_METATYPE(QtlDvdProgramChainPtr)
 
 //!
+//! List of smart pointers to QtlDvdProgramChain (non thread-safe).
+//!
+typedef QList<QtlDvdProgramChainPtr> QtlDvdProgramChainList;
+
+//!
 //! A class which describes a Program Chain (PGC) in a DVD Video Title Set (VTS).
+//! Note that a Program Chain is also named a "Title", a VTS being a set of PGC's.
 //!
 class QtlDvdProgramChain
 {
@@ -60,9 +68,14 @@ public:
     //! @param [in] ifo Content of the IFO file.
     //! @param [in] index Starting index of the PGC data in @a ifo.
     //! @param [in] titleNumber Title number in VTS. First title is #1.
+    //! @param [in] originalCells List of cells in original input files.
     //! @param [in] log Where to log errors.
     //!
-    QtlDvdProgramChain(const QtlByteBlock& ifo = QtlByteBlock(), int index = -1, int titleNumber = 0, QtlLogger* log = 0);
+    QtlDvdProgramChain(const QtlByteBlock& ifo = QtlByteBlock(),
+                       int index = -1,
+                       int titleNumber = 0,
+                       const QtlDvdOriginalCellList& originalCells = QtlDvdOriginalCellList(),
+                       QtlLogger* log = 0);
 
     //!
     //! Check if the Program Chain data was correctly analyzed.
@@ -120,18 +133,6 @@ public:
     }
 
     //!
-    //! Get the list of sectors inside the VTS for this PGC.
-    //! @return A list of ranges of sectors. The sectors are numbered inside
-    //! the VTS, meaning that sector #0 is the first sector of VTS_nn_1.VOB.
-    //! The list is ordered and minimal (there are no adjacent ranges, they
-    //! are merged into one larger ranges).
-    //!
-    QtlRangeList sectors() const
-    {
-        return _sectors;
-    }
-
-    //!
     //! Get the color palette of the title set in YUV format.
     //! Typically used to render subtitles.
     //! @return The palette in YUV format. Each entry contains 4 bytes: (0, Y, Cr, Cb).
@@ -147,6 +148,51 @@ public:
     //! @return The palette in RGB format. Each entry contains 4 bytes: (0, R, G, B).
     //!
     QtlByteBlock rgbPalette() const;
+
+    //!
+    //! Get the number of chapters in this program chain.
+    //! @return The number of chapters in this program chain.
+    //!
+    int chapterCount() const
+    {
+        return _chapters.size();
+    }
+
+    //!
+    //! Get the list of chapters in this program chain.
+    //! Note that a chapter is also named a "program" or a "part of a title" (PTT),
+    //! a program chain (PGC) being a chain of chapters.
+    //! @return The list of chapters in this program chain.
+    //!
+    QtlDvdProgramChapterList chapters() const
+    {
+        return _chapters;
+    }
+
+    //!
+    //! Get the number of cells in this program chain.
+    //! @return The number of cells in this program chain.
+    //!
+    int cellCount() const
+    {
+        return _cells.size();
+    }
+
+    //!
+    //! Get the list of cells in this program chain.
+    //! @return The list of cells in this program chain.
+    //!
+    QtlDvdProgramCellList cells() const
+    {
+        return _cells;
+    }
+
+    //!
+    //! Get the total number of sectors in all cells.
+    //! Note that the actual number of sectors can be a bit smaller (see QtlDvdProgramCell::sectors()).
+    //! @return The total number of sectors in all cells.
+    //!
+    int totalSectorCount() const;
 
     //!
     //! Convert a YUV palette into RGB.
@@ -177,43 +223,12 @@ private:
     bool          _valid;            //!< Object is valid.
     int           _titleNumber;      //!< Title number in VTS.
     int           _duration;         //!< Playback duration in seconds.
-    int           _programCount;     //!< Number of programs in the chain.
-    int           _cellCount;        //!< Number of cells.
     int           _nextPgc;          //!< Next PGC to play.
     int           _previousPgc;      //!< Previous PGC to play.
     int           _parentPgc;        //!< Parent PGC.
     QtlByteBlock  _palette;          //!< VTS color palette in YUV format.
-    QtlRangeList  _sectors;          //!< List of sectors inside the VTS for this PGC.
-};
-
-//!
-//! List of smart pointers to QtlDvdProgramChain (non thread-safe).
-//!
-class QtlDvdProgramChainPtrList : public QList<QtlDvdProgramChainPtr>
-{
-public:
-    //!
-    //! Redefine the superclass type.
-    //!
-    typedef QList<QtlDvdProgramChainPtr> SuperClass;
-
-    //!
-    //! Default constructor.
-    //!
-    QtlDvdProgramChainPtrList() : SuperClass() {}
-
-    //!
-    //! Copy constructor.
-    //! @param [in] other Other instance to copy.
-    //!
-    QtlDvdProgramChainPtrList(const SuperClass &other) : SuperClass(other) {}
-
-
-    //!
-    //! Get the sum of all title set playback durations in seconds.
-    //! @return The sum of all title set playback durations in seconds.
-    //!
-    int totalDurationInSeconds() const;
+    QtlDvdProgramCellList    _cells;     //!< List of cells in this program chain.
+    QtlDvdProgramChapterList _chapters;  //!< List of chapters in this program chain.
 };
 
 #endif // QTLDVDPROGRAMCHAIN_H

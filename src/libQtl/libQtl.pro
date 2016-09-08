@@ -94,7 +94,12 @@ SOURCES += \
     QtlRange.cpp \
     QtlDvdProgramChain.cpp \
     QtlFileSlices.cpp \
-    QtlDataPullSynchronousWrapper.cpp
+    QtlDataPullSynchronousWrapper.cpp \
+    QtlDvdOriginalCell.cpp \
+    QtlDvdProgramCell.cpp \
+    QtlDvdProgramChapter.cpp \
+    QtlDvdBandwidthReport.cpp \
+    QtlDvdProgramChainDemux.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -174,7 +179,12 @@ HEADERS += \
     QtlDvdProgramChain.h \
     QtlDvd.h \
     QtlFileSlices.h \
-    QtlDataPullSynchronousWrapper.h
+    QtlDataPullSynchronousWrapper.h \
+    QtlDvdOriginalCell.h \
+    QtlDvdProgramCell.h \
+    QtlDvdProgramChapter.h \
+    QtlDvdBandwidthReport.h \
+    QtlDvdProgramChainDemux.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2015, Thierry Lelegard
+// Copyright (c) 2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,27 +25,21 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//!
-//! @file QtlMovieVersion.h
-//!
-//! Declare the version of the product.
-//!
+//
+// Define the class QtlDvdOriginalCell.
+//
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEVERSION_H
-#define QTLMOVIEVERSION_H
+#include "QtlDvdOriginalCell.h"
 
-#include <QString>
 
-//!
-//! Version of the product.
-//!
-#define QTLMOVIE_VERSION "1.10-rc2"
+//----------------------------------------------------------------------------
+// Constructor.
+//----------------------------------------------------------------------------
 
-//!
-//! Get the actual version of the product.
-//! @return Actual version of the product.
-//!
-QString qtlMovieVersion();
-
-#endif // QTLMOVIEVERSION_H
+QtlDvdOriginalCell::QtlDvdOriginalCell(int vobId, int cellId, const QtlRange& sectors) :
+    _originalVobId(vobId),
+    _originalCellId(cellId),
+    _sectors(sectors)
+{
+}

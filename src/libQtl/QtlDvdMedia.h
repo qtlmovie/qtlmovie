@@ -266,15 +266,6 @@ public:
     //!
     bool loadAllEncryptionKeys();
 
-    //!
-    //! Build a human-readable string for DVD transfer rate.
-    //! @param [in] bytes Number of bytes transfered.
-    //! @param [in] milliSeconds Number of milliseconds to transfer @a bytes.
-    //! @param [in] flags A set of flags to specify the format.
-    //! @return A human readable string.
-    //!
-    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, Qtl::TransferRateFlags flags = Qtl::TransferDvdBase);
-
 signals:
     //!
     //! Emitted when a new DVD media is open.

@@ -55,7 +55,6 @@ QtlMovieInputFile::QtlMovieInputFile(const QString& fileName,
     _streams(),
     _dvdTitleSet(fileName, log),
     _dvdPgc(),
-    _dvdPgcSequence(),
     _teletextSearch(0),
     _ffprobeCount(0),
     _ccSearchCount(0),
@@ -91,7 +90,6 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
     _streams(other._streams),
     _dvdTitleSet(other._dvdTitleSet),
     _dvdPgc(other._dvdPgc),
-    _dvdPgcSequence(other._dvdPgcSequence),
     _teletextSearch(0),  // don't copy
     _ffprobeCount(0),    // don't copy
     _ccSearchCount(0),   // don't copy
@@ -159,7 +157,6 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     _ffmpegFormat.clear();
     _pipeInput = false;
     _dvdPgc.clear();
-    _dvdPgcSequence.clear();
 
     // Clear all previous media info.
     const bool wasNone = _streams.isEmpty();
@@ -202,10 +199,6 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
         _dvdPgc = _dvdTitleSet.title(_settings->dvdProgramChain());
         if (_dvdPgc.isNull()) {
             _dvdPgc = _dvdTitleSet.title(1);
-        }
-        if (!_dvdPgc.isNull()) {
-            // Full sequence, including prevous / next PGC's.
-            _dvdPgcSequence = _dvdTitleSet.allTitles(_dvdPgc->titleNumber());
         }
 
         // Give a 4 times longer timeout on DVD devices, they are so slow to start.
@@ -371,7 +364,7 @@ void QtlMovieInputFile::foundTeletextSubtitles(QtlMediaStreamInfoPtr stream)
     if (stream->streamId() >= 0) {
         // We know the PID of the stream in the TS file (should be always the case).
         // Look for previous streams with the same PID.
-        for (QtlMediaStreamInfoPtrVector::Iterator it = _streams.begin(); it != _streams.end(); ++it) {
+        for (QtlMediaStreamInfoList::Iterator it = _streams.begin(); it != _streams.end(); ++it) {
             const QtlMediaStreamInfoPtr& s(*it);
             if (s->streamId() == stream->streamId()) {
                 // Found a previous stream with same PID.
@@ -546,9 +539,11 @@ float QtlMovieInputFile::durationInSeconds() const
     // a multi-layer DVD, the time stamps are reset at the beginning of each layer.
     // So, the last time stamp of the last file is the duration of the last layer,
     // not the duration of the movie.
-    const int dvdDuration = _dvdPgcSequence.totalDurationInSeconds();
-    if (dvdDuration > 0) {
-        return float(dvdDuration);
+    if (_dvdTitleSet.isLoaded() && !_dvdPgc.isNull()) {
+        int dvdDuration = _dvdTitleSet.allTitlesDurationInSeconds(_dvdPgc->titleNumber());
+        if (dvdDuration > 0) {
+            return float(dvdDuration);
+        }
     }
 
     // Try duration of file.

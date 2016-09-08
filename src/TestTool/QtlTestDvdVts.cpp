@@ -31,8 +31,9 @@
 //----------------------------------------------------------------------------
 
 #include "QtlTestCommand.h"
-#include "QtlDataPullSynchronousWrapper.h"
 #include "QtlDvdTitleSet.h"
+#include "QtlDvdProgramChainDemux.h"
+#include "QtlDataPullSynchronousWrapper.h"
 
 //----------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ class QtlTestDvdVts : public QtlTestCommand
     Q_OBJECT
 
 public:
-    QtlTestDvdVts() : QtlTestCommand("dvdvts", "ifo-or-vob-file out-file [pgc-number]") {}
+    QtlTestDvdVts() : QtlTestCommand("dvdvts", "ifo-or-vob-file out-file [fix-navpacks|remove-navpacks|copy-navpacks [pgc-number]]") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
@@ -55,7 +56,19 @@ int QtlTestDvdVts::run(const QStringList& args)
 
     const QString input(args[0]);
     const QString output(args[1]);
-    int pgcNumber = args.size() < 3 ? 0 : args[2].toInt();
+    const QString navpackOption(args.size() < 3 ?"" : args[2]);
+    int pgcNumber = args.size() < 4 ? 0 : args[3].toInt();
+
+    Qtl::DvdDemuxPolicy demuxPolicy = Qtl::NavPacksFixed;
+    if (navpackOption.startsWith('f', Qt::CaseInsensitive)) {
+        demuxPolicy = Qtl::NavPacksFixed;
+    }
+    else if (navpackOption.startsWith('r', Qt::CaseInsensitive)) {
+        demuxPolicy = Qtl::NavPacksRemoved;
+    }
+    else if (navpackOption.startsWith('c', Qt::CaseInsensitive)) {
+        demuxPolicy = Qtl::NavPacksUnchanged;
+    }
 
     // Load VTS description.
     QtlDvdTitleSet vts(input, &log);
@@ -64,12 +77,16 @@ int QtlTestDvdVts::run(const QStringList& args)
         return EXIT_FAILURE;
     }
 
-    // Get list of sectors.
-    QtlRangeList sectors(vts.titleSectors(pgcNumber, 0, &log));
-    out << "VOB sectors to extract for PGC #" << pgcNumber << ": " << sectors << endl;
-
-    const quint64 sectorsCount = sectors.totalValueCount();
-    out << "Total size: " << sectorsCount << " sectors, " << (sectorsCount * Qtl::DVD_SECTOR_SIZE) << " bytes" << endl;
+    QtlDvdProgramChainDemux demux(vts,
+                                  pgcNumber,
+                                  1,       // angleNumber
+                                  1,       // fallbackPgcNumber
+                                  Qtl::DEFAULT_DVD_TRANSFER_SIZE,       // transferSize
+                                  QtlDataPull::DEFAULT_MIN_BUFFER_SIZE, // minBufferSize
+                                  demuxPolicy,
+                                  &log,
+                                  0,       // parent
+                                  true);   // useMaxReadSpeed
 
     // Create binary output file.
     QFile file(output);
@@ -79,10 +96,8 @@ int QtlTestDvdVts::run(const QStringList& args)
     }
 
     // Transfer the file using a wrapper test class.
-    QtlDataPull* dataPull = vts.dataPull(&log, 0, true, sectors);
-    QtlDataPullSynchronousWrapper(dataPull, &file);
-    out << "Completed, pulled " << (dataPull->pulledSize() / Qtl::DVD_SECTOR_SIZE) << " sectors, " << dataPull->pulledSize() << " bytes" << endl;
-    delete dataPull;
+    QtlDataPullSynchronousWrapper(&demux, &file);
+    out << "Completed, pulled " << (demux.pulledSize() / Qtl::DVD_SECTOR_SIZE) << " sectors, " << demux.pulledSize() << " bytes" << endl;
 
     file.close();
 
@@ -93,3 +108,4 @@ int QtlTestDvdVts::run(const QStringList& args)
 
 #include "QtlTestDvdVts.moc"
 namespace {QtlTestDvdVts thisTest;}
+

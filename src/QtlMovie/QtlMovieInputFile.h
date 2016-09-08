@@ -383,16 +383,15 @@ private slots:
     void closedCaptionsSearchTerminated(bool success);
 
 private:
-    QtlLogger*                  _log;            //!< Where to log errors.
-    const QtlMovieSettings*     _settings;       //!< Application settings.
-    QString                     _ffmpegInput;    //!< Name to specify as input to ffmpeg.
-    QString                     _ffmpegFormat;   //!< Name to specify as input file format to ffmpeg.
-    QtlMovieFFprobeTags         _ffInfo;         //!< Media info in ffprobe flat format.
-    QtlMediaStreamInfoPtrVector _streams;        //!< Stream information.
-    QtlDvdTitleSet              _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
-    QtlDvdProgramChainPtr       _dvdPgc;         //!< Smart pointer to PGC inside the DVD VTS.
-    QtlDvdProgramChainPtrList   _dvdPgcSequence; //!< Sequence of all PGC's inside the DVD VTS.
-    QtlMovieTeletextSearch*     _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
+    QtlLogger*              _log;            //!< Where to log errors.
+    const QtlMovieSettings* _settings;       //!< Application settings.
+    QString                 _ffmpegInput;    //!< Name to specify as input to ffmpeg.
+    QString                 _ffmpegFormat;   //!< Name to specify as input file format to ffmpeg.
+    QtlMovieFFprobeTags     _ffInfo;         //!< Media info in ffprobe flat format.
+    QtlMediaStreamInfoList  _streams;        //!< Stream information.
+    QtlDvdTitleSet          _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
+    QtlDvdProgramChainPtr   _dvdPgc;         //!< Smart pointer to PGC inside the DVD VTS.
+    QtlMovieTeletextSearch* _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
     int     _ffprobeCount;                       //!< Number of ffprobe in progress.
     int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.
     int     _selectedVideoStreamIndex;           //!< Index of video stream to transcode.

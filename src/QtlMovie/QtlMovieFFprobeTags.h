@@ -57,7 +57,7 @@ public:
     //! Analyze the FFprobe tags and add in a list of stream info.
     //! @param [in,out] streams The list of streams to build.
     //!
-    void buildStreamInfo(QtlMediaStreamInfoPtrVector& streams);
+    void buildStreamInfo(QtlMediaStreamInfoList& streams);
 
     //!
     //! Get the value of a global tag in FFprobe output.

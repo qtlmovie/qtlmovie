@@ -32,6 +32,7 @@
 
 #include "QtlTestCommand.h"
 #include "QtlDvdMedia.h"
+#include "QtlDvdBandwidthReport.h"
 
 class QtlTestDvdRead : public QtlTestCommand
 {
@@ -117,9 +118,9 @@ void QtlTestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& tim
     if (msAverage > 0) {
         out << "Transfer bandwidth after " << sectorCount << " sectors: ";
         if (msInstant > 0) {
-            out << QtlDvdMedia::transferRateToString(instantBytes, msInstant, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << ", ";
+            out << QtlDvdBandwidthReport::transferRateToString(instantBytes, msInstant, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << ", ";
         }
-        out << "average: " << QtlDvdMedia::transferRateToString(totalBytes, msAverage, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << endl;
+        out << "average: " << QtlDvdBandwidthReport::transferRateToString(totalBytes, msAverage, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << endl;
     }
 }
 

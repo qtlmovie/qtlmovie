@@ -70,8 +70,8 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
              startSector,
              sectorCount,
              badSectorPolicy,
-             QtlDvdDataPull::DEFAULT_TRANSFER_SIZE,
-             QtlDvdDataPull::DEFAULT_MIN_BUFFER_SIZE,
+             Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+             QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
              log,
              0,
              useMaxReadSpeed)

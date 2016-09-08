@@ -74,7 +74,7 @@ void QtlMovieFFprobeTags::loadFFprobeOutput(const QString& ffprobeOutput)
 // Analyze the FFprobe tags and build a list of stream info.
 //----------------------------------------------------------------------------
 
-void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoPtrVector& streams)
+void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoList& streams)
 {
     // Loop on all streams.
     const int ffStreamCount = intValue("format.nb_streams");

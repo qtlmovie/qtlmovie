@@ -379,7 +379,7 @@ void QtlDataPull::processNewState()
     // there will be calls to write(). During write(), we process events to make the
     // application more responsive. If there are queued calls to processNewState(),
     // they could be called. Such recursion could lead to output data in the wrong
-    // compared to input data.
+    // order compared to input data.
     QtlIncrement<int> updating(&_processingState);
     if (_processingState > 1) {
         return;
@@ -456,8 +456,11 @@ void QtlDataPull::processNewState()
         // Notify clients
         emit completed(_closed);
     }
-    else if (needMoreData()) {
-        // Not completed. If some devices need data and none are busy, ask for more data to the subclass.
+    else if (_newStatePosted || needMoreData()) {
+        // Not completed.
+        // If a recursive "process new state" was posted and dismissed, force its execution now.
+        // If some devices need data and none are busy, ask for more data to the subclass.
+        _newStatePosted = false;
         processNewStateLater();
     }
 }

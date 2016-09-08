@@ -324,8 +324,15 @@ inline bool qtsSequencedPts(quint64 pts1, quint64 pts2)
 //!
 //! SID (Stream identifier) values, as used in PES header.
 //!
+//! Note that QTS_SID_PACK, the SID for pack headers in program stream,
+//! is not a real PES packet. In DVD VOB files, for instance, each
+//! 2048-byte sector is a pack and starts with a pack header
+//! (see ISO 13818-1, §2.5.3.3).
+//!
 typedef quint8 QtsPesStreamId;
 
+const QtsPesStreamId QTS_SID_PACK       = 0xBA; //!< Pack header in program stream.
+const QtsPesStreamId QTS_SID_SYSTEM     = 0xBB; //!< System header in program stream.
 const QtsPesStreamId QTS_SID_PSMAP      = 0xBC; //!< Program stream map
 const QtsPesStreamId QTS_SID_PRIV1      = 0xBD; //!< Private stream 1
 const QtsPesStreamId QTS_SID_PAD        = 0xBE; //!< Padding stream
@@ -384,7 +391,19 @@ bool qtsIsLongHeaderPesStreamId(QtsPesStreamId sid);
 //---------------------------------------------------------------------
 
 //!
-//! SID (Stream identifier) values, as used in PES header.
+//! PES start codes values, as used in PES headers and data.
+//!
+//! A PES start sequence is 32-bit long. The first 24 bits are always
+//! 0x000001 (defined as QTS_PES_START), followed by the 8-bit start
+//! code value.
+//!
+//! A PES start sequence is used to "start a sequence". A sequence can
+//! be a complete PES packet, a unit inside a PES packet or system data
+//! outside PES packets (such as pack headers in program streams).
+//!
+//! Most PES start codes in the "system range" (0xB9 to 0xFF) are
+//! typically used as stream id values in PES packet headers (when
+//! the PES start sequence is in fact the start of a PES packet).
 //!
 typedef quint8 QtsPesStartCode;
 

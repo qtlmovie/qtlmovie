@@ -54,6 +54,11 @@ namespace Qtl {
     static const int DVD_TRANSFER_RATE = 1385000;
 
     //!
+    //! Default DVD transfer size in bytes (512 kB, 256 DVD sectors).
+    //!
+    static const int DEFAULT_DVD_TRANSFER_SIZE = 512 * 1024;
+
+    //!
     //! Management policy of bad or corrupted sectors.
     //!
     //! Some DVD may intentionally include bad sectors as "protection" in the hope
@@ -71,6 +76,19 @@ namespace Qtl {
         ErrorOnBadSectors,     //!< Stop and return an error when reading a bad sector.
         SkipBadSectors,        //!< Skip bad sectors, ignore them, do not include them in returned data.
         ReadBadSectorsAsZero   //!< Return bad sectors as if they contained all zeroes.
+    };
+
+    //!
+    //! DVD navigation packs management policy during program chain demux.
+    //!
+    //! To get a valid DVD content after demux, the navigation packs should be fixed.
+    //! However, if the result is used by tools like FFmpeg or VLC, the navigation
+    //! packs can be ignored.
+    //!
+    enum DvdDemuxPolicy {
+        NavPacksFixed,      //!< Fix sector addresses in navigation packs.
+        NavPacksUnchanged,  //!< Keep navigation packs unmodified.
+        NavPacksRemoved     //!< Completely remove navigation packs.
     };
 
     //!

@@ -54,9 +54,9 @@ class QtlMediaStreamInfo;
 typedef QtlSmartPointer<QtlMediaStreamInfo,QtlNullMutexLocker> QtlMediaStreamInfoPtr;
 
 //!
-//! Vector of smart pointers to QtlMediaStreamInfo (non thread-safe).
+//! List of smart pointers to QtlMediaStreamInfo (non thread-safe).
 //!
-typedef QVector<QtlMediaStreamInfoPtr> QtlMediaStreamInfoPtrVector;
+typedef QList<QtlMediaStreamInfoPtr> QtlMediaStreamInfoList;
 
 //!
 //! Description of a stream (video, audio, subtitle) in a multimedia file.
@@ -554,7 +554,7 @@ public:
     //! are added in the stream in @a destination.
     //! @param [in] source A list of stream information.
     //!
-    static void merge(QtlMediaStreamInfoPtrVector& destination, const QtlMediaStreamInfoPtrVector& source);
+    static void merge(QtlMediaStreamInfoList& destination, const QtlMediaStreamInfoList& source);
 
 private:
     StreamType   _streamType;       //!< Stream type (audio, video, etc.)

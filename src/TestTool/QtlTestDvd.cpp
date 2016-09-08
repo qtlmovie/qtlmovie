@@ -169,14 +169,35 @@ int QtlTestDvd::run(const QStringList& args)
             out << "PGC #" << i << " has a null pointer" << endl;
             continue;
         }
+        if (!pgc->isValid()) {
+            out << "PGC #" << i << " is invalid" << endl;
+            continue;
+        }
         out << "PGC #" << i << ": current:" << pgc->titleNumber()
             << ", previous:" << pgc->previousTitleNumber()
             << ", next:" << pgc->nextTitleNumber()
             << ", parent:" << pgc->parentTitleNumber() << endl
             << "    Duration: " << pgc->durationInSeconds() << " seconds (" << qtlSecondsToString(pgc->durationInSeconds()) << ")" << endl
-            << "    Sectors:" << pgc->sectors() << endl
             << "    YUV palette: " << QtlDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
-            << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl;
+            << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl
+            << "    Chapters: " << pgc->chapterCount()
+            << ", cells: " << pgc->cellCount()
+            << ", total sectors: " << pgc->totalSectorCount() << endl;
+        foreach (const QtlDvdProgramChapterPtr& chapter, pgc->chapters()) {
+            out << "    Chapter #" << chapter->chapterId() << ", cells:";
+            foreach (const QtlDvdProgramCellPtr& cell, chapter->cells()) {
+                out << " " << cell->cellId();
+            }
+            out << endl;
+        }
+        foreach (const QtlDvdProgramCellPtr& cell, pgc->cells()) {
+            out << "    Cell #" << cell->cellId()
+                << ", angle: " << cell->angleId()
+                << ", " << qtlSecondsToString(cell->durationInSeconds())
+                << ", " << cell->sectors().totalValueCount()
+                << " sectors in " << cell->sectors().size() << " ranges"
+                << endl;
+        }
     }
 
     return EXIT_SUCCESS;

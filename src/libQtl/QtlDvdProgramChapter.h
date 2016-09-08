@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2015, Thierry Lelegard
+// Copyright (c) 2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,26 +26,67 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlMovieVersion.h
+//! @file QtlDvdProgramChapter.h
 //!
-//! Declare the version of the product.
+//! Declare the class QtlDvdProgramChapter.
+//! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLMOVIEVERSION_H
-#define QTLMOVIEVERSION_H
+#ifndef QTLDVDPROGRAMCHAPTER_H
+#define QTLDVDPROGRAMCHAPTER_H
 
-#include <QString>
+#include "QtlDvdProgramCell.h"
 
-//!
-//! Version of the product.
-//!
-#define QTLMOVIE_VERSION "1.10-rc2"
+class QtlDvdProgramChapter;
 
 //!
-//! Get the actual version of the product.
-//! @return Actual version of the product.
+//! Smart pointer to QtlDvdProgramChapter, non thread-safe.
 //!
-QString qtlMovieVersion();
+typedef QtlSmartPointer<QtlDvdProgramChapter,QtlNullMutexLocker> QtlDvdProgramChapterPtr;
+Q_DECLARE_METATYPE(QtlDvdProgramChapterPtr)
 
-#endif // QTLMOVIEVERSION_H
+//!
+//! List of smart pointers to QtlDvdProgramChapterChapter, non thread-safe.
+//!
+typedef QList<QtlDvdProgramChapterPtr> QtlDvdProgramChapterList;
+
+//!
+//! A class describing a chapter inside a DVD program.
+//!
+class QtlDvdProgramChapter
+{
+public:
+    //!
+    //! Constructor.
+    //! @param id Chapter id within program chain (PGC).
+    //!
+    QtlDvdProgramChapter(int id = 0);
+
+    //!
+    //! Get the chapter id in the DVD program.
+    //! @return The chapter id in the DVD program.
+    //!
+    int chapterId() const
+    {
+        return _chapterId;
+    }
+
+    //!
+    //! Get the list of program cells in this chapter.
+    //! @return The list of program cells in this chapter.
+    //!
+    QtlDvdProgramCellList cells() const
+    {
+        return _cells;
+    }
+
+private:
+    const int             _chapterId;  //!< Chapter id in the DVD program.
+    QtlDvdProgramCellList _cells;      //!< List of cells.
+
+    // This class is responsible for building our instances.
+    friend class QtlDvdProgramChain;
+};
+
+#endif // QTLDVDPROGRAMCHAPTER_H

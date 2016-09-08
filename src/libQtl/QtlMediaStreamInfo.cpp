@@ -184,7 +184,7 @@ bool QtlMediaStreamInfo::isTextFile(QtlMediaStreamInfo::SubtitleType type)
 // Merge two lists of stream informations.
 //----------------------------------------------------------------------------
 
-void QtlMediaStreamInfo::merge(QtlMediaStreamInfoPtrVector& destination, const QtlMediaStreamInfoPtrVector& source)
+void QtlMediaStreamInfo::merge(QtlMediaStreamInfoList& destination, const QtlMediaStreamInfoList& source)
 {
     // Loop on all destination streams.
     foreach (const QtlMediaStreamInfoPtr& dest, destination) {

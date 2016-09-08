@@ -42,6 +42,7 @@
 #include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
 #include "QtlDvdProgramChain.h"
+#include "QtlDvdOriginalCell.h"
 
 class QtlDvdTitleSet;
 
@@ -150,7 +151,15 @@ public:
     //! the specified @a titleNumber. Return an empty list if @a titleNumber is invalid or if the
     //! description of the title was invalid. When the list is not empty, all pointers are not null.
     //!
-    QtlDvdProgramChainPtrList allTitles(int titleNumber) const;
+    QtlDvdProgramChainList allTitles(int titleNumber) const;
+
+    //!
+    //! Get the duration of all sequential titles (or program chain, or PGC) in the title set.
+    //! @param [in] titleNumber A title number to get. The first title in the VTS is #1.
+    //! @return The total duration in seconds of all titles in the chain containing
+    //! the specified @a titleNumber.
+    //!
+    int allTitlesDurationInSeconds(int titleNumber) const;
 
     //!
     //! Get the longest duration of all sets of sequential titles in the title set.
@@ -265,25 +274,29 @@ public:
     //! Get the description of all video, audio and subtitle streams in the title set.
     //! @return A list of smart pointers to the description of all streams.
     //!
-    QtlMediaStreamInfoPtrVector streams() const
+    QtlMediaStreamInfoList streams() const
     {
         return _streams;
     }
 
     //!
-    //! Get the list of sectors for a given PGC, with fallback.
+    //! Get the number of original input VOB's, before DVD production.
+    //! @return The number of original input VOB's, before DVD production.
     //!
-    //! @param [in] titleNumber A title number (PGC) to get. The first title in the VTS is #1.
-    //! When set to zero, extract the complete content of all VOB files. If non-zero and the
-    //! specified title does not exist, use @a fallbackTitleNumber.
-    //! @param [in] fallbackTitleNumber When @a titleNumber is non-zero but the corresponing
-    //! title does not exist, then extract @a fallbackTitleNumber instead. If @a fallbackTitleNumber
-    //! is zero, then extract the complete content of all VOB files. If @a fallbackTitleNumber
-    //! is not zero but the corresponding title does no exist either, then extract nothing.
-    //! @param [in] log Where to log errors.
-    //! @return The list of sectors to extract with 0 as base for first sector of first VOB.
+    int originalVobCount() const
+    {
+        return _originalVobCount;
+    }
+
     //!
-    QtlRangeList titleSectors(int titleNumber = 0, int fallbackTitleNumber = 0, QtlLogger* log = 0) const;
+    //! Get the list of cells in original VOB files, before DVD production.
+    //! This is different from the cells inside a Program Chain which describe a cell inside the VOB files of the DVD.
+    //! @return List of cells in original VOB files.
+    //!
+    QtlDvdOriginalCellList originalCells() const
+    {
+        return _originalCells;
+    }
 
     //!
     //! Create a QtlDataPull to transfer some video content of the title set to a device.
@@ -314,19 +327,21 @@ public:
     static bool lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2);
 
 private:
-    QtlNullLogger _nullLog;        //!< Dummy null logger if none specified by caller.
-    QtlLogger*    _log;            //!< Where to log errors.
-    QString       _deviceName;     //!< DVD device name.
-    QString       _volumeId;       //!< Volume identifier.
-    int           _volumeSectors;  //!< Volume size in sectors.
-    bool          _isEncrypted;    //!< DVD is encrypted, need libdvdcss.
-    int           _vtsNumber;      //!< Title set number.
-    QString       _ifoFileName;    //!< IFO file name.
-    QStringList   _vobFileNames;   //!< List of VOB files.
-    qint64        _vobSizeInBytes; //!< Total size in bytes of all VOB's.
-    int           _vobStartSector; //!< First sector of VOB files on DVD media.
-    QtlMediaStreamInfoPtrVector _streams; //!< List of streams in the VTS.
-    QtlDvdProgramChainPtrList   _pgcs;    //!< List program chains in the VTS.
+    QtlNullLogger _nullLog;           //!< Dummy null logger if none specified by caller.
+    QtlLogger*    _log;               //!< Where to log errors.
+    QString       _deviceName;        //!< DVD device name.
+    QString       _volumeId;          //!< Volume identifier.
+    int           _volumeSectors;     //!< Volume size in sectors.
+    bool          _isEncrypted;       //!< DVD is encrypted, need libdvdcss.
+    int           _vtsNumber;         //!< Title set number.
+    QString       _ifoFileName;       //!< IFO file name.
+    QStringList   _vobFileNames;      //!< List of VOB files.
+    qint64        _vobSizeInBytes;    //!< Total size in bytes of all VOB's.
+    int           _vobStartSector;    //!< First sector of VOB files on DVD media.
+    int           _originalVobCount;  //!< Number of original input VOB's, before DVD production.
+    QtlMediaStreamInfoList _streams;       //!< List of streams in the VTS.
+    QtlDvdProgramChainList _pgcs;          //!< List program chains in the VTS.
+    QtlDvdOriginalCellList _originalCells; //!< List of cells in original input files.
 
     //!
     //! Build the IFO and VOB file names for the VTS.

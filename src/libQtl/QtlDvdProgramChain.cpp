@@ -38,19 +38,18 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, int titleNumber, QtlLogger* log) :
+QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, int titleNumber, const QtlDvdOriginalCellList& originalCells, QtlLogger* log) :
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
     _valid(false),
     _titleNumber(titleNumber),
     _duration(0),
-    _programCount(0),
-    _cellCount(0),
     _nextPgc(0),
     _previousPgc(0),
     _parentPgc(0),
     _palette(),
-    _sectors()
+    _cells(),
+    _chapters()
 {
     // Check that we have at least the minimum size of a PGC entry.
     if (startIndex < 0 || startIndex + 0x00EC > ifo.size()) {
@@ -58,12 +57,12 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
     }
 
     // Get basic PGC info.
-    _programCount = ifo[startIndex + 0x0002];
-    _cellCount    = ifo[startIndex + 0x0003];
-    _duration     = toPlaybackDuration(ifo.fromBigEndian<quint32>(startIndex + 0x0004));
-    _nextPgc      = ifo.fromBigEndian<quint16>(startIndex + 0x009C);
-    _previousPgc  = ifo.fromBigEndian<quint16>(startIndex + 0x009E);
-    _parentPgc    = ifo.fromBigEndian<quint16>(startIndex + 0x00A0);
+    const int programCount = ifo[startIndex + 0x0002];
+    const int cellCount    = ifo[startIndex + 0x0003];
+    _duration    = toPlaybackDuration(ifo.fromBigEndian<quint32>(startIndex + 0x0004));
+    _nextPgc     = ifo.fromBigEndian<quint16>(startIndex + 0x009C);
+    _previousPgc = ifo.fromBigEndian<quint16>(startIndex + 0x009E);
+    _parentPgc   = ifo.fromBigEndian<quint16>(startIndex + 0x00A0);
 
     // Get the palette in YUV format.
     _palette = ifo.mid(startIndex + 0x00A4, 16 * 4);
@@ -71,51 +70,118 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
     // Start index of the program map.
     // Each program entry is only one byte: the cell number.
     // Programs and cells are numbered starting from 1 (not 0).
-    const int programMap = startIndex + ifo.fromBigEndian<quint16>(startIndex + 0x00E6);
-    if (programMap + _programCount > ifo.size()) {
+    const int pmapStart = startIndex + ifo.fromBigEndian<quint16>(startIndex + 0x00E6);
+    if (pmapStart + programCount > ifo.size()) {
         // Program map does not fit into the IFO.
         return;
     }
 
-    // Start index of the cell playback information table.
-    // Each cell playback information table entry is 0x18 bytes long.
+    // Start index of the "cell playback information table".
+    // Each table entry is 0x18 bytes long.
     // See http://dvd.sourceforge.net/dvdinfo/pgc.html#play
-    const int cellPlay = startIndex + ifo.fromBigEndian<quint16>(startIndex + 0x00E8);
-    const int cellPlayEntrySize = 0x18;
-    if (cellPlay + (cellPlayEntrySize * _cellCount) > ifo.size()) {
+    const int cellPlayStart = startIndex + ifo.fromBigEndian<quint16>(startIndex + 0x00E8);
+    const int cellPlayEntrySize = 0x0018;
+    if (cellPlayStart + (cellPlayEntrySize * cellCount) > ifo.size()) {
         // Cell table does not fit into the IFO.
         return;
     }
 
-    // Get the list of sectors containing the media data for this PGC.
-    // First, loop on programs.
-    for (int prog = 0; prog < _programCount; ++prog) {
-        // Each program entry is only one byte: the cell number.
-        const int cellId = ifo[programMap + prog];
-        if (cellId < 1 || cellId > _cellCount) {
-            // Invalid cell id.
-            return;
-        }
-        // Locate the cell playback information table entry.
-        // Cell ids are numbered starting from 1.
-        const int cellIndex = cellPlay + (cellPlayEntrySize * (cellId - 1));
-        // Get first and last sector of the cell.
-        const int firstSector = ifo.fromBigEndian<quint32>(cellIndex + 0x08);
-        const int lastSector = ifo.fromBigEndian<quint32>(cellIndex + 0x14);
-        if (firstSector < 0 || lastSector < firstSector) {
-            // Invalid sector range.
-            return;
-        }
-        // Add the sector range of the cell to the PGC.
-        _sectors << QtlRange(firstSector, lastSector);
+    // Start index of the "Cell Position Information Table"
+    // Each table entry is 0x04 bytes long.
+    // See http://dvd.sourceforge.net/dvdinfo/pgc.html#pos
+    const int cellPosStart = startIndex + ifo.fromBigEndian<quint16>(startIndex + 0x00EA);
+    const int cellPosEntrySize = 0x0004;
+    if (cellPosStart + cellCount * cellPosEntrySize > ifo.size()) {
+        // Cell table does not fit into the IFO.
+        return;
     }
 
-    // Reduce the list of sectors so that adjacent sectors are merged.
-    // But do not reorder the list (don't sort it for instance).
-    _sectors.merge(Qtl::AdjacentOnly);
+    // Angle in current cell (0 means normal, for all angles).
+    int currentAngle = 0;
+
+    // Loop on all cells.
+    for (int cellIndex = 0; cellIndex < cellCount; ++cellIndex) {
+
+        const QtlDvdProgramCellPtr cell(new QtlDvdProgramCell(cellIndex + 1));
+        _cells.append(cell);
+
+        // Locate entry in "Cell Playback Information Table"
+        const int cellPlayEntry = cellPlayStart + cellIndex * cellPlayEntrySize;
+
+        // Compute angle id from cell category:
+        // Bits 7-6: cell type 00=normal, 01=first of angle block, 10=middle of angle block, 11=last of angle block
+        // Bits 5-4: block type 00 = normal, 01 = angle block
+        const int category = ifo[cellPlayEntry] & 0xF0;
+        if (category == 0x50) {
+            // 0101 : first angle.
+            currentAngle = 1;
+        }
+        else if ((category == 0x90 || category == 0xD0) && currentAngle != 0) {
+            // 1001 : middle angle or 1101 : last angle => next angle in both cases.
+            currentAngle++;
+        }
+        // If category == 0 ("normal"), this is common content.
+        cell->_angleId = category == 0 ? 0 : currentAngle;
+        if (category == 0xD0) {
+            // 1101 : last angle => reset angle count.
+            currentAngle = 0;
+        }
+
+        // Cell playback duration.
+        cell->_duration = toPlaybackDuration(ifo.fromBigEndian<quint32>(cellPlayEntry + 4));
+
+        // Locate entry in "Cell Positon Information Table"
+        const int cellPosEntry = cellPosStart + cellIndex * cellPosEntrySize;
+
+        // Get original VOB Id and original Cell Id.
+        cell->_originalVobId  = ifo.fromBigEndian<quint16>(cellPosEntry);
+        cell->_originalCellId = ifo[cellPosEntry + 3];
+
+        // Loop on all cells in "Cell Address Table" (VTS_C_ADT).
+        // We collect all ranges of sectors with the right original VID Id / Cell Id.
+        foreach (const QtlDvdOriginalCellPtr& originalCell, originalCells) {
+            if (originalCell->originalVobId() == cell->originalVobId() && originalCell->originalCellId() == cell->originalCellId()) {
+                cell->_sectors.append(originalCell->sectors());
+            }
+        }
+
+        // Reduce the list of sectors in the cell.
+        cell->_sectors.merge(Qtl::AdjacentOnly);
+    }
+
+    // Loop on "Program Map Table" to get the list of chapters.
+    QtlDvdProgramCellList::ConstIterator nextCell(_cells.begin());
+    int nextCellId = ifo[pmapStart];  // entry cell id of next chapter.
+    for (int pgmIndex = 0; pgmIndex < programCount; ++pgmIndex) {
+
+        const QtlDvdProgramChapterPtr chapter(new QtlDvdProgramChapter(pgmIndex + 1));
+        _chapters.append(chapter);
+
+        nextCellId = pgmIndex < programCount - 1 ? ifo[pmapStart + pgmIndex + 1] : cellCount + 1;
+        while (nextCell != _cells.end() && (*nextCell)->cellId() < nextCellId) {
+            chapter->_cells.append(*nextCell);
+            ++nextCell;
+        }
+    }
 
     // Now we can say the PGC is valid.
     _valid = true;
+}
+
+
+//----------------------------------------------------------------------------
+// Get the total number of sectors in all cells.
+//----------------------------------------------------------------------------
+
+int QtlDvdProgramChain::totalSectorCount() const
+{
+    int count = 0;
+    foreach (const QtlDvdProgramCellPtr& cell, _cells) {
+        if (!cell.isNull()) {
+            count += cell->sectors().totalValueCount();
+        }
+    }
+    return count;
 }
 
 
@@ -213,20 +279,4 @@ int QtlDvdProgramChain::toPlaybackDuration(quint32 value)
     // const int rate  = (value  >> 6) & 0x03;
 
     return (hours * 3600) + (minutes * 60) + seconds;
-}
-
-
-//----------------------------------------------------------------------------
-// Get the sum of all title set playback durations in seconds.
-//----------------------------------------------------------------------------
-
-int QtlDvdProgramChainPtrList::totalDurationInSeconds() const
-{
-    int duration = 0;
-    foreach (const QtlDvdProgramChainPtr& pcg, *this) {
-        if (!pcg.isNull()) {
-            duration += pcg->durationInSeconds();
-        }
-    }
-    return duration;
 }
