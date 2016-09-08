@@ -26,19 +26,24 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdProgramChapter.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdProgramCell.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdProgramChapter.h"
+#include "QtsDvdProgramCell.h"
 
 
 //----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChapter::QtlDvdProgramChapter(int id) :
-    _chapterId(id),
-    _cells()
+QtsDvdProgramCell::QtsDvdProgramCell(int id) :
+    _cellId(id),
+    _angleId(0),
+    _originalVobId(0),
+    _originalCellId(0),
+    _duration(0),
+    _sectors()
 {
 }

@@ -26,44 +26,44 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdProgramCell.h
+//! @file QtsDvdProgramCell.h
 //!
-//! Declare the class QtlDvdProgramCell.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdProgramCell.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDPROGRAMCELL_H
-#define QTLDVDPROGRAMCELL_H
+#ifndef QTSDVDPROGRAMCELL_H
+#define QTSDVDPROGRAMCELL_H
 
-#include "QtlCore.h"
+#include "QtsDvd.h"
 #include "QtlRangeList.h"
 #include "QtlSmartPointer.h"
 
-class QtlDvdProgramCell;
+class QtsDvdProgramCell;
 
 //!
-//! Smart pointer to QtlDvdProgramCell, non thread-safe.
+//! Smart pointer to QtsDvdProgramCell, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdProgramCell,QtlNullMutexLocker> QtlDvdProgramCellPtr;
-Q_DECLARE_METATYPE(QtlDvdProgramCellPtr)
+typedef QtlSmartPointer<QtsDvdProgramCell,QtlNullMutexLocker> QtsDvdProgramCellPtr;
+Q_DECLARE_METATYPE(QtsDvdProgramCellPtr)
 
 //!
-//! List of smart pointers to QtlDvdProgramCellCell, non thread-safe.
+//! List of smart pointers to QtsDvdProgramCellCell, non thread-safe.
 //!
-typedef QList<QtlDvdProgramCellPtr> QtlDvdProgramCellList;
+typedef QList<QtsDvdProgramCellPtr> QtsDvdProgramCellList;
 
 //!
 //! A class describing a cell inside a DVD program.
 //!
-class QtlDvdProgramCell
+class QtsDvdProgramCell
 {
 public:
     //!
     //! Constructor.
     //! @param id Cell id within program chain (PGC).
     //!
-    explicit QtlDvdProgramCell(int id = 0);
+    explicit QtsDvdProgramCell(int id = 0);
 
     //!
     //! Get the cell id in the DVD program.
@@ -137,7 +137,7 @@ private:
     QtlRangeList _sectors;        //!< List of sectors for this cell.
 
     // This class is responsible for building our instances.
-    friend class QtlDvdProgramChain;
+    friend class QtsDvdProgramChain;
 };
 
-#endif // QTLDVDPROGRAMCELL_H
+#endif // QTSDVDPROGRAMCELL_H

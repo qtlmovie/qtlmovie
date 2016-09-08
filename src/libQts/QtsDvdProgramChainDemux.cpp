@@ -26,25 +26,25 @@
 //
 //----------------------------------------------------------------------------
 //
-// Qtl, Qt utility library.
-// Define the class QtlDvdProgramChainDemux.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdProgramChainDemux.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdProgramChainDemux.h"
+#include "QtsDvdProgramChainDemux.h"
 
 
 //----------------------------------------------------------------------------
 // Constructors.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChainDemux::QtlDvdProgramChainDemux(const QtlDvdTitleSet& vts,
+QtsDvdProgramChainDemux::QtsDvdProgramChainDemux(const QtsDvdTitleSet& vts,
                                                  int pgcNumber,
                                                  int angleNumber,
                                                  int fallbackPgcNumber,
                                                  int transferSize,
                                                  int minBufferSize,
-                                                 Qtl::DvdDemuxPolicy demuxPolicy,
+                                                 Qts::DvdDemuxPolicy demuxPolicy,
                                                  QtlLogger* logger,
                                                  QObject* parent,
                                                  bool useMaxReadSpeed) :
@@ -53,10 +53,10 @@ QtlDvdProgramChainDemux::QtlDvdProgramChainDemux(const QtlDvdTitleSet& vts,
     _pgc(_vts.title(pgcNumber)),
     _angleNumber(angleNumber),
     _demuxPolicy(demuxPolicy),
-    _sectorChunk(qMax(1, transferSize / Qtl::DVD_SECTOR_SIZE)),
+    _sectorChunk(qMax(1, transferSize / QTS_DVD_SECTOR_SIZE)),
     _maxReadSpeed(useMaxReadSpeed),
     _vobStartSector(-1),
-    _buffer(_sectorChunk * Qtl::DVD_SECTOR_SIZE),
+    _buffer(_sectorChunk * QTS_DVD_SECTOR_SIZE),
     _inputSectors(log()),
     _dvd(QString(), log()),
     _vobs(_vts.vobFileNames(), log()),
@@ -73,7 +73,7 @@ QtlDvdProgramChainDemux::QtlDvdProgramChainDemux(const QtlDvdTitleSet& vts,
     if (!_pgc.isNull()) {
         // Set total transfer size in bytes. The actual total size may be slightly
         // smaller, but this is just a hint.
-        setProgressMaxHint(qint64(_pgc->totalSectorCount()) * Qtl::DVD_SECTOR_SIZE);
+        setProgressMaxHint(qint64(_pgc->totalSectorCount()) * QTS_DVD_SECTOR_SIZE);
 
         // Set progress interval: every 1 MB.
         setProgressIntervalInBytes(1024 * 1024);
@@ -85,7 +85,7 @@ QtlDvdProgramChainDemux::QtlDvdProgramChainDemux(const QtlDvdTitleSet& vts,
 // Initialize the transfer.
 //----------------------------------------------------------------------------
 
-bool QtlDvdProgramChainDemux::initializeTransfer()
+bool QtsDvdProgramChainDemux::initializeTransfer()
 {
     // Filter invalid initial parameters.
     if (_pgc.isNull()) {
@@ -108,7 +108,7 @@ bool QtlDvdProgramChainDemux::initializeTransfer()
 
     // Open the input media.
     if (_vts.isEncrypted()) {
-        // The content is on an encrypted DVD, use a QtlDvdMedia object.
+        // The content is on an encrypted DVD, use a QtsDvdMedia object.
         // Locate the first VOB. Its first sector is "sector zero" in cells' lists of sectors.
         _vobStartSector = _vts.vobStartSector();
         if (_vobStartSector < 0) {
@@ -131,7 +131,7 @@ bool QtlDvdProgramChainDemux::initializeTransfer()
 // Invoked when more data is needed.
 //----------------------------------------------------------------------------
 
-bool QtlDvdProgramChainDemux::needTransfer(qint64 maxSize)
+bool QtsDvdProgramChainDemux::needTransfer(qint64 maxSize)
 {
     // Get next sector to read.
     const int sectorAddress = _inputSectors.currentSectorAddress();
@@ -145,7 +145,7 @@ bool QtlDvdProgramChainDemux::needTransfer(qint64 maxSize)
     // Maximum number of contiguous sectors to read.
     int sectorCount = qMin(_sectorChunk, _inputSectors.currentSectorCount());
     if (maxSize >= 0) {
-        sectorCount = qMin(sectorCount, int(maxSize / Qtl::DVD_SECTOR_SIZE));
+        sectorCount = qMin(sectorCount, int(maxSize / QTS_DVD_SECTOR_SIZE));
     }
     if (sectorCount <= 0) {
         return sectorCount;
@@ -156,7 +156,7 @@ bool QtlDvdProgramChainDemux::needTransfer(qint64 maxSize)
         // Reading DVD media. Compute logical sector address on DVD media.
         const int lba = _vobStartSector + sectorAddress;
         // Seek (if required) and read.
-        sectorCount = _dvd.readSectors(_buffer.data(), sectorCount, (lba == _dvd.nextSector() ? -1 : lba), Qtl::SkipBadSectors);
+        sectorCount = _dvd.readSectors(_buffer.data(), sectorCount, (lba == _dvd.nextSector() ? -1 : lba), Qts::SkipBadSectors);
     }
     else {
         // Reading VOB files.
@@ -185,7 +185,7 @@ bool QtlDvdProgramChainDemux::needTransfer(qint64 maxSize)
 // Cleanup the transfer.
 //----------------------------------------------------------------------------
 
-void QtlDvdProgramChainDemux::cleanupTransfer(bool clean)
+void QtsDvdProgramChainDemux::cleanupTransfer(bool clean)
 {
     // Final bandwidth report.
     _report.reportBandwidth();
@@ -206,10 +206,10 @@ void QtlDvdProgramChainDemux::cleanupTransfer(bool clean)
 // Demux the sectors in the buffer, write demuxed sectors to superclass.
 //----------------------------------------------------------------------------
 
-bool QtlDvdProgramChainDemux::demuxBuffer(int sectorCount)
+bool QtsDvdProgramChainDemux::demuxBuffer(int sectorCount)
 {
     // End of read sectors in buffers.
-    const int bufferEnd = sectorCount * Qtl::DVD_SECTOR_SIZE;
+    const int bufferEnd = sectorCount * QTS_DVD_SECTOR_SIZE;
     Q_ASSERT(bufferEnd <= _buffer.size());
 
     // Original VOB id and cell id in the current cell.
@@ -218,7 +218,7 @@ bool QtlDvdProgramChainDemux::demuxBuffer(int sectorCount)
     _inputSectors.getCurrentOriginalIds(vobId, cellId);
 
     // Now process all sectors one by one.
-    for (int sectorStart = 0; sectorStart < bufferEnd; sectorStart += Qtl::DVD_SECTOR_SIZE) {
+    for (int sectorStart = 0; sectorStart < bufferEnd; sectorStart += QTS_DVD_SECTOR_SIZE) {
 
         // A VOB sector is an MPEG-2 program stream pack (ISO 13818-1, §2.5.3.3).
         // The pack header is 14 bytes long, followed by a PES packet.
@@ -258,7 +258,7 @@ bool QtlDvdProgramChainDemux::demuxBuffer(int sectorCount)
                     _buffer[sectorStart + 0x422] == cellId;
 
             // Fix navigation pack content if requested.
-            if (_demuxPolicy == Qtl::NavPacksFixed) {
+            if (_demuxPolicy == Qts::NavPacksFixed) {
                 // The LBA (Logical Block Address) of the navigation pack is present in the PCI and in the DCI.
                 // We must fix both.
                 _buffer.storeUInt32(sectorStart + 0x002D, _writtenSectors); // in PCI
@@ -267,8 +267,8 @@ bool QtlDvdProgramChainDemux::demuxBuffer(int sectorCount)
         }
 
         // Write sectors which are part of the PGC content.
-        if (_inPgcContent && (!isNavPack || _demuxPolicy != Qtl::NavPacksRemoved)) {
-            if (!write(&_buffer[sectorStart], Qtl::DVD_SECTOR_SIZE)) {
+        if (_inPgcContent && (!isNavPack || _demuxPolicy != Qts::NavPacksRemoved)) {
+            if (!write(&_buffer[sectorStart], QTS_DVD_SECTOR_SIZE)) {
                 return false;
             }
             ++_writtenSectors;
@@ -284,7 +284,7 @@ bool QtlDvdProgramChainDemux::demuxBuffer(int sectorCount)
 // VobFileSet: Constructor and destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChainDemux::VobFileSet::VobFileSet(const QStringList& vobFileNames, QtlLogger* log) :
+QtsDvdProgramChainDemux::VobFileSet::VobFileSet(const QStringList& vobFileNames, QtlLogger* log) :
     _log(log),
     _files(vobFileNames.size()),
     _current(-1)
@@ -294,12 +294,12 @@ QtlDvdProgramChainDemux::VobFileSet::VobFileSet(const QStringList& vobFileNames,
         _files[i] = new File;
         _files[i]->file.setFileName(vobFileNames[i]);
         _files[i]->nextSector = -1;
-        _files[i]->sectors.setRange(nextSector, nextSector + (QFileInfo(vobFileNames[i]).size() / Qtl::DVD_SECTOR_SIZE) - 1);
+        _files[i]->sectors.setRange(nextSector, nextSector + (QFileInfo(vobFileNames[i]).size() / QTS_DVD_SECTOR_SIZE) - 1);
         nextSector = _files[i]->sectors.last() + 1;
     }
 }
 
-QtlDvdProgramChainDemux::VobFileSet::~VobFileSet()
+QtsDvdProgramChainDemux::VobFileSet::~VobFileSet()
 {
     close();
     for (int i = 0; i < _files.size(); ++i) {
@@ -314,7 +314,7 @@ QtlDvdProgramChainDemux::VobFileSet::~VobFileSet()
 // VobFileSet: Read some contiguous sectors.
 //----------------------------------------------------------------------------
 
-int QtlDvdProgramChainDemux::VobFileSet::read(int sectorAddress, void* buffer, int maxSectorCount)
+int QtsDvdProgramChainDemux::VobFileSet::read(int sectorAddress, void* buffer, int maxSectorCount)
 {
     // Does the current VOB contain the sector to read?
     if (_current < 0 || _current >= _files.size() || !_files[_current]->sectors.contains(sectorAddress)) {
@@ -334,7 +334,7 @@ int QtlDvdProgramChainDemux::VobFileSet::read(int sectorAddress, void* buffer, i
     File& vob(*_files[_current]);
 
     // If not the current sector in the file, need to seek into this file.
-    const qint64 position = (sectorAddress - vob.sectors.first()) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 position = (sectorAddress - vob.sectors.first()) * QTS_DVD_SECTOR_SIZE;
     if (vob.nextSector != sectorAddress) {
         // Open it first if not yet done.
         if (!vob.file.isOpen() && !vob.file.open(QFile::ReadOnly)) {
@@ -352,7 +352,7 @@ int QtlDvdProgramChainDemux::VobFileSet::read(int sectorAddress, void* buffer, i
 
     // Limit the number of sectors to read to the rest of file.
     const int sectorCount = qMin<int>(maxSectorCount, vob.sectors.last() - sectorAddress + 1);
-    const qint64 size = qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 size = qint64(sectorCount) * QTS_DVD_SECTOR_SIZE;
 
     // Now read the file.
     const qint64 got = vob.file.read((char*)(buffer), size);
@@ -372,7 +372,7 @@ int QtlDvdProgramChainDemux::VobFileSet::read(int sectorAddress, void* buffer, i
 // VobFileSet: Close all VOB files.
 //----------------------------------------------------------------------------
 
-void QtlDvdProgramChainDemux::VobFileSet::close()
+void QtsDvdProgramChainDemux::VobFileSet::close()
 {
     for (int i = 0; i < _files.size(); ++i) {
         if (_files[i]->file.isOpen()) {
@@ -380,6 +380,7 @@ void QtlDvdProgramChainDemux::VobFileSet::close()
         }
     }
 }
+
 
 //----------------------------------------------------------------------------
 // InputSectors: Initialization.
@@ -392,7 +393,7 @@ void QtlDvdProgramChainDemux::VobFileSet::close()
 //            Next sector to read: _currentSector
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChainDemux::InputSectors::InputSectors(QtlLogger* log) :
+QtsDvdProgramChainDemux::InputSectors::InputSectors(QtlLogger* log) :
     _log(log),
     _cells(),
     _currentCell(-1),
@@ -402,7 +403,7 @@ QtlDvdProgramChainDemux::InputSectors::InputSectors(QtlLogger* log) :
 {
 }
 
-void QtlDvdProgramChainDemux::InputSectors::initialize(const QtlDvdProgramChainPtr& pgc)
+void QtsDvdProgramChainDemux::InputSectors::initialize(const QtsDvdProgramChainPtr& pgc)
 {
     // Initialize list of cells.
     if (pgc.isNull()) {
@@ -422,7 +423,7 @@ void QtlDvdProgramChainDemux::InputSectors::initialize(const QtlDvdProgramChainP
 // InputSectors: Get current position.
 //----------------------------------------------------------------------------
 
-int QtlDvdProgramChainDemux::InputSectors::currentSectorAddress() const
+int QtsDvdProgramChainDemux::InputSectors::currentSectorAddress() const
 {
     if (_currentCell >= 0 && _currentCell < _cells.size()) {
         Q_ASSERT(_currentRange >= 0);
@@ -436,7 +437,7 @@ int QtlDvdProgramChainDemux::InputSectors::currentSectorAddress() const
     }
 }
 
-int QtlDvdProgramChainDemux::InputSectors::currentSectorCount() const
+int QtsDvdProgramChainDemux::InputSectors::currentSectorCount() const
 {
     if (_currentCell >= 0 && _currentCell < _cells.size()) {
         Q_ASSERT(_currentRange >= 0);
@@ -455,7 +456,7 @@ int QtlDvdProgramChainDemux::InputSectors::currentSectorCount() const
 // InputSectors: Advance current position by a number of sectors.
 //----------------------------------------------------------------------------
 
-void QtlDvdProgramChainDemux::InputSectors::advance(int sectorCount)
+void QtsDvdProgramChainDemux::InputSectors::advance(int sectorCount)
 {
     // No negative "advance", always move forward.
     sectorCount = qMax(0, sectorCount);
@@ -514,7 +515,7 @@ void QtlDvdProgramChainDemux::InputSectors::advance(int sectorCount)
 // InputSectors: Get the current original VOB Id and original Cell Id.
 //----------------------------------------------------------------------------
 
-void QtlDvdProgramChainDemux::InputSectors::getCurrentOriginalIds(int& vobId, int& cellId) const
+void QtsDvdProgramChainDemux::InputSectors::getCurrentOriginalIds(int& vobId, int& cellId) const
 {
     if (_currentCell >= 0 && _currentCell < _cells.size() && !_cells[_currentCell].isNull()) {
         vobId = _cells[_currentCell]->originalVobId();

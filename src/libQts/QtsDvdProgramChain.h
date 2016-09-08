@@ -26,41 +26,41 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdProgramChain.h
+//! @file QtsDvdProgramChain.h
 //!
-//! Declare the class QtlDvdProgramChain.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdProgramChain.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDPROGRAMCHAIN_H
-#define QTLDVDPROGRAMCHAIN_H
+#ifndef QTSDVDPROGRAMCHAIN_H
+#define QTSDVDPROGRAMCHAIN_H
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
-#include "QtlDvdProgramChapter.h"
-#include "QtlDvdProgramCell.h"
-#include "QtlDvdOriginalCell.h"
-#include "QtlDvd.h"
+#include "QtsDvdProgramChapter.h"
+#include "QtsDvdProgramCell.h"
+#include "QtsDvdOriginalCell.h"
+#include "QtsDvd.h"
 
-class QtlDvdProgramChain;
-
-//!
-//! Smart pointer to QtlDvdProgramChain, non thread-safe.
-//!
-typedef QtlSmartPointer<QtlDvdProgramChain,QtlNullMutexLocker> QtlDvdProgramChainPtr;
-Q_DECLARE_METATYPE(QtlDvdProgramChainPtr)
+class QtsDvdProgramChain;
 
 //!
-//! List of smart pointers to QtlDvdProgramChain (non thread-safe).
+//! Smart pointer to QtsDvdProgramChain, non thread-safe.
 //!
-typedef QList<QtlDvdProgramChainPtr> QtlDvdProgramChainList;
+typedef QtlSmartPointer<QtsDvdProgramChain,QtlNullMutexLocker> QtsDvdProgramChainPtr;
+Q_DECLARE_METATYPE(QtsDvdProgramChainPtr)
+
+//!
+//! List of smart pointers to QtsDvdProgramChain (non thread-safe).
+//!
+typedef QList<QtsDvdProgramChainPtr> QtsDvdProgramChainList;
 
 //!
 //! A class which describes a Program Chain (PGC) in a DVD Video Title Set (VTS).
 //! Note that a Program Chain is also named a "Title", a VTS being a set of PGC's.
 //!
-class QtlDvdProgramChain
+class QtsDvdProgramChain
 {
 public:
     //!
@@ -71,10 +71,10 @@ public:
     //! @param [in] originalCells List of cells in original input files.
     //! @param [in] log Where to log errors.
     //!
-    QtlDvdProgramChain(const QtlByteBlock& ifo = QtlByteBlock(),
+    QtsDvdProgramChain(const QtlByteBlock& ifo = QtlByteBlock(),
                        int index = -1,
                        int titleNumber = 0,
-                       const QtlDvdOriginalCellList& originalCells = QtlDvdOriginalCellList(),
+                       const QtsDvdOriginalCellList& originalCells = QtsDvdOriginalCellList(),
                        QtlLogger* log = 0);
 
     //!
@@ -164,7 +164,7 @@ public:
     //! a program chain (PGC) being a chain of chapters.
     //! @return The list of chapters in this program chain.
     //!
-    QtlDvdProgramChapterList chapters() const
+    QtsDvdProgramChapterList chapters() const
     {
         return _chapters;
     }
@@ -182,14 +182,14 @@ public:
     //! Get the list of cells in this program chain.
     //! @return The list of cells in this program chain.
     //!
-    QtlDvdProgramCellList cells() const
+    QtsDvdProgramCellList cells() const
     {
         return _cells;
     }
 
     //!
     //! Get the total number of sectors in all cells.
-    //! Note that the actual number of sectors can be a bit smaller (see QtlDvdProgramCell::sectors()).
+    //! Note that the actual number of sectors can be a bit smaller (see QtsDvdProgramCell::sectors()).
     //! @return The total number of sectors in all cells.
     //!
     int totalSectorCount() const;
@@ -227,8 +227,8 @@ private:
     int           _previousPgc;      //!< Previous PGC to play.
     int           _parentPgc;        //!< Parent PGC.
     QtlByteBlock  _palette;          //!< VTS color palette in YUV format.
-    QtlDvdProgramCellList    _cells;     //!< List of cells in this program chain.
-    QtlDvdProgramChapterList _chapters;  //!< List of chapters in this program chain.
+    QtsDvdProgramCellList    _cells;     //!< List of cells in this program chain.
+    QtsDvdProgramChapterList _chapters;  //!< List of chapters in this program chain.
 };
 
-#endif // QTLDVDPROGRAMCHAIN_H
+#endif // QTSDVDPROGRAMCHAIN_H

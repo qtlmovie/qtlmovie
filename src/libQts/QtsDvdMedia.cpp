@@ -26,7 +26,8 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdMedia.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdMedia.
 //
 // Relevant documentation: The structure of a Video DVD is not public but
 // some useful information can be found on the Internet.
@@ -47,8 +48,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdMedia.h"
-#include "QtlDvdDataPull.h"
+#include "QtsDvdMedia.h"
+#include "QtsDvdDataPull.h"
 #include "QtlByteBlock.h"
 #include "QtlStringList.h"
 #include "QtlStringUtils.h"
@@ -71,7 +72,7 @@
 // Constructor & destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* parent, bool useMaxReadSpeed) :
+QtsDvdMedia::QtsDvdMedia(const QString& fileName, QtlLogger* log, QObject* parent, bool useMaxReadSpeed) :
     QObject(parent),
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
@@ -92,7 +93,7 @@ QtlDvdMedia::QtlDvdMedia(const QString& fileName, QtlLogger* log, QObject* paren
     }
 }
 
-QtlDvdMedia::~QtlDvdMedia()
+QtsDvdMedia::~QtsDvdMedia()
 {
     close();
 }
@@ -102,7 +103,7 @@ QtlDvdMedia::~QtlDvdMedia()
 // Close a DVD media.
 //----------------------------------------------------------------------------
 
-void QtlDvdMedia::close()
+void QtsDvdMedia::close()
 {
     const bool wasOpen = _isOpen;
     _isOpen = false;
@@ -150,7 +151,7 @@ extern "C" void dvdMessageLogger(void* logParam, int debug, const char* message)
 // Check if the DVD media is encrypted.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::isEncrypted() const
+bool QtsDvdMedia::isEncrypted() const
 {
     return _dvdcss != 0 && dvdcss_is_scrambled(_dvdcss);
 }
@@ -160,7 +161,7 @@ bool QtlDvdMedia::isEncrypted() const
 // Open and load the description of a DVD media starting from a file.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::openFromFile(const QString& fileName, bool useMaxReadSpeed)
+bool QtsDvdMedia::openFromFile(const QString& fileName, bool useMaxReadSpeed)
 {
     // Close previous media if necessary.
     close();
@@ -209,7 +210,7 @@ bool QtlDvdMedia::openFromFile(const QString& fileName, bool useMaxReadSpeed)
 // Open and load the description of a DVD media starting from its device name.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed)
+bool QtsDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed)
 {
     // Close previous media if necessary.
     close();
@@ -237,8 +238,8 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
         // descriptor and the list is terminated by one volume descriptor set terminator.
         // Here, we do not read more than 8 sectors (not standard, but highly probable).
         // We do not skip bad sectors in this part of the media.
-        QtlByteBlock data(Qtl::DVD_SECTOR_SIZE);
-        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, Qtl::ErrorOnBadSectors) == 1; --count) {
+        QtlByteBlock data(QTS_DVD_SECTOR_SIZE);
+        for (int count = 8; count > 0 && readSectors(data.data(), 1, -1, Qts::ErrorOnBadSectors) == 1; --count) {
             // Volume descriptor type is in first byte.
             const int type = data[0];
             // Volume descriptor standard identified is in the next 5 bytes.
@@ -277,7 +278,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
     }
 
     // Read the complete file structure.
-    _rootDirectory = QtlDvdDirectory(QString(), rootDirSector, rootDirSize);
+    _rootDirectory = QtsDvdDirectory(QString(), rootDirSector, rootDirSize);
     if (!readDirectoryStructure(_rootDirectory, 0, true, false)) {
         close();
         return false;
@@ -289,10 +290,10 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
 
     // Walk through the list of files and insert placeholders on non-file space.
     int lastSector = 0;
-    for (QList<QtlDvdFilePtr>::Iterator iter = _allFiles.begin(); iter != _allFiles.end(); ++iter) {
+    for (QList<QtsDvdFilePtr>::Iterator iter = _allFiles.begin(); iter != _allFiles.end(); ++iter) {
         if ((*iter)->startSector() > lastSector) {
             // There is a hole here, fill it with a placeholder.
-            QtlDvdFilePtr ph(new QtlDvdFile(QString(), lastSector, ((*iter)->startSector() - lastSector) * Qtl::DVD_SECTOR_SIZE));
+            QtsDvdFilePtr ph(new QtsDvdFile(QString(), lastSector, ((*iter)->startSector() - lastSector) * QTS_DVD_SECTOR_SIZE));
             // Insert placeholder before current element.
             iter = _allFiles.insert(iter, ph); // iter now points to inserted element
             ++iter; // iter now points back to original current element
@@ -302,7 +303,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
 
     // Add placeholder at the end if necessary.
     if (lastSector < _volumeSize) {
-        _allFiles << QtlDvdFilePtr(new QtlDvdFile(QString(), lastSector, (_volumeSize - lastSector) * Qtl::DVD_SECTOR_SIZE));
+        _allFiles << QtsDvdFilePtr(new QtsDvdFile(QString(), lastSector, (_volumeSize - lastSector) * QTS_DVD_SECTOR_SIZE));
     }
 
     // Set the reader at maximum read speed only now.
@@ -327,7 +328,7 @@ bool QtlDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
 // Set the position of the next sector to read.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::seekSector(int position)
+bool QtsDvdMedia::seekSector(int position)
 {
     // Check that the device is at least partially open.
     if (_dvdcss == 0 || position < 0 || (_isOpen && position >= _volumeSize)) {
@@ -336,7 +337,7 @@ bool QtlDvdMedia::seekSector(int position)
 
     // Get flags for libdvdcss.
     int seekFlags = DVDCSS_NOFLAGS;
-    QList<QtlDvdFilePtr>::ConstIterator file(_allFiles.end());
+    QList<QtsDvdFilePtr>::ConstIterator file(_allFiles.end());
 
     // If not yet fully open, we are still reading the file structure and NOFLAGS is ok.
     if (_isOpen) {
@@ -379,7 +380,7 @@ bool QtlDvdMedia::seekSector(int position)
 // Read a given number of sectors from the DVD media.
 //----------------------------------------------------------------------------
 
-int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSectorPolicy badSectorPolicy)
+int QtsDvdMedia::readSectors(void* buffer, int count, int position, Qts::BadSectorPolicy badSectorPolicy)
 {
     // Check that the device is at least partially open.
     // Seek if requested.
@@ -452,19 +453,19 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSect
                 badSectorMax = DVD_BAD_SECTOR_RETRY;
             }
         }
-        else if (badSectorPolicy != Qtl::ErrorOnBadSectors && badSectorMax > 0) {
+        else if (badSectorPolicy != Qts::ErrorOnBadSectors && badSectorMax > 0) {
             // In case of read error, this may be an intentional bad sector, used to fool copy programs.
             // Let's ignore it if we can explicitly seek to next sector.
             if (dvdcss_seek(_dvdcss, _nextSector + 1, seekFlags) > 0) {
                 badSectorMax--;
                 switch (badSectorPolicy) {
-                    case Qtl::SkipBadSectors:
+                    case Qts::SkipBadSectors:
                         got = 0;
                         ++_nextSector;
                         break;
-                    case Qtl::ReadBadSectorsAsZero:
+                    case Qts::ReadBadSectorsAsZero:
                         got = 1;
-                        ::memset(buf, 0, Qtl::DVD_SECTOR_SIZE);
+                        ::memset(buf, 0, QTS_DVD_SECTOR_SIZE);
                         break;
                     default:
                         _log->line(tr("Internal error, invalid bad sector policy"));
@@ -482,7 +483,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSect
         _nextSector += got;
         result += got;
         count -= got;
-        buf += got * Qtl::DVD_SECTOR_SIZE;
+        buf += got * QTS_DVD_SECTOR_SIZE;
     }
 
     return result;
@@ -493,7 +494,7 @@ int QtlDvdMedia::readSectors(void* buffer, int count, int position, Qtl::BadSect
 // Read the file structure under the specified directory.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs)
+bool QtsDvdMedia::readDirectoryStructure(QtsDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs)
 {
     // Avoid loops in the file system, limit the depth.
     if (depth > 256) {
@@ -508,9 +509,9 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
     }
 
     // Read directory content.
-    const int dirSectorCount = dir.sizeInBytes() / Qtl::DVD_SECTOR_SIZE + int(dir.sizeInBytes() % Qtl::DVD_SECTOR_SIZE != 0);
-    QtlByteBlock data(dirSectorCount * Qtl::DVD_SECTOR_SIZE);
-    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), Qtl::ErrorOnBadSectors)) {
+    const int dirSectorCount = dir.sizeInBytes() / QTS_DVD_SECTOR_SIZE + int(dir.sizeInBytes() % QTS_DVD_SECTOR_SIZE != 0);
+    QtlByteBlock data(dirSectorCount * QTS_DVD_SECTOR_SIZE);
+    if (!readSectors(data.data(), dirSectorCount, dir.startSector(), Qts::ErrorOnBadSectors)) {
         _log->line(tr("Error reading DVD directory information at sector %1").arg(dir.startSector()));
         return false;
     }
@@ -542,7 +543,7 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
 
         if (isDirectory) {
             // Add a directory entry.
-            QtlDvdDirectoryPtr subdir(new QtlDvdDirectory(parent + name, entrySector, entrySize));
+            QtsDvdDirectoryPtr subdir(new QtsDvdDirectory(parent + name, entrySector, entrySize));
             dir._subDirectories.append(subdir);
             // Is this directory the root VIDEO_TS?
             const bool vts = inRoot && name.compare("VIDEO_TS", Qt::CaseInsensitive) == 0;
@@ -553,7 +554,7 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
         }
         else {
             // Add a file entry.
-            QtlDvdFilePtr file(new QtlDvdFile(parent + name, entrySector, entrySize));
+            QtsDvdFilePtr file(new QtsDvdFile(parent + name, entrySector, entrySize));
             dir._files.append(file);
             _allFiles.append(file);
             // Is this a video title set? Must be VTS_nn_0.IFO.
@@ -571,11 +572,11 @@ bool QtlDvdMedia::readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool i
 // Locate a file in the DVD.
 //----------------------------------------------------------------------------
 
-QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity cs) const
+QtsDvdFile QtsDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity cs) const
 {
     // Can't search file if there is no DVD.
     if (!_isOpen) {
-        return QtlDvdFile();
+        return QtsDvdFile();
     }
 
     // Full path of the file to search.
@@ -596,7 +597,7 @@ QtlDvdFile QtlDvdMedia::searchFile(const QString& fileName, Qt::CaseSensitivity 
 // Build the full path name of a Video Title Set information file on the DVD.
 //----------------------------------------------------------------------------
 
-QString QtlDvdMedia::vtsInformationFileName(int vtsNumber) const
+QString QtsDvdMedia::vtsInformationFileName(int vtsNumber) const
 {
     const QString name(QStringLiteral("VIDEO_TS%1VTS_%2_0.IFO").arg(QDir::separator()).arg(vtsNumber, 2, 10, QLatin1Char('0')));
     return _rootName.isEmpty() ? name : _rootName + QDir::separator() + name;
@@ -607,7 +608,7 @@ QString QtlDvdMedia::vtsInformationFileName(int vtsNumber) const
 // Build the full path name of a Video Title Set video file on the DVD.
 //----------------------------------------------------------------------------
 
-QString QtlDvdMedia::vtsVideoFileName(int vtsNumber, int vobIndex) const
+QString QtsDvdMedia::vtsVideoFileName(int vtsNumber, int vobIndex) const
 {
     const QString name(QStringLiteral("VIDEO_TS%1VTS_%2_%3.VOB").arg(QDir::separator()).arg(vtsNumber, 2, 10, QLatin1Char('0')).arg(vobIndex));
     return _rootName.isEmpty() ? name : _rootName + QDir::separator() + name;
@@ -618,7 +619,7 @@ QString QtlDvdMedia::vtsVideoFileName(int vtsNumber, int vobIndex) const
 // Get the description of a Video Title Set information file on the DVD.
 //----------------------------------------------------------------------------
 
-QtlDvdFile QtlDvdMedia::vtsInformationFile(int vtsNumber) const
+QtsDvdFile QtsDvdMedia::vtsInformationFile(int vtsNumber) const
 {
     const QString name(QStringLiteral("VTS_%1_0.IFO").arg(vtsNumber, 2, 10, QLatin1Char('0')));
     return _rootDirectory.searchPath(QtlStringList("VIDEO_TS", name));
@@ -629,7 +630,7 @@ QtlDvdFile QtlDvdMedia::vtsInformationFile(int vtsNumber) const
 // Get the description of a Video Title Set video file on the DVD.
 //----------------------------------------------------------------------------
 
-QtlDvdFile QtlDvdMedia::vtsVideoFile(int vtsNumber, int vobIndex) const
+QtsDvdFile QtsDvdMedia::vtsVideoFile(int vtsNumber, int vobIndex) const
 {
     const QString name(QStringLiteral("VTS_%1_%2.VOB").arg(vtsNumber, 2, 10, QLatin1Char('0')).arg(vobIndex));
     return _rootDirectory.searchPath(QtlStringList("VIDEO_TS", name));
@@ -640,7 +641,7 @@ QtlDvdFile QtlDvdMedia::vtsVideoFile(int vtsNumber, int vobIndex) const
 // Check if a file name matches a Video Title Set information file.
 //----------------------------------------------------------------------------
 
-int QtlDvdMedia::vtsInformationFileNumber(const QString& fileName)
+int QtsDvdMedia::vtsInformationFileNumber(const QString& fileName)
 {
     const QString name(QFileInfo(fileName).fileName());
     // Does name match "VTS_nn_0.IFO"?
@@ -656,7 +657,7 @@ int QtlDvdMedia::vtsInformationFileNumber(const QString& fileName)
 // Load all encryption keys into the cache of libdvdcss.
 //----------------------------------------------------------------------------
 
-bool QtlDvdMedia::loadAllEncryptionKeys()
+bool QtsDvdMedia::loadAllEncryptionKeys()
 {
     // We need to be able to locate all encryption keys.
     if (_dvdcss == 0 || _allFiles.isEmpty()) {
@@ -666,7 +667,7 @@ bool QtlDvdMedia::loadAllEncryptionKeys()
 
     // Loop on all files.
     bool success = true;
-    foreach (const QtlDvdFilePtr& file, _allFiles) {
+    foreach (const QtsDvdFilePtr& file, _allFiles) {
         // We seek on first VOB's.
         const QString name(file->name());
         if (name.endsWith("_TS.VOB", Qt::CaseInsensitive) || name.endsWith("_0.VOB", Qt::CaseInsensitive) || name.endsWith("_1.VOB", Qt::CaseInsensitive)) {

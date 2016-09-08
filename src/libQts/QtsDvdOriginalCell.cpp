@@ -25,68 +25,22 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//!
-//! @file QtlDvdProgramChapter.h
-//!
-//! Declare the class QtlDvdProgramChapter.
-//! Qtl, Qt utility library.
-//!
+//
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdOriginalCell.
+//
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDPROGRAMCHAPTER_H
-#define QTLDVDPROGRAMCHAPTER_H
+#include "QtsDvdOriginalCell.h"
 
-#include "QtlDvdProgramCell.h"
 
-class QtlDvdProgramChapter;
+//----------------------------------------------------------------------------
+// Constructor.
+//----------------------------------------------------------------------------
 
-//!
-//! Smart pointer to QtlDvdProgramChapter, non thread-safe.
-//!
-typedef QtlSmartPointer<QtlDvdProgramChapter,QtlNullMutexLocker> QtlDvdProgramChapterPtr;
-Q_DECLARE_METATYPE(QtlDvdProgramChapterPtr)
-
-//!
-//! List of smart pointers to QtlDvdProgramChapterChapter, non thread-safe.
-//!
-typedef QList<QtlDvdProgramChapterPtr> QtlDvdProgramChapterList;
-
-//!
-//! A class describing a chapter inside a DVD program.
-//!
-class QtlDvdProgramChapter
+QtsDvdOriginalCell::QtsDvdOriginalCell(int vobId, int cellId, const QtlRange& sectors) :
+    _originalVobId(vobId),
+    _originalCellId(cellId),
+    _sectors(sectors)
 {
-public:
-    //!
-    //! Constructor.
-    //! @param id Chapter id within program chain (PGC).
-    //!
-    QtlDvdProgramChapter(int id = 0);
-
-    //!
-    //! Get the chapter id in the DVD program.
-    //! @return The chapter id in the DVD program.
-    //!
-    int chapterId() const
-    {
-        return _chapterId;
-    }
-
-    //!
-    //! Get the list of program cells in this chapter.
-    //! @return The list of program cells in this chapter.
-    //!
-    QtlDvdProgramCellList cells() const
-    {
-        return _cells;
-    }
-
-private:
-    const int             _chapterId;  //!< Chapter id in the DVD program.
-    QtlDvdProgramCellList _cells;      //!< List of cells.
-
-    // This class is responsible for building our instances.
-    friend class QtlDvdProgramChain;
-};
-
-#endif // QTLDVDPROGRAMCHAPTER_H
+}

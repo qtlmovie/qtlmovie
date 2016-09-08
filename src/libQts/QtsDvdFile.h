@@ -26,41 +26,41 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdFile.h
+//! @file QtsDvdFile.h
 //!
-//! Declare the class QtlDvdFile.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdFile.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDFILE_H
-#define QTLDVDFILE_H
+#ifndef QTSDVDFILE_H
+#define QTSDVDFILE_H
 
-#include "QtlCore.h"
+#include "QtsDvd.h"
 #include "QtlSmartPointer.h"
 
-class QtlDvdFile;
+class QtsDvdFile;
 
 //!
-//! Smart pointer to QtlDvdFile, non thread-safe.
+//! Smart pointer to QtsDvdFile, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdFile,QtlNullMutexLocker> QtlDvdFilePtr;
-Q_DECLARE_METATYPE(QtlDvdFilePtr)
+typedef QtlSmartPointer<QtsDvdFile,QtlNullMutexLocker> QtsDvdFilePtr;
+Q_DECLARE_METATYPE(QtsDvdFilePtr)
 
 //!
-//! Operator "less than" on QtlDvdFilePtr to sort files.
+//! Operator "less than" on QtsDvdFilePtr to sort files.
 //! The sort criteria is the placement on the DVD media.
 //! @param [in] f1 First instance to compare.
 //! @param [in] f2 Second instance to compare.
 //! @return True if @a f1 is logically less than @a f2, meaning that
 //! @a f1 physically preceeds @a f2 on the DVD media.
 //!
-bool operator<(const QtlDvdFilePtr& f1, const QtlDvdFilePtr& f2);
+bool operator<(const QtsDvdFilePtr& f1, const QtsDvdFilePtr& f2);
 
 //!
 //! A class which describes a file on DVD.
 //!
-class QtlDvdFile
+class QtsDvdFile
 {
 public:
     //!
@@ -69,12 +69,12 @@ public:
     //! @param [in] startSector First sector on DVD media.
     //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlDvdFile(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
+    QtsDvdFile(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
 
     //!
     //! Virtual destructor.
     //!
-    virtual ~QtlDvdFile();
+    virtual ~QtsDvdFile();
 
     //!
     //! Check if this object contains a valid file description.
@@ -158,7 +158,7 @@ public:
     //! @return True if @a this is logically less than @a other, meaning that
     //! @a this physically preceeds @a other on the DVD media.
     //!
-    bool operator<(const QtlDvdFile& other)
+    bool operator<(const QtsDvdFile& other)
     {
         return _sector < other._sector;
     }
@@ -169,4 +169,4 @@ protected:
     int     _size;    //!< Size in bytes.
 };
 
-#endif // QTLDVDFILE_H
+#endif // QTSDVDFILE_H

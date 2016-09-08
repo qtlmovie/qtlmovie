@@ -26,19 +26,20 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdProgramChain.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdProgramChain.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdProgramChain.h"
-#include "QtlDvdMedia.h"
+#include "QtsDvdProgramChain.h"
+#include "QtsDvdMedia.h"
 
 
 //----------------------------------------------------------------------------
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, int titleNumber, const QtlDvdOriginalCellList& originalCells, QtlLogger* log) :
+QtsDvdProgramChain::QtsDvdProgramChain(const QtlByteBlock& ifo, int startIndex, int titleNumber, const QtsDvdOriginalCellList& originalCells, QtlLogger* log) :
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
     _valid(false),
@@ -102,7 +103,7 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
     // Loop on all cells.
     for (int cellIndex = 0; cellIndex < cellCount; ++cellIndex) {
 
-        const QtlDvdProgramCellPtr cell(new QtlDvdProgramCell(cellIndex + 1));
+        const QtsDvdProgramCellPtr cell(new QtsDvdProgramCell(cellIndex + 1));
         _cells.append(cell);
 
         // Locate entry in "Cell Playback Information Table"
@@ -139,7 +140,7 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
 
         // Loop on all cells in "Cell Address Table" (VTS_C_ADT).
         // We collect all ranges of sectors with the right original VID Id / Cell Id.
-        foreach (const QtlDvdOriginalCellPtr& originalCell, originalCells) {
+        foreach (const QtsDvdOriginalCellPtr& originalCell, originalCells) {
             if (originalCell->originalVobId() == cell->originalVobId() && originalCell->originalCellId() == cell->originalCellId()) {
                 cell->_sectors.append(originalCell->sectors());
             }
@@ -150,11 +151,11 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
     }
 
     // Loop on "Program Map Table" to get the list of chapters.
-    QtlDvdProgramCellList::ConstIterator nextCell(_cells.begin());
+    QtsDvdProgramCellList::ConstIterator nextCell(_cells.begin());
     int nextCellId = ifo[pmapStart];  // entry cell id of next chapter.
     for (int pgmIndex = 0; pgmIndex < programCount; ++pgmIndex) {
 
-        const QtlDvdProgramChapterPtr chapter(new QtlDvdProgramChapter(pgmIndex + 1));
+        const QtsDvdProgramChapterPtr chapter(new QtsDvdProgramChapter(pgmIndex + 1));
         _chapters.append(chapter);
 
         nextCellId = pgmIndex < programCount - 1 ? ifo[pmapStart + pgmIndex + 1] : cellCount + 1;
@@ -173,10 +174,10 @@ QtlDvdProgramChain::QtlDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
 // Get the total number of sectors in all cells.
 //----------------------------------------------------------------------------
 
-int QtlDvdProgramChain::totalSectorCount() const
+int QtsDvdProgramChain::totalSectorCount() const
 {
     int count = 0;
-    foreach (const QtlDvdProgramCellPtr& cell, _cells) {
+    foreach (const QtsDvdProgramCellPtr& cell, _cells) {
         if (!cell.isNull()) {
             count += cell->sectors().totalValueCount();
         }
@@ -189,7 +190,7 @@ int QtlDvdProgramChain::totalSectorCount() const
 // Get the color palette of the title set in RGB format.
 //----------------------------------------------------------------------------
 
-QtlByteBlock QtlDvdProgramChain::rgbPalette() const
+QtlByteBlock QtsDvdProgramChain::rgbPalette() const
 {
     QtlByteBlock palette(_palette);
     convertPaletteYuvToRgb(palette, _log);
@@ -201,7 +202,7 @@ QtlByteBlock QtlDvdProgramChain::rgbPalette() const
 // Convert a YUV palette into RGB.
 //----------------------------------------------------------------------------
 
-void QtlDvdProgramChain::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log)
+void QtsDvdProgramChain::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger* log)
 {
     if (palette.size() % 4 != 0 && log != 0) {
         log->line(QObject::tr("Palette conversion: palette size is %1 bytes, not a multiple of 4").arg(palette.size()));
@@ -247,7 +248,7 @@ void QtlDvdProgramChain::convertPaletteYuvToRgb(QtlByteBlock& palette, QtlLogger
 // Convert a YUV or RBG palette into a string.
 //----------------------------------------------------------------------------
 
-QString QtlDvdProgramChain::paletteToString(const QtlByteBlock& palette)
+QString QtsDvdProgramChain::paletteToString(const QtlByteBlock& palette)
 {
     QString result;
     for (int base = 0; base + 4 <= palette.size(); base += 4) {
@@ -267,7 +268,7 @@ QString QtlDvdProgramChain::paletteToString(const QtlByteBlock& palette)
 // Decode a 32-bit value as a playback duration.
 //----------------------------------------------------------------------------
 
-int QtlDvdProgramChain::toPlaybackDuration(quint32 value)
+int QtsDvdProgramChain::toPlaybackDuration(quint32 value)
 {
     // The playback time is encoded in BCD as: hh:mm:ss:ff (ff = frame count within second).
     // With 2 MSBits of ff indicating frame rate: 11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal.

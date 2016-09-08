@@ -26,24 +26,24 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdMedia.h
+//! @file QtsDvdMedia.h
 //!
-//! Declare the class QtlDvdMedia.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdMedia.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDMEDIA_H
-#define QTLDVDMEDIA_H
+#ifndef QTSDVDMEDIA_H
+#define QTSDVDMEDIA_H
 
 #include "QtlNullLogger.h"
-#include "QtlDvdDirectory.h"
-#include "QtlDvd.h"
+#include "QtsDvdDirectory.h"
+#include "QtsDvd.h"
 
 //!
 //! Description of a DVD media.
 //!
-class QtlDvdMedia : public QObject
+class QtsDvdMedia : public QObject
 {
     Q_OBJECT
 
@@ -55,12 +55,12 @@ public:
     //! @param [in] parent Optional parent widget.
     //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //!
-    QtlDvdMedia(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false);
+    QtsDvdMedia(const QString& fileName = QString(), QtlLogger* log = 0, QObject* parent = 0, bool useMaxReadSpeed = false);
 
     //!
     //! Destructor.
     //!
-    ~QtlDvdMedia();
+    ~QtsDvdMedia();
 
     //!
     //! Get the message logger.
@@ -176,7 +176,7 @@ public:
     //! is negative then there was an error before anything could be read.
     //! @see BadSectorPolicy
     //!
-    int readSectors(void *buffer, int count, int position = -1, Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors);
+    int readSectors(void *buffer, int count, int position = -1, Qts::BadSectorPolicy badSectorPolicy = Qts::SkipBadSectors);
 
     //!
     //! Get the number of Video Title Sets (VTS) on the DVD.
@@ -192,7 +192,7 @@ public:
     //! Can be used to describe the complete file system on DVD.
     //! @return A description of the root directory.
     //!
-    QtlDvdDirectory rootDirectory() const
+    QtsDvdDirectory rootDirectory() const
     {
         return _rootDirectory;
     }
@@ -205,7 +205,7 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+    QtsDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
     //!
     //! Build the full path name of a Video Title Set information file on the DVD.
@@ -231,7 +231,7 @@ public:
     //! @param [in] vtsNumber VTS number.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile vtsInformationFile(int vtsNumber) const;
+    QtsDvdFile vtsInformationFile(int vtsNumber) const;
 
     //!
     //! Get the description of a Video Title Set video file on the DVD.
@@ -239,7 +239,7 @@ public:
     //! @param [in] vobIndex Index of the VOB file, starting at 1.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile vtsVideoFile(int vtsNumber, int vobIndex) const;
+    QtsDvdFile vtsVideoFile(int vtsNumber, int vobIndex) const;
 
     //!
     //! Check if a file name matches a Video Title Set information file (VTS_nn_0.IFO).
@@ -252,10 +252,10 @@ public:
     //! Get the list of all files on the DVD media.
     //! The list is sorted by physical placement of files on the media.
     //! Non-file space (meta-data, directories, unused space) is represented
-    //! by "place holders", ie. QtlDvdFile with an empty file name.
+    //! by "place holders", ie. QtsDvdFile with an empty file name.
     //! @return The list of all files on the DVD media.
     //!
-    QList<QtlDvdFilePtr> allFiles() const
+    QList<QtsDvdFilePtr> allFiles() const
     {
         return _allFiles;
     }
@@ -289,9 +289,9 @@ private:
     int              _vtsCount;      //!< Number of video title sets.
     struct dvdcss_s* _dvdcss;        //!< Handle to libdvdcss (don't include dvdcss.h in this .h).
     int              _nextSector;    //!< Next sector to read.
-    QtlDvdDirectory  _rootDirectory; //!< Description of root directory.
-    QList<QtlDvdFilePtr> _allFiles;  //!< List of all files on DVD.
-    QList<QtlDvdFilePtr>::ConstIterator _currentFile; //!< File area where _nextSector is.
+    QtsDvdDirectory  _rootDirectory; //!< Description of root directory.
+    QList<QtsDvdFilePtr> _allFiles;  //!< List of all files on DVD.
+    QList<QtsDvdFilePtr>::ConstIterator _currentFile; //!< File area where _nextSector is.
 
     //!
     //! Read the file structure under the specified directory.
@@ -301,16 +301,16 @@ private:
     //! @param [in] inVideoTs True when @a dir is VIDEO_TS.
     //! @return True on success, false on error.
     //!
-    bool readDirectoryStructure(QtlDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs);
+    bool readDirectoryStructure(QtsDvdDirectory& dir, int depth, bool inRoot, bool inVideoTs);
 
     // Unaccessible operations.
-    Q_DISABLE_COPY(QtlDvdMedia)
+    Q_DISABLE_COPY(QtsDvdMedia)
 };
 
 //!
-//! Smart pointer to QtlDvdMedia, non thread-safe.
+//! Smart pointer to QtsDvdMedia, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdMedia,QtlNullMutexLocker> QtlDvdMediaPtr;
-Q_DECLARE_METATYPE(QtlDvdMediaPtr)
+typedef QtlSmartPointer<QtsDvdMedia,QtlNullMutexLocker> QtsDvdMediaPtr;
+Q_DECLARE_METATYPE(QtsDvdMediaPtr)
 
-#endif // QTLDVDMEDIA_H
+#endif // QTSDVDMEDIA_H

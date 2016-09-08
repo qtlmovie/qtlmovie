@@ -37,7 +37,7 @@
 
 #include "QtlFile.h"
 #include "QtlDataPull.h"
-#include "QtlDvdTitleSet.h"
+#include "QtsDvdTitleSet.h"
 #include "QtlProcess.h"
 #include "QtlMediaStreamInfo.h"
 #include "QtlMovieSettings.h"
@@ -389,8 +389,8 @@ private:
     QString                 _ffmpegFormat;   //!< Name to specify as input file format to ffmpeg.
     QtlMovieFFprobeTags     _ffInfo;         //!< Media info in ffprobe flat format.
     QtlMediaStreamInfoList  _streams;        //!< Stream information.
-    QtlDvdTitleSet          _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
-    QtlDvdProgramChainPtr   _dvdPgc;         //!< Smart pointer to PGC inside the DVD VTS.
+    QtsDvdTitleSet          _dvdTitleSet;    //!< DVD title set access (when the input file comes from a DVD).
+    QtsDvdProgramChainPtr   _dvdPgc;         //!< Smart pointer to PGC inside the DVD VTS.
     QtlMovieTeletextSearch* _teletextSearch; //!< Search for Teletext subtitles in MPEG-TS files.
     int     _ffprobeCount;                       //!< Number of ffprobe in progress.
     int     _ccSearchCount;                      //!< Number of Closed Captions research in progress.

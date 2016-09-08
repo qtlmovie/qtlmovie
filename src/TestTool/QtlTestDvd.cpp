@@ -34,8 +34,8 @@
 #include "QtlFile.h"
 #include "QtlStringUtils.h"
 #include "QtlStdoutLogger.h"
-#include "QtlDvdTitleSet.h"
-#include "QtlDvdMedia.h"
+#include "QtsDvdTitleSet.h"
+#include "QtsDvdMedia.h"
 
 //----------------------------------------------------------------------------
 
@@ -48,13 +48,13 @@ public:
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
 private:
-    void displayFile(const QString& indent, const QtlDvdFile& file);
-    void displayDirectory(const QString& indent, const QtlDvdDirectory& dir);
+    void displayFile(const QString& indent, const QtsDvdFile& file);
+    void displayDirectory(const QString& indent, const QtsDvdDirectory& dir);
 };
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvd::displayFile(const QString& indent, const QtlDvdFile& file)
+void QtlTestDvd::displayFile(const QString& indent, const QtsDvdFile& file)
 {
     out << indent << file.name()
         << ", " << file.sizeInBytes() << " bytes"
@@ -62,15 +62,15 @@ void QtlTestDvd::displayFile(const QString& indent, const QtlDvdFile& file)
         << endl;
 }
 
-void QtlTestDvd::displayDirectory(const QString& indent, const QtlDvdDirectory& dir)
+void QtlTestDvd::displayDirectory(const QString& indent, const QtsDvdDirectory& dir)
 {
     displayFile(indent + "Directory: ", dir);
-    foreach (const QtlDvdFilePtr& file, dir.files()) {
+    foreach (const QtsDvdFilePtr& file, dir.files()) {
         if (!file.isNull()) {
             displayFile(indent + "    File: ", *file);
         }
     }
-    foreach (const QtlDvdDirectoryPtr& subdir, dir.subDirectories()) {
+    foreach (const QtsDvdDirectoryPtr& subdir, dir.subDirectories()) {
         if (!subdir.isNull()) {
             displayDirectory(indent + "    ", *subdir);
         }
@@ -89,7 +89,7 @@ int QtlTestDvd::run(const QStringList& args)
     const QString input(args[0]);
 
     // Load DVD media description.
-    QtlDvdMedia dvd(input, &log);
+    QtsDvdMedia dvd(input, &log);
     dvd.loadAllEncryptionKeys();
 
     // Display DVD information.
@@ -111,13 +111,13 @@ int QtlTestDvd::run(const QStringList& args)
 
     // Display DVD file layout.
     out << "File layout:" << endl;
-    foreach (const QtlDvdFilePtr& file, dvd.allFiles()) {
+    foreach (const QtsDvdFilePtr& file, dvd.allFiles()) {
         out << "    " << file->description() << ", LBA " << file->startSector() << "-" << (file->endSector() - 1) << endl;
     }
     out << endl;
 
     // Load VTS description.
-    QtlDvdTitleSet vts(input, &log);
+    QtsDvdTitleSet vts(input, &log);
     if (!vts.isLoaded()) {
         err << "Error loading " << input << endl;
         return EXIT_FAILURE;
@@ -164,7 +164,7 @@ int QtlTestDvd::run(const QStringList& args)
 
     // Display PGC information.
     for (int i = 1; i <= vts.titleCount(); ++i) {
-        const QtlDvdProgramChainPtr pgc(vts.title(i));
+        const QtsDvdProgramChainPtr pgc(vts.title(i));
         if (pgc.isNull()) {
             out << "PGC #" << i << " has a null pointer" << endl;
             continue;
@@ -178,19 +178,19 @@ int QtlTestDvd::run(const QStringList& args)
             << ", next:" << pgc->nextTitleNumber()
             << ", parent:" << pgc->parentTitleNumber() << endl
             << "    Duration: " << pgc->durationInSeconds() << " seconds (" << qtlSecondsToString(pgc->durationInSeconds()) << ")" << endl
-            << "    YUV palette: " << QtlDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
-            << "    RGB palette: " << QtlDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl
+            << "    YUV palette: " << QtsDvdProgramChain::paletteToString(pgc->yuvPalette()) << endl
+            << "    RGB palette: " << QtsDvdProgramChain::paletteToString(pgc->rgbPalette()) << endl
             << "    Chapters: " << pgc->chapterCount()
             << ", cells: " << pgc->cellCount()
             << ", total sectors: " << pgc->totalSectorCount() << endl;
-        foreach (const QtlDvdProgramChapterPtr& chapter, pgc->chapters()) {
+        foreach (const QtsDvdProgramChapterPtr& chapter, pgc->chapters()) {
             out << "    Chapter #" << chapter->chapterId() << ", cells:";
-            foreach (const QtlDvdProgramCellPtr& cell, chapter->cells()) {
+            foreach (const QtsDvdProgramCellPtr& cell, chapter->cells()) {
                 out << " " << cell->cellId();
             }
             out << endl;
         }
-        foreach (const QtlDvdProgramCellPtr& cell, pgc->cells()) {
+        foreach (const QtsDvdProgramCellPtr& cell, pgc->cells()) {
             out << "    Cell #" << cell->cellId()
                 << ", angle: " << cell->angleId()
                 << ", " << qtlSecondsToString(cell->durationInSeconds())

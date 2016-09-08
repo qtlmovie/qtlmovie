@@ -36,7 +36,7 @@
 #define QTLMOVIEDVDEXTRACTIONSESSION_H
 
 #include "QtlMovieAction.h"
-#include "QtlDvdDataPull.h"
+#include "QtsDvdDataPull.h"
 #include "QtlSmartPointer.h"
 
 //!
@@ -63,9 +63,9 @@ public:
     //! @param [in] startSector First sector to read.
     //! @param [in] sectorCount Total number of sectors to read.
     //! @param [in] badSectorPolicy How to handle bad sectors.
-    //! @see QtlDvdMedia::BadSectorPolicy
+    //! @see QtsDvdMedia::BadSectorPolicy
     //!
-    void addFile(const QString& outputFileName, int startSector, int sectorCount, Qtl::BadSectorPolicy badSectorPolicy);
+    void addFile(const QString& outputFileName, int startSector, int sectorCount, Qts::BadSectorPolicy badSectorPolicy);
 
     //!
     //! Get the number of remaining transfers, including the current one.
@@ -131,7 +131,7 @@ private:
     public:
         const int      totalSectors;  //!< Total number of sectors in this transfer.
         QFile          file;          //!< Output file.
-        QtlDvdDataPull dataPull;      //!< DVD transfer.
+        QtsDvdDataPull dataPull;      //!< DVD transfer.
 
         //!
         //! Constructor.
@@ -148,7 +148,7 @@ private:
                    int startSector,
                    int sectorCount,
                    bool useMaxReadSpeed,
-                   Qtl::BadSectorPolicy badSectorPolicy,
+                   Qts::BadSectorPolicy badSectorPolicy,
                    QtlLogger* log);
     };
 

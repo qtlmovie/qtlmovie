@@ -35,6 +35,7 @@
 
 libQts {
     CONFIG += libQtl
+    CONFIG += libdvdcss
     LIBS += -L../libQts -lQts
     PRE_TARGETDEPS += ../libQts/libQts.a
     INCLUDEPATH += ../libQts
@@ -44,3 +45,4 @@ libQts {
 # General application config
 
 include(../libQtl/libQtl.pri)
+include(../libdvdcss/libdvdcss.pri)

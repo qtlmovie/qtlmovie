@@ -144,7 +144,7 @@ private:
     //! Get the currently selected DVD.
     //! @return A pointer to the currently selected DVD or a null pointer if none is selected.
     //!
-    QtlDvdMediaPtr currentDvd() const;
+    QtsDvdMediaPtr currentDvd() const;
 
     //!
     //! Refresh the list of DVD's.
@@ -165,16 +165,16 @@ private:
     //! Add a file in the current extraction.
     //! @param [in] file File description.
     //!
-    void addFileForExtraction(const QtlDvdFile& file);
+    void addFileForExtraction(const QtsDvdFile& file);
 
     //!
     //! Add a tree of files and directories in the table of files.
     //! @param [in] dir Directory description.
     //!
-    void addDirectoryTree(const QtlDvdDirectory& dir);
+    void addDirectoryTree(const QtsDvdDirectory& dir);
 
     Ui::QtlMovieDvdExtractionWindow _ui;          //!< UI from Qt Designer.
-    QList<QtlDvdMediaPtr>           _dvdList;     //!< List of detected DVD's.
+    QList<QtsDvdMediaPtr>           _dvdList;     //!< List of detected DVD's.
     QtlMovieDvdExtractionSession*   _extraction;  //!< Current extraction.
 
     // Unaccessible operations.

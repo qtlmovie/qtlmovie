@@ -26,12 +26,12 @@
 //
 //----------------------------------------------------------------------------
 //
-// Qtl, Qt utility library.
-// Define the class QtlDvdBandwidthReport.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdBandwidthReport.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdBandwidthReport.h"
+#include "QtsDvdBandwidthReport.h"
 #include "QtlStringUtils.h"
 
 
@@ -39,7 +39,7 @@
 // Constructor.
 //----------------------------------------------------------------------------
 
-QtlDvdBandwidthReport::QtlDvdBandwidthReport(int reportInterval, QtlLogger* log) :
+QtsDvdBandwidthReport::QtsDvdBandwidthReport(int reportInterval, QtlLogger* log) :
     _log(log),
     _started(false),
     _timeAverage(),
@@ -55,7 +55,7 @@ QtlDvdBandwidthReport::QtlDvdBandwidthReport(int reportInterval, QtlLogger* log)
 // Start the transfer.
 //----------------------------------------------------------------------------
 
-void QtlDvdBandwidthReport::start()
+void QtsDvdBandwidthReport::start()
 {
     if (!_started) {
         _countAverage = 0;
@@ -71,7 +71,7 @@ void QtlDvdBandwidthReport::start()
 // Declare the transfer of sectors from DVD media.
 //----------------------------------------------------------------------------
 
-void QtlDvdBandwidthReport::transfered(int sectorCount)
+void QtsDvdBandwidthReport::transfered(int sectorCount)
 {
     if (_started) {
         if (sectorCount > 0) {
@@ -89,15 +89,15 @@ void QtlDvdBandwidthReport::transfered(int sectorCount)
 // Report bandwidth immediately.
 //----------------------------------------------------------------------------
 
-void QtlDvdBandwidthReport::reportBandwidth()
+void QtsDvdBandwidthReport::reportBandwidth()
 {
     if (_started) {
         const int msAverage = _timeAverage.elapsed();
         const int msInstant = _timeInstant.restart();
-        const qint64 totalBytes = qint64(_countAverage) * Qtl::DVD_SECTOR_SIZE;
-        const qint64 instantBytes = qint64(_countInstant) * Qtl::DVD_SECTOR_SIZE;
+        const qint64 totalBytes = qint64(_countAverage) * QTS_DVD_SECTOR_SIZE;
+        const qint64 instantBytes = qint64(_countInstant) * QTS_DVD_SECTOR_SIZE;
 
-        const Qtl::TransferRateFlags flags(Qtl::TransferDvdBase | Qtl::TransferKiloBytes);
+        const Qts::TransferRateFlags flags(Qts::TransferDvdBase | Qts::TransferKiloBytes);
         const QString averageRate(transferRateToString(totalBytes, msAverage, flags));
         const QString instantRate(transferRateToString(instantBytes, msInstant, flags));
 
@@ -121,33 +121,33 @@ void QtlDvdBandwidthReport::reportBandwidth()
 // Build a human-readable string for DVD transfer rate.
 //----------------------------------------------------------------------------
 
-QString QtlDvdBandwidthReport::transferRateToString(qint64 bytes, qint64 milliSeconds, Qtl::TransferRateFlags flags)
+QString QtsDvdBandwidthReport::transferRateToString(qint64 bytes, qint64 milliSeconds, Qts::TransferRateFlags flags)
 {
     QString result;
     if (milliSeconds > 0) {
         const QString separator(QStringLiteral(", "));
-        if (flags & Qtl::TransferDvdBase) {
-            result = qtlFractionToString(bytes * 1000, milliSeconds * Qtl::DVD_TRANSFER_RATE, 1) + "x";
+        if (flags & Qts::TransferDvdBase) {
+            result = qtlFractionToString(bytes * 1000, milliSeconds * QTS_DVD_TRANSFER_RATE, 1) + "x";
         }
-        if (flags & Qtl::TransferBytes) {
+        if (flags & Qts::TransferBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 B/s").arg(bytes * 1000 / milliSeconds));
         }
-        if (flags & Qtl::TransferKiloBytes) {
+        if (flags & Qts::TransferKiloBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 kB/s").arg(bytes / milliSeconds));
         }
-        if (flags & Qtl::TransferKibiBytes) {
+        if (flags & Qts::TransferKibiBytes) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }
             result.append(QStringLiteral("%1 kiB/s").arg(bytes * 1000 / milliSeconds * 1024));
         }
-        if (flags & Qtl::TransferBits) {
+        if (flags & Qts::TransferBits) {
             if (!result.isEmpty()) {
                 result.append(separator);
             }

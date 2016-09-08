@@ -26,38 +26,38 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvd.h
+//! @file QtsDvd.h
 //!
 //! Common definitions for DVD handling.
-//! Qtl, Qt utility library.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVD_H
-#define QTLDVD_H
+#ifndef QTSDVD_H
+#define QTSDVD_H
 
-#include "QtlCore.h"
+#include "QtsCore.h"
 #include "QtlRangeList.h"
 
 //!
-//! Qtl namespace.
+//! Size in bytes of a DVD sector.
 //!
-namespace Qtl {
-    //!
-    //! Size in bytes of a DVD sector.
-    //!
-    static const int DVD_SECTOR_SIZE = 2048;
+static const int QTS_DVD_SECTOR_SIZE = 2048;
 
-    //!
-    //! Reference DVD transfer rate in bytes / second (aka "1x").
-    //!
-    static const int DVD_TRANSFER_RATE = 1385000;
+//!
+//! Reference DVD transfer rate in bytes / second (aka "1x").
+//!
+static const int QTS_DVD_TRANSFER_RATE = 1385000;
 
-    //!
-    //! Default DVD transfer size in bytes (512 kB, 256 DVD sectors).
-    //!
-    static const int DEFAULT_DVD_TRANSFER_SIZE = 512 * 1024;
+//!
+//! Default DVD transfer size in bytes (512 kB, 256 DVD sectors).
+//!
+static const int QTS_DEFAULT_DVD_TRANSFER_SIZE = 512 * 1024;
 
+//!
+//! Qts namespace.
+//!
+namespace Qts {
     //!
     //! Management policy of bad or corrupted sectors.
     //!
@@ -92,7 +92,7 @@ namespace Qtl {
     };
 
     //!
-    //! Flags for QtlDvdMedia::transferRateToString().
+    //! Flags for QtsDvdMedia::transferRateToString().
     //!
     enum TransferRateFlag {
         TransferDvdBase   = 0x0001,  //!< Include "Nx" using DVD base transfer rate.
@@ -103,6 +103,6 @@ namespace Qtl {
     };
     Q_DECLARE_FLAGS(TransferRateFlags, TransferRateFlag)
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(Qtl::TransferRateFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qts::TransferRateFlags)
 
-#endif // QTLDVD_H
+#endif // QTSDVD_H

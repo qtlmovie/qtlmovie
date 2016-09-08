@@ -38,6 +38,8 @@ TARGET = Qts
 TEMPLATE = lib
 CONFIG += staticlib
 
+INCLUDEPATH += ../libdvdcss/include
+
 SOURCES += \
     QtsCore.cpp \
     QtsCrc32.cpp \
@@ -63,7 +65,18 @@ SOURCES += \
     QtsTeletextDemux.cpp \
     QtsTimeStamper.cpp \
     QtsTeletextFrame.cpp \
-    QtsTeletextCharset.cpp
+    QtsTeletextCharset.cpp \
+    QtsDvdTitleSet.cpp \
+    QtsDvdDataPull.cpp \
+    QtsDvdMedia.cpp \
+    QtsDvdDirectory.cpp \
+    QtsDvdFile.cpp \
+    QtsDvdProgramChain.cpp \
+    QtsDvdOriginalCell.cpp \
+    QtsDvdProgramCell.cpp \
+    QtsDvdProgramChapter.cpp \
+    QtsDvdBandwidthReport.cpp \
+    QtsDvdProgramChainDemux.cpp
 
 HEADERS += \
     QtsCore.h \
@@ -95,7 +108,19 @@ HEADERS += \
     QtsTeletextHandlerInterface.h \
     QtsTimeStamper.h \
     QtsTeletextFrame.h \
-    QtsTeletextCharset.h
+    QtsTeletextCharset.h \
+    QtsDvdMedia.h \
+    QtsDvdProgramChain.h \
+    QtsDvdOriginalCell.h \
+    QtsDvdProgramCell.h \
+    QtsDvd.h \
+    QtsDvdProgramChainDemux.h \
+    QtsDvdBandwidthReport.h \
+    QtsDvdTitleSet.h \
+    QtsDvdDataPull.h \
+    QtsDvdDirectory.h \
+    QtsDvdFile.h \
+    QtsDvdProgramChapter.h
 
 TRANSLATIONS += \
     locale/qts_fr.ts

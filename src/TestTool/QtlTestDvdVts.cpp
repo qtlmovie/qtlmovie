@@ -31,8 +31,8 @@
 //----------------------------------------------------------------------------
 
 #include "QtlTestCommand.h"
-#include "QtlDvdTitleSet.h"
-#include "QtlDvdProgramChainDemux.h"
+#include "QtsDvdTitleSet.h"
+#include "QtsDvdProgramChainDemux.h"
 #include "QtlDataPullSynchronousWrapper.h"
 
 //----------------------------------------------------------------------------
@@ -59,29 +59,29 @@ int QtlTestDvdVts::run(const QStringList& args)
     const QString navpackOption(args.size() < 3 ?"" : args[2]);
     int pgcNumber = args.size() < 4 ? 0 : args[3].toInt();
 
-    Qtl::DvdDemuxPolicy demuxPolicy = Qtl::NavPacksFixed;
+    Qts::DvdDemuxPolicy demuxPolicy = Qts::NavPacksFixed;
     if (navpackOption.startsWith('f', Qt::CaseInsensitive)) {
-        demuxPolicy = Qtl::NavPacksFixed;
+        demuxPolicy = Qts::NavPacksFixed;
     }
     else if (navpackOption.startsWith('r', Qt::CaseInsensitive)) {
-        demuxPolicy = Qtl::NavPacksRemoved;
+        demuxPolicy = Qts::NavPacksRemoved;
     }
     else if (navpackOption.startsWith('c', Qt::CaseInsensitive)) {
-        demuxPolicy = Qtl::NavPacksUnchanged;
+        demuxPolicy = Qts::NavPacksUnchanged;
     }
 
     // Load VTS description.
-    QtlDvdTitleSet vts(input, &log);
+    QtsDvdTitleSet vts(input, &log);
     if (!vts.isLoaded()) {
         err << "Error loading " << input << endl;
         return EXIT_FAILURE;
     }
 
-    QtlDvdProgramChainDemux demux(vts,
+    QtsDvdProgramChainDemux demux(vts,
                                   pgcNumber,
                                   1,       // angleNumber
                                   1,       // fallbackPgcNumber
-                                  Qtl::DEFAULT_DVD_TRANSFER_SIZE,       // transferSize
+                                  QTS_DEFAULT_DVD_TRANSFER_SIZE,       // transferSize
                                   QtlDataPull::DEFAULT_MIN_BUFFER_SIZE, // minBufferSize
                                   demuxPolicy,
                                   &log,
@@ -97,7 +97,7 @@ int QtlTestDvdVts::run(const QStringList& args)
 
     // Transfer the file using a wrapper test class.
     QtlDataPullSynchronousWrapper(&demux, &file);
-    out << "Completed, pulled " << (demux.pulledSize() / Qtl::DVD_SECTOR_SIZE) << " sectors, " << demux.pulledSize() << " bytes" << endl;
+    out << "Completed, pulled " << (demux.pulledSize() / QTS_DVD_SECTOR_SIZE) << " sectors, " << demux.pulledSize() << " bytes" << endl;
 
     file.close();
 

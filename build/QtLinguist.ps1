@@ -78,7 +78,7 @@ else {
         $LUpdateDir = (Split-Path -Parent $LUpdate)
         Copy-Item $LUpdate (Join-Path $LUpdateDir lupd.exe)
         # Update all translation files.
-        lupd -no-obsolete $ProjectFile
+        lupd -locations absolute -no-obsolete $ProjectFile
     }
     linguist (Get-ChildItem . -Recurse -Include *.ts -Name)
     Pop-Location

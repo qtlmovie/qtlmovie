@@ -26,26 +26,27 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdDataPull.h
+//! @file QtsDvdDataPull.h
 //!
-//! Declare the class QtlDvdDataPull.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdDataPull.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDDATAPULL_H
-#define QTLDVDDATAPULL_H
+#ifndef QTSDVDDATAPULL_H
+#define QTSDVDDATAPULL_H
 
 #include "QtlDataPull.h"
 #include "QtlByteBlock.h"
-#include "QtlDvdMedia.h"
-#include "QtlDvdBandwidthReport.h"
+#include "QtsDvdMedia.h"
+#include "QtsDvdBandwidthReport.h"
+#include "QtsDvd.h"
 
 //!
 //! A class to pull data from an encrypted DVD into an asynchronous device such as QProcess.
 //! @see QtlDataPull
 //!
-class QtlDvdDataPull : public QtlDataPull
+class QtsDvdDataPull : public QtlDataPull
 {
     Q_OBJECT
 
@@ -64,13 +65,13 @@ public:
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
     //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
-    //! @see QtlDvdMedia::BadSectorPolicy
+    //! @see QtsDvdMedia::BadSectorPolicy
     //!
-    QtlDvdDataPull(const QString& deviceName,
+    QtsDvdDataPull(const QString& deviceName,
                    int startSector,
                    int sectorCount,
-                   Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors,
-                   int transferSize = Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+                   Qts::BadSectorPolicy badSectorPolicy = Qts::SkipBadSectors,
+                   int transferSize = QTS_DEFAULT_DVD_TRANSFER_SIZE,
                    int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                    QtlLogger* log = 0,
                    QObject* parent = 0,
@@ -89,12 +90,12 @@ public:
     //! @param [in] log Optional message logger.
     //! @param [in] parent Optional parent object.
     //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
-    //! @see QtlDvdMedia::BadSectorPolicy
+    //! @see QtsDvdMedia::BadSectorPolicy
     //!
-    QtlDvdDataPull(const QString& deviceName,
+    QtsDvdDataPull(const QString& deviceName,
                    const QtlRangeList sectorList,
-                   Qtl::BadSectorPolicy badSectorPolicy = Qtl::SkipBadSectors,
-                   int transferSize = Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+                   Qts::BadSectorPolicy badSectorPolicy = Qts::SkipBadSectors,
+                   int transferSize = QTS_DEFAULT_DVD_TRANSFER_SIZE,
                    int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
                    QtlLogger* log = 0,
                    QObject* parent = 0,
@@ -126,18 +127,18 @@ protected:
 private:
     const QString               _deviceName;      //!< DVD device name.
     const QtlRangeList          _sectorList;      //!< List of sectors to read.
-    const Qtl::BadSectorPolicy  _badSectorPolicy; //!< How to handle bad sectors.
+    const Qts::BadSectorPolicy  _badSectorPolicy; //!< How to handle bad sectors.
     const int                   _sectorChunk;     //!< Number of sectors per transfer.
     const bool                  _maxReadSpeed;    //!< Set the DVD reader to maximum speed.
     QtlRangeList::ConstIterator _currentRange;    //!< Current pointer in _sectorList.
     int                         _nextSector;      //!< Next sector in _currentRange, -1 means at beginning.
     QtlByteBlock                _buffer;          //!< Transfer buffer.
-    QtlDvdMedia                 _dvd;             //!< Access to DVD media.
-    QtlDvdBandwidthReport       _report;          //!< To report transfer bandwidth.
+    QtsDvdMedia                 _dvd;             //!< Access to DVD media.
+    QtsDvdBandwidthReport       _report;          //!< To report transfer bandwidth.
 
     // Unaccessible operations.
-    QtlDvdDataPull() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlDvdDataPull)
+    QtsDvdDataPull() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtsDvdDataPull)
 };
 
-#endif // QTLDVDDATAPULL_H
+#endif // QTSDVDDATAPULL_H

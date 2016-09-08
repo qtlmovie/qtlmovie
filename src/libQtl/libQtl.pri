@@ -87,16 +87,11 @@ QMAKE_EXTRA_COMPILERS += updateqm
 # Applications using the libQtl library depends on it.
 
 libQtl {
-    CONFIG += libdvdcss
     LIBS += -L../libQtl -lQtl
     PRE_TARGETDEPS += ../libQtl/libQtl.a
     INCLUDEPATH += ../libQtl
     DEPENDPATH += ../libQtl
 }
-
-# Configuration with "CONFIG += libdvdcss".
-
-include(../libdvdcss/libdvdcss.pri)
 
 # Applications using OpenSSL shall use "CONFIG += openssl".
 # On Windows, assume default location used by binary installers from

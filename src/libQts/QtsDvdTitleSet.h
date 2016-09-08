@@ -26,31 +26,32 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdTitleSet.h
+//! @file QtsDvdTitleSet.h
 //!
-//! Declare the class QtlDvdTitleSet.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdTitleSet.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDTITLESET_H
-#define QTLDVDTITLESET_H
+#ifndef QTSDVDTITLESET_H
+#define QTSDVDTITLESET_H
 
 #include "QtlNullLogger.h"
 #include "QtlByteBlock.h"
-#include "QtlDvdMedia.h"
+#include "QtsDvdMedia.h"
 #include "QtlDataPull.h"
 #include "QtlMediaStreamInfo.h"
-#include "QtlDvdProgramChain.h"
-#include "QtlDvdOriginalCell.h"
+#include "QtsDvdProgramChain.h"
+#include "QtsDvdOriginalCell.h"
+#include "QtsDvd.h"
 
-class QtlDvdTitleSet;
+class QtsDvdTitleSet;
 
 //!
-//! Smart pointer to QtlDvdTitleSet, non thread-safe.
+//! Smart pointer to QtsDvdTitleSet, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdTitleSet,QtlNullMutexLocker> QtlDvdTitleSetPtr;
-Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
+typedef QtlSmartPointer<QtsDvdTitleSet,QtlNullMutexLocker> QtsDvdTitleSetPtr;
+Q_DECLARE_METATYPE(QtsDvdTitleSetPtr)
 
 //!
 //! Description of a "Title Set" in a DVD.
@@ -72,7 +73,7 @@ Q_DECLARE_METATYPE(QtlDvdTitleSetPtr)
 //! The content of a VTS is physically contiguous on the DVD, starting from
 //! VTS_nn_0.VOB, VTS_nn_1.VOB, etc., ending with the VTS_nn_0.BUP.
 //!
-class QtlDvdTitleSet
+class QtsDvdTitleSet
 {
 public:
     //!
@@ -80,13 +81,13 @@ public:
     //! @param [in] fileName Name of the IFO file or name of one of the VOB files in the title set.
     //! @param [in] log Where to log errors.
     //!
-    QtlDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0);
+    QtsDvdTitleSet(const QString& fileName = QString(), QtlLogger* log = 0);
 
     //!
     //! Copy constructor.
     //! @param [in] other Other instance to copy (except parent).
     //!
-    explicit QtlDvdTitleSet(const QtlDvdTitleSet& other);
+    explicit QtsDvdTitleSet(const QtsDvdTitleSet& other);
 
     //!
     //! Load the description of a title set.
@@ -95,7 +96,7 @@ public:
     //! is already open, pass it as an optimization. This is optional, using 0 always works.
     //! @return True on success, false on error.
     //!
-    bool load(const QString& fileName = QString(), const QtlDvdMedia* dvd = 0);
+    bool load(const QString& fileName = QString(), const QtsDvdMedia* dvd = 0);
 
     //!
     //! Clear object content.
@@ -135,9 +136,9 @@ public:
     //! @return A smart pointer to the description of the title. Return a null pointer if
     //! @a titleNumber is invalid or if the description of the title was invalid.
     //!
-    QtlDvdProgramChainPtr title(int titleNumber) const
+    QtsDvdProgramChainPtr title(int titleNumber) const
     {
-        return titleNumber < 1 || titleNumber > _pgcs.size() ? QtlDvdProgramChainPtr() : _pgcs.at(titleNumber - 1);
+        return titleNumber < 1 || titleNumber > _pgcs.size() ? QtsDvdProgramChainPtr() : _pgcs.at(titleNumber - 1);
     }
 
     //!
@@ -151,7 +152,7 @@ public:
     //! the specified @a titleNumber. Return an empty list if @a titleNumber is invalid or if the
     //! description of the title was invalid. When the list is not empty, all pointers are not null.
     //!
-    QtlDvdProgramChainList allTitles(int titleNumber) const;
+    QtsDvdProgramChainList allTitles(int titleNumber) const;
 
     //!
     //! Get the duration of all sequential titles (or program chain, or PGC) in the title set.
@@ -258,7 +259,7 @@ public:
     //!
     int vobSectorCount() const
     {
-        return int(_vobSizeInBytes / Qtl::DVD_SECTOR_SIZE);
+        return int(_vobSizeInBytes / QTS_DVD_SECTOR_SIZE);
     }
 
     //!
@@ -293,7 +294,7 @@ public:
     //! This is different from the cells inside a Program Chain which describe a cell inside the VOB files of the DVD.
     //! @return List of cells in original VOB files.
     //!
-    QtlDvdOriginalCellList originalCells() const
+    QtsDvdOriginalCellList originalCells() const
     {
         return _originalCells;
     }
@@ -340,8 +341,8 @@ private:
     int           _vobStartSector;    //!< First sector of VOB files on DVD media.
     int           _originalVobCount;  //!< Number of original input VOB's, before DVD production.
     QtlMediaStreamInfoList _streams;       //!< List of streams in the VTS.
-    QtlDvdProgramChainList _pgcs;          //!< List program chains in the VTS.
-    QtlDvdOriginalCellList _originalCells; //!< List of cells in original input files.
+    QtsDvdProgramChainList _pgcs;          //!< List program chains in the VTS.
+    QtsDvdOriginalCellList _originalCells; //!< List of cells in original input files.
 
     //!
     //! Build the IFO and VOB file names for the VTS.
@@ -358,4 +359,4 @@ private:
     bool readVtsIfo();
 };
 
-#endif // QTLDVDTITLESET_H
+#endif // QTSDVDTITLESET_H

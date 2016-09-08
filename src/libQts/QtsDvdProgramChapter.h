@@ -25,21 +25,69 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------
-//
-// Define the class QtlDvdOriginalCell.
-//
+//!
+//! @file QtsDvdProgramChapter.h
+//!
+//! Declare the class QtsDvdProgramChapter.
+//! Qts, the Qt MPEG Transport Stream library.
+//!
 //----------------------------------------------------------------------------
 
-#include "QtlDvdOriginalCell.h"
+#ifndef QTSDVDPROGRAMCHAPTER_H
+#define QTSDVDPROGRAMCHAPTER_H
 
+#include "QtsDvd.h"
+#include "QtsDvdProgramCell.h"
 
-//----------------------------------------------------------------------------
-// Constructor.
-//----------------------------------------------------------------------------
+class QtsDvdProgramChapter;
 
-QtlDvdOriginalCell::QtlDvdOriginalCell(int vobId, int cellId, const QtlRange& sectors) :
-    _originalVobId(vobId),
-    _originalCellId(cellId),
-    _sectors(sectors)
+//!
+//! Smart pointer to QtsDvdProgramChapter, non thread-safe.
+//!
+typedef QtlSmartPointer<QtsDvdProgramChapter,QtlNullMutexLocker> QtsDvdProgramChapterPtr;
+Q_DECLARE_METATYPE(QtsDvdProgramChapterPtr)
+
+//!
+//! List of smart pointers to QtsDvdProgramChapterChapter, non thread-safe.
+//!
+typedef QList<QtsDvdProgramChapterPtr> QtsDvdProgramChapterList;
+
+//!
+//! A class describing a chapter inside a DVD program.
+//!
+class QtsDvdProgramChapter
 {
-}
+public:
+    //!
+    //! Constructor.
+    //! @param id Chapter id within program chain (PGC).
+    //!
+    QtsDvdProgramChapter(int id = 0);
+
+    //!
+    //! Get the chapter id in the DVD program.
+    //! @return The chapter id in the DVD program.
+    //!
+    int chapterId() const
+    {
+        return _chapterId;
+    }
+
+    //!
+    //! Get the list of program cells in this chapter.
+    //! @return The list of program cells in this chapter.
+    //!
+    QtsDvdProgramCellList cells() const
+    {
+        return _cells;
+    }
+
+private:
+    const int             _chapterId;  //!< Chapter id in the DVD program.
+    QtsDvdProgramCellList _cells;      //!< List of cells.
+
+    // This class is responsible for building our instances.
+    friend class QtsDvdProgramChain;
+};
+
+#endif // QTSDVDPROGRAMCHAPTER_H

@@ -26,7 +26,8 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdTitleSet.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdTitleSet.
 //
 // Relevant documentation: The structure of a Video DVD is not public but
 // some useful information can be found on the Internet.
@@ -36,8 +37,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdTitleSet.h"
-#include "QtlDvdDataPull.h"
+#include "QtsDvdTitleSet.h"
+#include "QtsDvdDataPull.h"
 #include "QtlFileDataPull.h"
 #include "QtlFile.h"
 #include "QtlStringUtils.h"
@@ -68,7 +69,7 @@
 // Constructor & destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log) :
+QtsDvdTitleSet::QtsDvdTitleSet(const QString& fileName, QtlLogger* log) :
     _nullLog(),
     _log(log != 0 ? log : &_nullLog),
     _deviceName(),
@@ -90,8 +91,8 @@ QtlDvdTitleSet::QtlDvdTitleSet(const QString& fileName, QtlLogger* log) :
     }
 }
 
-QtlDvdTitleSet::
-QtlDvdTitleSet(const QtlDvdTitleSet& other) :
+QtsDvdTitleSet::
+QtsDvdTitleSet(const QtsDvdTitleSet& other) :
     _nullLog(),
     _log(other._log != 0 && other._log != &other._nullLog ? other._log : &_nullLog),
     _deviceName(other._deviceName),
@@ -115,7 +116,7 @@ QtlDvdTitleSet(const QtlDvdTitleSet& other) :
 // Clear object content.
 //----------------------------------------------------------------------------
 
-void QtlDvdTitleSet::clear()
+void QtsDvdTitleSet::clear()
 {
     _deviceName.clear();
     _volumeId.clear();
@@ -137,7 +138,7 @@ void QtlDvdTitleSet::clear()
 // Load the description of a title set.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
+bool QtsDvdTitleSet::load(const QString& fileName, const QtsDvdMedia* dvd)
 {
     // Reset previous content.
     clear();
@@ -149,9 +150,9 @@ bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
     }
 
     // Check if the files are on a DVD media.
-    // Use the provided QtlDvdMedia or open a local one.
+    // Use the provided QtsDvdMedia or open a local one.
     // Opening takes some time, so providing an already open one is faster.
-    QtlDvdMedia dvdLocal;
+    QtsDvdMedia dvdLocal;
     if (dvd == 0 || !dvd->isOpen()) {
         // Do not log errors on "dvdLocal" since the file may not be on a DVD
         // media and we do not want to log that kind of error.
@@ -167,7 +168,7 @@ bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
         _isEncrypted = dvd->isEncrypted();
 
         // Look for the starting sector of the VTS.
-        const QtlDvdFile vob(dvd->searchFile(_vobFileNames.first()));
+        const QtsDvdFile vob(dvd->searchFile(_vobFileNames.first()));
         _vobStartSector = vob.startSector();
         if (_vobStartSector < 0) {
             _log->line(QObject::tr("Cannot find start sector for %1 on %2").arg(_vobFileNames.first()).arg(_deviceName));
@@ -184,7 +185,7 @@ bool QtlDvdTitleSet::load(const QString& fileName, const QtlDvdMedia* dvd)
 // Check if a file is a .IFO or .VOB.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::isDvdTitleSetFileName(const QString& fileName)
+bool QtsDvdTitleSet::isDvdTitleSetFileName(const QString& fileName)
 {
     const QFileInfo info (fileName);
     const QString suffix(info.suffix().toUpper());
@@ -209,7 +210,7 @@ bool QtlDvdTitleSet::isDvdTitleSetFileName(const QString& fileName)
 // Build the IFO and VOB file names for the VTS.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
+bool QtsDvdTitleSet::buildFileNames(const QString& fileName)
 {
     // Only .IFO and .VOB are DVD structures.
     if (!isDvdTitleSetFileName(fileName)) {
@@ -265,7 +266,7 @@ bool QtlDvdTitleSet::buildFileNames(const QString& fileName)
 // Read the content of the VTS IFO.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::readVtsIfo()
+bool QtsDvdTitleSet::readVtsIfo()
 {
     // Read IFO file.
     QtlByteBlock ifo(QtlFile::readBinaryFile(_ifoFileName));
@@ -451,7 +452,7 @@ bool QtlDvdTitleSet::readVtsIfo()
 
     // Locat the VTS_C_ADT (Title Set Cell Address Table).
     // IFO offset of Cell Address Table (VTS_C_ADT):
-    const int cadtStart = Qtl::DVD_SECTOR_SIZE * ifo.fromBigEndian<quint32>(DVD_IFO_VTS_C_ADT_OFFSET);
+    const int cadtStart = QTS_DVD_SECTOR_SIZE * ifo.fromBigEndian<quint32>(DVD_IFO_VTS_C_ADT_OFFSET);
     int cadtEnd = 0;
     valid = cadtStart + DVD_IFO_ADT_HEADER_SIZE <= ifo.size();
     if (valid) {
@@ -472,7 +473,7 @@ bool QtlDvdTitleSet::readVtsIfo()
         const int cellId = ifo[cadtIndex + 2];
         const int first  = ifo.fromBigEndian<quint32>(cadtIndex + 4);
         const int last   = ifo.fromBigEndian<quint32>(cadtIndex + 8);
-        const QtlDvdOriginalCellPtr cell(new QtlDvdOriginalCell(vobId, cellId, QtlRange(first, last)));
+        const QtsDvdOriginalCellPtr cell(new QtsDvdOriginalCell(vobId, cellId, QtlRange(first, last)));
         _originalCells.append(cell);
     }
 
@@ -480,7 +481,7 @@ bool QtlDvdTitleSet::readVtsIfo()
     // - pgci: the relative sector VTS_PGCI, make it a byte offset from the beginning of the file.
     // - pgcCount: number of entries in the PGCI.
     // - pgcLastByte: index of last PGC byte, relative to start of PGCI.
-    const int pgciStart = Qtl::DVD_SECTOR_SIZE * ifo.fromBigEndian<quint32>(DVD_IFO_VTS_PGCI_OFFSET);
+    const int pgciStart = QTS_DVD_SECTOR_SIZE * ifo.fromBigEndian<quint32>(DVD_IFO_VTS_PGCI_OFFSET);
     int pgcCount = 0;
     int pgcLastByte = 0;
 
@@ -507,13 +508,13 @@ bool QtlDvdTitleSet::readVtsIfo()
         }
         // Read the starting offset of each PGC, relative to the start of PGCI.
         const int pgcStart = pgciStart + ifo.fromBigEndian<quint32>(descIndex + 4);
-        QtlDvdProgramChainPtr pgc(new QtlDvdProgramChain(ifo, pgcStart, titleNumber, _originalCells, _log));
+        QtsDvdProgramChainPtr pgc(new QtsDvdProgramChain(ifo, pgcStart, titleNumber, _originalCells, _log));
         valid = !pgc.isNull() && pgc->isValid();
         if (valid) {
             // Make sure the list is large enough.
             // Note that titleNumber is less than 128.
             while (_pgcs.size() < titleNumber) {
-                _pgcs << QtlDvdProgramChainPtr();
+                _pgcs << QtsDvdProgramChainPtr();
             }
             // Now set the PGC at the right index.
             _pgcs.replace(titleNumber - 1, pgc);
@@ -530,16 +531,16 @@ bool QtlDvdTitleSet::readVtsIfo()
 // Get the description of all sequential titles in the title set.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramChainList QtlDvdTitleSet::allTitles(int titleNumber) const
+QtsDvdProgramChainList QtsDvdTitleSet::allTitles(int titleNumber) const
 {
     // We must not create a loop and add the same title twice, keep track of inserted titles.
     QSet<int> numbers;
 
     // Get the "main" title.
-    QtlDvdProgramChainPtr pgc(title(titleNumber));
+    QtsDvdProgramChainPtr pgc(title(titleNumber));
 
     // Build the list containing this PGC.
-    QtlDvdProgramChainList result;
+    QtsDvdProgramChainList result;
     if (!pgc.isNull()) {
         const int next = pgc->nextTitleNumber();
 
@@ -566,10 +567,10 @@ QtlDvdProgramChainList QtlDvdTitleSet::allTitles(int titleNumber) const
 // Get the duration of all sequential titles (or program chain, or PGC) in the title set.
 //----------------------------------------------------------------------------
 
-int QtlDvdTitleSet::allTitlesDurationInSeconds(int titleNumber) const
+int QtsDvdTitleSet::allTitlesDurationInSeconds(int titleNumber) const
 {
     int duration = 0;
-    foreach (const QtlDvdProgramChainPtr& pgc, allTitles(titleNumber)) {
+    foreach (const QtsDvdProgramChainPtr& pgc, allTitles(titleNumber)) {
         if (!pgc.isNull()) {
             duration += pgc->durationInSeconds();
         }
@@ -582,7 +583,7 @@ int QtlDvdTitleSet::allTitlesDurationInSeconds(int titleNumber) const
 // Get the longest duration of all sets of sequential titles in the title set.
 //----------------------------------------------------------------------------
 
-int QtlDvdTitleSet::longestDurationInSeconds() const
+int QtsDvdTitleSet::longestDurationInSeconds() const
 {
     int longest = 0;
     for (int i = 1; i <= titleCount(); ++i) {
@@ -596,7 +597,7 @@ int QtlDvdTitleSet::longestDurationInSeconds() const
 // Compare two QtlMediaStreamInfoPtr for DVD stream ordering.
 //----------------------------------------------------------------------------
 
-bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2)
+bool QtsDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStreamInfoPtr& p2)
 {
     // A null pointer is always less than a non null pointer.
     if (p1.isNull() || p2.isNull()) {
@@ -627,23 +628,23 @@ bool QtlDvdTitleSet::lessThan(const QtlMediaStreamInfoPtr& p1, const QtlMediaStr
 // Create a QtlDataPull to transfer of the video content of the title set.
 //----------------------------------------------------------------------------
 
-QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useMaxReadSpeed, const QtlRangeList& sectorList) const
+QtlDataPull* QtsDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useMaxReadSpeed, const QtlRangeList& sectorList) const
 {
     QtlDataPull* writer;
     QtlRangeList sectors(sectorList);
 
     if (_isEncrypted) {
-        // If the DVD is encrypted, use QtlDvdDataPull.
+        // If the DVD is encrypted, use QtsDvdDataPull.
         // Sector numbering start a beginning of DVD, add the offset of the first VOB.
         // Remember that all VOB's of a given VTS are contiguous on disk.
         sectors.add(_vobStartSector);
         log->debug(QObject::tr("Extracting DVD sectors %1").arg(sectors.toString()));
 
         // When ripping files, we skip bad sectors.
-        writer = new QtlDvdDataPull(_deviceName,
+        writer = new QtsDvdDataPull(_deviceName,
                                     sectors,
-                                    Qtl::SkipBadSectors,
-                                    Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+                                    Qts::SkipBadSectors,
+                                    QTS_DEFAULT_DVD_TRANSFER_SIZE,
                                     QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
                                     log,
                                     parent,
@@ -652,7 +653,7 @@ QtlDataPull* QtlDvdTitleSet::dataPull(QtlLogger* log, QObject* parent, bool useM
     else {
         // Non-encrypted DVD or not a DVD, use file transfer.
         // Transform sector ranges into bytes ranges.
-        sectors.scale(Qtl::DVD_SECTOR_SIZE);
+        sectors.scale(QTS_DVD_SECTOR_SIZE);
 
         // Build a list of files to read.
         QtlFileSlicesPtrList files;

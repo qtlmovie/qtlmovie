@@ -64,6 +64,6 @@ if [[ -z "$PROJ" ]]; then
     "$LINGUIST"
 else
     cd $(dirname "$PROJ")
-    lupdate -no-obsolete "$PROJ"
+    lupdate -locations absolute -no-obsolete "$PROJ"
     "$LINGUIST" $(find . -name '*.ts')
 fi

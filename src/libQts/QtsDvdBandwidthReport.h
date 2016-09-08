@@ -26,23 +26,23 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdBandwidthReport.h
+//! @file QtsDvdBandwidthReport.h
 //!
-//! Declare the class QtlDvdBandwidthReport.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdBandwidthReport.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDBANDWIDTHREPORT_H
-#define QTLDVDBANDWIDTHREPORT_H
+#ifndef QTSDVDBANDWIDTHREPORT_H
+#define QTSDVDBANDWIDTHREPORT_H
 
 #include "QtlLogger.h"
-#include "QtlDvd.h"
+#include "QtsDvd.h"
 
 //!
 //! A utility class to report transfer bandwidth on DVD media.
 //!
-class QtlDvdBandwidthReport
+class QtsDvdBandwidthReport
 {
 public:
     //!
@@ -50,7 +50,7 @@ public:
     //! @param [in] reportInterval Interval in milli-seconds between bandwidth reporting.
     //! @param [in] log Where to report messages.
     //!
-    QtlDvdBandwidthReport(int reportInterval, QtlLogger* log);
+    QtsDvdBandwidthReport(int reportInterval, QtlLogger* log);
 
     //!
     //! Start the transfer.
@@ -60,7 +60,7 @@ public:
     //!
     //! Declare the transfer of sectors from DVD media.
     //! If it is time to report the bandwidth, a message is logged.
-    //! @param [in] sectorCounr Number of sectors transfered.
+    //! @param [in] sectorCount Number of sectors transfered.
     //!
     void transfered(int sectorCount);
 
@@ -76,7 +76,7 @@ public:
     //! @param [in] flags A set of flags to specify the format.
     //! @return A human readable string.
     //!
-    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, Qtl::TransferRateFlags flags = Qtl::TransferDvdBase);
+    static QString transferRateToString(qint64 bytes, qint64 milliSeconds, Qts::TransferRateFlags flags = Qts::TransferDvdBase);
 
 private:
     QtlLogger* _log;            //!< Where to log the messages.
@@ -88,4 +88,4 @@ private:
     int        _reportInterval; //!< Interval in milli-seconds between bandwidth reporting.
 };
 
-#endif // QTLDVDBANDWIDTHREPORT_H
+#endif // QTSDVDBANDWIDTHREPORT_H

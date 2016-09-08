@@ -26,23 +26,80 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlDvdProgramCell.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdFile.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdProgramCell.h"
+#include "QtsDvdFile.h"
+#include "QtsDvdMedia.h"
 
 
 //----------------------------------------------------------------------------
-// Constructor.
+// Constructor and destructor.
 //----------------------------------------------------------------------------
 
-QtlDvdProgramCell::QtlDvdProgramCell(int id) :
-    _cellId(id),
-    _angleId(0),
-    _originalVobId(0),
-    _originalCellId(0),
-    _duration(0),
-    _sectors()
+QtsDvdFile::QtsDvdFile(const QString& path, int startSector, int sizeInBytes) :
+    _path(path),
+    _sector(startSector),
+    _size(sizeInBytes)
 {
+}
+
+QtsDvdFile::~QtsDvdFile()
+{
+}
+
+
+//----------------------------------------------------------------------------
+// Get the file characteristics.
+//----------------------------------------------------------------------------
+
+QString QtsDvdFile::name() const
+{
+    return _path.isEmpty() ? QString() : QFileInfo(_path).fileName();
+}
+
+QString QtsDvdFile::description() const
+{
+    return _path.isEmpty() ? "metadata" : _path;
+}
+
+int QtsDvdFile::sectorCount() const
+{
+    return _size / QTS_DVD_SECTOR_SIZE + int(_size % QTS_DVD_SECTOR_SIZE > 0);
+}
+
+
+bool QtsDvdFile::isVob() const
+{
+    return _path.endsWith(".VOB", Qt::CaseInsensitive);
+}
+
+
+//----------------------------------------------------------------------------
+// Clear the content of this object.
+//----------------------------------------------------------------------------
+
+void QtsDvdFile::clear()
+{
+    _path.clear();
+    _sector = -1;
+    _size = 0;
+}
+
+
+//----------------------------------------------------------------------------
+// Operator "less than" on QtsDvdFilePtr to sort files.
+//----------------------------------------------------------------------------
+
+bool operator<(const QtsDvdFilePtr& f1, const QtsDvdFilePtr& f2)
+{
+    // Null pointers preceeds everything.
+    if (!f1.isNull() && !f2.isNull()) {
+        return *f1 < *f2;
+    }
+    else {
+        return !f2.isNull();
+    }
 }

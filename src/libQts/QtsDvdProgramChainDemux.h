@@ -26,27 +26,28 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdProgramChainDemux.h
+//! @file QtsDvdProgramChainDemux.h
 //!
-//! Declare the class QtlDvdProgramChainDemux.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdProgramChainDemux.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDPROGRAMCHAINDEMUX_H
-#define QTLDVDPROGRAMCHAINDEMUX_H
+#ifndef QTSDVDPROGRAMCHAINDEMUX_H
+#define QTSDVDPROGRAMCHAINDEMUX_H
 
 #include "QtlDataPull.h"
 #include "QtlByteBlock.h"
-#include "QtlDvdTitleSet.h"
-#include "QtlDvdBandwidthReport.h"
+#include "QtsDvdTitleSet.h"
+#include "QtsDvdBandwidthReport.h"
+#include "QtsDvd.h"
 
 //!
 //! A class to demultiplex a Program Chain (PGC) from a DVD Video Title Set (VTS).
 //! This class pulls data from either an encrypted DVD or regular VTS files into asynchronous devices such as QProcess.
 //! @see QtlDataPull
 //!
-class QtlDvdProgramChainDemux : public QtlDataPull
+class QtsDvdProgramChainDemux : public QtlDataPull
 {
     Q_OBJECT
 
@@ -69,13 +70,13 @@ public:
     //! @param [in] parent Optional parent object.
     //! @param [in] useMaxReadSpeed If true, try to set the DVD reader to maximum speed.
     //!
-    QtlDvdProgramChainDemux(const QtlDvdTitleSet& vts,
+    QtsDvdProgramChainDemux(const QtsDvdTitleSet& vts,
                             int pgcNumber,
                             int angleNumber,
                             int fallbackPgcNumber = 0,
-                            int transferSize = Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+                            int transferSize = QTS_DEFAULT_DVD_TRANSFER_SIZE,
                             int minBufferSize = DEFAULT_MIN_BUFFER_SIZE,
-                            Qtl::DvdDemuxPolicy demuxPolicy = Qtl::NavPacksFixed,
+                            Qts::DvdDemuxPolicy demuxPolicy = Qts::NavPacksFixed,
                             QtlLogger* log = 0,
                             QObject* parent = 0,
                             bool useMaxReadSpeed = false);
@@ -168,7 +169,7 @@ private:
         //! Initialize the walk through the list of sectors.
         //! @param [in] pgc PGC description.
         //!
-        void initialize(const QtlDvdProgramChainPtr& pgc);
+        void initialize(const QtsDvdProgramChainPtr& pgc);
         //!
         //! Get current sector address to read.
         //! @return Current sector address to read, -1 at end of sector list.
@@ -193,7 +194,7 @@ private:
 
     private:
         QtlLogger*            _log;            //!< Message logger.
-        QtlDvdProgramCellList _cells;          //!< List of PGC cells.
+        QtsDvdProgramCellList _cells;          //!< List of PGC cells.
         int                   _currentCell;    //!< Index of current cell in _cells.
         QtlRangeList          _ranges;         //!< List of sector ranges in current cell.
         int                   _currentRange;   //!< Index of current range in _rangeList.
@@ -203,24 +204,24 @@ private:
     //
     // Private members
     //
-    const QtlDvdTitleSet   _vts;             //!< Title set to demux.
-    QtlDvdProgramChainPtr  _pgc;             //!< PGC to demux.
+    const QtsDvdTitleSet   _vts;             //!< Title set to demux.
+    QtsDvdProgramChainPtr  _pgc;             //!< PGC to demux.
     const int              _angleNumber;     //!< Angle to demux.
-    Qtl::DvdDemuxPolicy    _demuxPolicy;     //!< Management policy for navigation packs.
+    Qts::DvdDemuxPolicy    _demuxPolicy;     //!< Management policy for navigation packs.
     const int              _sectorChunk;     //!< Number of sectors per transfer.
     const bool             _maxReadSpeed;    //!< Set the DVD reader to maximum speed.
     int                    _vobStartSector;  //!< First sector of VOB files on DVD media.
     QtlByteBlock           _buffer;          //!< Transfer buffer.
     InputSectors           _inputSectors;    //!< Computation of input sectors to read.
-    QtlDvdMedia            _dvd;             //!< Access through DVD media.
+    QtsDvdMedia            _dvd;             //!< Access through DVD media.
     VobFileSet             _vobs;            //!< Access through VOB files.
-    QtlDvdBandwidthReport  _report;          //!< To report transfer bandwidth.
+    QtsDvdBandwidthReport  _report;          //!< To report transfer bandwidth.
     bool                   _inPgcContent;    //!< True if current sectors are part of the PGC content.
     int                    _writtenSectors;  //!< Number of written sectors.
 
     // Unaccessible operations.
-    QtlDvdProgramChainDemux() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlDvdProgramChainDemux)
+    QtsDvdProgramChainDemux() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(QtsDvdProgramChainDemux)
 };
 
-#endif // QTLDVDPROGRAMCHAINDEMUX_H
+#endif // QTSDVDPROGRAMCHAINDEMUX_H

@@ -294,7 +294,7 @@ void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
         QtlMediaStreamInfo::merge(_streams, _dvdTitleSet.streams());
 
         // Sort streams in the DVD order for user's convenience.
-        qSort(_streams.begin(), _streams.end(), QtlDvdTitleSet::lessThan);
+        qSort(_streams.begin(), _streams.end(), QtsDvdTitleSet::lessThan);
     }
 
     // Is the file a transport stream, a pure subtitle file?

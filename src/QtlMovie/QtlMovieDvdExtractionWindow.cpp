@@ -36,7 +36,7 @@
 #include "QtlProcess.h"
 #include "QtlStringList.h"
 #include "QtlStringUtils.h"
-#include "QtlDvdTitleSet.h"
+#include "QtsDvdTitleSet.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlTableWidgetUtils.h"
 #include "QtlCheckableHeaderView.h"
@@ -214,9 +214,9 @@ void QtlMovieDvdExtractionWindow::extractionUpdateUi(bool started)
 // Get the currently selected DVD.
 //-----------------------------------------------------------------------------
 
-QtlDvdMediaPtr QtlMovieDvdExtractionWindow::currentDvd() const
+QtsDvdMediaPtr QtlMovieDvdExtractionWindow::currentDvd() const
 {
-    return _ui.comboDvd->count() > 0 ? _ui.comboDvd->currentData().value<QtlDvdMediaPtr>() : QtlDvdMediaPtr();
+    return _ui.comboDvd->count() > 0 ? _ui.comboDvd->currentData().value<QtsDvdMediaPtr>() : QtsDvdMediaPtr();
 }
 
 
@@ -258,7 +258,7 @@ void QtlMovieDvdExtractionWindow::refreshDvdList()
         // name is OS-dependent. We "assume" here that the name contains "UDF".
         if (si.isReadOnly() && QString(si.fileSystemType()).contains(QStringLiteral("udf"), Qt::CaseInsensitive)) {
             // This is maybe a DVD. Maybe. Let's try to open it.
-            QtlDvdMediaPtr dvd(new QtlDvdMedia(si.rootPath(), log(), this));
+            QtsDvdMediaPtr dvd(new QtsDvdMedia(si.rootPath(), log(), this));
             if (dvd->isOpen()) {
                 // This is a DVD, keep it.
                 _dvdList << dvd;
@@ -286,7 +286,7 @@ void QtlMovieDvdExtractionWindow::refreshDvdList()
         // Otherwise, select the first DVD.
         _ui.comboDvd->setCurrentIndex(0);
         // Preset the ISO file name at the volume id.
-        QtlDvdMediaPtr dvd(_ui.comboDvd->currentData().value<QtlDvdMediaPtr>());
+        QtsDvdMediaPtr dvd(_ui.comboDvd->currentData().value<QtsDvdMediaPtr>());
         if (!dvd.isNull()) {
             _ui.editIsoFile->setText(dvd->volumeId());
         }
@@ -304,7 +304,7 @@ void QtlMovieDvdExtractionWindow::refreshVtsList()
     _ui.tableTitleSets->setRowCount(0);
 
     // Get selected DVD.
-    const QtlDvdMediaPtr dvd(currentDvd());
+    const QtsDvdMediaPtr dvd(currentDvd());
     if (dvd.isNull()) {
         return;
     }
@@ -313,7 +313,7 @@ void QtlMovieDvdExtractionWindow::refreshVtsList()
     for (int vtsNumber = 1; vtsNumber <= dvd->vtsCount(); ++vtsNumber) {
 
         // Get the description of the VTS.
-        QtlDvdTitleSetPtr vts(new QtlDvdTitleSet(QString(), log()));
+        QtsDvdTitleSetPtr vts(new QtsDvdTitleSet(QString(), log()));
         if (!vts->load(dvd->vtsInformationFileName(vtsNumber), &*dvd)) {
             // Cannot open VTS, strange, skip it.
             log()->line(tr("Cannot open video title set %1").arg(vtsNumber));
@@ -342,7 +342,7 @@ void QtlMovieDvdExtractionWindow::refreshFilesList()
     _ui.tableFiles->setRowCount(0);
 
     // Get selected DVD.
-    const QtlDvdMediaPtr dvd(currentDvd());
+    const QtsDvdMediaPtr dvd(currentDvd());
     if (dvd.isNull()) {
         return;
     }
@@ -356,10 +356,10 @@ void QtlMovieDvdExtractionWindow::refreshFilesList()
 // Add a tree of files and directories in the table of files.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdExtractionWindow::addDirectoryTree(const QtlDvdDirectory& dir)
+void QtlMovieDvdExtractionWindow::addDirectoryTree(const QtsDvdDirectory& dir)
 {
     // First, add local files in current directory.
-    foreach (const QtlDvdFilePtr& file, dir.files()) {
+    foreach (const QtsDvdFilePtr& file, dir.files()) {
         if (!file.isNull()) {
 
             // Items: check box, file path, file size.
@@ -374,7 +374,7 @@ void QtlMovieDvdExtractionWindow::addDirectoryTree(const QtlDvdDirectory& dir)
     }
 
     // Then, add subdirectory trees.
-    foreach (const QtlDvdDirectoryPtr& subdir, dir.subDirectories()) {
+    foreach (const QtsDvdDirectoryPtr& subdir, dir.subDirectories()) {
         if (!subdir.isNull()) {
             addDirectoryTree(*subdir);
         }
@@ -395,7 +395,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
     }
 
     // Get currently selected DVD.
-    QtlDvdMediaPtr dvd(currentDvd());
+    QtsDvdMediaPtr dvd(currentDvd());
     if (dvd.isNull() || !dvd->isOpen()) {
         log()->line(tr("No DVD found, try to refresh"));
         return;
@@ -409,7 +409,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
         case QTL_TAB_ISO: {
             // Only one big file to extract.
             // We replace bad sectors by zeroes to preserve the media layout.
-            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors(), Qtl::ReadBadSectorsAsZero);
+            _extraction->addFile(_ui.valueFullPath->text(), 0, dvd->volumeSizeInSectors(), Qts::ReadBadSectorsAsZero);
             break;
         }
         case QTL_TAB_VTS: {
@@ -422,7 +422,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
                 if (item1 != 0 && item1->checkState() == Qt::Checked && item2 != 0) {
                     // We need to extract this title set.
                     // The first cell is used to store the title set description.
-                    const QtlDvdTitleSetPtr vts(item1->data(Qt::UserRole).value<QtlDvdTitleSetPtr>());
+                    const QtsDvdTitleSetPtr vts(item1->data(Qt::UserRole).value<QtsDvdTitleSetPtr>());
                     const int vtsNumber = qtlToInt(item2->text());
                     if (!vts.isNull() && vtsNumber > 0) {
                         addFileForExtraction(dvd->vtsInformationFile(vtsNumber));
@@ -442,7 +442,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
                 if (item1 != 0 && item1->checkState() == Qt::Checked) {
                     // We need to extract this file.
                     // The first cell is used to store the file description.
-                    const QtlDvdFilePtr file(item1->data(Qt::UserRole).value<QtlDvdFilePtr>());
+                    const QtsDvdFilePtr file(item1->data(Qt::UserRole).value<QtsDvdFilePtr>());
                     addFileForExtraction(*file);
                 }
             }
@@ -489,7 +489,7 @@ void QtlMovieDvdExtractionWindow::startExtraction()
 // Add a file in the current extraction.
 //-----------------------------------------------------------------------------
 
-void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtlDvdFile& file)
+void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtsDvdFile& file)
 {
     // Check the validity of the file.
     if (file.startSector() < 0) {
@@ -512,7 +512,7 @@ void QtlMovieDvdExtractionWindow::addFileForExtraction(const QtlDvdFile& file)
     // Add the file.
     if (_extraction != 0) {
         // When ripping files, we skip bad sectors.
-        _extraction->addFile(outputPath, file.startSector(), file.sectorCount(), Qtl::SkipBadSectors);
+        _extraction->addFile(outputPath, file.startSector(), file.sectorCount(), Qts::SkipBadSectors);
     }
 }
 

@@ -31,8 +31,8 @@
 //----------------------------------------------------------------------------
 
 #include "QtlTestCommand.h"
-#include "QtlDvdMedia.h"
-#include "QtlDvdBandwidthReport.h"
+#include "QtsDvdMedia.h"
+#include "QtsDvdBandwidthReport.h"
 
 class QtlTestDvdRead : public QtlTestCommand
 {
@@ -54,7 +54,7 @@ int QtlTestDvdRead::run(const QStringList& args)
     const QString deviceName(args[0]);
 
     // Open libdvdcss
-    QtlDvdMedia dvd(QString(), &log);
+    QtsDvdMedia dvd(QString(), &log);
     if (!dvd.openFromDevice(deviceName, true)) {
         out << "Cannot initialize libdvdcss on " << deviceName << endl;
         return EXIT_FAILURE;
@@ -78,7 +78,7 @@ int QtlTestDvdRead::run(const QStringList& args)
     const int sectorsPerRead = 256;
     const int reportInterval = 50000;
 
-    char buffer[sectorsPerRead * Qtl::DVD_SECTOR_SIZE];
+    char buffer[sectorsPerRead * QTS_DVD_SECTOR_SIZE];
     int nextReport = reportInterval;
     int currentSector = 0;
     int lastInstantSector = 0;
@@ -112,15 +112,15 @@ void QtlTestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& tim
 {
     const int msAverage = timeAverage.elapsed();
     const int msInstant = timeInstant.elapsed();
-    const qint64 totalBytes = qint64(sectorCount) * Qtl::DVD_SECTOR_SIZE;
-    const qint64 instantBytes = qint64(instantSectorCount) * Qtl::DVD_SECTOR_SIZE;
+    const qint64 totalBytes = qint64(sectorCount) * QTS_DVD_SECTOR_SIZE;
+    const qint64 instantBytes = qint64(instantSectorCount) * QTS_DVD_SECTOR_SIZE;
 
     if (msAverage > 0) {
         out << "Transfer bandwidth after " << sectorCount << " sectors: ";
         if (msInstant > 0) {
-            out << QtlDvdBandwidthReport::transferRateToString(instantBytes, msInstant, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << ", ";
+            out << QtsDvdBandwidthReport::transferRateToString(instantBytes, msInstant, Qts::TransferDvdBase | Qts::TransferKiloBytes) << ", ";
         }
-        out << "average: " << QtlDvdBandwidthReport::transferRateToString(totalBytes, msAverage, Qtl::TransferDvdBase | Qtl::TransferKiloBytes) << endl;
+        out << "average: " << QtsDvdBandwidthReport::transferRateToString(totalBytes, msAverage, Qts::TransferDvdBase | Qts::TransferKiloBytes) << endl;
     }
 }
 

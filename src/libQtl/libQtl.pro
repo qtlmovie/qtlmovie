@@ -37,8 +37,6 @@ TARGET = Qtl
 TEMPLATE = lib
 CONFIG += staticlib
 
-INCLUDEPATH += ../libdvdcss/include
-
 SOURCES += \
     QtlByteBlock.cpp \
     QtlFile.cpp \
@@ -76,30 +74,19 @@ SOURCES += \
     QtlOpticalDrive.cpp \
     QtlSynchronousProcess.cpp \
     QtlMediaStreamInfo.cpp \
-    QtlDvdTitleSet.cpp \
     QtlDataPull.cpp \
-    QtlDvdDataPull.cpp \
     QtlFileDataPull.cpp \
-    QtlDvdMedia.cpp \
-    QtlDvdDirectory.cpp \
     QtlLayoutUtils.cpp \
     QtlCheckableHeaderView.cpp \
     QtlFileDialogUtils.cpp \
-    QtlDvdFile.cpp \
     QtlSubRipGenerator.cpp \
     QtlSubStationAlphaParser.cpp \
     QtlSubStationAlphaStyle.cpp \
     QtlSubStationAlphaFrame.cpp \
     QtlRangeList.cpp \
     QtlRange.cpp \
-    QtlDvdProgramChain.cpp \
     QtlFileSlices.cpp \
-    QtlDataPullSynchronousWrapper.cpp \
-    QtlDvdOriginalCell.cpp \
-    QtlDvdProgramCell.cpp \
-    QtlDvdProgramChapter.cpp \
-    QtlDvdBandwidthReport.cpp \
-    QtlDvdProgramChainDemux.cpp
+    QtlDataPullSynchronousWrapper.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -159,14 +146,9 @@ HEADERS += \
     QtlOpticalDrive.h \
     QtlSynchronousProcess.h \
     QtlMediaStreamInfo.h \
-    QtlDvdTitleSet.h \
     QtlStdoutLogger.h \
     QtlDataPull.h \
-    QtlDvdDataPull.h \
     QtlFileDataPull.h \
-    QtlDvdMedia.h \
-    QtlDvdFile.h \
-    QtlDvdDirectory.h \
     QtlLayoutUtils.h \
     QtlCheckableHeaderView.h \
     QtlFileDialogUtils.h \
@@ -176,15 +158,8 @@ HEADERS += \
     QtlSubStationAlphaFrame.h \
     QtlRange.h \
     QtlRangeList.h \
-    QtlDvdProgramChain.h \
-    QtlDvd.h \
     QtlFileSlices.h \
-    QtlDataPullSynchronousWrapper.h \
-    QtlDvdOriginalCell.h \
-    QtlDvdProgramCell.h \
-    QtlDvdProgramChapter.h \
-    QtlDvdBandwidthReport.h \
-    QtlDvdProgramChainDemux.h
+    QtlDataPullSynchronousWrapper.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

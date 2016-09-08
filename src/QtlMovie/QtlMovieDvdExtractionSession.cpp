@@ -62,7 +62,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
                                                      int startSector,
                                                      int sectorCount,
                                                      bool useMaxReadSpeed,
-                                                     Qtl::BadSectorPolicy badSectorPolicy,
+                                                     Qts::BadSectorPolicy badSectorPolicy,
                                                      QtlLogger* log) :
     totalSectors(sectorCount),
     file(outputFileName),
@@ -70,7 +70,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
              startSector,
              sectorCount,
              badSectorPolicy,
-             Qtl::DEFAULT_DVD_TRANSFER_SIZE,
+             QTS_DEFAULT_DVD_TRANSFER_SIZE,
              QtlDataPull::DEFAULT_MIN_BUFFER_SIZE,
              log,
              0,
@@ -86,7 +86,7 @@ QtlMovieDvdExtractionSession::OutputFile::OutputFile(const QString& outputFileNa
 void QtlMovieDvdExtractionSession::addFile(const QString& outputFileName,
                                            int startSector,
                                            int sectorCount,
-                                           Qtl::BadSectorPolicy badSectorPolicy)
+                                           Qts::BadSectorPolicy badSectorPolicy)
 {
     // Cannot do that after start.
     if (isStarted()) {
@@ -256,7 +256,7 @@ void QtlMovieDvdExtractionSession::abort()
 void QtlMovieDvdExtractionSession::dataPullProgressed(qint64 current, qint64 maximum)
 {
     // Number of sectors from previous transfers plus sectors in current transfer.
-    emitProgress(_completedSectors + int(current / Qtl::DVD_SECTOR_SIZE), _totalSectors);
+    emitProgress(_completedSectors + int(current / QTS_DVD_SECTOR_SIZE), _totalSectors);
 }
 
 

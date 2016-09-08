@@ -26,52 +26,52 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdOriginalCell.h
+//! @file QtsDvdOriginalCell.h
 //!
-//! Declare the class QtlDvdOriginalCell.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdOriginalCell.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDORIGINALCELL_H
-#define QTLDVDORIGINALCELL_H
+#ifndef QTSDVDORIGINALCELL_H
+#define QTSDVDORIGINALCELL_H
 
-#include "QtlCore.h"
+#include "QtsDvd.h"
 #include "QtlRange.h"
 #include "QtlSmartPointer.h"
 
-class QtlDvdOriginalCell;
+class QtsDvdOriginalCell;
 
 //!
-//! Smart pointer to QtlDvdOriginalCell, non thread-safe.
+//! Smart pointer to QtsDvdOriginalCell, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdOriginalCell,QtlNullMutexLocker> QtlDvdOriginalCellPtr;
-Q_DECLARE_METATYPE(QtlDvdOriginalCellPtr)
+typedef QtlSmartPointer<QtsDvdOriginalCell,QtlNullMutexLocker> QtsDvdOriginalCellPtr;
+Q_DECLARE_METATYPE(QtsDvdOriginalCellPtr)
 
 //!
-//! List of smart pointers to QtlDvdOriginalCell, non thread-safe.
+//! List of smart pointers to QtsDvdOriginalCell, non thread-safe.
 //!
-typedef QList<QtlDvdOriginalCellPtr> QtlDvdOriginalCellList;
+typedef QList<QtsDvdOriginalCellPtr> QtsDvdOriginalCellList;
 
 //!
 //! A class describing a cell inside the original input VOB's of a DVD, before DVD production.
 //!
 //! This is different from the cells inside a Program Chain which describe a cell inside the VOB files of the DVD.
-//! @see QtlDvdProgramCell
+//! @see QtsDvdProgramCell
 //!
-class QtlDvdOriginalCell
+class QtsDvdOriginalCell
 {
 public:
     //!
     //! Constructor.
-    //! @param [in@ vobId Original VOB id inside the original input files.
+    //! @param [in] vobId Original VOB id inside the original input files.
     //! Valid VOD id values start at 1.
-    //! @param [in@ cellId Original cell id inside the original input files.
+    //! @param [in] cellId Original cell id inside the original input files.
     //! Valid cell id values start at 1.
-    //! @param [in@ sectors Range of sectors on DVD for this cell.
+    //! @param [in] sectors Range of sectors on DVD for this cell.
     //! Sector zero is the first sector of the corresponding VTS_nn_1.VOB.
     //!
-    explicit QtlDvdOriginalCell(int vobId = 0, int cellId = 0, const QtlRange& sectors = QtlRange());
+    explicit QtsDvdOriginalCell(int vobId = 0, int cellId = 0, const QtlRange& sectors = QtlRange());
 
     //!
     //! Get the original VOB id inside the original input files, before DVD production.
@@ -110,4 +110,4 @@ private:
     QtlRange _sectors;        //!< Range of sectors on DVD for this cell.
 };
 
-#endif // QTLDVDORIGINALCELL_H
+#endif // QTSDVDORIGINALCELL_H

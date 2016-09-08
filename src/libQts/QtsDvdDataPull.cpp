@@ -26,28 +26,28 @@
 //
 //----------------------------------------------------------------------------
 //
-// Qtl, Qt utility library.
-// Define the class QtlDvdDataPull.
+// Qts, the Qt MPEG Transport Stream library.
+// Define the class QtsDvdDataPull.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlDvdDataPull.h"
+#include "QtsDvdDataPull.h"
 
 
 //----------------------------------------------------------------------------
 // Constructors.
 //----------------------------------------------------------------------------
 
-QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
+QtsDvdDataPull::QtsDvdDataPull(const QString& deviceName,
                                int startSector,
                                int sectorCount,
-                               Qtl::BadSectorPolicy badSectorPolicy,
+                               Qts::BadSectorPolicy badSectorPolicy,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
                                QObject* parent,
                                bool useMaxReadSpeed) :
-    QtlDvdDataPull(deviceName,
+    QtsDvdDataPull(deviceName,
                    QtlRangeList(QtlRange(startSector, startSector + sectorCount - 1)),
                    badSectorPolicy,
                    transferSize,
@@ -59,9 +59,9 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
 }
 
 
-QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
+QtsDvdDataPull::QtsDvdDataPull(const QString& deviceName,
                                const QtlRangeList sectorList,
-                               Qtl::BadSectorPolicy badSectorPolicy,
+                               Qts::BadSectorPolicy badSectorPolicy,
                                int transferSize,
                                int minBufferSize,
                                QtlLogger* log,
@@ -71,17 +71,17 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
     _deviceName(deviceName),
     _sectorList(sectorList),
     _badSectorPolicy(badSectorPolicy),
-    _sectorChunk(qMax(1, transferSize / Qtl::DVD_SECTOR_SIZE)),
+    _sectorChunk(qMax(1, transferSize / QTS_DVD_SECTOR_SIZE)),
     _maxReadSpeed(useMaxReadSpeed),
     _currentRange(_sectorList.begin()),
     _nextSector(-1),
-    _buffer(_sectorChunk * Qtl::DVD_SECTOR_SIZE),
+    _buffer(_sectorChunk * QTS_DVD_SECTOR_SIZE),
     _dvd(QString(), log),
     _report(30000, log) // report transfer bandwidth every 30 seconds.
 {
     // Set total transfer size in bytes. In case of ignored bad sectors, the
     // total size will be slightly smaller, but this is just a hint.
-    setProgressMaxHint(_sectorList.totalValueCount() * Qtl::DVD_SECTOR_SIZE);
+    setProgressMaxHint(_sectorList.totalValueCount() * QTS_DVD_SECTOR_SIZE);
 
     // Set progress interval: every 1 MB.
     setProgressIntervalInBytes(1024 * 1024);
@@ -92,7 +92,7 @@ QtlDvdDataPull::QtlDvdDataPull(const QString& deviceName,
 // Initialize the transfer.
 //----------------------------------------------------------------------------
 
-bool QtlDvdDataPull::initializeTransfer()
+bool QtsDvdDataPull::initializeTransfer()
 {
     // Filter invalid initial parameters and initialize DVD access.
     if (_dvd.isOpen() || _deviceName.isEmpty() ||!_dvd.openFromDevice(_deviceName, _maxReadSpeed)) {
@@ -114,7 +114,7 @@ bool QtlDvdDataPull::initializeTransfer()
 // Invoked when more data is needed.
 //----------------------------------------------------------------------------
 
-bool QtlDvdDataPull::needTransfer(qint64 maxSize)
+bool QtsDvdDataPull::needTransfer(qint64 maxSize)
 {
     // Move forward in sector list until we find something to read.
     while (_currentRange != _sectorList.end()) {
@@ -151,7 +151,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     // Compute maximum number of sectors to read.
     int count = qMin<int>(_sectorChunk, _currentRange->last() - _nextSector + 1);
     if (maxSize >= 0) {
-        count = qMin(count, int(maxSize / Qtl::DVD_SECTOR_SIZE));
+        count = qMin(count, int(maxSize / QTS_DVD_SECTOR_SIZE));
     }
     if (count <= 0) {
         return true;
@@ -165,7 +165,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
     _report.transfered(count);
 
     // Write sectors.
-    return write(_buffer.data(), count * Qtl::DVD_SECTOR_SIZE);
+    return write(_buffer.data(), count * QTS_DVD_SECTOR_SIZE);
 }
 
 
@@ -173,7 +173,7 @@ bool QtlDvdDataPull::needTransfer(qint64 maxSize)
 // Cleanup the transfer.
 //----------------------------------------------------------------------------
 
-void QtlDvdDataPull::cleanupTransfer(bool clean)
+void QtsDvdDataPull::cleanupTransfer(bool clean)
 {
     _report.reportBandwidth();
     _dvd.close();

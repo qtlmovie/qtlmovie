@@ -36,7 +36,7 @@
 #ifndef QTSCORE_H
 #define QTSCORE_H
 
-#include <QtCore>
+#include "QtlCore.h"
 #include <bitset>
 
 

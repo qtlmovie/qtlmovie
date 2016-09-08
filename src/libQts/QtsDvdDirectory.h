@@ -26,30 +26,30 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlDvdDirectory.h
+//! @file QtsDvdDirectory.h
 //!
-//! Declare the class QtlDvdDirectory.
-//! Qtl, Qt utility library.
+//! Declare the class QtsDvdDirectory.
+//! Qts, the Qt MPEG Transport Stream library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLDVDDIRECTORY_H
-#define QTLDVDDIRECTORY_H
+#ifndef QTSDVDDIRECTORY_H
+#define QTSDVDDIRECTORY_H
 
-#include "QtlDvdFile.h"
+#include "QtsDvdFile.h"
 
-class QtlDvdDirectory;
+class QtsDvdDirectory;
 
 //!
-//! Smart pointer to QtlDvdDirectory, non thread-safe.
+//! Smart pointer to QtsDvdDirectory, non thread-safe.
 //!
-typedef QtlSmartPointer<QtlDvdDirectory,QtlNullMutexLocker> QtlDvdDirectoryPtr;
-Q_DECLARE_METATYPE(QtlDvdDirectoryPtr)
+typedef QtlSmartPointer<QtsDvdDirectory,QtlNullMutexLocker> QtsDvdDirectoryPtr;
+Q_DECLARE_METATYPE(QtsDvdDirectoryPtr)
 
 //!
 //! A class which describes a directory on DVD.
 //!
-class QtlDvdDirectory : public QtlDvdFile
+class QtsDvdDirectory : public QtsDvdFile
 {
 public:
     //!
@@ -58,18 +58,18 @@ public:
     //! @param [in] startSector First sector on DVD media.
     //! @param [in] sizeInBytes Size in bytes.
     //!
-    QtlDvdDirectory(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
+    QtsDvdDirectory(const QString& path = QString(), int startSector = -1, int sizeInBytes = 0);
 
     //!
     //! Virtual destructor.
     //!
-    virtual ~QtlDvdDirectory();
+    virtual ~QtsDvdDirectory();
 
     //!
     //! Get the list of all subdirectories in this directory.
     //! @return The list of all subdirectories in this directory.
     //!
-    QList<QtlDvdDirectoryPtr> subDirectories() const
+    QList<QtsDvdDirectoryPtr> subDirectories() const
     {
         return _subDirectories;
     }
@@ -78,7 +78,7 @@ public:
     //! Get the list of all files in this directory.
     //! @return The list of all files in this directory.
     //!
-    QList<QtlDvdFilePtr> files() const
+    QList<QtsDvdFilePtr> files() const
     {
         return _files;
     }
@@ -89,7 +89,7 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+    QtsDvdFile searchFile(const QString& fileName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
     //!
     //! Search a file in the directory tree.
@@ -97,7 +97,7 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchPath(const QString& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+    QtsDvdFile searchPath(const QString& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
     //!
     //! Search a file in the directory tree.
@@ -105,7 +105,7 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchPath(const QStringList& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+    QtsDvdFile searchPath(const QStringList& path, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
     //!
     //! Search a file in the directory tree.
@@ -114,7 +114,7 @@ public:
     //! @param [in] cs Case sensitivity when looking for file names.
     //! @return Description of the file. Return an invalid file if not found.
     //!
-    QtlDvdFile searchPath(QStringList::ConstIterator begin, QStringList::ConstIterator end, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
+    QtsDvdFile searchPath(QStringList::ConstIterator begin, QStringList::ConstIterator end, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
     //!
     //! Clear the content of this object.
@@ -122,9 +122,9 @@ public:
     virtual void clear() Q_DECL_OVERRIDE;
 
 private:
-    friend class QtlDvdMedia;
-    QList<QtlDvdDirectoryPtr> _subDirectories;  //!< All subdirectories in this directory.
-    QList<QtlDvdFilePtr>      _files;           //!< All files in this directory.
+    friend class QtsDvdMedia;
+    QList<QtsDvdDirectoryPtr> _subDirectories;  //!< All subdirectories in this directory.
+    QList<QtsDvdFilePtr>      _files;           //!< All files in this directory.
 };
 
-#endif // QTLDVDDIRECTORY_H
+#endif // QTSDVDDIRECTORY_H
