@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2016, Thierry Lelegard
+// Copyright (c) 2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,58 +26,42 @@
 //
 //----------------------------------------------------------------------------
 //
-// Define the class QtlTestCommand.
+// Test tool main program.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 
-QtlTestCommand::CommandMap* QtlTestCommand::_commandMap = 0;
-
-
-//----------------------------------------------------------------------------
-// Constructor
-//----------------------------------------------------------------------------
-
-QtlTestCommand::QtlTestCommand(const QString& command, const QString& syntax, QObject* parent) :
-    QObject(parent),
-    out(stdout, QIODevice::WriteOnly),
-    err(stderr, QIODevice::WriteOnly),
-    log(0, true),
-    _command(command),
-    _syntax(syntax)
+int main(int argc, char* argv[])
 {
-    if (_commandMap == 0) {
-        _commandMap = new CommandMap;
-    }
-    _commandMap->insert(command.toLower(), this);
-}
+    // Do not remove the QApplication instance. On Windows, it ensures that
+    // CoInitialize is invoked and this is required for some classes in Qtl.
+    QApplication app(argc, argv);
 
-int QtlTestCommand::syntaxError()
-{
-    err << "syntax: " << QCoreApplication::applicationName() << " " << _command << " " << _syntax << endl;
-    return EXIT_FAILURE;
-}
+    QStringList args(app.arguments());
+    QTextStream err(stderr, QIODevice::WriteOnly);
+    int status = EXIT_SUCCESS;
 
-
-//----------------------------------------------------------------------------
-// Command repository.
-//----------------------------------------------------------------------------
-
-QtlStringList QtlTestCommand::allCommands()
-{
-    if (_commandMap == 0) {
-        return QtlStringList();
+    if (args.size() < 2) {
+        // We need at least one subcommand.
+        err << "Usage: " << app.applicationName() << " command [options]" << endl
+            << "Try \"" << app.applicationName() << " help\"" << endl;
+        status = EXIT_FAILURE;
     }
     else {
-        QtlStringList names(_commandMap->keys());
-        names.sort(Qt::CaseInsensitive);
-        return names;
+        // Execute one command.
+        TestToolCommand* command = TestToolCommand::instance(args.at(1));
+        if (command == 0) {
+            err << app.applicationName() << ": command \"" << args.at(1) << "\" is unknown, try \"help\"" << endl;
+            status = EXIT_FAILURE;
+        }
+        else {
+            // Run the command.
+            args.removeFirst();
+            args.removeFirst();
+            status = command->run(args);
+        }
     }
-}
 
-QtlTestCommand* QtlTestCommand::instance(const QString& command)
-{
-    CommandMap::ConstIterator it;
-    return _commandMap != 0 && (it = _commandMap->find(command.toLower())) != _commandMap->end() ? it.value() : 0;
+    return status;
 }

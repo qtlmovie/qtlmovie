@@ -30,20 +30,20 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtlOpticalDrive.h"
 
-class QtlTestOptical : public QtlTestCommand
+class TestOptical : public TestToolCommand
 {
     Q_OBJECT
 public:
-    QtlTestOptical() : QtlTestCommand("optical") {}
+    TestOptical() : TestToolCommand("optical", "", "Test features in QtlOpticalDrive class.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
 //----------------------------------------------------------------------------
 
-int QtlTestOptical::run(const QStringList& args)
+int TestOptical::run(const QStringList& args)
 {
     // Get the list of all optical drives in the system.
     const QList<QtlOpticalDrive> drives(QtlOpticalDrive::getAllDrives());
@@ -80,5 +80,5 @@ int QtlTestOptical::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestOptical.moc"
-namespace {QtlTestOptical thisTest;}
+#include "TestOptical.moc"
+namespace {TestOptical thisTest;}

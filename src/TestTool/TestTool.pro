@@ -41,17 +41,18 @@ CONFIG += console
 CONFIG -= app_bundle
 
 SOURCES += \
-    main.cpp \
-    QtlTestCommand.cpp \
-    QtlTestDvd.cpp \
-    QtlTestTeletext.cpp \
-    QtlTestOptical.cpp \
-    QtlTestSysInfo.cpp \
-    QtlTestMkdir.cpp \
-    QtlTestDvdRead.cpp \
-    QtlTestSsa.cpp \
-    QtlTestDvdIfo.cpp \
-    QtlTestDvdVts.cpp
+    TestTool.cpp \
+    TestToolCommand.cpp \
+    TestTeletext.cpp \
+    TestSysInfo.cpp \
+    TestSsa.cpp \
+    TestOptical.cpp \
+    TestMkdir.cpp \
+    TestDvdRead.cpp \
+    TestPgcDemux.cpp \
+    TestIfoDump.cpp \
+    TestDvd.cpp \
+    TestHelp.cpp
 
 HEADERS += \
-    QtlTestCommand.h
+    TestToolCommand.h

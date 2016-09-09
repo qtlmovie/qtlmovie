@@ -26,37 +26,68 @@
 //
 //----------------------------------------------------------------------------
 //
-// Command line tool to test the creation of directories.
+// Help command for TestTool.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
-#include "QtlFile.h"
+#include "TestToolCommand.h"
 
-class QtlTestMkdir : public QtlTestCommand
+class TestHelp : public TestToolCommand
 {
     Q_OBJECT
 public:
-    QtlTestMkdir() : QtlTestCommand("mkdir", "path-name [-createOnly]") {}
+    TestHelp() : TestToolCommand("help", "[-v | command]", "Display help on one or all commands.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
+private:
+    void display(TestToolCommand* cmd)
+    {
+        if (cmd != 0) {
+            err << QCoreApplication::applicationName() << " " << cmd->command() << " " << cmd->syntax() << endl
+                << endl
+                << cmd->description() << endl;
+        }
+    }
 };
 
 //----------------------------------------------------------------------------
 
-int QtlTestMkdir::run(const QStringList& args)
+int TestHelp::run(const QStringList& args)
 {
-    if (args.size() != 1 && (args.size() != 2 || args[1] != "-createOnly")) {
-        return syntaxError();
+    if (args.isEmpty()) {
+        // List all available commands with short syntax.
+        const QtlStringList names(allCommands());
+        const int length = names.maxLength();
+        foreach (const QString& name, names) {
+            TestToolCommand* cmd = TestToolCommand::instance(name);
+            if (cmd != 0) {
+                err << "  " << cmd->command() << QString(length - cmd->command().length() + 1, QChar(' ')) << cmd->syntax() << endl;
+            }
+        }
     }
-
-    if (!QtlFile::createDirectory(args[0], args.size() >= 2 && args[1] == "-createOnly")) {
-        err << "Error creating \"" << args[0] << "\"" << endl;
+    else if (args.first() == "-v") {
+        // Display all available commands with verbose help.
+        err << endl;
+        foreach (const QString& name, allCommands()) {
+            err << "==== ";
+            display(instance(name));
+            err << endl;
+        }
     }
-
+    else {
+        // Display help on a specific command.
+        TestToolCommand* cmd = TestToolCommand::instance(args.first());
+        if (cmd == 0) {
+            err << QCoreApplication::applicationName() << ": command \"" << args.first() << "\" is unknown, try \"help\"" << endl;
+            return EXIT_FAILURE;
+        }
+        err << endl;
+        display(cmd);
+        err << endl;
+    }
     return EXIT_SUCCESS;
 }
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestMkdir.moc"
-namespace {QtlTestMkdir thisTest;}
+#include "TestHelp.moc"
+namespace {TestHelp thisTest;}

@@ -30,18 +30,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtlSubStationAlphaParser.h"
 #include "QtlSubRipGenerator.h"
 
-class QtlTestSsa : public QtlTestCommand
+class TestSsa : public TestToolCommand
 {
     Q_OBJECT
 public:
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
-    QtlTestSsa() :
-        QtlTestCommand("ssa", "file-name [-html]"),
+    TestSsa() :
+        TestToolCommand("ssa",
+                        "file-name [-html]",
+                        "Parse an SSA/ASS subtitles file and convert to SubRip (SRT).\n"
+                        "With -html, add HTML tags in the SubRip output."),
         _useHtml(false)
     {
     }
@@ -56,7 +59,7 @@ private:
 
 //----------------------------------------------------------------------------
 
-int QtlTestSsa::run(const QStringList& args)
+int TestSsa::run(const QStringList& args)
 {
     if (args.empty()) {
         return syntaxError();
@@ -66,8 +69,8 @@ int QtlTestSsa::run(const QStringList& args)
     _useHtml = args.size() > 1 && args[1] == "-html";
 
     QtlSubStationAlphaParser parser(&log);
-    connect(&parser, &QtlSubStationAlphaParser::sectionChanged, this, &QtlTestSsa::sectionChanged);
-    connect(&parser, &QtlSubStationAlphaParser::subtitleFrame, this, &QtlTestSsa::subtitleFrame);
+    connect(&parser, &QtlSubStationAlphaParser::sectionChanged, this, &TestSsa::sectionChanged);
+    connect(&parser, &QtlSubStationAlphaParser::subtitleFrame, this, &TestSsa::subtitleFrame);
     parser.addFile(fileName);
 
     return EXIT_SUCCESS;
@@ -75,14 +78,14 @@ int QtlTestSsa::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-void QtlTestSsa::sectionChanged(const QString& sectionName)
+void TestSsa::sectionChanged(const QString& sectionName)
 {
     out << "Found section \"" << sectionName << "\"" << endl;
 }
 
 //----------------------------------------------------------------------------
 
-void QtlTestSsa::subtitleFrame(const QtlSubStationAlphaFramePtr& frame)
+void TestSsa::subtitleFrame(const QtlSubStationAlphaFramePtr& frame)
 {
     out << "Found subtitle frame: " << QtlSubRipGenerator::formatDuration(frame->showTimestamp(), frame->hideTimestamp()) << endl
         << "    SSA text: " << frame->text() << endl
@@ -91,5 +94,5 @@ void QtlTestSsa::subtitleFrame(const QtlSubStationAlphaFramePtr& frame)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestSsa.moc"
-namespace {QtlTestSsa thisTest;}
+#include "TestSsa.moc"
+namespace {TestSsa thisTest;}

@@ -30,15 +30,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtsDvdMedia.h"
 #include "QtsDvdBandwidthReport.h"
 
-class QtlTestDvdRead : public QtlTestCommand
+class TestDvdRead : public TestToolCommand
 {
     Q_OBJECT
 public:
-    QtlTestDvdRead() : QtlTestCommand("dvdread", "device-name") {}
+    TestDvdRead() : TestToolCommand("dvdread", "device-name", "Evaluate transfer bandwidth from a DVD using libdvdcss.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 private:
     void displayBandwidth(const QTime& timeAverage, const QTime& timeInstant, int sectorCount, int instantSectorCount);
@@ -46,7 +46,7 @@ private:
 
 //----------------------------------------------------------------------------
 
-int QtlTestDvdRead::run(const QStringList& args)
+int TestDvdRead::run(const QStringList& args)
 {
     if (args.size() != 1) {
         return syntaxError();
@@ -108,7 +108,7 @@ int QtlTestDvdRead::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& timeInstant, int sectorCount, int instantSectorCount)
+void TestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& timeInstant, int sectorCount, int instantSectorCount)
 {
     const int msAverage = timeAverage.elapsed();
     const int msInstant = timeInstant.elapsed();
@@ -126,5 +126,5 @@ void QtlTestDvdRead::displayBandwidth(const QTime& timeAverage, const QTime& tim
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestDvdRead.moc"
-namespace {QtlTestDvdRead thisTest;}
+#include "TestDvdRead.moc"
+namespace {TestDvdRead thisTest;}

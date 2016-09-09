@@ -30,25 +30,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtsDvdTitleSet.h"
 #include "QtsDvdProgramChainDemux.h"
 #include "QtlDataPullSynchronousWrapper.h"
 
 //----------------------------------------------------------------------------
 
-class QtlTestDvdVts : public QtlTestCommand
+class TestPgcDemux : public TestToolCommand
 {
     Q_OBJECT
 
 public:
-    QtlTestDvdVts() : QtlTestCommand("dvdvts", "ifo-or-vob-file out-file [fix-navpacks|remove-navpacks|copy-navpacks [pgc-number]]") {}
+    TestPgcDemux() : TestToolCommand
+                     ("pgcdemux",
+                      "ifo-or-vob-file out-file [fix-navpacks|remove-navpacks|copy-navpacks [pgc-number]]",
+                      "Demux a PGC from a DVD video title set (VTS).\n"
+                      "Test tool for class QtsDvdProgramChainDemux.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
 //----------------------------------------------------------------------------
 
-int QtlTestDvdVts::run(const QStringList& args)
+int TestPgcDemux::run(const QStringList& args)
 {
     if (args.size() < 2) {
         return syntaxError();
@@ -106,6 +110,6 @@ int QtlTestDvdVts::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestDvdVts.moc"
-namespace {QtlTestDvdVts thisTest;}
+#include "TestPgcDemux.moc"
+namespace {TestPgcDemux thisTest;}
 

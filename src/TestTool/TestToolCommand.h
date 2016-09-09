@@ -26,14 +26,14 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlTestCommand.h
+//! @file TestToolCommand.h
 //!
-//! Declare the class QtlTestCommand.
+//! Declare the class TestToolCommand.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLTESTCOMMAND_H
-#define QTLTESTCOMMAND_H
+#ifndef TESTTOOLCOMMAND_H
+#define TESTTOOLCOMMAND_H
 
 #include "QtlStdoutLogger.h"
 #include "QtlStringList.h"
@@ -41,7 +41,7 @@
 //!
 //! Base class for all subcommands in TestTool.
 //!
-class QtlTestCommand : public QObject
+class TestToolCommand : public QObject
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ public:
     //! @param [in] command Name of the TestTool subcommand.
     //! @return The instance for @a command or zero if not found.
     //!
-    static QtlTestCommand* instance(const QString& command);
+    static TestToolCommand* instance(const QString& command);
 
     //!
     //! Get the command name.
@@ -78,6 +78,15 @@ public:
     }
 
     //!
+    //! Get the multi-line command description.
+    //! @return The multi-line command description.
+    //!
+    QString description() const
+    {
+        return _description;
+    }
+
+    //!
     //! Run the test which is implemented by this class.
     //! @param [in] args Command line arguments (after subcommand name).
     //! @return Either EXIT_SUCCESS or EXIT_FAILURE.
@@ -89,9 +98,9 @@ protected:
     //! Protected constructor.
     //! @param [in] command Name of the TestTool subcommand.
     //! @param [in] syntax Brief parameter syntax overview.
-    //! @param [in] parent Optional parent object.
+    //! @param [in] description Multi-line command description.
     //!
-    QtlTestCommand(const QString& command, const QString& syntax = QString(), QObject* parent = 0);
+    TestToolCommand(const QString& command, const QString& syntax, const QString& description);
 
     //!
     //! Display an syntax error message and return EXIT_FAILURE.
@@ -106,13 +115,14 @@ protected:
 private:
     QString _command;
     QString _syntax;
+    QString _description;
 
-    typedef QMap<QString,QtlTestCommand*> CommandMap;
+    typedef QMap<QString,TestToolCommand*> CommandMap;
     static CommandMap* _commandMap;
 
     // Unaccessible operations.
-    QtlTestCommand() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlTestCommand)
+    TestToolCommand() Q_DECL_EQ_DELETE;
+    Q_DISABLE_COPY(TestToolCommand)
 };
 
-#endif // QTLTESTCOMMAND_H
+#endif // TESTTOOLCOMMAND_H

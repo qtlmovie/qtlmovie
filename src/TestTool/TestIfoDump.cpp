@@ -30,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtlRangeList.h"
 #include "QtlFile.h"
 #include "QtlSmartPointer.h"
@@ -159,12 +159,17 @@ typedef QList<PgcPtr> PgcList;
 
 //----------------------------------------------------------------------------
 
-class QtlTestDvdIfo : public QtlTestCommand
+class TestIfoDump : public TestToolCommand
 {
     Q_OBJECT
 
 public:
-    QtlTestDvdIfo() : QtlTestCommand("dvdifo", "ifo-file-name [demuxed-file [pgc# [angle#]]]") {}
+    TestIfoDump() : TestToolCommand
+                    ("ifodump",
+                     "ifo-file-name [demuxed-file [pgc# [angle#]]]",
+                     "Dump a DVD IFO file. This is formatted dump from raw IFO content, it does not\n"
+                     "use the QtsDvd classes. This is prototype code to test the interpretation of\n"
+                     "DVD content. If demuxed-file is present, also demux one PGC/angle.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
 private:
@@ -199,22 +204,22 @@ private:
 
 //----------------------------------------------------------------------------
 
-int QtlTestDvdIfo::run(const QStringList& args)
+int TestIfoDump::run(const QStringList& args)
 {
     // Decode command line arguments.
     if (args.size() < 1 || args.size() > 4) {
         return syntaxError();
     }
     _ifoFileName = args[0];
-    _demuxFileName = args.size() > 1 ? args[1] : "";
-    const int pgcNumber = args.size() > 2 ? args[2].toInt() : 1;
-    const int angleNumber = args.size() > 3 ? args[3].toInt() : 1;
+    _demuxFileName = args.value(1, "");
+    const int pgcNumber = args.value(2, "1").toInt();
+    const int angleNumber = args.value(3, "1").toInt();
 
     if (!loadIfo()) {
         return EXIT_FAILURE;
     }
 
-    if (_demuxFileName.isEmpty() < 0) {
+    if (_demuxFileName.isEmpty()) {
         displayIfo();
     }
     else {
@@ -226,7 +231,7 @@ int QtlTestDvdIfo::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-bool QtlTestDvdIfo::loadIfo()
+bool TestIfoDump::loadIfo()
 {
     // Read IFO file content.
     _ifo = QtlFile::readBinaryFile(_ifoFileName);
@@ -442,7 +447,7 @@ bool QtlTestDvdIfo::loadIfo()
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvdIfo::displayIfo()
+void TestIfoDump::displayIfo()
 {
     // List files.
     out << QFileInfo(_ifoFileName).fileName() << " : " << (_ifo.size() / DVD_SECTOR_SIZE) << " sectors, " << _ifo.size() << " bytes" << endl;
@@ -518,7 +523,7 @@ void QtlTestDvdIfo::displayIfo()
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvdIfo::displayAudioVideoAttributes()
+void TestIfoDump::displayAudioVideoAttributes()
 {
     const quint8 vid0 = _ifo[0x0200];
     const quint8 vid1 = _ifo[0x0201];
@@ -609,7 +614,7 @@ void QtlTestDvdIfo::displayAudioVideoAttributes()
 
 //----------------------------------------------------------------------------
 
-bool QtlTestDvdIfo::demuxPgc(int pgcNumber, int angleNumber)
+bool TestIfoDump::demuxPgc(int pgcNumber, int angleNumber)
 {
     // PGC and Angles are numbered from 1 onwards.
     if (pgcNumber < 1 || pgcNumber > _pgcList.size()) {
@@ -713,7 +718,7 @@ bool QtlTestDvdIfo::demuxPgc(int pgcNumber, int angleNumber)
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvdIfo::resetRead()
+void TestIfoDump::resetRead()
 {
     _currentVob.clear();
     _nextSector = -1;
@@ -721,7 +726,7 @@ void QtlTestDvdIfo::resetRead()
 
 //----------------------------------------------------------------------------
 
-bool QtlTestDvdIfo::readSector(QtlByteBlock& buffer, int sector)
+bool TestIfoDump::readSector(QtlByteBlock& buffer, int sector)
 {
     if (sector < 0) {
         err << "Invalid sector " << sector << endl;
@@ -762,7 +767,7 @@ bool QtlTestDvdIfo::readSector(QtlByteBlock& buffer, int sector)
 
 //----------------------------------------------------------------------------
 
-int QtlTestDvdIfo::playbackSeconds(quint32 value)
+int TestIfoDump::playbackSeconds(quint32 value)
 {
     // The playback time is encoded in BCD as: hh:mm:ss:ff (ff = frame count within second).
     // With 2 MSBits of ff indicating frame rate: 11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal.
@@ -776,7 +781,7 @@ int QtlTestDvdIfo::playbackSeconds(quint32 value)
 
 //----------------------------------------------------------------------------
 
-QString QtlTestDvdIfo::playbackString(quint32 value)
+QString TestIfoDump::playbackString(quint32 value)
 {
     // The playback time is encoded in BCD as: hh:mm:ss:ff (ff = frame count within second)
     // With 2 MSBits of ff indicating frame rate: 11 = 30 fps, 10 = illegal, 01 = 25 fps, 00 = illegal
@@ -804,7 +809,7 @@ QString QtlTestDvdIfo::playbackString(quint32 value)
 
 //----------------------------------------------------------------------------
 
-QString QtlTestDvdIfo::paletteString(const QtlByteBlock& data)
+QString TestIfoDump::paletteString(const QtlByteBlock& data)
 {
     QString result;
     for (int i = 0; i < data.size(); ++i) {
@@ -818,5 +823,5 @@ QString QtlTestDvdIfo::paletteString(const QtlByteBlock& data)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestDvdIfo.moc"
-namespace {QtlTestDvdIfo thisTest;}
+#include "TestIfoDump.moc"
+namespace {TestIfoDump thisTest;}

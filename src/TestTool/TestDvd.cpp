@@ -30,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtlFile.h"
 #include "QtlStringUtils.h"
 #include "QtlStdoutLogger.h"
@@ -39,12 +39,16 @@
 
 //----------------------------------------------------------------------------
 
-class QtlTestDvd : public QtlTestCommand
+class TestDvd : public TestToolCommand
 {
     Q_OBJECT
 
 public:
-    QtlTestDvd() : QtlTestCommand("dvd", "ifo-or-vob-file") {}
+    TestDvd() : TestToolCommand
+                ("dvd",
+                 "ifo-or-vob-file",
+                 "Display information about a DVD media and one of its VTS."
+                 "Test tool for classes QtsDvdMedia and QtsDvdTitleSet.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
 private:
@@ -54,7 +58,7 @@ private:
 
 //----------------------------------------------------------------------------
 
-void QtlTestDvd::displayFile(const QString& indent, const QtsDvdFile& file)
+void TestDvd::displayFile(const QString& indent, const QtsDvdFile& file)
 {
     out << indent << file.name()
         << ", " << file.sizeInBytes() << " bytes"
@@ -62,7 +66,7 @@ void QtlTestDvd::displayFile(const QString& indent, const QtsDvdFile& file)
         << endl;
 }
 
-void QtlTestDvd::displayDirectory(const QString& indent, const QtsDvdDirectory& dir)
+void TestDvd::displayDirectory(const QString& indent, const QtsDvdDirectory& dir)
 {
     displayFile(indent + "Directory: ", dir);
     foreach (const QtsDvdFilePtr& file, dir.files()) {
@@ -79,7 +83,7 @@ void QtlTestDvd::displayDirectory(const QString& indent, const QtsDvdDirectory& 
 
 //----------------------------------------------------------------------------
 
-int QtlTestDvd::run(const QStringList& args)
+int TestDvd::run(const QStringList& args)
 {
     // Expect at least one argument, the name of a VTS file on DVD.
     if (args.size() < 1) {
@@ -205,5 +209,5 @@ int QtlTestDvd::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestDvd.moc"
-namespace {QtlTestDvd thisTest;}
+#include "TestDvd.moc"
+namespace {TestDvd thisTest;}

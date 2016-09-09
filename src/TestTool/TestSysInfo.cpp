@@ -30,20 +30,20 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtlCore.h"
 
-class QtlTestSysInfo : public QtlTestCommand
+class TestSysInfo : public TestToolCommand
 {
     Q_OBJECT
 public:
-    QtlTestSysInfo() : QtlTestCommand("sysinfo") {}
+    TestSysInfo() : TestToolCommand("sysinfo", "", "Display various information from QSysInfo and other system classes.") {}
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 };
 
 //----------------------------------------------------------------------------
 
-int QtlTestSysInfo::run(const QStringList& args)
+int TestSysInfo::run(const QStringList& args)
 {
     out << "==== Global system information" << endl
         << "qtlApplicationName() = " << qtlApplicationName() << endl
@@ -92,5 +92,5 @@ int QtlTestSysInfo::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestSysInfo.moc"
-namespace {QtlTestSysInfo thisTest;}
+#include "TestSysInfo.moc"
+namespace {TestSysInfo thisTest;}

@@ -30,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "QtlTestCommand.h"
+#include "TestToolCommand.h"
 #include "QtsSectionDemux.h"
 #include "QtsTeletextDemux.h"
 #include "QtsTeletextDescriptor.h"
@@ -49,15 +49,19 @@ typedef QMap<int,QtlSubRipGeneratorPtr> SubRipMap;
 // Test class.
 //----------------------------------------------------------------------------
 
-class QtlTestTeletext : public QtlTestCommand, private QtsTeletextHandlerInterface, private QtsTableHandlerInterface
+class TestTeletext : public TestToolCommand, private QtsTeletextHandlerInterface, private QtsTableHandlerInterface
 {
     Q_OBJECT
 
 public:
     virtual int run(const QStringList& args) Q_DECL_OVERRIDE;
 
-    QtlTestTeletext() :
-        QtlTestCommand("teletext", "input-file [output-file-prefix]"),
+    TestTeletext() :
+        TestToolCommand("teletext",
+                        "input-file [output-file-prefix]",
+                        "Read an MPEG2-TS file and locate all Teletext subtitles streams.\n"
+                        "If output-file-prefix is specified, extract each Teletext stream\n"
+                        "in a file named <prefix>_<pid>_<page>.srt"),
         _outputPrefix(),
         _teletextDemux(this),
         _input(),
@@ -84,7 +88,7 @@ private:
 // Locate all Teletext streams in the file.
 //----------------------------------------------------------------------------
 
-bool QtlTestTeletext::locateStreams()
+bool TestTeletext::locateStreams()
 {
     if (!_input.isOpen() || !_input.seek(0)) {
         return false;
@@ -112,7 +116,7 @@ bool QtlTestTeletext::locateStreams()
 // PSI Table Handler
 //----------------------------------------------------------------------------
 
-void QtlTestTeletext::handleTable(QtsSectionDemux& demux, const QtsTable& table)
+void TestTeletext::handleTable(QtsSectionDemux& demux, const QtsTable& table)
 {
     switch (table.tableId()) {
         case QTS_TID_PAT: {
@@ -157,7 +161,7 @@ void QtlTestTeletext::handleTable(QtsSectionDemux& demux, const QtsTable& table)
 // Extract all Teletext streams.
 //----------------------------------------------------------------------------
 
-bool QtlTestTeletext::extractStreams()
+bool TestTeletext::extractStreams()
 {
     if (!_input.isOpen() || !_input.seek(0)) {
         return false;
@@ -185,7 +189,7 @@ bool QtlTestTeletext::extractStreams()
 // Teletext frame handler.
 //----------------------------------------------------------------------------
 
-void QtlTestTeletext::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
+void TestTeletext::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTeletextFrame& frame)
 {
     // Search an existing output file.
     // The index in the map is made of pid and page.
@@ -221,7 +225,7 @@ void QtlTestTeletext::handleTeletextMessage(QtsTeletextDemux& demux, const QtsTe
 // Program entry point.
 //----------------------------------------------------------------------------
 
-int QtlTestTeletext::run(const QStringList& args)
+int TestTeletext::run(const QStringList& args)
 {
     if (args.size() < 1) {
         return syntaxError();
@@ -246,5 +250,5 @@ int QtlTestTeletext::run(const QStringList& args)
 
 //----------------------------------------------------------------------------
 
-#include "QtlTestTeletext.moc"
-namespace {QtlTestTeletext thisTest;}
+#include "TestTeletext.moc"
+namespace {TestTeletext thisTest;}
