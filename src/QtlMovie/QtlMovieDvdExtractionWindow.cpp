@@ -36,7 +36,6 @@
 #include "QtlProcess.h"
 #include "QtlStringList.h"
 #include "QtlStringUtils.h"
-#include "QtsDvdTitleSet.h"
 #include "QtlMessageBoxUtils.h"
 #include "QtlTableWidgetUtils.h"
 #include "QtlCheckableHeaderView.h"
@@ -71,17 +70,9 @@ QtlMovieDvdExtractionWindow::QtlMovieDvdExtractionWindow(QWidget *parent, bool l
     // The "ISO file name" cannot contain directory separators.
     _ui.editIsoFile->setValidator(new QRegExpValidator(QRegExp("[^/\\\\]+"), this));
 
-    // Configure the VTS and Files tables.
-    setupTable(_ui.tableTitleSets);
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 0, "");
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 1, tr("VTS"), Qt::AlignCenter);
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 2, tr("Duration"), Qt::AlignLeft | Qt::AlignVCenter);
-    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 3, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
-
-    setupTable(_ui.tableFiles);
-    qtlSetTableHorizontalHeader(_ui.tableFiles, 0, "");
-    qtlSetTableHorizontalHeader(_ui.tableFiles, 1, tr("File"), Qt::AlignLeft | Qt::AlignVCenter);
-    qtlSetTableHorizontalHeader(_ui.tableFiles, 2, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
+    // Configure the VTS and Files table.
+    setupTableTitleSets();
+    setupTableFiles();
 
     // Extraction is initially stopped.
     extractionUpdateUi(false);
@@ -131,6 +122,76 @@ void QtlMovieDvdExtractionWindow::setupTable(QTableWidget* table)
 
     // Setup properties that can be set only using stylesheets.
     table->setStyleSheet("QTableWidget::item {padding-right: 15px;};");
+}
+
+
+//-----------------------------------------------------------------------------
+// Setup the VTS table.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdExtractionWindow::setupTableTitleSets()
+{
+    setupTable(_ui.tableTitleSets);
+
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 0, "");
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 1, tr("VTS"), Qt::AlignCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 2, tr("Duration"), Qt::AlignLeft | Qt::AlignVCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 3, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 4, tr("PGC's"), Qt::AlignCenter);
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 5, tr("Angles"), Qt::AlignCenter);
+
+    // Additional empty column since previous one is centered and we want to keep it narrow.
+    qtlSetTableHorizontalHeader(_ui.tableTitleSets, 6, "", Qt::AlignLeft | Qt::AlignVCenter);
+}
+
+void QtlMovieDvdExtractionWindow::addRowTableTitleSets(const QtsDvdTitleSetPtr& vts)
+{
+    if (!vts.isNull()) {
+        QtlStringList texts;
+        texts << "" // check box placeholder
+              << QString::number(vts->vtsNumber())
+              << qtlSecondsToString(vts->longestDurationInSeconds())
+              << qtlSizeToString(vts->vobSizeInBytes(), 2)
+              << QString::number(vts->titleCount())
+              << QString::number(vts->maximumAngleCount())
+              << "";
+
+        // Create the row, use header text alignment, set checkbox in column zero.
+        const int row = qtlSetTableRow(_ui.tableTitleSets, _ui.tableTitleSets->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
+
+        // The first cell is used to store the title set description.
+        _ui.tableTitleSets->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(vts));
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Setup the files table.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdExtractionWindow::setupTableFiles()
+{
+    setupTable(_ui.tableFiles);
+
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 0, "");
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 1, tr("File"), Qt::AlignLeft | Qt::AlignVCenter);
+    qtlSetTableHorizontalHeader(_ui.tableFiles, 2, tr("Size"), Qt::AlignLeft | Qt::AlignVCenter);
+}
+
+void QtlMovieDvdExtractionWindow::addRowTableFiles(const QtsDvdFilePtr& file)
+{
+    if (!file.isNull()) {
+        QtlStringList texts;
+        texts << "" // check box placeholder
+              << file->path()
+              << qtlSizeToString(file->sizeInBytes(), 2);
+
+        // Create the row, use header text alignment, set checkbox in column zero.
+        const int row = qtlSetTableRow(_ui.tableFiles, _ui.tableFiles->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
+
+        // The first cell is used to store the file description.
+        _ui.tableFiles->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(file));
+    }
 }
 
 
@@ -336,23 +397,15 @@ void QtlMovieDvdExtractionWindow::refreshVtsList()
 
     // Create one row per title set.
     for (int vtsNumber = 1; vtsNumber <= dvd->vtsCount(); ++vtsNumber) {
-
         // Get the description of the VTS.
         QtsDvdTitleSetPtr vts(new QtsDvdTitleSet(QString(), log()));
         if (!vts->load(dvd->vtsInformationFileName(vtsNumber), &*dvd)) {
             // Cannot open VTS, strange, skip it.
             log()->line(tr("Cannot open video title set %1").arg(vtsNumber));
-            continue;
         }
-
-        // Items: check box, VTS number, VTS duration, size of the VOB files.
-        const QtlStringList texts("", QString::number(vtsNumber), qtlSecondsToString(vts->longestDurationInSeconds()), qtlSizeToString(vts->vobSizeInBytes(), 2));
-
-        // Create the row, use header text alignment, set checkbox in column zero.
-        const int row = qtlSetTableRow(_ui.tableTitleSets, _ui.tableTitleSets->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
-
-        // The first cell is used to store the title set description.
-        _ui.tableTitleSets->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(vts));
+        else {
+            addRowTableTitleSets(vts);
+        }
     }
 }
 
@@ -385,17 +438,7 @@ void QtlMovieDvdExtractionWindow::addDirectoryTree(const QtsDvdDirectory& dir)
 {
     // First, add local files in current directory.
     foreach (const QtsDvdFilePtr& file, dir.files()) {
-        if (!file.isNull()) {
-
-            // Items: check box, file path, file size.
-            const QtlStringList texts("", file->path(), qtlSizeToString(file->sizeInBytes(), 2));
-
-            // Create the row, use header text alignment, set checkbox in column zero.
-            const int row = qtlSetTableRow(_ui.tableFiles, _ui.tableFiles->rowCount(), texts, true, Qt::ItemIsEnabled, 0);
-
-            // The first cell is used to store the file description.
-            _ui.tableFiles->item(row, 0)->setData(Qt::UserRole, QVariant::fromValue(file));
-        }
+        addRowTableFiles(file);
     }
 
     // Then, add subdirectory trees.

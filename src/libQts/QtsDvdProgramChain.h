@@ -133,6 +133,15 @@ public:
     }
 
     //!
+    //! Get the number of specific angles.
+    //! @return The number of specific angles. If there is no specific angle,
+    //! only common content as in most cases, return 0.
+    //!
+    int angleCount() const {
+        return _angleCount;
+    }
+
+    //!
     //! Get the color palette of the title set in YUV format.
     //! Typically used to render subtitles.
     //! @return The palette in YUV format. Each entry contains 4 bytes: (0, Y, Cr, Cb).
@@ -226,6 +235,7 @@ private:
     int           _nextPgc;          //!< Next PGC to play.
     int           _previousPgc;      //!< Previous PGC to play.
     int           _parentPgc;        //!< Parent PGC.
+    int           _angleCount;       //!< Number of angles.
     QtlByteBlock  _palette;          //!< VTS color palette in YUV format.
     QtsDvdProgramCellList    _cells;     //!< List of cells in this program chain.
     QtsDvdProgramChapterList _chapters;  //!< List of chapters in this program chain.

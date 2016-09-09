@@ -169,6 +169,13 @@ public:
     int longestDurationInSeconds() const;
 
     //!
+    //! Get the maximum number of specific angles in all titles.
+    //! @return The maximum number of specific angles in all titles. If there is no
+    //! specific angle, only common content as in most cases, return 0.
+    //!
+    int maximumAngleCount() const;
+
+    //!
     //! Get the full absolute file name of the IFO file for the title set.
     //! @return The full absolute file name of the IFO file for the title set.
     //!

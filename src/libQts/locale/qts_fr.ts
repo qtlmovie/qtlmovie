@@ -14,12 +14,12 @@
         <translation>moyenne:</translation>
     </message>
     <message>
-        <location filename="../QtsDvdProgramChain.cpp" line="208"/>
+        <location filename="../QtsDvdProgramChain.cpp" line="214"/>
         <source>Palette conversion: palette size is %1 bytes, not a multiple of 4</source>
         <translation>Conversion de palette: la taille de palette est de %1 octets, pas un multiple de 4</translation>
     </message>
     <message>
-        <location filename="../QtsDvdProgramChain.cpp" line="232"/>
+        <location filename="../QtsDvdProgramChain.cpp" line="238"/>
         <source>Palette conversion: unexpected value 0x%1, should be 0</source>
         <translation>Conversion de palette: valeur 0x%1 inattendue, aurait dû être 0</translation>
     </message>

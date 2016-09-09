@@ -48,6 +48,7 @@ QtsDvdProgramChain::QtsDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
     _nextPgc(0),
     _previousPgc(0),
     _parentPgc(0),
+    _angleCount(0),
     _palette(),
     _cells(),
     _chapters()
@@ -126,6 +127,11 @@ QtsDvdProgramChain::QtsDvdProgramChain(const QtlByteBlock& ifo, int startIndex, 
         if (category == 0xD0) {
             // 1101 : last angle => reset angle count.
             currentAngle = 0;
+        }
+
+        // Keep track of angle count.
+        if (currentAngle > _angleCount) {
+            _angleCount = currentAngle;
         }
 
         // Cell playback duration.

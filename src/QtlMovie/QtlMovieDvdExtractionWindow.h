@@ -40,6 +40,7 @@
 #include "QtlMovieMainWindowBase.h"
 #include "QtlMovieDvdExtractionSession.h"
 #include "QtlFileDialogUtils.h"
+#include "QtsDvdTitleSet.h"
 
 //!
 //! A subclass of QMainWindow which implements the UI for the DVD Ripper application.
@@ -129,52 +130,61 @@ private:
     //! @return Cancel status.
     //!
     virtual CancelStatus proposeToCancel() Q_DECL_OVERRIDE;
-
     //!
     //! Common setup for the VTS and Files tables.
     //! @param [in] table The table to setup.
     //!
     void setupTable(QTableWidget* table);
-
+    //!
+    //! Setup the VTS table.
+    //!
+    void setupTableTitleSets();
+    //!
+    //! Add a row in the VTS table.
+    //! @param [in] vts Description of the VTS to add.
+    //!
+    void addRowTableTitleSets(const QtsDvdTitleSetPtr& vts);
+    //!
+    //! Setup the files table.
+    //!
+    void setupTableFiles();
+    //!
+    //! Add a row in the files table.
+    //! @param [in] file Description of the file to add.
+    //!
+    void addRowTableFiles(const QtsDvdFilePtr& file);
     //!
     //! Apply the settings which affect the UI.
     //! @param [in] initial If true, the object is being constructed.
     //!
     virtual void applyUserInterfaceSettings(bool initial) Q_DECL_OVERRIDE;
-
     //!
     //! Update the UI when extraction starts or stops.
     //! @param [in] started True if extraction starts, false if it stops.
     //!
     void extractionUpdateUi(bool started);
-
     //!
     //! Get the currently selected DVD.
     //! @return A pointer to the currently selected DVD or a null pointer if none is selected.
     //!
     QtsDvdMediaPtr currentDvd() const;
-
     //!
     //! Refresh the list of DVD's.
     //!
     void refreshDvdList();
-
     //!
     //! Refresh the list of video title sets.
     //!
     void refreshVtsList();
-
     //!
     //! Refresh the list of files.
     //!
     void refreshFilesList();
-
     //!
     //! Add a file in the current extraction.
     //! @param [in] file File description.
     //!
     void addFileForExtraction(const QtsDvdFile& file);
-
     //!
     //! Add a tree of files and directories in the table of files.
     //! @param [in] dir Directory description.

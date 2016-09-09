@@ -594,6 +594,22 @@ int QtsDvdTitleSet::longestDurationInSeconds() const
 
 
 //----------------------------------------------------------------------------
+// Get the maximum number of specific angles in all titles.
+//----------------------------------------------------------------------------
+
+int QtsDvdTitleSet::maximumAngleCount() const
+{
+    int angleCount = 0;
+    foreach (const QtsDvdProgramChainPtr& pgc, _pgcs) {
+        if (!pgc.isNull()) {
+            angleCount = qMax(angleCount, pgc->angleCount());
+        }
+    }
+    return angleCount;
+}
+
+
+//----------------------------------------------------------------------------
 // Compare two QtlMediaStreamInfoPtr for DVD stream ordering.
 //----------------------------------------------------------------------------
 
