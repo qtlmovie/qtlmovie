@@ -221,6 +221,18 @@ QtsDvdMediaPtr QtlMovieDvdExtractionWindow::currentDvd() const
 
 
 //-----------------------------------------------------------------------------
+// Invoked when the selected DVD has changed.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdExtractionWindow::selectedDvdChanged()
+{
+    updateIsoFileFromVolumeId();
+    refreshVtsList();
+    refreshFilesList();
+}
+
+
+//-----------------------------------------------------------------------------
 // Invoked by the "Refresh ..." buttons.
 //-----------------------------------------------------------------------------
 
@@ -286,9 +298,22 @@ void QtlMovieDvdExtractionWindow::refreshDvdList()
         // Otherwise, select the first DVD.
         _ui.comboDvd->setCurrentIndex(0);
         // Preset the ISO file name at the volume id.
-        QtsDvdMediaPtr dvd(_ui.comboDvd->currentData().value<QtsDvdMediaPtr>());
-        if (!dvd.isNull()) {
-            _ui.editIsoFile->setText(dvd->volumeId());
+        updateIsoFileFromVolumeId();
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Update the name of the ISO file to match the volume id of the DVD.
+//-----------------------------------------------------------------------------
+
+void QtlMovieDvdExtractionWindow::updateIsoFileFromVolumeId()
+{
+    const QtsDvdMediaPtr dvd(currentDvd());
+    if (!dvd.isNull()) {
+        const QString id(dvd->volumeId());
+        if (!id.isEmpty()) {
+            _ui.editIsoFile->setText(id);
         }
     }
 }

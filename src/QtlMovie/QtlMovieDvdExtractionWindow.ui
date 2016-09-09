@@ -397,7 +397,6 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-
   <action name="actionHomePage">
    <property name="text">
     <string>Home Page</string>
@@ -414,8 +413,6 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-
-
   <action name="actionRefresh">
    <property name="text">
     <string>Refresh ...</string>
@@ -595,7 +592,6 @@
     </hint>
    </hints>
   </connection>
-
   <connection>
    <sender>actionReleaseNotes</sender>
    <signal>triggered()</signal>
@@ -612,20 +608,38 @@
     </hint>
    </hints>
   </connection>
-
   <connection>
    <sender>actionHomePage</sender>
    <signal>triggered()</signal>
    <receiver>QtlMovieDvdExtractionWindow</receiver>
    <slot>openHomePage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>actionSupportPage</sender>
    <signal>triggered()</signal>
    <receiver>QtlMovieDvdExtractionWindow</receiver>
    <slot>openSupportPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
-
   <connection>
    <sender>actionRefresh</sender>
    <signal>triggered()</signal>
@@ -706,10 +720,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>comboDvd</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>QtlMovieDvdExtractionWindow</receiver>
+   <slot>selectedDvdChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>232</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>refresh()</slot>
   <slot>updateIsoFullPath()</slot>
   <slot>browseDestination()</slot>
+  <slot>updateIsoFileFromVolumeId()</slot>
+  <slot>selectedDvdChanged()</slot>
  </slots>
 </ui>

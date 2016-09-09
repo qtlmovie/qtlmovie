@@ -95,6 +95,14 @@ private slots:
     //!
     void extractionProgress(const QString& description, int current, int maximum, int elapsedSeconds, int remainingSeconds);
     //!
+    //! Invoked when the selected DVD has changed.
+    //!
+    void selectedDvdChanged();
+    //!
+    //! Update the name of the ISO file to match the volume id of the DVD.
+    //!
+    void updateIsoFileFromVolumeId();
+    //!
     //! Update the label containing the ISO full path.
     //!
     void updateIsoFullPath();
