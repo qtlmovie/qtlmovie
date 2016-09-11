@@ -1,36 +1,48 @@
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QtlMovie Documentation</title>
+    <title>QtlMovie License</title>
+    <link type="image/png" rel="icon" href="favicon.png">
     <link type="text/css" rel="stylesheet" href="default.css"/>
     <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
     <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
-    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:200px;" id="mySidenav">
+    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
       <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
-      <a href="#" class="w3-light-grey w3-medium">Home</a>
-      <a href="qtlmovie-user.html">Using QtlMovie</a>
-      <a href="qtlmovie-build.html">Building QtlMovie</a>
-      <a href="#license">License</a>
-      <a href="#contrib">Contributions</a>
-      <a href="#links">External references</a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Language <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-license.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-license_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
+        <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro.html">Introduction</a>
+          <a href="qtlmovie-user.html">Using QtlMovie</a>
+          <a href="qtlmovie-build.html">Building QtlMovie</a>
+          <a href="qtlmovie-license.html">License</a>
+        </div>
+      </div>
     </nav>
     <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
-    <div class="w3-main" style="margin-left:200px;">
+    <div class="w3-main" style="margin-left:250px;">
       <div id="myTop" class="w3-top w3-container w3-padding-16 w3-theme w3-large">
         <i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right" onclick="w3_open()"></i>
-        <span id="myIntro" class="w3-hide">QtlMovie Documentation</span>
+        <span id="myIntro" class="w3-hide">QtlMovie License</span>
       </div>
       <header class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
-        <h1 class="w3-xxxlarge w3-padding-16">QtlMovie</h1>
+        <h1 class="w3-xxxlarge w3-padding-16">QtlMovie License</h1>
       </header>
       <div class="w3-container w3-padding-32" style="padding-left:32px">
 
-        <div class="anchor" id="license"><h2>License</h2></div>
-        
+        <h2>License</h2>
+
         <p>QtlMovie is released under the terms of the license which is commonly referred
           to as "BSD 2-Clause License" or "Simplified BSD License" or "FreeBSD License".
           See <a href="http://opensource.org/licenses/BSD-2-Clause" target="_blank">
@@ -60,7 +72,7 @@
             the possibility of such damage.</p>
         </div>
 
-        <div class="anchor" id="contrib"><h2>Contributions</h2></div>
+        <h2>Contributions</h2>
 
         <ul>
           <li>Teletext code from Petr Kutalek's <a href="http://github.com/petrkutalek/telxcc">Telxcc</a>.</li>
@@ -68,49 +80,6 @@
           <li>QtlMovie logo by <a href="http://www.designbolts.com">DesignBolts</a>.</li>
         </ul>
 
-        <div class="anchor" id="links"><h2>External references</h2></div>
-
-        <p>The following references link to useful resources on the Web about FFmpeg, DVD format and other media tools.</p>
-        <ul>
-          <li><a href="http://ffmpeg.org/">FFmpeg home page</a>.
-            <ul>
-              <li><a href="http://ffmpeg.org/ffmpeg-all.html">FFmpeg command line documentation</a>.</li>
-              <li><a href="http://ffmpeg.org/ffmpeg-filters.html">FFmpeg filters documentation</a>.</li>
-              <li><a href="http://trac.ffmpeg.org/wiki">FFmpeg Wiki</a>.</li>
-              <li><a href="http://ffmpeg.zeranoe.com/builds/">FFmpeg Windows builds</a>.</li>
-              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/">Win64 static builds</a>.</li>
-              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.7z">Win64 latest version</a>.</li>
-              <li><a href="http://develop.participatoryculture.org/index.php/ConversionMatrix">A list of recommended FFmpeg options</a>.</li>
-              <li><a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's FFmpeg PPA for Ubuntu</a>.</li>
-            </ul>
-          </li>
-          <li><a href="http://libav.org/">Libav home page</a> (FFmpeg clone).
-            <ul>
-              <li><a href="http://win32.libav.org/releases/">Libav Windows builds</a>.</li>
-            </ul>
-          </li>
-          <li>Mkisofs version 2 <a href="http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/mkisofs.exe">Windows binary</a>
-            (do not use version 3).</li>
-          <li><a href="http://dvdauthor.sourceforge.net/">DVD Author home page</a>.
-            <ul>
-              <li><a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/">DVD Author download</a>
-                (Version <a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/dvdauthor-0.7.1.tar.gz/download">0.7.1</a>).</li>
-              <li><a href="http://www.paehl.com/open_source/?DVDAuthor">DVD Author MinGW version for Windows</a>
-                (Version <a href="http://www.paehl.com/open_source/downloads/dvdauthor_0.7.1.7z">0.7.1</a>).</li>
-              <li><a href="http://dvdauthor.sourceforge.net/doc/index.html">DVD Author documentation</a>.</li>
-            </ul>
-          </li>
-          <li><a href="http://www.videohelp.com/tools/DVD-Decrypter">DVD Decrypter</a> and information on its
-            <a href="http://www.cdrom-guide.com/forums/showthread.php?t=263862">command line mode</a>.</li>
-          <li>DVD-Video structure:
-            <ul>
-              <li><a href="http://www.dvdforum.org/forum.shtml">DVD Forum</a> (official site).</li>
-              <li><a href="http://dvddemystified.com/dvdfaq.html">DVD Frequently Asked Questions (and Answers)</a>.</li>
-              <li><a href="http://dvd.sourceforge.net/dvdinfo/">DVD-Video Information</a>.</li>
-              <li><a href="http://dvd.wwwdotorg.org/">dvd.wwwdotorg.org</a>.</li>
-            </ul>
-          </li>
-        </ul>
       </div>
       <footer class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
         <p>QtlMovie is Free and Open Source |

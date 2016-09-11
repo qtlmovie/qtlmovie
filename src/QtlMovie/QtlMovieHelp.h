@@ -54,29 +54,18 @@ public:
     virtual ~QtlMovieHelp();
 
     //!
-    //! The help file to open.
-    //!
-    enum HelpFileType {
-        Home,       //!< Main help file.
-        User,       //!< Help file for "using QtlMovie".
-        Developer   //!< Help file for "building QtlMovie".
-    };
-
-    //!
     //! Display a help HTML file in the external browser.
     //! @param [in] parent Parent object/widget for error messages. If not a widget, find first widget in its hierarchy.
-    //! @param [in] type File type to open.
     //! @param [in] fragment Option fragment inside the help file (trailing "#fragment" in URL).
     //!
-    void showHelp(QObject* parent, HelpFileType type, const QString& fragment = QString());
+    void showHelp(QObject* parent, const QString& fragment = QString());
 
     //!
     //! Build the URL for a help HTML file.
     //! @param [in] parent Parent object/widget for error messages. If not a widget, find first widget in its hierarchy.
-    //! @param [in] type File type to open.
     //! @param [in] fragment Option fragment inside the help file (trailing "#fragment" in URL).
     //!
-    QUrl urlOf(QObject* parent, HelpFileType type, const QString& fragment = QString());
+    QUrl urlOf(QObject* parent, const QString& fragment = QString());
 
 private:
     QTemporaryDir* _tempDir;  //!< Directory for temporary files.

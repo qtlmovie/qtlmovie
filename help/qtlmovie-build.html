@@ -1,18 +1,35 @@
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Building QtlMovie</title>
+    <link type="image/png" rel="icon" href="favicon.png">
     <link type="text/css" rel="stylesheet" href="default.css"/>
     <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
     <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
     <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
-      <a href="qtlmovie.html" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
+      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
-      <a href="#" class="w3-light-grey w3-medium">Home</a>
       <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Language <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-build.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-build_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
+        <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro.html">Introduction</a>
+          <a href="qtlmovie-user.html">Using QtlMovie</a>
+          <a href="qtlmovie-build.html">Building QtlMovie</a>
+          <a href="qtlmovie-license.html">License</a>
+        </div>
+      </div>
+      <div class="w3-firstnav w3-accordion">
         <a onclick="myAccordion('menu-linux')" href="javascript:void(0)">Building on Linux <i class="fa fa-caret-down"></i></a>
         <div id="menu-linux" class="w3-accordion-content w3-animate-left w3-padding">
           <a href="#linreq">Pre-requisites</a>

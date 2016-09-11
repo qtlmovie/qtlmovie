@@ -321,7 +321,7 @@ void QtlMovieEditSettings::help()
     QWidget* current = _ui.tab->currentWidget();
     if (current != 0 && _help != 0) {
         // Use the object name of the tab as URL fragment (example: "#tabDirectories").
-        _help->showHelp(this, QtlMovieHelp::User, current->objectName());
+        _help->showHelp(this, current->objectName());
     }
 }
 

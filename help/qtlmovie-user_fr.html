@@ -1,18 +1,35 @@
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="fr">
+  <head profile="http://www.w3.org/2005/10/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Utilisation de QtlMovie</title>
+    <link type="image/png" rel="icon" href="favicon.png">
     <link type="text/css" rel="stylesheet" href="default.css"/>
     <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
     <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
     <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
-      <a href="qtlmovie_fr.html" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"></a>
-      <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Fermer <img src="close.png"></i></a>
-      <a href="#" class="w3-light-grey w3-medium">Début</a>
-      <a href="#overview">Introduction</a>
+      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"></a>
+      <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Fermer <i class="fa fa-remove"></i></a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Langue <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-user.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-user_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
+        <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro_fr.html">Introduction</a>
+          <a href="qtlmovie-user_fr.html">Utilisation de QtlMovie</a>
+          <a href="qtlmovie-build_fr.html">Construction de QtlMovie</a>
+          <a href="qtlmovie-license_fr.html">Licence</a>
+        </div>
+      </div>
+      <div class="w3-firstnav"><a href="#overview">Introduction</a></div>
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-infile')" href="javascript:void(0)">Fichiers d'entrée <i class="fa fa-caret-down"></i></a>
         <div id="menu-infile" class="w3-accordion-content w3-animate-left w3-padding">
@@ -69,6 +86,7 @@
           <a href="#otherpf">Autres plates-formes</a>
         </div>
       </div>
+      <a href="#license">Licence</a>
     </nav>
     <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
     <div class="w3-main" style="margin-left:250px;">
@@ -83,9 +101,9 @@
 
         <div class="anchor" id="overview"><h2>Introduction</h2></div>
 
-        <p>QtlMovie est un simple frontal Qt pour ffmpeg et quelque autres outils media.</p>
-        <p>QtlMovie ne prétend pas être la dernière interface graphique à la mode pour ffmpeg.
-          Au contraire, QtlMovie est conçu pour automatiser un petit nombre de tâches
+        <p>QtlMovie est une interface graphique pour ffmpeg et quelque autres outils media,
+          avec la simplicité comme objectif principal.</p>
+        <p>QtlMovie est conçu pour automatiser un petit nombre de tâches
           spécifiques "<i>en un clic</i>" sans avoir à gérer trop d'options.</p>
         <p>Ces tâches sont les suivantes:</p>
         <ul>
@@ -95,10 +113,10 @@
         </ul>
         <p>Les principales fonctionnalités de QtlMovie sont les suivantes:</p>
         <ul>
-          <li>Lecture de n'importe quel type courant de fichier audio/vidéo en entrée.</li>
+          <li>Lecture de n'importe quel type courant de fichier audio/vidéo en entrée, y compris des DVD.</li>
           <li>Création d'images ISO pour DVD et les graver en option.</li>
           <li>Création de fichiers audio/vidéo adaptés pour iPad, iPhone ou appareils Android.</li>
-          <li>Création d'un fichier audio/vidéo AVI hautement compressé pour stockage ou échange de fichier.</li>
+          <li>Création d'un fichier audio/vidéo AVI pour stockage ou échange de fichier.</li>
           <li>Ne conserver qu'une seule piste audio.</li>
           <li>En option, incruster une piste de sous-titrage dans la vidéo mais
             sans conserver de flux de sous-titrage indépendant dans le fichier..</li>

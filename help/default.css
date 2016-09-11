@@ -141,6 +141,7 @@ ul.w3-ul li:last-child{border-bottom:none}
 .w3-topnav .w3-dropdown-hover a{border-bottom:0}
 .w3-opennav,.w3-closenav{color:inherit}
 .w3-opennav:hover,.w3-closenav:hover{cursor:pointer;opacity:0.8}
+.w3-firstnav{border-top:1px solid #ccc;-webkit-transition:border-top .3s;transition:border-top .3s}
 
 .w3-btn,.w3-btn-floating,.w3-dropnav a,.w3-btn-floating-large,.w3-btn-block,
 .w3-hover-shadow,.w3-hover-opacity,.w3-navbar a,.w3-sidenav a,.w3-pagination li a,

@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="fr">
+  <head profile="http://www.w3.org/2005/10/profile">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QtlMovie</title>
+    <link type="image/png" rel="icon" href="favicon.png">
+    <link type="text/css" rel="stylesheet" href="default.css"/>
+    <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
+    <script type="text/javascript" src="functions.js"></script>
+  </head>
+  <body>
+    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
+      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
+      <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Fermer <i class="fa fa-remove"></i></a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Langue <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-intro_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
+        <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro_fr.html">Introduction</a>
+          <a href="qtlmovie-user_fr.html">Utilisation de QtlMovie</a>
+          <a href="qtlmovie-build_fr.html">Construction de QtlMovie</a>
+          <a href="qtlmovie-license_fr.html">Licence</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-download')" href="javascript:void(0)">Téléchargement <i class="fa fa-caret-down"></i></a>
+        <div id="menu-download" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="https://sourceforge.net/projects/qtlmovie/files/win32/">Windows 32-bit</a>
+          <a href="https://sourceforge.net/projects/qtlmovie/files/win64/">Windows 64-bit</a>
+          <a href="https://sourceforge.net/projects/qtlmovie/files/mac/">Mac OS X</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-source')" href="javascript:void(0)">Code source <i class="fa fa-caret-down"></i></a>
+        <div id="menu-source" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="https://sourceforge.net/projects/qtlmovie/files/src/">Archives</a>
+          <a href="https://sourceforge.net/p/qtlmovie/code/">Git sur SourgeForge</a>
+          <a href="https://github.com/qtlmovie/qtlmovie">Git sur GitHub</a>
+          <a href="http://qtlmovie.sourceforge.net/doxy/">Documentation Doxygen</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-other')" href="javascript:void(0)">Sur le Web <i class="fa fa-caret-down"></i></a>
+        <div id="menu-other" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="http://qtlmovie.sourceforge.net/">Site Web de QtlMovie</a>
+          <a href="https://sourceforge.net/projects/qtlmovie/">Projet sur SourceForge</a>
+          <a href="https://sourceforge.net/p/qtlmovie/discussion/">Forum de discussion</a>
+          <a href="https://github.com/qtlmovie/qtlmovie/issues">Signaler un problème</a>
+        </div>
+      </div>
+    </nav>
+    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+    <div class="w3-main" style="margin-left:250px;">
+      <div id="myTop" class="w3-top w3-container w3-padding-16 w3-theme w3-large">
+        <i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right" onclick="w3_open()"></i>
+        <span id="myIntro" class="w3-hide">QtlMovie</span>
+      </div>
+      <header class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
+        <h1 class="w3-xxxlarge w3-padding-16">QtlMovie</h1>
+      </header>
+      <div class="w3-container w3-padding-32" style="padding-left:32px">
+
+        <h2>Qu'est-ce que QtlMovie ?</h2>
+
+        <p>QtlMovie est une interface graphique simple pour FFmpeg et quelque autres outils media.</p>
+        <p>Pourquoi créer encore une autre interface graphique pour FFmpeg?
+          Parce que la plupart de ces interfaces graphiques génériques sont complexes.
+          QtlMovie a été conçu avec la simplicité comme objectif principal
+          pour quelques opérations spécifiques courantes.</p>
+        <p>QtlMovie effectue un petit nombre de tâches répétives spécialisées
+          qui se sont avérées difficiles ou pénibles avec d'autres outils.
+          En bref, j'ai développé QtlMovie en premier lieu pour mon usage personnel,
+          pour automatiser des tâches qui me prenaient trop de temps,
+          et je le mets maintenant à la disposition de tous.</p>
+
+        <h2>A quoi sert QtlMovie ?</h2>
+
+        <p>C'est principalement la réponse aux besoins suivants:</p>
+        <ul>
+          <li>Je suis un amateur de cinéma et je ne veux regarder les films qu'en version
+            originale, avec des sous-titres si nécessaire.</li>
+          <li>J'enregistre beaucoup de films qui passent à la télévision
+            (TV numérique ou conversion numérique d'enregistrements analogiques)
+            ou je récupère d'autres fichiers vidéo et je veux faire des DVD de tous ces films.</li>
+          <li>Je possède un iPad (ou autre tablette) ainsi que de nombreux DVD et je veux
+            pouvoir regarder ces DVD sur la tablette.</li>
+        </ul>
+        <p>Cela semble-t-il un besoin raisonnable? Oui, a priori. Ou du moins le croyais-je.</p>
+        <p>Cela semble simple? Pas si simple en fait. Avant de développer QtlMovie,
+          je devais utiliser une bonne douzaine d'outils différents selon le type de
+          fichier en entrée et en sortie:
+          MediaInfo (toujours un bon point de départ), AviDemux, ProjectX, VirtualDub,
+          MediaCoder, DVD Decrypter, VOB Merge, DeeVeeDee, Nero, plusieurs outils plus
+          ou moins fonctionnels de conversion de sous-titres et, pour les cas désespérés,
+          une bonne vieille ligne de commande ffmpeg.
+          Aucun de ces outils ne pouvait être supprimé.
+          Il y avait toujours un cas spécifique où l'un d'entre eux était nécessaire
+          (la plupart du temps en raison du cauchemar des formats de sous-titres).
+          Plus de détails seront donnés plus loin.
+          Notez que je ne mentionne que des outils gratuits.
+          Il y a peut-être un outil professionnel magique hors de prix qui ferait
+          ce que je veux mais je ne suis simplement pas intéressé.</p>
+        <p>C'est pourquoi j'ai décidé d'unifier tous ces outils derrière une interface
+          graphique unique qui, sans cacher leur existence, interagit avec FFmpeg et quelques autres
+          outils en ligne de commande.
+          FFmpeg est l'outil clé, celui qui fait le plus gros du travail.
+          Mais d'autres outils ont été ajoutés pour extraire des sous-titres au format
+          "Close Captions" ou pour créer des DVD.
+          Une fenêtre de journal ("log") montre les commandes générées ainsi que ce qu'elles affichent.
+          Pour comprendre à quel point QtlMovie peut être utile, la fenêtre de journal
+          montre pas moins de 10 commandes successives pour créer un DVD depuis un
+          enregistrement TV utilisant des sous-titres Teletext.</p>
+
+        <h2>Utiliser QtlMovie</h2>
+
+        <p>La manière la plus classique d'utiliser QtlMovie est la suivante:</p>
+        <ul>
+          <li>Ouvrir un fichier vidéo de n'importe quel type, y compris un DVD ou
+            un système de fichiers issu d'un DVD, avec n'importe quelle combinaison
+            et formats de vidéo, audio et sous-titres.</li>
+          <li>Cinq clicks: 1. sélectionner la piste vidéo,
+            2. sélectionner la piste audio,
+            3. sélectionner la piste de sous-titres,
+            4. sélectionner le format de sortie,
+            5. démarrer.
+            Toutes les sélections utilisent de simples "boutons radio" dans une fenêtre unique
+            (pas de menus complexes, ni de choix déroulants, etc.)</li>
+          <li>Tout est automatisé pour créer soit un DVD (fichier MPEG, image ISO ou graver le média,
+            au choix) ou un fichier vidéo pour iPad/iPhone/Android/AVI.
+            Le média ainsi créé est simple et basique:
+            une piste vidéo avec sous-titres incorporés, une piste audio, c'est tout
+            (pas de menu ni de sélection de pistes).</li>
+        </ul>
+
+        <h2>Pourquoi est-ce si compliqué ?</h2>
+
+        <p>Curieusement, et bien que cela soit la tâche la plus compliquée techniquement,
+          les conversions audio et vidéo n'ont jamais été un problème.
+          La plupart des outils gèrent cela correctement, en général grâce à des
+          outils intégrés comme FFmpeg ou ses bibliothèques de code.</p>
+        <p>Voici une liste de quelques difficultés techniques que j'ai rencontrées.
+          Aucun outil traditionnel ne peut les résoudre toutes à la fois.
+          J'ai toujours eu besoin d'un ensemble d'outils distincts et complémentaires.
+          Et quand une solution existait dans un outil, je devais sélectionner de
+          multiples options et faire quelques calculs à la main à chaque fois.
+          Je déteste répéter les mêmes opérations (ou pire, des opérations similaires)
+          quand une solution technique pourrait exister pour les automatiser.</p>
+        <ul>
+          <li>Taille vidéo, proportions de taille d'affichage et de pixel.
+            Exemple: soit une vidéo de taille 1280x536
+            avec une proportion de taille de <i><strong>pixel</strong></i> de 1:1.
+            Comment retailler et ajouter des bandes noires pour obtenir une vidéo DVD
+            de taille 720x576 avec une proportion de taille d'<i><strong>affichage</strong></i> de 16:9?
+            A chaque fois, il faut refaire quelques calculs simples mais pénibles.</li>
+          <li>Identification des langues et propriétés des pistes audio et sous-titres (standard, forcé,
+            pour malvoyants ou malentendants). Les fichiers VOB sur un DVD ne contiennent pas cette information.
+            Il faut analyser le fichier .IFO correspondant pour l'obtenir.
+            Avec certains outils, les propriétés de ces pistes audio et sous-titres ne sont pas clairement
+            identifiées, ce qui rend la sélection de la bonne piste plus difficile.</li>
+          <li>Identification et démultiplexage des Chaînes de Programmes (PGC) sur les DVD.
+            Avec certains DVD, transcoder les fichiers VOB donne des résultats étranges parce qu'ils
+            contiennent plusieurs programmes distincts sur les mêmes pistes vidéo et audio.
+            Il faut démultiplexer le bon programme avant le transcodage.</li>
+          <li>Sous-titres texte: Quel est le format? SRT, SSA, ASS. Quelle en est la source?
+            Une piste dans le fichier d'entrée ou un fichier externe?
+            Comment les incruster dans la vidéo? AviDemux fonctionne plus ou moins mais n'est pas fiable.
+            Sa capacité à incruster des sous-titres SRT ou ASS ne cesse de varier en fonction des versions
+            et j'ai eu à subir des crashs répétés et particulièrement agaçants.</li>
+          <li>Sous-titres Teletext, fréquents en télévision numérique terrestre (TNT) et en IP-TV (box opérateur).
+            Le seul outil graphique qui peut les extraire est ProjectX.
+            Mais il ne fonctionne que sur des fichiers transport MPEG-TS et son interface
+            est complexe et peu intuitive.</li>
+          <li>Position et taille des sous-titres Bitmap (DVD et DVB).
+            Les tailles d'image de la vidéo et des sous-titres sont parfois différentes
+            et incruster l'un sur l'autre nécessite des ajustements manuels
+            (après des heures de crise de nerfs à essayer de comprendre pourquoi ces
+            cochonneries de sous-titres n'apparaissent pas dans la vidéo).</li>
+          <li>Couleur des sous-titres DVD. Les fichiers VOB d'un DVD contiennent les bitmaps des sous-titres
+            sans information de couleur. Le résultat de l'incrustation de ces sous-titres sans information
+            de couleur est affreux et difficilement regardable. Il faut creuser au fond du fichier .IFO
+            correspondant sur le DVD pour extraire la palette de couleurs à appliquer aux sous-titres.</li>
+          <li>Sans compter toutes les autres difficultés que j'ai maintenant oubliées.</li>
+        </ul>
+        <p>Bon, ça suffisait comme ça. Je voulais juste ouvrir un fichier, 5 clicks,
+          prendre un café et ensuite récupérer mon DVD ou mon fichier vidéo tout fait.
+          C'est ainsi que j'ai développé QtlMovie.</p>
+        <p>QtlMovie n'est pas un outil sophistiqué. Il ne manipule pas (ou peu) la vidéo ou
+          autres flux complexes. Il synchronise simplement le travail d'autres outils,
+          excellents et complexes, comme FFmpeg.
+          Mais "<i>simplement</i>" est exactement le mot qui manquait et j'espère que
+          QtlMovie vous apportera cette simplicité.</p>
+
+        <h2>Disponibilité</h2>
+        
+        <p>QtlMovie est Open Source et disponible selon les termes de la licence BSD.
+          Il est développé en C++ au dessus de Qt 5 et devrait donc fonctionner sur
+          toute plate-forme supportant Qt 5.5 ou supérieur, FFmpeg et les autres outils média.
+          QtlMovie est développé principalement sous Windows mais est également testé sur Mac et Linux.</p>
+        <p>QtlMovie est disponible sur SourceForge.
+          Le code source est disponible sous forme d'un fichier archive par version et dans un dépot Git.
+          Les différents liens sont disponibles dans le menu de cette page..</p>
+        <p>Des installeurs binaires pour Windows (32 et 64 bits) et Mac OS X (Mac Intel 64 bits) sont disponibles.
+          Ces installeurs binaires inclus des versions récentes de ffmpeg, ffprobe, dvdauthor, ccextractor, mkisofs et growisofs.
+          Ils sont donc auto-suffisants et directement utilisables pour tout utilisateur.</p>
+        <p>Des packages RPM et DEB sont disponibles pour Fedora et Ubuntu Linux (64 bits).
+          Suivant les règles habituelles de la gestion de packages sous Linux,
+          ces packages n'installent que QtlMovie. Les packages des outils média doivent
+          être installés séparemment.</p>
+        <p>Merci de signaler tout problème via le <a href="https://github.com/qtlmovie/qtlmovie/issues">gestionnaire de bugs</a>.
+          Un <a href="https://sourceforge.net/p/qtlmovie/discussion/">forum de discussion</a>
+          est également disponible. Les posts anonymes y sont autorisés mais seront
+          modérés au préalable. Les utilisateurs enregistrés sur SourceForge peuvent poster sans restriction.</p>
+
+        <h2>Remerciements</h2>
+
+        <p>Je tiens à remercier les auteurs de
+          <a href="http://ffmpeg.org/">ffmpeg</a>,
+          <a href="http://dvdauthor.sourceforge.net/">dvdauthor</a>,
+          <a href="http://github.com/petrkutalek/telxcc">telxcc</a>,
+          <a href="http://ccextractor.sourceforge.net/">ccextractor</a>,
+          <a href="http://cdrecord.berlios.de/">mkisofs</a> et
+          <a href="http://freecode.com/projects/dvdrw-tools">growisofs</a>.
+          Ils ont développé de superbes outils. QtlMovie ne fait que les synchroniser...</p>
+
+        <h2>Références externes (en anglais)</h2>
+
+        <p>Les liens suivants référencent des articles utiles sur le Web à propos
+          de FFmpeg, des formats DVD et des autres outils média utilisés par QtlMovie.
+          Ces sites sont en anglais.</p>
+        <ul>
+          <li><a href="http://ffmpeg.org/">Site officiel de FFmpeg</a>.
+            <ul>
+              <li><a href="http://ffmpeg.org/ffmpeg-all.html">Documentation de la ligne de commande FFmpeg</a>.</li>
+              <li><a href="http://ffmpeg.org/ffmpeg-filters.html">Documentation des filtres FFmpeg</a>.</li>
+              <li><a href="http://trac.ffmpeg.org/wiki">Wiki FFmpeg</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/">Binaires de FFmpeg pour Windows</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/">Binaires Win64 statiques</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.7z">Dernière version Win64</a>.</li>
+              <li><a href="http://evermeet.cx/ffmpeg/">Binaires de FFmpeg pour Mac OS</a>.</li>
+              <li><a href="http://develop.participatoryculture.org/index.php/ConversionMatrix">Liste des options recommandées de FFmpeg</a>.</li>
+              <li><a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Le PPA FFmpeg de Jon Severinsson pour Ubuntu</a>.</li>
+            </ul>
+          </li>
+          <li><a href="http://libav.org/">Site officiel de Libav</a> (clone de FFmpeg).
+            <ul>
+              <li><a href="http://win32.libav.org/releases/">Binaires Windows de Libav</a>.</li>
+            </ul>
+          </li>
+          <li><a href="http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/mkisofs.exe">Binaires Windows</a>
+            pour Mkisofs version 2 (ne pas utiliser la version 3).</li>
+          <li><a href="http://dvdauthor.sourceforge.net/">Site officiel de DVD Author</a>.
+            <ul>
+              <li><a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/">Téléchargements DVD Author</a>
+                (Version <a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/dvdauthor-0.7.1.tar.gz/download">0.7.1</a>).</li>
+              <li><a href="http://www.paehl.com/open_source/?DVDAuthor">Version MinGW de DVD Author pour Windows</a>
+                (Version <a href="http://www.paehl.com/open_source/downloads/dvdauthor_0.7.1.7z">0.7.1</a>).</li>
+              <li><a href="http://dvdauthor.sourceforge.net/doc/index.html">Documentation de DVD Author</a>.</li>
+            </ul>
+          </li>
+          <li><a href="http://www.videohelp.com/tools/DVD-Decrypter">DVD Decrypter</a> et informations sur son
+            <a href="http://www.cdrom-guide.com/forums/showthread.php?t=263862">mode ligne de commande</a>.</li>
+          <li>Structure des DVD-Vidéo:
+            <ul>
+              <li><a href="http://www.dvdforum.org/forum.shtml">DVD Forum</a> (site officiel).</li>
+              <li><a href="http://dvddemystified.com/dvdfaq.html">Questions fréquentes sur les DVDs</a>.</li>
+              <li><a href="http://dvd.sourceforge.net/dvdinfo/">Information sur le format DVD-Vidéo</a>.</li>
+              <li><a href="http://dvd.wwwdotorg.org/">dvd.wwwdotorg.org</a>.</li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      <footer class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
+        <p>QtlMovie est Libre, Gratuit et Open Source |
+          <a href="http://qtlmovie.sourceforge.net/" target="_blank">Site Web</a> |
+          <a href="https://github.com/qtlmovie/qtlmovie/issues" target="_blank">Signaler un problème</a></p>
+      </footer>
+    </div>
+  </body>
+</html> 

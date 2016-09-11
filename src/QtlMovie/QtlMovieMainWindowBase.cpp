@@ -273,7 +273,7 @@ void QtlMovieMainWindowBase::about()
 
 void QtlMovieMainWindowBase::showHelp()
 {
-    _help.showHelp(this, QtlMovieHelp::Home);
+    _help.showHelp(this);
 }
 
 

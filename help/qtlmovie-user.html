@@ -1,18 +1,35 @@
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QtlMovie User Guide</title>
+    <link type="image/png" rel="icon" href="favicon.png">
     <link type="text/css" rel="stylesheet" href="default.css"/>
     <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
     <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
     <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
-      <a href="qtlmovie.html" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
+      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
-      <a href="#" class="w3-light-grey w3-medium">Home</a>
-      <a href="#overview">Overview</a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Language <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-user.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-user_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
+        <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro.html">Introduction</a>
+          <a href="qtlmovie-user.html">Using QtlMovie</a>
+          <a href="qtlmovie-build.html">Building QtlMovie</a>
+          <a href="qtlmovie-license.html">License</a>
+        </div>
+      </div>
+      <div class="w3-firstnav"><a href="#overview">Overview</a></div>
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-infile')" href="javascript:void(0)">Input files <i class="fa fa-caret-down"></i></a>
         <div id="menu-infile" class="w3-accordion-content w3-animate-left w3-padding">
@@ -83,9 +100,9 @@
 
         <div class="anchor" id="overview"><h2>Overview</h2></div>
 
-        <p>QtlMovie is a simple Qt front-end to ffmpeg and other media tools.</p>
-        <p>QtlMovie does not pretend to be the next most wanted GUI for ffmpeg.
-          Instead, it is designed to automate a reduced number of tasks in a
+        <p>QtlMovie is a graphical front-end to ffmpeg and other media tools,
+          with simplicity in mind.</p>
+        <p>QtlMovie is designed to automate a reduced number of specific tasks in a
           "one-click" way without setting many parameters.</p>
         <p>These tasks are:</p>
         <ul>
@@ -95,10 +112,10 @@
         </ul>
         <p>QtlMovie main features are:</p>
         <ul>
-          <li>Take any type of common audio/video file as input.</li>
+          <li>Take any type of common audio/video file as input, including DVD media.</li>
           <li>Produce DVD ISO images and optionally burn them.</li>
           <li>Produce video files for iPad, iPhone or Android viewing.</li>
-          <li>Produce highly compressed AVI video files for storage or interchange.</li>
+          <li>Produce AVI video files for storage or interchange.</li>
           <li>Keep only one audio track.</li>
           <li>Optionally hardcode ("<i>burn</i>") one subtitle track into the video
             but does not keep subtitles as a separate stream.</li>

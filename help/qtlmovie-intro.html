@@ -1,21 +1,32 @@
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QtlMovie</title>
-    <link type="text/css" rel="stylesheet" href="doc/default.css"/>
-    <link type="text/css" rel="stylesheet" href="doc/fontawesome.css"/>
-    <script type="text/javascript" src="doc/functions.js"></script>
+    <link type="image/png" rel="icon" href="favicon.png">
+    <link type="text/css" rel="stylesheet" href="default.css"/>
+    <link type="text/css" rel="stylesheet" href="fontawesome.css"/>
+    <script type="text/javascript" src="functions.js"></script>
   </head>
   <body>
-    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:200px;" id="mySidenav">
-      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="doc/qtlmovie.png" style="width:80%;"/></a>
+    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:250px;" id="mySidenav">
+      <a href="#" class="w3-sidenav-top w3-border-bottom w3-large"><img src="qtlmovie.png" style="width:80%;"/></a>
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
+      <div class="w3-accordion">
+        <a onclick="myAccordion('menu-translations')" href="javascript:void(0)">Language <i class="fa fa-caret-down"></i></a>
+        <div id="menu-translations" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="qtlmovie-intro.html"><img class="w3-navbar" src="flag_en.png"> English</a>
+          <a href="qtlmovie-intro_fr.html"><img class="w3-navbar" src="flag_fr.png"> Français</a>
+        </div>
+      </div>
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-documentation')" href="javascript:void(0)">Documentation <i class="fa fa-caret-down"></i></a>
         <div id="menu-documentation" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="doc/qtlmovie.html">English</a>
-          <a href="doc/qtlmovie_fr.html">Fran&ccedil;ais</a>
+          <a href="qtlmovie-intro.html">Introduction</a>
+          <a href="qtlmovie-user.html">Using QtlMovie</a>
+          <a href="qtlmovie-build.html">Building QtlMovie</a>
+          <a href="qtlmovie-license.html">License</a>
         </div>
       </div>
       <div class="w3-accordion">
@@ -32,20 +43,21 @@
           <a href="https://sourceforge.net/projects/qtlmovie/files/src/">Archives</a>
           <a href="https://sourceforge.net/p/qtlmovie/code/">Git on SourgeForge</a>
           <a href="https://github.com/qtlmovie/qtlmovie">Git on GitHub</a>
-          <a href="doxy/index.html">Doxygen documentation</a>
+          <a href="http://qtlmovie.sourceforge.net/doxy/">Doxygen documentation</a>
         </div>
       </div>
       <div class="w3-accordion">
-        <a onclick="myAccordion('menu-other')" href="javascript:void(0)">Other resources <i class="fa fa-caret-down"></i></a>
+        <a onclick="myAccordion('menu-other')" href="javascript:void(0)">Web resources <i class="fa fa-caret-down"></i></a>
         <div id="menu-other" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="https://sourceforge.net/projects/qtlmovie/">SourceForge Project</a>
+          <a href="http://qtlmovie.sourceforge.net/">QtlMovie Web site</a>
+          <a href="https://sourceforge.net/projects/qtlmovie/">SourceForge project</a>
           <a href="https://sourceforge.net/p/qtlmovie/discussion/">Discussion forum</a>
           <a href="https://github.com/qtlmovie/qtlmovie/issues">Report a problem</a>
         </div>
       </div>
     </nav>
     <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
-    <div class="w3-main" style="margin-left:200px;">
+    <div class="w3-main" style="margin-left:250px;">
       <div id="myTop" class="w3-top w3-container w3-padding-16 w3-theme w3-large">
         <i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right" onclick="w3_open()"></i>
         <span id="myIntro" class="w3-hide">QtlMovie</span>
@@ -57,11 +69,11 @@
 
         <h2>What is QtlMovie ?</h2>
 
-        <p>QtlMovie is a simple specialized graphical front-end to FFmpeg and other free media tools using the Qt framework.</p>
-        <p>Why another front-end to FFmpeg? So many different ones already exist.</p>
-        <p>QtlMovie is <i>not</i> a general-purpose GUI for FFmpeg, interfacing its
-          rich set of options and filters.</p>
-        <p>Instead, QtlMovie only performs a few repetitive specialized
+        <p>QtlMovie is a simple specialized graphical front-end to FFmpeg and other free media tools.</p>
+        <p>Why another front-end to FFmpeg?
+          Because most of these general-purpose front-ends are complex.
+          QtlMovie has been designed with simplicity in mind for just a few specific common operations.</p>
+        <p>QtlMovie performs a few repetitive specialized
           tasks which proved to be difficult or boring with other tools. In short, I developed QtlMovie
           primarily for my own usage to automate tasks which took me too long and I now share it.</p>
 
@@ -87,7 +99,7 @@
           magic and expensive tools which do what I want but I am simply not interested.</p>
         <p>This is why I decided to unify all of them behind a common GUI which interfaces
           (but does not hide) ffmpeg and other command line tools. FFmpeg is the key tool which
-          does most of the work. But additional tools are added to extract Teletext subtitles
+          does most of the work. But additional tools are added to extract Close Captions subtitles
           or create DVD file systems and media. A log window shows the generated commands
           and their output. To understand why QtlMovie can be useful, the log window shows
           no less than 10 successive commands to generate a DVD media from a TV recording
@@ -124,6 +136,10 @@
           <li>Identification of audio and subtitle language and properties (standard, forced, for hearing/visual impaired).
             VOB files from DVD do not carry this information. You have to analyze the .IFO file for that.
             With some tools, the properties are not clearly reported, making the selection decision more difficult.</li>
+          <li>Identification and demultiplexing the Program Chains (PGC) on DVD.
+            With some DVD's, transcoding the VOB files gives weird results because they contains
+            distinct programs in the same video and audio tracks. You have to demultiplex the
+            right program before transcoding.</li>
           <li>Text subtitles. Which format: SRT, SSA, ASS. Which source: a stream in the input file or an external file.
             How to burn them in the video. AviDemux is mostly OK but unreliable, its support for SRT vs. ASS keeps
             changing with versions and I faced repeated and irritating crashes.</li>
@@ -138,7 +154,7 @@
           <li>And other difficulties I have now forgotten.</li>
         </ul>
         <p>Well, enough is enough. I just wanted to open a file,  5 clicks, go for a coffee
-          (or a "<i>magret de canard</i>") and later collect my DVD media or movie file.
+          and later collect my DVD media or movie file.
           So I developed QtlMovie.</p>
         <p>QtlMovie is a not a sophisticated tool. It does not manipulate video and other complex bitstreams.
           It simply synchronizes the work of other excellent and complex tools such as FFmpeg.
@@ -174,7 +190,53 @@
           <a href="http://ccextractor.sourceforge.net/">ccextractor</a>,
           <a href="http://cdrecord.berlios.de/">mkisofs</a> and
           <a href="http://freecode.com/projects/dvdrw-tools">growisofs</a>.
-          They developed great tools. QtlMovie is just providing the glue...<p>
+          They developed great tools. QtlMovie is just providing the glue...</p>
+
+        <h2>Useful external references</h2>
+
+        <p>The following references link to useful resources on the Web about FFmpeg, DVD format and other media tools.</p>
+        <ul>
+          <li><a href="http://ffmpeg.org/">FFmpeg home page</a>.
+            <ul>
+              <li><a href="http://ffmpeg.org/ffmpeg-all.html">FFmpeg command line documentation</a>.</li>
+              <li><a href="http://ffmpeg.org/ffmpeg-filters.html">FFmpeg filters documentation</a>.</li>
+              <li><a href="http://trac.ffmpeg.org/wiki">FFmpeg Wiki</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/">FFmpeg Windows builds</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/">Win64 static builds</a>.</li>
+              <li><a href="http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.7z">Win64 latest version</a>.</li>
+              <li><a href="http://evermeet.cx/ffmpeg/">FFmpeg Mac OS builds</a>.</li>
+              <li><a href="http://develop.participatoryculture.org/index.php/ConversionMatrix">A list of recommended FFmpeg options</a>.</li>
+              <li><a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's FFmpeg PPA for Ubuntu</a>.</li>
+            </ul>
+          </li>
+          <li><a href="http://libav.org/">Libav home page</a> (FFmpeg clone).
+            <ul>
+              <li><a href="http://win32.libav.org/releases/">Libav Windows builds</a>.</li>
+            </ul>
+          </li>
+          <li>Mkisofs version 2 <a href="http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/mkisofs.exe">Windows binary</a>
+            (do not use version 3).</li>
+          <li><a href="http://dvdauthor.sourceforge.net/">DVD Author home page</a>.
+            <ul>
+              <li><a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/">DVD Author download</a>
+                (Version <a href="http://sourceforge.net/projects/dvdauthor/files/dvdauthor/0.7.1/dvdauthor-0.7.1.tar.gz/download">0.7.1</a>).</li>
+              <li><a href="http://www.paehl.com/open_source/?DVDAuthor">DVD Author MinGW version for Windows</a>
+                (Version <a href="http://www.paehl.com/open_source/downloads/dvdauthor_0.7.1.7z">0.7.1</a>).</li>
+              <li><a href="http://dvdauthor.sourceforge.net/doc/index.html">DVD Author documentation</a>.</li>
+            </ul>
+          </li>
+          <li><a href="http://www.videohelp.com/tools/DVD-Decrypter">DVD Decrypter</a> and information on its
+            <a href="http://www.cdrom-guide.com/forums/showthread.php?t=263862">command line mode</a>.</li>
+          <li>DVD-Video structure:
+            <ul>
+              <li><a href="http://www.dvdforum.org/forum.shtml">DVD Forum</a> (official site).</li>
+              <li><a href="http://dvddemystified.com/dvdfaq.html">DVD Frequently Asked Questions (and Answers)</a>.</li>
+              <li><a href="http://dvd.sourceforge.net/dvdinfo/">DVD-Video Information</a>.</li>
+              <li><a href="http://dvd.wwwdotorg.org/">dvd.wwwdotorg.org</a>.</li>
+            </ul>
+          </li>
+        </ul>
+
       </div>
       <footer class="w3-container w3-theme w3-padding-16" style="padding-left:32px">
         <p>QtlMovie is Free and Open Source |

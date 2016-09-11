@@ -60,10 +60,10 @@ QtlMovieHelp::~QtlMovieHelp()
 // Display a help HTML file in the external browser.
 //----------------------------------------------------------------------------
 
-void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, const QString& fragment)
+void QtlMovieHelp::showHelp(QObject* parent, const QString& fragment)
 {
     // Open the file in the external browser.
-    const QUrl url(urlOf(parent, type, fragment));
+    const QUrl url(urlOf(parent, fragment));
     if (url.isValid() && !QDesktopServices::openUrl(url)) {
         qtlError(parent, QObject::tr("Error opening browser.\nSee %1").arg(url.toString()));
     }
@@ -74,24 +74,10 @@ void QtlMovieHelp::showHelp(QObject* parent, QtlMovieHelp::HelpFileType type, co
 // Build the URL for a help HTML file.
 //----------------------------------------------------------------------------
 
-QUrl QtlMovieHelp::urlOf(QObject* parent, QtlMovieHelp::HelpFileType type, const QString& fragment)
+QUrl QtlMovieHelp::urlOf(QObject* parent, const QString& fragment)
 {
     // Name of the main help file.
-    QString fileName;
-    switch (type) {
-        case Home:
-            fileName = "qtlmovie.html";
-            break;
-        case User:
-            fileName = "qtlmovie-user.html";
-            break;
-        case Developer:
-            fileName = "qtlmovie-build.html";
-            break;
-        default:
-            qtlError(parent, QObject::tr("Invalid help file"));
-            return QUrl();
-    }
+    const QString fileName("qtlmovie-user.html");
 
     // Search the directory where help files are stored.
     // Start with the application directory.

@@ -71,6 +71,9 @@ for sz in $ICON_SIZES; do
     cp src/QtlMovie/images/qtlmovie-${sz}.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/${sz}x${sz}/apps/qtlmovie.png
 done
 cp help/default.css \
+   help/favicon.png \
+   help/flag_en.png \
+   help/flag_fr.png \
    help/fontawesome.css \
    help/fontawesome-webfont.eot \
    help/fontawesome-webfont.svg \
@@ -78,13 +81,15 @@ cp help/default.css \
    help/fontawesome-webfont.woff \
    help/fontawesome-webfont.woff2 \
    help/functions.js \
-   help/qtlmovie.html \
    help/qtlmovie.png \
-   help/qtlmovie_fr.html \
-   help/qtlmovie-build.html \
-   help/qtlmovie-build_fr.html \
+   help/qtlmovie-intro.html \
+   help/qtlmovie-intro_fr.html \
    help/qtlmovie-user.html \
    help/qtlmovie-user_fr.html \
+   help/qtlmovie-build.html \
+   help/qtlmovie-build_fr.html \
+   help/qtlmovie-license.html \
+   help/qtlmovie-license_fr.html \
    $RPM_BUILD_ROOT/usr/share/doc/qtlmovie
 
 %clean
@@ -108,6 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/icons/hicolor/256x256/apps/qtlmovie.png
 /usr/share/icons/hicolor/512x512/apps/qtlmovie.png
 /usr/share/doc/qtlmovie/default.css
+/usr/share/doc/qtlmovie/favicon.png
+/usr/share/doc/qtlmovie/flag_en.png
+/usr/share/doc/qtlmovie/flag_fr.png
 /usr/share/doc/qtlmovie/fontawesome.css
 /usr/share/doc/qtlmovie/fontawesome-webfont.eot
 /usr/share/doc/qtlmovie/fontawesome-webfont.svg
@@ -115,11 +123,13 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/doc/qtlmovie/fontawesome-webfont.woff
 /usr/share/doc/qtlmovie/fontawesome-webfont.woff2
 /usr/share/doc/qtlmovie/functions.js
-/usr/share/doc/qtlmovie/qtlmovie.html
 /usr/share/doc/qtlmovie/qtlmovie.png
-/usr/share/doc/qtlmovie/qtlmovie_fr.html
-/usr/share/doc/qtlmovie/qtlmovie-build.html
-/usr/share/doc/qtlmovie/qtlmovie-build_fr.html
+/usr/share/doc/qtlmovie/qtlmovie-intro.html
+/usr/share/doc/qtlmovie/qtlmovie-intro_fr.html
 /usr/share/doc/qtlmovie/qtlmovie-user.html
 /usr/share/doc/qtlmovie/qtlmovie-user_fr.html
-%doc CHANGELOG.txt LICENSE.txt TODO.txt
+/usr/share/doc/qtlmovie/qtlmovie-build.html
+/usr/share/doc/qtlmovie/qtlmovie-build_fr.html
+/usr/share/doc/qtlmovie/qtlmovie-license.html
+/usr/share/doc/qtlmovie/qtlmovie-license_fr.html
+%doc CHANGELOG.txt LICENSE.txt
