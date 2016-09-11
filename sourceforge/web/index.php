@@ -12,7 +12,8 @@ if ($lang == "fr") {
     $suffix = "_" . $lang;
 }
 
-// Redirect to localized page:
-header("location: doc/qtlmovie-user" . $suffix . ".html");
+// Redirect to localized page.
+// Use status 307 ("temporary redirect") to avoid the browser caching the result.
+header("location: doc/qtlmovie-intro" . $suffix . ".html", $true, 307);
 
 ?>
