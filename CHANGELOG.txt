@@ -7,6 +7,7 @@ Version 1.10
   transcode when reading DVD content as input file. In most cases, transcoding
   the complete VOB files may work. But, with multi-PGC movies, it won't.
   With these options, transcoding a DVD movie is always safe.
+- Added an option to set the DVD burning speed (passed to growisofs).
 - Bug fix: The total duration of an input DVD movie was incorrectly computed as
   the sum of the durations of all PGC's. In the rare cases where a DVD movie had
   several PGC's, the duration could be wrong. This is fixed.

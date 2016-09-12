@@ -1068,6 +1068,10 @@ bool QtlMovieJob::addBurnDvd(const QString& isoFile, const QString& dvdBurner)
     // growisofs creates a new file system with the ISO file inside. The "=" in the
     // same argument means that the file is an ISO image to burn.
     QStringList args;
+    const int dvdBurningSpeed = settings()->dvdBurningSpeed();
+    if (dvdBurningSpeed > 0) {
+        args << QStringLiteral("-speed=%1").arg(dvdBurningSpeed);
+    }
     args << "-dvd-compat" << "-Z" << (dev + "=" + isoFile);
 
     // Add the growisofs process to the job.

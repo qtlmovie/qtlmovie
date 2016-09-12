@@ -262,6 +262,12 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.spinDvdProgramChain->setValue(_settings->dvdProgramChain());
     _ui.spinDvdAngle->setValue(_settings->dvdAngle());
 
+    const int dvdBurningSpeed = _settings->dvdBurningSpeed();
+    _ui.checkDvdBurningSpeed->setChecked(dvdBurningSpeed != 0);
+    if (dvdBurningSpeed != 0) {
+        _ui.spinDvdBurningSpeed->setValue(dvdBurningSpeed);
+    }
+
     // Update max bit rates according to video qualities.
     updateMaxBitRates();
 
@@ -415,6 +421,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdTranscodeRawVob(_ui.radioTranscodeRawVob->isChecked());
     _settings->setDvdProgramChain(_ui.spinDvdProgramChain->value());
     _settings->setDvdAngle(_ui.spinDvdAngle->value());
+    _settings->setDvdBurningSpeed(_ui.checkDvdBurningSpeed->isChecked() ? _ui.spinDvdBurningSpeed->value() : 0);
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {
@@ -583,6 +590,16 @@ void QtlMovieEditSettings::updateMaxBitRates()
 
     // AVI max bit rate.
     updateMaxBitRate(_ui.labelAviMaxBitRate, _ui.spinAviQuality, _ui.spinAviWidth->value(), _ui.spinAviHeight->value(), QTL_AVI_FRAME_RATE);
+}
+
+
+//-----------------------------------------------------------------------------
+// Invoked when the DVD burning speed is changed in the spin box.
+//-----------------------------------------------------------------------------
+
+void QtlMovieEditSettings::dvdBurningSpeedChanged(int speed)
+{
+    _ui.checkDvdBurningSpeed->setChecked(speed != 0);
 }
 
 

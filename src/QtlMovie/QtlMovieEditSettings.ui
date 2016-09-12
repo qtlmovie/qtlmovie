@@ -717,7 +717,7 @@
           <item row="2" column="0">
            <widget class="QCheckBox" name="checkCreateChapters">
             <property name="text">
-             <string>Create chapters :</string>
+             <string>Create chapters every :</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -754,6 +754,29 @@
            <widget class="QCheckBox" name="checkForceDvdTranscode">
             <property name="text">
              <string>Force transcoding even if the input file or video is DVD-compliant</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="checkDvdBurningSpeed">
+            <property name="text">
+             <string>Set burning speed :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="3">
+           <widget class="QSpinBox" name="spinDvdBurningSpeed">
+            <property name="suffix">
+             <string notr="true">x</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>64</number>
+            </property>
+            <property name="value">
+             <number>1</number>
             </property>
            </widget>
           </item>
@@ -2147,6 +2170,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>spinDvdBurningSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>QtlMovieEditSettings</receiver>
+   <slot>dvdBurningSpeedChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>428</x>
+     <y>327</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>356</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>resetValues(QAbstractButton*)</slot>
@@ -2167,5 +2206,6 @@
   <slot>updateMaxBitRates()</slot>
   <slot>browseDvdExtractionDir()</slot>
   <slot>help()</slot>
+  <slot>dvdBurningSpeedChanged(int)</slot>
  </slots>
 </ui>

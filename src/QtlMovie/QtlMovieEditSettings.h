@@ -189,6 +189,12 @@ private slots:
     //!
     void updateMaxBitRates();
 
+    //!
+    //! Invoked when the DVD burning speed is changed in the spin box.
+    //! @param [in] speed The new speed in Nx.
+    //!
+    void dvdBurningSpeedChanged(int speed);
+
 private:
     //!
     //! Description of an output directory settings.

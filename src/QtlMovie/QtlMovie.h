@@ -85,6 +85,7 @@
 #define QTL_DVD_TRANSCODE_RAW_VOB          false  //!< Transcode raw VOB files from DVD (don't extract specific PGC).
 #define QTL_DVD_PROGRAM_CHAIN                  1  //!< Default Program Chain (PGC) to extract in a DVD Title Set (VTS).
 #define QTL_DVD_ANGLE                          1  //!< Default angle to extract in a DVD program chain.
+#define QTL_DVD_BURNING_SPEED                  0  //!< DVD burning speed as Nx, 0 means use current/default speed.
 
 //
 // Transcoding presets.

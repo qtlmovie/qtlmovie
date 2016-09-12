@@ -218,6 +218,7 @@ public:
     QTL_SETTINGS_BOOL(dvdTranscodeRawVob, setDvdTranscodeRawVob, QTL_DVD_TRANSCODE_RAW_VOB)
     QTL_SETTINGS_INT(dvdProgramChain, setDvdProgramChain, QTL_DVD_PROGRAM_CHAIN)
     QTL_SETTINGS_INT(dvdAngle, setDvdAngle, QTL_DVD_ANGLE)
+    QTL_SETTINGS_INT(dvdBurningSpeed, setDvdBurningSpeed, QTL_DVD_BURNING_SPEED)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

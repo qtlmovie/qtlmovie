@@ -613,7 +613,7 @@
         <p>Le débit vidéo est utilisé comme débit binaire moyen pour les pistes vidéo.
           Toutefois, QtlMovie s'assure que l'image de sortie tienne sur un media standard de 4.7 GB
           et réduit le débit au besoin.</p>
-        <p>L'option "Création de chapitres" permet de créer des chapitres sur le DVD.
+        <p>L'option "Créer des chapitres" permet de créer des chapitres sur le DVD.
           Tous les chapitres ont la même durée, exprimée en minutes.</p>
         <p>L'option "Remultiplexer l'audio et la vidéo après le transcodage" force un
           remultiplexage additionnel de l'audio et la vidéo après transcodage. Cela prend
@@ -625,6 +625,11 @@
         <p>L'option "Forcer le transcodage même si le fichier ou sa vidéo sont déjà compatibles DVD"
           fait ce qu'elle dit... Cela peut être utile pour forcer le transcodage quand le
           fichier semble compatible DVD mais ne l'est pas vraiment (trop grand par exemple).</p>
+        <p>Quand l'option "Forcer la vitesse de gravure" est activée, cette vitesse
+          est forcée à la vitesse indiquée ("1x" étant la débit de
+          transfert nominal d'un DVD, soit environ 1,385 MO/s).
+          Cette vitesse est directement passée à <i>growisofs</i>.
+          Quand l'option n'est pas activée, la vitesse de gravure n'est pas modifiée.</p>
 
         <div class="anchor" id="tabIpad"><h3>Onglet "iPad"</h3></div>
 
