@@ -122,6 +122,10 @@ table,th,td{border:none}
 ul.w3-ul{list-style-type:none;padding:0;margin:0}
 ul.w3-ul li{padding:6px 2px 6px 16px;border-bottom:1px solid #ddd}
 ul.w3-ul li:last-child{border-bottom:none}
+
+ul.qtl-topics li{padding-bottom:0.4em}
+ul.qtl-topics li:last-child{padding-bottom:0}
+
 .w3-tooltip,.w3-display-container{position:relative}
 .w3-fluid{max-width:100%;height:auto}
 .w3-tooltip .w3-text{display:none}

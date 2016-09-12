@@ -276,7 +276,7 @@
           If the original file contains a subtitle stream you want to use, you should not edit the original video file.
           It may depend on the editing tool, but most of the time the subtitle streams are lost after editing.
           Instead, you should use the following scenario:</p>
-        <ul>
+        <ul class="qtl-topics">
           <li>Use QtlMovie to generate a <i>DVD MPEG File</i> with the complete content.
             Select the required audio and subtitle streams.
             This is the longest part, where the re-encoding takes place.</li>
@@ -444,7 +444,7 @@
           in the meantime, press "Refresh" to update the content of the window.</p>
         <p>The "DVD extraction" tool has three tabs, one per mode of operation.
           In all cases, the output files are created in the selected "Destination directory".</p>
-        <ul>
+        <ul class="qtl-topics">
           <li>Tab "ISO": When this tab is selected, the complete content of the DVD is
             extracted as one large ISO file.</li>
           <li>Tab "Video Title Sets" (or VTS): When this tab is selected, each VTS in the
@@ -638,7 +638,7 @@
           In theory, 0 dBFS is ideal but -1 dBFS should be preferred to avoid clipping.</p>
         <p>When the input dynamic is too large for the target normalization, several options
           are possible.</p>
-        <ul>
+        <ul class="qtl-topics">
           <li>Align to mean level and compress: The target mean level is used and dynamic
             compression is performed (similar to standard MP3 conversions).
             This is the default and should be fine for most usages.</li>
@@ -687,16 +687,16 @@
         <p>As the name implies, this tab groups all options which did not fit in other tabs.</p>
         <p>The "File processing mode" options describe how QtlMovie processes multiple input
           files. Since these options significantly modifies the way QtlMovie works, they are
-          actually applied only when QtlMovie is restarted.<p>
-          <ul>
-            <li>The "single file mode" is the legacy mode which was found in the original version
-              of QtlMovie. Only one file can be processed at a time. This is a simple operation
-              mode. The input and output file descriptions directly appear in the main window.</li>
-            <li>The "<a href="#batchmode">multi-file batch mode</a>" allows the processing of
-              multiple files in sequence. The main window shows a list of files to be processed.
-              The transcoding operation processes all files in the list. Adding other files to
-              process is allowed during the transcoding of the previous files.</li>
-          </ul>
+          actually applied only when QtlMovie is restarted.</p>
+        <ul class="qtl-topics">
+          <li>The "single file mode" is the legacy mode which was found in the original version
+            of QtlMovie. Only one file can be processed at a time. This is a simple operation
+            mode. The input and output file descriptions directly appear in the main window.</li>
+          <li>The "<a href="#batchmode">multi-file batch mode</a>" allows the processing of
+            multiple files in sequence. The main window shows a list of files to be processed.
+            The transcoding operation processes all files in the list. Adding other files to
+            process is allowed during the transcoding of the previous files.</li>
+        </ul>
         <p>The "Target audience language codes" lists the codes which are used to identify the
           language of the "target audience".
           This needs some explanation.
