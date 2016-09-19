@@ -2,8 +2,15 @@
 QtlMovie - A specialized Qt frontend for FFmpeg
 ===============================================
 
+Web site:
+  http://qtlmovie.sourceforge.net/
+
 Documentation:
-  See help/qtlmovie.html
+  help/qtlmovie-intro.html
+  help/qtlmovie-user.html
+
+Questions and bug reports:
+  https://github.com/qtlmovie/qtlmovie/issues
 
 Build requirements:
   QtlMovie can be built on Linux, Mac or Windows platforms. It requires Qt version 5.

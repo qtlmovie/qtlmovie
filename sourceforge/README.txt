@@ -60,8 +60,6 @@ The various steps in the release process of a new version of QtlMovie are:
       default download for all platforms, except Windows and Mac. Note that
       the "default download" system of SourceForge does not allow specific
       files for Ubuntu and Fedora.
-    - Go to the "General Discussion" forum and create a topic announcing the
-      new release and a copy of the extract of CHANGELOG.txt for this release.
 - Log in the VideoHelp.com forums, go to the thread discussing QtlMovie (see
   URL below), create a reply announcing the new release and a copy of the
   extract of CHANGELOG.txt for this release. Thread URL:
