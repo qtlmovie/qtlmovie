@@ -48,7 +48,7 @@ QtlPasswordDialog::QtlPasswordDialog(const QString& target, bool createPassword,
     setWindowTitle(tr("Password"));
 
     // Initial dialog size.
-    resize(400, 150);
+    resize(400, 100);
 
     // Setup a bold font.
     QFont boldFont;
@@ -57,18 +57,13 @@ QtlPasswordDialog::QtlPasswordDialog(const QString& target, bool createPassword,
 
     // Layout for this dialog. There will be two columns.
     QGridLayout* layout = new QGridLayout(this);
+    layout->setVerticalSpacing(12);
     int currentRow = 0;
 
     // Header label in first row, two columns.
-    QLabel* label = new QLabel(this);
+    QLabel* label = new QLabel(target, this);
     label->setFont(boldFont);
     label->setAlignment(Qt::AlignCenter);
-    if (createPassword) {
-        label->setText(tr("Create a new password for\n%1\n").arg(target));
-    }
-    else {
-        label->setText(tr("Enter password for\n%1\n").arg(target));
-    }
     layout->addWidget(label, currentRow++, 0, 1, 2);
 
     // Password edit box.
