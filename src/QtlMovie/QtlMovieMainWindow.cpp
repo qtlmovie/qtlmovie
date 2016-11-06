@@ -32,7 +32,7 @@
 
 #include "QtlMovieMainWindow.h"
 #include "QtlMovie.h"
-#include "QtlProcess.h"
+#include "QtlBoundProcess.h"
 #include "QtlStringUtils.h"
 
 

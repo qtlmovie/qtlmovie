@@ -46,7 +46,7 @@ QtlMovieProcess::QtlMovieProcess(const QtlMovieExecFile* execFile,
                                  QObject *parent,
                                  QtlDataPull* dataPull):
     QtlMovieAction(settings, log, parent),
-    _process(new QProcess(this)),
+    _process(new QtlProcess(this)),
     _execFile(execFile),
     _arguments(arguments),
     _hasBinaryOutput(hasBinaryOutput),

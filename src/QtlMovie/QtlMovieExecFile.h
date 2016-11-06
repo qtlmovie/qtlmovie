@@ -37,7 +37,7 @@
 
 #include "QtlFile.h"
 #include "QtlLogger.h"
-#include "QtlProcessResult.h"
+#include "QtlBoundProcessResult.h"
 
 //!
 //! Describe an executable file such as ffmpeg, ffprobe, etc.
@@ -158,7 +158,7 @@ private slots:
     //! Invoked when the "get version" process completes.
     //! @param [in] result Process execution results.
     //!
-    void getVersionTerminated(const QtlProcessResult& result);
+    void getVersionTerminated(const QtlBoundProcessResult& result);
 
 private:
     QtlLogger*  _log;            //!< Where to log errors.

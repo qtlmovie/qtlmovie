@@ -2,6 +2,12 @@
 QtlMovie Change Log
 ===================
 
+Version 1.11
+- Added an option to run FFmpeg processes at a lower priority. This option is
+  enabled by default. Other processes like CC Extractor and DVD Author are run
+  at the normal priority since they are less CPU intensive (ie. I/O-bound, not
+  CPU-bound).
+
 Version 1.10
 - Added an option to select the "program chain" (or "PGC") and angle to
   transcode when reading DVD content as input file. In most cases, transcoding

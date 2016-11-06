@@ -37,7 +37,7 @@
 #define QTLSYNCHRONOUSPROCESS_H
 
 #include <QObject>
-#include "QtlProcess.h"
+#include "QtlBoundProcess.h"
 
 //!
 //! The QtlSynchronousProcess class implements the execution of a synchronous process.
@@ -154,12 +154,12 @@ private slots:
     //! Invoked when the process is terminated or failed to start.
     //! @param [in] result Process execution results.
     //!
-    void processTerminated(const QtlProcessResult& result);
+    void processTerminated(const QtlBoundProcessResult& result);
 
 private:
-    QEventLoop       _eventLoop;  //!< Event loop which executes in the constructor.
-    QtlProcessResult _result;     //!< Process execution result.
-    bool             _terminated; //!< Process execution is completed.
+    QEventLoop            _eventLoop;  //!< Event loop which executes in the constructor.
+    QtlBoundProcessResult _result;     //!< Process execution result.
+    bool                  _terminated; //!< Process execution is completed.
 
     // Unaccessible operations.
     QtlSynchronousProcess() Q_DECL_EQ_DELETE;

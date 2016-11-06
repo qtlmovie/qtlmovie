@@ -38,7 +38,7 @@
 #include "QtlFile.h"
 #include "QtlDataPull.h"
 #include "QtsDvdTitleSet.h"
-#include "QtlProcess.h"
+#include "QtlBoundProcess.h"
 #include "QtlMediaStreamInfo.h"
 #include "QtlMovieSettings.h"
 #include "QtlMovieFFprobeTags.h"
@@ -360,7 +360,7 @@ private slots:
     //! Invoked when the ffprobe process completes.
     //! @param [in] result Process execution results.
     //!
-    void ffprobeTerminated(const QtlProcessResult& result);
+    void ffprobeTerminated(const QtlBoundProcessResult& result);
     //!
     //! Invoked when a Teletext subtitle stream is found.
     //! @param [in] stream A smart pointer to the stream info data.
@@ -420,9 +420,9 @@ private:
     //! @param [in] probeTimeDivisor If positive, this value is used to reduce the probe time duration.
     //! The actual probe time is the value from @a settings, divided by @a probeTimeDivisor.
     //! @param [in] ffprobeTimeout Timeout of process execution in seconds.
-    //! @return A new instance of QtlProcess.
+    //! @return A new instance of QtlBoundProcess.
     //!
-    QtlProcess* ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout);
+    QtlBoundProcess* ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout);
 
     // Unaccessible operations.
     QtlMovieInputFile() Q_DECL_EQ_DELETE;

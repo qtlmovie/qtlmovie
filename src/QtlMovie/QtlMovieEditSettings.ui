@@ -427,6 +427,19 @@
           <string>FFmpeg options</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelFFprobeExecutionTimeout">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>FFprobe timeout :</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="labelFFmpegProbeSeconds">
             <property name="sizePolicy">
@@ -462,19 +475,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelFFprobeExecutionTimeout">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>FFprobe timeout :</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="spinFFprobeExecutionTimeout">
             <property name="sizePolicy">
@@ -494,6 +494,13 @@
             </property>
             <property name="value">
              <number>40</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkBoxFFmpegLowPriority">
+            <property name="text">
+             <string>Run FFmpeg processes at a lower priority</string>
             </property>
            </widget>
           </item>

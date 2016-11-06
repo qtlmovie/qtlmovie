@@ -44,13 +44,14 @@ QtlSynchronousProcess::QtlSynchronousProcess(const QString &program,
                                              int maxProcessOutputSize,
                                              QObject *parent,
                                              const QProcessEnvironment &env) :
+    QObject(parent),
     _eventLoop(),
     _result(),
     _terminated(false)
 {
     // Create the process. The object will delete itself upon termination.
-    QtlProcess* process = QtlProcess::newInstance(program, arguments, msRunTestTimeout, maxProcessOutputSize, this, env);
-    connect(process, &QtlProcess::terminated, this, &QtlSynchronousProcess::processTerminated);
+    QtlBoundProcess* process = QtlBoundProcess::newInstance(program, arguments, msRunTestTimeout, maxProcessOutputSize, this, env);
+    connect(process, &QtlBoundProcess::terminated, this, &QtlSynchronousProcess::processTerminated);
     process->start();
 
     // Run a private event loop while the process executes.
@@ -64,7 +65,7 @@ QtlSynchronousProcess::QtlSynchronousProcess(const QString &program,
 // Invoked when the process is terminated or failed to start.
 //----------------------------------------------------------------------------
 
-void QtlSynchronousProcess::processTerminated(const QtlProcessResult &result)
+void QtlSynchronousProcess::processTerminated(const QtlBoundProcessResult &result)
 {
     _terminated = true;
     _result = result;

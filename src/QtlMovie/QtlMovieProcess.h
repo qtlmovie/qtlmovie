@@ -35,7 +35,7 @@
 #ifndef QTLMOVIEPROCESS_H
 #define QTLMOVIEPROCESS_H
 
-#include <QtCore>
+#include "QtlProcess.h"
 #include "QtlDataPull.h"
 #include "QtlMovieAction.h"
 #include "QtlMovieExecFile.h"
@@ -115,6 +115,17 @@ public:
     //! @return The command line arguments.
     //!
     void setArguments(const QStringList& arguments);
+
+    //!
+    //! Set the process priority.
+    //! The process must not be already started.
+    //! Special privileges may be required to set Qtl::HighPriority and Qtl::VeryHighPriority.
+    //! @param [in] priority Requested priority.
+    //!
+    void setPriority(Qtl::ProcessPriority priority)
+    {
+        _process->setPriority(priority);
+    }
 
     //!
     //! Return the device from which  standard output can be read.
@@ -206,7 +217,7 @@ private slots:
     void dataPullProgressed(qint64 current, qint64 maximum);
 
 private:
-    QProcess*               _process;         //!< Process instance.
+    QtlProcess*             _process;         //!< Process instance.
     const QtlMovieExecFile* _execFile;        //!< Process executable file.
     QStringList             _arguments;       //!< Command line arguments.
     bool                    _hasBinaryOutput; //!< Treat standard output as binary data.

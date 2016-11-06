@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,22 +26,22 @@
 //
 //----------------------------------------------------------------------------
 //!
-//! @file QtlProcessResult.h
+//! @file QtlBoundProcessResult.h
 //!
-//! Declare the class QtlProcessResult.
+//! Declare the class QtlBoundProcessResult.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
 
-#ifndef QTLPROCESSRESULT_H
-#define QTLPROCESSRESULT_H
+#ifndef QTLBOUNDPROCESSRESULT_H
+#define QTLBOUNDPROCESSRESULT_H
 
 #include "QtlCore.h"
 
 //!
 //! Result of a process execution.
 //!
-class QtlProcessResult
+class QtlBoundProcessResult
 {
 public:
     //!
@@ -49,19 +49,19 @@ public:
     //! @param [in] program Executable file path.
     //! @param [in] arguments Command line arguments.
     //!
-    QtlProcessResult(const QString& program = QString(), const QStringList& arguments = QStringList());
+    QtlBoundProcessResult(const QString& program = QString(), const QStringList& arguments = QStringList());
 
     //!
     //! Copy constructor.
     //! @param [in] other Other instance to copy.
     //!
-    QtlProcessResult(const QtlProcessResult& other);
+    QtlBoundProcessResult(const QtlBoundProcessResult& other);
 
     //!
     //! Assignment operator.
     //! @param [in] other Other instance to copy.
     //!
-    const QtlProcessResult& operator=(const QtlProcessResult& other);
+    const QtlBoundProcessResult& operator=(const QtlBoundProcessResult& other);
 
     //!
     //! Get the executable file path.
@@ -189,4 +189,4 @@ private:
     int         _exitCode;      //!< Process exit code.
 };
 
-#endif // QTLPROCESSRESULT_H
+#endif // QTLBOUNDPROCESSRESULT_H

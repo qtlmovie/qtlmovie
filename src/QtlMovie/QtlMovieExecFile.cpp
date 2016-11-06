@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "QtlMovieExecFile.h"
-#include "QtlProcess.h"
+#include "QtlBoundProcess.h"
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QRegExp>
@@ -171,16 +171,16 @@ void QtlMovieExecFile::startGetVersion()
     env.insert(QTL_PATH_VARIABLE_NAME, directoryName() + QTL_SEARCH_PATH_SEPARATOR + env.value(QTL_PATH_VARIABLE_NAME));
 
     // Start a process which requests the executable versions.
-    QtlProcess* process =
-        QtlProcess::newInstance(fileName(),       // command
-                                _versionOptions,  // arguments
-                                5000,             // timeout after 5 seconds.
-                                32768,            // max output size in bytes
-                                this,             // parent object
-                                env);
+    QtlBoundProcess* process =
+            QtlBoundProcess::newInstance(fileName(),       // command
+                                         _versionOptions,  // arguments
+                                         5000,             // timeout after 5 seconds.
+                                         32768,            // max output size in bytes
+                                         this,             // parent object
+                                         env);
 
     // Get notification at process termination.
-    connect(process, &QtlProcess::terminated, this, &QtlMovieExecFile::getVersionTerminated);
+    connect(process, &QtlBoundProcess::terminated, this, &QtlMovieExecFile::getVersionTerminated);
 
     // Start the process.
     process->start();
@@ -201,7 +201,7 @@ int QtlMovieExecFile::markerPosition(const QString &marker, const QString &str)
 // Invoked when the "get version" process completes.
 //----------------------------------------------------------------------------
 
-void QtlMovieExecFile::getVersionTerminated(const QtlProcessResult& result)
+void QtlMovieExecFile::getVersionTerminated(const QtlBoundProcessResult& result)
 {
     // Report termination error.
     if (result.hasError()) {

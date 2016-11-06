@@ -261,6 +261,7 @@ void QtlMovieEditSettings::resetValues(QAbstractButton* button)
     _ui.radioDemuxProgramChain->setChecked(!_settings->dvdTranscodeRawVob());
     _ui.spinDvdProgramChain->setValue(_settings->dvdProgramChain());
     _ui.spinDvdAngle->setValue(_settings->dvdAngle());
+    _ui.checkBoxFFmpegLowPriority->setChecked(_settings->ffmpegLowPriority());
 
     const int dvdBurningSpeed = _settings->dvdBurningSpeed();
     _ui.checkDvdBurningSpeed->setChecked(dvdBurningSpeed != 0);
@@ -422,6 +423,7 @@ void QtlMovieEditSettings::applySettings()
     _settings->setDvdProgramChain(_ui.spinDvdProgramChain->value());
     _settings->setDvdAngle(_ui.spinDvdAngle->value());
     _settings->setDvdBurningSpeed(_ui.checkDvdBurningSpeed->isChecked() ? _ui.spinDvdBurningSpeed->value() : 0);
+    _settings->setFFmpegLowPriority(_ui.checkBoxFFmpegLowPriority->isChecked());
 
     // Load default output directories by output type.
     for (OutputDirectoryMap::ConstIterator it = _outDirs.begin(); it != _outDirs.end(); ++it) {

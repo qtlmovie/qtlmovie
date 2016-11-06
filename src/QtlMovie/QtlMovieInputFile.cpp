@@ -123,7 +123,7 @@ QtlMovieInputFile::QtlMovieInputFile(const QtlMovieInputFile& other, QObject* pa
 // Create and start a ffprobe process.
 //----------------------------------------------------------------------------
 
-QtlProcess* QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout)
+QtlBoundProcess* QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeTimeout)
 {
     // ffprobe executable.
     const QString ffprobe(_settings->ffprobe()->fileName());
@@ -139,16 +139,17 @@ QtlProcess* QtlMovieInputFile::ffprobeProcess(int probeTimeDivisor, int ffprobeT
 
     // Create the process object.
     _log->debug(ffprobe + " " + args.join(' '));
-    QtlProcess* process = QtlProcess::newInstance(ffprobe,
-                                                  args,
-                                                  1000 * ffprobeTimeout,
-                                                  65536,   // max output size: 64 kB
-                                                  this,    // parent object
-                                                  QProcessEnvironment(),
-                                                  _pipeInput);
+    QtlBoundProcess* process =
+            QtlBoundProcess::newInstance(ffprobe,
+                                         args,
+                                         1000 * ffprobeTimeout,
+                                         65536,   // max output size: 64 kB
+                                         this,    // parent object
+                                         QProcessEnvironment(),
+                                         _pipeInput);
 
     // Get notified of process termination and starts the process.
-    connect(process, &QtlProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
+    connect(process, &QtlBoundProcess::terminated, this, &QtlMovieInputFile::ffprobeTerminated);
     process->start();
     _ffprobeCount++;
     return process;
@@ -242,7 +243,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     }
 
     // Create the process object. It will automatically delete itself after completion.
-    QtlProcess* process = ffprobeProcess(1, ffprobeTimeout);
+    QtlBoundProcess* process = ffprobeProcess(1, ffprobeTimeout);
 
     // Here is another trick. Reading an encrypted DVD, or a DVD media in general,
     // is very slow. A typical bitrate is 21 Mb/s. Reading the default probe size
@@ -254,8 +255,8 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
     // perfect but better than waiting 1 minute.
 
     if (isOnDvd) {
-        QtlProcess* process2 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_2, ffprobeTimeout);
-        QtlProcess* process3 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_3, ffprobeTimeout);
+        QtlBoundProcess* process2 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_2, ffprobeTimeout);
+        QtlBoundProcess* process3 = ffprobeProcess(QTL_FFPROBE_DVD_DIVISOR_3, ffprobeTimeout);
 
         // Pipe DVD content into all process inputs at the same time.
         if (_pipeInput) {
@@ -287,7 +288,7 @@ void QtlMovieInputFile::updateMediaInfo(const QString& fileName)
 // Invoked when the ffprobe process completes.
 //----------------------------------------------------------------------------
 
-void QtlMovieInputFile::ffprobeTerminated(const QtlProcessResult& result)
+void QtlMovieInputFile::ffprobeTerminated(const QtlBoundProcessResult& result)
 {
     // FFprobe terminated.
     _ffprobeCount--;

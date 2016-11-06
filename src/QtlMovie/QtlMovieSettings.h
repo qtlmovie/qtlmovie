@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -219,6 +219,7 @@ public:
     QTL_SETTINGS_INT(dvdProgramChain, setDvdProgramChain, QTL_DVD_PROGRAM_CHAIN)
     QTL_SETTINGS_INT(dvdAngle, setDvdAngle, QTL_DVD_ANGLE)
     QTL_SETTINGS_INT(dvdBurningSpeed, setDvdBurningSpeed, QTL_DVD_BURNING_SPEED)
+    QTL_SETTINGS_BOOL(ffmpegLowPriority, setFFmpegLowPriority, QTL_FFMPEG_LOW_PRIORITY)
 
     //
     // Inlined definitions of the getters and setters for media tools executable.

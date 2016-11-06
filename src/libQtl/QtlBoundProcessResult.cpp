@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,18 +27,18 @@
 //----------------------------------------------------------------------------
 //
 // Qtl, Qt utility library.
-// Define the class QtlProcessResult.
+// Define the class QtlBoundProcessResult.
 //
 //----------------------------------------------------------------------------
 
-#include "QtlProcessResult.h"
+#include "QtlBoundProcessResult.h"
 
 
 //----------------------------------------------------------------------------
 // Constructors and assignment.
 //----------------------------------------------------------------------------
 
-QtlProcessResult::QtlProcessResult(const QString& program, const QStringList& arguments) :
+QtlBoundProcessResult::QtlBoundProcessResult(const QString& program, const QStringList& arguments) :
     _program(program),
     _arguments(arguments),
     _stdOutput(),
@@ -48,7 +48,7 @@ QtlProcessResult::QtlProcessResult(const QString& program, const QStringList& ar
 {
 }
 
-QtlProcessResult::QtlProcessResult(const QtlProcessResult &other) :
+QtlBoundProcessResult::QtlBoundProcessResult(const QtlBoundProcessResult &other) :
     _program(other._program),
     _arguments(other._arguments),
     _stdOutput(other._stdOutput),
@@ -59,7 +59,7 @@ QtlProcessResult::QtlProcessResult(const QtlProcessResult &other) :
 
 }
 
-const QtlProcessResult& QtlProcessResult::operator=(const QtlProcessResult &other)
+const QtlBoundProcessResult& QtlBoundProcessResult::operator=(const QtlBoundProcessResult &other)
 {
     if (&other != this) {
         _program = other._program;

@@ -67,6 +67,10 @@ QtlMovieFFmpegProcess::QtlMovieFFmpegProcess(const QStringList& ffmpegArguments,
     _inputDurationInSeconds(inputDurationInSeconds),
     _tempDir(temporaryDirectory)
 {
+    // FFmpeg processes may be started with a lower priority.
+    if (settings->ffmpegLowPriority()) {
+        setPriority(Qtl::LowPriority);
+    }
 }
 
 

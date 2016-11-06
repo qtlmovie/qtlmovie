@@ -43,8 +43,6 @@ SOURCES += \
     QtlLineEdit.cpp \
     QtlPlainTextLogger.cpp \
     QtlBrowserDialog.cpp \
-    QtlProcess.cpp \
-    QtlProcessResult.cpp \
     QtlStringList.cpp \
     QtlFixedSizeTableWidget.cpp \
     QtlHexa.cpp \
@@ -86,7 +84,10 @@ SOURCES += \
     QtlRangeList.cpp \
     QtlRange.cpp \
     QtlFileSlices.cpp \
-    QtlDataPullSynchronousWrapper.cpp
+    QtlDataPullSynchronousWrapper.cpp \
+    QtlBoundProcessResult.cpp \
+    QtlBoundProcess.cpp \
+    QtlProcess.cpp
 
 HEADERS += \
     QtlByteBlock.h \
@@ -96,8 +97,6 @@ HEADERS += \
     QtlNullLogger.h \
     QtlPlainTextLogger.h \
     QtlBrowserDialog.h \
-    QtlProcess.h \
-    QtlProcessResult.h \
     QtlSmartPointer.h \
     QtlSmartPointerTemplate.h \
     QtlStringList.h \
@@ -159,7 +158,10 @@ HEADERS += \
     QtlRange.h \
     QtlRangeList.h \
     QtlFileSlices.h \
-    QtlDataPullSynchronousWrapper.h
+    QtlDataPullSynchronousWrapper.h \
+    QtlBoundProcessResult.h \
+    QtlBoundProcess.h \
+    QtlProcess.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts

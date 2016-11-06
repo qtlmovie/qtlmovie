@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,194 +27,138 @@
 //----------------------------------------------------------------------------
 //
 // Qtl, Qt utility library.
-// Define the class QtlProcess, an encapsulation of QProcess.
+// Define the class QtlProcess, an enhanced version of QProcess.
 //
 //----------------------------------------------------------------------------
 
 #include "QtlProcess.h"
 
+#if defined(Q_OS_UNIX)
+    #include <unistd.h>
+#endif
+
 
 //----------------------------------------------------------------------------
-// Create a new instance. Enforce object creation on the heap.
+// Constructors.
 //----------------------------------------------------------------------------
 
-QtlProcess* QtlProcess::newInstance(const QString& program,
-                                    const QStringList& arguments,
-                                    int msRunTestTimeout,
-                                    int maxProcessOutputSize,
-                                    QObject* parent,
-                                    const QProcessEnvironment& env,
-                                    bool pipeInput)
+QtlProcess::QtlProcess(QObject* parent) :
+    QProcess(parent),
+    _priority(Qtl::NormalPriority)
 {
-    return new QtlProcess(program, arguments, msRunTestTimeout, maxProcessOutputSize, parent, env, pipeInput);
 }
 
 
 //----------------------------------------------------------------------------
-// Constructor.
+// Set the process priority.
 //----------------------------------------------------------------------------
 
-QtlProcess::QtlProcess(const QString& program,
-                       const QStringList& arguments,
-                       int msRunTestTimeout,
-                       int maxProcessOutputSize,
-                       QObject* parent,
-                       const QProcessEnvironment& env,
-                       bool pipeInput) :
-    QObject(parent),
-    _msRunTestTimeout(msRunTestTimeout),
-    _maxProcessOutputSize(maxProcessOutputSize),
-    _result(program, arguments),
-    _pipeInput(pipeInput),
-    _started(false),
-    _terminated(false),
-    _process(new QProcess(this)),
-    _timer(new QTimer(this))
+void QtlProcess::setPriority(Qtl::ProcessPriority priority)
 {
-    if (!env.isEmpty()) {
-        _process->setProcessEnvironment(env);
+    // Must be called before start(), ignored otherwise.
+    if (state() == NotRunning) {
+        _priority = priority;
+
+#if defined(Q_OS_WIN)
+        // On Windows, set a function that will set the priority of the process.
+        switch (_priority) {
+            case Qtl::VeryLowPriority:
+                setCreateProcessArgumentsModifier(setVeryLowPriority);
+                break;
+            case Qtl::LowPriority:
+                setCreateProcessArgumentsModifier(setLowPriority);
+                break;
+            case Qtl::NormalPriority:
+                setCreateProcessArgumentsModifier(setNormalPriority);
+                break;
+            case Qtl::HighPriority:
+                setCreateProcessArgumentsModifier(setHighPriority);
+                break;
+            case Qtl::VeryHighPriority:
+                setCreateProcessArgumentsModifier(setVeryHighPriority);
+                break;
+        }
+#endif
     }
 }
 
 
 //----------------------------------------------------------------------------
-// Start the process.
+// This function is called in the child process context just before the
+// program is executed on Unix or OS X (i.e., after fork(), but before
+// execve()). Reimplement this function to do last minute initialization
+// of the child process.
 //----------------------------------------------------------------------------
 
-void QtlProcess::start()
+void QtlProcess::setupChildProcess()
 {
-    // Do not start twice.
-    if (_started) {
-        return;
+#if defined(Q_OS_UNIX)
+    switch (_priority) {
+        case Qtl::VeryLowPriority:
+            ::nice(20);
+            break;
+        case Qtl::LowPriority:
+            ::nice(10);
+            break;
+        case Qtl::NormalPriority:
+            ::nice(0);
+            break;
+        case Qtl::HighPriority:
+            ::nice(-10);
+            break;
+        case Qtl::VeryHighPriority:
+            ::nice(-20);
+            break;
     }
-    _started = true;
-
-    // Get notifications from the QProcess object.
-    connect(_process, &QProcess::readyReadStandardOutput, this, &QtlProcess::readOutputData);
-    connect(_process, &QProcess::readyReadStandardError, this, &QtlProcess::readOutputData);
-    connect(_process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &QtlProcess::processFinished);
-    connect(_process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &QtlProcess::processError);
-
-    // Start the process.
-    _process->start(_result.program(), _result.arguments());
-
-    // Immediately close the write channel if we have nothing to write on the standard input of the process.
-    if (!_pipeInput) {
-        _process->closeWriteChannel();
-    }
-
-    // Set a sigle-shot timer to kill process on timeout.
-    if (_msRunTestTimeout > 0) {
-        connect(_timer, &QTimer::timeout, this, &QtlProcess::processTimeout);
-        _timer->setSingleShot(true);
-        _timer->start(_msRunTestTimeout);
-    }
+#endif
 }
 
 
 //----------------------------------------------------------------------------
-// Cancel the start of the process.
+// Functions to set the priority of the Windows process.
 //----------------------------------------------------------------------------
 
-void QtlProcess::cancel()
+#if defined(Q_OS_WIN)
+
+void QtlProcess::clearPriority(CreateProcessArguments* args)
 {
-    // Simulate a start and an immediate abort.
-    if (!_started) {
-        _started = true;
-        sendTerminated(tr("Process execution canceled"));
-    }
+    // The priority is embedded in the flags. Clear all priority flags.
+    args->flags &= ~(IDLE_PRIORITY_CLASS |
+                     BELOW_NORMAL_PRIORITY_CLASS |
+                     NORMAL_PRIORITY_CLASS |
+                     ABOVE_NORMAL_PRIORITY_CLASS |
+                     HIGH_PRIORITY_CLASS |
+                     REALTIME_PRIORITY_CLASS);
 }
 
-
-//----------------------------------------------------------------------------
-// Read as much data as possible from the process standard error and output.
-//----------------------------------------------------------------------------
-
-void QtlProcess::readOutputData()
+void QtlProcess::setVeryLowPriority(CreateProcessArguments* args)
 {
-    // Read all available data.
-    _result.appendStandardOutput(_process->readAllStandardOutput());
-    _result.appendStandardError(_process->readAllStandardError());
-
-    // Check if the output limit has been reached.
-    if (_maxProcessOutputSize > 0 && (_result.standardOutputSize() > _maxProcessOutputSize || _result.standardErrorSize() > _maxProcessOutputSize)) {
-        sendTerminated(tr("Process output/error size exceeds limit"));
-    }
+    clearPriority(args);
+    args->flags |= IDLE_PRIORITY_CLASS;
 }
 
-
-//----------------------------------------------------------------------------
-// Invoked when the process is finished.
-//----------------------------------------------------------------------------
-
-void QtlProcess::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void QtlProcess::setLowPriority(CreateProcessArguments* args)
 {
-    _result.setExitCode(exitCode);
-    sendTerminated(exitStatus == QProcess::NormalExit ? "" : tr("Process crashed"));
+    clearPriority(args);
+    args->flags |= BELOW_NORMAL_PRIORITY_CLASS;
 }
 
-
-//----------------------------------------------------------------------------
-// Invoked when an error occurs on the process.
-//----------------------------------------------------------------------------
-
-void QtlProcess::processError(QProcess::ProcessError error)
+void QtlProcess::setNormalPriority(CreateProcessArguments* args)
 {
-    // Send an appropriate message.
-    switch (error) {
-    case QProcess::FailedToStart:
-        sendTerminated(tr("Failed to start process"));
-        break;
-    case QProcess::Crashed:
-        sendTerminated(tr("Process crashed"));
-        break;
-    default:
-        sendTerminated(tr("Unknown process error"));
-        break;
-    }
+    clearPriority(args);
+    args->flags |= NORMAL_PRIORITY_CLASS;
 }
 
-
-//----------------------------------------------------------------------------
-// Invoked when the process execution is too long.
-//----------------------------------------------------------------------------
-
-void QtlProcess::processTimeout()
+void QtlProcess::setHighPriority(CreateProcessArguments* args)
 {
-    sendTerminated(tr("Process exceeds execution time limit"));
+    clearPriority(args);
+    args->flags |= ABOVE_NORMAL_PRIORITY_CLASS;
 }
 
-
-//----------------------------------------------------------------------------
-// Send the terminated() signal.
-//----------------------------------------------------------------------------
-
-void QtlProcess::sendTerminated(const QString& message)
+void QtlProcess::setVeryHighPriority(CreateProcessArguments* args)
 {
-    // Do not send twice.
-    if (!_started || _terminated) {
-        return;
-    }
-    _terminated = true;
-    _result.setErrorMessage(message);
-
-    // Disconnect notifications from our internal objects.
-    disconnect(_process, 0, this, 0);
-    disconnect(_timer, 0, this, 0);
-
-    // Cancel the timer, if still running.
-    _timer->stop();
-
-    // Read all remaining available data.
-    _result.appendStandardOutput(_process->readAllStandardOutput());
-    _result.appendStandardError(_process->readAllStandardError());
-
-    // Notify the clients. The exit code is available only when there is no other error.
-    emit terminated(_result);
-
-    // Be sure to kill the process, in case of premature error.
-    _process->kill();
-
-    // Finally deallocate ourselves upon return to event loop.
-    deleteLater();
+    clearPriority(args);
+    args->flags |= HIGH_PRIORITY_CLASS;
 }
+
+#endif

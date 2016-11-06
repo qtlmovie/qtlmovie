@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013, Thierry Lelegard
+// Copyright (c) 2013-2016, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 //!
 //! @file QtlProcess.h
 //!
-//! Declare the class QtlProcess, an encapsulation of QProcess.
+//! Declare the class QtlProcess, an enhanced version of QProcess.
 //! Qtl, Qt utility library.
 //!
 //----------------------------------------------------------------------------
@@ -37,131 +37,83 @@
 #define QTLPROCESS_H
 
 #include "QtlCore.h"
-#include "QtlProcessResult.h"
 
 //!
-//! An encapsulation of QProcess which reports only the final state.
+//! Qtl namespace.
 //!
-//! A QtlProcess instance deletes itself automatically after process
-//! termination (after start()) or cancelation (after cancel()).
-//! It is both useless and invalid to explicitely delete the object.
-//! To enfore object creation on the heap, there is no public constructor.
-//! Always use the static method newInstance().
+namespace Qtl {
+    //!
+    //! Priority of a process, as used by QtlProcess.
+    //! Exact mapping depends on the operating system.
+    //!
+    enum ProcessPriority {
+        VeryLowPriority,  //!< Unix: nice +20, Windows: IDLE_PRIORITY_CLASS
+        LowPriority,      //!< Unix: nice +10, Windows: BELOW_NORMAL_PRIORITY_CLASS
+        NormalPriority,   //!< Unix: nice 0,   Windows: NORMAL_PRIORITY_CLASS
+        HighPriority,     //!< Unix: nice -10, Windows: ABOVE_NORMAL_PRIORITY_CLASS
+        VeryHighPriority  //!< Unix: nice -20, Windows: HIGH_PRIORITY_CLASS
+    };
+}
+
 //!
-class QtlProcess : public QObject
+//! A subclass of QProcess with additional features.
+//!
+class QtlProcess : public QProcess
 {
     Q_OBJECT
 
 public:
     //!
-    //! Create a new instance.
-    //! Enforce object creation on the heap.
-    //! @param [in] program Executable file path.
-    //! @param [in] arguments Command line arguments.
-    //! @param [in] msRunTestTimeout Timeout of process execution in milliseconds. Ignored if negative or zero.
-    //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
+    //! Constructor.
     //! @param [in] parent Optional parent object.
-    //! @param [in] env Environment for the process. Current environment by default.
-    //! @param [in] pipeInput If true, the standard input of the process can be fed using inputDevice().
-    //! @return The new QtlProcess instance.
     //!
-    static QtlProcess* newInstance(const QString& program,
-                                   const QStringList& arguments = QStringList(),
-                                   int msRunTestTimeout = 0,
-                                   int maxProcessOutputSize = 0,
-                                   QObject* parent = 0,
-                                   const QProcessEnvironment& env = QProcessEnvironment(),
-                                   bool pipeInput = false);
+    QtlProcess(QObject* parent = 0);
 
     //!
-    //! Start the process.
+    //! Get the process priority.
+    //! @return The process priority.
     //!
-    void start();
-
-    //!
-    //! Cancel the start of the process.
-    //! If the process is not yet started, it will never be and the terminated()
-    //! signal is sent with a cancelation message.
-    //!
-    void cancel();
-
-    //!
-    //! Get the device representing the input pipe of the process.
-    //! The returned QIODevice is writeable only.
-    //! @return The input pipe as a QIODevice or zero if @a pipeInput
-    //! was set to false in the constructor.
-    //!
-    QIODevice* inputDevice() const
+    Qtl::ProcessPriority priority() const
     {
-        return _pipeInput ? _process : 0;
+        return _priority;
     }
 
-signals:
     //!
-    //! This signal is emitted when the process is terminated or failed to start.
-    //! @param [in] result Process execution results.
+    //! Set the process priority.
+    //! Must be called before start(), ignored otherwise.
+    //! Special privileges may be required to set Qtl::HighPriority and Qtl::VeryHighPriority.
+    //! @param [in] priority Requested priority.
     //!
-    void terminated(const QtlProcessResult& result);
+    void setPriority(Qtl::ProcessPriority priority);
 
-private slots:
+protected:
     //!
-    //! Read as much data as possible from the process standard error and output.
+    //! Reimplemented from QProcess.
     //!
-    void readOutputData();
+    //! This function is called in the child process context just before the
+    //! program is executed on Unix or OS X (i.e., after fork(), but before
+    //! execve()). Reimplement this function to do last minute initialization
+    //! of the child process.
     //!
-    //! Invoked when the process is finished.
-    //! @param [in] exitCode Process exit code.
-    //! @param [in] exitStatus QProcess exit status.
-    //!
-    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    //!
-    //! Invoked when an error occurs on the process.
-    //! @param [in] error QProcess error code.
-    //!
-    void processError(QProcess::ProcessError error);
-    //!
-    //! Invoked when the process execution is too long.
-    //!
-    void processTimeout();
+    virtual void setupChildProcess();
 
 private:
-    const int        _msRunTestTimeout;     //!< Timeout of process execution in milliseconds. Ignored if negative or zero.
-    const int        _maxProcessOutputSize; //!< Maximum size in bytes of process output. Ignored if negative or zero.
-    QtlProcessResult _result;               //!< Process execution results.
-    bool             _pipeInput;            //!< Process input is an accessible pipe.
-    bool             _started;              //!< start() was called.
-    bool             _terminated;           //!< terminated() has been signaled.
-    QProcess*        _process;              //!< Actual QProcess object.
-    QTimer*          _timer;                //!< Process execution timeout.
+    Qtl::ProcessPriority _priority;  //!< Priority of the created process.
 
-    //!
-    //! Private constructor.
-    //! @param [in] program Executable file path.
-    //! @param [in] arguments Command line arguments.
-    //! @param [in] msRunTestTimeout Timeout of process execution in milliseconds. Ignored if negative or zero.
-    //! @param [in] maxProcessOutputSize Maximum size in bytes of process output. Ignored if negative or zero.
-    //! @param [in] parent Optional parent object.
-    //! @param [in] env Optional process environment.
-    //! @param [in] pipeInput If true, the standard input of the process can be fed using inputDevice().
-    //!
-    QtlProcess(const QString& program,
-               const QStringList& arguments,
-               int msRunTestTimeout,
-               int maxProcessOutputSize,
-               QObject* parent,
-               const QProcessEnvironment& env = QProcessEnvironment(),
-               bool pipeInput = false);
-
-    //!
-    //! Send the terminated() signal.
-    //! @param [in] message Error message if process did not complete normally.
-    //! Empty if process completed normally.
-    //!
-    void sendTerminated(const QString& message);
-
-    // Unaccessible operations.
-    QtlProcess() Q_DECL_EQ_DELETE;
-    Q_DISABLE_COPY(QtlProcess)
+#if defined(Q_OS_WIN)
+    //
+    // Functions to set the priority of the Windows process.
+    // Since QProcess::setCreateProcessArgumentsModifier() only accepts
+    // static functions or lambda functions, we must have one function
+    // per priority.
+    //
+    static void clearPriority(CreateProcessArguments* args);
+    static void setVeryLowPriority(CreateProcessArguments* args);
+    static void setLowPriority(CreateProcessArguments* args);
+    static void setNormalPriority(CreateProcessArguments* args);
+    static void setHighPriority(CreateProcessArguments* args);
+    static void setVeryHighPriority(CreateProcessArguments* args);
+#endif
 };
 
 #endif // QTLPROCESS_H

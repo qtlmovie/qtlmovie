@@ -2226,6 +2226,40 @@ L&apos;application va s&apos;arrêter</translation>
     </message>
 </context>
 <context>
+    <name>QtlBoundProcess</name>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="124"/>
+        <source>Process execution canceled</source>
+        <translation>Exécution du processus annulée</translation>
+    </message>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="141"/>
+        <source>Process output/error size exceeds limit</source>
+        <translation>La taille de la sortie du processus dépasse la limite</translation>
+    </message>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="153"/>
+        <location filename="../QtlBoundProcess.cpp" line="169"/>
+        <source>Process crashed</source>
+        <translation>Le processus a été interrompu</translation>
+    </message>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="166"/>
+        <source>Failed to start process</source>
+        <translation>Impossible de démarrer le processus</translation>
+    </message>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="172"/>
+        <source>Unknown process error</source>
+        <translation>Erreur inconnue du process</translation>
+    </message>
+    <message>
+        <location filename="../QtlBoundProcess.cpp" line="184"/>
+        <source>Process exceeds execution time limit</source>
+        <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
+    </message>
+</context>
+<context>
     <name>QtlBrowserDialog</name>
     <message>
         <location filename="../QtlBrowserDialog.cpp" line="70"/>
@@ -2292,46 +2326,28 @@ L&apos;application va s&apos;arrêter</translation>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../QtlPasswordDialog.cpp" line="67"/>
-        <source>Create a new password for
-%1
-</source>
-        <translation>Créer un nouveau mot de passe pour
-%1
-</translation>
-    </message>
-    <message>
         <location filename="../QtlPasswordDialog.cpp" line="70"/>
-        <source>Enter password for
-%1
-</source>
-        <translation>Entrer le mot de passe pour
-%1
-</translation>
-    </message>
-    <message>
-        <location filename="../QtlPasswordDialog.cpp" line="75"/>
         <source>Password :</source>
         <translation>Mot de passe :</translation>
     </message>
     <message>
-        <location filename="../QtlPasswordDialog.cpp" line="83"/>
+        <location filename="../QtlPasswordDialog.cpp" line="78"/>
         <source>Verify :</source>
         <translation>Vérification :</translation>
     </message>
     <message>
-        <location filename="../QtlPasswordDialog.cpp" line="142"/>
-        <location filename="../QtlPasswordDialog.cpp" line="148"/>
+        <location filename="../QtlPasswordDialog.cpp" line="137"/>
+        <location filename="../QtlPasswordDialog.cpp" line="143"/>
         <source>Password error</source>
         <translation>Erreur de mot de passe</translation>
     </message>
     <message>
-        <location filename="../QtlPasswordDialog.cpp" line="142"/>
+        <location filename="../QtlPasswordDialog.cpp" line="137"/>
         <source>Please enter a password</source>
         <translation>Prière d&apos;entrer un mot de passe</translation>
     </message>
     <message>
-        <location filename="../QtlPasswordDialog.cpp" line="148"/>
+        <location filename="../QtlPasswordDialog.cpp" line="143"/>
         <source>Verified password does not match</source>
         <translation>Le mot de passe et sa vérification sont différents</translation>
     </message>
@@ -2357,40 +2373,6 @@ L&apos;application va s&apos;arrêter</translation>
         <location filename="../QtlPlainTextLogger.cpp" line="191"/>
         <source>Error creating file %1</source>
         <translation>Erreur à la création du fichier %1</translation>
-    </message>
-</context>
-<context>
-    <name>QtlProcess</name>
-    <message>
-        <location filename="../QtlProcess.cpp" line="124"/>
-        <source>Process execution canceled</source>
-        <translation>Exécution du processus annulée</translation>
-    </message>
-    <message>
-        <location filename="../QtlProcess.cpp" line="141"/>
-        <source>Process output/error size exceeds limit</source>
-        <translation>La taille de la sortie du processus dépasse la limite</translation>
-    </message>
-    <message>
-        <location filename="../QtlProcess.cpp" line="153"/>
-        <location filename="../QtlProcess.cpp" line="169"/>
-        <source>Process crashed</source>
-        <translation>Le processus a été interrompu</translation>
-    </message>
-    <message>
-        <location filename="../QtlProcess.cpp" line="166"/>
-        <source>Failed to start process</source>
-        <translation>Impossible de démarrer le processus</translation>
-    </message>
-    <message>
-        <location filename="../QtlProcess.cpp" line="172"/>
-        <source>Unknown process error</source>
-        <translation>Erreur inconnue du process</translation>
-    </message>
-    <message>
-        <location filename="../QtlProcess.cpp" line="184"/>
-        <source>Process exceeds execution time limit</source>
-        <translation>Le temps d&apos;exécution du process a dépassé la limite</translation>
     </message>
 </context>
 <context>
