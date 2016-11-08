@@ -31,6 +31,13 @@
 # 
 #-----------------------------------------------------------------------------
 
+SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
+ROOTDIR=$(dirname $SCRIPTDIR)
+SRCDIR=$ROOTDIR/src
+
+# QtlMovie version is extracted from QtlMovieVersion.h
+export PROJECT_NUMBER=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
+
 cd $(dirname $BASH_SOURCE)
 echo Running Doxygen...
 doxygen
