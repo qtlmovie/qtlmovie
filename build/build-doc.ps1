@@ -53,17 +53,47 @@
   Do not wait for the user to press <enter> at end of execution. By default,
   execute a "pause" instruction at the end of execution, which is useful
   when the script was run from Windows Explorer.
+
+ .PARAMETER Version
+
+  Version of the product. The default is extracted from the source file
+  {ProductName}Version.h.
 #>
 param(
+    [Parameter(Mandatory=$false)][string]$Version,
     [switch]$NoOpen = $false,
     [switch]$NoPause = $false
 )
 
+
+# PowerShell execution policy.
+Set-StrictMode -Version 3
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
+
+# Get the project directories.
+$RootDir = (Split-Path -Parent $PSScriptRoot)
+$SrcDir = (Join-Path $RootDir "src")
+$ProjectFile = Get-QtProjectFile $SrcDir
+$ProductName = (Get-Item $ProjectFile).BaseName
+
+# Get the product version.
+if (-not $Version) {
+    $VersionFile = Search-File "${ProductName}Version.h" ($SrcDir, (Join-Path $SrcDir $ProductName))
+    if ($VersionFile) {
+        $Version = (Get-Content $VersionFile | Select-String '^ *#define .*_VERSION  *"') -replace '^ *#define .*_VERSION  *"' -replace '".*$'
+    }
+}
+
+$env:PROJECT_NUMBER = $Version
+
+# Generate Doxygen documentation.
 Push-Location $PSScriptRoot
 Write-Host "Running Doxygen..."
 doxygen
 Pop-Location
 
+# Open the browser.
 if (-not $NoOpen) {
     $RootDir = (Split-Path -Parent $PSScriptRoot)
     $HtmlIndex = (Join-Path (Join-Path (Join-Path $RootDir "build-doxygen") "html") "index.html")
