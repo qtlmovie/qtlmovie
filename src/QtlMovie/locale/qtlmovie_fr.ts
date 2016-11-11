@@ -1299,27 +1299,27 @@ Les remplacer?</translation>
 <context>
     <name>QtlMovieFFmpegProcess</name>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="79"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="83"/>
         <source>Starting ffmpeg transcode, playback duration: %1 seconds (%2)</source>
         <translation>Démarrage de transcodage ffmpeg: durée de visionnage: %1 secondes (%2)</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="110"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="114"/>
         <source>Cannot find %1, may be a problem to insert subtitles</source>
         <translation>%1 introuvable, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="113"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="117"/>
         <source>Cannot create %1, no temporary directory defined, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, pas de répertoire temporaire défini, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="134"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="138"/>
         <source>Cannot open %1, may be a problem to insert subtitles</source>
         <translation>Impossible d&apos;ouvrir %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
     <message>
-        <location filename="../QtlMovieFFmpegProcess.cpp" line="138"/>
+        <location filename="../QtlMovieFFmpegProcess.cpp" line="142"/>
         <source>Cannot create %1, may be a problem to insert subtitles</source>
         <translation>Impossible de créer %1, il y aura peut-être un problème d&apos;insertion de sous-titres</translation>
     </message>
