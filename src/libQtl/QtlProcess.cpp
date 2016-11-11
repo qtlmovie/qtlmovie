@@ -93,23 +93,27 @@ void QtlProcess::setPriority(Qtl::ProcessPriority priority)
 void QtlProcess::setupChildProcess()
 {
 #if defined(Q_OS_UNIX)
+    // Warning: This code is written in a way to avoid warnings on recent
+    // versions of Linux. Don't modify it without thinking twice.
+    int niceValue = 0;
     switch (_priority) {
         case Qtl::VeryLowPriority:
-            ::nice(20);
+            niceValue = 20;
             break;
         case Qtl::LowPriority:
-            ::nice(10);
+            niceValue = 10;
             break;
         case Qtl::NormalPriority:
-            ::nice(0);
+            niceValue = 0;
             break;
         case Qtl::HighPriority:
-            ::nice(-10);
+            niceValue = -10;
             break;
         case Qtl::VeryHighPriority:
-            ::nice(-20);
+            niceValue = -20;
             break;
     }
+    niceValue = ::nice(niceValue);
 #endif
 }
 
