@@ -6,7 +6,8 @@ Version 1.11
 - Added an option to run FFmpeg processes at a lower priority. This option is
   enabled by default. Other processes like CC Extractor and DVD Author are run
   at the normal priority since they are less CPU intensive (ie. I/O-bound, not
-  CPU-bound).
+  CPU-bound). This option avoids reported slowness on other programs running
+  on the computer.
 
 Version 1.10
 - Added an option to select the "program chain" (or "PGC") and angle to
