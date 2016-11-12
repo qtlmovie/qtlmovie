@@ -2,6 +2,13 @@
 QtlMovie Change Log
 ===================
 
+Version 1.11.1
+- Bug fix version for Windows only. When looking for a new version, the release
+  notes for the new version are fetched from SourceForge. Due to a new policy,
+  SourceForge now returns files using HTTPS, not HTTP. The way QtlMovie was
+  linked on Windows prevented the use of OpenSSL and HTTPS. This is fixed.
+- Help files were missing from Windows standalone packages. This is fixed.
+
 Version 1.11
 - Added an option to run FFmpeg processes at a lower priority. This option is
   enabled by default. Other processes like CC Extractor and DVD Author are run

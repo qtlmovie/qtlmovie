@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------------------------
 ; 
-;  Copyright (c) 2013, Thierry Lelegard
+;  Copyright (c) 2013-2016, Thierry Lelegard
 ;  All rights reserved.
 ; 
 ;  Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@
 ;  - RootDir: Project top-level directory.
 ;  - BuildDir: Build top-level directory.
 ;  - InstallerDir: Directory for binary installers.
-;  - QtDir: Qt installation directory.
 ;  - Win64: If defined, generate an installer for 64-bit systems.
 ;
 ;-----------------------------------------------------------------------------
@@ -152,14 +151,7 @@ Section "Install"
     SetShellVarContext all
 
     ; Delete obsolete files from previous versions.
-    Delete "$INSTDIR\Qt5Core.dll"
-    Delete "$INSTDIR\Qt5Network.dll"
-    Delete "$INSTDIR\Qt5Gui.dll"
-    Delete "$INSTDIR\Qt5Widgets.dll"
-    Delete "$INSTDIR\Qt5Multimedia.dll"
-    Delete "$INSTDIR\libgcc_s_dw2-1.dll"
-    Delete "$INSTDIR\libstdc++-6.dll"
-    Delete "$INSTDIR\libwinpthread-1.dll"
+    Delete "$INSTDIR\qt.conf"
     Delete "$INSTDIR\icuin51.dll"
     Delete "$INSTDIR\icuuc51.dll"
     Delete "$INSTDIR\icudt51.dll"
@@ -176,63 +168,7 @@ Section "Install"
 
     ; Install product files.
     SetOutPath "$INSTDIR"
-    File "${BuildDir}\QtlMovie\QtlMovie.exe"
-    File "${RootDir}\build\qt.conf"
-    File "${RootDir}\LICENSE.txt"
-    File "${RootDir}\CHANGELOG.txt"
-
-    SetOutPath "$INSTDIR\translations"
-    File "${QtDir}\translations\qt*_fr.qm"
-    File "${BuildDir}\libQtl\locale\qtl_fr.qm"
-    File "${BuildDir}\libQts\locale\qts_fr.qm"
-    File "${BuildDir}\QtlMovie\locale\qtlmovie_fr.qm"
-
-    SetOutPath "$INSTDIR\fonts"
-    File "${RootDir}\fonts\fonts.conf.template"
-    File "${RootDir}\fonts\subfont.ttf"
-
-    SetOutPath "$INSTDIR\help"
-    File "${RootDir}\help\default.css"
-    File "${RootDir}\help\favicon.png"
-    File "${RootDir}\help\flag_en.png"
-    File "${RootDir}\help\flag_fr.png"
-    File "${RootDir}\help\fontawesome.css"
-    File "${RootDir}\help\fontawesome-webfont.eot"
-    File "${RootDir}\help\fontawesome-webfont.svg"
-    File "${RootDir}\help\fontawesome-webfont.ttf"
-    File "${RootDir}\help\fontawesome-webfont.woff"
-    File "${RootDir}\help\fontawesome-webfont.woff2"
-    File "${RootDir}\help\functions.js"
-    File "${RootDir}\help\qtlmovie.png"
-    File "${RootDir}\help\qtlmovie-intro.html"
-    File "${RootDir}\help\qtlmovie-intro_fr.html"
-    File "${RootDir}\help\qtlmovie-user.html"
-    File "${RootDir}\help\qtlmovie-user_fr.html"
-    File "${RootDir}\help\qtlmovie-build.html"
-    File "${RootDir}\help\qtlmovie-build_fr.html"
-    File "${RootDir}\help\qtlmovie-license.html"
-    File "${RootDir}\help\qtlmovie-license_fr.html"
-
-    SetOutPath "$INSTDIR\wintools"
-    !ifdef Win64
-        File "${RootDir}\wintools64\ffprobe.exe"
-        File "${RootDir}\wintools64\ffmpeg.exe"
-        File "${RootDir}\wintools64\ffmpeg.txt"
-        File "${RootDir}\wintools64\ccextractor.exe"
-        File "${RootDir}\wintools64\ccextractor.txt"
-    !else
-        File "${RootDir}\wintools\ffprobe.exe"
-        File "${RootDir}\wintools\ffmpeg.exe"
-        File "${RootDir}\wintools\ffmpeg.txt"
-        File "${RootDir}\wintools\ccextractor.exe"
-        File "${RootDir}\wintools\ccextractor.txt"
-    !endif
-    File "${RootDir}\wintools\dvdauthor.exe"
-    File "${RootDir}\wintools\dvdauthor.txt"
-    File "${RootDir}\wintools\mkisofs.exe"
-    File "${RootDir}\wintools\mkisofs.txt"
-    File "${RootDir}\wintools\growisofs.exe"
-    File "${RootDir}\wintools\growisofs.txt"
+    File /r "${BuildDir}\*"
 
     ; Create a shortcut in start menu.
     CreateShortCut "$SMPROGRAMS\QtlMovie.lnk" "$INSTDIR\QtlMovie.exe"
@@ -261,17 +197,7 @@ Section "Uninstall"
     SetShellVarContext all
 
     ; Delete product files.
-    RMDir /r "$INSTDIR\fonts"
-    RMDir /r "$INSTDIR\help"
-    RMDir /r "$INSTDIR\wintools"
-    RMDir /r "$INSTDIR\translations"
-
-    Delete "$INSTDIR\QtlMovie.exe"
-    Delete "$INSTDIR\qt.conf"
-    Delete "$INSTDIR\LICENSE.txt"
-    Delete "$INSTDIR\CHANGELOG.txt"
-    Delete "$INSTDIR\QtlMovieUninstall.exe"
-    RMDir  "$INSTDIR"
+    RMDir /r "$INSTDIR"
 
     ; Delete start menu entries  
     Delete "$SMPROGRAMS\QtlMovie.lnk"

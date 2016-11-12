@@ -180,88 +180,91 @@ void QtlMovieNewVersion::httpCompleted(bool success, const QUrl& url, const QStr
 
 void QtlMovieNewVersion::releaseNotesCompleted(bool success, const QUrl& url, const QString& response, const QString& mimeType)
 {
-    // In case of error during Web request.
-    if (!success) {
-        fail(response);
-        return;
-    }
+    // In case of error during Web request for release notes, do not fail.
+    // Simply consider that no release notes are available.
+    if (success) {
 
-    // The release notes are formatted as HTML.
-    QString html;
-    const char* ulOpen  = "<ul>";
-    const char* ulClose = "</ul>";
-    const char* liOpen  = "<li>";
-    const char* liClose = "</li>";
-    const char* hOpen   = "<h3>";
-    const char* hClose  = "</h3>";
-    bool ulIsOpen = false;
-    bool liIsOpen = false;
+        // The release notes are formatted as HTML.
+        QString html;
+        const char* ulOpen  = "<ul>";
+        const char* ulClose = "</ul>";
+        const char* liOpen  = "<li>";
+        const char* liClose = "</li>";
+        const char* hOpen   = "<h3>";
+        const char* hClose  = "</h3>";
+        bool ulIsOpen = false;
+        bool liIsOpen = false;
 
-    // Analyze the text of the release notes.
-    // Prefix for lines introducing a version.
-    const QString versionPrefix("Version ");
+        // Analyze the text of the release notes.
+        // Prefix for lines introducing a version.
+        const QString versionPrefix("Version ");
 
-    // Analyze line by line. Keep only release notes from current version to new version.
-    bool keep = false;
-    foreach (const QString& line, response.split(QRegExp("\\s*\\n\\s*"))) {
+        // Analyze line by line. Keep only release notes from current version to new version.
+        bool keep = false;
+        foreach (const QString& line, response.split(QRegExp("\\s*\\n\\s*"))) {
 
-        // Check if this is the start of a version description.
-        if (line.startsWith(versionPrefix, Qt::CaseInsensitive)) {
-            // Get the associated version.
-            const QtlVersion version(line.mid(versionPrefix.length()).trimmed());
-            if (version.isValid()) {
-                if (version <= _currentVersion) {
-                    // This is the start of current and former versions, not new, not interesting.
-                    break;
+            // Check if this is the start of a version description.
+            if (line.startsWith(versionPrefix, Qt::CaseInsensitive)) {
+                // Get the associated version.
+                const QtlVersion version(line.mid(versionPrefix.length()).trimmed());
+                if (version.isValid()) {
+                    if (version <= _currentVersion) {
+                        // This is the start of current and former versions, not new, not interesting.
+                        break;
+                    }
+                    // Close previous lists.
+                    if (liIsOpen) {
+                        html.append(liClose);
+                        liIsOpen = false;
+                    }
+                    if (ulIsOpen) {
+                        html.append(ulClose);
+                        ulIsOpen = false;
+                    }
+                    // Do not keep header and beta versions, more recent than latest official.
+                    keep = version <= _latestVersion;
+                    // Transform the line in a header.
+                    if (keep) {
+                        html.append(hOpen).append(line.toHtmlEscaped().append(hClose));
+                    }
                 }
-                // Close previous lists.
-                if (liIsOpen) {
-                    html.append(liClose);
-                    liIsOpen = false;
+            }
+            else if (keep) {
+                if (line.startsWith('-') || line.startsWith('*')) {
+                    if (!ulIsOpen) {
+                        html.append(ulOpen);
+                        ulIsOpen = true;
+                    }
+                    else if (liIsOpen) {
+                        html.append(liClose);
+                    }
+                    html.append(liOpen);
+                    liIsOpen = true;
+                    html.append(line.mid(1).trimmed().toHtmlEscaped());
                 }
-                if (ulIsOpen) {
-                    html.append(ulClose);
-                    ulIsOpen = false;
-                }
-                // Do not keep header and beta versions, more recent than latest official.
-                keep = version <= _latestVersion;
-                // Transform the line in a header.
-                if (keep) {
-                    html.append(hOpen).append(line.toHtmlEscaped().append(hClose));
+                else if (!line.isEmpty()) {
+                    html.append(" ");
+                    html.append(line.toHtmlEscaped());
                 }
             }
         }
-        else if (keep) {
-            if (line.startsWith('-') || line.startsWith('*')) {
-                if (!ulIsOpen) {
-                    html.append(ulOpen);
-                    ulIsOpen = true;
-                }
-                else if (liIsOpen) {
-                    html.append(liClose);
-                }
-                html.append(liOpen);
-                liIsOpen = true;
-                html.append(line.mid(1).trimmed().toHtmlEscaped());
-            }
-            else if (!line.isEmpty()) {
-                html.append(" ");
-                html.append(line.toHtmlEscaped());
-            }
+
+        // Close previous lists.
+        if (liIsOpen) {
+            html.append(liClose);
+        }
+        if (ulIsOpen) {
+            html.append(ulClose);
+        }
+
+        // Final text of the release notes.
+        if (!html.isEmpty()) {
+            _releaseNotes = "<html><body>" + html + "</body></html>";
         }
     }
-
-    // Close previous lists.
-    if (liIsOpen) {
-        html.append(liClose);
-    }
-    if (ulIsOpen) {
-        html.append(ulClose);
-    }
-
-    // Final text of the release notes.
-    if (!html.isEmpty()) {
-        _releaseNotes = "<html><body>" + html + "</body></html>";
+    else {
+        // Failed to download the release notes, display the reason in debug mode only.
+        _log->debug(response);
     }
 
     // Now, this is the end.

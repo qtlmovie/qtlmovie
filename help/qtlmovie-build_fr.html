@@ -39,7 +39,6 @@
           <a href="#ubbuild">Construire le package DEB pour Ubuntu</a>
           <a href="#lincleanup">Construction multi-platformes</a>
           <a href="#lindoxy">Construire la documentation Doxygen</a>
-          <a href="#rhbuild">Construire Qt 5 sur Red Hat Entreprise Linux</a>
         </div>
       </div>
       <div class="w3-accordion">
@@ -47,6 +46,7 @@
         <div id="menu-windows" class="w3-accordion-content w3-animate-left w3-padding">
           <a href="#winreq">Pré-requis</a>
           <a href="#winqt">Version de Qt</a>
+          <a href="#winssl">Librairies OpenSSL</a>
           <a href="#winps1">Windows PowerShell</a>
           <a href="#winmanbuild">Construire manuellement</a>
           <a href="#winqtcreator">Construire avec Qt Creator</a>
@@ -82,14 +82,12 @@
 
         <div class="anchor" id="linreq"><h3>Pré-requis</h3></div>
 
-        <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.
+        <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.5.
           Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
         <p>L'utilisation de Qt Creator n'est pas obligatoire.
           S'il est utilisé, Qt Creator version 2.7 ou plus requis.
           Qt Creator est recommandé pour éditer ou modifier le projet.
           Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
-        <p>Si Red Hat Entreprise Linux 6 (RHEL 6), ou un de ses clones CentOS et
-          Scientific Linux, est utilisé voir <a href="#rhbuild">ci-dessous</a> pour plus de détails.</p>
         <p>Qt peut être installé dans les répertoires système (<i>/usr/bin</i> ou équivalent)
           avec les packages standards de la distribution Linux ou en utilisant les installeurs binaires
           de <a href="http://qt-project.org/">http://qt-project.org/</a>.
@@ -165,81 +163,6 @@
 
         <p>Exécuter le script <i>build/build-doc.sh</i>.</p>
 
-        <div class="anchor" id="rhbuild"><h3>Construire Qt 5 sur Red Hat Entreprise Linux</h3></div>
-
-        <p>RHEL 6 et ses clones CentOS et Scientific Linux sont livrés avec Qt 4.6.
-          Il n'y a pas de package pour Qt 5 dans les dépots standards.</p>
-        <p>Des installeurs binaires de Qt 5 pour Linux sont disponibles sur le site
-          <a href="http://qt-project.org/">http://qt-project.org/</a>.
-          L'installeur Qt 5.0.2 ne peut pas être installé sur RHEL 6 car il dépend
-          de versions plus récentes des libraires standards GCC. Cela a été partiellement
-          corrigé avec Qt 5.1.0: l'installeur lui-même s'exécute correctement mais pas
-          la version installée de Qt. Elle dépend encore de versions plus récentes des
-          librairies GCC.</p>
-        <p>La seule solution restante est de recompiler Qt 5 sur RHEL 6.</p>
-
-        <div class="anchor" id="rhqt510build"><h4>Compiler et installer Qt 5.1.0 sur RHEL 6</h4></div>
-
-        <p>Télécharger depuis <a href="http://qt-project.org/">http://qt-project.org/</a>
-          les archives sources. Les fichiers suivants ont été utilisés avec succès:</p>
-        <ul>
-          <li><a href="http://download.qt-project.org/archive/qt/5.1/5.1.0/single/qt-everywhere-opensource-src-5.1.0.tar.gz">
-              qt-everywhere-opensource-src-5.1.0.tar.gz</a></li>
-          <li><a href="http://download.qt-project.org/official_releases/qtcreator/2.7/2.7.2/qt-creator-2.7.2-src.tar.gz">
-              qt-creator-2.7.2-src.tar.gz</a></li>
-        </ul>
-        <p>Pré-requis: Installer au moins les packages suivants depuis les dépots standards de RHEL / CentOS / SL.</p>
-        <p>Il s'agit simplement d'une liste de dépendances potentielles déterminées sur un système sur lequel
-          la procédure a été testée avec succès. Certains autres packages sont peut-être nécessaires,
-          présents sur le système testé mais non listés. A l'inverse, certains d'entre eux ne sont
-          peut-être pas nécessaires. En particulier, tous les packages <i>-devel</i> du système
-          testé ont été listés. Tous ces packages de développement ne sont peut-être pas nécessaires
-          pour reconstruire Qt ou Qt Creator mais il est difficile de déterminer lesquels pourraient
-          éventuellement être exclus. Donc, utilisez la commande <i>yum install</i> suivante
-          et essayez.</p>
-<pre>
-sudo yum install \
-  make gcc gcc-c++ bison python ruby libtool autoconf \
-  alsa-lib-devel atk-devel audiofile-devel boost-devel bzip2-devel \
-  cairo-devel check-devel cryptopp-devel cups-devel dbus-devel \
-  dbus-glib-devel enchant-devel esound-devel ffmpeg-spice-devel \
-  fontconfig-devel freetype-devel gamin-devel GConf2-devel geoclue-devel \
-  gettext-devel giflib-devel glib2-devel glibc-devel glib-devel gmp-devel \
-  gnome-desktop-devel gnome gnome-libs-devel gnome-menus-devel \
-  gnome-utils-devel gnome-vfs2-devel gnutls-devel gstreamer-devel \
-  gstreamer-plugins-base-devel gtk2-devel gtk+-devel hal-devel imlib-devel \
-  jasper-devel java-1.6.0-openjdk-devel kernel-devel keyutils-libs-devel \
-  krb5-devel lcms-devel libao-devel libart_lgpl-devel libbonobo-devel \
-  libbonoboui-devel libcom_err-devel libdrm-devel libffi-devel \
-  libgcrypt-devel libglade2-devel libgnomecanvas-devel libgnome-devel \
-  libgnomeui-devel libgpg-error-devel libICE-devel libicu-devel \
-  libIDL-devel libjpeg-turbo-devel libmcrypto-devel libmnetutil-devel \
-  libmng-devel libmutil-devel libpaper-devel libpng-devel libselinux-devel \
-  libsepol-devel libSM-devel libsoup-devel libstdc++-devel \
-  libtiff-devellibX11-devel libXau-devel libxcb-devel libXcomposite-devel \
-  libXcursor-devel libXdamage-devel libXdmcp-devel libXext-devel \
-  libXfixes-devel libXft-devel libXi-devel libXinerama-devel libxml2-devel \
-  libXmu-devel libXp-devel libXpm-devel libXrandr-devel libXrender-devel \
-  libxslt-devel libXt-devel libXxf86vm-devel mesa-libGL-devel \
-  mesa-libGLU-devel mysql-devel NetworkManager-devel opencryptoki-devel \
-  openmotif-devel openssl-devel ORBit2-devel ORBit-devel pango-devel \
-  pcre-devel pcsc-lite-devel perl-devel pixman-devel popt-devel \
-  postgresql-devel pygobject2-devel python-devel sip-devel sqlite-devel \
-  startup-notification-devel t1lib-devel unixODBC-devel webkitgtk-devel \
-  xcb-util-devel xorg-x11-proto-devel zlib-devel
-</pre>
-        <p>Le script <i>build/redhat-build-qt510.sh</i> construit et installe
-          Qt-5.1.0 sur RHEL 6. Qt et Qt Creator sont installés dans <i>/usr/local</i>
-          et n'interfèrent pas avec l'installation standard de Qt 4 sur RHEL 6.</p>
-
-        <div class="anchor" id="rhqt510user"><h4>Utiliser Qt 5.1.0 sur RHEL 6</h4></div>
-
-        <p>Les variables d'environnement PATH et LD_LIBRARY_PATH doivent être positionnées
-          pour inclure la dernière version de Qt et Qt Creator dans <i>/usr/local</i>.
-          Le fichier <i>build/QtSetEnvironment.rc</i> doit être inclus
-          (commande <i>source</i> ou <i>.</i> dans les scripts bash avant
-          d'utiliser les applications Qt 5.</p>
-
         <div class="anchor" id="windows"><h2>Construire QtlMovie sur Windows</h2></div>
 
         <p>Il y a probablement plusieurs façons différents de construire QtlMovie sur les
@@ -252,7 +175,8 @@ sudo yum install \
           Les numéros de version minimum sont indiqués mais des versions supérieures
           fonctionnent probablement.</p>
         <ul>
-          <li>Qt 5.0 (avec environnement MinGW)</li>
+          <li>Qt 5.5 (avec environnement MinGW)</li>
+          <li>Librairies OpenSSL 1.0</li>
           <li>NullSoft Scriptable Install System (NSIS) 2.46</li>
           <li>Windows PowerShell 3.0</li>
           <li>Microsoft .NET Framework 4.5</li>
@@ -268,26 +192,39 @@ sudo yum install \
           Qt Creator est recommandé pour éditer ou modifier le projet.
           Construire le produit sans le modifier ne nécessite pas Qt Creator.</p>
         <p>Qt peut être installé en utilisant les installeurs binaires disponibles sur
-          <a href="http://qt-project.org/">http://qt-project.org/</a>.
+          <a href="http://qt-project.org/">qt-project.org</a>.
           Utiliser l'installation par défaut dans <i>C:\Qt</i>.
-          A titre d'exemple, l'installeur binaire pour Qt 5.1.1 est
-          <a href="http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe">
-            qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe</a>.</p>
-        <p>La version de Qt qui vient avec l'installeur binaire utilise des librairies dynamiques (DLL).
-          C'est suffisant pour le développement et les tests mais cela pose des problèmes de déploiement
-          sur les autres machines. L'installeur binaire de QtlMovie amène une version statique de QtlMovie,
-          sans librairies partagées. Pour construire cet exécutable, il est nécessaire d'utiliser une
-          version spéciale de Qt, avec des librairies statiques et non dynamiques. Il n'existe
-          pas d'installeur pour cela. Il faut télécharger l'archive des sources de Qt et le recompiler
-          statiquement. C'est ce que fait le script <i>build\windows-build-qt-static.ps1</i>.
-          Il télécharge la dernière version identifiée de Qt (éditer le paramètre par défaut pour en changer),
-          recompile et installe une version statique de Qt.</p>
-        <p>Cette version statique est complémentaire par rapport à la version dynamique installée
-          par défaut, elle ne la remplace pas. Il faut d'abord installer l'installeur binaire
-          de Qt. Il crée <i>C:\Qt</i> et installe MinGW. Ensuite, la version statique est
-          construite et installée dans <i>C:\Qt\Static</i>. La version dynamique est utilisée
-          pour le développement et les tests, notamment avec Qt Creator. La version statique est
-          utilisée pour construire l'installeur binaire de QtlMovie.</p>
+          A titre d'exemple, l'installeur binaire pour Qt 5.7.0 est
+          <a href="http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-mingw530-5.7.0.exe">
+            qt-opensource-windows-x86-mingw530-5.7.0.exe</a>.</p>
+        <p>Important: Lors de l'installation de Qt, sélectionner l'option <i>Tools</i>, puis <i>MinGW</i>.</p>
+
+        <div class="anchor" id="winssl"><h3>Librairies OpenSSL</h3></div>
+
+        <p>Sur Windows, Qt n'inclut pas les librairies OpenSSL. OpenSSL est indispensable pour
+          utiliser HTTPS. QtlMovie ne fait aucune opération sur le réseau, sauf pour aller
+          vérifier la disponibilité d'une nouvelle version sur Internet. Selon la configuration
+          du fournisseur de service, cette opération peut utiliser HTTPS et par conséquent
+          requiert OpenSSL.</p>
+        <p>Les librairies binaires OpenSLL sont disponibles sur
+          <a href="https://slproweb.com/products/Win32OpenSSL.html">slproweb.com</a>.
+          Sélectionner la version Win32 la plus récente.
+          Utiliser l'installation par défaut dans <i>C:\OpenSSL-Win32</i>.
+          A titre d'exemple, l'installeur binaire pour OpenSSL 1.0.2j est
+          <a href="https://slproweb.com/download/Win32OpenSSL-1_0_2j.exe">Win32OpenSSL-1_0_2j.exe</a>.</p>
+        <p>Important:</p>
+        <ul>
+          <li>Lors de l'installation d'OpenSSL, sélectionner l'option <i>Copy OpenSSL DLLs</i> vers
+            <i>The OpenSSL binaries (/bin) directory</i>. C'est normallement la valeur par défaut.</li>
+          <li>Il est actuellement recommandé d'utiliser OpenSSL 1.0.x, pas 1.1.x.
+            Le nommage des fichiers de librairie a changé en 1.1.x (tout au moins tel que constaté avec la 1.1.0c).
+            Les librairies sont nommées <i>libcrypto-1_1.dll</i> et <i>libssl-1_1.dll</i> au lieu
+            des noms Windows traditionnels <i>libeay32.dll</i> et <i>ssleay32.dll</i>.
+            Le problème est que Qt recherche <i>libeay32.dll</i> et <i>ssleay32.dll</i>,
+            pas les nouveaux noms. Il lui sera alors impossible d'utiliser SSL.
+            Si vous voulez tester une version plus récente d'OpenSSL, vérifiez la présence
+            de <i>libeay32.dll</i> et <i>ssleay32.dll</i> dans <i>C:\OpenSSL-Win32\bin</i>.</li>
+        </ul>
 
         <div class="anchor" id="winps1"><h3>Windows PowerShell</h3></div>
 
@@ -323,8 +260,6 @@ Major  Minor  Build  Revision
         <div class="anchor" id="winmanbuild"><h3>Construire QtlMovie manuellement</h3></div>
 
         <p>Exécuter le script <i>build\build.ps1</i>.</p>
-        <p>Par défaut, QtlMovie est construit en utilisant la version dynamique de Qt.
-          Spécifier le paramètre <i>-Static</i> pour construire QtlMovie avec la version statique de Qt.</p>
 
         <div class="anchor" id="winqtcreator"><h3>Construire QtlMovie avec Qt Creator</h3></div>
 
@@ -361,9 +296,7 @@ Major  Minor  Build  Revision
           <a href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a>.
           NSIS version 2.46 a été utilisé pour QtlMovie.</p>
         <p>Pour construire l'installeur binaire de QtlMovie, exécuter le script
-          <i>build\build-installer.ps1</i>.
-          Ce script construit QtlMovie en utilisant la version statique de Qt.
-          Assurez vous d'avoir <a href="#winqt">construit et installé</a> cette version statique au préalable.</p>
+          <i>build\build-installer.ps1</i>.</p>
         <p>Ce script construit également l'archive "standalone", une alternative pour
           les utilisateurs sans privilège administrateur qui ne peuvent pas exécuter
           l'installeur standard.</p>

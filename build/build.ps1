@@ -1,6 +1,6 @@
 ﻿#-----------------------------------------------------------------------------
 # 
-#  Copyright (c) 2013-2015, Thierry Lelegard
+#  Copyright (c) 2013-2016, Thierry Lelegard
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with or without
@@ -60,10 +60,6 @@
 
   Build the release version.
 
- .PARAMETER Static
-
-  Use the static version of Qt which is under the $QtRoot\Static.
-
  .PARAMETER NoPause
 
   Do not wait for the user to press <enter> at end of execution. By default,
@@ -73,7 +69,6 @@
 param(
     [switch]$Release = $false,
     [switch]$Debug = $false,
-    [switch]$Static = $false,
     [switch]$NoPause = $false
 )
 
@@ -83,14 +78,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
 Import-Module -Name (Join-Path $PSScriptRoot WindowsPowerShellTools.psm1)
 
 # Build a safe environment for the latest Qt version.
-if ($Static) {
-    Set-QtPath -NoWindows -Static
-    $DirSuffix = "-Static"
-}
-else {
-    Set-QtPath -NoWindows
-    $DirSuffix = ""
-}
+Set-QtPath -NoWindows
 
 # Default arguments: build all.
 if (-not $Release -and -not $Debug) {
@@ -108,8 +96,8 @@ if ($ProjectFile -eq $null) {
 else {
     # Build directories for release and debug.
     $BuildDirBase = (Join-Path $RootDir "build-Win32")
-    $BuildDirRelease = $BuildDirBase + "-Release" + $DirSuffix
-    $BuildDirDebug = $BuildDirBase + "-Debug" + $DirSuffix
+    $BuildDirRelease = $BuildDirBase + "-Release"
+    $BuildDirDebug = $BuildDirBase + "-Debug"
 
     # Build project in release mode.
     if ($Release) {
