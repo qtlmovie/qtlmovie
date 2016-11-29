@@ -2,6 +2,11 @@
 QtlMovie Change Log
 ===================
 
+Version 1.12
+- Bug fix (issue #4): In batch mode, after editing a task, modified its output
+  directory, closed the edit window, the output directory was reverted to the
+  default when the task was edited again. This is fixed.
+
 Version 1.11.1
 - Bug fix version for Windows only. When looking for a new version, the release
   notes for the new version are fetched from SourceForge. Due to a new policy,

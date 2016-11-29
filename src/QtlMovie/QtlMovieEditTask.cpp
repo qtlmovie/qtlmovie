@@ -255,7 +255,7 @@ void QtlMovieEditTask::setOutputFileType()
             // Revert to DVD ISO Image (will trigger this slot again).
             _ui.boxOutputTypes->checkId(int(QtlMovieOutputFile::DvdImage));
         }
-        else {
+        else if (_task->outputFile()->outputType() != type) {
             // Apply the output file type.
             _task->outputFile()->setOutputType(type);
             _task->outputFile()->setDefaultFileName(_task->inputFile()->fileName(), false, true);
