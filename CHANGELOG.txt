@@ -6,6 +6,7 @@ Version 1.12
 - Bug fix (issue #4): In batch mode, after editing a task, modified its output
   directory, closed the edit window, the output directory was reverted to the
   default when the task was edited again. This is fixed.
+- In batch mode, when editing a task, pressing Return closes the editor.
 
 Version 1.11.1
 - Bug fix version for Windows only. When looking for a new version, the release

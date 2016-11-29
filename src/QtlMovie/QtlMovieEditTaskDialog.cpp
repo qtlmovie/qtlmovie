@@ -76,4 +76,7 @@ QtlMovieEditTaskDialog::QtlMovieEditTaskDialog(QtlMovieTask* task, QtlMovieSetti
     connect(propertiesButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showInputFileProperties);
     connect(audioButton, &QPushButton::clicked, editTask, &QtlMovieEditTask::showAudioTest);
     connect(okButton, &QPushButton::clicked, this, &QtlMovieEditTaskDialog::accept);
+
+    // "OK" is the default button.
+    okButton->setDefault(true);
 }
