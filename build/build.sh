@@ -73,7 +73,8 @@ if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
 else
     NCPU=$(nproc 2>/dev/null)
 fi
-NPROCESS=$(( (${NCPU:-1} + 1) / 2))
+NPROCESS=${NCPU:-1}
+[[ $NPROCESS -gt 1 ]] && NPROCESS=$(($NPROCESS - 1))
 
 # Use similar build directory naming as Qt Creator "shadow build" mode.
 BUILDDIR_BASE=$ROOTDIR/build-${PROJECT_NAME}-Desktop
