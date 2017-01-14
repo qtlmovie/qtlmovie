@@ -103,7 +103,7 @@ function Exit-Script ([string]$Message = "")
 {
     $Code = 0
     if ($Message -ne "") {
-        Write-Output "ERROR: $Message"
+        Write-Host "ERROR: $Message"
         $Code = 1
     }
     if (-not $NoPause) {
