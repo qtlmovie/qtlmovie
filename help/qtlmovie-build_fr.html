@@ -83,7 +83,7 @@
         <div class="anchor" id="linreq"><h3>Pré-requis</h3></div>
 
         <p>QtlMovie peut être construit sur n'importe quelle plate-forme Linux supportant Qt 5.5.
-          Tous les packages de développement de Qt 5 doivent être installés, y compris QtMultimedia.</p>
+          Tous les packages de développement de Qt 5 doivent être installés.</p>
         <p>L'utilisation de Qt Creator n'est pas obligatoire.
           S'il est utilisé, Qt Creator version 2.7 ou plus requis.
           Qt Creator est recommandé pour éditer ou modifier le projet.
@@ -96,6 +96,14 @@
           l'installation de Qt la plus récente dans <i>/usr/local</i> et ajoute les répertoires
           nécessaires dans le PATH.
           <i>QtSetEnvironment.rc</i> est automatiquement invoqué par tous les scripts de construction.</p>
+        <p>Pour installer l'environnement de construction sur Fedora:</p>
+<pre>
+sudo dnf install qt5-qttools qt5-devel qt-creator rpmdevtools
+</pre>
+        <p>Pour installer l'environnement de construction sur Ubuntu:</p>
+<pre>
+sudo apt-get install qtcreator qtbase5-dev qt5-default qtmultimedia5-dev
+</pre>
 
         <div class="anchor" id="linmanbuild"><h3>Construire QtlMovie manuellement</h3></div>
 

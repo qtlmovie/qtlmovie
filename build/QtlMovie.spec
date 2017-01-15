@@ -92,6 +92,18 @@ cp help/default.css \
    help/qtlmovie-license_fr.html \
    $RPM_BUILD_ROOT/usr/share/doc/qtlmovie
 
+%post
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 

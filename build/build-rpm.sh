@@ -44,6 +44,10 @@ INSTDIR=$ROOTDIR/installers
 # QtlMovie version is extracted from QtlMovieVersion.h
 QTLMOVIE_VERSION=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
 QTLMOVIE_RELEASE=0
+if [[ ${QTLMOVIE_VERSION} == *-* ]]; then
+    QTLMOVIE_RELEASE=$(sed <<<${QTLMOVIE_VERSION} -e 's/.*-//')
+    QTLMOVIE_VERSION=$(sed <<<${QTLMOVIE_VERSION} -e 's/-.*//')
+fi
 
 # User's rpmbuild environment:
 RPMBUILD=$HOME/rpmbuild

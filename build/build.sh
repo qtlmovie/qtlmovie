@@ -67,7 +67,7 @@ PROJECT_FILE=
 [[ -z "$PROJECT_FILE" ]] && error "unique project file not found in $SRCDIR"
 PROJECT_NAME=$(basename $PROJECT_FILE .pro)
 
-# Use parallel processes up to half the number of logical processors.
+# Use parallel processes up to the number of logical processors minus 1.
 if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then
     NCPU=$(sysctl -n hw.ncpu 2>/dev/null)
 else
