@@ -147,23 +147,23 @@ void QtlMovieFFprobeTags::buildStreamInfo(QtlMediaStreamInfoList& streams)
         // Subtitle type is based on codec name.
         // Closed Captions are embedded in a video stream and are not detected by ffprobe.
         if (info->streamType() == QtlMediaStreamInfo::Subtitle) {
-            if (codecName == "subrip" || codecName == "srt") {
+            if (codecName.startsWith("subrip") || codecName.startsWith("srt")) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubRip);
             }
-            else if (codecName == "ssa") {
+            else if (codecName.contains("teletext")) {
+                info->setSubtitleType(QtlMediaStreamInfo::SubTeletext);
+            }
+            else if (codecName.startsWith("ssa")) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubSsa);
             }
-            else if (codecName == "ass") {
+            else if (codecName.startsWith("ass")) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubAss);
             }
-            else if (codecName == "vobsub" || codecName == "dvdsub") {
+            else if (codecName.startsWith("vob") || codecName.startsWith("dvd")) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubDvd);
             }
-            else if (codecName == "dvbsub") {
+            else if (codecName.startsWith("dvb")) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubDvb);
-            }
-            else if (codecName == "teletext" || codecName == "dvb_teletext") {
-                info->setSubtitleType(QtlMediaStreamInfo::SubTeletext);
             }
             else if (!codecName.isEmpty()) {
                 info->setSubtitleType(QtlMediaStreamInfo::SubOther);

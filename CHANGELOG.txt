@@ -6,9 +6,12 @@ Version 1.12
 - Bug fix (issue #4): In batch mode, after editing a task, modified its output
   directory, closed the edit window, the output directory was reverted to the
   default when the task was edited again. This is fixed.
+- Bug fix (issue #6): DVB subtitles were no longer recognized as valid for
+  ffmpeg. This was due to an incompatible change in recent versions of ffprobe.
+  This is fixed.
 - In batch mode, when editing a task, pressing Return closes the editor.
-- Precompiled Mac and Windows binaries use Qt 5.7.1.
-- Mac and Windows installers include FFmpeg 3.2.2.
+- Precompiled Mac and Windows binaries use Qt 5.8.0.
+- Mac and Windows installers include FFmpeg 3.2.4.
 
 Version 1.11.1
 - Bug fix version for Windows only. When looking for a new version, the release
