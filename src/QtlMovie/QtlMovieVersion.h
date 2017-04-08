@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2013-2016, Thierry Lelegard
+// Copyright (c) 2013-2017, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
 //!
 //! Version of the product.
 //!
-#define QTLMOVIE_VERSION "1.12-rc3"
+#define QTLMOVIE_VERSION "1.12-rc4"
 
 //!
 //! Get the actual version of the product.

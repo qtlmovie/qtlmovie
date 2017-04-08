@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// Copyright (c) 2016, Thierry Lelegard
+// Copyright (c) 2013-2017, Thierry Lelegard
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -252,7 +252,7 @@ void QtlMovieMainWindowBase::about()
                        tr("About QtlMovie"),
                        QStringLiteral("<p><b>%1</b>: %2</p>"
                            "<p>%3 %4 (%5)</p>"
-                           "<p>Copyright (c) 2013-2016, Thierry Lel&eacute;gard</p>"
+                           "<p>Copyright (c) 2013-2017, Thierry Lel&eacute;gard</p>"
                            "<hr/>"
                            "<p><b>Contributions:</b></p>"
                            "<p>Teletext code from Petr Kutalek's Telxcc.<br/>"
