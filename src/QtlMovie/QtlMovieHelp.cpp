@@ -123,13 +123,13 @@ QUrl QtlMovieHelp::urlOf(QObject* parent, const QString& fragment)
     // Set the "#fragment" part of the URL.
     url.setFragment(fragment);
 
-#if QT_VERSION < QT_VERSION_CHECK(5,7,2)
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 
     // Warning: Qt bug #55300 (https://bugreports.qt.io/browse/QTBUG-55300)
     // When there is a fragment in a file:// URL, QDesktopServices::openUrl()
     // fails to set the fragment in the actual URL. This bug has been reported
     // for Qt 5.7.0. We do not know yet when this bug is fixed. Currently, we
-    // assume it will be fixed in 5.7.2, if this version ever exists.
+    // assume it will be fixed in 6.0.0.
 
     // Workaround for Qt bug: We create a temporary HTML file containing
     // a redirect directive to the target URL. In case of error, we simply
