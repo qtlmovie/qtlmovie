@@ -40,7 +40,7 @@
 //!
 //! Version of the product.
 //!
-#define QTLMOVIE_VERSION "1.12-rc4"
+#define QTLMOVIE_VERSION "1.12"
 
 //!
 //! Get the actual version of the product.

@@ -31,13 +31,36 @@
 # 
 #-----------------------------------------------------------------------------
 
+SCRIPT=$(basename $BASH_SOURCE)
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
+
+usage() { echo >&2 "usage: $SCRIPT [-n]"; exit 1; }
+error() { echo >&2 "$SCRIPT: $*"; exit 1; }
+
 ROOTDIR=$(dirname $SCRIPTDIR)
-SRCDIR=$ROOTDIR/src
+SRCDIR="$ROOTDIR/src"
+DOXYDIR="$ROOTDIR/build-doxygen/html"
+INDEX="$DOXYDIR/index.html"
+
+# With option "-n", do not try to open a browser to view the generated files.
+[[ "$1" == "-n" ]] && OPEN_BROWSER=false || OPEN_BROWSER=true
 
 # QtlMovie version is extracted from QtlMovieVersion.h
 export PROJECT_NUMBER=$(grep QTLMOVIE_VERSION $SRCDIR/QtlMovie/QtlMovieVersion.h | sed -e 's/[^"]*"//' -e 's/".*//')
 
+# Generate documentation.
 cd $(dirname $BASH_SOURCE)
 echo Running Doxygen...
-doxygen
+doxygen || exit
+[[ -f "$INDEX" ]] || error "$INDEX not built"
+
+# Try to find a browser to open the generated documentation.
+# Safari and Firefox automatically reuse an existing instance, if one is open.
+if $OPEN_BROWSER; then
+    if [[ "$(uname -s | tr A-Z a-z)" == "darwin" ]]; then # macOS
+        open -a Safari "$INDEX"
+    else
+        FIREFOX=$(which firefox 2>/dev/null)
+        [[ -n "$FIREFOX" ]] && "$FIREFOX" "$INDEX" &
+    fi
+fi

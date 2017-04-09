@@ -294,7 +294,7 @@ QList<QtlOpticalDrive> QtlOpticalDrive::getAllDrives()
         }
 
         // On Windows, the order of drives is strange. Sort them by name.
-        qSort(drives.begin(), drives.end(), lessThanByName);
+        std::sort(drives.begin(), drives.end(), lessThanByName);
     }
 
 #elif defined(Q_OS_LINUX)

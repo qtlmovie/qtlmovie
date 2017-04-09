@@ -1926,32 +1926,32 @@ Redémarrer maintenant?</translation>
         <translation>Votre version est %1, la dernière est %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="319"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="322"/>
         <source>&lt;p&gt;Download latest version %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;Télécharger la dernière version %1&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="319"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="322"/>
         <source>here</source>
         <translation>ici</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="343"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="346"/>
         <source>QtlMovie New Version</source>
         <translation>Nouvelle Version de QtlMovie</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="358"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="361"/>
         <source>New features :</source>
         <translation>Nouveautés :</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="380"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="383"/>
         <source>Download QtlMovie %1</source>
         <translation>Télécharger QtlMovie %1</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="392"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="395"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -1966,7 +1966,7 @@ Redémarrer maintenant?</translation>
         <translation>Votre version de QtlMovie est la %1&lt;br/&gt;Plus récente que la %2, la plus récente en ligne</translation>
     </message>
     <message>
-        <location filename="../QtlMovieNewVersion.cpp" line="314"/>
+        <location filename="../QtlMovieNewVersion.cpp" line="317"/>
         <source>No new version found, this: %1, latest: %2</source>
         <translation>Pas de nouvelle version, celle-ci: %1, dernière: %2</translation>
     </message>
@@ -2017,30 +2017,29 @@ Redémarrer maintenant?</translation>
 <context>
     <name>QtlMovieProcess</name>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="88"/>
+        <location filename="../QtlMovieProcess.cpp" line="91"/>
         <source>%1 not found, install it or set explicit path in settings.</source>
         <translation>%1 introuvable, l&apos;installer ou spécifier son emplacement dans les options.</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="177"/>
+        <location filename="../QtlMovieProcess.cpp" line="180"/>
         <source>%1 completed with status %2</source>
         <translation>%1 terminé avec le code %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="180"/>
-        <location filename="../QtlMovieProcess.cpp" line="196"/>
+        <location filename="../QtlMovieProcess.cpp" line="183"/>
         <source>%1 process crashed</source>
         <translation>Le processus %1 a été interrompu</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="193"/>
-        <source>Failed to start %1 process</source>
-        <translation>Impossible de démarrer le processus %1</translation>
+        <location filename="../QtlMovieProcess.cpp" line="198"/>
+        <source>Process %1 reported error %2</source>
+        <translation>Le processus %1 a signalé l&apos;erreur %2</translation>
     </message>
     <message>
-        <location filename="../QtlMovieProcess.cpp" line="199"/>
-        <source>%1 failed, unknown process error</source>
-        <translation>%1 a échoué, erreur de processus inconnue</translation>
+        <location filename="../QtlMovieProcess.cpp" line="239"/>
+        <source>Process %1 terminated with error %2</source>
+        <translation>Le processus %1 s&apos;est terminé avec l&apos;erreur %2</translation>
     </message>
 </context>
 <context>
