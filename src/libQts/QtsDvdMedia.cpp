@@ -286,7 +286,7 @@ bool QtsDvdMedia::openFromDevice(const QString& deviceName, bool useMaxReadSpeed
 
     // The list of all file has been built by readDirectoryStructure.
     // Sort the files according to physical placement on DVD.
-    qSort(_allFiles);
+    std::sort(_allFiles.begin(), _allFiles.end());
 
     // Walk through the list of files and insert placeholders on non-file space.
     int lastSector = 0;

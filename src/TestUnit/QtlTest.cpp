@@ -84,7 +84,7 @@ int QtlTest::mainProgram(int argc, char** argv)
     }
 
     // Sort the list of test per class name.
-    qSort(*_allTests);
+    std::sort(_allTests->begin(), _allTests->end());
 
     // Analyze first argument if any.
     QString className;

@@ -32,6 +32,7 @@
 
 #include "QtlMovieProcess.h"
 #include "QtlMovieJob.h"
+#include "QtlEnumUtils.h"
 
 
 //----------------------------------------------------------------------------
@@ -53,7 +54,9 @@ QtlMovieProcess::QtlMovieProcess(const QtlMovieExecFile* execFile,
     _dataPull(dataPull),
     _stdOutput(),
     _stdError(),
-    _dpProgress(false)
+    _dpProgress(false),
+    _gotError(false),
+    _processError(QProcess::UnknownError)
 {
     Q_ASSERT(execFile != 0);
 }
@@ -188,17 +191,11 @@ void QtlMovieProcess::processFinished(int exitCode, QProcess::ExitStatus exitSta
 
 void QtlMovieProcess::processError(QProcess::ProcessError error)
 {
-    switch (error) {
-    case QProcess::FailedToStart:
-        processCompleted(false, tr("Failed to start %1 process").arg(_execFile->name()));
-        break;
-    case QProcess::Crashed:
-        processCompleted(false, tr("%1 process crashed").arg(_execFile->name()));
-        break;
-    default:
-        processCompleted(false, tr("%1 failed, unknown process error").arg(_execFile->name()));
-        break;
-    }
+    // An error was signaled by the QProcess object. This does not mean that the process has terminated.
+    // If the error is fatal, then processFinished will be invoked later.
+    _gotError = true;
+    _processError = error;
+    debug(tr("Process %1 reported error %2").arg(_execFile->name()).arg(qtlNameOf(error)));
 }
 
 
@@ -223,8 +220,29 @@ void QtlMovieProcess::processCompleted(bool success, const QString& message)
         line(_stdError);
     }
 
+    // When an error was reported, filter out errors we consider as "normal".
+    QString realMessage(message);
+    if (success && _gotError) {
+        switch (_processError) {
+            case QProcess::ReadError:
+            case QProcess::WriteError:
+                // Not a real error if we interrupted the process.
+                success = true;
+                break;
+            case QProcess::FailedToStart:
+            case QProcess::Crashed:
+            case QProcess::Timedout:
+            case QProcess::UnknownError:
+            default:
+                // Consider as a failure.
+                success = false;
+                realMessage = tr("Process %1 terminated with error %2").arg(_execFile->name()).arg(qtlNameOf(_processError));
+                break;
+        }
+    }
+
     // Let superclass notify clients.
-    emitCompleted(success, message);
+    emitCompleted(success, realMessage);
 }
 
 

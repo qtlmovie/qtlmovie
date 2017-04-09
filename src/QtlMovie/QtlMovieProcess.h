@@ -225,6 +225,8 @@ private:
     QString                 _stdOutput;       //!< Standard error buffer.
     QString                 _stdError;        //!< Standard error buffer.
     bool                    _dpProgress;      //!< True if dataPullProgressed() was successfully set.
+    bool                    _gotError;        //!< The process reported an error.
+    QProcess::ProcessError  _processError;    //!< Last reported error.
 
     //!
     //! Process the termination of the process.

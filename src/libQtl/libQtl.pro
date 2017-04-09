@@ -161,7 +161,8 @@ HEADERS += \
     QtlDataPullSynchronousWrapper.h \
     QtlBoundProcessResult.h \
     QtlBoundProcess.h \
-    QtlProcess.h
+    QtlProcess.h \
+    QtlEnumUtils.h
 
 TRANSLATIONS += \
     locale/qtl_fr.ts
