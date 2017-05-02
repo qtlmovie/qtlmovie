@@ -51,4 +51,14 @@ QString qtlNameOf(ENUM e)
     return name != 0 && name[0] != '\0' ? QString(name) : QString::number(int(e));
 }
 
+//
+// Specializations of qtlNameOf() for enumeration types without Q_ENUM in older versions of Qt.
+// In that case, we simply return the integer value of the enumeration value.
+// Was fixed in Qt 5.6.0 (https://bugreports.qt.io/browse/QTBUG-10777).
+//
+#if QT_VERSION < QT_VERSION_CHECK(5,6,0) && !defined(DOXYGEN)
+template<> inline QString qtlNameOf(QProcess::ProcessError e) {return QString::number(int(e));}
+template<> inline QString qtlNameOf(QProcess::ProcessState e) {return QString::number(int(e));}
+#endif
+
 #endif // QTLENUMUTILS_H
