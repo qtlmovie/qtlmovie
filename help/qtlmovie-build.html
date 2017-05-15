@@ -30,15 +30,13 @@
         </div>
       </div>
       <div class="w3-firstnav w3-accordion">
-        <a onclick="myAccordion('menu-linux')" href="javascript:void(0)">Building on Linux <i class="fa fa-caret-down"></i></a>
-        <div id="menu-linux" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="#linreq">Pre-requisites</a>
-          <a href="#linmanbuild">Building manually</a>
-          <a href="#linqtcreator">Building using Qt Creator</a>
-          <a href="#fcbuild">Building the RPM package for Fedora</a>
-          <a href="#ubbuild">Building the DEB package for Ubuntu</a>
-          <a href="#lincleanup">Multi-platform build</a>
-          <a href="#lindoxy">Building the Doxygen documentation</a>
+        <a onclick="myAccordion('menu-macosx')" href="javascript:void(0)">Building on Mac OS <i class="fa fa-caret-down"></i></a>
+        <div id="menu-macosx" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#macreq">Pre-requisites</a>
+          <a href="#macmanbuild">Building manually</a>
+          <a href="#macqtcreator">Building using Qt Creator</a>
+          <a href="#macdoxy">Building the Doxygen documentation</a>
+          <a href="#macinstaller">Building the binary installer for Mac OS</a>
         </div>
       </div>
       <div class="w3-accordion">
@@ -57,13 +55,15 @@
         </div>
       </div>
       <div class="w3-accordion">
-        <a onclick="myAccordion('menu-macosx')" href="javascript:void(0)">Building on Mac OS X <i class="fa fa-caret-down"></i></a>
-        <div id="menu-macosx" class="w3-accordion-content w3-animate-left w3-padding">
-          <a href="#macreq">Pre-requisites</a>
-          <a href="#macmanbuild">Building manually</a>
-          <a href="#macqtcreator">Building using Qt Creator</a>
-          <a href="#macdoxy">Building the Doxygen documentation</a>
-          <a href="#macinstaller">Building the binary installer for Mac OS X</a>
+        <a onclick="myAccordion('menu-linux')" href="javascript:void(0)">Building on Linux <i class="fa fa-caret-down"></i></a>
+        <div id="menu-linux" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#linreq">Pre-requisites</a>
+          <a href="#linmanbuild">Building manually</a>
+          <a href="#linqtcreator">Building using Qt Creator</a>
+          <a href="#fcbuild">Building the RPM package for Fedora</a>
+          <a href="#ubbuild">Building the DEB package for Ubuntu</a>
+          <a href="#lincleanup">Multi-platform build</a>
+          <a href="#lindoxy">Building the Doxygen documentation</a>
         </div>
       </div>
     </nav>
@@ -78,96 +78,38 @@
       </header>
       <div class="w3-container w3-padding-32" style="padding-left:32px">
 
-        <div class="anchor" id="linux"><h2>Building QtlMovie on Linux</h2></div>
+        <div class="anchor" id="macosx"><h2>Building QtlMovie on Mac OS</h2></div>
+        
+        <div class="anchor" id="macreq"><h3>Pre-requisites</h3></div>
 
-        <div class="anchor" id="linreq"><h3>Pre-requisites</h3></div>
-
-        <p>QtlMovie can be built on any Linux platform supporting Qt 5.5.
-          All development packages for Qt 5 shall be installedxs.</p>
+        <p>QtlMovie can be built on any Mac OS platform supporting Qt 5.5 or higher.
+          All development packages for Qt 5 shall be installed, including QtMultimedia.</p>
         <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
           is required. Qt Creator is recommended to edit and modify the project.
           Simply building the product without modification does not require Qt Creator.</p>
-        <p>Qt can be installed in system directories (<i>/usr/bin</i> et al.) from
-          the distro packages or using binary installers from
-          <a href="http://qt-project.org/">http://qt-project.org/</a>. In the later
-          case, Qt is installed inside <i>/usr/local</i>.
-          The script <i>build/QtSetEnvironment.rc</i> searches <i>/usr/local</i>
-          for the most recent installation of Qt and add the required directories to the PATH.
-          <i>QtSetEnvironment.rc</i> is automatically dot-sourced by all build scripts.</p>
-        <p>Installing the pre-requisite environment on Fedora:</p>
-<pre>
-sudo dnf install qt5-qttools qt5-devel qt-creator rpmdevtools
-</pre>
-        <p>Installing the pre-requisite environment on Ubuntu:</p>
-<pre>
-sudo apt-get install qtcreator qtbase5-dev qt5-default qtmultimedia5-dev
-</pre>
+        <p>Before installing Qt, Xcode shall be installed first from the Apple AppStore (it is a free application).
+          Xcode is required because it installs the C++ compiler and other development tools.</p>
 
-        <div class="anchor" id="linmanbuild"><h3>Building QtlMovie manually</h3></div>
+        <div class="anchor" id="macmanbuild"><h3>Building QtlMovie manually</h3></div>
 
         <p>Run the script <i>build/build.sh</i>.</p>
 
-        <div class="anchor" id="linqtcreator"><h3>Building QtlMovie using Qt Creator</h3></div>
+        <div class="anchor" id="macqtcreator"><h3>Building QtlMovie using Qt Creator</h3></div>
 
-        <p>Qt Creator shall be launched using the script <i>build/QtCreator.sh</i>.
-          This script ensures that the appropriate environment is setup for the latest version of Qt.
-          The QtlMovie project is automatically open.</p>
-        <p>The first time Qt Creator is launched, accept all defaults for the project
+        <p>Qt Creator shall be launched from the Mac OS Launcher.
+          The first time Qt Creator is launched, accept all defaults for the project
           configuration, especially the <i>shadow build</i> configuration.</p>
-
-        <div class="anchor" id="fcbuild"><h3>Building the QtlMovie RPM package for Fedora</h3></div>
-
-        <p>Run the script <i>build/build-rpm.sh</i>.
-          The RPM package is built in the directory <i>installers</i>.
-          The RPM package is named <i>qtlmovie-1.6-0.fc19.x86_64.rpm</i> for instance,
-          where "1.6" is the QtlMovie version, "19" is the Fedora version and "x86_64" is the platform.</p>
-        <p>Following the package management rules, the RPM package contains only QtlMovie.
-          It contains dependencies on the various media tools packages which must be separately installed.
-          Note the following points on non-standard packages:</p>
-        <ul class="qtl-topics">
-          <li>The package <i>ffmpeg</i> is available through the RPMfusion repository, not the standard Fedora repositories.
-            See <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> for the way to configure RPMfusion as
-            a default repository for your system.</li>
-          <li>The package <i>ccextractor</i> is not available as RPM packages in the
-            various standard repositories. This package must be rebuilt manually using the script
-            <i>linuxtools/ccextractor-rpmbuild.sh</i>.
-            The script downloads the latest sources online and rebuilds the package.</li>
-        </ul>
-
-        <div class="anchor" id="ubbuild"><h3>Building the QtlMovie DEB package for Ubuntu</h3></div>
-
-        <p>Run the script <i>build/build-deb.sh</i>.
-          The DEB package is built in the directory <i>installers</i>.
-          The DEB package is named <i>qtlmovie_1.2.16_amd64.deb</i> for instance,
-          where "1.2.16" is the QtlMovie version and "amd64" is the platform.</p>
-        <p>Following the package management rules, the DEB package contains only QtlMovie.
-          It contains dependencies on the various media tools packages which must be separately installed.
-          Note the following points on non-standard packages:</p>
-        <ul class="qtl-topics">
-          <li>On Ubuntu version 15 and higher, the package <i>ffmpeg</i> is available through the
-            standard Ubuntu repositories.</li>
-          <li>Prior to Ubuntu version 15, the package <i>ffmpeg</i> was available through the
-            <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's PPA</a>,
-            not the standard Ubuntu repositories.
-            See the <a href="qtlmovie-user.html#ubuntu">QtlMovie user guide</a>
-            for the way to configure this PPA as a default repository for your system.</li>
-          <li>The package <i>ccextractor</i> is not available as DEB packages in the
-            various standard repositories. This packages must be rebuilt manually using the script
-            <i>linuxtools/ccextractor-debbuild.sh</i>.
-            The script downloads the latest sources online and rebuilds the packages.</li>
-        </ul>
-
-        <div class="anchor" id="lincleanup"><h3>Multi-platform build</h3></div>
-
-        <p>When the project directory tree was previously used to build QtlMovie for
-          another platform (either using a shared disk or as a result of a copy),
-          clean up first using the script <i>build/cleanup.sh</i>.</p>
-        <p>This script removes all previously generated files, including the Qt Creator
-          platform-specific <i>.pro.user</i> files.</p>
-
-        <div class="anchor" id="lindoxy"><h3>Building the Doxygen documentation</h3></div>
+        
+        <div class="anchor" id="macdoxy"><h3>Building the Doxygen documentation</h3></div>
 
         <p>Run the script <i>build/build-doc.sh</i>.</p>
+
+        <div class="anchor" id="macinstaller"><h3>Building the QtlMovie binary installer for Mac OS</h3></div>
+
+        <p>Run the script <i>build/build-mac.sh</i>.
+          The DMG package is built in the directory <i>installers</i>.
+          The DMG package is named <i>QtlMovie-1.6.dmg</i> for instance,
+          where "1.6" is the QtlMovie version.</p>
 
         <div class="anchor" id="windows"><h2>Building QtlMovie on Windows</h2></div>
 
@@ -188,7 +130,7 @@ sudo apt-get install qtcreator qtbase5-dev qt5-default qtmultimedia5-dev
 
         <div class="anchor" id="winqt"><h3>Qt requirements</h3></div>
 
-        <p>QtlMovie can be built on any Windows platform supporting Qt 5.
+        <p>QtlMovie can be built on any Windows platform supporting Qt 5.5 or higher.
           The MinGW version is recommended. Using Qt for Visual Studio may
           work but has not been tested.</p>
         <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
@@ -301,38 +243,96 @@ Major  Minor  Build  Revision
         <p>This script also builds the "standalone" archive, an alternative for
           users without administration privileges who cannot execute the standard installer.</p>
 
-        <div class="anchor" id="macosx"><h2>Building QtlMovie on Mac OS X</h2></div>
-        
-        <div class="anchor" id="macreq"><h3>Pre-requisites</h3></div>
+        <div class="anchor" id="linux"><h2>Building QtlMovie on Linux</h2></div>
 
-        <p>QtlMovie can be built on any Mac OS X platform supporting Qt 5.
-          All development packages for Qt 5 shall be installed, including QtMultimedia.</p>
+        <div class="anchor" id="linreq"><h3>Pre-requisites</h3></div>
+
+        <p>QtlMovie can be built on any Linux platform supporting Qt 5.5 or higher.
+          All development packages for Qt 5 shall be installed.</p>
         <p>Using Qt Creator is optional. When used, Qt Creator version 2.7 or higher
           is required. Qt Creator is recommended to edit and modify the project.
           Simply building the product without modification does not require Qt Creator.</p>
-        <p>Before installing Qt, Xcode shall be installed first from the Apple AppStore (it is a free application).
-          Xcode is required because it installs the C++ compiler and other development tools.</p>
+        <p>Qt can be installed in system directories (<i>/usr/bin</i> et al.) from
+          the distro packages or using binary installers from
+          <a href="http://qt-project.org/">http://qt-project.org/</a>. In the later
+          case, Qt is installed inside <i>/usr/local</i>.
+          The script <i>build/QtSetEnvironment.rc</i> searches <i>/usr/local</i>
+          for the most recent installation of Qt and add the required directories to the PATH.
+          <i>QtSetEnvironment.rc</i> is automatically dot-sourced by all build scripts.</p>
+        <p>Installing the pre-requisite environment on Fedora:</p>
+<pre>
+sudo dnf install qt5-qttools qt5-devel qt-creator rpmdevtools
+</pre>
+        <p>Installing the pre-requisite environment on Ubuntu:</p>
+<pre>
+sudo apt-get install qtcreator qtbase5-dev qt5-default qtmultimedia5-dev
+</pre>
 
-        <div class="anchor" id="macmanbuild"><h3>Building QtlMovie manually</h3></div>
+        <div class="anchor" id="linmanbuild"><h3>Building QtlMovie manually</h3></div>
 
         <p>Run the script <i>build/build.sh</i>.</p>
 
-        <div class="anchor" id="macqtcreator"><h3>Building QtlMovie using Qt Creator</h3></div>
+        <div class="anchor" id="linqtcreator"><h3>Building QtlMovie using Qt Creator</h3></div>
 
-        <p>Qt Creator shall be launched from the Mac OS X Launcher.
-          The first time Qt Creator is launched, accept all defaults for the project
+        <p>Qt Creator shall be launched using the script <i>build/QtCreator.sh</i>.
+          This script ensures that the appropriate environment is setup for the latest version of Qt.
+          The QtlMovie project is automatically open.</p>
+        <p>The first time Qt Creator is launched, accept all defaults for the project
           configuration, especially the <i>shadow build</i> configuration.</p>
-        
-        <div class="anchor" id="macdoxy"><h3>Building the Doxygen documentation</h3></div>
+
+        <div class="anchor" id="fcbuild"><h3>Building the QtlMovie RPM package for Fedora</h3></div>
+
+        <p>Run the script <i>build/build-rpm.sh</i>.
+          The RPM package is built in the directory <i>installers</i>.
+          The RPM package is named <i>qtlmovie-1.6-0.fc19.x86_64.rpm</i> for instance,
+          where "1.6" is the QtlMovie version, "19" is the Fedora version and "x86_64" is the platform.</p>
+        <p>Following the package management rules, the RPM package contains only QtlMovie.
+          It contains dependencies on the various media tools packages which must be separately installed.
+          Note the following points on non-standard packages:</p>
+        <ul class="qtl-topics">
+          <li>The package <i>ffmpeg</i> is available through the RPMfusion repository, not the standard Fedora repositories.
+            See <a href="http://rpmfusion.org/Configuration">rpmfusion.org</a> for the way to configure RPMfusion as
+            a default repository for your system.</li>
+          <li>The package <i>ccextractor</i> is not available as RPM packages in the
+            various standard repositories. This package must be rebuilt manually using the script
+            <i>linuxtools/ccextractor-rpmbuild.sh</i>.
+            The script downloads the latest sources online and rebuilds the package.</li>
+        </ul>
+
+        <div class="anchor" id="ubbuild"><h3>Building the QtlMovie DEB package for Ubuntu</h3></div>
+
+        <p>Run the script <i>build/build-deb.sh</i>.
+          The DEB package is built in the directory <i>installers</i>.
+          The DEB package is named <i>qtlmovie_1.2.16_amd64.deb</i> for instance,
+          where "1.2.16" is the QtlMovie version and "amd64" is the platform.</p>
+        <p>Following the package management rules, the DEB package contains only QtlMovie.
+          It contains dependencies on the various media tools packages which must be separately installed.
+          Note the following points on non-standard packages:</p>
+        <ul class="qtl-topics">
+          <li>On Ubuntu version 15 and higher, the package <i>ffmpeg</i> is available through the
+            standard Ubuntu repositories.</li>
+          <li>Prior to Ubuntu version 15, the package <i>ffmpeg</i> was available through the
+            <a href="https://launchpad.net/~jon-severinsson/+archive/ffmpeg">Jon Severinsson's PPA</a>,
+            not the standard Ubuntu repositories.
+            See the <a href="qtlmovie-user.html#ubuntu">QtlMovie user guide</a>
+            for the way to configure this PPA as a default repository for your system.</li>
+          <li>The package <i>ccextractor</i> is not available as DEB packages in the
+            various standard repositories. This packages must be rebuilt manually using the script
+            <i>linuxtools/ccextractor-debbuild.sh</i>.
+            The script downloads the latest sources online and rebuilds the packages.</li>
+        </ul>
+
+        <div class="anchor" id="lincleanup"><h3>Multi-platform build</h3></div>
+
+        <p>When the project directory tree was previously used to build QtlMovie for
+          another platform (either using a shared disk or as a result of a copy),
+          clean up first using the script <i>build/cleanup.sh</i>.</p>
+        <p>This script removes all previously generated files, including the Qt Creator
+          platform-specific <i>.pro.user</i> files.</p>
+
+        <div class="anchor" id="lindoxy"><h3>Building the Doxygen documentation</h3></div>
 
         <p>Run the script <i>build/build-doc.sh</i>.</p>
-
-        <div class="anchor" id="macinstaller"><h3>Building the QtlMovie binary installer for Mac OS X</h3></div>
-
-        <p>Run the script <i>build/build-mac.sh</i>.
-          The DMG package is built in the directory <i>installers</i>.
-          The DMG package is named <i>QtlMovie-1.6.dmg</i> for instance,
-          where "1.6" is the QtlMovie version.</p>
 
       </div>
       <footer class="w3-container w3-theme w3-padding-16" style="padding-left:32px">

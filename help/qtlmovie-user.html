@@ -80,8 +80,8 @@
       <div class="w3-accordion">
         <a onclick="myAccordion('menu-platforms')" href="javascript:void(0)">Platforms notes <i class="fa fa-caret-down"></i></a>
         <div id="menu-platforms" class="w3-accordion-content w3-animate-left w3-padding">
+          <a href="#macosx">Mac OS</a>
           <a href="#windows">Windows</a>
-          <a href="#macosx">Mac OS X</a>
           <a href="#linux">Linux</a>
           <a href="#otherpf">Other platforms</a>
         </div>
@@ -474,7 +474,8 @@
           which is read-only by definition.</p>
         <p>The "DVD burning device" designates the device name for the DVD burner.
           On Windows, it shall be a device letter like "D:" or "E:".
-          On Unix systems, it shall be a device path such as "/dev/dvd".
+          On Mac OS, a list of available drives is displayed.
+          On other Unix systems, it shall be a device path such as "/dev/dvd".
           Unlike input and output directories, this is not a default value which can be changed in the GUI,
           this is the actual device name which is unconditionally used when "Burn DVD" is selected as output type.
           This makes sense since most computers have only one DVD drive.
@@ -790,12 +791,29 @@
 
         <div class="anchor" id="platforms"><h2>Platforms notes</h2></div>
 
+        <div class="anchor" id="macosx"><h3>Mac OS</h3></div>
+
+        <p>QtlMovie is now primarily developed on Mac OS.</p>
+        <p>The package QtlMovie-<i>version</i>.dmg is installed the same way as most Mac
+          applications. Double-click on the .dmg file to open the disk image. In
+          the Finder window which is opened, drag and drop "QtlMovie" into
+          "Applications". Then, close the Finder windows, right-click on the
+          desktop icon for "QtlMovie" and select "Eject". Now QtlMovie can be
+          started from the Launcher and optionally locked on the Dock.</p>
+        <p>The binary package for QtlMovie includes all required media tools.
+          Installing the QtlMovie package is sufficient to get a fully functional system.
+          The media tools are installed in the same directory tree as QtlMovie but you may
+          select alternate versions of these tools in the settings menu.</p>
+        <p>The standard binary package for QtlMovie works on Mac OS 10.12 and higher.
+          It has been reported that this binary package failed on Mac OS 10.10.
+          This was due to some incompatibility with Qt 5.8. A special binary package
+          of QtlMovie has beed created with Qt 5.7 and worked on Mac OS 10.10.</p>
+
         <div class="anchor" id="windows"><h3>Windows</h3></div>
 
-        <p>QtlMovie is primarily developed on Windows. The binary installer for QtlMovie includes
-          all required media tools. Running the QtlMovie binary installer is sufficient to get
-          a fully functional system.</p>
-        <p>The media tools are installed in the same directory tree as QtlMovie but you may
+        <p>The binary installer for QtlMovie includes all required media tools.
+          Running the QtlMovie binary installer is sufficient to get a fully functional system.
+          The media tools are installed in the same directory tree as QtlMovie but you may
           select alternate versions of these tools in the settings menu.</p>
         <p>There is one binary installer for 32-bit systems and another one for 64-bit systems.
           However, the 64-bit installer mostly contains 32-bit executables. FFmpeg is the only
@@ -804,18 +822,7 @@
         <p>The binary installers require administration privileges to install QtlMovie
           on the system. For users without such privileges, use the "standalone"
           archive. Unzip it anywhere at simply run QtlMovie.exe.</p>
-
-        <div class="anchor" id="macosx"><h3>Mac OS X</h3></div>
-
-        <p>QtlMovie has been tested on Mac OS X 10.11 ("El Capitan") and proved to work correctly.</p>
-        <p>The package QtlMovie-<i>version</i>.dmg is installed the same way as most Mac
-          applications. Double-click on the .dmg file to open the disk image. In
-          the Finder window which is opened, drag and drop "QtlMovie" into
-          "Applications". Then, close the Finder windows, right-click on the
-          desktop icon for "QtlMovie" and select "Eject". Now QtlMovie can be
-          started from the Launcher and optionally locked on the Dock.</p>
-        <p>The media tools are installed in the same directory tree as QtlMovie but you may
-          select alternate versions of these tools in the settings menu.</p>
+        <p>QtlMovie worked on Windows 7 and later versions. Windows XP is not supported.</p>
 
         <div class="anchor" id="linux"><h3>Linux</h3></div>
 
