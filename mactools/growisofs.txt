@@ -1,5 +1,10 @@
-A MacOS binary for growisofs is found in the bundle for OSx360 at:
-  http://osx360.tla.su/osx360/download_files/osx360_v1.0b3.zip
+A binary for growisofs is included in HomeBrew package dvd+rw-tools.
 
-Download it and growisofs is at:
-  ~/Downloads/OSx360.app/Contents/MacOS/growisofs
+Install HomeBrew:
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+Install dvd+rw-tools:
+  brew install dvd+rw-tools
+
+Binary for growisofs is at:
+  /usr/local/Cellar/dvd+rw-tools/<version>/bin/growisofs

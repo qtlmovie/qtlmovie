@@ -36,7 +36,7 @@ SCRIPT=$(basename $BASH_SOURCE)
 error() { echo >&2 "$SCRIPT: $*"; exit 1; }
 
 # Uncompressed DMG size.
-DMGSIZE=128m
+DMGSIZE=200m
 
 # Various directories.
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE); pwd)
